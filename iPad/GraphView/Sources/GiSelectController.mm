@@ -32,7 +32,7 @@
 
 - (void)dynDraw:(GiGraphics*)gs
 {
-    GiContext context(-1, GiColor(0, 0, 255, 64));
+    GiContext context(-4, GiColor(0, 0, 255, 55));
     
     for (int i = 0; i < _count; i++) {
         [_view drawShape:_section[i] graphics:gs context:&context];
