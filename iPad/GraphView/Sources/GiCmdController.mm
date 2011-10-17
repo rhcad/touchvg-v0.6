@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #import "GiCmdController.h"
-#import "GiGraphView.h"
+#include <Graph2d/gigraph.h>
 
 @implementation GiCommandController
 

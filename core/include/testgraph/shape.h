@@ -55,6 +55,8 @@ public:
     Int32       count;
     Point2d*    points;
     Vector2d*   knotVectors;
+    Point2d*    bzpts;
+    Int32       bzcount;
     
     CurveItem(CurveType curveType = kBSplines);
     CurveItem(int n, CurveType curveType);

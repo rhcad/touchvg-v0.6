@@ -98,9 +98,8 @@
                 gs->saveCachedBitmap();
             }
             [self dynDraw:gs];
-            if (_drawingDelegate &&
-                [_drawingDelegate performSelector:@selector(dynDraw)]) {
-                [_drawingDelegate dynDraw];
+            if ([_drawingDelegate respondsToSelector:@selector(dynDraw)]) {
+                [_drawingDelegate performSelector:@selector(dynDraw)];
             }
         }
         

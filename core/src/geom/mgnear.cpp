@@ -73,6 +73,36 @@ GEOMAPI double mgCubicSplinesHit(
     return dDistMin;
 }
 
+GEOMAPI Int32 mgBSplinesToBeziers(
+    Point2d points[/*1+n*3*/], Int32 n, const Point2d* controlPoints, bool closed)
+{
+    Point2d pt1, pt2, pt3, pt4;
+    double d6 = 1.0 / 6.0;
+    int i = 0;
+        
+    pt1 = controlPoints[0];
+    pt2 = controlPoints[1];
+    pt3 = controlPoints[2];
+    pt4 = controlPoints[3 % n];
+    points[i++].set((pt1.x + 4 * pt2.x + pt3.x)*d6, (pt1.y + 4 * pt2.y + pt3.y)*d6);
+    points[i++].set((4 * pt2.x + 2 * pt3.x)    *d6, (4 * pt2.y + 2 * pt3.y)    *d6);
+    points[i++].set((2 * pt2.x + 4 * pt3.x)    *d6, (2 * pt2.y + 4 * pt3.y)    *d6);
+    points[i++].set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
+    
+    for (int ci = 4; ci < (closed ? n + 3 : n); ci++)
+    {
+        pt1 = pt2;
+        pt2 = pt3;
+        pt3 = pt4;
+        pt4 = controlPoints[ci % n];
+        points[i++].set((4 * pt2.x + 2 * pt3.x)    *d6, (4 * pt2.y + 2 * pt3.y)    *d6);
+        points[i++].set((2 * pt2.x + 4 * pt3.x)    *d6, (2 * pt2.y + 4 * pt3.y)    *d6);
+        points[i++].set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
+    }
+    
+    return i;
+}
+
 GEOMAPI double mgLinesHit(
     Int32 n, const Point2d* points, bool closed, 
     const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment)

@@ -239,18 +239,28 @@ void ArcItem::hitTest(const Box2d& limits, double& dist)
 {
     Point2d points[16];
     int count = mgAngleArcToBezier(points, center, rx, ry, startAngle, sweepAngle);
+    
+    Point2d ptNear;
+    
+    for (int i = 0; i + 3 < count; i += 3) {
+        mgNearestOnBezier(limits.center(), points + i, ptNear);
+        double d = ptNear.distanceTo(limits.center());
+        if (dist > d) {
+            dist = d;
+        }
+    }
 }
 
 // CurveItem
 //
 
 CurveItem::CurveItem(CurveType type)
-    : curveType(type), count(0), points(NULL), knotVectors(NULL)
+    : curveType(type), count(0), points(NULL), knotVectors(NULL), bzpts(NULL)
 {
 }
 
 CurveItem::CurveItem(int n, CurveType type)
-    : curveType(type), count(n), points(new Point2d[n]), knotVectors(NULL)
+    : curveType(type), count(n), points(new Point2d[n]), knotVectors(NULL), bzpts(NULL)
 {
 }
 
@@ -260,6 +270,8 @@ CurveItem::~CurveItem()
         delete[] points;
     if (knotVectors)
         delete[] knotVectors;
+    if (bzpts)
+        delete[] bzpts;
 }
 
 void CurveItem::applyPoints()
@@ -268,6 +280,11 @@ void CurveItem::applyPoints()
         if (!knotVectors)
             knotVectors = new Vector2d[count];
         mgCubicSplines(count, points, knotVectors);
+    }
+    else if (kBSplines == curveType) {
+        if (!bzpts)
+            bzpts = new Point2d[1 + count * 3];
+        bzcount = mgBSplinesToBeziers(bzpts, count, points, false);
     }
 }
 
@@ -295,11 +312,33 @@ void CurveItem::draw(GiGraphics* gs, const GiContext *ctx) const
 Box2d CurveItem::getExtent() const
 {
     Box2d rect;
-    mgBeziersBox(rect, count, points);
+    
+    if (knotVectors) {
+        mgCubicSplinesBox(rect, count, points, knotVectors);
+    }
+    else if (bzpts) {
+        mgBeziersBox(rect, bzcount, bzpts);
+    }
     
     return rect;
 }
 
 void CurveItem::hitTest(const Box2d& limits, double& dist)
 {
+    Point2d ptNear;
+    Int32 segment;
+    
+    if (bzpts) {
+        for (int i = 0; i + 3 < bzcount; i += 3) {
+            mgNearestOnBezier(limits.center(), bzpts + i, ptNear);
+            double d = ptNear.distanceTo(limits.center());
+            if (dist > d) {
+                dist = d;
+            }
+        }
+    }
+    else if (knotVectors) {
+        dist = mgCubicSplinesHit(count, points, knotVectors, false,
+                                 limits.center(), limits.width(), ptNear, segment);
+    }
 }

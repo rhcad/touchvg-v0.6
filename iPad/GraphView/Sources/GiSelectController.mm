@@ -3,7 +3,6 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #import "GiSelectController.h"
-#import "GiGraphView.h"
 #include <Graph2d/gigraph.h>
 
 @interface GiSelectController(Internal)
@@ -100,7 +99,7 @@
 
 - (BOOL)hitTest:(void**)shapeFound point:(CGPoint)point
 {
-    Box2d limits(Box2d(Point2d(point.x, point.y), 200, 200) * _view.xform->displayToModel());
+    Box2d limits(Box2d(Point2d(point.x, point.y), 50, 50) * _view.xform->displayToModel());
     double minDist = DBL_MAX;
     void *it, *shape;
     
