@@ -291,18 +291,18 @@ void CurveItem::applyPoints()
 void CurveItem::draw(GiGraphics* gs, const GiContext *ctx) const
 {
     GiContext context(useLineWidth(lineWidth,ctx,gs), useLineColor(lineColor,ctx), useLineStyle(lineStyle, ctx));
-    GiContext ctxaux(0, GiColor(128,128,128,64), kLineDash);
+    //GiContext ctxaux(0, GiColor(128,128,128,64), kLineDash);
     
-    gs->drawLines(&ctxaux, count, points);
+    //gs->drawLines(&ctxaux, count, points);
     
     if (knotVectors) {
         gs->drawSplines(&context, count, points, knotVectors);
-        ctxaux.setLineColor(GiColor(0,0,128,32));
+        /*ctxaux.setLineColor(GiColor(0,0,128,32));
         ctxaux.setFillColor(GiColor(128,128,128,32));
         for (int i = 0; i < count; i++) {
             gs->drawLine(&ctxaux, points[i], points[i] + knotVectors[i]);
             gs->drawEllipse(&ctxaux, points[i] + knotVectors[i], 1);
-        }
+        }*/
     }
     else {
         gs->drawBSplines(&context, count, points);

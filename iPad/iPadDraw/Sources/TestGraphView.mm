@@ -52,44 +52,12 @@
     [self setNeedsDisplay];
 }
 
-- (void)dynDraw:(GiGraphics*)gs
-{
-    if (!CGPointEqualToPoint(_lastPoint, _firstPoint)) {
-        GiContext context(0, GiColor(128,0,0,128), kLineSolid, GiColor(128,0,0,64));
-        gs->rawLine(&context, _firstPoint.x, _firstPoint.y, _lastPoint.x, _lastPoint.y);
-        gs->rawEllipse(&context, _firstPoint.x - 10, _firstPoint.y - 10, 20, 20);
-        gs->rawEllipse(&context, _lastPoint.x - 10, _lastPoint.y - 10, 20, 20);
-    }
-    [super dynDraw:gs];
-}
-
 - (BOOL)undoMotion
 {
     if (self.viewMode != GiViewModeView)
         return [super undoMotion];
 
     [self reset];
-    return YES;
-}
-
-- (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
-{
-    if (self.viewMode != GiViewModeView)
-        return [super oneFingerPan:sender];
-    
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        _firstPoint = [sender locationInView:self];
-        _lastPoint = _firstPoint;
-    }
-    else if (sender.state == UIGestureRecognizerStateChanged) {
-        _lastPoint = [sender locationInView:self];
-        [self setNeedsDisplay];
-    }
-    else {
-        _lastPoint = _firstPoint;
-        [self setNeedsDisplay];
-    }
-    
     return YES;
 }
 

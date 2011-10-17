@@ -40,7 +40,12 @@
 
 - (BOOL)undoMotion
 {
-    return NO;
+    if (_count > 0) {
+        _count = 0;
+        [_view setNeedsDisplay];
+    }
+    
+    return YES;
 }
 
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender

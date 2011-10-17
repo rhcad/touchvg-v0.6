@@ -232,7 +232,8 @@
         ret = [_gview twoFingersTwoTaps:sender];
     
     if (!ret) {
-        _gview.viewMode = (GiViewMode)((_gview.viewMode + 1) % GiViewModeMax);
+        [_selector undoMotion];
+        //_gview.viewMode = (GiViewMode)((_gview.viewMode + 1) % GiViewModeMax);
     }
 }
 
