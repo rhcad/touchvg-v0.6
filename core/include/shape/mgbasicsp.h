@@ -13,7 +13,7 @@
 */
 class MgLine : public MgShape
 {
-    MGSHAPE_DECLARE(MgLine, 10)
+    MGSHAPE_DECLARE(MgLine, MgShape, 10)
 public:
     //! 返回起点
     const Point2d& startPoint() const { return _points[0]; }
@@ -30,6 +30,7 @@ private:
 */
 class MgBaseRect : public MgShape
 {
+    MGSHAPE_DECLARE0(MgShape)
 public:
     //! 返回本对象的类型
     static UInt32 Type() { return 2; }
@@ -88,7 +89,7 @@ protected:
 */
 class MgRect : public MgBaseRect
 {
-    MGSHAPE_DECLARE2(MgRect, 11)
+    MGSHAPE_DECLARE2(MgRect, MgBaseRect, 11)
 };
 
 //! 椭圆图形类
@@ -96,7 +97,7 @@ class MgRect : public MgBaseRect
 */
 class MgEllipse : public MgBaseRect
 {
-    MGSHAPE_DECLARE2(MgEllipse, 12)
+    MGSHAPE_DECLARE2(MgEllipse, MgBaseRect, 12)
 public:
     //! 返回X半轴长度
     double getRadiusX() const;
@@ -121,7 +122,7 @@ protected:
 */
 class MgRoundRect : public MgBaseRect
 {
-    MGSHAPE_DECLARE2(MgRoundRect, 13)
+    MGSHAPE_DECLARE2(MgRoundRect, MgBaseRect, 13)
 public:
     //! 返回X圆角半径
     double getRadiusX() const { return _rx; }
@@ -149,6 +150,7 @@ protected:
 */
 class MgBaseLines : public MgShape
 {
+    MGSHAPE_DECLARE0(MgShape)
 public:
     //! 返回本对象的类型
     static UInt32 Type() { return 3; }
@@ -196,7 +198,7 @@ protected:
 */
 class MgLines : public MgBaseLines
 {
-    MGSHAPE_DECLARE2(MgLines, 15)
+    MGSHAPE_DECLARE2(MgLines, MgBaseLines, 15)
 };
 
 //! 三次参数样条曲线类
@@ -204,7 +206,7 @@ class MgLines : public MgBaseLines
 */
 class MgSplines : public MgBaseLines
 {
-    MGSHAPE_DECLARE2(MgSplines, 16)
+    MGSHAPE_DECLARE2(MgSplines, MgBaseLines, 16)
 protected:
     void _update();
     double _hitTest(const Point2d& pt, double tol, 

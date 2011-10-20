@@ -14,7 +14,8 @@
 struct MgShapes
 {
     virtual UInt32 getShapeCount() const = 0;
-    virtual GiShape* getShape(UInt32 index) const = 0;
+    virtual GiShape* getFirstShape(void*& it) const = 0;
+    virtual GiShape* getNextShape(void*& it) const = 0;
     virtual GiShape* findShape(UInt32 id) const = 0;
     virtual Box2d getExtent() const = 0;
 

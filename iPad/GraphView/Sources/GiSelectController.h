@@ -3,12 +3,13 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #import "GiGraphView.h"
+#include <Graph2d/mgshapes.h>
 
 @class GiGraphView;
 
 @interface GiSelectController : NSObject<GiMotionHandler> {
     GiGraphView*    _view;
-    void*           _selection[100];
+    GiShape*        _selection[100];
     int             _count;
 }
 

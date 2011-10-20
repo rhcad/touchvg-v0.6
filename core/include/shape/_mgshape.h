@@ -8,7 +8,7 @@
 
 #include <gigraph.h>
 
-#define _MGSHAPE_IMPLEMENT(Cls)                             \
+#define MGSHAPE_IMPLEMENT(Cls, Base)                        \
     Cls* Cls::create() { return new Cls(); }                \
     MgObject* Cls::clone() const                            \
         { Cls* p = create(); p->_copy(*this); return p; }   \
@@ -30,12 +30,5 @@
         { return _hitTest(pt, tol, ptNear, segment); }      \
     bool Cls::draw(GiGraphics& gs, const GiContext& ctx) const  \
         { return _draw(gs, ctx); }
-
-#if defined(_MSC_VER) && _MSC_VER <= 1200
-#define MGSHAPE_IMPLEMENT(Cls, Base)                        \
-    typedef Base __super; _MGSHAPE_IMPLEMENT(Cls)
-#else
-#define MGSHAPE_IMPLEMENT(Cls, Base)    _MGSHAPE_IMPLEMENT(Cls)
-#endif
 
 #endif // __GEOMETRY_MGSHAPEIMPL_H_

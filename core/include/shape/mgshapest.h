@@ -54,9 +54,20 @@ public:
         return _shapes.size();
     }
 
-    GiShape* getShape(UInt32 index) const
+    GiShape* getFirstShape(void*& it) const
     {
-        return _shapes[index];
+        it = (void*)0;
+        return _shapes.empty() ? NULL : _shapes[0];
+    }
+    
+    GiShape* getNextShape(void*& it) const
+    {
+        UInt32 index = 1 + (UInt32)it;
+        if (index < _shapes.size()) {
+            it = (void*)index;
+            return _shapes[index];
+        }
+        return NULL;
     }
 
     GiShape* findShape(UInt32 id) const

@@ -3,10 +3,7 @@
 
 #import <GraphView/GiGraphView.h>
 
-class Shapes;
-
 @interface TestGraphView : GiGraphView {
-    Shapes*     _shapes;
 }
 
 - (void)reset;

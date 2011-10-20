@@ -4,16 +4,7 @@
 
 #import "GiGraphView.h"
 #include "GiGraphIos.h"
-
-@implementation GiGraphView(ShapeProvider)
-
-- (void*)getFirstShape:(void**)it { return NULL; }
-- (void*)getNextShape:(void**)it { return NULL; }
-- (BOX2D)getShapeExtent:(void*)shape { return Box2d(); }
-- (void)drawShape:(void*)shape graphics:(GiGraphics*)gs context:(const GiContext *)ctx {}
-- (double)hitTest:(void*)shape limits:(const BOX2D*)box { return DBL_MAX; }
-
-@end
+#include <Graph2d/mgshapes.h>
 
 @interface GiGraphView(Zooming)
 
@@ -25,6 +16,7 @@
 
 @implementation GiGraphView
 
+@synthesize shapes = _shapes;
 @synthesize xform = _xform;
 @synthesize graph = _graph;
 @synthesize viewMode = _viewMode;
@@ -34,6 +26,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        _shapes = NULL; // need to set by subclass
         _xform = new GiTransform();
         _graph = new GiGraphIos(*_xform);
         [self afterCreated];
@@ -45,6 +38,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        _shapes = NULL; // need to set by subclass
         _xform = new GiTransform();
         _graph = new GiGraphIos(*_xform);
         [self afterCreated];
@@ -54,6 +48,10 @@
 
 - (void)dealloc
 {
+    if (_shapes) {
+        _shapes->release();
+        _shapes = NULL;
+    }
     if (_graph) {
         delete _graph;
         _graph = NULL;
@@ -109,20 +107,7 @@
 
 - (void)draw:(GiGraphics*)gs
 {
-    Box2d clip(gs->getClipModel());
-    Box2d extent;
-    void *it, *shape;
-    
-    for (shape = [self getFirstShape:&it]; shape; shape = [self getNextShape:&it]) {
-        Box2d box = [self getShapeExtent:shape];
-        extent.unionWith(box);
-        if (clip.isIntersect(box)) {
-            [self drawShape:shape graphics:gs context:NULL];
-        }
-    }
-    
-    GiContext context(0, GiColor(128, 128, 128, 150), kLineDot);
-    gs->drawRect(&context, extent);
+    _shapes->draw(*gs);
 }
 
 - (void)dynDraw:(GiGraphics*)gs

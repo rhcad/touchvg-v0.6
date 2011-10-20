@@ -7,8 +7,8 @@
 
 @interface GiSelectController(Internal)
 
-- (BOOL)hitTest:(void**)shapeFound point:(CGPoint)point;
-- (void)addToSelection:(void*)shape;
+- (BOOL)hitTest:(GiShape**)shapeFound point:(CGPoint)point;
+- (void)addToSelection:(GiShape*)shape;
 
 @end
 
@@ -34,7 +34,7 @@
     GiContext context(-4, GiColor(0, 0, 255, 55));
     
     for (int i = 0; i < _count; i++) {
-        [_view drawShape:_selection[i] graphics:gs context:&context];
+        _selection[i]->draw(*gs, &context);
     }
 }
 
@@ -75,7 +75,7 @@
 
 - (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
-    void *shape = NULL;
+    GiShape *shape = NULL;
     
     if ([self hitTest:&shape point:[sender locationInView:sender.view]]) {
         _count = 0;
@@ -93,7 +93,7 @@
 
 @implementation GiSelectController(Internal)
 
-- (void)addToSelection:(void*)shape
+- (void)addToSelection:(GiShape*)shape
 {
     if (_count < 100) {
         _selection[_count] = shape;
@@ -102,23 +102,13 @@
     }
 }
 
-- (BOOL)hitTest:(void**)shapeFound point:(CGPoint)point
+- (BOOL)hitTest:(GiShape**)shapeFound point:(CGPoint)point
 {
     Box2d limits(Box2d(Point2d(point.x, point.y), 50, 50) * _view.xform->displayToModel());
-    double minDist = limits.width();
-    void *it, *shape;
+    Point2d ptNear;
+    Int32 segment;
     
-    *shapeFound = NULL;
-    for (shape = [_view getFirstShape:&it]; shape; shape = [_view getNextShape:&it]) {
-        Box2d box = [_view getShapeExtent:shape];
-        if (limits.isIntersect(box)) {
-            double dist = [_view hitTest:shape limits:&limits];
-            if (minDist > dist) {
-                minDist = dist;
-                *shapeFound = shape;
-            }
-        }
-    }
+    *shapeFound = _view.shapes->hitTest(limits, ptNear, segment);
     
     return *shapeFound != NULL;
 }

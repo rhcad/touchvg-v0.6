@@ -121,7 +121,15 @@ protected:
     bool _draw(GiGraphics& gs, const GiContext& ctx) const;
 };
 
-#define MGSHAPE_DECLARE2(Cls, TypeNum)          \
+#if !defined(_MSC_VER) || _MSC_VER <= 1200
+#define MGSHAPE_DECLARE0(Base)                  \
+    typedef Base __super;
+#else
+#define MGSHAPE_DECLARE0(Base)
+#endif
+
+#define MGSHAPE_DECLARE2(Cls, Base, TypeNum)    \
+    MGSHAPE_DECLARE0(Base)                      \
 public:                                         \
     Cls();                                      \
     virtual ~Cls();                             \
@@ -149,8 +157,8 @@ private:                                        \
         Point2d& ptNear, Int32& segment) const; \
     virtual bool draw(GiGraphics& gs, const GiContext& ctx) const;
 
-#define MGSHAPE_DECLARE(Cls, TypeNum)           \
-    MGSHAPE_DECLARE2(Cls, TypeNum)              \
+#define MGSHAPE_DECLARE(Cls, Base, TypeNum)     \
+    MGSHAPE_DECLARE2(Cls, Base, TypeNum)        \
 protected:                                      \
     void _copy(const Cls& src);                 \
     bool _equals(const Cls& src) const;         \

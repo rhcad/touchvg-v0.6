@@ -4,6 +4,7 @@
 
 #import <UIKit/UIKit.h>
 
+struct MgShapes;
 class GiTransform;
 class GiGraphics;
 
@@ -28,6 +29,7 @@ typedef enum {
 @end
 
 @interface GiGraphView : UIView<GiMotionHandler> {
+    MgShapes*       _shapes;
     GiTransform*    _xform;
     GiGraphics*     _graph;
     GiViewMode      _viewMode;
@@ -45,6 +47,7 @@ typedef enum {
     CGPoint         _centerBeforeDbl;
 }
 
+@property (nonatomic,readonly) MgShapes*    shapes;
 @property (nonatomic,readonly) GiTransform* xform;
 @property (nonatomic,readonly) GiGraphics*  graph;
 @property (nonatomic)          GiViewMode   viewMode;
@@ -59,16 +62,3 @@ typedef enum {
 
 @end
 
-#include <Graph2d/mgtype.h>
-class GiContext;
-
-@interface GiGraphView(ShapeProvider)
-
-- (void*)getFirstShape:(void**)it;
-- (void*)getNextShape:(void**)it;
-- (BOX2D)getShapeExtent:(void*)shape;
-- (void)drawShape:(void*)shape graphics:(GiGraphics*)gs context:(const GiContext *)ctx;
-
-- (double)hitTest:(void*)shape limits:(const BOX2D*)box;
-
-@end
