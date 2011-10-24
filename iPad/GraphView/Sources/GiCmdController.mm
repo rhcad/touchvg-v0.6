@@ -141,11 +141,12 @@ private:
     if (cmd) {
         _mgview->view = [self toView:sender];
         [self convertPoint:[sender locationInView:sender.view]];
-        
-        ret = cmd->doubleClick(_motion);
-        
+        _motion->startPoint = _motion->point;
+        _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
         _motion->lastPointM = _motion->pointM;
+        
+        ret = cmd->doubleClick(_motion);
     }
     
     return ret;
@@ -159,11 +160,12 @@ private:
     if (cmd) {
         _mgview->view = [self toView:sender];
         [self convertPoint:[sender locationInView:sender.view]];
-        
-        ret = cmd->click(_motion);
-        
+        _motion->startPoint = _motion->point;
+        _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
         _motion->lastPointM = _motion->pointM;
+        
+        ret = cmd->click(_motion);
     }
     
     return ret;

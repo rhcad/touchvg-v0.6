@@ -148,6 +148,29 @@ double MgBaseRect::_hitTest(const Point2d& pt, double tol,
     return mgLinesHit(4, _points, true, pt, tol, ptNear, segment);
 }
 
+UInt32 MgBaseRect::getHandleCount() const
+{
+    return 8;
+}
+
+Point2d MgBaseRect::getHandlePoint(UInt32 index) const
+{
+    Point2d pt;
+    mgGetRectHandle(getRect(), index, pt);
+    pt *= Matrix2d::rotation(getAngle(), getCenter());
+    return pt;
+}
+
+bool MgBaseRect::setHandlePoint(UInt32 index, const Point2d& pt)
+{
+    Point2d pt2(pt * Matrix2d::rotation(-getAngle(), getCenter()));
+    Box2d rect(getRect());
+    mgMoveRectHandle(rect, index, pt2);
+    setRect(rect, getAngle());
+    update();
+    return true;
+}
+
 // MgRect
 //
 

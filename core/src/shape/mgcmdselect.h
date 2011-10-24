@@ -33,10 +33,16 @@ private:
     virtual bool touchEnded(const MgMotion* sender);
 
 private:
-    std::vector<UInt32>     m_selection;
-    UInt32                  m_id;
-    Point2d                 m_ptNear;
-    Int32                   m_segment;
+    MgShape* hitTestAll(const MgMotion* sender, Point2d &ptNear, Int32 &segment);
+    MgShape* getSelectedShape(const MgMotion* sender);
+    bool canSelect(MgShape* shape, const MgMotion* sender);
+    Int32 hitTestHandles(MgShape* shape, const MgMotion* sender);
+    
+    UInt32                  m_id;               // 选中图形的ID
+    Point2d                 m_ptNear;           // 图形上的最近点
+    Int32                   m_segment;          // 点中的是图行上的哪部分
+    UInt32                  m_handleIndex;      // 点中的是哪个控制点
+    MgShape                 *m_shapeClone;      // 选中图形的复制对象
 };
 
 #endif // __GEOMETRY_MGCOMMAND_SELECT_H_

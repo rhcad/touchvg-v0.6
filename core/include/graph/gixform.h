@@ -90,6 +90,9 @@ public:
         由显示设备分辨率和显示比例决定，即为 getDpiY() * getViewScale()
     */
     double getWorldToDisplayY() const;
+    
+    //! 返回Y方向上显示长度对应的模型长度
+    double displayToModel(double px) const;
 
     //! 返回模型坐标系到世界坐标系的变换矩阵
     const Matrix2d& modelToWorld() const;

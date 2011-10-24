@@ -50,3 +50,20 @@ bool MgBaseShape::_draw(GiGraphics&, const GiContext&) const
 {
     return false;
 }
+
+UInt32 MgBaseShape::getHandleCount() const
+{
+    return getPointCount();
+}
+
+Point2d MgBaseShape::getHandlePoint(UInt32 index) const
+{
+    return getPoint(index);
+}
+
+bool MgBaseShape::setHandlePoint(UInt32 index, const Point2d& pt)
+{
+    setPoint(index, pt);
+    update();
+    return true;
+}

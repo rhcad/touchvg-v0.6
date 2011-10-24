@@ -79,6 +79,9 @@ protected:
     void _clear();
     double _hitTest(const Point2d& pt, double tol, 
         Point2d& ptNear, Int32& segment) const;
+    virtual UInt32 getHandleCount() const;
+    virtual Point2d getHandlePoint(UInt32 index) const;
+    virtual bool setHandlePoint(UInt32 index, const Point2d& pt);
 
 protected:
     Point2d     _points[4]; // 从左上角起顺时针的四个角点

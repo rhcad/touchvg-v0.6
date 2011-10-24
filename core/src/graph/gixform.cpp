@@ -156,6 +156,8 @@ Point2d GiTransform::getCenterW() const { return m_data->centerW; }
 double GiTransform::getViewScale() const { return m_data->viewScale; }
 double GiTransform::getWorldToDisplayX() const { return m_data->w2dx; }
 double GiTransform::getWorldToDisplayY() const { return m_data->w2dy; }
+double GiTransform::displayToModel(double px) const
+    { return (Vector2d(0,px) * m_data->matD2M).length(); }
 const Matrix2d& GiTransform::modelToWorld() const
     { return m_data->matM2W; }
 const Matrix2d& GiTransform::worldToModel() const

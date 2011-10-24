@@ -108,6 +108,15 @@ public:
 
     //! 显示图形
     virtual bool draw(GiGraphics& gs, const GiContext& ctx) const = 0;
+    
+    //! 返回控制点个数
+    virtual UInt32 getHandleCount() const;
+    
+    //! 返回指定序号的控制点坐标
+    virtual Point2d getHandlePoint(UInt32 index) const;
+    
+    //! 设置指定序号的控制点坐标，需再调用 update()
+    virtual bool setHandlePoint(UInt32 index, const Point2d& pt);
 
 protected:
     Box2d   _extent;
