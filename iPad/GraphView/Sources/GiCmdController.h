@@ -12,6 +12,7 @@ class GiContext;
     MgMotion    *_motion;
     MgViewProxy *_mgview;
     GiContext   *_context;
+    BOOL        undoFired;
 }
 
 @property (nonatomic,readonly)  GiContext*      context;

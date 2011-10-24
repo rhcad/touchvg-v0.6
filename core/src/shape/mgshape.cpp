@@ -67,3 +67,12 @@ bool MgBaseShape::setHandlePoint(UInt32 index, const Point2d& pt)
     update();
     return true;
 }
+
+bool MgBaseShape::offset(const Vector2d& vec, Int32)
+{
+    for (UInt32 i = 0; i < getPointCount(); i++) {
+        setPoint(i, getPoint(i) + vec);
+    }
+    update();
+    return true;
+}

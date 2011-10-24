@@ -9,8 +9,9 @@
     id      _command;                   // 绘图命令,GiCommandController
     void*   _shapesCreated;             // 创建的图形列表
     BOOL    _gestureRecognizerUsed;     // 是否使用手势识别器处理触摸消息
+    int     _touchCount;                // 开始触摸时的手指数
     
-    enum { RECOGNIZER_COUNT = 5 };
+    enum { RECOGNIZER_COUNT = 4 };
     UIGestureRecognizer* _recognizers[RECOGNIZER_COUNT];
 }
 

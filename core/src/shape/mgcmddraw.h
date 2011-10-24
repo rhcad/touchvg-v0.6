@@ -39,13 +39,14 @@ public:
     virtual ~MgCmdBaseLines();
 
 protected:
+    virtual bool undo(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);
 
 protected:
-    virtual bool canAddPoint(const MgMotion* sender);
+    virtual bool canAddPoint(const MgMotion* sender, bool ended);
     virtual bool canAddShape(const MgMotion* sender);
 };
 

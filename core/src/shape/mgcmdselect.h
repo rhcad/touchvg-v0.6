@@ -42,7 +42,7 @@ private:
     Point2d                 m_ptNear;           // 图形上的最近点
     Int32                   m_segment;          // 点中的是图行上的哪部分
     UInt32                  m_handleIndex;      // 点中的是哪个控制点
-    MgShape                 *m_shapeClone;      // 选中图形的复制对象
+    MgShape                 *m_clonesp;         // 选中图形的复制对象
 };
 
 #endif // __GEOMETRY_MGCOMMAND_SELECT_H_

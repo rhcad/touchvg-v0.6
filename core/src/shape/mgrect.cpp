@@ -81,7 +81,7 @@ void MgBaseRect::_clear()
 
 Point2d MgBaseRect::getCenter() const
 {
-    return (_points[0] + _points[1]) * 0.5;
+    return (_points[0] + _points[2]) * 0.5;
 }
 
 Box2d MgBaseRect::getRect() const

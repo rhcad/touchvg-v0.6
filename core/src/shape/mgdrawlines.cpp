@@ -28,11 +28,19 @@ MgCmdBaseLines::~MgCmdBaseLines()
 {
 }
 
+bool MgCmdBaseLines::undo(const MgMotion* sender)
+{
+    if (m_step > 1) {
+        ((MgBaseLines*)m_shape->shape())->removePoint(m_step - 1);
+    }
+    return MgCommandDraw::undo(sender);
+}
+
 bool MgCmdBaseLines::draw(const MgMotion* sender, GiGraphics* gs)
 {
     if (m_step > 1) {
         GiContext ctxaux(0, GiColor(64, 64, 64, 128), kLineSolid, GiColor(0, 64, 64, 168));
-        double radius = gs->xf().displayToModel(5);
+        double radius = gs->xf().displayToModel(3);
         
         for (UInt32 i = 0; i < m_shape->shape()->getPointCount(); i++) {
             gs->drawEllipse(&ctxaux, m_shape->shape()->getPoint(i), radius);
@@ -57,7 +65,7 @@ bool MgCmdBaseLines::touchMoved(const MgMotion* sender)
 {
     m_shape->shape()->setPoint(m_step, sender->pointM);
 
-    if (m_step > 0 && canAddPoint(sender)) {
+    if (m_step > 0 && canAddPoint(sender, false)) {
         m_step++;
         if (m_step >= m_shape->shape()->getPointCount()) {
             ((MgBaseLines*)m_shape->shape())->addPoint(sender->pointM);
@@ -70,12 +78,19 @@ bool MgCmdBaseLines::touchMoved(const MgMotion* sender)
 
 bool MgCmdBaseLines::touchEnded(const MgMotion* sender)
 {
+    MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
+    
     m_shape->shape()->setPoint(m_step, sender->pointM);
-    m_shape->shape()->update();
-
-    if (canAddPoint(sender)) {
-        ((MgBaseLines*)m_shape->shape())->removePoint(m_step);
+    
+    if (lines->endPoint().distanceTo(m_shape->shape()->getPoint(0))
+             < sender->view->xform()->displayToModel(20)) {
+        lines->removePoint(m_step);
+        lines->setClosed(true);
     }
+    else if (m_step > 1 && !canAddPoint(sender, true)) {
+        lines->removePoint(m_step);
+    }
+    m_shape->shape()->update();
 
     if (m_step > 2 && canAddShape(sender)) {
         _addshape(sender);
@@ -89,21 +104,21 @@ bool MgCmdBaseLines::touchEnded(const MgMotion* sender)
 
 const int       MIN_DIST_TWO_POINTS = 20;
 
-bool MgCmdBaseLines::canAddPoint(const MgMotion* sender)
+bool MgCmdBaseLines::canAddPoint(const MgMotion* sender, bool ended)
 {
-    Point2d endPtM   = m_shape->shape()->getPoint(m_step - 1);
-    Point2d endPt    = endPtM * sender->view->xform()->modelToDisplay();
-    double distToEnd = endPt.distanceTo(Point2d(sender->point.x, sender->point.y));
+    double minDist = sender->view->xform()->displayToModel(MIN_DIST_TWO_POINTS);
+    Point2d endPt  = m_shape->shape()->getPoint(m_step - 1);
+    double distToEnd = endPt.distanceTo(sender->pointM);
     double turnAngle = 90;
 
     if (m_step > 1)
     {
-        Point2d lastPtM = m_shape->shape()->getPoint(m_step - 2);
-        turnAngle = (endPtM - lastPtM).angleTo(sender->pointM - endPtM);
+        Point2d lastPt = m_shape->shape()->getPoint(m_step - 2);
+        turnAngle = (endPt - lastPt).angleTo(sender->pointM - endPt);
         turnAngle = mgRad2Deg(fabs(turnAngle));
     }
 
-    if (distToEnd < MIN_DIST_TWO_POINTS
+    if (distToEnd < minDist * (ended ? 0.5 : 1)
         || sin(turnAngle) * distToEnd < MIN_DIST_TWO_POINTS)
     {
         return false;

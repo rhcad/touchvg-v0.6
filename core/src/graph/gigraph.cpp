@@ -681,6 +681,7 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center,
         {
             ret = rawMoveTo(pts[0].x, pts[0].y);
             ret = rawPolyBezierTo(pts + 1, 12);
+            ret = rawCloseFigure();
             ret = rawEndPath(ctx, true);
         }
     }
@@ -878,6 +879,7 @@ bool GiGraphics::drawClosedSplines(const GiContext* ctx, int count,
     {
         ret = rawMoveTo(lppt[0].x, lppt[0].y);
         ret = rawPolyBezierTo(lppt + 1, getSize(pxpoints) - 1);
+        ret = rawCloseFigure();
         ret = rawEndPath(ctx, true);
     }
 
@@ -998,6 +1000,7 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
     {
         ret = rawMoveTo(lppt[0].x, lppt[0].y);
         ret = rawPolyBezierTo(lppt + 1, getSize(pxpoints) - 1);
+        ret = rawCloseFigure();
         ret = rawEndPath(ctx, true);
     }
 

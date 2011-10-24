@@ -86,6 +86,7 @@ void MgBaseLines::_transform(const Matrix2d& mat)
 void MgBaseLines::_clear()
 {
     _count = 0;
+    _closed = false;
     __super::_clear();
 }
 

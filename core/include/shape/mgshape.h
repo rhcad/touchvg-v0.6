@@ -115,8 +115,11 @@ public:
     //! 返回指定序号的控制点坐标
     virtual Point2d getHandlePoint(UInt32 index) const;
     
-    //! 设置指定序号的控制点坐标，需再调用 update()
+    //! 设置指定序号的控制点坐标
     virtual bool setHandlePoint(UInt32 index, const Point2d& pt);
+    
+    //! 移动图形, segment 由 hitTest() 得到
+    virtual bool offset(const Vector2d& vec, Int32 segment);
 
 protected:
     Box2d   _extent;

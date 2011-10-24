@@ -19,7 +19,7 @@ bool MgCmdDrawSplines::initialize(const MgMotion* sender)
     return _initialize(MgShapeT<MgSplines>::create, sender);
 }
 
-bool MgCmdDrawSplines::canAddPoint(const MgMotion* sender)
+bool MgCmdDrawSplines::canAddPoint(const MgMotion* sender, bool ended)
 {
-    return MgCmdBaseLines::canAddPoint(sender);
+    return MgCmdBaseLines::canAddPoint(sender, ended);
 }

@@ -21,7 +21,7 @@ private:
     virtual void release() { delete this; }
     virtual bool initialize(const MgMotion* sender);
 
-    virtual bool canAddPoint(const MgMotion* sender);
+    virtual bool canAddPoint(const MgMotion* sender, bool ended);
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_SPLINES_H_

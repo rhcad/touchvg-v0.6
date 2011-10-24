@@ -255,14 +255,8 @@
     
     UIPanGestureRecognizer *twoFingersPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
-    [twoFingersPan setMinimumNumberOfTouches:2];
     [twoFingersPan setMaximumNumberOfTouches:2];
     _recognizers[n++] = twoFingersPan;
-    
-    UIPanGestureRecognizer *oneFingerPan =
-    [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
-    [oneFingerPan setMaximumNumberOfTouches:1];
-    _recognizers[n++] = oneFingerPan;
     
     UITapGestureRecognizer *oneFingerTwoTaps =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerTwoTaps:)];
@@ -274,6 +268,7 @@
     [oneFingerOneTap requireGestureRecognizerToFail:oneFingerTwoTaps];
     _recognizers[n++] = oneFingerOneTap;
     
+    _touchCount = 0;
     if (_gestureRecognizerUsed) {
         for (int i = 0; i < RECOGNIZER_COUNT; i++)
             [self.view addGestureRecognizer:_recognizers[i]];
@@ -303,8 +298,15 @@
 
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
-    if (![[self getCommand:@selector(twoFingersPan:)] twoFingersPan:sender])
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        _touchCount = [sender numberOfTouches];
+    }
+    if (1 == _touchCount) {
+        [self oneFingerPan:sender];
+    }
+    else if (![[self getCommand:@selector(twoFingersPan:)] twoFingersPan:sender]) {
         [[self motionView:@selector(twoFingersPan:)] twoFingersPan:sender];
+    }
 }
 
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
