@@ -87,7 +87,7 @@ bool MgCmdBaseLines::touchEnded(const MgMotion* sender)
         lines->removePoint(m_step);
         lines->setClosed(true);
     }
-    else if (m_step > 1 && !canAddPoint(sender, true)) {
+    else if (m_step > 1) {
         lines->removePoint(m_step);
     }
     m_shape->shape()->update();

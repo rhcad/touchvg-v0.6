@@ -23,6 +23,37 @@
 
 #import "SCCalloutView.h"
 
+// SCCalloutGraphView
+
+@interface SCCalloutGraphView : SCCalloutView
+{
+    GiViewController    *_graph;
+}
+@property (nonatomic,readonly)  GiViewController *graph;
+@end
+
+@implementation SCCalloutGraphView
+@synthesize graph = _graph;
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        _graph = [[GiViewController alloc]init];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [_graph release];
+    [super dealloc];
+}
+
+@end
+
+// GraphViewController
+
 static const NSUInteger kRedTag         = 0;
 static const NSUInteger kBlueTag        = 1;
 static const NSUInteger kYellowTag      = 2;
@@ -228,8 +259,7 @@ static const NSUInteger kDashLineTag    = 4;
     viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
     viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _downview.frame.size.height - 20;
     
-	SCCalloutView *calloutView = [[SCCalloutView alloc]initWithFrame:viewrect];
-    [calloutView setImage:[UIImage imageNamed:@"colormap.png"] forState: UIControlStateNormal];
+	SCCalloutGraphView *calloutView = [[SCCalloutGraphView alloc]initWithFrame:viewrect];
     [self.view addSubview:calloutView];
     [calloutView release];
     
@@ -241,9 +271,11 @@ static const NSUInteger kDashLineTag    = 4;
     
     UIButton *mapbtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 20, 298, 257)];
 	[mapbtn setImage:[UIImage imageNamed:@"colormap.png"] forState:UIControlStateNormal];
-    mapbtn.enabled = NO;
 	[wrapview addSubview:mapbtn];
 	[mapbtn release];
+    
+    [calloutView.graph createSubGraphView:mapbtn];
+    calloutView.graph.commandName = "splines";
 }
 
 - (IBAction)colorMapPress:(id)sender
