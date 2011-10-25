@@ -61,6 +61,11 @@
     _activeView = self.view;
     [[self gview] setDrawingDelegate:self];
     [self addGestureRecognizers:0 view:self.view];
+    
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    [cmd touchesBegan:CGPointZero view:_activeView];
+    cmd.lineWidth = 50;
+    cmd.lineColor = GiColor(0, 0, 0, 128);
 }
 
 - (void)dealloc
@@ -97,7 +102,7 @@
         _shapesCreated = aview.shapes;
     }
     
-    [self addGestureRecognizers:0 view:aview];
+    [self viewDidLoad];
     
     [aview release];
     return self.view;

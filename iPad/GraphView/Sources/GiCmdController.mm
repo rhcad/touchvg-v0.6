@@ -20,7 +20,7 @@ public:
     UIView**        auxviews;
     
     MgViewProxy(UIView** views) : view(Nil), auxviews(views) {}
-    GiContext* context() { return [view shapes]->context(); }
+    GiContext* context() { return shapes() ? shapes()->context() : NULL; }
     
 private:
     MgShapes* shapes() { return [view shapes]; }
@@ -84,7 +84,6 @@ private:
         _mgview = new MgViewProxy(auxviews);
         _motion = new MgMotion;
         _motion->view = _mgview;
-        *_mgview->context() = GiContext(50, GiColor(0, 0, 0, 128));
     }
     return self;
 }

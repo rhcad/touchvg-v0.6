@@ -52,8 +52,8 @@
 
 - (void)afterCreated
 {
-	CGFloat scrscale = [[UIScreen mainScreen] scale];
-    GiCanvasIos::setScreenDpi(160 * scrscale);
+	//CGFloat scrscale = [[UIScreen mainScreen] scale];
+    //GiCanvasIos::setScreenDpi(160 * scrscale);
     
     if (!_graph) {
         _graph = new GiGraphIos();
