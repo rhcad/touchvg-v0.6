@@ -71,7 +71,7 @@ private:
     [super dealloc];
 }
 
-- (const char*)getCommandName {
+- (const char*)commandName {
     return mgGetCommandManager()->getCommandName();
 }
 

@@ -13,6 +13,28 @@
 		7EC8FF911504CB1100F6193D /* TestGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7EC8FF901504CB1100F6193D /* TestGraphView.mm */; };
 		C97B07E615021F5200040728 /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C97B07E415021F5200040728 /* libGraph2d.a */; };
 		C97B07E715021F5200040728 /* libGraphView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C97B07E515021F5200040728 /* libGraphView.a */; };
+		C985F88A14562C4400728C97 /* SCCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = C985F88914562C4400728C97 /* SCCalloutView.m */; };
+		C985F8A214562DBE00728C97 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F88B14562DBE00728C97 /* back.png */; };
+		C985F8A514562DBE00728C97 /* bluebrush.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F88E14562DBE00728C97 /* bluebrush.png */; };
+		C985F8A614562DBE00728C97 /* bluebrush1.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F88F14562DBE00728C97 /* bluebrush1.png */; };
+		C985F8A714562DBE00728C97 /* brush1.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89014562DBE00728C97 /* brush1.png */; };
+		C985F8A814562DBE00728C97 /* brush.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89114562DBE00728C97 /* brush.png */; };
+		C985F8A914562DBE00728C97 /* brushoption.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89214562DBE00728C97 /* brushoption.png */; };
+		C985F8AA14562DBE00728C97 /* clearview.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89314562DBE00728C97 /* clearview.png */; };
+		C985F8AB14562DBE00728C97 /* colormap.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89414562DBE00728C97 /* colormap.png */; };
+		C985F8AC14562DBE00728C97 /* colormix.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89514562DBE00728C97 /* colormix.png */; };
+		C985F8AD14562DBE00728C97 /* colormix1.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89614562DBE00728C97 /* colormix1.png */; };
+		C985F8AF14562DBE00728C97 /* dashline.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89814562DBE00728C97 /* dashline.png */; };
+		C985F8B014562DBE00728C97 /* downview.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89914562DBE00728C97 /* downview.png */; };
+		C985F8B114562DBE00728C97 /* erase.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89A14562DBE00728C97 /* erase.png */; };
+		C985F8B214562DBE00728C97 /* erase1.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89B14562DBE00728C97 /* erase1.png */; };
+		C985F8B314562DBE00728C97 /* freedraw.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89C14562DBE00728C97 /* freedraw.png */; };
+		C985F8B414562DBE00728C97 /* line.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89D14562DBE00728C97 /* line.png */; };
+		C985F8B514562DBE00728C97 /* redbrush.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89E14562DBE00728C97 /* redbrush.png */; };
+		C985F8B614562DBE00728C97 /* redbrush1.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F89F14562DBE00728C97 /* redbrush1.png */; };
+		C985F8B714562DBE00728C97 /* yellowbrush.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F8A014562DBE00728C97 /* yellowbrush.png */; };
+		C985F8B814562DBE00728C97 /* yellowbrush1.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F8A114562DBE00728C97 /* yellowbrush1.png */; };
+		C98AEA5B1456AF6900695359 /* back1.png in Resources */ = {isa = PBXBuildFile; fileRef = C98AEA5A1456AF6800695359 /* back1.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +98,29 @@
 		7EC8FF901504CB1100F6193D /* TestGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TestGraphView.mm; path = Sources/TestGraphView.mm; sourceTree = SOURCE_ROOT; };
 		C97B07E415021F5200040728 /* libGraph2d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGraph2d.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C97B07E515021F5200040728 /* libGraphView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGraphView.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C985F88814562C4400728C97 /* SCCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCCalloutView.h; path = Sources/SCCalloutView.h; sourceTree = SOURCE_ROOT; };
+		C985F88914562C4400728C97 /* SCCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCCalloutView.m; path = Sources/SCCalloutView.m; sourceTree = SOURCE_ROOT; };
+		C985F88B14562DBE00728C97 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Resources/images/back.png; sourceTree = SOURCE_ROOT; };
+		C985F88E14562DBE00728C97 /* bluebrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluebrush.png; path = Resources/images/bluebrush.png; sourceTree = SOURCE_ROOT; };
+		C985F88F14562DBE00728C97 /* bluebrush1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bluebrush1.png; path = Resources/images/bluebrush1.png; sourceTree = SOURCE_ROOT; };
+		C985F89014562DBE00728C97 /* brush1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = brush1.png; path = Resources/images/brush1.png; sourceTree = SOURCE_ROOT; };
+		C985F89114562DBE00728C97 /* brush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = brush.png; path = Resources/images/brush.png; sourceTree = SOURCE_ROOT; };
+		C985F89214562DBE00728C97 /* brushoption.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = brushoption.png; path = Resources/images/brushoption.png; sourceTree = SOURCE_ROOT; };
+		C985F89314562DBE00728C97 /* clearview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = clearview.png; path = Resources/images/clearview.png; sourceTree = SOURCE_ROOT; };
+		C985F89414562DBE00728C97 /* colormap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = colormap.png; path = Resources/images/colormap.png; sourceTree = SOURCE_ROOT; };
+		C985F89514562DBE00728C97 /* colormix.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = colormix.png; path = Resources/images/colormix.png; sourceTree = SOURCE_ROOT; };
+		C985F89614562DBE00728C97 /* colormix1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = colormix1.png; path = Resources/images/colormix1.png; sourceTree = SOURCE_ROOT; };
+		C985F89814562DBE00728C97 /* dashline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dashline.png; path = Resources/images/dashline.png; sourceTree = SOURCE_ROOT; };
+		C985F89914562DBE00728C97 /* downview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = downview.png; path = Resources/images/downview.png; sourceTree = SOURCE_ROOT; };
+		C985F89A14562DBE00728C97 /* erase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = erase.png; path = Resources/images/erase.png; sourceTree = SOURCE_ROOT; };
+		C985F89B14562DBE00728C97 /* erase1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = erase1.png; path = Resources/images/erase1.png; sourceTree = SOURCE_ROOT; };
+		C985F89C14562DBE00728C97 /* freedraw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = freedraw.png; path = Resources/images/freedraw.png; sourceTree = SOURCE_ROOT; };
+		C985F89D14562DBE00728C97 /* line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = line.png; path = Resources/images/line.png; sourceTree = SOURCE_ROOT; };
+		C985F89E14562DBE00728C97 /* redbrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = redbrush.png; path = Resources/images/redbrush.png; sourceTree = SOURCE_ROOT; };
+		C985F89F14562DBE00728C97 /* redbrush1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = redbrush1.png; path = Resources/images/redbrush1.png; sourceTree = SOURCE_ROOT; };
+		C985F8A014562DBE00728C97 /* yellowbrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = yellowbrush.png; path = Resources/images/yellowbrush.png; sourceTree = SOURCE_ROOT; };
+		C985F8A114562DBE00728C97 /* yellowbrush1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = yellowbrush1.png; path = Resources/images/yellowbrush1.png; sourceTree = SOURCE_ROOT; };
+		C98AEA5A1456AF6800695359 /* back1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back1.png; path = Resources/images/back1.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +176,7 @@
 		4AC4D33A142455C60055F4CA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C985F85914562BE200728C97 /* images */,
 				4AE2C1A41424920700C67987 /* App-Info.plist */,
 			);
 			name = Resources;
@@ -140,6 +186,8 @@
 		4AC4D35A1424627A0055F4CA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C985F88814562C4400728C97 /* SCCalloutView.h */,
+				C985F88914562C4400728C97 /* SCCalloutView.m */,
 				7EC8FF8F1504CB1100F6193D /* TestGraphView.h */,
 				7EC8FF901504CB1100F6193D /* TestGraphView.mm */,
 				7E3D20661500BE2F008ACC1B /* GraphViewController.h */,
@@ -170,6 +218,35 @@
 				4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */,
 			);
 			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		C985F85914562BE200728C97 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				C98AEA5A1456AF6800695359 /* back1.png */,
+				C985F88B14562DBE00728C97 /* back.png */,
+				C985F88E14562DBE00728C97 /* bluebrush.png */,
+				C985F88F14562DBE00728C97 /* bluebrush1.png */,
+				C985F89014562DBE00728C97 /* brush1.png */,
+				C985F89114562DBE00728C97 /* brush.png */,
+				C985F89214562DBE00728C97 /* brushoption.png */,
+				C985F89314562DBE00728C97 /* clearview.png */,
+				C985F89414562DBE00728C97 /* colormap.png */,
+				C985F89514562DBE00728C97 /* colormix.png */,
+				C985F89614562DBE00728C97 /* colormix1.png */,
+				C985F89814562DBE00728C97 /* dashline.png */,
+				C985F89914562DBE00728C97 /* downview.png */,
+				C985F89A14562DBE00728C97 /* erase.png */,
+				C985F89B14562DBE00728C97 /* erase1.png */,
+				C985F89C14562DBE00728C97 /* freedraw.png */,
+				C985F89D14562DBE00728C97 /* line.png */,
+				C985F89E14562DBE00728C97 /* redbrush.png */,
+				C985F89F14562DBE00728C97 /* redbrush1.png */,
+				C985F8A014562DBE00728C97 /* yellowbrush.png */,
+				C985F8A114562DBE00728C97 /* yellowbrush1.png */,
+			);
+			name = images;
+			path = ../../../drawingBoard/drawingBoard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,6 +343,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C985F8A214562DBE00728C97 /* back.png in Resources */,
+				C985F8A514562DBE00728C97 /* bluebrush.png in Resources */,
+				C985F8A614562DBE00728C97 /* bluebrush1.png in Resources */,
+				C985F8A714562DBE00728C97 /* brush1.png in Resources */,
+				C985F8A814562DBE00728C97 /* brush.png in Resources */,
+				C985F8A914562DBE00728C97 /* brushoption.png in Resources */,
+				C985F8AA14562DBE00728C97 /* clearview.png in Resources */,
+				C985F8AB14562DBE00728C97 /* colormap.png in Resources */,
+				C985F8AC14562DBE00728C97 /* colormix.png in Resources */,
+				C985F8AD14562DBE00728C97 /* colormix1.png in Resources */,
+				C985F8AF14562DBE00728C97 /* dashline.png in Resources */,
+				C985F8B014562DBE00728C97 /* downview.png in Resources */,
+				C985F8B114562DBE00728C97 /* erase.png in Resources */,
+				C985F8B214562DBE00728C97 /* erase1.png in Resources */,
+				C985F8B314562DBE00728C97 /* freedraw.png in Resources */,
+				C985F8B414562DBE00728C97 /* line.png in Resources */,
+				C985F8B514562DBE00728C97 /* redbrush.png in Resources */,
+				C985F8B614562DBE00728C97 /* redbrush1.png in Resources */,
+				C985F8B714562DBE00728C97 /* yellowbrush.png in Resources */,
+				C985F8B814562DBE00728C97 /* yellowbrush1.png in Resources */,
+				C98AEA5B1456AF6900695359 /* back1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +378,7 @@
 				4AC4D3B41424794C0055F4CA /* main.m in Sources */,
 				7E3D20681500BE2F008ACC1B /* GraphViewController.mm in Sources */,
 				7EC8FF911504CB1100F6193D /* TestGraphView.mm in Sources */,
+				C985F88A14562C4400728C97 /* SCCalloutView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

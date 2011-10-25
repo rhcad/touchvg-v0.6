@@ -29,6 +29,9 @@
 @synthesize lineWidth;
 @synthesize lineColor;
 @synthesize fillColor;
+@synthesize lineAlpha;
+@synthesize fillAlpha;
+@synthesize lineStyle;
 @synthesize commandName;
 
 - (id)init
@@ -76,6 +79,9 @@
     aview.shapes = new MgShapesT<std::list<MgShape*> >;
     _shapesCreated = aview.shapes;
     
+    if (!_recognizers[0])
+        [self addGestureRecognizers];
+    
     [aview release];
     return self.view;
 }
@@ -93,6 +99,9 @@
     
     aview.shapes = new MgShapesT<std::list<MgShape*> >;
     _shapesCreated = aview.shapes;
+    
+    if (!_recognizers[0])
+        [self addGestureRecognizers];
     
     [aview release];
     return self.view;
@@ -124,7 +133,7 @@
 }
 
 
-- (const char*)getCommandName {
+- (const char*)commandName {
     GiCommandController* cmd = (GiCommandController*)_command;
     return cmd.commandName;
 }
@@ -134,7 +143,7 @@
     cmd.commandName = name;
 }
 
-- (int)getLineWidth {
+- (int)lineWidth {
     GiCommandController* cmd = (GiCommandController*)_command;
     return cmd.context->getLineWidth();
 }
@@ -144,26 +153,62 @@
     cmd.context->setLineWidth(w);
 }
 
-- (UIColor*)getLineColor {
+- (UIColor*)lineColor {
     GiCommandController* cmd = (GiCommandController*)_command;
     GiColor c = cmd.context->getLineColor();
-    return [UIColor colorWithRed:c.r green:c.g blue:c.b alpha:c.a];
+    return [UIColor colorWithRed:c.r green:c.g blue:c.b alpha:1];
 }
 
 - (void)setLineColor:(UIColor*)c {
     GiCommandController* cmd = (GiCommandController*)_command;
-    cmd.context->setLineColor(giFromCGColor(c.CGColor));
+    GiColor color(giFromCGColor(c.CGColor));
+    if (color.a > 0.01f && cmd.context->getLineColor().a > 0)
+        color.a = cmd.context->getLineColor().a;
+    cmd.context->setLineColor(color);
 }
 
-- (UIColor*)getFillColor {
+- (UIColor*)fillColor {
     GiCommandController* cmd = (GiCommandController*)_command;
     GiColor c = cmd.context->getFillColor();
-    return [UIColor colorWithRed:c.r green:c.g blue:c.b alpha:c.a];
+    return [UIColor colorWithRed:c.r green:c.g blue:c.b alpha:1];
 }
 
 - (void)setFillColor:(UIColor*)c {
     GiCommandController* cmd = (GiCommandController*)_command;
-    cmd.context->setFillColor(giFromCGColor(c.CGColor));
+    GiColor color(giFromCGColor(c.CGColor));
+    if (color.a > 0.01f && cmd.context->getFillColor().a > 0)
+        color.a = cmd.context->getFillColor().a;
+    cmd.context->setFillColor(color);
+}
+
+- (float)lineAlpha {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    return cmd.context->getLineColor().a / 255.0f;
+}
+
+- (void)setLineAlpha:(float)a {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    cmd.context->setLineAlpha(mgRound(a * 255));
+}
+
+- (float)fillAlpha {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    return cmd.context->getFillColor().a / 255.0f;
+}
+
+- (void)setFillAlpha:(float)a {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    cmd.context->setFillAlpha(mgRound(a * 255));
+}
+
+- (int)lineStyle {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    return cmd.context->getLineStyle();
+}
+
+- (void)setLineStyle:(int)style {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    cmd.context->setLineStyle((kLineStyle)style);
 }
 
 #pragma mark - View motion

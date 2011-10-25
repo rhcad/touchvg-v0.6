@@ -102,7 +102,7 @@ bool MgCmdBaseLines::touchEnded(const MgMotion* sender)
     return _touchEnded(sender);
 }
 
-const int       MIN_DIST_TWO_POINTS = 20;
+const int       MIN_DIST_TWO_POINTS = 10;
 
 bool MgCmdBaseLines::canAddPoint(const MgMotion* sender, bool ended)
 {
