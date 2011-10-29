@@ -8,6 +8,8 @@
 
 #include <mgcmd.h>
 
+int getLineHalfWidth(const MgShape* shape, GiGraphics* gs);
+
 //! 绘图命令基类
 /*! \ingroup _GEOM_SHAPE_
 */

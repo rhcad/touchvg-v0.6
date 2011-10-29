@@ -3,6 +3,7 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #include "mgcmdselect.h"
+#include <mgbasicsp.h>
 
 MgCommandSelect::MgCommandSelect() : m_clonesp(NULL)
 {
@@ -31,9 +32,10 @@ bool MgCommandSelect::initialize(const MgMotion* /*sender*/)
 
 bool MgCommandSelect::undo(bool &, const MgMotion* sender)
 {
-    if (m_clonesp) {                             // 正在拖改
+    if (m_clonesp) {                                // 正在拖改
         m_clonesp->release();
         m_clonesp = NULL;
+        m_insertPoint = false;
         sender->view->redraw();
         return true;
     }
@@ -52,6 +54,14 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
     return false;
 }
 
+int getLineHalfWidth(const MgShape* shape, GiGraphics* gs)
+{
+    int width = shape->context()->getLineWidth();
+    if (width > 0)
+        width = - (int)gs->calcPenWidth(width);
+    return mgMax(1, - width / 2);
+}
+
 bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
 {
     const MgShape* spsel = getSelectedShape(sender);
@@ -61,15 +71,24 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     
     // 选中时比原图形宽4像素，控制点修改时仅亮显控制点
     GiContext ctxshape(-4, GiColor(0, 0, 255, m_handleIndex > 0 ? 50 : 128));
-    GiContext ctxhd(0, GiColor(64, 64, 64, 128), kLineSolid, GiColor(0, 64, 64, 64));
-    double radius = gs->xf().displayToModel(4);
+    GiContext ctxhd(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
+    int radiuspx = mgMin(8, 2 + mgMax(4, getLineHalfWidth(shape, gs)));
+    double radius = gs->xf().displayToModel(radiuspx);
+    double r2 = gs->xf().displayToModel(4 + radiuspx);
     
     shape->draw(*gs, &ctxshape);
     
     if (m_handleIndex > 0) {
         for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
-            gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(i), 
-                            m_handleIndex == i+1 ? radius*2 : radius);
+            gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(i), radius);
+        }
+        if (m_clonesp || !m_insertPoint) {
+            gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(m_handleIndex - 1), r2);
+        }
+        if (m_insertPoint) {
+            GiContext insertctx(ctxhd);
+            insertctx.setFillColor(GiColor(255, 0, 0, 240));
+            gs->drawEllipse(&insertctx, m_ptNear, r2);
         }
         if (m_clonesp) {
             gs->drawEllipse(&ctxhd, spsel->shape()->getHandlePoint(m_handleIndex-1), radius);
@@ -94,27 +113,29 @@ MgShape* MgCommandSelect::getSelectedShape(const MgMotion* sender)
 
 bool MgCommandSelect::canSelect(MgShape* shape, const MgMotion* sender)
 {
-    Box2d limits(Point2d(sender->point.x, sender->point.y), 20, 0);
+    Box2d limits(Point2d(sender->point.x, sender->point.y), 50, 0);
     limits *= sender->view->xform()->displayToModel();
-    
-    Point2d ptNear;
-    Int32 segment;
-    double d = shape->shape()->hitTest(limits.center(), limits.width() / 2, ptNear, segment);
+    double d = shape->shape()->hitTest(limits.center(), limits.width() / 2, m_ptNear, m_segment);
     
     return d <= limits.width() / 2;
 }
 
-Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const MgMotion* sender)
+Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const MgMotion* sender, const Point2d& pointM)
 {
     UInt32 handleIndex = 0;
     double minDist = _DBL_MAX;
     
     for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
-        double d = sender->pointM.distanceTo(shape->shape()->getHandlePoint(i));
+        double d = pointM.distanceTo(shape->shape()->getHandlePoint(i));
         if (minDist > d) {
             minDist = d;
             handleIndex = i + 1;
         }
+    }
+    if (minDist > sender->view->xform()->displayToModel(50)
+        && shape->shape()->isKindOf(MgBaseLines::Type()))
+    {
+        m_insertPoint = true;
     }
     
     return handleIndex;
@@ -128,20 +149,19 @@ bool MgCommandSelect::click(const MgMotion* sender)
     MgShape* shape;
     bool    canSelAgain;
     
+    m_insertPoint = false;
     shape = getSelectedShape(sender);
     canSelAgain = (shape && (m_handleIndex > 0 || shape->getID() == m_id)
                    && canSelect(shape, sender));
     
     if (canSelAgain) {
-        handleIndex = hitTestHandles(shape, sender);
-        if (m_handleIndex != handleIndex) {
+        handleIndex = hitTestHandles(shape, sender, sender->pointM);
+        if (m_handleIndex != handleIndex || m_insertPoint) {
             m_handleIndex = handleIndex;
-            sender->view->redraw();
         }
     }
     else if (shape && m_handleIndex > 0) {
         m_handleIndex = 0;
-        sender->view->redraw();
     }
     else {
         shape = hitTestAll(sender, ptNear, segment);
@@ -152,9 +172,9 @@ bool MgCommandSelect::click(const MgMotion* sender)
             m_ptNear = ptNear;
             m_segment = segment;
             m_handleIndex = 0;
-            sender->view->redraw();
         }
     }
+    sender->view->redraw();
     
     return true;
 }
@@ -173,12 +193,20 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
 {
     MgShape* shape = getSelectedShape(sender);
     
-    if (shape && m_handleIndex > 0) {
-        m_handleIndex = hitTestHandles(shape, sender);
-    }
     if (m_clonesp)
         m_clonesp->release();
     m_clonesp = shape ? (MgShape*)shape->clone() : NULL;
+    
+    m_insertPoint = false;
+    m_handleIndex = (m_clonesp && m_handleIndex > 0) ? hitTestHandles(m_clonesp, sender, sender->pointM) : 0;
+    
+    if (m_insertPoint && m_clonesp->shape()->isKindOf(MgBaseLines::Type())) {
+        MgBaseLines* lines = (MgBaseLines*)m_clonesp->shape();
+        canSelect(m_clonesp, sender);   // calc m_ptNear
+        lines->insertPoint(m_segment, m_ptNear);
+        m_clonesp->shape()->update();
+        m_handleIndex = hitTestHandles(m_clonesp, sender, m_ptNear);
+    }
     
     sender->view->redraw();
     
@@ -191,8 +219,13 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
     
     if (m_clonesp && shape) {
         m_clonesp->shape()->copy(*(shape->shape()));
+        if (m_insertPoint && m_clonesp->shape()->isKindOf(MgBaseLines::Type())) {
+            MgBaseLines* lines = (MgBaseLines*)m_clonesp->shape();
+            lines->insertPoint(m_segment, m_ptNear);
+        }
         if (m_handleIndex > 0) {
-            m_clonesp->shape()->setHandlePoint(m_handleIndex - 1, sender->pointM);
+            double tol = sender->view->xform()->displayToModel(10);
+            m_clonesp->shape()->setHandlePoint(m_handleIndex - 1, sender->pointM, tol);
         }
         else {
             m_clonesp->shape()->offset(sender->pointM - sender->startPointM, m_segment);
@@ -212,8 +245,14 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
         shape->shape()->copy(*(m_clonesp->shape()));
         shape->shape()->update();
         sender->view->regen();
+        
         m_clonesp->release();
         m_clonesp = NULL;
+        
+        if (m_handleIndex > 0) {
+            m_insertPoint = false;
+            m_handleIndex = hitTestHandles(shape, sender, sender->pointM);
+        }
     }
     
     return true;

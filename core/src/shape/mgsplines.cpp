@@ -75,20 +75,23 @@ void MgSplines::smooth(double tol)
     points[0] = _points[0];                 // 第一个点不动
     indexMap[0] = 0;
     
-    for (i = 1; i + 1 < _count; i++)        // 检查第i点能否去掉
+    for (i = 1; i + 1 < _count; i++)        // 检查第i点能否去掉，最末点除外
     {
         for (j = 1; i + j < _count; j++)    // 跳过第i点复制后续点到points
             points[n + j] = _points[i + j];
-        mgCubicSplines(n + j, points, knotVectors, _closed ? kCubicLoop : 0);
-        dist = mgCubicSplinesHit(n + j, points, knotVectors, _closed, _points[i],
+        
+        // 新曲线：indexMap[0], indexMap[1], ..., indexMap[n], i+1, i+2, ..., _count-1
+        mgCubicSplines(n + _count - i, points, knotVectors, _closed ? kCubicLoop : 0);
+        dist = mgCubicSplinesHit(n + _count - i, points, knotVectors, _closed, _points[i],
                                  tol * 2, ptNear, segment); // 检查第i点到新曲线的距离
         if (dist >= tol) {                  // 第i点去掉则偏了，应保留
             points[++n] = _points[i];
-            indexMap[n] = i;                // 新曲线的第i点对应与原indexMap[i]点
+            indexMap[n] = i;                // 新曲线的第j点对应与原indexMap[j]点
         }
         else {
-            for (j = 0; j <= n; j++) {      // 切向变化超过30度时也保留点
-                if (_knotVectors[indexMap[j]].angleTo(knotVectors[j]) > _M_PI_6) {
+            for (j = 0; j < n + _count - i; j++) {  // 切向变化超过30度时也保留点
+                UInt32 index = j > n ? i + j - n : indexMap[j];
+                if (_knotVectors[index].angleTo(knotVectors[j]) > _M_PI_6) {
                     points[++n] = _points[i];
                     indexMap[n] = i;
                     break;
@@ -107,4 +110,5 @@ void MgSplines::smooth(double tol)
     
     delete[] points;
     delete[] knotVectors;
+    delete[] indexMap;
 }

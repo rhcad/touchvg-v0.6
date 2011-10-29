@@ -32,15 +32,6 @@ bool MgCmdDrawSplines::undo(bool &enableRecall, const MgMotion* sender)
 
 bool MgCmdDrawSplines::draw(const MgMotion* sender, GiGraphics* gs)
 {
-    /*if (m_step > 1) {
-        GiContext ctxaux(0, GiColor(64, 64, 64, 128), kLineSolid, GiColor(0, 64, 64, 168));
-        double radius = gs->xf().displayToModel(3);
-        
-        for (UInt32 i = 0; i < m_shape->shape()->getPointCount(); i++) {
-            gs->drawEllipse(&ctxaux, m_shape->shape()->getPoint(i), radius);
-        }
-    }*/
-    
     return MgCommandDraw::draw(sender, gs);
 }
 
@@ -59,11 +50,11 @@ bool MgCmdDrawSplines::touchMoved(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
     
-    double closelen  = sender->view->xform()->displayToModel(20);
+    double closelen  = sender->view->xform()->displayToModel(20 + getLineHalfWidth(m_shape, sender->view->graph()));
     double closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
     bool   closed    = (m_step > 2 && closedist < closelen
-                        && m_shape->shape()->getExtent().width() > closedist
-                        && m_shape->shape()->getExtent().height() > closedist);
+                        && m_shape->shape()->getExtent().width() > closedist * 1.5
+                        && m_shape->shape()->getExtent().height() > closedist * 1.5);
     
     if (m_step > 2 && m_shape->shape()->isClosed() != closed) {
         lines->setClosed(closed);
@@ -91,7 +82,8 @@ bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
     MgSplines* splines = (MgSplines*)m_shape->shape();
     
     if (m_step > 1) {
-        splines->smooth(sender->view->xform()->displayToModel(5));
+        int w = getLineHalfWidth(m_shape, sender->view->graph());
+        splines->smooth(sender->view->xform()->displayToModel(2 + w));
         _addshape(sender);
     }
     
@@ -103,7 +95,7 @@ bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
 
 bool MgCmdDrawSplines::canAddPoint(const MgMotion* sender, bool ended)
 {
-    double minDist = sender->view->xform()->displayToModel(3);
+    /*double minDist = sender->view->xform()->displayToModel(3);
     Point2d endPt  = m_shape->shape()->getPoint(m_step - 1);
     double distToEnd = endPt.distanceTo(sender->pointM);
     double turnAngle = 90;
@@ -118,7 +110,7 @@ bool MgCmdDrawSplines::canAddPoint(const MgMotion* sender, bool ended)
     if (distToEnd < minDist)
         return false;
     if (!ended && sin(turnAngle) * distToEnd < 1)
-        return false;
+        return false;*/
     
     return true;
 }

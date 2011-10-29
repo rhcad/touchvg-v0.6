@@ -27,7 +27,7 @@ public:
 protected:
     UInt32 getHandleCount() const;
     Point2d getHandlePoint(UInt32 index) const;
-    bool setHandlePoint(UInt32 index, const Point2d& pt);
+    bool setHandlePoint(UInt32 index, const Point2d& pt, double tol);
 
 private:
     Point2d     _points[2];
@@ -89,7 +89,7 @@ protected:
         Point2d& ptNear, Int32& segment) const;
     UInt32 getHandleCount() const;
     Point2d getHandlePoint(UInt32 index) const;
-    bool setHandlePoint(UInt32 index, const Point2d& pt);
+    bool setHandlePoint(UInt32 index, const Point2d& pt, double tol);
 
 protected:
     Point2d     _points[4]; // 从左上角起顺时针的四个角点
@@ -177,6 +177,9 @@ public:
 
     //! 添加一个顶点
     void addPoint(const Point2d& pt);
+    
+    //! 在指定段插入一个顶点
+    void insertPoint(Int32 segment, const Point2d& pt);
 
     //! 删除一个顶点
     void removePoint(UInt32 index);
@@ -194,6 +197,7 @@ protected:
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
+    bool setHandlePoint(UInt32 index, const Point2d& pt, double tol);
     double _hitTest(const Point2d& pt, double tol, 
         Point2d& ptNear, Int32& segment) const;
 

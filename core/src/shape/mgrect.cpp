@@ -161,7 +161,7 @@ Point2d MgBaseRect::getHandlePoint(UInt32 index) const
     return pt;
 }
 
-bool MgBaseRect::setHandlePoint(UInt32 index, const Point2d& pt)
+bool MgBaseRect::setHandlePoint(UInt32 index, const Point2d& pt, double)
 {
     Point2d pt2(pt * Matrix2d::rotation(-getAngle(), getCenter()));
     Box2d rect(getRect());

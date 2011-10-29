@@ -24,8 +24,14 @@ struct MgShapes : public MgObject
     virtual MgShape* hitTest(const Box2d& limits, Point2d& ptNear, Int32& segment) const = 0;
     virtual void draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
 
+    //! 删除所有图形
     virtual void clear() = 0;
+    
+    //! 复制出新图形并添加到图形列表中
     virtual MgShape* addShape(const MgShape& src) = 0;
+    
+    //! 移除一个图形，由调用者删除图形对象
+    virtual MgShape* removeShape(UInt32 nID) = 0;
 };
 
 #endif // __GEOMETRY_MGSHAPES_H_

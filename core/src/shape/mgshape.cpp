@@ -61,7 +61,7 @@ Point2d MgBaseShape::getHandlePoint(UInt32 index) const
     return getPoint(index);
 }
 
-bool MgBaseShape::setHandlePoint(UInt32 index, const Point2d& pt)
+bool MgBaseShape::setHandlePoint(UInt32 index, const Point2d& pt, double)
 {
     setPoint(index, pt);
     update();

@@ -29,6 +29,7 @@ public:
 public:
     bool beginPaint(CGContextRef context, bool buffered = true, bool fast = false);
     void endPaint(bool draw = true);
+    static void setScreenDpi(int dpi);
 
     virtual void clearWnd();
     virtual bool drawCachedBitmap(int x = 0, int y = 0, bool secondBmp = false);

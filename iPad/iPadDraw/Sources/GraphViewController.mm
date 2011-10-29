@@ -94,7 +94,7 @@ static const NSUInteger kDashLineTag    = 4;
     viewFrame.size.height -= BAR_HEIGHT;
     
     _graph = [[GiViewController alloc]init];
-    [_graph createGraphView:viewFrame backgroundColor:[UIColor grayColor]];
+    [_graph createGraphView:viewFrame backgroundColor:[UIColor grayColor] shapes:NULL];
     [self.view addSubview:_graph.view];
     
     CGRect barFrame = rect;
@@ -274,7 +274,7 @@ static const NSUInteger kDashLineTag    = 4;
 	[wrapview addSubview:mapbtn];
 	[mapbtn release];
     
-    [calloutView.graph createSubGraphView:mapbtn];
+    [calloutView.graph createSubGraphView:mapbtn shapes:_graph.shapes];
     calloutView.graph.commandName = "splines";
 }
 
@@ -294,7 +294,7 @@ static const NSUInteger kDashLineTag    = 4;
 	[self showUnlightButtons];
 	[erasebtn setImage:[UIImage imageNamed:@"erase1.png"] forState:UIControlStateNormal];
     
-    _graph.commandName = "rect";
+    _graph.commandName = "erase";
 }
 
 - (IBAction)clearView:(id)sender    // 清屏

@@ -55,7 +55,7 @@ private:
 {
     self = [super init];
     if (self) {
-        _context = new GiContext(-3);
+        _context = new GiContext(-3, GiColor(0, 0, 0, 172));
         _mgview = new MgViewProxy(_context);
         _motion = new MgMotion;
         _motion->view = _mgview;

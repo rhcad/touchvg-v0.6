@@ -68,6 +68,9 @@
     _zooming = NO;
     _doubleZoomed = NO;
     _enableZoom = YES;
+    
+    CGFloat scrscale = [[UIScreen mainScreen] scale];
+    GiGraphIos::setScreenDpi(mgRound(160 * scrscale));
 
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _xform->setViewScaleRange(0.01, 20.0);

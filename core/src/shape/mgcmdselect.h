@@ -41,13 +41,14 @@ private:
     MgShape* hitTestAll(const MgMotion* sender, Point2d &ptNear, Int32 &segment);
     MgShape* getSelectedShape(const MgMotion* sender);
     bool canSelect(MgShape* shape, const MgMotion* sender);
-    Int32 hitTestHandles(MgShape* shape, const MgMotion* sender);
+    Int32 hitTestHandles(MgShape* shape, const MgMotion* sender, const Point2d& pointM);
     
     UInt32                  m_id;               // 选中图形的ID
     Point2d                 m_ptNear;           // 图形上的最近点
     Int32                   m_segment;          // 点中的是图行上的哪部分
     UInt32                  m_handleIndex;      // 点中的是哪个控制点
     MgShape                 *m_clonesp;         // 选中图形的复制对象
+    bool                    m_insertPoint;      // 是否可插入新点
 };
 
 #endif // __GEOMETRY_MGCOMMAND_SELECT_H_

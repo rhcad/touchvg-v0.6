@@ -151,6 +151,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\src\shape\mgcmderase.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\src\shape\mgcmdmgr.cpp"
 				>
 			</File>
@@ -221,6 +225,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\src\shape\mgcmddraw.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\src\shape\mgcmderase.h"
 				>
 			</File>
 			<File

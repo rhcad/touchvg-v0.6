@@ -127,6 +127,8 @@ public:
     */
     Box2d& set(const Point2d& center, double width, double height)
     {
+        if (mgIsZero(height))
+            height = width;
         xmin = center.x - width * 0.5;
         ymin = center.y - height * 0.5;
         xmax = center.x + width * 0.5;

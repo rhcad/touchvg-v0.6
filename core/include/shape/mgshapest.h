@@ -18,6 +18,7 @@ class MgShapesT : public MgShapes
 {
     typedef MgShapesT<Container> ThisClass;
     typedef typename Container::const_iterator const_iterator;
+    typedef typename Container::iterator iterator;
 public:
     MgShapesT()
     {
@@ -85,6 +86,19 @@ public:
             _shapes.push_back(p);
         }
         return p;
+    }
+    
+    MgShape* removeShape(UInt32 nID)
+    {
+        for (iterator it = _shapes.begin(); it != _shapes.end(); ++it)
+        {
+            MgShape* shape = *it;
+            if (shape->getID() == nID) {
+                _shapes.erase(it);
+                return shape;
+            }
+        }
+        return NULL;
     }
 
     UInt32 getShapeCount() const

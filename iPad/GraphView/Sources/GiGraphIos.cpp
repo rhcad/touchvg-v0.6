@@ -25,6 +25,7 @@ public:
     GiContext       _gictx;
     bool            _fast;
     CGImageRef      _caches[2];
+    static int      _dpi;
 
     GiGraphIosImpl(GiGraphIos* p) : _this(p), _context(NULL), _buffctx(NULL)
         , _bkcolor(GiColor::White()), _fast(false)
@@ -103,6 +104,8 @@ public:
     
     void createBufferBitmap(int width, int height);
 };
+
+int GiGraphIosImpl::_dpi = 160;
 
 GiColor giFromCGColor(CGColorRef color)
 {
@@ -266,9 +269,14 @@ bool GiGraphIos::isBufferedDrawing() const
     return !!m_draw->_buffctx;
 }
 
+void GiGraphIos::setScreenDpi(int dpi)
+{
+    GiGraphIosImpl::_dpi = dpi;
+}
+
 int GiGraphIos::getScreenDpi() const
 {
-    return 160; // How to get the actual DPI?
+    return GiGraphIosImpl::_dpi;
 }
 
 bool GiGraphIos::setClipBox(const RECT* prc)
@@ -389,16 +397,20 @@ bool GiGraphIos::rawPolygon(const GiContext* ctx,
 
     if (ret)
     {
-        CGContextMoveToPoint(m_draw->getContext(), lppt[0].x, lppt[0].y);
-        for (int i = 1; i < count; i++) {
-            CGContextAddLineToPoint(m_draw->getContext(), lppt[i].x, lppt[i].y);
-        }
-        CGContextClosePath(m_draw->getContext());
-
         if (usepen) {
+            CGContextMoveToPoint(m_draw->getContext(), lppt[0].x, lppt[0].y);
+            for (int i = 1; i < count; i++) {
+                CGContextAddLineToPoint(m_draw->getContext(), lppt[i].x, lppt[i].y);
+            }
+            CGContextClosePath(m_draw->getContext());
             CGContextStrokePath(m_draw->getContext());
         }
         if (usebrush) {
+            CGContextMoveToPoint(m_draw->getContext(), lppt[0].x, lppt[0].y);
+            for (int i = 1; i < count; i++) {
+                CGContextAddLineToPoint(m_draw->getContext(), lppt[i].x, lppt[i].y);
+            }
+            CGContextClosePath(m_draw->getContext());
             CGContextFillPath(m_draw->getContext());
         }
     }

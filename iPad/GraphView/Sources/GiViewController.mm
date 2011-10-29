@@ -33,6 +33,7 @@
 @synthesize fillAlpha;
 @synthesize lineStyle;
 @synthesize commandName;
+@synthesize shapes;
 
 - (id)init
 {
@@ -68,7 +69,7 @@
     [super dealloc];
 }
 
-- (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor
+- (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor shapes:(void*)sp
 {
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
@@ -76,8 +77,14 @@
     aview.backgroundColor = bkColor;
     [aview setDrawingDelegate:self];
     
-    aview.shapes = new MgShapesT<std::list<MgShape*> >;
-    _shapesCreated = aview.shapes;
+    if (sp) {
+        aview.shapes = (MgShapes*)sp;
+    }
+    else
+    {
+        aview.shapes = new MgShapesT<std::list<MgShape*> >;
+        _shapesCreated = aview.shapes;
+    }
     
     if (!_recognizers[0])
         [self addGestureRecognizers];
@@ -86,7 +93,7 @@
     return self.view;
 }
 
-- (UIView*)createSubGraphView:(UIView*)parentView
+- (UIView*)createSubGraphView:(UIView*)parentView shapes:(void*)sp
 {
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:parentView.bounds];
     
@@ -97,8 +104,14 @@
     
     [parentView addSubview:aview];
     
-    aview.shapes = new MgShapesT<std::list<MgShape*> >;
-    _shapesCreated = aview.shapes;
+    if (sp) {
+        aview.shapes = (MgShapes*)sp;
+    }
+    else
+    {
+        aview.shapes = new MgShapesT<std::list<MgShape*> >;
+        _shapesCreated = aview.shapes;
+    }
     
     if (!_recognizers[0])
         [self addGestureRecognizers];
@@ -121,17 +134,9 @@
     [[self gview] getGraph]->clearCachedBitmap();
 }
 
-- (id)setCommand:(id)cmd
-{
-    assert(!cmd || [cmd conformsToProtocol:@protocol(GiMotionHandler)]);
-    id oldcmd = _command;
-    
-    [[self getCommand:@selector(cancel)] cancel];
-    _command = cmd;
-    
-    return oldcmd;
+- (void*)shapes {
+    return [[self gview] getShapes];
 }
-
 
 - (const char*)commandName {
     GiCommandController* cmd = (GiCommandController*)_command;

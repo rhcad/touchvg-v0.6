@@ -19,6 +19,8 @@
     UIGestureRecognizer* _recognizers[RECOGNIZER_COUNT];
 }
 
+@property (nonatomic,readonly)  void*   shapes;     //!< 图形列表, MgShapes*
+
 //! 当前命令名称
 @property (nonatomic)         const char*   commandName;
 
@@ -49,9 +51,20 @@
 - (void)dynDraw;                        //!< 供图形视图动态显示时调用
 
 //! 创建图形视图(GiGraphView)和图形列表，不需要图形视图的派生类时使用
-- (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor;
+/*!
+    \param frame 视图位置大小
+    \param bkColor 背景色
+    \param shapes 已有的共享图形列表，如果为NULL则自动创建图形列表
+    \return 创建子图形视图(GiGraphView)
+ */
+- (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor shapes:(void*)shapes;
 
 //! 在已有视图中创建子图形视图(GiGraphView)和图形列表
-- (UIView*)createSubGraphView:(UIView*)parentView;
+/*!
+    \param parentView 已有视图，将创建其子视图
+    \param shapes 已有的共享图形列表，如果为NULL则自动创建图形列表
+    \return 创建子图形视图(GiGraphView)
+ */
+- (UIView*)createSubGraphView:(UIView*)parentView shapes:(void*)shapes;
 
 @end

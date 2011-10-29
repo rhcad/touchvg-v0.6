@@ -91,7 +91,7 @@ Point2d MgLine::getHandlePoint(UInt32 index) const
     return 1 == index ? center() : _points[index ? 1 : 0];
 }
 
-bool MgLine::setHandlePoint(UInt32 index, const Point2d& pt)
+bool MgLine::setHandlePoint(UInt32 index, const Point2d& pt, double)
 {
     if (1 == index) {
         Vector2d off(pt - center());

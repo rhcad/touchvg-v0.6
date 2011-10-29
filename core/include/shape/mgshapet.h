@@ -34,6 +34,11 @@ public:
     {
         return &_context;
     }
+    
+    const GiContext* context() const
+    {
+        return &_context;
+    }
 
     MgBaseShape* shape()
     {

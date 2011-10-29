@@ -123,6 +123,16 @@ void MgBaseLines::addPoint(const Point2d& pt)
     _points[_count - 1] = pt;
 }
 
+void MgBaseLines::insertPoint(Int32 segment, const Point2d& pt)
+{
+    if (segment >= 0 && segment < _count - (_closed ? 1 : 2)) {
+        resize(_count + 1);
+        for (Int32 i = (Int32)_count - 1; i > segment + 1; i--)
+            _points[i] = _points[i - 1];
+        _points[segment + 1] = pt;
+    }
+}
+
 void MgBaseLines::removePoint(UInt32 index)
 {
     if (index < _count)
@@ -131,6 +141,30 @@ void MgBaseLines::removePoint(UInt32 index)
             _points[i - 1] = _points[i];
         _count--;
     }
+}
+
+bool MgBaseLines::setHandlePoint(UInt32 index, const Point2d& pt, double tol)
+{
+    Int32 preindex = (_closed && 0 == index) ? _count - 1 : index - 1;
+    UInt32 postindex = (_closed && index + 1 == _count) ? 0 : index + 1;
+    
+    double predist = preindex < 0 ? _DBL_MAX : getPoint(preindex).distanceTo(pt);
+    double postdist = postindex >= _count ? _DBL_MAX : getPoint(postindex).distanceTo(pt);
+    
+    if (predist < tol || postdist < tol) {
+        removePoint(index);
+    }
+    else if (!_closed && ((index == 0 && getPoint(_count - 1).distanceTo(pt) < tol)
+             || (index == _count - 1 && getPoint(0).distanceTo(pt) < tol))) {
+        removePoint(index);
+        _closed = true;
+    }
+    else {
+        setPoint(index, pt);
+    }
+    update();
+    
+    return true;
 }
 
 double MgBaseLines::_hitTest(const Point2d& pt, double tol, 

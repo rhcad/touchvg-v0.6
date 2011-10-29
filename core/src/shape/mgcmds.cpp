@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include "mgcmdselect.h"
+#include "mgcmderase.h"
 #include "mgdrawrect.h"
 #include "mgdrawlines.h"
 #include "mgdrawsplines.h"
@@ -17,6 +18,7 @@ MgCommand* mgCreateCommand(const char* name)
     };
     const Cmd cmds[] = {
         { MgCommandSelect::Name(), MgCommandSelect::Create },
+        { MgCommandErase::Name(), MgCommandErase::Create },
         { MgCmdDrawRect::Name(), MgCmdDrawRect::Create },
         { MgCmdDrawLines::Name(), MgCmdDrawLines::Create },
         { MgCmdDrawSplines::Name(), MgCmdDrawSplines::Create },
