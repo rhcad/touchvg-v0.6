@@ -132,7 +132,7 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const MgMotion* sender, co
             handleIndex = i + 1;
         }
     }
-    if (minDist > sender->view->xform()->displayToModel(50)
+    if (minDist > sender->view->xform()->displayToModel(20)
         && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
         m_insertPoint = true;
