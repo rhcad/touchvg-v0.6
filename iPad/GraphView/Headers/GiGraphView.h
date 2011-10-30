@@ -47,12 +47,14 @@
     GiGraphics*     _graph;                 //!< 图形显示对象
     id<GiView>      _gview;                 //!< 实际图形视图
     id              _drawingDelegate;       //!< 动态绘图用的委托控制器对象
+    CGPoint         _pointW;                //!< 实际图形视图的当前点，世界坐标
 }
 
 @property (nonatomic,readonly) GiGraphics*  graph;      //!< 图形显示对象
-@property (nonatomic)          CGPoint      centerW;    //!< 视图中心的世界坐标
+@property (nonatomic)          CGPoint      pointW;     //!< 实际图形视图的当前点，世界坐标
 
 - (id)initWithFrame:(CGRect)frame graphView:(id<GiView>)gview;
 - (void)draw:(GiGraphics*)gs;
+- (void)dynDraw:(GiGraphics*)gs;
 
 @end

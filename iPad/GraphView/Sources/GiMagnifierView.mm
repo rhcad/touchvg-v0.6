@@ -9,7 +9,7 @@
 @implementation GiMagnifierView
 
 @synthesize graph = _graph;
-@synthesize centerW;
+@synthesize pointW = _pointW;
 
 - (id)initWithFrame:(CGRect)frame graphView:(id<GiView>)gview
 {
@@ -20,6 +20,9 @@
         _xform->setViewScaleRange(1, 50);
         _gview = gview;
         _drawingDelegate = Nil;
+        
+        self.multipleTouchEnabled = YES;
+        self.contentMode = UIViewContentModeRedraw;
     }
     return self;
 }
@@ -37,15 +40,12 @@
     [super dealloc];
 }
 
-- (CGPoint)centerW {
-    return CGPointMake(_xform->getCenterW().x, _xform->getCenterW().y);
-}
-
-- (void)setCenterW:(CGPoint)pt {
+- (void)setPointW:(CGPoint)pt {
+    _pointW = pt;
     Point2d ptd = Point2d(pt.x, pt.y) * _xform->worldToDisplay();
+    
     if (!CGRectContainsPoint(CGRectInset(self.bounds, 20, 20), CGPointMake(ptd.x, ptd.y))) { 
         _xform->zoom(Point2d(pt.x, pt.y), _xform->getViewScale());
-        [self setNeedsDisplay];
     }
 }
 
@@ -89,21 +89,13 @@
     _xform->zoom(_xform->getCenterW(), [_gview getXform]->getViewScale() * 3);
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (gs->beginPaint(context, [[self gestureRecognizers]count] > 0))
+    if (gs->beginPaint(context))
     {
-        if (!gs->drawCachedBitmap(0, 0)) {
+        if ([[self gestureRecognizers]count] > 0 && !gs->drawCachedBitmap(0, 0)) {
             [self draw:gs];
             gs->saveCachedBitmap();
         }
-        
-        GiContext ctx(0, GiColor(64, 64, 64, 172));
-        gs->rawLine(&ctx, self.center.x - 20, self.center.y, self.center.x + 20, self.center.y);
-        gs->rawLine(&ctx, self.center.x, self.center.y - 20, self.center.x, self.center.y + 20);
-        
-        if ([_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
-            [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
-        }
-        
+        [self dynDraw:gs];
         gs->endPaint();
     }
 }
@@ -115,12 +107,16 @@
     }
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)dynDraw:(GiGraphics*)gs
 {
-    if ([_drawingDelegate respondsToSelector:@selector(graphViewActivated:)]) {
-        [_drawingDelegate performSelector:@selector(graphViewActivated:) withObject:self];
+    if ([_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
+        [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
     }
-    [super touchesEnded:touches withEvent:event];
+    
+    GiContext ctx(0, GiColor(64, 64, 64, 172));
+    Point2d ptd(Point2d(_pointW.x, _pointW.y) * _xform->worldToDisplay());
+    gs->rawLine(&ctx, ptd.x - 20, ptd.y, ptd.x + 20, ptd.y);
+    gs->rawLine(&ctx, ptd.x, ptd.y - 20, ptd.x, ptd.y + 20);
 }
 
 @end

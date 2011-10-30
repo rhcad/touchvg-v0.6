@@ -15,10 +15,9 @@
     BOOL    _gestureRecognizerUsed;     //!< 是否使用手势识别器处理触摸消息
     int     _touchCount;                //!< 开始触摸时的手指数
     UIView  *_magnifierView;            //!< 放大镜视图
-    UIView  *_curView;                  //!< 当前图形视图
     
     enum { RECOGNIZER_COUNT = 4 };
-    UIGestureRecognizer* _recognizers[RECOGNIZER_COUNT];
+    UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT];
 }
 
 @property (nonatomic,readonly)  void*   shapes;     //!< 图形列表, MgShapes*
@@ -51,7 +50,6 @@
 - (void)clearCachedData;                //!< 清除缓冲数据，下次重新构建显示
 - (void)undoMotion;                     //!< 触发晃动或撤销操作
 - (void)dynDraw:(id)sender;             //!< 供图形视图动态显示时调用
-- (void)graphViewActivated:(UIView*)aview;
 
 //! 创建图形视图(GiGraphView)和图形列表，不需要图形视图的派生类时使用
 /*!

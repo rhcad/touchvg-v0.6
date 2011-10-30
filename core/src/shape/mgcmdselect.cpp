@@ -112,6 +112,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         }
         if (m_clonesp || !m_insertPoint) {
             gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(m_handleIndex - 1), r2);
+            if (m_clonesp)
+                gs->drawEllipse(&ctxhd, spsel->shape()->getHandlePoint(m_handleIndex - 1), r2);
         }
         if (m_insertPoint && m_clonesp) {
             GiContext insertctx(ctxhd);
@@ -141,7 +143,7 @@ MgShape* MgCommandSelect::getSelectedShape(const MgMotion* sender)
 
 bool MgCommandSelect::canSelect(MgShape* shape, const MgMotion* sender)
 {
-    Box2d limits(Point2d(sender->point.x, sender->point.y), 50, 0);
+    Box2d limits(Point2d(sender->startPoint.x, sender->startPoint.y), 50, 0);
     limits *= sender->view->xform()->displayToModel();
     double d = shape->shape()->hitTest(limits.center(), limits.width() / 2, m_ptNear, m_segment);
     
@@ -152,6 +154,7 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const MgMotion* sender, co
 {
     UInt32 handleIndex = 0;
     double minDist = _DBL_MAX;
+    double nearDist = m_ptNear.distanceTo(pointM);
     
     for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
         double d = pointM.distanceTo(shape->shape()->getHandlePoint(i));
@@ -160,8 +163,8 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const MgMotion* sender, co
             handleIndex = i + 1;
         }
     }
-    if (minDist > sender->view->xform()->displayToModel(20)
-        && m_ptNear.distanceTo(pointM) < minDist / 2
+    
+    if (nearDist < minDist / 2
         && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
         m_insertPoint = true;
@@ -234,12 +237,13 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
         m_showSel = true;
         sender->view->regen();
     }
+    
     m_insertPoint = false;
+    canSelect(m_clonesp, sender);   // calc m_ptNear
     m_handleIndex = (m_clonesp && m_handleIndex > 0) ? hitTestHandles(m_clonesp, sender, sender->pointM) : 0;
     
     if (m_insertPoint && m_clonesp->shape()->isKindOf(MgBaseLines::Type())) {
         MgBaseLines* lines = (MgBaseLines*)m_clonesp->shape();
-        canSelect(m_clonesp, sender);   // calc m_ptNear
         lines->insertPoint(m_segment, m_ptNear);
         m_clonesp->shape()->update();
         m_handleIndex = hitTestHandles(m_clonesp, sender, m_ptNear);

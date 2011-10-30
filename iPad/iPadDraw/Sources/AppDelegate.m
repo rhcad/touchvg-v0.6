@@ -37,7 +37,6 @@
 
     _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _controller = [[GraphViewController alloc] init];
-    _window.rootViewController = _controller;
     [_window addSubview:_controller.view];
     [_window makeKeyAndVisible];
     

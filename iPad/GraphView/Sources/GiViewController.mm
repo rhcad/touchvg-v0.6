@@ -8,13 +8,6 @@
 #import "GiCmdController.h"
 #import "GiGraphView.h"
 
-enum kGestureType {
-    kGesturePinch,
-    kGestureTwoPan,
-    kGestureTwoTaps,
-    kGestureTap,
-};
-
 @interface GiViewController(GestureRecognizer)
 
 - (id<GiView>)gview;
@@ -23,7 +16,7 @@ enum kGestureType {
 - (void)updateMagnifierCenter:(CGPoint)point;
 - (void)convertFromMagnifier:(UIGestureRecognizer *)sender;
 
-- (void)addGestureRecognizers;
+- (void)addGestureRecognizers:(int)t view:(UIView*)view;
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
@@ -49,11 +42,12 @@ enum kGestureType {
     self = [super init];
     if (self) {
         _magnifierView = Nil;
-        _curView = Nil;
         _command = [[GiCommandController alloc]init:&_magnifierView];
         _shapesCreated = NULL;
-        for (int i = 0; i < RECOGNIZER_COUNT; i++)
-            _recognizers[i] = Nil;
+        for (int t = 0; t < 2; t++) {
+            for (int i = 0; i < RECOGNIZER_COUNT; i++)
+                _recognizers[t][i] = Nil;
+        }
         _gestureRecognizerUsed = YES;
     }
     return self;
@@ -61,9 +55,8 @@ enum kGestureType {
 
 - (void)viewDidLoad
 {
-    _curView = self.view;
     [[self gview] setDrawingDelegate:self];
-    [self addGestureRecognizers];
+    [self addGestureRecognizers:0 view:self.view];
 }
 
 - (void)dealloc
@@ -74,9 +67,11 @@ enum kGestureType {
         ((MgShapes*)_shapesCreated)->release();
         _shapesCreated = NULL;
     }
-    for (int i = 0; i < RECOGNIZER_COUNT; i++) {
-        [_recognizers[i] release];
-        _recognizers[i] = Nil;
+    for (int t = 0; t < 2; t++) {
+        for (int i = 0; i < RECOGNIZER_COUNT; i++) {
+            [_recognizers[t][i] release];
+            _recognizers[t][i] = Nil;
+        }
     }
     [super dealloc];
 }
@@ -86,7 +81,6 @@ enum kGestureType {
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
     self.view = aview;
-    _curView = aview;
     aview.backgroundColor = bkColor;
     [aview setDrawingDelegate:self];
     
@@ -99,8 +93,7 @@ enum kGestureType {
         _shapesCreated = aview.shapes;
     }
     
-    if (!_recognizers[0])
-        [self addGestureRecognizers];
+    [self addGestureRecognizers:0 view:aview];
     
     [aview release];
     return self.view;
@@ -111,7 +104,6 @@ enum kGestureType {
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:parentView.bounds];
     
     self.view = aview;
-    _curView = aview;
     aview.backgroundColor = [UIColor clearColor];
     aview.enableZoom = NO;
     
@@ -127,8 +119,7 @@ enum kGestureType {
         _shapesCreated = aview.shapes;
     }
     
-    if (!_recognizers[0])
-        [self addGestureRecognizers];
+    [self addGestureRecognizers:0 view:aview];
     
     [aview release];
     return self.view;
@@ -142,6 +133,7 @@ enum kGestureType {
     
     [aview setDrawingDelegate:self];
     [parentView addSubview:aview];
+    [self addGestureRecognizers:1 view:aview];
     
     [aview release];
 }
@@ -310,16 +302,6 @@ enum kGestureType {
     }
 }
 
-- (void)graphViewActivated:(UIView*)aview
-{
-    if (_curView != aview) {
-        BOOL used = _gestureRecognizerUsed;
-        [self setGestureRecognizerUsed:NO];
-        _curView = aview;
-        [self setGestureRecognizerUsed:used];
-    }
-}
-
 @end
 
 @implementation GiViewController(GestureRecognizer)
@@ -345,44 +327,52 @@ enum kGestureType {
         (id<GiMotionHandler>)_command : Nil;
 }
 
-- (void)addGestureRecognizers
+- (void)addGestureRecognizers:(int)t view:(UIView*)view
 {
+    if (_recognizers[t][0])
+        return;
+    
+    int n = 0;
     UIPinchGestureRecognizer *twoFingersPinch =
     [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPinch:)];
-    _recognizers[kGesturePinch] = twoFingersPinch;
+    _recognizers[t][n++] = twoFingersPinch;
     
     UIPanGestureRecognizer *twoFingersPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
     [twoFingersPan setMaximumNumberOfTouches:2];
-    _recognizers[kGestureTwoPan] = twoFingersPan;
+    _recognizers[t][n++] = twoFingersPan;
     
     UITapGestureRecognizer *oneFingerTwoTaps =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerTwoTaps:)];
     [oneFingerTwoTaps setNumberOfTapsRequired:2];
-    _recognizers[kGestureTwoTaps] = oneFingerTwoTaps;
+    _recognizers[t][n++] = oneFingerTwoTaps;
     
     UITapGestureRecognizer *oneFingerOneTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
     [oneFingerOneTap requireGestureRecognizerToFail:oneFingerTwoTaps];
-    _recognizers[kGestureTap] = oneFingerOneTap;
+    _recognizers[t][n++] = oneFingerOneTap;
     
     _touchCount = 0;
     if (_gestureRecognizerUsed) {
         for (int i = 0; i < RECOGNIZER_COUNT; i++)
-            [self.view addGestureRecognizer:_recognizers[i]];
+            [view addGestureRecognizer:_recognizers[t][i]];
     }
 }
 
 - (void)setGestureRecognizerUsed:(BOOL)used
 {
     if (_gestureRecognizerUsed) {
-        for (int i = 0; i < RECOGNIZER_COUNT; i++)
-            [_curView removeGestureRecognizer:_recognizers[i]];
+        for (int i = 0; i < RECOGNIZER_COUNT; i++) {
+            [self.view removeGestureRecognizer:_recognizers[0][i]];
+            [_magnifierView removeGestureRecognizer:_recognizers[1][i]];
+        }
     }
     _gestureRecognizerUsed = used;
     if (_gestureRecognizerUsed) {
-        for (int i = 0; i < RECOGNIZER_COUNT; i++)
-            [_curView addGestureRecognizer:_recognizers[i]];
+        for (int i = 0; i < RECOGNIZER_COUNT; i++) {
+            [self.view addGestureRecognizer:_recognizers[0][i]];
+            [_magnifierView addGestureRecognizer:_recognizers[1][i]];
+        }
     }
 }
 
@@ -447,11 +437,14 @@ enum kGestureType {
         zview.superview.center = [zview.superview.superview convertPoint:cen fromView:self.view];
     }
     
-    zview.centerW = [cmd getPointModel];
+    zview.pointW = [cmd getPointModel];
 }
 
 - (void)convertFromMagnifier:(UIGestureRecognizer *)sender
 {
+    if ([sender numberOfTouches] == 0)
+        return;
+    
     GiCommandController* cmd = (GiCommandController*)_command;
     GiMagnifierView *zview = (GiMagnifierView *)_magnifierView;
     CGPoint point = [sender locationInView:sender.view];
@@ -478,9 +471,10 @@ enum kGestureType {
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
     }
-    if (_magnifierView && sender.view == self.view) {
+    if (_magnifierView && sender.view == self.view && [sender numberOfTouches]) {
         [self updateMagnifierCenter:[sender locationInView:sender.view]];
     }
+    [_magnifierView setNeedsDisplay];
 }
 
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
@@ -490,7 +484,7 @@ enum kGestureType {
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerOneTap:)] oneFingerOneTap:sender];
     }
-    if (_magnifierView && sender.view == self.view) {
+    if (_magnifierView && sender.view == self.view && [sender numberOfTouches]) {
         [self updateMagnifierCenter:[sender locationInView:sender.view]];
     }
 }
@@ -502,7 +496,7 @@ enum kGestureType {
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerTwoTaps:)] oneFingerTwoTaps:sender];
     }
-    if (_magnifierView && sender.view == self.view) {
+    if (_magnifierView && sender.view == self.view && [sender numberOfTouches]) {
         [self updateMagnifierCenter:[sender locationInView:sender.view]];
     }
 }

@@ -89,9 +89,9 @@ void MgSplines::smooth(double tol)
             indexMap[n] = i;                // 新曲线的第j点对应与原indexMap[j]点
         }
         else {
-            for (j = 0; j < n + _count - i; j++) {  // 切向变化超过30度时也保留点
+            for (j = 0; j < n + _count - i; j++) {  // 切向变化超过45度时也保留点
                 UInt32 index = j > n ? i + j - n : indexMap[j];
-                if (_knotVectors[index].angleTo(knotVectors[j]) > _M_PI_6) {
+                if (_knotVectors[index].angleTo(knotVectors[j]) > M_PI_4) {
                     points[++n] = _points[i];
                     indexMap[n] = i;
                     break;

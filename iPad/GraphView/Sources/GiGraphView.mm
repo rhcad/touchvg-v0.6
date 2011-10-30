@@ -111,14 +111,6 @@
         _shapes->draw(*gs);
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    if ([_drawingDelegate respondsToSelector:@selector(graphViewActivated:)]) {
-        [_drawingDelegate performSelector:@selector(graphViewActivated:) withObject:self];
-    }
-    [super touchesEnded:touches withEvent:event];
-}
-
 - (UIView*)getOwnerView
 {
     return self;
