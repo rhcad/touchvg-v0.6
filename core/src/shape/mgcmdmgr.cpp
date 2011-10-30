@@ -6,6 +6,7 @@
 
 static MgCmdManagerImpl s_cmds;
 MgCommand* mgCreateCommand(const char* name);
+int mgGetSelection(MgCommand* cmd, MgView* view, int count, MgShape** shapes);
 
 MgCommandManager* mgGetCommandManager()
 {
@@ -64,4 +65,9 @@ bool MgCmdManagerImpl::cancel(const MgMotion* sender)
         return it->second->cancel(sender);
     }
     return false;
+}
+
+int MgCmdManagerImpl::getSelection(MgView* view, int count, MgShape** shapes)
+{
+    return view ? mgGetSelection(getCommand(), view, count, shapes) : 0;
 }

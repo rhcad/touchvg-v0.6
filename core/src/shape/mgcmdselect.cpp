@@ -4,8 +4,29 @@
 
 #include "mgcmdselect.h"
 #include <mgbasicsp.h>
+#include <string.h>
 
-MgCommandSelect::MgCommandSelect() : m_clonesp(NULL)
+int mgGetSelection(MgCommand* cmd, MgView* view, int count, MgShape** shapes)
+{
+    if (cmd && strcmp(cmd->getName(), MgCommandSelect::Name()) == 0) {
+        MgCommandSelect* sel = (MgCommandSelect*)cmd;
+        return sel->getSelection(view, count, shapes);
+    }
+    return 0;
+}
+
+int MgCommandSelect::getSelection(MgView* view, int count, MgShape** shapes)
+{
+    if (count < 1 || !shapes)
+        return m_id ? 1 : 0;
+    
+    *shapes = view->shapes()->findShape(m_id);
+    m_showSel = false;
+    
+    return *shapes ? 1 : 0;
+}
+
+MgCommandSelect::MgCommandSelect() : m_clonesp(NULL), m_showSel(true)
 {
 }
 
@@ -26,6 +47,7 @@ bool MgCommandSelect::initialize(const MgMotion* /*sender*/)
     m_id = 0;
     m_segment = -1;
     m_handleIndex = 0;
+    m_showSel = true;
 
     return true;
 }
@@ -69,23 +91,29 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     if (!shape)
         return false;
     
-    // 选中时比原图形宽4像素，控制点修改时仅亮显控制点
-    GiContext ctxshape(-4, GiColor(0, 0, 255, m_handleIndex > 0 ? 50 : 128));
-    GiContext ctxhd(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
-    int radiuspx = mgMin(8, 2 + mgMax(4, getLineHalfWidth(shape, gs)));
-    double radius = gs->xf().displayToModel(radiuspx);
-    double r2 = gs->xf().displayToModel(4 + radiuspx);
+    if (m_showSel) {    // 选中时比原图形宽4像素，控制点修改时仅亮显控制点
+        GiContext ctx(m_handleIndex > 0 ? 0 : -4, GiColor(0, 0, 255, m_handleIndex > 0 ? 50 : 128));
+        shape->draw(*gs, &ctx);
+    }
+    else {
+        GiContext ctxbk(0, gs->getBkColor());
+        shape->draw(*gs, &ctxbk);       // 擦掉原图形
+        shape->draw(*gs);               // 按实际属性动态显示
+    }
     
-    shape->draw(*gs, &ctxshape);
-    
-    if (m_handleIndex > 0) {
+    if (m_handleIndex > 0 && m_showSel) {
+        GiContext ctxhd(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
+        int radiuspx = mgMin(8, 2 + mgMax(4, getLineHalfWidth(shape, gs)));
+        double radius = gs->xf().displayToModel(radiuspx);
+        double r2 = gs->xf().displayToModel(4 + radiuspx);
+        
         for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
             gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(i), radius);
         }
         if (m_clonesp || !m_insertPoint) {
             gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(m_handleIndex - 1), r2);
         }
-        if (m_insertPoint) {
+        if (m_insertPoint && m_clonesp) {
             GiContext insertctx(ctxhd);
             insertctx.setFillColor(GiColor(255, 0, 0, 240));
             gs->drawEllipse(&insertctx, m_ptNear, r2);
@@ -133,6 +161,7 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const MgMotion* sender, co
         }
     }
     if (minDist > sender->view->xform()->displayToModel(20)
+        && m_ptNear.distanceTo(pointM) < minDist / 2
         && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
         m_insertPoint = true;
@@ -149,6 +178,10 @@ bool MgCommandSelect::click(const MgMotion* sender)
     MgShape* shape;
     bool    canSelAgain;
     
+    if (!m_showSel) {
+        m_showSel = true;
+        sender->view->regen();
+    }
     m_insertPoint = false;
     shape = getSelectedShape(sender);
     canSelAgain = (shape && (m_handleIndex > 0 || shape->getID() == m_id)
@@ -197,6 +230,10 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
         m_clonesp->release();
     m_clonesp = shape ? (MgShape*)shape->clone() : NULL;
     
+    if (!m_showSel) {
+        m_showSel = true;
+        sender->view->regen();
+    }
     m_insertPoint = false;
     m_handleIndex = (m_clonesp && m_handleIndex > 0) ? hitTestHandles(m_clonesp, sender, sender->pointM) : 0;
     

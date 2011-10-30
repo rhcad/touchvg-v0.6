@@ -25,6 +25,7 @@ private:
     virtual bool setCommand(const MgMotion* sender, const char* name);
     virtual bool cancel(const MgMotion* sender);
     virtual void unloadCommands();
+    virtual int getSelection(MgView* view, int count, MgShape** shapes);
 
 private:
     typedef std::map<std::string, MgCommand*> CMDS;

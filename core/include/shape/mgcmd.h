@@ -64,6 +64,7 @@ struct MgCommandManager {
     virtual bool setCommand(const MgMotion* sender, const char* name) = 0;
     virtual bool cancel(const MgMotion* sender) = 0;
     virtual void unloadCommands() = 0;
+    virtual int getSelection(MgView* view, int count, MgShape** shapes) = 0;
 };
 
 //! 返回命令管理器

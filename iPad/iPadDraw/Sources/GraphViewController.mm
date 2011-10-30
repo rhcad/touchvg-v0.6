@@ -81,7 +81,6 @@ static const NSUInteger kDashLineTag    = 4;
 - (void)loadView
 {
     CGRect rect = [[UIScreen mainScreen] applicationFrame];
-    rect.origin.y = 0;
     CGFloat BAR_HEIGHT = rect.size.height > 1000 ? 50 : 40;
     CGFloat BTN_XDIFF  = rect.size.height > 1000 ? 10 : 0;
     
@@ -89,6 +88,7 @@ static const NSUInteger kDashLineTag    = 4;
     self.view = mainview;
     self.view.backgroundColor = [UIColor clearColor];
     [mainview release];
+    rect.origin.y = 0;
     
     CGRect viewFrame = rect;
     viewFrame.size.height -= BAR_HEIGHT;
@@ -96,6 +96,12 @@ static const NSUInteger kDashLineTag    = 4;
     _graph = [[GiViewController alloc]init];
     [_graph createGraphView:viewFrame backgroundColor:[UIColor grayColor] shapes:NULL];
     [self.view addSubview:_graph.view];
+    
+    UIView *magnifierView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, 200, 200)];
+    magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.7f];
+    [self.view addSubview:magnifierView];
+    [_graph createMagnifierView:magnifierView frame:magnifierView.bounds];
+    [magnifierView release];
     
     CGRect barFrame = rect;
     barFrame.size.height = BAR_HEIGHT;

@@ -20,6 +20,7 @@ public:
 
     static const char* Name() { return "select"; }
     static MgCommand* Create() { return new MgCommandSelect; }
+    int getSelection(MgView* view, int count, MgShape** shapes);
     
 private:
     virtual const char* getName() const { return Name(); }
@@ -49,6 +50,7 @@ private:
     UInt32                  m_handleIndex;      // 点中的是哪个控制点
     MgShape                 *m_clonesp;         // 选中图形的复制对象
     bool                    m_insertPoint;      // 是否可插入新点
+    bool                    m_showSel;          // 是否亮显选中的图形
 };
 
 #endif // __GEOMETRY_MGCOMMAND_SELECT_H_

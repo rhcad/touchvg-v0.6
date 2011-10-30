@@ -7,7 +7,6 @@
 
 @interface GiCommandController(Internal)
 
-- (id<GiView>)toView:(UIGestureRecognizer*)sender;
 - (void)convertPoint:(CGPoint)pt;
 
 @end
@@ -17,25 +16,27 @@ class MgViewProxy : public MgView
 public:
     GiContext*      _context;
     id<GiView>      view;
-    MgViewProxy(GiContext* ctx) : _context(ctx), view(Nil) {}
+    UIView**        _auxview;
+    MgViewProxy(GiContext* ctx, UIView** auxview) : _context(ctx), view(Nil), _auxview(auxview) {}
 private:
     MgShapes* shapes() { return [view getShapes]; }
     GiTransform* xform() { return [view getXform]; }
     GiGraphics* graph() { return [view getGraph]; }
-    void regen() { [view regen]; }
-    void redraw() { [view redraw]; }
+    void regen() {
+        [view regen];
+        if ([*_auxview respondsToSelector:@selector(regen)])
+            [*_auxview performSelector:@selector(regen)];
+    }
+    void redraw() {
+        [view redraw];
+        [*_auxview setNeedsDisplay];
+    }
     const GiContext* context() { return _context; }
     bool shapeWillAdded(MgShape* shape) { return true; }
     bool shapeWillDeleted(MgShape* shape) { return true; }
 };
 
 @implementation GiCommandController(Internal)
-
-- (id<GiView>)toView:(UIGestureRecognizer*)sender
-{
-    assert([sender.view conformsToProtocol:@protocol(GiView)]);
-    return (id<GiView>)sender.view;
-}
 
 - (void)convertPoint:(CGPoint)pt
 {
@@ -48,15 +49,18 @@ private:
 
 @implementation GiCommandController
 
-@synthesize context = _context;
 @synthesize commandName;
+@synthesize lineWidth;
+@synthesize lineStyle;
+@synthesize lineColor;
+@synthesize fillColor;
 
-- (id)init
+- (id)init:(UIView**)auxview
 {
     self = [super init];
     if (self) {
-        _context = new GiContext(-3, GiColor(0, 0, 0, 172));
-        _mgview = new MgViewProxy(_context);
+        _context = new GiContext(-3, GiColor(0, 0, 0, 128));
+        _mgview = new MgViewProxy(_context, auxview);
         _motion = new MgMotion;
         _motion->view = _mgview;
     }
@@ -79,6 +83,86 @@ private:
     mgGetCommandManager()->setCommand(_motion, name);
 }
 
+- (int)lineWidth {
+    MgShape* shape = NULL;
+    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
+        return shape->context()->getLineWidth();
+    }
+    return _context->getLineWidth();
+}
+
+- (void)setLineWidth:(int)w {
+    MgShape* shape = NULL;
+    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
+        shape->context()->setLineWidth(w);
+        _motion->view->redraw();
+    }
+    else {
+        _context->setLineWidth(w);
+    }
+}
+
+- (GiColor)lineColor {
+    MgShape* shape = NULL;
+    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
+        return shape->context()->getLineColor();
+    }
+    return _context->getLineColor();
+}
+
+- (void)setLineColor:(GiColor)c {
+    MgShape* shape = NULL;
+    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
+        shape->context()->setLineColor(c);
+        _motion->view->redraw();
+    }
+    else {
+        _context->setLineColor(c);
+    }
+}
+
+- (GiColor)fillColor {
+    MgShape* shape = NULL;
+    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
+        return shape->context()->getFillColor();
+    }
+    return _context->getFillColor();
+}
+
+- (void)setFillColor:(GiColor)c {
+    MgShape* shape = NULL;
+    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
+        shape->context()->setFillColor(c);
+        _motion->view->redraw();
+    }
+    else {
+        _context->setFillColor(c);
+    }
+}
+
+- (int)lineStyle {
+    MgShape* shape = NULL;
+    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
+        return shape->context()->getLineStyle();
+    }
+    return _context->getLineStyle();
+}
+
+- (void)setLineStyle:(int)style {
+    MgShape* shape = NULL;
+    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
+        shape->context()->setLineStyle((kLineStyle)style);
+        _motion->view->redraw();
+    }
+    else {
+        _context->setLineStyle((kLineStyle)style);
+    }
+}
+
+- (CGPoint)getPointModel {
+    return CGPointMake(_motion->pointM.x, _motion->pointM.y);
+}
+
 - (void)dynDraw:(GiGraphics*)gs
 {
     MgCommand* cmd = mgGetCommandManager()->getCommand();
@@ -99,10 +183,16 @@ private:
     return cmd && _mgview->view && cmd->undo(recall, _motion);
 }
 
-- (void)touchesBegan:(NSSet *)touches
+- (void)touchesBegan:(CGPoint)point
 {
-    UITouch *touch = [touches anyObject];
-    _downPoint = [touch locationInView:touch.view];
+    _downPoint = point;
+}
+
+- (void)setTouchPoint:(CGPoint)point view:(UIView*)view
+{
+    assert([view conformsToProtocol:@protocol(GiView)]);
+    _mgview->view = (id<GiView>)view;
+    _point = point;
 }
 
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
@@ -112,13 +202,10 @@ private:
     
     if (cmd)
     {
-        _mgview->view = [self toView:sender];
-        
-        CGPoint point = [sender locationInView:sender.view];
         if (sender.state == UIGestureRecognizerStateBegan)
             [self convertPoint:_downPoint];
         else
-            [self convertPoint:point];
+            [self convertPoint:_point];
         
         if (sender.state == UIGestureRecognizerStateBegan) {
             _motion->startPoint = _motion->point;
@@ -167,8 +254,7 @@ private:
     BOOL ret = NO;
     
     if (cmd) {
-        _mgview->view = [self toView:sender];
-        [self convertPoint:[sender locationInView:sender.view]];
+        [self convertPoint:_point];
         _motion->startPoint = _motion->point;
         _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
@@ -186,8 +272,7 @@ private:
     BOOL ret = NO;
     
     if (cmd) {
-        _mgview->view = [self toView:sender];
-        [self convertPoint:[sender locationInView:sender.view]];
+        [self convertPoint:_point];
         _motion->startPoint = _motion->point;
         _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
