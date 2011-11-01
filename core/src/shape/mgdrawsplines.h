@@ -30,6 +30,7 @@ private:
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);
+    virtual bool click(const MgMotion* sender);
     
 private:
     bool canAddPoint(const MgMotion* sender, bool ended);
