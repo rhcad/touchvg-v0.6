@@ -507,8 +507,11 @@
     if ([sender numberOfTouches] > 0) {
         CGPoint point  = [sender locationInView:sender.view];
         CGPoint ptzoom = [zview convertPoint:point fromView:self.view];
+        CGRect selfbounds = [self.view convertRect:self.view.bounds toView:zview.superview.superview];
         
-        if (CGRectContainsPoint(CGRectInset(zview.bounds, -20, -20), ptzoom)) {
+        if (CGRectContainsRect(selfbounds, zview.superview.frame)
+            && CGRectContainsPoint(CGRectInset(zview.bounds, -20, -20), ptzoom))
+        {
             CGPoint cen;
             
             if (point.x < self.view.bounds.size.width / 2) {

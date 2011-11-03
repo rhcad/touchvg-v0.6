@@ -108,6 +108,7 @@
 
 - (void)redraw {
     [self setNeedsDisplay];
+    [_gview redraw];
 }
 
 - (void)drawRect:(CGRect)rect
@@ -139,16 +140,19 @@
 
 - (void)dynDraw:(GiGraphics*)gs
 {
-    BOOL locked = _lockRedraw && ![self isActiveView];
+    BOOL inactive = ![self isActiveView];
+    BOOL locked = _lockRedraw && inactive;
     
     if (!locked && [_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
         [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
     }
     
-    GiContext ctx(0, GiColor(64, 64, 64, 172));
-    Point2d ptd(Point2d(_pointW.x, _pointW.y) * _xform->worldToDisplay());
-    gs->rawLine(&ctx, ptd.x - 20, ptd.y, ptd.x + 20, ptd.y);
-    gs->rawLine(&ctx, ptd.x, ptd.y - 20, ptd.x, ptd.y + 20);
+    if (inactive) {
+        GiContext ctx(0, GiColor(64, 64, 64, 172));
+        Point2d ptd(Point2d(_pointW.x, _pointW.y) * _xform->worldToDisplay());
+        gs->rawLine(&ctx, ptd.x - 20, ptd.y, ptd.x + 20, ptd.y);
+        gs->rawLine(&ctx, ptd.x, ptd.y - 20, ptd.x, ptd.y + 20);
+    }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
