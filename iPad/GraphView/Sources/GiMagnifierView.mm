@@ -19,7 +19,7 @@
     if (self) {
         _xform = new GiTransform();
         _graph = new GiGraphIos(*_xform);
-        _xform->setViewScaleRange(1, 50);
+        _xform->setViewScaleRange(1e-4, 50);
         _graph->setMaxPenWidth(10);
         _gview = gview;
         _drawingDelegate = Nil;
@@ -159,6 +159,37 @@
 {
     [_drawingDelegate touchesBegan:touches withEvent:event];
     [super touchesBegan:touches withEvent:event];
+}
+
+- (BOOL)automoveSuperview:(CGPoint)point fromView:(UIView*)view
+{
+    CGPoint ptzoom = [self convertPoint:point fromView:view];
+    CGRect selfbounds = [view convertRect:view.bounds toView:self.superview.superview];
+    BOOL moved = NO;
+    
+    if (CGRectContainsRect(selfbounds, self.superview.frame)
+        && CGRectContainsPoint(CGRectInset(self.bounds, -20, -20), ptzoom))
+    {
+        CGPoint cen;
+        
+        if (point.x < view.bounds.size.width / 2) {
+            cen.x = view.bounds.size.width - self.superview.frame.size.width / 2 - 10;
+        }
+        else {
+            cen.x = self.superview.frame.size.width / 2 + 10;
+        }
+        if (point.y < view.bounds.size.height / 2) {
+            cen.y = view.bounds.size.height - self.superview.frame.size.height / 2 - 10;
+        }
+        else {
+            cen.y = self.superview.frame.size.height / 2 + 10;
+        }
+        
+        moved = YES;
+        self.superview.center = [self.superview.superview convertPoint:cen fromView:view];
+    }
+    
+    return moved;
 }
 
 @end

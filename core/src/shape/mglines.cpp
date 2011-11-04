@@ -143,7 +143,7 @@ void MgBaseLines::removePoint(UInt32 index)
     }
 }
 
-bool MgBaseLines::setHandlePoint(UInt32 index, const Point2d& pt, double tol)
+bool MgBaseLines::_setHandlePoint(UInt32 index, const Point2d& pt, double tol)
 {
     Int32 preindex = (_closed && 0 == index) ? _count - 1 : index - 1;
     UInt32 postindex = (_closed && index + 1 == _count) ? 0 : index + 1;
@@ -194,4 +194,17 @@ bool MgLines::_draw(GiGraphics& gs, const GiContext& ctx) const
     else
         ret = gs.drawLines(&ctx, _count, _points);
     return __super::_draw(gs, ctx) || ret;
+}
+
+bool MgLines::_hitTestBox(const Box2d& rect) const
+{
+    if (!__super::_hitTestBox(rect))
+        return false;
+    
+    for (UInt32 i = 0; i + 1 < _count; i++) {
+        if (Box2d(_points[i], _points[i + 1]).isIntersect(rect))
+            return true;
+    }
+    
+    return _count < 2;
 }

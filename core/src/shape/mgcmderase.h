@@ -39,6 +39,7 @@ private:
 private:
     UInt32 getStep() { return 0; }
     MgShape* hitTest(const MgMotion* sender);
+    bool isIntersectMode(const MgMotion* sender);
     
     std::vector<MgShape*>   m_deleted;
     bool                    m_down;

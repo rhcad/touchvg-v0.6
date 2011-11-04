@@ -57,12 +57,20 @@
 @property (nonatomic)          CGFloat      scale;      //!< 放大倍数
 @property (nonatomic)          BOOL         lockRedraw; //!< 禁止放大镜动态显示
 
+//! 给定视图外框和实际图形视图初始化本视图对象
 - (id)initWithFrame:(CGRect)frame graphView:(id<GiView>)gview;
+
+//! 在本视图内平移显示
 - (void)zoomPan:(CGPoint)ranslation;
+
+//! 设置实际图形视图的当前点（世界坐标）并刷新显示
 - (void)setPointWandRedraw:(CGPoint)pt;
 
-- (void)draw:(GiGraphics*)gs;
-- (void)dynDraw:(GiGraphics*)gs;
-- (BOOL)isActiveView;
+//! 根据实际图形视图中的当前位置自动移动上级视图，以便当前位置不被本视图遮挡
+- (BOOL)automoveSuperview:(CGPoint)point fromView:(UIView*)view;
+
+- (void)draw:(GiGraphics*)gs;                           //!< 显示全部图形内部调用
+- (void)dynDraw:(GiGraphics*)gs;                        //!< 动态显示时内部调用
+- (BOOL)isActiveView;                                   //!< 返回本视图是否为当前交互视图
 
 @end

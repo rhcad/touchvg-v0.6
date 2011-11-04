@@ -7,7 +7,7 @@
 #include "mglnrel.h"
 
 GEOMAPI void mgBeziersBox(
-    Box2d& box, Int32 count, const Point2d* points, bool /*closed*/)
+    Box2d& box, Int32 count, const Point2d* points, bool closed)
 {
     const int SPLITN = 4;
     Point2d fits[SPLITN + 1];
@@ -21,6 +21,52 @@ GEOMAPI void mgBeziersBox(
         fits[SPLITN] = points[i+3];
         box.unionWith(Box2d(SPLITN + 1, fits));
     }
+    if (closed && count > 3) {
+        Point2d pts[4] = {
+            points[count - 1],
+            points[count - 1] * 2 - points[count - 2].asVector(),
+            points[0] * 2 - points[1].asVector(),
+            points[0]
+        };
+        for (int j = 1; j < SPLITN; j++)
+            mgFitBezier(pts, 1.0 / SPLITN * j, fits[j]);
+        fits[0] = pts[0];
+        fits[SPLITN] = pts[3];
+        box.unionWith(Box2d(SPLITN + 1, fits));
+    }
+}
+
+GEOMAPI bool mgBeziersIntersectBox(
+    const Box2d& box, Int32 count, const Point2d* points, bool closed)
+{
+    const int SPLITN = 8;
+    Point2d fits[SPLITN + 1];
+    
+    for (Int32 i = 0; i + 3 < count; i += 3)
+    {
+        for (int j = 1; j < SPLITN; j++)
+            mgFitBezier(points + i, 1.0 / SPLITN * j, fits[j]);
+        fits[0] = points[i];
+        fits[SPLITN] = points[i+3];
+        if (box.isIntersect(Box2d(SPLITN + 1, fits)))
+            return true;
+    }
+    if (closed && count > 3) {
+        Point2d pts[4] = {
+            points[count - 1],
+            points[count - 1] * 2 - points[count - 2].asVector(),
+            points[0] * 2 - points[1].asVector(),
+            points[0]
+        };
+        for (int j = 1; j < SPLITN; j++)
+            mgFitBezier(pts, 1.0 / SPLITN * j, fits[j]);
+        fits[0] = pts[0];
+        fits[SPLITN] = pts[3];
+        if (box.isIntersect(Box2d(SPLITN + 1, fits)))
+            return true;
+    }
+    
+    return false;
 }
 
 static Box2d mgBeziersBox2(const Point2d* points, Int32 count = 4)
@@ -45,6 +91,25 @@ GEOMAPI void mgCubicSplinesBox(
             knots[(i + 1) % n] };
         box.unionWith(mgBeziersBox2(pts));
     }
+}
+
+GEOMAPI bool mgCubicSplinesIntersectBox(
+    const Box2d& box, Int32 n, const Point2d* knots, 
+    const Vector2d* knotVectors, bool closed)
+{
+    Int32 n2 = (closed && n > 1) ? n + 1 : n;
+    
+    for (Int32 i = 0; i + 1 < n2; i++)
+    {
+        Point2d pts[4] = { knots[i], 
+            knots[i] + knotVectors[i] / 3.0, 
+            knots[(i + 1) % n] - knotVectors[(i + 1) % n] / 3.0, 
+            knots[(i + 1) % n] };
+        if (mgBeziersIntersectBox(box, 4, pts, false))
+            return true;
+    }
+    
+    return false;
 }
 
 GEOMAPI double mgCubicSplinesHit(

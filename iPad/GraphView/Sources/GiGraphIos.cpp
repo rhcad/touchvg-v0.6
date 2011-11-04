@@ -169,8 +169,8 @@ bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
     CGContextSetShouldAntialias(context, !fast && isAntiAliasMode());
     CGContextSetFlatness(context, fast ? 20 : 1);
 
-    CGContextSetMiterLimit(context, (CGFloat)(1.0 / sin(_M_PI_6)));  // 60 deg.
     CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetLineJoin(context, kCGLineJoinRound);
 
     return true;
 }
@@ -329,6 +329,15 @@ GiColor GiGraphIos::setBkColor(const GiColor& color)
 GiColor GiGraphIos::getNearestColor(const GiColor& color) const
 {
     return color;
+}
+
+void GiGraphIos::setAntiAliasMode(bool antiAlias)
+{
+    if (m_draw->_context) {
+        CGContextSetAllowsAntialiasing(m_draw->getContext(), !m_draw->_fast && antiAlias);
+        CGContextSetShouldAntialias(m_draw->getContext(), !m_draw->_fast && antiAlias);
+    }
+    GiGraphics::setAntiAliasMode(antiAlias);
 }
 
 const GiContext* GiGraphIos::getCurrentContext() const

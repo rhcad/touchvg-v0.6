@@ -51,28 +51,33 @@ bool MgBaseShape::_draw(GiGraphics&, const GiContext&) const
     return false;
 }
 
-UInt32 MgBaseShape::getHandleCount() const
+UInt32 MgBaseShape::_getHandleCount() const
 {
     return getPointCount();
 }
 
-Point2d MgBaseShape::getHandlePoint(UInt32 index) const
+Point2d MgBaseShape::_getHandlePoint(UInt32 index) const
 {
     return getPoint(index);
 }
 
-bool MgBaseShape::setHandlePoint(UInt32 index, const Point2d& pt, double)
+bool MgBaseShape::_setHandlePoint(UInt32 index, const Point2d& pt, double)
 {
     setPoint(index, pt);
     update();
     return true;
 }
 
-bool MgBaseShape::offset(const Vector2d& vec, Int32)
+bool MgBaseShape::_offset(const Vector2d& vec, Int32)
 {
     for (UInt32 i = 0; i < getPointCount(); i++) {
         setPoint(i, getPoint(i) + vec);
     }
     update();
     return true;
+}
+
+bool MgBaseShape::_hitTestBox(const Box2d& rect) const
+{
+    return getExtent().isIntersect(rect);
 }

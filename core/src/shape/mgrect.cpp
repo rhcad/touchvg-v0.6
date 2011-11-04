@@ -148,12 +148,25 @@ double MgBaseRect::_hitTest(const Point2d& pt, double tol,
     return mgLinesHit(4, _points, true, pt, tol, ptNear, segment);
 }
 
-UInt32 MgBaseRect::getHandleCount() const
+bool MgBaseRect::_hitTestBox(const Box2d& rect) const
+{
+    if (!__super::_hitTestBox(rect))
+        return false;
+    
+    for (int i = 0; i < 3; i++) {
+        if (Box2d(_points[i], _points[i + 1]).isIntersect(rect))
+            return true;
+    }
+    
+    return false;
+}
+
+UInt32 MgBaseRect::_getHandleCount() const
 {
     return 8;
 }
 
-Point2d MgBaseRect::getHandlePoint(UInt32 index) const
+Point2d MgBaseRect::_getHandlePoint(UInt32 index) const
 {
     Point2d pt;
     mgGetRectHandle(getRect(), index, pt);
@@ -161,7 +174,7 @@ Point2d MgBaseRect::getHandlePoint(UInt32 index) const
     return pt;
 }
 
-bool MgBaseRect::setHandlePoint(UInt32 index, const Point2d& pt, double)
+bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, double)
 {
     Point2d pt2(pt * Matrix2d::rotation(-getAngle(), getCenter()));
     Box2d rect(getRect());

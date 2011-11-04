@@ -366,7 +366,7 @@ bool GiGraphics::drawLines(const GiContext* ctx, int count,
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
-    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // 全部在显示区域内
+    if (DRAW_MAXR(m_impl, modelUnit).contains(extent))  // 全部在显示区域内
     {
         pxpoints.resize(count);
         POINT* lppt = &pxpoints.front();
@@ -422,7 +422,7 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
-    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // 全部在显示区域内
+    if (DRAW_MAXR(m_impl, modelUnit).contains(extent))  // 全部在显示区域内
     {
         pxpoints.resize(count);
         lppt = &pxpoints.front();
@@ -605,7 +605,7 @@ bool GiGraphics::drawPolygon(const GiContext* ctx, int count,
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
-    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // 全部在显示区域内
+    if (DRAW_MAXR(m_impl, modelUnit).contains(extent))  // 全部在显示区域内
     {
         ret = _DrawPolygon(this, ctx, 
             count, points, true, true, true, modelUnit);

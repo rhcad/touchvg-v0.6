@@ -18,7 +18,9 @@ bool MgCommandErase::cancel(const MgMotion* sender)
 {
     bool recall;
     m_down = false;
-    return undo(recall, sender);
+    bool ret = undo(recall, sender);
+    ret = undo(recall, sender) || ret;
+    return undo(recall, sender) || ret;
 }
 
 bool MgCommandErase::initialize(const MgMotion* /*sender*/)
@@ -35,6 +37,10 @@ bool MgCommandErase::undo(bool &enableRecall, const MgMotion* sender)
         sender->view->redraw();
         return true;
     }
+    if (m_down) {
+        m_down = false;
+        return true;
+    }
     return false;
 }
 
@@ -43,7 +49,8 @@ bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
     GiContext ctx(-4, GiColor(64, 64, 64, 128));
     
     if (m_down) {
-        GiContext ctxshap(0, GiColor(0, 0, 255, 128), kLineDash, GiColor(0, 0, 255, 10));
+        GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
+                          isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 10));
         bool antiAlias = gs->isAntiAliasMode();
         
         gs->setAntiAliasMode(false);
@@ -98,16 +105,24 @@ bool MgCommandErase::touchBegan(const MgMotion* sender)
     return true;
 }
 
+bool MgCommandErase::isIntersectMode(const MgMotion* sender)
+{
+    return (sender->startPoint.x < sender->point.x
+            && sender->startPoint.y < sender->point.y);
+}
+
 bool MgCommandErase::touchMoved(const MgMotion* sender)
 {
     Box2d snap(sender->startPointM, sender->pointM);
     void *it;
-    MgShape* shape = sender->view->shapes()->getFirstShape(it);
+    MgShape* shape = m_down ? sender->view->shapes()->getFirstShape(it) : NULL;
     
     m_deleted.clear();
     for (; shape; shape = sender->view->shapes()->getNextShape(it)) {
-        if (shape->shape()->getExtent().isIntersect(snap))
+        if (isIntersectMode(sender) ? shape->shape()->hitTestBox(snap)
+            : snap.contains(shape->shape()->getExtent())) {
             m_deleted.push_back(shape);
+        }
     }
     sender->view->redraw();
     

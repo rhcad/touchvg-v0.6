@@ -350,7 +350,7 @@ bool GiTransform::zoomWnd(const POINT& pt1, const POINT& pt2, bool adjust)
     Box2d box (ptW, 2 * halfw, 2 * halfh);
 
     // 检查显示窗口的新坐标范围是否在极限范围内
-    if (!m_data->rectLimitsW.isEmpty() && !m_data->rectLimitsW.isInside(box))
+    if (!m_data->rectLimitsW.isEmpty() && !m_data->rectLimitsW.contains(box))
     {
         if (adjust)
             AdjustCenterW(ptW, halfw, halfh, m_data->rectLimitsW);
@@ -423,7 +423,7 @@ bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT* rcTo, bool adjust)
     double halfw = m_data->cxWnd * d2mmX  / scale * 0.5;
     double halfh = m_data->cyWnd * d2mmY  / scale * 0.5;
     Box2d box (ptW, 2 * halfw, 2 * halfh);
-    if (!m_data->rectLimitsW.isEmpty() && !m_data->rectLimitsW.isInside(box))
+    if (!m_data->rectLimitsW.isEmpty() && !m_data->rectLimitsW.contains(box))
     {
         if (adjust)
             AdjustCenterW(ptW, halfw, halfh, m_data->rectLimitsW);
@@ -546,7 +546,7 @@ bool GiTransform::zoomScale(double viewScale, const POINT* pxAt, bool adjust)
     double halfw = m_data->cxWnd / w2dx * 0.5;
     double halfh = m_data->cyWnd / w2dy * 0.5;
     Box2d box (ptW, 2 * halfw, 2 * halfh);
-    if (!m_data->rectLimitsW.isEmpty() && !m_data->rectLimitsW.isInside(box))
+    if (!m_data->rectLimitsW.isEmpty() && !m_data->rectLimitsW.contains(box))
     {
         if (adjust)
             AdjustCenterW(ptW, halfw, halfh, m_data->rectLimitsW);

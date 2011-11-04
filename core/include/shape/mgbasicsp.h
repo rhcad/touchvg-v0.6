@@ -25,9 +25,9 @@ public:
     Point2d center() const { return (_points[0] + _points[1]) / 2; }
     
 protected:
-    UInt32 getHandleCount() const;
-    Point2d getHandlePoint(UInt32 index) const;
-    bool setHandlePoint(UInt32 index, const Point2d& pt, double tol);
+    UInt32 _getHandleCount() const;
+    Point2d _getHandlePoint(UInt32 index) const;
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, double tol);
 
 private:
     Point2d     _points[2];
@@ -85,11 +85,11 @@ protected:
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
-    double _hitTest(const Point2d& pt, double tol, 
-        Point2d& ptNear, Int32& segment) const;
-    UInt32 getHandleCount() const;
-    Point2d getHandlePoint(UInt32 index) const;
-    bool setHandlePoint(UInt32 index, const Point2d& pt, double tol);
+    double _hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const;
+    UInt32 _getHandleCount() const;
+    Point2d _getHandlePoint(UInt32 index) const;
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, double tol);
+    bool _hitTestBox(const Box2d& rect) const;
 
 protected:
     Point2d     _points[4]; // 从左上角起顺时针的四个角点
@@ -121,8 +121,8 @@ public:
 
 protected:
     void _update();
-    double _hitTest(const Point2d& pt, double tol, 
-        Point2d& ptNear, Int32& segment) const;
+    double _hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const;
+    bool _hitTestBox(const Box2d& rect) const;
 
 protected:
     Point2d     _bzpts[13];
@@ -148,8 +148,7 @@ protected:
     void _copy(const MgRoundRect& src);
     bool _equals(const MgRoundRect& src) const;
     void _clear();
-    double _hitTest(const Point2d& pt, double tol, 
-        Point2d& ptNear, Int32& segment) const;
+    double _hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const;
 
 protected:
     double      _rx;
@@ -197,9 +196,8 @@ protected:
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
-    bool setHandlePoint(UInt32 index, const Point2d& pt, double tol);
-    double _hitTest(const Point2d& pt, double tol, 
-        Point2d& ptNear, Int32& segment) const;
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, double tol);
+    double _hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const;
 
 protected:
     Point2d*    _points;
@@ -214,6 +212,8 @@ protected:
 class MgLines : public MgBaseLines
 {
     MG_INHERIT_CREATE(MgLines, MgBaseLines, 15)
+protected:
+    bool _hitTestBox(const Box2d& rect) const;
 };
 
 //! 三次参数样条曲线类
@@ -228,8 +228,8 @@ public:
     
 protected:
     void _update();
-    double _hitTest(const Point2d& pt, double tol, 
-        Point2d& ptNear, Int32& segment) const;
+    double _hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const;
+    bool _hitTestBox(const Box2d& rect) const;
 
 protected:
     Vector2d*   _knotVectors;

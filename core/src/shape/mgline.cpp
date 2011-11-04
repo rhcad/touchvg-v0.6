@@ -81,17 +81,17 @@ bool MgLine::_draw(GiGraphics& gs, const GiContext& ctx) const
     return __super::_draw(gs, ctx) || ret;
 }
 
-UInt32 MgLine::getHandleCount() const
+UInt32 MgLine::_getHandleCount() const
 {
     return 3;
 }
 
-Point2d MgLine::getHandlePoint(UInt32 index) const
+Point2d MgLine::_getHandlePoint(UInt32 index) const
 {
     return 1 == index ? center() : _points[index ? 1 : 0];
 }
 
-bool MgLine::setHandlePoint(UInt32 index, const Point2d& pt, double)
+bool MgLine::_setHandlePoint(UInt32 index, const Point2d& pt, double)
 {
     if (1 == index) {
         Vector2d off(pt - center());

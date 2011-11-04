@@ -505,30 +505,7 @@
     GiMagnifierView *zview = (GiMagnifierView *)_magnifierView;
     
     if ([sender numberOfTouches] > 0) {
-        CGPoint point  = [sender locationInView:sender.view];
-        CGPoint ptzoom = [zview convertPoint:point fromView:self.view];
-        CGRect selfbounds = [self.view convertRect:self.view.bounds toView:zview.superview.superview];
-        
-        if (CGRectContainsRect(selfbounds, zview.superview.frame)
-            && CGRectContainsPoint(CGRectInset(zview.bounds, -20, -20), ptzoom))
-        {
-            CGPoint cen;
-            
-            if (point.x < self.view.bounds.size.width / 2) {
-                cen.x = self.view.bounds.size.width - zview.superview.frame.size.width / 2 - 10;
-            }
-            else {
-                cen.x = zview.superview.frame.size.width / 2 + 10;
-            }
-            if (point.y < self.view.bounds.size.height / 2) {
-                cen.y = self.view.bounds.size.height - zview.superview.frame.size.height / 2 - 10;
-            }
-            else {
-                cen.y = zview.superview.frame.size.height / 2 + 10;
-            }
-            
-            zview.superview.center = [zview.superview.superview convertPoint:cen fromView:self.view];
-        }
+        [zview automoveSuperview:[sender locationInView:sender.view] fromView:self.view];
     }
     
     if (sender.state == UIGestureRecognizerStateEnded) {

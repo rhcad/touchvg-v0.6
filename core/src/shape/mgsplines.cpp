@@ -42,6 +42,13 @@ double MgSplines::_hitTest(const Point2d& pt, double tol,
         pt, tol, ptNear, segment);
 }
 
+bool MgSplines::_hitTestBox(const Box2d& rect) const
+{
+    if (!__super::_hitTestBox(rect))
+        return false;
+    return mgCubicSplinesIntersectBox(rect, _count, _points, _knotVectors, _closed);
+}
+
 bool MgSplines::_draw(GiGraphics& gs, const GiContext& ctx) const
 {
     bool ret = false;

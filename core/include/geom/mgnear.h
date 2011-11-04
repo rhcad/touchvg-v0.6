@@ -25,10 +25,23 @@ GEOMAPI void mgNearestOnBezier(
     \param[in] count 点的个数，至少为4，必须为3的倍数加1
     \param[in] points 控制点和端点的数组，点数为count
     \param[in] closed 是否为闭合曲线
-    \see mgCubicSplines, mgBeziersBox2
+    \see mgCubicSplines, mgBeziersBox2, mgBeziersIntersectBox
 */
 GEOMAPI void mgBeziersBox(
     Box2d& box, Int32 count, const Point2d* points, bool closed = false);
+
+//! 判断贝塞尔曲线是否与矩形相交
+/*!
+    \ingroup _GEOMAPI_CURVE_
+    \param[in] box 指定的矩形
+    \param[in] count 点的个数，至少为4，必须为3的倍数加1
+    \param[in] points 控制点和端点的数组，点数为count
+    \param[in] closed 是否为闭合曲线
+    \return 是否相交
+    \see mgCubicSplines, mgBeziersBox2, mgBeziersBox
+*/
+GEOMAPI bool mgBeziersIntersectBox(
+    const Box2d& box, Int32 count, const Point2d* points, bool closed = false);
 
 //! 计算三次样条曲线的绑定框
 /*!
@@ -38,10 +51,25 @@ GEOMAPI void mgBeziersBox(
     \param[in] knots 型值点坐标数组，元素个数为n
     \param[in] knotVectors 型值点的切矢量数组，元素个数为n
     \param[in] closed 是否为闭合曲线
-    \see mgCubicSplines
+    \see mgCubicSplines, mgCubicSplinesIntersectBox
 */
 GEOMAPI void mgCubicSplinesBox(
     Box2d& box, Int32 n, const Point2d* knots, 
+    const Vector2d* knotVectors, bool closed = false);
+
+//! 判断三次样条曲线是否与矩形相交
+/*!
+    \ingroup _GEOMAPI_CURVE_
+    \param[in] box 指定的矩形
+    \param[in] n 三次样条曲线的型值点的点数
+    \param[in] knots 型值点坐标数组，元素个数为n
+    \param[in] knotVectors 型值点的切矢量数组，元素个数为n
+    \param[in] closed 是否为闭合曲线
+    \return 是否相交
+    \see mgCubicSplines, mgCubicSplinesBox
+*/
+GEOMAPI bool mgCubicSplinesIntersectBox(
+    const Box2d& box, Int32 n, const Point2d* knots, 
     const Vector2d* knotVectors, bool closed = false);
 
 //! 计算点到三次样条曲线的最近距离

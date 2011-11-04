@@ -240,7 +240,7 @@ public:
         \param pt 给定的测试点
         \return 如果在本矩形框内或框的边上，则返回true，否则返回false
     */
-    bool isInside(const Point2d& pt) const
+    bool contains(const Point2d& pt) const
     {
         return pt.x >= xmin && pt.y >= ymin
             && pt.x <= xmax && pt.y <= ymax;
@@ -252,7 +252,7 @@ public:
         \param tol 判断的容差，用到其长度容差
         \return 如果在本矩形框内或框的边上，则返回true，否则返回false
     */
-    bool isInside(const Point2d& pt, const Tol& tol) const
+    bool contains(const Point2d& pt, const Tol& tol) const
     {
         return pt.x >= xmin - tol.equalPoint()
             && pt.y >= ymin - tol.equalPoint()
@@ -266,7 +266,7 @@ public:
         \param box 另一个矩形框
         \return 如果在本矩形框内或有重合，则返回true，否则返回false
     */
-    bool isInside(const Box2d& box) const
+    bool contains(const Box2d& box) const
     {
         return box.xmin >= xmin && box.ymin >= ymin
             && box.xmax <= xmax && box.ymax <= ymax;
@@ -279,7 +279,7 @@ public:
         \param tol 判断的容差，用到其长度容差
         \return 如果在本矩形框内或有重合，则返回true，否则返回false
     */
-    bool isInside(const Box2d& box, const Tol& tol) const
+    bool contains(const Box2d& box, const Tol& tol) const
     {
         return box.xmin >= xmin - tol.equalPoint()
             && box.ymin >= ymin - tol.equalPoint()

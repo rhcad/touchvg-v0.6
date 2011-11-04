@@ -106,21 +106,24 @@ public:
     */
     virtual double hitTest(const Point2d& pt, double tol, 
         Point2d& ptNear, Int32& segment) const = 0;
+    
+    //! 框选检查
+    virtual bool hitTestBox(const Box2d& rect) const = 0;
 
     //! 显示图形
     virtual bool draw(GiGraphics& gs, const GiContext& ctx) const = 0;
     
     //! 返回控制点个数
-    virtual UInt32 getHandleCount() const;
+    virtual UInt32 getHandleCount() const = 0;
     
     //! 返回指定序号的控制点坐标
-    virtual Point2d getHandlePoint(UInt32 index) const;
+    virtual Point2d getHandlePoint(UInt32 index) const = 0;
     
     //! 设置指定序号的控制点坐标，指定的容差用于比较重合点
-    virtual bool setHandlePoint(UInt32 index, const Point2d& pt, double tol);
+    virtual bool setHandlePoint(UInt32 index, const Point2d& pt, double tol) = 0;
     
     //! 移动图形, segment 由 hitTest() 得到
-    virtual bool offset(const Vector2d& vec, Int32 segment);
+    virtual bool offset(const Vector2d& vec, Int32 segment) = 0;
 
 protected:
     Box2d   _extent;
@@ -133,6 +136,11 @@ protected:
     void _transform(const Matrix2d& mat);
     void _clear();
     bool _draw(GiGraphics& gs, const GiContext& ctx) const;
+    bool _hitTestBox(const Box2d& rect) const;
+    UInt32 _getHandleCount() const;
+    Point2d _getHandlePoint(UInt32 index) const;
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, double tol);
+    bool _offset(const Vector2d& vec, Int32 segment);
 };
 
 #if !defined(_MSC_VER) || _MSC_VER <= 1200
@@ -169,7 +177,12 @@ private:                                                        \
     virtual bool isClosed() const;                              \
     virtual double hitTest(const Point2d& pt, double tol,       \
         Point2d& ptNear, Int32& segment) const;                 \
-    virtual bool draw(GiGraphics& gs, const GiContext& ctx) const;
+    virtual bool hitTestBox(const Box2d& rect) const;  \
+    virtual bool draw(GiGraphics& gs, const GiContext& ctx) const;  \
+    virtual UInt32 getHandleCount() const;                      \
+    virtual Point2d getHandlePoint(UInt32 index) const;         \
+    virtual bool setHandlePoint(UInt32 index, const Point2d& pt, double tol);   \
+    virtual bool offset(const Vector2d& vec, Int32 segment);
 
 #define MG_DECLARE_CREATE(Cls, Base, TypeNum)                   \
     MG_INHERIT_CREATE(Cls, Base, TypeNum)                       \

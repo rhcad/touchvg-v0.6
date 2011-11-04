@@ -115,7 +115,7 @@ bool MgCommandSelect::draw(const MgMotion* /*sender*/, GiGraphics* gs)
         const MgShape* shape = shapes.front();
         int radiuspx = mgMin(8, 2 + mgMax(4, getLineHalfWidth(shape, gs)));
         double radius = gs->xf().displayToModel(radiuspx);
-        double r2 = gs->xf().displayToModel(4 + radiuspx);
+        double r2 = gs->xf().displayToModel(6 + radiuspx);
         
         for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
             gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(i), radius);
@@ -300,6 +300,11 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
 
 bool MgCommandSelect::touchMoved(const MgMotion* sender)
 {
+    Point2d pointM(sender->pointM);
+    
+    if (m_insertPoint && pointM.distanceTo(m_ptNear) < sender->view->xform()->displayToModel(10)) {
+        pointM = m_ptNear;  // 拖动刚新加的点到起始点时取消新增
+    }
     for (size_t i = 0; i < m_cloneShapes.size(); i++) {
         MgBaseShape* shape = m_cloneShapes[i]->shape();
         
@@ -310,10 +315,10 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
         }
         if (m_handleIndex > 0) {
             double tol = sender->view->xform()->displayToModel(10);
-            shape->setHandlePoint(m_handleIndex - 1, sender->pointM, tol);
+            shape->setHandlePoint(m_handleIndex - 1, pointM, tol);
         }
         else {
-            shape->offset(sender->pointM - sender->startPointM, m_segment);
+            shape->offset(pointM - sender->startPointM, m_segment);
         }
         shape->update();
         sender->view->redraw();
@@ -350,9 +355,10 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
     }
     m_cloneShapes.clear();
     
+    m_insertPoint = false;
     if (m_handleIndex > 0) {
-        m_insertPoint = false;
         m_handleIndex = hitTestHandles(m_selection[0], sender->pointM);
+        sender->view->redraw();
     }
     
     return true;

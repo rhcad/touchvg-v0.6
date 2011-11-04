@@ -76,6 +76,14 @@ double MgEllipse::_hitTest(const Point2d& pt, double tol,
     return distMin;
 }
 
+bool MgEllipse::_hitTestBox(const Box2d& rect) const
+{
+    if (!getExtent().isIntersect(rect))
+        return false;
+    
+    return mgBeziersIntersectBox(rect, 13, _bzpts, true);
+}
+
 bool MgEllipse::_draw(GiGraphics& gs, const GiContext& ctx) const
 {
     bool ret = false;

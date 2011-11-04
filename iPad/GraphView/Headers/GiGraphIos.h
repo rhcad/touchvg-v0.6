@@ -47,6 +47,7 @@ public:
     virtual GiColor getBkColor() const;
     virtual GiColor setBkColor(const GiColor& color);
     virtual GiColor getNearestColor(const GiColor& color) const;
+    virtual void setAntiAliasMode(bool antiAlias);
     virtual const GiContext* getCurrentContext() const;
 
     virtual bool rawLine(const GiContext* ctx, 
