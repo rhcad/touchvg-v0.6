@@ -105,11 +105,9 @@
     [self setNeedsDisplay];
 }
 
-- (void)draw:(GiGraphics*)gs
+- (BOOL)draw:(GiGraphics*)gs
 {
-    if (_shapes) {
-        _shapes->draw(*gs);
-    }
+    return _shapes && _shapes->draw(*gs);
 }
 
 - (void)dynDraw:(GiGraphics*)gs

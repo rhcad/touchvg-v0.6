@@ -177,15 +177,19 @@ public:
         return retshape;
     }
 
-    void draw(GiGraphics& gs, const GiContext *ctx = NULL) const
+    bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const
     {
         Box2d clip(gs.getClipModel());
+        bool ret = false;
         
         for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
         {
-            if ((*it)->shape()->getExtent().isIntersect(clip))
-                (*it)->draw(gs, ctx);
+            if ((*it)->shape()->getExtent().isIntersect(clip)) {
+                ret = (*it)->draw(gs, ctx) || ret;
+            }
         }
+        
+        return ret;
     }
     
     bool save(MgStorage* s) const
