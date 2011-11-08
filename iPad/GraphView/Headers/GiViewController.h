@@ -16,6 +16,7 @@
     int     _touchCount;                //!< 开始触摸时的手指数
     UIView  *_magnifierView[3];         //!< 放大镜视图
     UIView  *_activeView;               //!< 当前图形视图
+    BOOL    _ignoreTouches;             //!< 忽略当前触摸手势
     
     enum { RECOGNIZER_COUNT = 6 };
     UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT];
@@ -81,5 +82,8 @@
     \return 创建的放大镜视图(GiMagnifierView)
  */
 - (UIView*)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale;
+
+//! 点击导致来源视图消失时忽略本次触摸动作
++ (void)ignoreTouchesBegan:(CGPoint)point view:(UIView*)sender;
 
 @end

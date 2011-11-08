@@ -36,11 +36,11 @@
 
 - (IBAction)backToView:(id)sender;      // 退出自由绘图
 - (IBAction)clearView:(id)sender;       // 清屏
-- (IBAction)backtoDraw:(id)sender;      // 返回自由绘制（在画直线或者虚线后，需要该方法返回）
+- (IBAction)hideMagnifier:(id)sender;   // 切换放大镜视图的可见性
 - (IBAction)showPaletee:(id)sender;     // 显示调色板
 
 - (IBAction)lockMagnifier:(id)sender;   // 切换是否禁止放大镜动态显示
-- (IBAction)resizeMagnifier:(id)sender;   // 切换放大镜视图大小
+- (IBAction)resizeMagnifier:(id)sender; // 切换放大镜视图大小
 - (IBAction)fireUndo:(id)sender;        // 回退一步
 
 - (UIButton *)addButton:(NSString *)imgname action:(SEL)action bar:(UIView*)bar

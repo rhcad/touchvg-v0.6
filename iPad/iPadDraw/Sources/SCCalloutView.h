@@ -6,3 +6,14 @@
 }
 
 @end
+
+@class GiViewController;
+
+@interface SCCalloutGraphView : SCCalloutView
+{
+    GiViewController    *_graphc;
+}
+
+@property (nonatomic,readonly)  GiViewController *graphc;
+
+@end

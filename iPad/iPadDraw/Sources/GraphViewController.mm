@@ -24,37 +24,6 @@
 #import "SCCalloutView.h"
 #import <GraphView/GiGraphView.h>
 
-// SCCalloutGraphView
-
-@interface SCCalloutGraphView : SCCalloutView
-{
-    GiViewController    *_graphc;
-}
-@property (nonatomic,readonly)  GiViewController *graphc;
-@end
-
-@implementation SCCalloutGraphView
-@synthesize graphc = _graphc;
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        _graphc = [[GiViewController alloc]init];
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    [_graphc release];
-    [super dealloc];
-}
-
-@end
-
-// GraphViewController
-
 static const NSUInteger kRedTag         = 0;
 static const NSUInteger kBlueTag        = 1;
 static const NSUInteger kYellowTag      = 2;
@@ -111,7 +80,6 @@ static const NSUInteger kDashLineTag    = 4;
     UIView *magnifierView = [[UIView alloc]initWithFrame:magFrame];
     magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.9f];
     [self.view addSubview:magnifierView];
-    [magnifierView release];
     
     CGFloat magbtnw = 32;
     CGRect magbarRect = CGRectMake(0, 0, magnifierView.bounds.size.width, magbtnw);
@@ -142,11 +110,26 @@ static const NSUInteger kDashLineTag    = 4;
     magView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.1f];
     
     CGFloat magbtnx = 4;
-    [self addButton:@"back.png" action:@selector(lockMagnifier:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    UIButton *magbtn = [self addButton:Nil action:@selector(lockMagnifier:)
+                                   bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    [magbtn setTitle:@"L" forState: UIControlStateNormal];
+    [magbtn setTitle:@"l" forState: UIControlStateHighlighted];
+    
 #ifndef MAG_AT_BOTTOM
-    [self addButton:@"clearview.png" action:@selector(resizeMagnifier:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    magbtn = [self addButton:Nil action:@selector(resizeMagnifier:)
+                         bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    [magbtn setTitle:@"S" forState: UIControlStateNormal];
+    [magbtn setTitle:@"s" forState: UIControlStateHighlighted];
 #endif
-    [self addButton:@"erase.png" action:@selector(fireUndo:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    magbtn = [self addButton:Nil action:@selector(fireUndo:)
+                         bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    [magbtn setTitle:@"U" forState: UIControlStateNormal];
+    [magbtn setTitle:@"u" forState: UIControlStateHighlighted];
+    
+    magbtn = [self addButton:Nil action:@selector(hideMagnifier:)
+                         bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    [magbtn setTitle:@"H" forState: UIControlStateNormal];
+    [magbtn setTitle:@"h" forState: UIControlStateHighlighted];
     
     barFrame.size.height = BAR_HEIGHT;
     barFrame.origin.y += viewFrame.size.height;
@@ -156,6 +139,7 @@ static const NSUInteger kDashLineTag    = 4;
 	_downview.alpha = 0.6;
 	[self.view addSubview:_downview];
     [_downview release];
+    _downview.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin);
     
     CGFloat btnx = barFrame.size.width / 2 - (BTN_XDIFF + BAR_HEIGHT) * 4;
     redBtn = [self addButton:@"redbrush.png" action:@selector(colorBtnPress:)
@@ -190,7 +174,9 @@ static const NSUInteger kDashLineTag    = 4;
                       x:(CGFloat*)x size:(CGFloat)size diffx:(CGFloat)diffx
 {
     UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(*x, 0, size, size)];
-    [btn setImage:[UIImage imageNamed:imgname] forState: UIControlStateNormal];
+    if (imgname) {
+        [btn setImage:[UIImage imageNamed:imgname] forState: UIControlStateNormal];
+    }
     [btn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     [bar addSubview:btn];
     [btn release];
@@ -281,7 +267,7 @@ static const NSUInteger kDashLineTag    = 4;
 	
 	UIButton *freebrush = [[UIButton alloc]initWithFrame:CGRectMake(154, 92, 63, 44)];
 	[freebrush setImage:[UIImage imageNamed:@"freedraw.png"] forState:UIControlStateNormal];
-	[freebrush addTarget:self action:@selector(backtoDraw:) forControlEvents:UIControlEventTouchUpInside];
+	[freebrush addTarget:self action:@selector(hideMagnifier:) forControlEvents:UIControlEventTouchUpInside];
 	[calloutView addSubview:freebrush];
 	[freebrush release];
 }
@@ -366,10 +352,22 @@ static const NSUInteger kDashLineTag    = 4;
     //UIControl* btn = (UIControl*)sender;
 }
 
-- (IBAction)backtoDraw:(id)sender   // 返回自由画图
+- (IBAction)hideMagnifier:(id)sender   // 切换放大镜视图的可见性
 {
-    UIControl *btn = (UIControl *)sender;
-    [btn.superview removeFromSuperview];
+    _graphc.magnifierView.superview.hidden = !_graphc.magnifierView.superview.hidden;
+    
+#ifdef MAG_AT_BOTTOM
+    if (_graphc.magnifierView.superview.hidden) {
+        CGRect rect = _graphc.view.frame;
+        rect.size.height += _graphc.magnifierView.superview.frame.size.height;
+        _graphc.view.frame = rect;
+    }
+    else {
+        CGRect rect = _graphc.view.frame;
+        rect.size.height -= _graphc.magnifierView.superview.frame.size.height;
+        _graphc.view.frame = rect;
+    }
+#endif
 }
 
 - (IBAction)eraseColor:(id)sender   // 切换至橡皮擦

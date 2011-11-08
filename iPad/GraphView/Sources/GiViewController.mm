@@ -325,6 +325,12 @@
     [_magnifierView[1] setNeedsDisplay];
 }
 
+static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
+
++ (void)ignoreTouchesBegan:(CGPoint)point view:(UIView*)sender {
+    _ignorepoint = [sender convertPoint:point toView:[sender window]];
+}
+
 @end
 
 @implementation GiViewController(GestureRecognizer)
@@ -426,6 +432,10 @@
 {
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:touch.view];
+    CGPoint ignorept = [touch.view convertPoint:_ignorepoint fromView:[touch.view window]];
+    
+    _ignorepoint = CGPointMake(-1000, -1000);
+    _ignoreTouches = CGPointEqualToPoint(point, ignorept);
     
     GiCommandController* cmd = (GiCommandController*)_command;
     [cmd touchesBegan:point view:touch.view];
@@ -438,6 +448,10 @@
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
+    if (_ignoreTouches) {
+        sender.cancelsTouchesInView = YES;
+        return;
+    }
     if (![[self getCommand:@selector(twoFingersPinch:)] twoFingersPinch:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(twoFingersPinch:)] twoFingersPinch:sender];
@@ -447,6 +461,10 @@
 
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
+    if (_ignoreTouches) {
+        sender.cancelsTouchesInView = YES;
+        return;
+    }
     if (sender.state == UIGestureRecognizerStateBegan) {
         _touchCount = [sender numberOfTouches];
     }
@@ -471,6 +489,10 @@
 
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
+    if (_ignoreTouches) {
+        sender.cancelsTouchesInView = YES;
+        return;
+    }
     if (sender.state == UIGestureRecognizerStateBegan) {
         _touchCount = [sender numberOfTouches];
     }
@@ -488,6 +510,10 @@
 
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
+    if (_ignoreTouches) {
+        sender.cancelsTouchesInView = YES;
+        return;
+    }
     if (![[self getCommand:@selector(oneFingerOneTap:)] oneFingerOneTap:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerOneTap:)] oneFingerOneTap:sender];
@@ -497,6 +523,10 @@
 
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
+    if (_ignoreTouches) {
+        sender.cancelsTouchesInView = YES;
+        return;
+    }
     if (![[self getCommand:@selector(oneFingerTwoTaps:)] oneFingerTwoTaps:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerTwoTaps:)] oneFingerTwoTaps:sender];
@@ -506,6 +536,10 @@
 
 - (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
 {
+    if (_ignoreTouches) {
+        sender.cancelsTouchesInView = YES;
+        return;
+    }
     if (![[self getCommand:@selector(twoFingersTwoTaps:)] twoFingersTwoTaps:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(twoFingersTwoTaps:)] twoFingersTwoTaps:sender];
