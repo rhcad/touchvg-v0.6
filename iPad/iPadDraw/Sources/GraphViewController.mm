@@ -357,15 +357,17 @@ static const NSUInteger kDashLineTag    = 4;
     _graphc.magnifierView.superview.hidden = !_graphc.magnifierView.superview.hidden;
     
 #ifdef MAG_AT_BOTTOM
+    CGRect rect = _graphc.view.frame;
     if (_graphc.magnifierView.superview.hidden) {
-        CGRect rect = _graphc.view.frame;
         rect.size.height += _graphc.magnifierView.superview.frame.size.height;
         _graphc.view.frame = rect;
     }
     else {
-        CGRect rect = _graphc.view.frame;
         rect.size.height -= _graphc.magnifierView.superview.frame.size.height;
         _graphc.view.frame = rect;
+        rect = CGRectMake(0, rect.size.height, rect.size.width, 
+                          _graphc.magnifierView.superview.frame.size.height);
+        _graphc.magnifierView.superview.frame = rect;
     }
 #endif
 }
