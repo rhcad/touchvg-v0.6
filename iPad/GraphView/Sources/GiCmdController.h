@@ -3,7 +3,7 @@
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 // License: LGPL, https://github.com/rhcad/touchdraw
 
-#import <Graph2d/GiMotionHandler.h>
+#import "GiMotionHandler.h"
 #include <Graph2d/gicontxt.h>
 
 struct MgMotion;

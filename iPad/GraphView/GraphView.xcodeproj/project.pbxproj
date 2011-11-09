@@ -14,12 +14,11 @@
 		9D98C69F1512DEBE00DA83AE /* GiCmdController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D98C69D1512DEBE00DA83AE /* GiCmdController.mm */; };
 		C99CC9EC1448794E00802345 /* GiViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C99CC9EB1448794E00802345 /* GiViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C99CC9EE1448795600802345 /* GiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C99CC9ED1448795600802345 /* GiViewController.mm */; };
-		C9A22A1E15020808008AA1EA /* GiGraphIos.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A22A1C15020808008AA1EA /* GiGraphIos.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9A22A1F15020808008AA1EA /* GiGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A22A1D15020808008AA1EA /* GiGraphView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C9A22A221502081D008AA1EA /* GiGraphIos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A22A201502081D008AA1EA /* GiGraphIos.cpp */; };
 		C9A22A231502081D008AA1EA /* GiGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9A22A211502081D008AA1EA /* GiGraphView.mm */; };
 		C9A22A25150208C4008AA1EA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A22A24150208C4008AA1EA /* CoreGraphics.framework */; };
 		C9A22A2815020956008AA1EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A22A2715020956008AA1EA /* UIKit.framework */; };
+		C9A7F8CA146B334500597DF0 /* GiMotionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C9146B334500597DF0 /* GiMotionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,12 +68,11 @@
 		C9340F21150216B500C2831C /* Graph2d.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Graph2d.xcodeproj; path = ../Graph2d/Graph2d.xcodeproj; sourceTree = "<group>"; };
 		C99CC9EB1448794E00802345 /* GiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiViewController.h; path = Headers/GiViewController.h; sourceTree = "<group>"; };
 		C99CC9ED1448795600802345 /* GiViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiViewController.mm; path = Sources/GiViewController.mm; sourceTree = "<group>"; };
-		C9A22A1C15020808008AA1EA /* GiGraphIos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphIos.h; path = Headers/GiGraphIos.h; sourceTree = "<group>"; };
 		C9A22A1D15020808008AA1EA /* GiGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphView.h; path = Headers/GiGraphView.h; sourceTree = "<group>"; };
-		C9A22A201502081D008AA1EA /* GiGraphIos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GiGraphIos.cpp; path = Sources/GiGraphIos.cpp; sourceTree = "<group>"; };
 		C9A22A211502081D008AA1EA /* GiGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiGraphView.mm; path = Sources/GiGraphView.mm; sourceTree = "<group>"; };
 		C9A22A24150208C4008AA1EA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C9A22A2715020956008AA1EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C9A7F8C9146B334500597DF0 /* GiMotionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiMotionHandler.h; path = Headers/GiMotionHandler.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,11 +99,7 @@
 		4AE2C1C71424998500C67987 = {
 			isa = PBXGroup;
 			children = (
-				9D98C69C1512DEBE00DA83AE /* GiCmdController.h */,
-				C99CC9EB1448794E00802345 /* GiViewController.h */,
-				C9A22A1C15020808008AA1EA /* GiGraphIos.h */,
-				C9A22A1D15020808008AA1EA /* GiGraphView.h */,
-				4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */,
+				C9A7F8C8146B332600597DF0 /* Headers */,
 				4AE2C21514249CD300C67987 /* Sources */,
 				4AE2C1E81424998500C67987 /* Tests */,
 				C9A22A2615020911008AA1EA /* Frameworks */,
@@ -151,7 +145,6 @@
 				9D749EEE1525939000EE879B /* GiMagnifierView.mm */,
 				9D98C69D1512DEBE00DA83AE /* GiCmdController.mm */,
 				C99CC9ED1448795600802345 /* GiViewController.mm */,
-				C9A22A201502081D008AA1EA /* GiGraphIos.cpp */,
 				C9A22A211502081D008AA1EA /* GiGraphView.mm */,
 			);
 			name = Sources;
@@ -191,6 +184,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C9A7F8C8146B332600597DF0 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				C9A7F8C9146B334500597DF0 /* GiMotionHandler.h */,
+				9D98C69C1512DEBE00DA83AE /* GiCmdController.h */,
+				C99CC9EB1448794E00802345 /* GiViewController.h */,
+				C9A22A1D15020808008AA1EA /* GiGraphView.h */,
+				4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */,
+			);
+			name = Headers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -198,9 +203,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9A22A1E15020808008AA1EA /* GiGraphIos.h in Headers */,
 				C9A22A1F15020808008AA1EA /* GiGraphView.h in Headers */,
 				C99CC9EC1448794E00802345 /* GiViewController.h in Headers */,
+				C9A7F8CA146B334500597DF0 /* GiMotionHandler.h in Headers */,
 				9D98C69E1512DEBE00DA83AE /* GiCmdController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -326,7 +331,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9A22A221502081D008AA1EA /* GiGraphIos.cpp in Sources */,
 				C9A22A231502081D008AA1EA /* GiGraphView.mm in Sources */,
 				C99CC9EE1448795600802345 /* GiViewController.mm in Sources */,
 				9D98C69F1512DEBE00DA83AE /* GiCmdController.mm in Sources */,
