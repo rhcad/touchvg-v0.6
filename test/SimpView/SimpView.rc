@@ -1,0 +1,405 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""l.chs\\afxres.rc""          // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "SimpView.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "文件(&F)"
+    BEGIN
+        MENUITEM "新建(&N)...\tCtrl+N",         ID_FILE_NEW
+        MENUITEM SEPARATOR
+        MENUITEM "退出(&X)",                    ID_APP_EXIT
+    END
+    POPUP "查看(&V)"
+    BEGIN
+        MENUITEM "状态栏(&S)",                  ID_VIEW_STATUS_BAR
+    END
+    POPUP "帮助(&H)"
+    BEGIN
+        MENUITEM "关于 SimpView(&A)",           ID_APP_ABOUT
+    END
+END
+
+IDR_STEP1_VIEW MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "文件(&F)"
+    BEGIN
+        MENUITEM "新建(&N)...\tCtrl+N",         ID_FILE_NEW
+        MENUITEM "关闭(&C)",                    ID_FILE_CLOSE
+        MENUITEM SEPARATOR
+        MENUITEM "退出(&X)",                    ID_APP_EXIT
+    END
+    POPUP "查看(&V)"
+    BEGIN
+        MENUITEM "状态栏(&S)",                  ID_VIEW_STATUS_BAR
+        MENUITEM SEPARATOR
+        MENUITEM "使用GDI&+\tCtrl+G",           ID_VIEW_GDIP
+        MENUITEM "反走样(&A)\tCtrl+L",          ID_VIEW_ANTIALIAS
+        MENUITEM "背景颜色(&B)...",             ID_VIEW_BKCOLOR
+        MENUITEM SEPARATOR
+        MENUITEM "全部显示(&E)\tCtrl+E",        ID_ZOOM_EXTENT
+        MENUITEM "放大(&I)\t+",                 ID_VIEW_ZOOMIN
+        MENUITEM "缩小(&O)\t-",                 ID_VIEW_ZOOMOUT
+        MENUITEM "左移(&L)\tLeft",              ID_PAN_LEFT
+        MENUITEM "右移(&R)\tRight",             ID_PAN_RIGHT
+        MENUITEM "上移(&U)\tUp",                ID_PAN_UP
+        MENUITEM "下移(&D)\tDown",              ID_PAN_DOWN
+    END
+    POPUP "窗口(&W)"
+    BEGIN
+        MENUITEM "层叠(&C)",                    ID_WINDOW_CASCADE
+        MENUITEM "水平平铺(&H)",                ID_WINDOW_TILE_HORZ
+        MENUITEM "垂直平铺(&V)",                ID_WINDOW_TILE_VERT
+        MENUITEM "排列图标(&A)",                ID_WINDOW_ARRANGE
+    END
+    POPUP "帮助(&H)"
+    BEGIN
+        MENUITEM "关于 SimpView(&A)",           ID_APP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "-",            ID_VIEW_ZOOMOUT,        ASCII,  NOINVERT
+    "=",            ID_VIEW_ZOOMIN,         ASCII,  NOINVERT
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "E",            ID_ZOOM_EXTENT,         VIRTKEY, CONTROL, NOINVERT
+    "G",            ID_VIEW_GDIP,           VIRTKEY, CONTROL, NOINVERT
+    "L",            ID_VIEW_ANTIALIAS,      VIRTKEY, CONTROL, NOINVERT
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_DOWN,        ID_PAN_DOWN,            VIRTKEY, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_LEFT,        ID_PAN_LEFT,            VIRTKEY, NOINVERT
+    VK_RIGHT,       ID_PAN_RIGHT,           VIRTKEY, NOINVERT
+    VK_UP,          ID_PAN_UP,              VIRTKEY, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 235, 55
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于 SimpView"
+FONT 9, "宋体"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "图形接口库简单显示测试 1.0 版",IDC_STATIC,40,10,117,8,
+                    SS_NOPREFIX
+    LTEXT           "版权所有 (C) 2009",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "确定",IDOK,178,7,50,14,WS_GROUP
+END
+
+IDD_NEW_VIEW DIALOG DISCARDABLE  0, 0, 162, 91
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "新建视图"
+FONT 9, "宋体"
+BEGIN
+    GROUPBOX        "随机图形最大数量",IDC_STATIC,7,7,87,50
+    LTEXT           "线段数:",IDC_STATIC,14,21,29,8
+    EDITTEXT        IDC_NEW_LINECOUNT,47,18,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "圆弧数:",IDC_STATIC,14,39,29,8
+    EDITTEXT        IDC_NEW_ARCCOUNT,47,36,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "随机线型",IDC_NEW_RANDLNSTYLE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,62,48,10
+    CONTROL         "有滚动条",IDC_NEW_SCROLLBAR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,74,48,10
+    DEFPUSHBUTTON   "确定",IDOK,105,7,50,14
+    PUSHBUTTON      "取消",IDCANCEL,105,24,50,14
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "图形接口库简单显示测试程序\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "SimpView\0"
+            VALUE "LegalCopyright", "版权所有 (C) 2009\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "SimpView.EXE\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "图形接口库\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_NEW_VIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 155
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 84
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    IDR_MAINFRAME           "图形接口库简单显示测试"
+    IDR_STEP1_VIEW          "\nShape\nStep1"
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "SimpView"
+    AFX_IDS_IDLEMESSAGE     "就绪"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_EXT        "扩展名"
+    ID_INDICATOR_CAPS       "大写"
+    ID_INDICATOR_NUM        "数字"
+    ID_INDICATOR_SCRL       "滚动"
+    ID_INDICATOR_OVR        "改写"
+    ID_INDICATOR_REC        "记录"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_NEW             "建立新文档\n新建"
+    ID_FILE_CLOSE           "关闭活动文档\n关闭"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "显示程序信息，版本号和版权\n关于"
+    ID_APP_EXIT             "退出应用程序；提示保存文档\n退出"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NEXT_PANE            "切换到下一个窗格\n下一窗格"
+    ID_PREV_PANE            "切换回前一个窗格\n前一窗格"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_ARRANGE       "将图标排列在窗口底部\n排列图标"
+    ID_WINDOW_CASCADE       "排列窗口成相互重叠\n层叠窗口"
+    ID_WINDOW_TILE_HORZ     "水平排列窗口成互不重叠\n水平平铺"
+    ID_WINDOW_TILE_VERT     "垂直排列窗口成互不重叠\n垂直平铺"
+    ID_WINDOW_SPLIT         "将活动的窗口分隔成窗格\n分隔"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_CLEAR           "删除被选对象\n删除"
+    ID_EDIT_CLEAR_ALL       "全部删除\n全部删除"
+    ID_EDIT_COPY            "复制被选对象并将其置于剪贴板上\n复制"
+    ID_EDIT_CUT             "剪切被选对象并将其置于剪贴板上\n剪切"
+    ID_EDIT_FIND            "查找指定的正文\n查找"
+    ID_EDIT_PASTE           "插入剪贴板内容\n粘贴"
+    ID_EDIT_REPEAT          "重复上一步操作\n重复"
+    ID_EDIT_REPLACE         "用不同的正文替换指定的正文\n替换"
+    ID_EDIT_SELECT_ALL      "选择整个文档\n选择全部"
+    ID_EDIT_UNDO            "撤消最后一步操作\n撤消"
+    ID_EDIT_REDO            "重新执行先前已撤消的操作\n重新执行"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_STATUS_BAR      "显示或隐藏状态栏\n显隐状态栏"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "改变窗口大小"
+    AFX_IDS_SCMOVE          "改变窗口位置"
+    AFX_IDS_SCMINIMIZE      "将窗口缩小成图标"
+    AFX_IDS_SCMAXIMIZE      "把窗口放大到最大尺寸"
+    AFX_IDS_SCNEXTWINDOW    "切换到下一个文档窗口"
+    AFX_IDS_SCPREVWINDOW    "切换到先前的文档窗口"
+    AFX_IDS_SCCLOSE         "关闭活动的窗口并提示保存所有文档"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "把窗口恢复到正常大小"
+    AFX_IDS_SCTASKLIST      "激活任务表"
+    AFX_IDS_MDICHILD        "激活该窗口"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_GDIP            "切换显示视图时是使用GDI还是GDI+\n使用GDI+"
+    ID_VIEW_BKCOLOR         "改变视图的背景颜色\n背景颜色"
+    ID_VIEW_ZOOMIN          "放大显示\n放大"
+    ID_VIEW_ZOOMOUT         "缩小显示\n缩小"
+    ID_PAN_LEFT             "显示左边的图形\n左移"
+    ID_PAN_RIGHT            "显示右边的图形\n右移"
+    ID_PAN_UP               "显示上边的图形\n上移"
+    ID_PAN_DOWN             "显示下边的图形\n下移"
+    ID_VIEW_ANTIALIAS       "设置使用GDI+显示时是否启用反走样\n反走样"
+    ID_ZOOM_EXTENT          "在窗口中显示全部图形\n全部显示"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_X          "X: 0000.00"
+    ID_INDICATOR_Y          "Y: 0000.00"
+    ID_INDICATOR_VIEWSCALE  "100.00%"
+END
+
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE 4, 2
+#pragma code_page(936)
+#endif //_WIN32
+#include "l.chs\afxres.rc"          // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

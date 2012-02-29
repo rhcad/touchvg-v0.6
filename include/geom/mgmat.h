@@ -1,0 +1,295 @@
+//! \file mgmat.h
+//! \brief 定义二维齐次变换矩阵类 Matrix2d
+// Copyright (c) 2004-2012, Zhang Yungui
+// License: GPL, https://github.com/rhcad/graph2d
+
+#ifndef __GEOMETRY_MATRIX_H_
+#define __GEOMETRY_MATRIX_H_
+
+#include "mgpnt.h"
+
+_GEOM_BEGIN
+
+//! 二维齐次变换矩阵类
+/*!
+    \ingroup _GEOM_CLASS_
+    
+    变换矩阵类Matrix用于二维图形的仿射变换。矩阵 M 的形式为: \n
+    　　e0x　e0y　0 \n
+    　　e1x　e1y　0 \n
+    　　dx　　dy　1 \n
+    其中矩阵 A: \n
+    　　e0x　e0y \n
+    　　e1x　e1y \n
+    称为 M 的线性部分，其作用是对图形进行伸缩、旋转、对称和错切等变换。\n
+    行向量 T (dx, dy) 称为 M 的平移部分，其作用是对图形进行平移变换。\n
+    
+    Point的点pnt的对应变换点为 P x M，行矢量 P = (pnt.x, pnt.y, 1.0) \n
+    Vector的矢量vec的对应变换矢量为 V x M，M 的平移部分不参与计算。\n
+    
+    每个矩阵 M 对应一个坐标系，其坐标原点为(dx, dy)，坐标轴为矢量(e0x, e0y)和
+    (e1x, e1y)。M 为将(0,0)(1,0)(0,1)映射到(dx, dy)(e0x, e0y)(e1x, e1y)的矩阵。
+*/
+class Matrix2d : public MATRIX2D
+{
+public:
+    //! 单位矩阵
+    static const Matrix2d& kIdentity()
+    {
+        static const Matrix2d mat;
+        return mat;
+    }
+    
+    //! 构造为单位矩阵
+    Matrix2d();
+    
+    //! 拷贝构造函数
+    Matrix2d(const MATRIX2D& src);
+    
+    //! 给定元素构造
+    Matrix2d(double _m11, double _m12, double _m21, double _m22,
+        double _dx, double _dy);
+    
+    //! 给定两坐标轴矢量和原点构造
+    /*! 相对于绝对坐标系构造出新的坐标系矩阵。
+        如果这两个坐标轴矢量不正交，则构造出放射坐标系，否则为正交坐标系
+        \param e0 X轴一个单位的矢量
+        \param e1 Y轴一个单位的矢量
+        \param origin 新坐标系的原点
+    */
+    Matrix2d(const Vector2d& e0, const Vector2d& e1,
+        const Point2d& origin);
+    
+    //! 矩阵乘法
+    Matrix2d operator*(const Matrix2d& mat) const;
+    
+    //! 矩阵乘法
+    Matrix2d& operator*=(const Matrix2d& mat);
+    
+    //! 左乘一个矩阵，leftSide * (*this)
+    Matrix2d& preMultBy(const Matrix2d& leftSide);
+    
+    //! 右乘一个矩阵，(*this) * rightSide
+    Matrix2d& postMultBy(const Matrix2d& rightSide);
+    
+    //! 设置为两个矩阵的乘积 (m1 * m2)
+    Matrix2d& setToProduct(const Matrix2d& m1, const Matrix2d& m2);
+    
+    //! 对多个点进行矩阵变换
+    /*!
+        \param[in] count 点的个数
+        \param[in,out] points 要变换的点的数组，元素个数为count
+    */
+    void TransformPoints(Int32 count, Point2d* points) const;
+
+    //! 对多个矢量进行矩阵变换
+    /*! 对矢量进行矩阵变换时，矩阵的平移分量部分不起作用
+        \param[in] count 矢量的个数
+        \param[in,out] vectors 要变换的矢量的数组，元素个数为count
+    */
+    void TransformVectors(Int32 count, Vector2d* vectors) const;
+    
+    //! 行列式值
+    double det() const;
+    
+    //! 设置为逆矩阵
+    /*!
+        \return 是否可逆，如果不可逆则设置为单位矩阵
+    */
+    bool invert();
+    
+    //! 返回逆矩阵
+    Matrix2d inverse() const;
+    
+    //! 判断矩阵是否可逆
+    bool isInvertible() const;
+    
+    //! 比例大小
+    double scale() const;
+    
+    //! X比例大小
+    double scaleX() const;
+    
+    //! Y比例大小
+    double scaleY() const;
+    
+    //! 判断两个矩阵是否相等
+    bool operator==(const Matrix2d& mat) const;
+    
+    //! 判断两个矩阵是否不相等
+    bool operator!=(const Matrix2d& mat) const;
+    
+    //! 用欧拉规则判断两个矩阵是否相等，即判断矩阵的行矢量是否相等
+    bool isEqualTo(const Matrix2d& mat, const Tol& tol = Tol::gTol()) const;
+
+    //! 判断是否为单位矩阵
+    bool isIdentity() const;
+
+    //! 判断矩阵的坐标轴矢量是否分别水平和垂直
+    bool isOrtho() const;
+    
+    //! 得到比例、旋转、镜像成分
+    /*!
+        \param[out] scaleX 矩阵的X方向放缩比例
+        \param[out] scaleY 矩阵的Y方向放缩比例
+        \param[out] angle 矩阵的旋转角度，弧度
+        \param[out] isMirror 矩阵中是否含有对称成分
+        \param[out] reflex 矩阵中的对称轴方向矢量(如果有对称成分)
+        \return 是否求解成功，矩阵的X轴和Y轴不垂直则失败
+    */
+    bool isConformal(double& scaleX, double& scaleY, double& angle,
+        bool& isMirror, Vector2d& reflex) const;
+    
+    //! 设置为原点为origin，坐标轴矢量为e0和e1的坐标系
+    Matrix2d& setCoordSystem(
+        const Vector2d& e0, const Vector2d& e1, const Point2d& origin);
+    
+    //! 得到坐标系的原点origin，坐标轴矢量e0和e1
+    void getCoordSystem(
+        Vector2d& e0, Vector2d& e1, Point2d& origin) const;
+    
+    //! 返回原点为origin，坐标轴矢量为e0和e1的坐标系
+    static Matrix2d coordSystem(
+        const Vector2d& e0, const Vector2d& e1, const Point2d& origin);
+    
+    //! 返回给定原点、比例和旋转角度的坐标系
+    /*!
+        \param origin 新坐标系的原点坐标
+        \param scaleX X轴的比例系数
+        \param scaleY Y轴的比例系数，为0则取为scaleX
+        \param angle X轴的旋转角度，弧度
+        \return 新坐标系的矩阵
+    */
+    static Matrix2d coordSystem(const Point2d& origin, 
+        double scaleX, double scaleY = 0.0, double angle = 0.0);
+    
+    //! 设置为单位矩阵
+    Matrix2d& setToIdentity();
+    
+    //! 设置矩阵元素
+    Matrix2d& set(double _m11, double _m12, double _m21, double _m22,
+        double _dx, double _dy);
+    
+    //! 设置为平移变换矩阵
+    /*!
+        \param vec 平移矢量
+        \return 改变后的本对象的引用
+    */
+    Matrix2d& setToTranslation(const Vector2d& vec);
+    
+    //! 设置为以一点为中心的旋转变换矩阵
+    /*!
+        \param angle 旋转角度，弧度，逆时针为正
+        \param center 旋转中心点
+        \return 改变后的本对象的引用
+    */
+    Matrix2d& setToRotation(double angle, 
+        const Point2d& center = Point2d::kOrigin());
+    
+    //! 设置为以一点为中心的放缩变换矩阵
+    /*!
+        \param scale 放缩比例
+        \param center 放缩中心点
+        \return 改变后的本对象的引用
+    */
+    Matrix2d& setToScaling(double scale, 
+        const Point2d& center = Point2d::kOrigin());
+    
+    //! 设置为以一点为中心的放缩变换矩阵
+    /*!
+        \param scaleX 在X方向上的放缩比例
+        \param scaleY 在Y方向上的放缩比例，如果为0则取为scaleX
+        \param center 放缩中心点
+        \return 改变后的本对象的引用
+    */
+    Matrix2d& setToScaling(double scaleX, double scaleY, 
+        const Point2d& center = Point2d::kOrigin());
+    
+    //! 设置为关于一点对称的变换矩阵
+    /*!
+        \param pnt 对称中心点
+        \return 改变后的本对象的引用
+    */
+    Matrix2d& setToMirroring(const Point2d& pnt = Point2d::kOrigin());
+    
+    //! 设置为以直线(pnt,dir)为中心线的对称变换矩阵
+    /*!
+        \param pnt 对称中心线上的一点
+        \param dir 对称中心线的方向矢量
+        \return 改变后的本对象的引用
+    */
+    Matrix2d& setToMirroring(const Point2d& pnt, const Vector2d& dir);
+    
+    //! 设置为错切变换矩阵
+    /*!
+        \param sx 在X方向上的错切比例
+        \param sy 在Y方向上的错切比例，如果为0则取为sx
+        \param pnt 错切基点，在该点上的点变换后位置不变
+        \return 改变后的本对象的引用
+    */
+    Matrix2d& setToShearing(double sx, double sy, 
+        const Point2d& pnt = Point2d::kOrigin());
+    
+    //! 得到平移变换矩阵
+    /*!
+        \param vec 平移矢量
+        \return 新的变换矩阵
+    */
+    static Matrix2d translation(const Vector2d& vec);
+    
+    //! 得到以一点为中心的旋转变换矩阵
+    /*!
+        \param angle 旋转角度，弧度，逆时针为正
+        \param center 旋转中心点
+        \return 新的变换矩阵
+    */
+    static Matrix2d rotation(double angle, 
+        const Point2d& center = Point2d::kOrigin());
+    
+    //! 得到以一点为中心的放缩变换矩阵
+    /*!
+        \param scale 放缩比例
+        \param center 放缩中心点
+        \return 新的变换矩阵
+    */
+    static Matrix2d scaling(double scale, 
+        const Point2d& center = Point2d::kOrigin());
+    
+    //! 得到以一点为中心的放缩变换矩阵
+    /*!
+        \param scaleX 在X方向上的放缩比例
+        \param scaleY 在Y方向上的放缩比例，如果为0则取为scaleX
+        \param center 放缩中心点
+        \return 新的变换矩阵
+    */
+    static Matrix2d scaling(double scaleX, double scaleY, 
+        const Point2d& center = Point2d::kOrigin());
+    
+    //! 得到关于一点对称的变换矩阵
+    /*!
+        \param pnt 对称中心点
+        \return 新的变换矩阵
+    */
+    static Matrix2d mirroring(const Point2d& pnt = Point2d::kOrigin());
+    
+    //! 得到以直线(pnt,dir)为中心线的对称变换矩阵
+    /*!
+        \param pnt 对称中心线上的一点
+        \param dir 对称中心线的方向矢量
+        \return 新的变换矩阵
+    */
+    static Matrix2d mirroring(const Point2d& pnt, const Vector2d& dir);
+    
+    //! 得到错切变换矩阵
+    /*!
+        \param sx 在X方向上的错切比例
+        \param sy 在Y方向上的错切比例，如果为0则取为sx
+        \param pnt 错切基点，在该点上的点变换后位置不变
+        \return 新的变换矩阵
+    */
+    static Matrix2d shearing(double sx, double sy, 
+        const Point2d& pnt = Point2d::kOrigin());
+};
+
+_GEOM_END
+#endif // __GEOMETRY_MATRIX_H_

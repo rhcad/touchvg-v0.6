@@ -1,0 +1,301 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7E7B6B5214FB65F700FB6083 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7B6B5114FB65F700FB6083 /* Foundation.framework */; };
+		7E8D719B14FCD929004C55D7 /* mgbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D719214FCD929004C55D7 /* mgbase.cpp */; };
+		7E8D719C14FCD929004C55D7 /* mgbnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D719314FCD929004C55D7 /* mgbnd.cpp */; };
+		7E8D719D14FCD929004C55D7 /* mgcurv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D719414FCD929004C55D7 /* mgcurv.cpp */; };
+		7E8D719E14FCD929004C55D7 /* mglnrel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D719514FCD929004C55D7 /* mglnrel.cpp */; };
+		7E8D719F14FCD929004C55D7 /* mgmat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D719614FCD929004C55D7 /* mgmat.cpp */; };
+		7E8D71A014FCD929004C55D7 /* mgnear.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D719714FCD929004C55D7 /* mgnear.cpp */; };
+		7E8D71A114FCD929004C55D7 /* mgnearbz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D719814FCD929004C55D7 /* mgnearbz.cpp */; };
+		7E8D71A214FCD929004C55D7 /* mgrect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D719914FCD929004C55D7 /* mgrect.cpp */; };
+		7E8D71A314FCD929004C55D7 /* mgvec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D719A14FCD929004C55D7 /* mgvec.cpp */; };
+		7E8D71A914FCD93E004C55D7 /* _gigraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8D71A414FCD93E004C55D7 /* _gigraph.h */; };
+		7E8D71AA14FCD93E004C55D7 /* gigraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D71A514FCD93E004C55D7 /* gigraph.cpp */; };
+		7E8D71AB14FCD93E004C55D7 /* gipath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D71A614FCD93E004C55D7 /* gipath.cpp */; };
+		7E8D71AC14FCD93E004C55D7 /* giplclip.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8D71A714FCD93E004C55D7 /* giplclip.h */; };
+		7E8D71AD14FCD93E004C55D7 /* gixform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E8D71A814FCD93E004C55D7 /* gixform.cpp */; };
+		7EF3082714FB6904006010F4 /* GiGraphIos.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EF3082614FB6904006010F4 /* GiGraphIos.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EF308A214FB6975006010F4 /* GiGraphIos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EF308A114FB6975006010F4 /* GiGraphIos.cpp */; };
+		C95990AE14FD1415002A0E8D /* GiGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = C95990AC14FD1415002A0E8D /* GiGraphView.mm */; };
+		C95990B014FD2A29002A0E8D /* GiGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = C95990AF14FD2A29002A0E8D /* GiGraphView.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7E7B6B4E14FB65F700FB6083 /* libgraphios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgraphios.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E7B6B5114FB65F700FB6083 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		7E7B6B5514FB65F700FB6083 /* graphios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "graphios-Prefix.pch"; sourceTree = "<group>"; };
+		7E8D719214FCD929004C55D7 /* mgbase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgbase.cpp; path = geom/mgbase.cpp; sourceTree = "<group>"; };
+		7E8D719314FCD929004C55D7 /* mgbnd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgbnd.cpp; path = geom/mgbnd.cpp; sourceTree = "<group>"; };
+		7E8D719414FCD929004C55D7 /* mgcurv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgcurv.cpp; path = geom/mgcurv.cpp; sourceTree = "<group>"; };
+		7E8D719514FCD929004C55D7 /* mglnrel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mglnrel.cpp; path = geom/mglnrel.cpp; sourceTree = "<group>"; };
+		7E8D719614FCD929004C55D7 /* mgmat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgmat.cpp; path = geom/mgmat.cpp; sourceTree = "<group>"; };
+		7E8D719714FCD929004C55D7 /* mgnear.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgnear.cpp; path = geom/mgnear.cpp; sourceTree = "<group>"; };
+		7E8D719814FCD929004C55D7 /* mgnearbz.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgnearbz.cpp; path = geom/mgnearbz.cpp; sourceTree = "<group>"; };
+		7E8D719914FCD929004C55D7 /* mgrect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgrect.cpp; path = geom/mgrect.cpp; sourceTree = "<group>"; };
+		7E8D719A14FCD929004C55D7 /* mgvec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgvec.cpp; path = geom/mgvec.cpp; sourceTree = "<group>"; };
+		7E8D71A414FCD93E004C55D7 /* _gigraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _gigraph.h; path = graph/_gigraph.h; sourceTree = "<group>"; };
+		7E8D71A514FCD93E004C55D7 /* gigraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gigraph.cpp; path = graph/gigraph.cpp; sourceTree = "<group>"; };
+		7E8D71A614FCD93E004C55D7 /* gipath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gipath.cpp; path = graph/gipath.cpp; sourceTree = "<group>"; };
+		7E8D71A714FCD93E004C55D7 /* giplclip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = giplclip.h; path = graph/giplclip.h; sourceTree = "<group>"; };
+		7E8D71A814FCD93E004C55D7 /* gixform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gixform.cpp; path = graph/gixform.cpp; sourceTree = "<group>"; };
+		7EF3082614FB6904006010F4 /* GiGraphIos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphIos.h; path = ../include/graphios/GiGraphIos.h; sourceTree = "<group>"; };
+		7EF308A114FB6975006010F4 /* GiGraphIos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GiGraphIos.cpp; path = graphios/GiGraphIos.cpp; sourceTree = "<group>"; };
+		C95990AC14FD1415002A0E8D /* GiGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiGraphView.mm; path = graphios/GiGraphView.mm; sourceTree = "<group>"; };
+		C95990AF14FD2A29002A0E8D /* GiGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphView.h; path = ../include/graphios/GiGraphView.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7E7B6B4B14FB65F700FB6083 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E7B6B5214FB65F700FB6083 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7E7B6B4314FB65F700FB6083 = {
+			isa = PBXGroup;
+			children = (
+				C95990AF14FD2A29002A0E8D /* GiGraphView.h */,
+				C95990AC14FD1415002A0E8D /* GiGraphView.mm */,
+				7EF308A114FB6975006010F4 /* GiGraphIos.cpp */,
+				7EF3082614FB6904006010F4 /* GiGraphIos.h */,
+				7E7B6B5414FB65F700FB6083 /* Supporting Files */,
+				7E7B6B5014FB65F700FB6083 /* Frameworks */,
+				7E7B6B4F14FB65F700FB6083 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7E7B6B4F14FB65F700FB6083 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7E7B6B4E14FB65F700FB6083 /* libgraphios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7E7B6B5014FB65F700FB6083 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7E8D719114FCD8FA004C55D7 /* Graphics */,
+				7E8D719014FCD8B6004C55D7 /* Geometry */,
+				7E7B6B5114FB65F700FB6083 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7E7B6B5414FB65F700FB6083 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7E7B6B5514FB65F700FB6083 /* graphios-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			path = graphios;
+			sourceTree = "<group>";
+		};
+		7E8D719014FCD8B6004C55D7 /* Geometry */ = {
+			isa = PBXGroup;
+			children = (
+				7E8D719214FCD929004C55D7 /* mgbase.cpp */,
+				7E8D719314FCD929004C55D7 /* mgbnd.cpp */,
+				7E8D719414FCD929004C55D7 /* mgcurv.cpp */,
+				7E8D719514FCD929004C55D7 /* mglnrel.cpp */,
+				7E8D719614FCD929004C55D7 /* mgmat.cpp */,
+				7E8D719714FCD929004C55D7 /* mgnear.cpp */,
+				7E8D719814FCD929004C55D7 /* mgnearbz.cpp */,
+				7E8D719914FCD929004C55D7 /* mgrect.cpp */,
+				7E8D719A14FCD929004C55D7 /* mgvec.cpp */,
+			);
+			name = Geometry;
+			sourceTree = "<group>";
+		};
+		7E8D719114FCD8FA004C55D7 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				7E8D71A414FCD93E004C55D7 /* _gigraph.h */,
+				7E8D71A514FCD93E004C55D7 /* gigraph.cpp */,
+				7E8D71A614FCD93E004C55D7 /* gipath.cpp */,
+				7E8D71A714FCD93E004C55D7 /* giplclip.h */,
+				7E8D71A814FCD93E004C55D7 /* gixform.cpp */,
+			);
+			name = Graphics;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7E7B6B4C14FB65F700FB6083 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EF3082714FB6904006010F4 /* GiGraphIos.h in Headers */,
+				7E8D71A914FCD93E004C55D7 /* _gigraph.h in Headers */,
+				7E8D71AC14FCD93E004C55D7 /* giplclip.h in Headers */,
+				C95990B014FD2A29002A0E8D /* GiGraphView.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7E7B6B4D14FB65F700FB6083 /* graphios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7E7B6B5814FB65F700FB6083 /* Build configuration list for PBXNativeTarget "graphios" */;
+			buildPhases = (
+				7E7B6B4A14FB65F700FB6083 /* Sources */,
+				7E7B6B4B14FB65F700FB6083 /* Frameworks */,
+				7E7B6B4C14FB65F700FB6083 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = graphios;
+			productName = graphios;
+			productReference = 7E7B6B4E14FB65F700FB6083 /* libgraphios.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7E7B6B4514FB65F700FB6083 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 7E7B6B4814FB65F700FB6083 /* Build configuration list for PBXProject "graphios" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7E7B6B4314FB65F700FB6083;
+			productRefGroup = 7E7B6B4F14FB65F700FB6083 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7E7B6B4D14FB65F700FB6083 /* graphios */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7E7B6B4A14FB65F700FB6083 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EF308A214FB6975006010F4 /* GiGraphIos.cpp in Sources */,
+				7E8D719B14FCD929004C55D7 /* mgbase.cpp in Sources */,
+				7E8D719C14FCD929004C55D7 /* mgbnd.cpp in Sources */,
+				7E8D719D14FCD929004C55D7 /* mgcurv.cpp in Sources */,
+				7E8D719E14FCD929004C55D7 /* mglnrel.cpp in Sources */,
+				7E8D719F14FCD929004C55D7 /* mgmat.cpp in Sources */,
+				7E8D71A014FCD929004C55D7 /* mgnear.cpp in Sources */,
+				7E8D71A114FCD929004C55D7 /* mgnearbz.cpp in Sources */,
+				7E8D71A214FCD929004C55D7 /* mgrect.cpp in Sources */,
+				7E8D71A314FCD929004C55D7 /* mgvec.cpp in Sources */,
+				7E8D71AA14FCD93E004C55D7 /* gigraph.cpp in Sources */,
+				7E8D71AB14FCD93E004C55D7 /* gipath.cpp in Sources */,
+				7E8D71AD14FCD93E004C55D7 /* gixform.cpp in Sources */,
+				C95990AE14FD1415002A0E8D /* GiGraphView.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7E7B6B5614FB65F700FB6083 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				DEPLOYMENT_LOCATION = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../include/**";
+				INSTALL_PATH = ../build;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Debug;
+		};
+		7E7B6B5714FB65F700FB6083 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				DEPLOYMENT_LOCATION = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../include/**";
+				INSTALL_PATH = ../build;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Release;
+		};
+		7E7B6B5914FB65F700FB6083 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DSTROOT = /tmp/graphios.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "graphios/graphios-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7E7B6B5A14FB65F700FB6083 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DSTROOT = /tmp/graphios.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "graphios/graphios-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7E7B6B4814FB65F700FB6083 /* Build configuration list for PBXProject "graphios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7E7B6B5614FB65F700FB6083 /* Debug */,
+				7E7B6B5714FB65F700FB6083 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7E7B6B5814FB65F700FB6083 /* Build configuration list for PBXNativeTarget "graphios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7E7B6B5914FB65F700FB6083 /* Debug */,
+				7E7B6B5A14FB65F700FB6083 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7E7B6B4514FB65F700FB6083 /* Project object */;
+}

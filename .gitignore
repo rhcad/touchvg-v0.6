@@ -1,0 +1,11 @@
+build
+*.ncb
+*.opt
+*.suo
+*.user
+*.o
+*.a
+*~
+*.DS_Store
+xcuserdata
+._*
