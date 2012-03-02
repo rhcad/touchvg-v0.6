@@ -18,6 +18,17 @@
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        _xform = new GiTransform();
+        _graph = new GiGraphIos(*_xform);
+        self.multipleTouchEnabled = YES;
+    }
+    return self;
+}
+
 - (void)dealloc
 {
     if (_graph) {

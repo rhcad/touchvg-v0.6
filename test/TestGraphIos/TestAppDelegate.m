@@ -1,28 +1,20 @@
-//
-//  TestGraphIosAppDelegate.m
-//  TestGraphIos
-//
-//  Created by Zhang Yungui on 2/27/12.
-//  Copyright 2012 github.com/rhcad. All rights reserved.
-//
+// TestAppDelegate.m
+// Copyright (c) 2004-2012, Zhang Yungui
+// License: GPL, https://github.com/rhcad/graph2d
 
-#import "TestGraphIosAppDelegate.h"
+#import "TestAppDelegate.h"
+#import "TestViewController.h"
 
-#import "TestGraphIosViewController.h"
-
-@implementation TestGraphIosAppDelegate
-
+@implementation TestAppDelegate
 
 @synthesize window=_window;
 
-@synthesize viewController=_viewController;
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-     
-    self.window.rootViewController = self.viewController;
+    TestViewController *rootView = [[TestViewController alloc] init];
+    [self.window addSubview:rootView.view];
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
@@ -68,7 +60,6 @@
 - (void)dealloc
 {
     [_window release];
-    [_viewController release];
     [super dealloc];
 }
 

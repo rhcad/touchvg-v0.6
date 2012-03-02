@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../test/TestGraphIos.xcodeproj">
+      location = "group:xcode/TestGraphIos.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:../src/graphios.xcodeproj">
+      location = "group:xcode/graphios.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:xcode/graph2d.xcodeproj">
    </FileRef>
 </Workspace>

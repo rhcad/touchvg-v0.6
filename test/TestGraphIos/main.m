@@ -1,10 +1,6 @@
-//
-//  main.m
-//  TestGraphIos
-//
-//  Created by Zhang Yungui on 2/27/12.
-//  Copyright 2012 github.com/rhcad. All rights reserved.
-//
+// main.m
+// Copyright (c) 2004-2012, Zhang Yungui
+// License: GPL, https://github.com/rhcad/graph2d
 
 #import <UIKit/UIKit.h>
 
