@@ -1,0 +1,380 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4ACBCB381425D73E00212514 /* GraphViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* GraphViewTests.m */; };
+		4AE2C1E71424998500C67987 /* libGraphView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE2C1D21424998500C67987 /* libGraphView.a */; };
+		7E9CE8361500BAE600487BEF /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E9CE8351500BAE600487BEF /* libGraph2d.a */; };
+		7E9CE83A1500BB9E00487BEF /* GiGraphIos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE8381500BB9E00487BEF /* GiGraphIos.cpp */; };
+		7E9CE83B1500BB9E00487BEF /* GiGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE8391500BB9E00487BEF /* GiGraphView.mm */; };
+		7E9CE83E1500BBAD00487BEF /* GiGraphIos.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE83C1500BBAD00487BEF /* GiGraphIos.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7E9CE83F1500BBAD00487BEF /* GiGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE83D1500BBAD00487BEF /* GiGraphView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4ACBCB3A1425DB6300212514 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4AE2C1C91424998500C67987 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AE2C1D11424998500C67987;
+			remoteInfo = Template;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4AE2C1D21424998500C67987 /* libGraphView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGraphView.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphViewUnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AE2C2691424A47000C67987 /* GraphViewTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphViewTests.h; path = UnitTests/GraphViewTests.h; sourceTree = SOURCE_ROOT; };
+		4AE2C26A1424A47000C67987 /* GraphViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GraphViewTests.m; path = UnitTests/GraphViewTests.m; sourceTree = SOURCE_ROOT; };
+		4AE2C26E1424A80500C67987 /* GraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphView.h; path = Headers/GraphView.h; sourceTree = "<group>"; };
+		4AE2C2921424A99700C67987 /* UnitTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "UnitTests-Info.plist"; path = "UnitTests/Resources/UnitTests-Info.plist"; sourceTree = SOURCE_ROOT; };
+		4AE2C2941424AA6E00C67987 /* Library.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Library.xcconfig; path = Configurations/Library.xcconfig; sourceTree = "<group>"; };
+		4AE2C2951424AA6E00C67987 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Project.xcconfig; path = Configurations/Project.xcconfig; sourceTree = "<group>"; };
+		4AE2C2961424AA6E00C67987 /* UnitTests.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = UnitTests.xcconfig; path = Configurations/UnitTests.xcconfig; sourceTree = "<group>"; };
+		4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphView_Prefix.pch; path = Headers/GraphView_Prefix.pch; sourceTree = "<group>"; };
+		7E9CE8351500BAE600487BEF /* libGraph2d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGraph2d.a; sourceTree = SOURCE_ROOT; };
+		7E9CE8381500BB9E00487BEF /* GiGraphIos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GiGraphIos.cpp; path = Sources/GiGraphIos.cpp; sourceTree = "<group>"; };
+		7E9CE8391500BB9E00487BEF /* GiGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiGraphView.mm; path = Sources/GiGraphView.mm; sourceTree = "<group>"; };
+		7E9CE83C1500BBAD00487BEF /* GiGraphIos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphIos.h; path = Headers/GiGraphIos.h; sourceTree = "<group>"; };
+		7E9CE83D1500BBAD00487BEF /* GiGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphView.h; path = Headers/GiGraphView.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4AE2C1CF1424998500C67987 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E9CE8361500BAE600487BEF /* libGraph2d.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4AE2C1DB1424998500C67987 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4AE2C1E71424998500C67987 /* libGraphView.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4AE2C1C71424998500C67987 = {
+			isa = PBXGroup;
+			children = (
+				7E9CE83C1500BBAD00487BEF /* GiGraphIos.h */,
+				7E9CE83D1500BBAD00487BEF /* GiGraphView.h */,
+				4AE2C26E1424A80500C67987 /* GraphView.h */,
+				4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */,
+				4AE2C21514249CD300C67987 /* Sources */,
+				4AE2C1E81424998500C67987 /* Tests */,
+				4AE2C21214249C2E00C67987 /* Configurations */,
+				4AE2C1D31424998500C67987 /* Products */,
+				7E9CE8351500BAE600487BEF /* libGraph2d.a */,
+			);
+			sourceTree = "<group>";
+		};
+		4AE2C1D31424998500C67987 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4AE2C1D21424998500C67987 /* libGraphView.a */,
+				4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4AE2C1E81424998500C67987 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4AE2C2931424AA2B00C67987 /* Resources */,
+				4AE2C2691424A47000C67987 /* GraphViewTests.h */,
+				4AE2C26A1424A47000C67987 /* GraphViewTests.m */,
+			);
+			name = Tests;
+			path = UnitTests;
+			sourceTree = "<group>";
+		};
+		4AE2C21214249C2E00C67987 /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				4AE2C2941424AA6E00C67987 /* Library.xcconfig */,
+				4AE2C2951424AA6E00C67987 /* Project.xcconfig */,
+				4AE2C2961424AA6E00C67987 /* UnitTests.xcconfig */,
+			);
+			name = Configurations;
+			sourceTree = "<group>";
+		};
+		4AE2C21514249CD300C67987 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				7E9CE8381500BB9E00487BEF /* GiGraphIos.cpp */,
+				7E9CE8391500BB9E00487BEF /* GiGraphView.mm */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		4AE2C2931424AA2B00C67987 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4AE2C2921424A99700C67987 /* UnitTests-Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4AE2C1D01424998500C67987 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E9CE83E1500BBAD00487BEF /* GiGraphIos.h in Headers */,
+				7E9CE83F1500BBAD00487BEF /* GiGraphView.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4AE2C1D11424998500C67987 /* GraphView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4AE2C1F51424998500C67987 /* Build configuration list for PBXNativeTarget "GraphView" */;
+			buildPhases = (
+				4AE2C1CE1424998500C67987 /* Sources */,
+				4AE2C1CF1424998500C67987 /* Frameworks */,
+				4AE2C1D01424998500C67987 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GraphView;
+			productName = LibTemplate;
+			productReference = 4AE2C1D21424998500C67987 /* libGraphView.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		4AE2C1DE1424998500C67987 /* GraphViewUnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4AE2C1F81424998500C67987 /* Build configuration list for PBXNativeTarget "GraphViewUnitTests" */;
+			buildPhases = (
+				4AE2C1DA1424998500C67987 /* Sources */,
+				4AE2C1DB1424998500C67987 /* Frameworks */,
+				4AE2C1DC1424998500C67987 /* Resources */,
+				4AE2C1DD1424998500C67987 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4ACBCB3B1425DB6300212514 /* PBXTargetDependency */,
+			);
+			name = GraphViewUnitTests;
+			productName = UnitTests;
+			productReference = 4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4AE2C1C91424998500C67987 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Beijing Founder Electronics Co.,Ltd";
+			};
+			buildConfigurationList = 4AE2C1CC1424998500C67987 /* Build configuration list for PBXProject "GraphView" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4AE2C1C71424998500C67987;
+			productRefGroup = 4AE2C1D31424998500C67987 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4AE2C1D11424998500C67987 /* GraphView */,
+				4AE2C1DE1424998500C67987 /* GraphViewUnitTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4AE2C1DC1424998500C67987 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4AE2C1DD1424998500C67987 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4AE2C1CE1424998500C67987 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E9CE83A1500BB9E00487BEF /* GiGraphIos.cpp in Sources */,
+				7E9CE83B1500BB9E00487BEF /* GiGraphView.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4AE2C1DA1424998500C67987 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4ACBCB381425D73E00212514 /* GraphViewTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4ACBCB3B1425DB6300212514 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4AE2C1D11424998500C67987 /* GraphView */;
+			targetProxy = 4ACBCB3A1425DB6300212514 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4AE2C1F31424998500C67987 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4AE2C2951424AA6E00C67987 /* Project.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(STDLIB_HEADERS)",
+					"\"$(BUILT_PRODUCTS_DIR)/../../core/include\"/**",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPadDraw\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPadDraw\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPadDraw\"",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4AE2C1F41424998500C67987 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4AE2C2951424AA6E00C67987 /* Project.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(STDLIB_HEADERS)",
+					"\"$(BUILT_PRODUCTS_DIR)/../../core/include\"/**",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPadDraw\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPadDraw\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPadDraw\"",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		4AE2C1F61424998500C67987 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4AE2C2941424AA6E00C67987 /* Library.xcconfig */;
+			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+			};
+			name = Debug;
+		};
+		4AE2C1F71424998500C67987 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4AE2C2941424AA6E00C67987 /* Library.xcconfig */;
+			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+			};
+			name = Release;
+		};
+		4AE2C1F91424998500C67987 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4AE2C2961424AA6E00C67987 /* UnitTests.xcconfig */;
+			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+			};
+			name = Debug;
+		};
+		4AE2C1FA1424998500C67987 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4AE2C2961424AA6E00C67987 /* UnitTests.xcconfig */;
+			buildSettings = {
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4AE2C1CC1424998500C67987 /* Build configuration list for PBXProject "GraphView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4AE2C1F31424998500C67987 /* Debug */,
+				4AE2C1F41424998500C67987 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4AE2C1F51424998500C67987 /* Build configuration list for PBXNativeTarget "GraphView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4AE2C1F61424998500C67987 /* Debug */,
+				4AE2C1F71424998500C67987 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4AE2C1F81424998500C67987 /* Build configuration list for PBXNativeTarget "GraphViewUnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4AE2C1F91424998500C67987 /* Debug */,
+				4AE2C1FA1424998500C67987 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4AE2C1C91424998500C67987 /* Project object */;
+}

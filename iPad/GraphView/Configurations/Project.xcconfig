@@ -1,0 +1,5 @@
+
+#include "../Common/Configurations/Project.xcconfig"
+
+TEST_AFTER_BUILD = NO
+TARGETED_DEVICE_FAMILY = 1,2

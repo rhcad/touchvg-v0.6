@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:iPadDraw/iPadDraw.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:GraphView/GraphView.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Graph2d/Graph2d.xcodeproj">
+   </FileRef>
+</Workspace>
