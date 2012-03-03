@@ -9,11 +9,12 @@
 /* Begin PBXBuildFile section */
 		4ACBCB381425D73E00212514 /* GraphViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* GraphViewTests.m */; };
 		4AE2C1E71424998500C67987 /* libGraphView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE2C1D21424998500C67987 /* libGraphView.a */; };
-		7E9CE8361500BAE600487BEF /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E9CE8351500BAE600487BEF /* libGraph2d.a */; };
-		7E9CE83A1500BB9E00487BEF /* GiGraphIos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE8381500BB9E00487BEF /* GiGraphIos.cpp */; };
-		7E9CE83B1500BB9E00487BEF /* GiGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE8391500BB9E00487BEF /* GiGraphView.mm */; };
-		7E9CE83E1500BBAD00487BEF /* GiGraphIos.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE83C1500BBAD00487BEF /* GiGraphIos.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E9CE83F1500BBAD00487BEF /* GiGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE83D1500BBAD00487BEF /* GiGraphView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C9A22A1E15020808008AA1EA /* GiGraphIos.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A22A1C15020808008AA1EA /* GiGraphIos.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C9A22A1F15020808008AA1EA /* GiGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A22A1D15020808008AA1EA /* GiGraphView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C9A22A221502081D008AA1EA /* GiGraphIos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A22A201502081D008AA1EA /* GiGraphIos.cpp */; };
+		C9A22A231502081D008AA1EA /* GiGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = C9A22A211502081D008AA1EA /* GiGraphView.mm */; };
+		C9A22A25150208C4008AA1EA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A22A24150208C4008AA1EA /* CoreGraphics.framework */; };
+		C9A22A2815020956008AA1EA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A22A2715020956008AA1EA /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,6 +25,27 @@
 			remoteGlobalIDString = 4AE2C1D11424998500C67987;
 			remoteInfo = Template;
 		};
+		C9340F26150216B500C2831C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9340F21150216B500C2831C /* Graph2d.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4AE2C1D21424998500C67987;
+			remoteInfo = Graph2d;
+		};
+		C9340F28150216B500C2831C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9340F21150216B500C2831C /* Graph2d.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4AE2C1DF1424998500C67987;
+			remoteInfo = Graph2dUnitTests;
+		};
+		C9340F2B150216C300C2831C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9340F21150216B500C2831C /* Graph2d.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AE2C1D11424998500C67987;
+			remoteInfo = Graph2d;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -31,17 +53,18 @@
 		4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphViewUnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AE2C2691424A47000C67987 /* GraphViewTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphViewTests.h; path = UnitTests/GraphViewTests.h; sourceTree = SOURCE_ROOT; };
 		4AE2C26A1424A47000C67987 /* GraphViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GraphViewTests.m; path = UnitTests/GraphViewTests.m; sourceTree = SOURCE_ROOT; };
-		4AE2C26E1424A80500C67987 /* GraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphView.h; path = Headers/GraphView.h; sourceTree = "<group>"; };
 		4AE2C2921424A99700C67987 /* UnitTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "UnitTests-Info.plist"; path = "UnitTests/Resources/UnitTests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		4AE2C2941424AA6E00C67987 /* Library.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Library.xcconfig; path = Configurations/Library.xcconfig; sourceTree = "<group>"; };
 		4AE2C2951424AA6E00C67987 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Project.xcconfig; path = Configurations/Project.xcconfig; sourceTree = "<group>"; };
 		4AE2C2961424AA6E00C67987 /* UnitTests.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = UnitTests.xcconfig; path = Configurations/UnitTests.xcconfig; sourceTree = "<group>"; };
 		4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphView_Prefix.pch; path = Headers/GraphView_Prefix.pch; sourceTree = "<group>"; };
-		7E9CE8351500BAE600487BEF /* libGraph2d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGraph2d.a; sourceTree = SOURCE_ROOT; };
-		7E9CE8381500BB9E00487BEF /* GiGraphIos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GiGraphIos.cpp; path = Sources/GiGraphIos.cpp; sourceTree = "<group>"; };
-		7E9CE8391500BB9E00487BEF /* GiGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiGraphView.mm; path = Sources/GiGraphView.mm; sourceTree = "<group>"; };
-		7E9CE83C1500BBAD00487BEF /* GiGraphIos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphIos.h; path = Headers/GiGraphIos.h; sourceTree = "<group>"; };
-		7E9CE83D1500BBAD00487BEF /* GiGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphView.h; path = Headers/GiGraphView.h; sourceTree = "<group>"; };
+		C9340F21150216B500C2831C /* Graph2d.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Graph2d.xcodeproj; path = ../Graph2d/Graph2d.xcodeproj; sourceTree = "<group>"; };
+		C9A22A1C15020808008AA1EA /* GiGraphIos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphIos.h; path = Headers/GiGraphIos.h; sourceTree = "<group>"; };
+		C9A22A1D15020808008AA1EA /* GiGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphView.h; path = Headers/GiGraphView.h; sourceTree = "<group>"; };
+		C9A22A201502081D008AA1EA /* GiGraphIos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GiGraphIos.cpp; path = Sources/GiGraphIos.cpp; sourceTree = "<group>"; };
+		C9A22A211502081D008AA1EA /* GiGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiGraphView.mm; path = Sources/GiGraphView.mm; sourceTree = "<group>"; };
+		C9A22A24150208C4008AA1EA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C9A22A2715020956008AA1EA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,7 +72,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E9CE8361500BAE600487BEF /* libGraph2d.a in Frameworks */,
+				C9A22A2815020956008AA1EA /* UIKit.framework in Frameworks */,
+				C9A22A25150208C4008AA1EA /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,15 +91,15 @@
 		4AE2C1C71424998500C67987 = {
 			isa = PBXGroup;
 			children = (
-				7E9CE83C1500BBAD00487BEF /* GiGraphIos.h */,
-				7E9CE83D1500BBAD00487BEF /* GiGraphView.h */,
-				4AE2C26E1424A80500C67987 /* GraphView.h */,
+				C9A22A1C15020808008AA1EA /* GiGraphIos.h */,
+				C9A22A1D15020808008AA1EA /* GiGraphView.h */,
 				4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */,
 				4AE2C21514249CD300C67987 /* Sources */,
 				4AE2C1E81424998500C67987 /* Tests */,
+				C9A22A2615020911008AA1EA /* Frameworks */,
+				C9340F2D1502187000C2831C /* Dependencies */,
 				4AE2C21214249C2E00C67987 /* Configurations */,
 				4AE2C1D31424998500C67987 /* Products */,
-				7E9CE8351500BAE600487BEF /* libGraph2d.a */,
 			);
 			sourceTree = "<group>";
 		};
@@ -112,8 +136,8 @@
 		4AE2C21514249CD300C67987 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				7E9CE8381500BB9E00487BEF /* GiGraphIos.cpp */,
-				7E9CE8391500BB9E00487BEF /* GiGraphView.mm */,
+				C9A22A201502081D008AA1EA /* GiGraphIos.cpp */,
+				C9A22A211502081D008AA1EA /* GiGraphView.mm */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -126,6 +150,32 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		C9340F22150216B500C2831C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C9340F27150216B500C2831C /* libGraph2d.a */,
+				C9340F29150216B500C2831C /* Graph2dUnitTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C9340F2D1502187000C2831C /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				C9340F21150216B500C2831C /* Graph2d.xcodeproj */,
+			);
+			name = Dependencies;
+			sourceTree = "<group>";
+		};
+		C9A22A2615020911008AA1EA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C9A22A2715020956008AA1EA /* UIKit.framework */,
+				C9A22A24150208C4008AA1EA /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -133,8 +183,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E9CE83E1500BBAD00487BEF /* GiGraphIos.h in Headers */,
-				7E9CE83F1500BBAD00487BEF /* GiGraphView.h in Headers */,
+				C9A22A1E15020808008AA1EA /* GiGraphIos.h in Headers */,
+				C9A22A1F15020808008AA1EA /* GiGraphView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,6 +202,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C9340F2C150216C300C2831C /* PBXTargetDependency */,
 			);
 			name = GraphView;
 			productName = LibTemplate;
@@ -184,7 +235,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
-				ORGANIZATIONNAME = "Beijing Founder Electronics Co.,Ltd";
+				ORGANIZATIONNAME = github.com/rhcad;
 			};
 			buildConfigurationList = 4AE2C1CC1424998500C67987 /* Build configuration list for PBXProject "GraphView" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -196,6 +247,12 @@
 			mainGroup = 4AE2C1C71424998500C67987;
 			productRefGroup = 4AE2C1D31424998500C67987 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C9340F22150216B500C2831C /* Products */;
+					ProjectRef = C9340F21150216B500C2831C /* Graph2d.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4AE2C1D11424998500C67987 /* GraphView */,
@@ -203,6 +260,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C9340F27150216B500C2831C /* libGraph2d.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGraph2d.a;
+			remoteRef = C9340F26150216B500C2831C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C9340F29150216B500C2831C /* Graph2dUnitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Graph2dUnitTests.octest;
+			remoteRef = C9340F28150216B500C2831C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4AE2C1DC1424998500C67987 /* Resources */ = {
@@ -235,8 +309,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E9CE83A1500BB9E00487BEF /* GiGraphIos.cpp in Sources */,
-				7E9CE83B1500BB9E00487BEF /* GiGraphView.mm in Sources */,
+				C9A22A221502081D008AA1EA /* GiGraphIos.cpp in Sources */,
+				C9A22A231502081D008AA1EA /* GiGraphView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +330,11 @@
 			target = 4AE2C1D11424998500C67987 /* GraphView */;
 			targetProxy = 4ACBCB3A1425DB6300212514 /* PBXContainerItemProxy */;
 		};
+		C9340F2C150216C300C2831C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Graph2d;
+			targetProxy = C9340F2B150216C300C2831C /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -273,10 +352,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../../core/include\"/**",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPadDraw\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPadDraw\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPadDraw\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
@@ -294,10 +372,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../../core/include\"/**",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPadDraw\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPadDraw\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPadDraw\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
@@ -309,10 +386,6 @@
 			baseConfigurationReference = 4AE2C2941424AA6E00C67987 /* Library.xcconfig */;
 			buildSettings = {
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
 			};
 			name = Debug;
 		};
@@ -321,10 +394,6 @@
 			baseConfigurationReference = 4AE2C2941424AA6E00C67987 /* Library.xcconfig */;
 			buildSettings = {
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
 			};
 			name = Release;
 		};

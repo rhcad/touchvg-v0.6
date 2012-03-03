@@ -7,9 +7,12 @@
 #define __GEOMETRY_GRAPHIOS_H_
 
 #include <gigraph.h>
+#include <gicolor.h>
 #include <CoreGraphics/CGContext.h>
 
 class GiGraphIosImpl;
+
+GiColor giFromCGColor(CGColorRef color);
 
 //! The graphics class for iOS.
 /*! getGraphType() of this class returns 10.
@@ -24,7 +27,7 @@ public:
     GiGraphIos& operator=(const GiGraphIos& src);
 
 public:
-    bool beginPaint(CGContextRef context, bool buffered = true, bool overlay = false);
+    bool beginPaint(CGContextRef context);
     void endPaint(bool draw = true);
 
     virtual void clearWnd();

@@ -38,7 +38,7 @@ GiGraphIos& GiGraphIos::operator=(const GiGraphIos& src)
     return *this;
 }
 
-bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool overlay)
+bool GiGraphIos::beginPaint(CGContextRef context)
 {
     if (isDrawing() || context == NULL)
         return false;
@@ -56,6 +56,15 @@ void GiGraphIos::endPaint(bool draw)
         m_draw->context = NULL;
         GiGraphics::endPaint();
     }
+}
+
+GiColor giFromCGColor(CGColorRef color)
+{
+    const CGFloat *rgba = CGColorGetComponents(color);
+    return GiColor((UInt8)mgRound(rgba[0] * 255),
+                   (UInt8)mgRound(rgba[1] * 255),
+                   (UInt8)mgRound(rgba[2] * 255),
+                   (UInt8)mgRound(rgba[3] * 255));
 }
 
 void GiGraphIos::clearWnd()

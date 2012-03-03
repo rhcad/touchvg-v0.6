@@ -6,10 +6,14 @@
 
 class GiTransform;
 class GiGraphIos;
+class GiGraphics;
 
 @interface GiGraphView : UIView {
     GiTransform*    _xform;
     GiGraphIos*     _graph;
 }
+
+- (void)afterCreated;
+- (void)draw:(GiGraphics*)gs;
 
 @end

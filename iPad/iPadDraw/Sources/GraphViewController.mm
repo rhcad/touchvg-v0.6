@@ -3,7 +3,7 @@
 // License: GPL, https://github.com/rhcad/graph2d
 
 #import "GraphViewController.h"
-#import <GiGraphView.h>
+#import <GraphView/GiGraphView.h>
 
 @implementation GraphViewController
 

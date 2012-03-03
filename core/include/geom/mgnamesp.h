@@ -6,7 +6,7 @@
 #ifndef __GEOMETRY_NAMESPACE_H_
 #define __GEOMETRY_NAMESPACE_H_
 
-#if defined(__IPHONE_3_0)
+#if defined(__APPLE__)
 #define _GEOM_BEGIN
 #define _GEOM_END
 #else

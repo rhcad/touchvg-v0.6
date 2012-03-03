@@ -168,7 +168,7 @@
 		4AE2C1C91424998500C67987 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				ORGANIZATIONNAME = "Beijing Founder Electronics Co.,Ltd";
+				ORGANIZATIONNAME = "github.com/rhcad";
 			};
 			buildConfigurationList = 4AE2C1CC1424998500C67987 /* Build configuration list for PBXProject "Template" */;
 			compatibilityVersion = "Xcode 3.2";

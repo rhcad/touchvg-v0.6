@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A1A985A1425F67100394171 /* iPadDraw.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4A1A98591425F67000394171 /* iPadDraw.bundle */; };
 		4AC4D3B31424794C0055F4CA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4D3B11424794C0055F4CA /* AppDelegate.m */; };
 		4AC4D3B41424794C0055F4CA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4D3B21424794C0055F4CA /* main.m */; };
 		7E3D20681500BE2F008ACC1B /* GraphViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7E3D20671500BE2F008ACC1B /* GraphViewController.mm */; };
+		C97B07E615021F5200040728 /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C97B07E415021F5200040728 /* libGraph2d.a */; };
+		C97B07E715021F5200040728 /* libGraphView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C97B07E515021F5200040728 /* libGraphView.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,13 +43,6 @@
 			remoteGlobalIDString = 4AE2C1DF1424998500C67987;
 			remoteInfo = Graph2dUnitTests;
 		};
-		4A93E2F91426EED10068F29D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4AE2C1D11424998500C67987;
-			remoteInfo = Graph2d;
-		};
 		4A93E2FD1426EED10068F29D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4A93E2D51426EE920068F29D /* GraphView.xcodeproj */;
@@ -56,10 +50,16 @@
 			remoteGlobalIDString = 4AE2C1D11424998500C67987;
 			remoteInfo = GraphView;
 		};
+		C9340F2E15021BC800C2831C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AE2C1D11424998500C67987;
+			remoteInfo = Graph2d;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4A1A98591425F67000394171 /* iPadDraw.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = iPadDraw.bundle; path = Resources/iPadDraw.bundle; sourceTree = SOURCE_ROOT; };
 		4A93E2D51426EE920068F29D /* GraphView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GraphView.xcodeproj; path = ../GraphView/GraphView.xcodeproj; sourceTree = "<group>"; };
 		4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Graph2d.xcodeproj; path = ../Graph2d/Graph2d.xcodeproj; sourceTree = "<group>"; };
 		4AC4D32F142455C60055F4CA /* iPadDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPadDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,6 +71,8 @@
 		4AE2C1A41424920700C67987 /* App-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "App-Info.plist"; path = "Resources/App-Info.plist"; sourceTree = SOURCE_ROOT; };
 		7E3D20661500BE2F008ACC1B /* GraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphViewController.h; path = Sources/GraphViewController.h; sourceTree = SOURCE_ROOT; };
 		7E3D20671500BE2F008ACC1B /* GraphViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GraphViewController.mm; path = Sources/GraphViewController.mm; sourceTree = SOURCE_ROOT; };
+		C97B07E415021F5200040728 /* libGraph2d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGraph2d.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C97B07E515021F5200040728 /* libGraphView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGraphView.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C97B07E615021F5200040728 /* libGraph2d.a in Frameworks */,
+				C97B07E715021F5200040728 /* libGraphView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,7 +129,6 @@
 			isa = PBXGroup;
 			children = (
 				4AE2C1A41424920700C67987 /* App-Info.plist */,
-				4A1A98591425F67000394171 /* iPadDraw.bundle */,
 			);
 			name = Resources;
 			path = iPadDraw;
@@ -156,6 +159,8 @@
 		4AE2C17A1424866C00C67987 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				C97B07E415021F5200040728 /* libGraph2d.a */,
+				C97B07E515021F5200040728 /* libGraphView.a */,
 				4A93E2D51426EE920068F29D /* GraphView.xcodeproj */,
 				4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */,
 			);
@@ -176,8 +181,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				C9340F2F15021BC800C2831C /* PBXTargetDependency */,
 				4A93E2FE1426EED10068F29D /* PBXTargetDependency */,
-				4A93E2FA1426EED10068F29D /* PBXTargetDependency */,
 			);
 			name = iPadDraw;
 			productName = iPadDraw;
@@ -191,7 +196,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
-				ORGANIZATIONNAME = "Beijing Founder Electronics Co.,Ltd";
+				ORGANIZATIONNAME = github.com/rhcad;
 			};
 			buildConfigurationList = 4AC4D329142455C50055F4CA /* Build configuration list for PBXProject "iPadDraw" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -256,7 +261,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A1A985A1425F67100394171 /* iPadDraw.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,15 +280,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4A93E2FA1426EED10068F29D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Graph2d;
-			targetProxy = 4A93E2F91426EED10068F29D /* PBXContainerItemProxy */;
-		};
 		4A93E2FE1426EED10068F29D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GraphView;
 			targetProxy = 4A93E2FD1426EED10068F29D /* PBXContainerItemProxy */;
+		};
+		C9340F2F15021BC800C2831C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Graph2d;
+			targetProxy = C9340F2E15021BC800C2831C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -304,14 +308,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../../core/include\"/**",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPadDraw\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPadDraw\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPadDraw\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 				);
 				INFOPLIST_FILE = "";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -327,15 +330,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../../core/include\"/**",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPadDraw\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPadDraw\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPadDraw\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -374,23 +376,22 @@
 			baseConfigurationReference = 4AC4D3B61424795D0055F4CA /* Project.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Founder Electronics Co Ltd";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: github.com/rhcad";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../../core/include\"/**",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPadDraw\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPadDraw\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPadDraw\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "745C7C02-EA16-4D42-8548-22BB19ABBB37";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Enterprise;
 		};
@@ -415,23 +416,22 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Beijing Founder Electronics Co.,Ltd";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: github.com/rhcad";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../../core/include\"/**",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPadDraw\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPadDraw\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPadDraw\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "20636715-AB90-4C49-B334-507CEC68422C";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = AppStore;
 		};

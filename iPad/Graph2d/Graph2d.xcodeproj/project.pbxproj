@@ -310,7 +310,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
-				ORGANIZATIONNAME = "Beijing Founder Electronics Co.,Ltd";
+				ORGANIZATIONNAME = "github.com/rhcad";
 			};
 			buildConfigurationList = 4AE2C1CC1424998500C67987 /* Build configuration list for PBXProject "Graph2d" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -409,9 +409,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPadDraw\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPadDraw\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPadDraw\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
@@ -429,9 +429,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPadDraw\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPadDraw\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPadDraw\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
