@@ -31,8 +31,9 @@ public:
     /*! 对象属性为：96dpi，显示窗口中心的世界坐标为(0,0)，显示比例为100％，
         模型坐标系的变换矩阵为单位矩阵，显示比例范围为1％到500％，
         显示极限的世界坐标范围为(-1e5,-1e5)到(1e5,1e5)
+        \param ydown true表示显示设备的+Y方向为向下，false则向上
     */
-    GiTransform();
+    GiTransform(bool ydown = true);
 
     //! 拷贝构造函数
     /*! 不复制 enableZoom 相应参数
@@ -218,12 +219,12 @@ public:
 
     //! 设置显示放缩状态
     /*! 
-        \param[in] pntCenterW 显示窗口中心的世界坐标
+        \param[in] centerW 显示窗口中心的世界坐标
         \param[in] viewScale 显示比例
         \param[out] changed 填充是否已改变放缩参数的标记，为NULL则忽略
         \return 始终返回true
     */
-    bool zoom(Point2d pntCenterW, double viewScale, bool* changed = NULL);
+    bool zoom(Point2d centerW, double viewScale, bool* changed = NULL);
 
     //! 设置各种放缩函数是否立即生效
     /*! 本函数可用于检查放缩参数的有效性，避免改变图形系统的放缩状态；
@@ -236,10 +237,10 @@ public:
 
     //! 得到上一次放缩函数的结果
     /*! 不论 enableZoom 设置什么值，都能获取放缩结果
-        \param[out] pntCenterW 显示窗口中心的世界坐标
+        \param[out] centerW 显示窗口中心的世界坐标
         \param[out] viewScale 显示比例
     */
-    void getZoomValue(Point2d& pntCenterW, double& viewScale) const;
+    void getZoomValue(Point2d& centerW, double& viewScale) const;
 
     //! 返回放缩结果改变的次数，供图形系统等观察者作比较使用
     long getZoomTimes() const;

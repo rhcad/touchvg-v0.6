@@ -11,7 +11,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _xform = new GiTransform();
+        _xform = new GiTransform(false);
         _graph = new GiGraphIos(*_xform);
         [self afterCreated];
     }
@@ -22,7 +22,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        _xform = new GiTransform();
+        _xform = new GiTransform(false);
         _graph = new GiGraphIos(*_xform);
         [self afterCreated];
     }

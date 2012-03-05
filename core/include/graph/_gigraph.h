@@ -44,7 +44,7 @@ public:
         drawColors = 0;
         colorMode = GiGraphics::kColorReal;
         isPrint = false;
-        maxPenWidth = 50;
+        maxPenWidth = 100;
         antiAlias = true;
     }
 

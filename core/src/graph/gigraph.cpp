@@ -229,8 +229,8 @@ void GiGraphics::setMaxPenWidth(UInt8 pixels)
 {
     if (pixels < 1)
         pixels = 1;
-    else if (pixels > 50)
-        pixels = 50;
+    else if (pixels > 100)
+        pixels = 100;
     m_impl->maxPenWidth = pixels;
 }
 

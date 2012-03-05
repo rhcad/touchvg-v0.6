@@ -3,7 +3,7 @@
 // License: GPL, https://github.com/rhcad/graph2d
 
 #import "TestGraphView.h"
-#include "../../core/include/testgraph/shape.cpp"
+#include "../../../core/include/testgraph/shape.cpp"
 
 @implementation TestGraphView
 
@@ -11,17 +11,18 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        srand((unsigned)time(NULL));
+        srand(10000);
         
         RandomParam param;
         param.lineCount = 1000;
-        param.arcCount = 1000;
+        param.arcCount = 100;
         param.randomLineStyle = true;
         
         _shapes = new Shapes(param.getShapeCount());
         param.initShapes(_shapes);
         
-        //_xform->zoomTo(_shapes->getExtent() * _xform->modelToWorld());
+        _xform->zoomTo(_shapes->getExtent() * _xform->modelToWorld());
+        _xform->zoomByFactor(20);
     }
     return self;
 }
