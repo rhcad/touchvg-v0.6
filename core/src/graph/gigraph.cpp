@@ -352,10 +352,10 @@ bool GiGraphics::drawLines(const GiContext* ctx, int count,
     Matrix2d matD(S2D(xf(), modelUnit));
 
     const Box2d extent (count, points);                 // 模型坐标范围
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))    // 全部在显示区域外
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
-    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))    // 全部在显示区域内
+    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // 全部在显示区域内
     {
         pxpoints.resize(count);
         POINT* lppt = &pxpoints.front();
@@ -408,10 +408,10 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
     Matrix2d matD(S2D(xf(), modelUnit));
 
     const Box2d extent (count, points);                 // 模型坐标范围
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))    // 全部在显示区域外
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
-    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))    // 全部在显示区域内
+    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // 全部在显示区域内
     {
         pxpoints.resize(count);
         lppt = &pxpoints.front();
@@ -587,11 +587,11 @@ bool GiGraphics::drawPolygon(const GiContext* ctx, int count,
 
     bool ret = false;
 
-    const Box2d extent (count, points);             // 模型坐标范围
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))    // 全部在显示区域外
+    const Box2d extent (count, points);                 // 模型坐标范围
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
-    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))    // 全部在显示区域内
+    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // 全部在显示区域内
     {
         ret = _DrawPolygon(this, ctx, 
             count, points, true, true, true, modelUnit);
@@ -635,8 +635,8 @@ bool GiGraphics::drawEllipse(const GiContext* ctx,
     if (ry < _MGZERO)
         ry = rx;
 
-    const Box2d extent (center, rx, ry);                    // 模型坐标范围
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))    // 全部在显示区域外
+    const Box2d extent (center, rx*2.0, ry*2.0);            // 模型坐标范围
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
     if (mgIsZero(matD.m12) && mgIsZero(matD.m21))
@@ -682,8 +682,8 @@ bool GiGraphics::drawPie(const GiContext* ctx,
     if (ry < _MGZERO)
         ry = rx;
 
-    const Box2d extent (center, rx, ry);                    // 模型坐标范围
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))    // 全部在显示区域外
+    const Box2d extent (center, rx*2.0, ry*2.0);            // 模型坐标范围
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
     Point2d points[16];
@@ -875,7 +875,7 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
     count = mgMin(count, static_cast<int>(3 + (0x2000 - 1) / 3));
 
     const Box2d extent (count, controlPoints);              // 模型坐标范围
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))    // 全部在显示区域外
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
     int i;
@@ -932,7 +932,7 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
     count = mgMin(count, static_cast<int>((0x2000 - 1) / 3));
 
     const Box2d extent (count, controlPoints);              // 模型坐标范围
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))    // 全部在显示区域外
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
     int i;
@@ -1002,7 +1002,7 @@ bool GiGraphics::drawPath(const GiContext* ctx, int count,
     Matrix2d matD(S2D(xf(), modelUnit));
 
     const Box2d extent (count, points);                     // 模型坐标范围
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))    // 全部在显示区域外
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
     vector<POINT> pxpoints;
