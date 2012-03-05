@@ -8,7 +8,7 @@ class CScrollShapeView : public CRandomShapeView
 {
 // Construction
 public:
-	CScrollShapeView(RandomViewParam& param);
+	CScrollShapeView(RandomParam& param);
 	virtual ~CScrollShapeView();
 
 // Attributes

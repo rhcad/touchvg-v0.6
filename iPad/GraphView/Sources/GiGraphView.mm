@@ -56,7 +56,8 @@
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (_graph->beginPaint(context)) {
+    if (_graph->beginPaint(context))
+    {
         [self draw:_graph];
         _graph->endPaint();
     }

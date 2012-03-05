@@ -4,18 +4,11 @@
 
 #include "BaseView.h"
 
-struct RandomViewParam
-{
-	long nLineCount;
-	long nArcCount;
-	BOOL bRandomLineStyle;
-};
-
 class CRandomShapeView : public CBaseView
 {
 // Construction
 public:
-	CRandomShapeView(RandomViewParam& param);
+	CRandomShapeView(RandomParam& param);
 	virtual ~CRandomShapeView();
 
 // Attributes

@@ -42,7 +42,7 @@ const GiTransform& GiGraphics::xf() const
     return m_impl->xform;
 }
 
-void GiGraphics::beginPaint()
+void GiGraphics::beginPaint(const RECT* clipBox)
 {
     if (m_impl->lastZoomTimes != xf().getZoomTimes())
     {
@@ -50,6 +50,19 @@ void GiGraphics::beginPaint()
         m_impl->lastZoomTimes = xf().getZoomTimes();
     }
     giInterlockedIncrement(&m_impl->drawRefcnt);
+
+    if (clipBox)
+    {
+        memcpy(&m_impl->clipBox0, clipBox, sizeof(m_impl->clipBox0));
+        memcpy(&m_impl->clipBox, &m_impl->clipBox0, sizeof(m_impl->clipBox));
+        m_impl->rectDraw.set(m_impl->clipBox.left, m_impl->clipBox.top,
+                             m_impl->clipBox.right, m_impl->clipBox.bottom);
+        m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
+        m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
+        m_impl->rectDrawMaxM = Box2d(0, 0, xf().getWidth(), xf().getHeight()) * xf().displayToModel();
+        m_impl->rectDrawW = m_impl->rectDrawM * xf().modelToWorld();
+        m_impl->rectDrawMaxW = m_impl->rectDrawMaxM * xf().modelToWorld();
+    }
 }
 
 void GiGraphics::endPaint()

@@ -110,8 +110,6 @@ bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
     if (::GetMapMode(prtDC) != MM_TEXT)
         return false;
 
-    GiGraphics::beginPaint();
-
     m_attribDC = attribDC;
     m_impl->drawColors = GetDeviceCaps(prtDC, NUMCOLORS);
     m_impl->xform.setResolution(GetDeviceCaps(prtDC, LOGPIXELSX), 
@@ -127,21 +125,17 @@ bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
         m_attribDC = NULL;
     }
 
+    RECT clipBox;
+
     if (m_impl->isPrint
         || (buffered && !hasCachedBitmap())
-        || ERROR == ::GetClipBox(hdc, &m_impl->clipBox0)
-        || ::IsRectEmpty(&m_impl->clipBox0))
+        || ERROR == ::GetClipBox(hdc, &clipBox)
+        || ::IsRectEmpty(&clipBox))
     {
-        ::SetRect(&m_impl->clipBox0, 0, 0, xf().getWidth(), xf().getHeight());
+        ::SetRect(&clipBox, 0, 0, xf().getWidth(), xf().getHeight());
     }
-    ::CopyRect(&m_impl->clipBox, &m_impl->clipBox0);
-    m_impl->rectDraw.set(m_impl->clipBox.left, m_impl->clipBox.top,
-        m_impl->clipBox.right, m_impl->clipBox.bottom);
-    m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
-    m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
-    m_impl->rectDrawMaxM = Box2d(0, 0, xf().getWidth(), xf().getHeight()) * xf().displayToModel();
-    m_impl->rectDrawW = m_impl->rectDrawM * xf().modelToWorld();
-    m_impl->rectDrawMaxW = m_impl->rectDrawMaxM * xf().modelToWorld();
+
+    GiGraphics::beginPaint(&clipBox);
 
     return true;
 }

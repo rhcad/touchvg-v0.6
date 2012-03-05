@@ -78,10 +78,10 @@ CWnd* CreateChildView(UINT nFrameID)
 
 	if (IDR_STEP1_VIEW == nFrameID)
 	{
-		RandomViewParam param;
-		param.nLineCount = dlg.m_nLineCount;
-		param.nArcCount = dlg.m_nArcCount;
-		param.bRandomLineStyle = dlg.m_bRandomLineStyle;
+		RandomParam param;
+		param.lineCount = dlg.m_nLineCount;
+		param.arcCount = dlg.m_nArcCount;
+		param.randomLineStyle = !!dlg.m_bRandomLineStyle;
 		if (dlg.m_bScrollBar)
 			pView = new CScrollShapeView(param);
 		else

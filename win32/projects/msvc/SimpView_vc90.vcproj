@@ -42,7 +42,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\include\graphwin;..\..\src\SimpView"
+				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\include\graphwin;..\..\src\SimpView;..\..\..\core\include\testgraph"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -111,7 +111,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\include\graphwin;..\..\src\SimpView"
+				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\include\graphwin;..\..\src\SimpView;..\..\..\core\include\testgraph"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -182,8 +182,24 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\SimpView\shape.cpp"
+				RelativePath="..\..\..\core\include\testgraph\shape.cpp"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\src\SimpView\SimpView.cpp"
@@ -247,7 +263,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\SimpView\shape.h"
+				RelativePath="..\..\..\core\include\testgraph\shape.h"
 				>
 			</File>
 			<File

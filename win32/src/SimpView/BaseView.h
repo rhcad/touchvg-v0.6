@@ -8,19 +8,10 @@ class CBaseView : public CWnd
 {
 // Construction
 public:
-	CBaseView(long nShapeCount);
+	CBaseView(int shapeCount);
 	virtual ~CBaseView();
 
-// Attributes
-public:
-	long GetShapeCount() const;
-	ShapeItem* GetShape(long nIndex) const;
-	Box2d GetExtent() const;
-
-// Operations
-public:
-	void RecalcExtent();
-	void SetShape(long nIndex, ShapeItem* pShape);
+    Shapes m_shapes;
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -41,10 +32,6 @@ protected:
 private:
 	COLORREF		m_crBkColor;		// ´°¿Ú±³¾°ÑÕÉ«
 	bool			m_bGdip;
-
-	long			m_nShapeCount;
-	ShapeItem**		m_pShapes;
-	Box2d			m_rectExtent;
 
 // Generated message map functions
 protected:

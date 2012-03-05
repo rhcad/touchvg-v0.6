@@ -13,8 +13,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-CBaseView::CBaseView(long nShapeCount)
-	: m_nShapeCount(0), m_pShapes(NULL)
+CBaseView::CBaseView(int shapeCount) : m_shapes(shapeCount)
 {
 	m_sizePan.cx = m_sizePan.cy = 0;
 	m_bGdip = true;
@@ -24,22 +23,11 @@ CBaseView::CBaseView(long nShapeCount)
 		m_gs = new GiGraphGdip(m_xf);
 	else
 		m_gs = new GiGraphGdi(m_xf);
-
-	if (nShapeCount > 0)
-	{
-		m_nShapeCount = nShapeCount;
-		m_pShapes = new ShapeItem*[m_nShapeCount];
-		ZeroMemory(m_pShapes, sizeof(m_pShapes[0]) * m_nShapeCount);
-	}
 }
 
 CBaseView::~CBaseView()
 {
 	delete m_gs;
-
-	for (int i = 0; i < m_nShapeCount; i++)
-		delete m_pShapes[i];
-	delete[] m_pShapes;
 }
 
 BEGIN_MESSAGE_MAP(CBaseView, CWnd)
@@ -123,53 +111,14 @@ void CBaseView::OnZoomed()
 	Invalidate();
 }
 
-long CBaseView::GetShapeCount() const
-{
-	return m_nShapeCount;
-}
-
-ShapeItem* CBaseView::GetShape(long nIndex) const
-{
-	return nIndex >= 0 && nIndex < m_nShapeCount ? m_pShapes[nIndex] : NULL;
-}
-
-Box2d CBaseView::GetExtent() const
-{
-	return m_rectExtent;
-}
-
-void CBaseView::RecalcExtent()
-{
-	m_rectExtent.empty();
-	for (int i = 0; i < m_nShapeCount; i++)
-	{
-		m_rectExtent.unionWith(m_pShapes[i]->getExtent());
-	}
-}
-
-void CBaseView::SetShape(long nIndex, ShapeItem* pShape)
-{
-	ASSERT(nIndex >= 0 && nIndex < m_nShapeCount);
-	ASSERT(pShape != NULL && pShape != m_pShapes[nIndex]);
-
-	delete m_pShapes[nIndex];
-	m_pShapes[nIndex] = pShape;
-}
-
 void CBaseView::OnDraw(GiGraphics* gs)
 {
-	for (int i = 0; i < m_nShapeCount; i++)
-	{
-		m_pShapes[i]->draw(gs);
-	}
-	GiContext context(0, GiColor(128, 128, 128), kLineDot);
-	context.setLineAlpha(150);
-	gs->drawRect(&context, m_rectExtent);
+	m_shapes.draw(gs);
 }
 
 void CBaseView::OnZoomExtent() 
 {
-	if (m_xf.zoomTo(m_rectExtent * m_xf.modelToWorld(), NULL))
+	if (m_xf.zoomTo(m_shapes.getExtent() * m_xf.modelToWorld(), NULL))
 	{
 		OnZoomed();
 	}
@@ -232,18 +181,18 @@ void CBaseView::OnMouseMove(UINT nFlags, CPoint point)
 	pnt *= m_xf.displayToModel();
 
 	CString str;
-	int nIndex = pStatusBar->CommandToIndex(ID_INDICATOR_X);
-	if (nIndex >= 0)
+	int index = pStatusBar->CommandToIndex(ID_INDICATOR_X);
+	if (index >= 0)
 	{
 		str.Format(_T("X: %.2lf"), pnt.x);
-		pStatusBar->SetPaneText(nIndex, str);
+		pStatusBar->SetPaneText(index, str);
 	}
 
-	nIndex = pStatusBar->CommandToIndex(ID_INDICATOR_Y);
-	if (nIndex >= 0)
+	index = pStatusBar->CommandToIndex(ID_INDICATOR_Y);
+	if (index >= 0)
 	{
 		str.Format(_T("Y: %.2lf"), pnt.y);
-		pStatusBar->SetPaneText(nIndex, str);
+		pStatusBar->SetPaneText(index, str);
 	}
 }
 

@@ -3,7 +3,7 @@
 // License: GPL, https://github.com/rhcad/graph2d
 
 #import "GraphViewController.h"
-#import <GraphView/GiGraphView.h>
+#import "TestGraphView.h"
 
 @implementation GraphViewController
 
@@ -34,8 +34,8 @@
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView
 {
-    GiGraphView *view = [[GiGraphView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    view.backgroundColor = [UIColor whiteColor];
+    TestGraphView *view = [[TestGraphView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    view.backgroundColor = [UIColor blueColor];
     self.view = view;
     [view release];
 }

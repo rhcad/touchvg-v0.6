@@ -27,7 +27,7 @@ public:
     GiGraphics& operator=(const GiGraphics& src);
 
 protected:
-    void beginPaint();
+    void beginPaint(const RECT* clipBox);
     void endPaint();
 
 public:

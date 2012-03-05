@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "NewViewDlg.h"
+#include "shape.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -18,8 +19,8 @@ CNewViewDlg::CNewViewDlg(CWnd* pParent /*=NULL*/)
 	m_bScrollBar = TRUE;
 	m_bRandomLineStyle = TRUE;
 	//}}AFX_DATA_INIT
-	m_nLineCount = RandInt(0, 1000);
-	m_nArcCount = RandInt(0, 600);
+    m_nLineCount = RandomParam::RandInt(0, 1000);
+	m_nArcCount = RandomParam::RandInt(0, 600);
 }
 
 void CNewViewDlg::DoDataExchange(CDataExchange* pDX)
