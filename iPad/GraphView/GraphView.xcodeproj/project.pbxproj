@@ -355,6 +355,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
@@ -375,6 +376,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
@@ -386,6 +388,13 @@
 			baseConfigurationReference = 4AE2C2941424AA6E00C67987 /* Library.xcconfig */;
 			buildSettings = {
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = (
+					"$(STDLIB_HEADERS)",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+				);
 			};
 			name = Debug;
 		};
@@ -394,6 +403,13 @@
 			baseConfigurationReference = 4AE2C2941424AA6E00C67987 /* Library.xcconfig */;
 			buildSettings = {
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = (
+					"$(STDLIB_HEADERS)",
+					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+				);
 			};
 			name = Release;
 		};

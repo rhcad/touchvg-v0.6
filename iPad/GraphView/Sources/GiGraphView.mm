@@ -45,14 +45,15 @@
 - (void)afterCreated
 {
     self.multipleTouchEnabled = YES;
-    
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    _xform->zoomTo(Point2d(0,0));
 }
 
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
+    _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
     if (_graph->beginPaint(context)) {
@@ -63,7 +64,9 @@
 
 - (void)draw:(GiGraphics*)gs
 {
-    gs->drawEllipse(NULL, Point2d(0,0), 10, 10);
+    GiContext ctx;
+    ctx.setFillColor(GiColor(128,0,0));
+    gs->drawEllipse(&ctx, Point2d(0,0), _xform->getWidth() * 0.5, _xform->getHeight() * 0.5, false);
 }
 
 @end
