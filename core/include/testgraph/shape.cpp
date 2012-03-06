@@ -23,7 +23,7 @@ UInt8 RandomParam::RandUInt8(long nMin, long nMax)
 void RandomParam::setShapeProp(ShapeItem* shape)
 {
     shape->lineColor.set(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(1, 255));
-    shape->lineWidth = (Int16)RandInt(0, 50);
+    shape->lineWidth = (Int16)RandInt(-20, 300);
     shape->lineStyle = (kLineStyle)(randomLineStyle ? RandInt(kLineSolid, kLineNull) : kLineSolid);
 }
 
