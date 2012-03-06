@@ -23,7 +23,7 @@ UInt8 RandomParam::RandUInt8(long nMin, long nMax)
 void RandomParam::setShapeProp(ShapeItem* shape)
 {
     shape->lineColor.set(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(1, 255));
-    shape->lineWidth = (Int16)RandInt(0, 20);
+    shape->lineWidth = (Int16)RandInt(0, 50);
     shape->lineStyle = (kLineStyle)(randomLineStyle ? RandInt(kLineSolid, kLineNull) : kLineSolid);
 }
 
@@ -31,8 +31,50 @@ void RandomParam::initShapes(Shapes* shapes)
 {
     for (int i = 0; i < shapes->getShapeCount(); i++)
     {
-        bool bLine = (RandInt(0, 100) % 2 == 0);
-        if (bLine && lineCount > 0 || 0 == arcCount)
+        int type = RandInt(0, 2);
+        
+        if (0 == type && 0 == lineCount)
+            type = 1;
+        if (1 == type && 0 == arcCount)
+            type = 2;
+        if (2 == type && 0 == curveCount)
+            type = 0;
+        if (0 == type && 0 == lineCount)
+            type = 1;
+        
+        if (2 == type)
+        {
+            CurveItem* shape = new CurveItem(RandInt(3, 20));
+            shapes->setShape(i, shape);
+            curveCount--;
+            
+            setShapeProp(shape);
+            for (int i = 0; i < shape->count; i++)
+            {
+                if (0 == i)
+                {
+                    shape->points[i].set(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0));
+                }
+                else
+                {
+                    shape->points[i] = shape->points[i-1] + Vector2d(RandDbl(-200.0, 200.0), RandDbl(-200.0, 200.0));
+                }
+            }
+        }
+        else if (1 == type)
+        {
+            ArcItem* shape = new ArcItem();
+            shapes->setShape(i, shape);
+            arcCount--;
+            
+            setShapeProp(shape);
+            shape->center.set(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0));
+            shape->rx = RandDbl(1.0, 1000.0);
+            shape->ry = RandDbl(1.0, 1000.0);
+            shape->startAngle = RandDbl(0.0, _M_2PI);
+            shape->sweepAngle = RandDbl(0.0, M_PI_2 * 6);
+        }
+        else
         {
             LineItem* shape = new LineItem();
             shapes->setShape(i, shape);
@@ -41,19 +83,6 @@ void RandomParam::initShapes(Shapes* shapes)
             setShapeProp(shape);
             shape->startpt.set(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0));
             shape->endpt.set(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0));
-        }
-        else
-        {
-            ArcItem* shape = new ArcItem();
-            shapes->setShape(i, shape);
-            arcCount--;
-
-            setShapeProp(shape);
-            shape->center.set(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0));
-            shape->rx = RandDbl(1.0, 1000.0);
-            shape->ry = RandDbl(1.0, 1000.0);
-            shape->startAngle = RandDbl(0.0, _M_2PI);
-            shape->sweepAngle = RandDbl(0.0, M_PI_2 * 6);
         }
     }
 
@@ -160,6 +189,34 @@ Box2d ArcItem::getExtent() const
     mgBeziersBox(rect, count, points);
 
     return rect;
+}
+
+// CurveItem
+//
+
+CurveItem::CurveItem() : count(0), points(NULL)
+{
+}
+
+CurveItem::CurveItem(int n) : count(n), points(new Point2d[n])
+{
+}
+
+CurveItem::~CurveItem()
+{
+    if (points)
+        delete[] points;
+}
+
+void CurveItem::draw(GiGraphics* gs) const
+{
+    GiContext context(lineWidth<10?lineWidth:10, lineColor, lineStyle);
+    gs->drawBSplines(&context, count, points);
+}
+
+Box2d CurveItem::getExtent() const
+{
+    return Box2d(count, points);
 }
 
 _GEOM_END

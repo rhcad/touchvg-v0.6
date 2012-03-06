@@ -12,6 +12,9 @@ public:
     Int16       lineWidth;
     kLineStyle  lineStyle;
 
+    ShapeItem() {}
+    virtual ~ShapeItem() {}
+    
     virtual void draw(GiGraphics* gs) const = 0;
     virtual Box2d getExtent() const = 0;
 };
@@ -35,6 +38,20 @@ public:
     double      startAngle;
     double      sweepAngle;
 
+    virtual void draw(GiGraphics* gs) const;
+    virtual Box2d getExtent() const;
+};
+
+class CurveItem : public ShapeItem
+{
+public:
+    long        count;
+    Point2d*    points;
+    
+    CurveItem();
+    CurveItem(int n);
+    virtual ~CurveItem();
+    
     virtual void draw(GiGraphics* gs) const;
     virtual Box2d getExtent() const;
 };
@@ -64,9 +81,12 @@ struct RandomParam
 {
     long lineCount;
     long arcCount;
+    long curveCount;
     bool randomLineStyle;
+    
+    RandomParam() : lineCount(10), arcCount(10), curveCount(10), randomLineStyle(false) {}
 
-    long getShapeCount() const { return lineCount + arcCount; }
+    long getShapeCount() const { return lineCount + arcCount + curveCount; }
     void initShapes(Shapes* shapes);
     void setShapeProp(ShapeItem* shape);
 

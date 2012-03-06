@@ -35,7 +35,7 @@
 - (void)loadView
 {
     TestGraphView *view = [[TestGraphView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    view.backgroundColor = [UIColor blueColor];
+    view.backgroundColor = [UIColor whiteColor];
     self.view = view;
     [view release];
 }

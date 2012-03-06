@@ -14,8 +14,9 @@
         srand((unsigned)time(NULL));
         
         RandomParam param;
-        param.lineCount = 100;
-        param.arcCount = 100;
+        param.lineCount = RandomParam::RandInt(0, 50);
+        param.arcCount = RandomParam::RandInt(0, 20);
+        param.curveCount = RandomParam::RandInt(0, 20);
         param.randomLineStyle = true;
         
         _shapes = new Shapes(param.getShapeCount());
@@ -39,6 +40,20 @@
 - (void)draw:(GiGraphics*)gs
 {
     _shapes->draw(gs);
+}
+
+- (void)oneFingersTwoTaps
+{
+    RandomParam param;
+    param.lineCount = RandomParam::RandInt(0, 50);
+    param.arcCount = RandomParam::RandInt(0, 20);
+    param.curveCount = RandomParam::RandInt(0, 20);
+    param.randomLineStyle = true;
+    
+    delete _shapes;
+    _shapes = new Shapes(param.getShapeCount());
+    param.initShapes(_shapes);
+    [self setNeedsDisplay];
 }
 
 @end

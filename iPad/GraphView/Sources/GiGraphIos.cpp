@@ -75,10 +75,10 @@ public:
 GiColor giFromCGColor(CGColorRef color)
 {
     const CGFloat *rgba = CGColorGetComponents(color);
-    return GiColor((UInt8)mgRound(rgba[0] * 255),
-                   (UInt8)mgRound(rgba[1] * 255),
-                   (UInt8)mgRound(rgba[2] * 255),
-                   (UInt8)mgRound(rgba[3] * 255));
+    return rgba ? GiColor((UInt8)mgRound(rgba[0] * 255),
+                          (UInt8)mgRound(rgba[1] * 255),
+                          (UInt8)mgRound(rgba[2] * 255),
+                          (UInt8)mgRound(rgba[3] * 255)) : GiColor();
 }
 
 GiGraphIos::GiGraphIos(GiTransform& xform)
