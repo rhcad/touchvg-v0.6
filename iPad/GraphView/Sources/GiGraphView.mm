@@ -1,5 +1,5 @@
 // GiGraphView.mm
-// Copyright (c) 2004-2012, Zhang Yungui
+// Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 // License: GPL, https://github.com/rhcad/graph2d
 
 #import "GiGraphView.h"
@@ -45,8 +45,11 @@
 - (void)afterCreated
 {
     self.multipleTouchEnabled = YES;
+
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _xform->zoomTo(Point2d(0,0));
+
+    [self addGestureRecognizers];
 }
 
 - (void)drawRect:(CGRect)rect
@@ -65,9 +68,79 @@
 
 - (void)draw:(GiGraphics*)gs
 {
-    GiContext ctx;
-    ctx.setFillColor(GiColor(128,0,0));
-    gs->drawEllipse(&ctx, Point2d(0,0), _xform->getWidth() * 0.5, _xform->getHeight() * 0.5, false);
+}
+
+- (void)addGestureRecognizers
+{
+    UIPinchGestureRecognizer *twoFingerPinch =
+        [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingerPinch:)];
+    [self addGestureRecognizer:twoFingerPinch];
+    [twoFingerPinch release];
+
+    UIPanGestureRecognizer *twoFingerPan =
+        [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingerPan:)];
+    [twoFingerPan setMinimumNumberOfTouches:2];
+    [twoFingerPan setMaximumNumberOfTouches:2];
+    [self addGestureRecognizer:twoFingerPan];
+    [twoFingerPan release];
+
+    UIPanGestureRecognizer *oneFingerPan =
+        [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
+    [oneFingerPan setMaximumNumberOfTouches:1];
+    [self addGestureRecognizer:oneFingerPan];
+    [oneFingerPan release];
+
+    UITapGestureRecognizer *twoFingersTwoTaps =
+        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersTwoTaps)];
+    [twoFingersTwoTaps setNumberOfTapsRequired:2];
+    [twoFingersTwoTaps setNumberOfTouchesRequired:2];
+    [self addGestureRecognizer:twoFingersTwoTaps];
+    [twoFingersTwoTaps release];
+
+    UITapGestureRecognizer *oneFingersTwoTaps =
+        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingersTwoTaps)];
+    [self addGestureRecognizer:oneFingersTwoTaps];
+    [oneFingersTwoTaps release];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    Point2d centerW;
+    _xform->getZoomValue(centerW, _lastViewScale);
+    _lastCenterX = centerW.x;
+    _lastCenterY = centerW.y;
+}
+
+- (void)twoFingerPinch:(UIPinchGestureRecognizer *)recognizer
+{
+    CGPoint point = [recognizer locationInView:self];
+    POINT at = { point.x, point.y };
+    double factor = (recognizer.scale - 1) * 0.75;
+    
+    _xform->zoom(Point2d(_lastCenterX, _lastCenterY), _lastViewScale);
+    _xform->zoomByFactor(factor, &at);
+    [self setNeedsDisplay];
+}
+
+- (void)twoFingerPan:(UIPanGestureRecognizer *)recognizer
+{
+}
+
+- (void)oneFingerPan:(UIPanGestureRecognizer *)recognizer
+{
+    CGPoint translation = [recognizer translationInView:self];
+    
+    _xform->zoom(Point2d(_lastCenterX, _lastCenterY), _lastViewScale);
+    _xform->zoomPan(translation.x, translation.y);
+    [self setNeedsDisplay];
+}
+
+- (void)twoFingersTwoTaps
+{
+}
+
+- (void)oneFingersTwoTaps
+{
 }
 
 @end

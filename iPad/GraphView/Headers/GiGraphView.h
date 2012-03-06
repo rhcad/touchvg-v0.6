@@ -1,5 +1,5 @@
 // GiGraphView.h
-// Copyright (c) 2004-2012, Zhang Yungui
+// Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 // License: GPL, https://github.com/rhcad/graph2d
 
 #import <UIKit/UIKit.h>
@@ -11,9 +11,20 @@ class GiGraphics;
 @interface GiGraphView : UIView {
     GiTransform*    _xform;
     GiGraphIos*     _graph;
+    double          _lastCenterX;
+    double          _lastCenterY;
+    double          _lastViewScale;
 }
 
-- (void)afterCreated;
 - (void)draw:(GiGraphics*)gs;
+
+- (void)afterCreated;
+- (void)addGestureRecognizers;
+
+- (void)twoFingerPinch:(UIPinchGestureRecognizer *)recognizer;
+- (void)twoFingerPan:(UIPanGestureRecognizer *)recognizer;
+- (void)oneFingerPan:(UIPanGestureRecognizer *)recognizer;
+- (void)twoFingersTwoTaps;
+- (void)oneFingersTwoTaps;
 
 @end
