@@ -11,10 +11,10 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        srand(10000);
+        srand((unsigned)time(NULL));
         
         RandomParam param;
-        param.lineCount = 1000;
+        param.lineCount = 100;
         param.arcCount = 100;
         param.randomLineStyle = true;
         
@@ -22,7 +22,7 @@
         param.initShapes(_shapes);
         
         _xform->zoomTo(_shapes->getExtent() * _xform->modelToWorld());
-        _xform->zoomByFactor(20);
+        _xform->zoomByFactor(2.0);
     }
     return self;
 }

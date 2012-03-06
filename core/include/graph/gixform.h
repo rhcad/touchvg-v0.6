@@ -124,9 +124,9 @@ public:
     //! 设置显示分辨率
     /*! 一般不直接调用本函数，而是调用图形系统的 beginPaint 或 printSetup 函数
         \param dpiX 水平分辨率DPI
-        \param dpiY 垂直分辨率DPI
+        \param dpiY 垂直分辨率DPI，为0则取为dpiX
     */
-    void setResolution(int dpiX, int dpiY);
+    void setResolution(int dpiX, int dpiY = 0);
 
     //! 设置模型坐标系的变换矩阵
     /*! 建议在调用图形系统的 beginPaint 函数前调用本函数。\n

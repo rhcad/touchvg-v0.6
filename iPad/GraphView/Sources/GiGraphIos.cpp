@@ -85,6 +85,7 @@ GiGraphIos::GiGraphIos(GiTransform& xform)
     : GiGraphics(xform)
 {
     m_draw = new GiGraphIosImpl();
+    xform.setResolution(GiGraphIos::getScreenDpi());
 }
 
 GiGraphIos::GiGraphIos(const GiGraphIos& src)
@@ -164,6 +165,11 @@ void GiGraphIos::clearCachedBitmap()
 bool GiGraphIos::isBufferedDrawing() const
 {
     return false;
+}
+
+int GiGraphIos::getScreenDpi() const
+{
+    return 132; // How to get the actual DPI?
 }
 
 bool GiGraphIos::setClipBox(const RECT* prc)

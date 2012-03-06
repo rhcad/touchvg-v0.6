@@ -7,7 +7,7 @@ _GEOM_BEGIN
 
 double RandomParam::RandDbl(double dMin, double dMax)
 {
-    return (double)rand() / (RAND_MAX + 1) * (dMax - dMin) + dMin;
+    return rand() % mgRound(dMax - dMin) + dMin;
 }
 
 long RandomParam::RandInt(long nMin, long nMax)
@@ -22,8 +22,8 @@ UInt8 RandomParam::RandUInt8(long nMin, long nMax)
 
 void RandomParam::setShapeProp(ShapeItem* shape)
 {
-    shape->lineColor.set(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(50, 255));
-    shape->lineWidth = (Int16)RandInt(0, 100);
+    shape->lineColor.set(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(1, 255));
+    shape->lineWidth = (Int16)RandInt(0, 20);
     shape->lineStyle = (kLineStyle)(randomLineStyle ? RandInt(kLineSolid, kLineNull) : kLineSolid);
 }
 

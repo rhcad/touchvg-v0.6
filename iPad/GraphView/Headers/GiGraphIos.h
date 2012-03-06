@@ -37,7 +37,7 @@ public:
     virtual void clearCachedBitmap();
     virtual bool isBufferedDrawing() const;
     virtual int getGraphType() const { return 10; }
-    virtual int getScreenDpi() const { return 96; }
+    virtual int getScreenDpi() const;
     
     virtual bool setClipBox(const RECT* prc);
     virtual bool setClipWorld(const Box2d& rectWorld);
