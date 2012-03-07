@@ -7,11 +7,12 @@
 class GiGraphIosImpl
 {
 public:
+    GiGraphIos*     pthis;
     CGContextRef    context;
     GiColor         bkColor;
     GiContext       gictx;
 
-    GiGraphIosImpl() : context(NULL), bkColor(GiColor::White())
+    GiGraphIosImpl(GiGraphIos* p) : pthis(p), context(NULL), bkColor(GiColor::White())
     {
     }
 
@@ -22,29 +23,18 @@ public:
 
     bool setPen(const GiContext* ctx)
     {
-        if (ctx)
+        if (ctx && !ctx->isNullLine())
         {
-            if (ctx->getLineColor() != gictx.getLineColor())
-            {
-                gictx.setLineColor(ctx->getLineColor());
-                if (!ctx->isNullLine())
-                {
-                    CGContextSetRGBStrokeColor(context, 
-                        toFloat(ctx->getLineColor().r),
-                        toFloat(ctx->getLineColor().g),
-                        toFloat(ctx->getLineColor().b),
-                        toFloat(ctx->getLineColor().a));
-                }
-            }
-            if (ctx->getLineWidth() != gictx.getLineWidth())
-            {
-                gictx.setLineWidth(ctx->getLineWidth());
-                CGContextSetLineWidth(context, (CGFloat)ctx->getLineWidth());
-            }
-            if (ctx->getLineStyle() != gictx.getLineStyle())
-            {
-                gictx.setLineStyle(ctx->getLineStyle());
-            }
+            gictx.setLineColor(ctx->getLineColor());
+            gictx.setLineWidth(ctx->getLineWidth());
+            gictx.setLineStyle(ctx->getLineStyle());
+        }
+        if (!gictx.isNullLine())
+        {
+            GiColor color = pthis->calcPenColor(gictx.getLineColor());
+            CGContextSetRGBStrokeColor(context, toFloat(color.r), toFloat(color.g),
+                                       toFloat(color.b), toFloat(color.a));
+            CGContextSetLineWidth(context, (CGFloat)pthis->calcPenWidth(gictx.getLineWidth()));
         }
 
         return !gictx.isNullLine();
@@ -52,20 +42,15 @@ public:
 
     bool setBrush(const GiContext* ctx)
     {
-        if (ctx)
+        if (ctx && ctx->hasFillColor())
         {
-            if (ctx->getFillColor() != gictx.getFillColor())
-            {
-                gictx.setFillColor(ctx->getFillColor());
-                if (ctx->hasFillColor)
-                {
-                    CGContextSetRGBFillColor(context, 
-                        toFloat(ctx->getFillColor().r),
-                        toFloat(ctx->getFillColor().g),
-                        toFloat(ctx->getFillColor().b),
-                        toFloat(ctx->getFillColor().a));
-                }
-            }
+            gictx.setFillColor(ctx->getFillColor());
+        }
+        if (gictx.hasFillColor)
+        {
+            GiColor color = pthis->calcPenColor(gictx.getFillColor());
+            CGContextSetRGBFillColor(context, toFloat(color.r), toFloat(color.g),
+                                     toFloat(color.b), toFloat(color.a));
         }
 
         return gictx.hasFillColor();
@@ -78,20 +63,21 @@ GiColor giFromCGColor(CGColorRef color)
     return rgba ? GiColor((UInt8)mgRound(rgba[0] * 255),
                           (UInt8)mgRound(rgba[1] * 255),
                           (UInt8)mgRound(rgba[2] * 255),
-                          (UInt8)mgRound(rgba[3] * 255)) : GiColor();
+                          (UInt8)mgRound(rgba[3] * 255)) : GICOLOR_INVALID;
 }
 
 GiGraphIos::GiGraphIos(GiTransform& xform)
     : GiGraphics(xform)
 {
-    m_draw = new GiGraphIosImpl();
+    m_draw = new GiGraphIosImpl(this);
     xform.setResolution(GiGraphIos::getScreenDpi());
 }
 
 GiGraphIos::GiGraphIos(const GiGraphIos& src)
     : GiGraphics(src)
 {
-    m_draw = new GiGraphIosImpl();
+    m_draw = new GiGraphIosImpl(this);
+    operator=(src);
 }
 
 GiGraphIos::~GiGraphIos()

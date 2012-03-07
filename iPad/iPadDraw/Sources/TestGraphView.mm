@@ -14,8 +14,8 @@
         srand((unsigned)time(NULL));
         
         RandomParam param;
-        param.lineCount = RandomParam::RandInt(0, 50);
-        param.arcCount = RandomParam::RandInt(0, 20);
+        param.lineCount = RandomParam::RandInt(0, 100);
+        param.arcCount = RandomParam::RandInt(0, 50);
         param.curveCount = RandomParam::RandInt(0, 20);
         param.randomLineStyle = true;
         
@@ -45,9 +45,9 @@
 - (void)oneFingersTwoTaps
 {
     RandomParam param;
-    param.lineCount = RandomParam::RandInt(0, 50);
-    param.arcCount = RandomParam::RandInt(0, 20);
-    param.curveCount = RandomParam::RandInt(0, 20);
+    param.lineCount = RandomParam::RandInt(0, 100);
+        param.arcCount = RandomParam::RandInt(0, 50);
+        param.curveCount = RandomParam::RandInt(0, 20);
     param.randomLineStyle = true;
     
     delete _shapes;

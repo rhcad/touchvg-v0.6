@@ -47,6 +47,7 @@
     self.multipleTouchEnabled = YES;
 
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    _xform->setViewScaleRange(0.01, 10.0);
     _xform->zoomTo(Point2d(0,0));
 
     [self addGestureRecognizers];
@@ -99,39 +100,49 @@
 
     UITapGestureRecognizer *oneFingersTwoTaps =
         [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingersTwoTaps)];
+    [oneFingersTwoTaps setNumberOfTapsRequired:2];
     [self addGestureRecognizer:oneFingersTwoTaps];
     [oneFingersTwoTaps release];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)twoFingerPinch:(UIPinchGestureRecognizer *)sender
 {
-    Point2d centerW;
-    _xform->getZoomValue(centerW, _lastViewScale);
-    _lastCenterX = centerW.x;
-    _lastCenterY = centerW.y;
-}
+    if ([sender numberOfTouches] < 2)
+        return;
 
-- (void)twoFingerPinch:(UIPinchGestureRecognizer *)recognizer
-{
-    CGPoint point = [recognizer locationInView:self];
-    POINT at = { point.x, point.y };
-    double factor = (recognizer.scale - 1) * 0.75;
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        Point2d centerW;
+        _xform->getZoomValue(centerW, _lastViewScale);
+        _lastCenter = CGPointMake(centerW.x, centerW.y);
+        _firstPoint = [sender locationInView:self];
+    }
+
+    POINT at = { _firstPoint.x, _firstPoint.y };
+    _xform->zoom(Point2d(_lastCenter.x, _lastCenter.y), _lastViewScale);
+    _xform->zoomByFactor(sender.scale - 1, &at);
+
+    CGPoint point = [sender locationInView:self];
+    _xform->zoomPan(point.x - _firstPoint.x, point.y - _firstPoint.y);
     
-    _xform->zoom(Point2d(_lastCenterX, _lastCenterY), _lastViewScale);
-    _xform->zoomByFactor(factor, &at);
     [self setNeedsDisplay];
 }
 
-- (void)twoFingerPan:(UIPanGestureRecognizer *)recognizer
+- (void)twoFingerPan:(UIPanGestureRecognizer *)sender
 {
 }
 
-- (void)oneFingerPan:(UIPanGestureRecognizer *)recognizer
+- (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    CGPoint translation = [recognizer translationInView:self];
-    
-    _xform->zoom(Point2d(_lastCenterX, _lastCenterY), _lastViewScale);
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        Point2d centerW;
+        _xform->getZoomValue(centerW, _lastViewScale);
+        _lastCenter = CGPointMake(centerW.x, centerW.y);
+    }
+
+    CGPoint translation = [sender translationInView:self];
+    _xform->zoom(Point2d(_lastCenter.x, _lastCenter.y), _lastViewScale);
     _xform->zoomPan(translation.x, translation.y);
+    
     [self setNeedsDisplay];
 }
 

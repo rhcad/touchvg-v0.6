@@ -7,12 +7,12 @@ _GEOM_BEGIN
 
 double RandomParam::RandDbl(double dMin, double dMax)
 {
-    return rand() % mgRound(dMax - dMin) + dMin;
+    return (rand() % mgRound((dMax - dMin) * 10)) * 0.1 + dMin;
 }
 
 long RandomParam::RandInt(long nMin, long nMax)
 {
-    return rand() % (nMax - nMin) + nMin;
+    return rand() % (nMax - nMin + 1) + nMin;
 }
 
 UInt8 RandomParam::RandUInt8(long nMin, long nMax)
@@ -23,7 +23,7 @@ UInt8 RandomParam::RandUInt8(long nMin, long nMax)
 void RandomParam::setShapeProp(ShapeItem* shape)
 {
     shape->lineColor.set(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(1, 255));
-    shape->lineWidth = (Int16)RandInt(-20, 300);
+    shape->lineWidth = (Int16)RandInt(-10, 200);
     shape->lineStyle = (kLineStyle)(randomLineStyle ? RandInt(kLineSolid, kLineNull) : kLineSolid);
 }
 
@@ -151,8 +151,7 @@ void Shapes::draw(GiGraphics* gs) const
     {
         m_shapes[i]->draw(gs);
     }
-    GiContext context(0, GiColor(128, 128, 128), kLineDot);
-    context.setLineAlpha(150);
+    GiContext context(0, GiColor(128, 128, 128, 150), kLineDot);
     gs->drawRect(&context, m_extent);
 }
 

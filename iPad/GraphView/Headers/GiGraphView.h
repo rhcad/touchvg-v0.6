@@ -11,9 +11,9 @@ class GiGraphics;
 @interface GiGraphView : UIView {
     GiTransform*    _xform;
     GiGraphIos*     _graph;
-    double          _lastCenterX;
-    double          _lastCenterY;
     double          _lastViewScale;
+    CGPoint         _lastCenter;
+    CGPoint         _firstPoint;
 }
 
 - (void)draw:(GiGraphics*)gs;

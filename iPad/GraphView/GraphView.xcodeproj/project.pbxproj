@@ -357,7 +357,7 @@
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -378,7 +378,7 @@
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				SDKROOT = iphoneos;
 			};
 			name = Release;
