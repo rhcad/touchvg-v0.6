@@ -558,6 +558,15 @@ static bool _DrawPolygon(GiGraphics* gs, const GiContext* ctx,
         ctx = gs->getCurrentContext();
     if (NULL == ctx)
         return false;
+    
+    GiContext context (*ctx);
+    if (!bEdge)
+        context.setNullLine();
+    if (!bFill)
+        context.setNoFillColor();
+    
+    if (context.isNullLine() && !context.hasFillColor())
+        return false;
 
     vector<POINT> pxpoints;
     Point2d pt1, pt2;
@@ -579,12 +588,6 @@ static bool _DrawPolygon(GiGraphics* gs, const GiContext* ctx,
             n++;
         }
     }
-
-    GiContext context (*ctx);
-    if (!bEdge)
-        context.setNullLine();
-    if (!bFill)
-        context.setNoFillColor();
 
     return gs->rawPolygon(&context, lppt, n);
 }

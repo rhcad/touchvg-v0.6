@@ -1,4 +1,4 @@
-//  iPadDrawAppDelegate.m
+//  AppDelegate.m
 //  iPadDraw
 //  Created by Zhang Yungui on 2012-3-2.
 //
@@ -9,7 +9,9 @@
 // Inner property and methods
 @interface AppDelegate ()
 
+#ifndef __IPHONE_5_0
 @property (nonatomic, retain) UIWindow *window;
+#endif
 
 @end
 ////////////////////////////////////////////////////////////////

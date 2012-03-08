@@ -34,7 +34,7 @@
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView
 {
-    TestGraphView *view = [[TestGraphView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    TestGraphView *view = [[TestGraphView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     view.backgroundColor = [UIColor whiteColor];
     self.view = view;
     [view release];

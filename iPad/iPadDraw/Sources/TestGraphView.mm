@@ -14,16 +14,16 @@
         srand((unsigned)time(NULL));
         
         RandomParam param;
-        param.lineCount = RandomParam::RandInt(0, 100);
-        param.arcCount = RandomParam::RandInt(0, 50);
-        param.curveCount = RandomParam::RandInt(0, 20);
+        param.lineCount = 1000;
+        param.arcCount = 500;
+        param.curveCount = 200;
         param.randomLineStyle = true;
         
         _shapes = new Shapes(param.getShapeCount());
         param.initShapes(_shapes);
         
         _xform->zoomTo(_shapes->getExtent() * _xform->modelToWorld());
-        _xform->zoomByFactor(2.0);
+        _xform->zoomByFactor(4.0);
     }
     return self;
 }
@@ -42,17 +42,18 @@
     _shapes->draw(gs);
 }
 
-- (void)oneFingersTwoTaps
+- (void)twoFingersTwoTaps
 {
     RandomParam param;
-    param.lineCount = RandomParam::RandInt(0, 100);
-        param.arcCount = RandomParam::RandInt(0, 50);
-        param.curveCount = RandomParam::RandInt(0, 20);
+    param.lineCount = RandomParam::RandInt(0, 200);
+    param.arcCount = RandomParam::RandInt(0, 100);
+    param.curveCount = RandomParam::RandInt(0, 50);
     param.randomLineStyle = true;
     
     delete _shapes;
     _shapes = new Shapes(param.getShapeCount());
     param.initShapes(_shapes);
+    
     [self setNeedsDisplay];
 }
 

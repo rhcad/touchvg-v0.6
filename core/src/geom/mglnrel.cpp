@@ -384,8 +384,8 @@ static bool PtInArea_Edge(int &odd, const Point2d& pt, const Point2d& p1,
                           const Point2d& p2, const Point2d& p0)
 {
     // 如果从X方向上P不在边[P1,P2)上，则没有交点. 竖直边也没有
-    if (! (p2.x > p1.x && pt.x >= p1.x && pt.x < p2.x 
-        || p1.x > p2.x && pt.x <= p1.x && pt.x > p2.x))
+    if (!((p2.x > p1.x) && (pt.x >= p1.x) && (pt.x < p2.x)) &&
+        !((p1.x > p2.x) && (pt.x <= p1.x) && (pt.x > p2.x)) )
     {
         return false;
     }
@@ -396,7 +396,8 @@ static bool PtInArea_Edge(int &odd, const Point2d& pt, const Point2d& p1,
     {
         if (mgIsZero(pt.x - p1.x))    // 交点是顶点, 则比较P[i+1]和P[i-1]是否在pt.x同侧
         {
-            if (p0.x > pt.x && p2.x > pt.x || p0.x < pt.x && p2.x < pt.x)   // 同侧
+            if (((p0.x > pt.x) && (p2.x > pt.x)) ||
+                ((p0.x < pt.x) && (p2.x < pt.x)) )      // 同侧
             {
                 return false;
             }

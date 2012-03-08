@@ -11,9 +11,16 @@ class GiGraphics;
 @interface GiGraphView : UIView {
     GiTransform*    _xform;
     GiGraphIos*     _graph;
+    
+    BOOL            _fastDraw;
     double          _lastViewScale;
     CGPoint         _lastCenter;
     CGPoint         _firstPoint;
+    CGPoint         _lastPoint;
+    
+    BOOL            _doubleZoomed;
+    double          _scaleBefore;
+    CGPoint         _centerBefore;
 }
 
 - (void)draw:(GiGraphics*)gs;
@@ -24,7 +31,7 @@ class GiGraphics;
 - (void)twoFingerPinch:(UIPinchGestureRecognizer *)recognizer;
 - (void)twoFingerPan:(UIPanGestureRecognizer *)recognizer;
 - (void)oneFingerPan:(UIPanGestureRecognizer *)recognizer;
+- (void)oneFingersTwoTaps:(UITapGestureRecognizer *)sender;
 - (void)twoFingersTwoTaps;
-- (void)oneFingersTwoTaps;
 
 @end

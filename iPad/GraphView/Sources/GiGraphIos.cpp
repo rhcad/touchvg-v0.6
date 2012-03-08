@@ -3,17 +3,27 @@
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "GiGraphIos.h"
+#include <CoreGraphics/CGBitmapContext.h>
+#include <stdlib.h>
 
 class GiGraphIosImpl
 {
 public:
-    GiGraphIos*     pthis;
-    CGContextRef    context;
-    GiColor         bkColor;
-    GiContext       gictx;
+    GiGraphIos*     _this;
+    CGContextRef    _context;
+    CGContextRef    _buffctx;
+    GiColor         _bkcolor;
+    GiContext       _gictx;
+    bool            _fast;
 
-    GiGraphIosImpl(GiGraphIos* p) : pthis(p), context(NULL), bkColor(GiColor::White())
+    GiGraphIosImpl(GiGraphIos* p) : _this(p), _context(NULL), _buffctx(NULL)
+        , _bkcolor(GiColor::White()), _fast(false)
     {
+    }
+    
+    CGContextRef getContext() const
+    {
+        return _buffctx ? _buffctx : _context;
     }
 
     CGFloat toFloat(UInt8 c) const
@@ -25,36 +35,41 @@ public:
     {
         if (ctx && !ctx->isNullLine())
         {
-            gictx.setLineColor(ctx->getLineColor());
-            gictx.setLineWidth(ctx->getLineWidth());
-            gictx.setLineStyle(ctx->getLineStyle());
+            _gictx.setLineColor(ctx->getLineColor());
+            _gictx.setLineWidth(ctx->getLineWidth());
+            _gictx.setLineStyle(ctx->getLineStyle());
         }
-        if (!gictx.isNullLine())
+        if (!ctx) ctx = &_gictx;
+        if (!ctx->isNullLine())
         {
-            GiColor color = pthis->calcPenColor(gictx.getLineColor());
-            CGContextSetRGBStrokeColor(context, toFloat(color.r), toFloat(color.g),
+            GiColor color = _this->calcPenColor(ctx->getLineColor());
+            CGContextSetRGBStrokeColor(getContext(), toFloat(color.r), toFloat(color.g),
                                        toFloat(color.b), toFloat(color.a));
-            CGContextSetLineWidth(context, (CGFloat)pthis->calcPenWidth(gictx.getLineWidth()));
+            int w = _this->calcPenWidth(ctx->getLineWidth());
+            CGContextSetLineWidth(getContext(), _fast && w > 1 ? w - 1 : w);
         }
 
-        return !gictx.isNullLine();
+        return !ctx->isNullLine();
     }
 
     bool setBrush(const GiContext* ctx)
     {
         if (ctx && ctx->hasFillColor())
         {
-            gictx.setFillColor(ctx->getFillColor());
+            _gictx.setFillColor(ctx->getFillColor());
         }
-        if (gictx.hasFillColor)
+        if (!ctx) ctx = &_gictx;
+        if (ctx->hasFillColor())
         {
-            GiColor color = pthis->calcPenColor(gictx.getFillColor());
-            CGContextSetRGBFillColor(context, toFloat(color.r), toFloat(color.g),
+            GiColor color = _this->calcPenColor(ctx->getFillColor());
+            CGContextSetRGBFillColor(getContext(), toFloat(color.r), toFloat(color.g),
                                      toFloat(color.b), toFloat(color.a));
         }
 
-        return gictx.hasFillColor();
+        return ctx->hasFillColor();
     }
+    
+    void createBufferBitmap(int width, int height);
 };
 
 GiColor giFromCGColor(CGColorRef color)
@@ -91,19 +106,23 @@ GiGraphIos& GiGraphIos::operator=(const GiGraphIos& src)
     return *this;
 }
 
-bool GiGraphIos::beginPaint(CGContextRef context)
+bool GiGraphIos::beginPaint(CGContextRef context, bool fast)
 {
     if (isDrawing() || context == NULL)
         return false;
 
     CGRect rc = CGContextGetClipBoundingBox(context);
     RECT clipBox = { rc.origin.x, rc.origin.y, rc.size.width, rc.size.height };
-
-    m_draw->context = context;
     GiGraphics::beginPaint(&clipBox);
 
-    CGContextSetAllowsAntialiasing(context, isAntiAliasMode());
-    CGContextSetShouldAntialias(context, isAntiAliasMode());
+    m_draw->_context = context;
+    m_draw->_fast = fast;
+    m_draw->createBufferBitmap(xf().getWidth(), xf().getHeight());
+
+    context = m_draw->getContext();
+    CGContextSetAllowsAntialiasing(context, !fast && isAntiAliasMode());
+    CGContextSetShouldAntialias(context, !fast && isAntiAliasMode());
+    CGContextSetFlatness(context, fast ? 20 : 1);
 
     CGContextSetMiterLimit(context, (CGFloat)(1.0 / sin(_M_PI_6)));  // 60 deg.
 
@@ -114,14 +133,32 @@ void GiGraphIos::endPaint(bool draw)
 {
     if (isDrawing())
     {
-        m_draw->context = NULL;
+        if (draw && m_draw->_buffctx) {
+            CGImageRef image = CGBitmapContextCreateImage(m_draw->_buffctx);
+            CGContextDrawImage(m_draw->_context, CGRectMake(0, 0, xf().getWidth(), xf().getHeight()), image);
+            CGImageRelease(image);
+        }
+        if (m_draw->_buffctx) {
+            CGContextRelease(m_draw->_buffctx);
+            m_draw->_buffctx = NULL;
+        }
+        m_draw->_context = NULL;
         GiGraphics::endPaint();
+    }
+}
+
+void GiGraphIosImpl::createBufferBitmap(int width, int height)
+{
+    if (!_buffctx) {
+        _buffctx = CGBitmapContextCreate(NULL, width, height, 8, width * 4,
+                                         CGColorSpaceCreateDeviceRGB(), 
+                                         kCGImageAlphaPremultipliedLast);
     }
 }
 
 void GiGraphIos::clearWnd()
 {
-    CGContextClearRect(m_draw->context, 
+    CGContextClearRect(m_draw->getContext(), 
         CGRectMake(0, 0, xf().getWidth(), xf().getWidth()));
 }
 
@@ -155,21 +192,21 @@ bool GiGraphIos::isBufferedDrawing() const
 
 int GiGraphIos::getScreenDpi() const
 {
-    return 132; // How to get the actual DPI?
+    return 160; // How to get the actual DPI?
 }
 
 bool GiGraphIos::setClipBox(const RECT* prc)
 {
     bool ret = GiGraphics::setClipBox(prc);
 
-    if (ret && m_draw->context)
+    if (ret && m_draw->_context)
     {
         RECT clipBox;
         getClipBox(&clipBox);
         
         CGRect rect = CGRectMake(clipBox.left, clipBox.top, 
                                  clipBox.right - clipBox.left, clipBox.bottom - clipBox.top);
-        CGContextClipToRect(m_draw->context, rect);
+        CGContextClipToRect(m_draw->getContext(), rect);
     }
 
     return ret;
@@ -179,14 +216,14 @@ bool GiGraphIos::setClipWorld(const Box2d& rectWorld)
 {
     bool ret = GiGraphics::setClipWorld(rectWorld);
 
-    if (ret && m_draw->context)
+    if (ret && m_draw->_context)
     {
         RECT clipBox;
         getClipBox(&clipBox);
         
         CGRect rect = CGRectMake(clipBox.left, clipBox.top, 
                                  clipBox.right - clipBox.left, clipBox.bottom - clipBox.top);
-        CGContextClipToRect(m_draw->context, rect);
+        CGContextClipToRect(m_draw->getContext(), rect);
     }
 
     return ret;
@@ -194,13 +231,13 @@ bool GiGraphIos::setClipWorld(const Box2d& rectWorld)
 
 GiColor GiGraphIos::getBkColor() const
 {
-    return m_draw->bkColor;
+    return m_draw->_bkcolor;
 }
 
 GiColor GiGraphIos::setBkColor(const GiColor& color)
 {
-    GiColor old(m_draw->bkColor);
-    m_draw->bkColor = color;
+    GiColor old(m_draw->_bkcolor);
+    m_draw->_bkcolor = color;
     return old;
 }
 
@@ -211,7 +248,7 @@ GiColor GiGraphIos::getNearestColor(const GiColor& color) const
 
 const GiContext* GiGraphIos::getCurrentContext() const
 {
-    return &m_draw->gictx;
+    return &m_draw->_gictx;
 }
 
 bool GiGraphIos::rawLine(const GiContext* ctx, 
@@ -221,9 +258,9 @@ bool GiGraphIos::rawLine(const GiContext* ctx,
 
     if (ret)
     {
-        CGContextMoveToPoint(m_draw->context, x1, y1);
-        CGContextAddLineToPoint(m_draw->context, x2, y2);
-        CGContextStrokePath(m_draw->context);
+        CGContextMoveToPoint(m_draw->getContext(), x1, y1);
+        CGContextAddLineToPoint(m_draw->getContext(), x2, y2);
+        CGContextStrokePath(m_draw->getContext());
     }
 
     return ret;
@@ -236,12 +273,11 @@ bool GiGraphIos::rawPolyline(const GiContext* ctx,
 
     if (ret)
     {
-        CGContextMoveToPoint(m_draw->context, lppt[0].x, lppt[0].y);
-        for (int i = 1; i < count; i++)
-        {
-            CGContextAddLineToPoint(m_draw->context, lppt[i].x, lppt[i].y);
+        CGContextMoveToPoint(m_draw->getContext(), lppt[0].x, lppt[0].y);
+        for (int i = 1; i < count; i++) {
+            CGContextAddLineToPoint(m_draw->getContext(), lppt[i].x, lppt[i].y);
         }
-        CGContextStrokePath(m_draw->context);
+        CGContextStrokePath(m_draw->getContext());
     }
 
     return ret;
@@ -254,15 +290,15 @@ bool GiGraphIos::rawPolyBezier(const GiContext* ctx,
 
     if (ret)
     {
-        CGContextMoveToPoint(m_draw->context, lppt[0].x, lppt[0].y);
+        CGContextMoveToPoint(m_draw->getContext(), lppt[0].x, lppt[0].y);
         for (int i = 1; i + 2 < count; i += 3)
         {
-            CGContextAddCurveToPoint(m_draw->context, 
+            CGContextAddCurveToPoint(m_draw->getContext(), 
                 lppt[i+0].x, lppt[i+0].y,
                 lppt[i+1].x, lppt[i+1].y,
                 lppt[i+2].x, lppt[i+2].y);
         }
-        CGContextStrokePath(m_draw->context);
+        CGContextStrokePath(m_draw->getContext());
     }
 
     return ret;
@@ -271,26 +307,23 @@ bool GiGraphIos::rawPolyBezier(const GiContext* ctx,
 bool GiGraphIos::rawPolygon(const GiContext* ctx, 
                             const POINT* lppt, int count)
 {
-    bool ret = false;
+    bool usepen = m_draw->setPen(ctx);
+    bool usebrush = m_draw->setBrush(ctx);
+    bool ret = count > 1 && (usepen || usebrush);
 
-    if (count > 1)
+    if (ret)
     {
-        CGContextMoveToPoint(m_draw->context, lppt[0].x, lppt[0].y);
-        for (int i = 1; i < count; i++)
-        {
-            CGContextAddLineToPoint(m_draw->context, lppt[i].x, lppt[i].y);
+        CGContextMoveToPoint(m_draw->getContext(), lppt[0].x, lppt[0].y);
+        for (int i = 1; i < count; i++) {
+            CGContextAddLineToPoint(m_draw->getContext(), lppt[i].x, lppt[i].y);
         }
-        CGContextClosePath(m_draw->context);
+        CGContextClosePath(m_draw->getContext());
 
-        if (m_draw->setPen(ctx))
-        {
-            CGContextStrokePath(m_draw->context);
-            ret = true;
+        if (usepen) {
+            CGContextStrokePath(m_draw->getContext());
         }
-        if (m_draw->setBrush(ctx))
-        {
-            CGContextFillPath(m_draw->context);
-            ret = true;
+        if (usebrush) {
+            CGContextFillPath(m_draw->getContext());
         }
     }
 
@@ -304,12 +337,12 @@ bool GiGraphIos::rawRect(const GiContext* ctx,
 
     if (m_draw->setPen(ctx))
     {
-        CGContextStrokeRect(m_draw->context, CGRectMake(x, y, w, h));
+        CGContextStrokeRect(m_draw->getContext(), CGRectMake(x, y, w, h));
         ret = true;
     }
     if (m_draw->setBrush(ctx))
     {
-        CGContextFillRect(m_draw->context, CGRectMake(x, y, w, h));
+        CGContextFillRect(m_draw->getContext(), CGRectMake(x, y, w, h));
         ret = true;
     }
 
@@ -323,12 +356,12 @@ bool GiGraphIos::rawEllipse(const GiContext* ctx,
 
     if (m_draw->setPen(ctx))
     {
-        CGContextStrokeEllipseInRect(m_draw->context, CGRectMake(x, y, w, h));
+        CGContextStrokeEllipseInRect(m_draw->getContext(), CGRectMake(x, y, w, h));
         ret = true;
     }
     if (m_draw->setBrush(ctx))
     {
-        CGContextFillEllipseInRect(m_draw->context, CGRectMake(x, y, w, h));
+        CGContextFillEllipseInRect(m_draw->getContext(), CGRectMake(x, y, w, h));
         ret = true;
     }
 
@@ -345,22 +378,24 @@ bool GiGraphIos::rawEllipse(const GiContext* ctx,
 bool GiGraphIos::rawPolyDraw(const GiContext* ctx, 
                              int count, const POINT* lppt, const UInt8* types)
 {
+    CGContextBeginPath(m_draw->getContext());
+    
     for (int i = 0; i < count; i++)
     {
         switch (types[i] & ~PT_CLOSEFIGURE)
         {
         case PT_MOVETO:
-            CGContextMoveToPoint(m_draw->context, lppt[i].x, lppt[i].y);
+            CGContextMoveToPoint(m_draw->getContext(), lppt[i].x, lppt[i].y);
             break;
 
         case PT_LINETO:
-            CGContextAddLineToPoint(m_draw->context, lppt[i].x, lppt[i].y);
+            CGContextAddLineToPoint(m_draw->getContext(), lppt[i].x, lppt[i].y);
             break;
 
         case PT_BEZIERTO:
             if (i + 2 >= count)
                 return false;
-            CGContextAddCurveToPoint(m_draw->context, 
+            CGContextAddCurveToPoint(m_draw->getContext(), 
                 lppt[i+0].x, lppt[i+0].y,
                 lppt[i+1].x, lppt[i+1].y,
                 lppt[i+2].x, lppt[i+2].y);
@@ -371,19 +406,19 @@ bool GiGraphIos::rawPolyDraw(const GiContext* ctx,
             return false;
         }
         if (types[i] & PT_CLOSEFIGURE)
-            CGContextClosePath(m_draw->context);
+            CGContextClosePath(m_draw->getContext());
     }
 
     bool ret = false;
 
     if (count > 1 && m_draw->setPen(ctx))
     {
-        CGContextStrokePath(m_draw->context);
+        CGContextStrokePath(m_draw->getContext());
         ret = true;
     }
     if (count > 1 && m_draw->setBrush(ctx))
     {
-        CGContextFillPath(m_draw->context);
+        CGContextFillPath(m_draw->getContext());
         ret = true;
     }
 
@@ -392,7 +427,7 @@ bool GiGraphIos::rawPolyDraw(const GiContext* ctx,
 
 bool GiGraphIos::rawBeginPath()
 {
-    CGContextBeginPath(m_draw->context);
+    CGContextBeginPath(m_draw->getContext());
     return true;
 }
 
@@ -402,12 +437,12 @@ bool GiGraphIos::rawEndPath(const GiContext* ctx, bool fill)
 
     if (m_draw->setPen(ctx))
     {
-        CGContextStrokePath(m_draw->context);
+        CGContextStrokePath(m_draw->getContext());
         ret = true;
     }
     if (m_draw->setBrush(ctx))
     {
-        CGContextFillPath(m_draw->context);
+        CGContextFillPath(m_draw->getContext());
         ret = true;
     }
 
@@ -416,13 +451,13 @@ bool GiGraphIos::rawEndPath(const GiContext* ctx, bool fill)
 
 bool GiGraphIos::rawMoveTo(int x, int y)
 {
-    CGContextMoveToPoint(m_draw->context, x, y);
+    CGContextMoveToPoint(m_draw->getContext(), x, y);
     return true;
 }
 
 bool GiGraphIos::rawLineTo(int x, int y)
 {
-    CGContextAddLineToPoint(m_draw->context, x, y);
+    CGContextAddLineToPoint(m_draw->getContext(), x, y);
     return true;
 }
 
@@ -432,7 +467,7 @@ bool GiGraphIos::rawPolyBezierTo(const POINT* lppt, int count)
 
     for (int i = 0; i + 2 < count; i += 3)
     {
-        CGContextAddCurveToPoint(m_draw->context, 
+        CGContextAddCurveToPoint(m_draw->getContext(), 
             lppt[i+0].x, lppt[i+0].y,
             lppt[i+1].x, lppt[i+1].y,
             lppt[i+2].x, lppt[i+2].y);
@@ -443,6 +478,6 @@ bool GiGraphIos::rawPolyBezierTo(const POINT* lppt, int count)
 
 bool GiGraphIos::rawCloseFigure()
 {
-    CGContextClosePath(m_draw->context);
+    CGContextClosePath(m_draw->getContext());
     return true;
 }

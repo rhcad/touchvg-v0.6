@@ -147,10 +147,15 @@ void Shapes::setShape(long index, ShapeItem* shape)
 
 void Shapes::draw(GiGraphics* gs) const
 {
+    Box2d clip(gs->getClipModel());
+    
     for (int i = 0; i < m_count; i++)
     {
-        m_shapes[i]->draw(gs);
+        if (m_shapes[i]->getExtent().isIntersect(clip)) {
+            m_shapes[i]->draw(gs);
+        }
     }
+    
     GiContext context(0, GiColor(128, 128, 128, 150), kLineDot);
     gs->drawRect(&context, m_extent);
 }
@@ -209,7 +214,7 @@ CurveItem::~CurveItem()
 
 void CurveItem::draw(GiGraphics* gs) const
 {
-    GiContext context(lineWidth<10?lineWidth:10, lineColor, lineStyle);
+    GiContext context(lineWidth, lineColor, lineStyle);
     gs->drawBSplines(&context, count, points);
 }
 
