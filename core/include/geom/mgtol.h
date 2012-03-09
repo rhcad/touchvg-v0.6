@@ -1,5 +1,5 @@
-//! \file mgtol.h
-//! \brief �����ݲ��� Tol
+﻿//! \file mgtol.h
+//! \brief 定义容差类 Tol
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,21 +8,19 @@
 
 #include "mgdef.h"
 
-_GEOM_BEGIN
-
-//! �ݲ���
+//! 容差类
 /*!
     \ingroup _GEOM_CLASS_
-    �ݲ��ຬ�г����ݲ��ʸ���ݲ\n
-    �����ݲ��ʾ����С�ڸ�ֵ����Ϊ���㳤�ȣ����������С�ڸ�ֵ����Ϊ�غϡ�\n
-    ʸ���ݲ��ʾ�������ȽǶ�С�ڸ�ֵ����Ϊ����ȣ�����ʸ���ݲ�һ���С��
-    �ʶ���ʸ���ݲ�a����a��sin(a)��tan(a)��cos(a)��1��
+    容差类含有长度容差和矢量容差。\n
+    长度容差表示长度小于该值就认为是零长度，或两点距离小于该值就认为重合。\n
+    矢量容差表示两个弧度角度小于该值就认为是相等，由于矢量容差一般很小，
+    故对于矢量容差a，有a≈sin(a)≈tan(a)，cos(a)≈1。
 */
 class Tol
 {
 public:
-    //! ȫ��ȱʡ�ݲ�
-    /*! ���ݲ�����ѧ���ο��кܶຯ����Ĭ���ݲ�����޸ĸö�����ݲ�ֵ
+    //! 全局缺省容差
+    /*! 该容差是数学几何库中很多函数的默认容差，可以修改该对象的容差值
     */
     static Tol& gTol()
     {
@@ -30,8 +28,8 @@ public:
         return tol;
     }
     
-    //! ��С�ݲ�
-    /*! ���ݲ�ĳ����ݲ�ֵ��ʸ���ݲ�ֵ��Ϊ1e-10
+    //! 最小容差
+    /*! 该容差的长度容差值和矢量容差值都为1e-10
     */
     static const Tol& minTol()
     {
@@ -39,17 +37,17 @@ public:
         return tol;
     }
     
-    //! ����Ĭ���ݲ�
-    /*! Ĭ�Ϲ��캯��������ĳ����ݲ�ֵΪ1e-7��ʸ���ݲ�ֵΪ1e-4
+    //! 构造默认容差
+    /*! 默认构造函数构造出的长度容差值为1e-7，矢量容差值为1e-4
     */
     Tol() : mTolPoint(1e-7), mTolVector(1e-4)
     {
     }
     
-    //! �����ݲ��
-    /*! ��������ݲ�ֵС��1e-10����ȡ��С�ݲ�ֵ1e-10
-        \param tolPoint �����ݲ�ֵ������
-        \param tolVector ʸ���ݲ�ֵ��������һ��ȡС��0.1����
+    //! 给定容差构造
+    /*! 如果给定容差值小于1e-10，将取最小容差值1e-10
+        \param tolPoint 长度容差值，正数
+        \param tolVector 矢量容差值，正数，一般取小于0.1的数
     */
     Tol(double tolPoint, double tolVector)
     {
@@ -57,21 +55,21 @@ public:
         setEqualVector(tolVector);
     }
     
-    //! ���س����ݲ�
+    //! 返回长度容差
     double equalPoint() const
     {
         return mTolPoint;
     }
     
-    //! ����ʸ���ݲ�
+    //! 返回矢量容差
     double equalVector() const
     {
         return mTolVector;
     }
     
-    //! ���ó����ݲ�
-    /*! ��������ݲ�ֵС��1e-10����ȡ��С�ݲ�ֵ1e-10
-        \param tol �����ݲ�ֵ������
+    //! 设置长度容差
+    /*! 如果给定容差值小于1e-10，将取最小容差值1e-10
+        \param tol 长度容差值，正数
     */
     void setEqualPoint(double tol)
     {
@@ -80,9 +78,9 @@ public:
         mTolPoint = tol;
     }
     
-    //! ����ʸ���ݲ�
-    /*! ��������ݲ�ֵС��1e-10����ȡ��С�ݲ�ֵ1e-10
-        \param tol ʸ���ݲ�ֵ��������һ��ȡС��0.1����
+    //! 设置矢量容差
+    /*! 如果给定容差值小于1e-10，将取最小容差值1e-10
+        \param tol 矢量容差值，正数，一般取小于0.1的数
     */
     void setEqualVector(double tol)
     {
@@ -92,9 +90,8 @@ public:
     }
     
 private:
-    double  mTolPoint;      //!< �����ݲ�
-    double  mTolVector;     //!< ʸ���ݲ�
+    double  mTolPoint;      //!< 长度容差
+    double  mTolVector;     //!< 矢量容差
 };
 
-_GEOM_END
 #endif // __GEOMETRY_MGTOL_H_

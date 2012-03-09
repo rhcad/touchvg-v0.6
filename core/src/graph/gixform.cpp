@@ -1,51 +1,49 @@
-// gixform.cpp: ÊµÏÖ×ø±êÏµ¹ÜÀíÀàGiTransform
+ï»¿// gixform.cpp: å®ç°åæ ‡ç³»ç®¡ç†ç±»GiTransform
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "gixform.h"
 
-_GEOM_BEGIN
-
-//! ·ÅËõ·¶Î§
+//! æ”¾ç¼©èŒƒå›´
 struct ZoomLimit
 {
-    double      minViewScale;   //!< ×îĞ¡ÏÔÊ¾±ÈÀı
-    double      maxViewScale;   //!< ×î´óÏÔÊ¾±ÈÀı
-    Box2d       rectLimitsW;    //!< ÏÔÊ¾¼«ÏŞµÄÊÀ½ç×ø±ê·¶Î§
+    double      minViewScale;   //!< æœ€å°æ˜¾ç¤ºæ¯”ä¾‹
+    double      maxViewScale;   //!< æœ€å¤§æ˜¾ç¤ºæ¯”ä¾‹
+    Box2d       rectLimitsW;    //!< æ˜¾ç¤ºæé™çš„ä¸–ç•Œåæ ‡èŒƒå›´
 
     ZoomLimit()
     {
-        minViewScale = 0.01;   // ×îĞ¡ÏÔÊ¾±ÈÀıÎª1%
-        maxViewScale = 5.0;    // ×î´óÏÔÊ¾±ÈÀıÎª500%
+        minViewScale = 0.01;   // æœ€å°æ˜¾ç¤ºæ¯”ä¾‹ä¸º1%
+        maxViewScale = 5.0;    // æœ€å¤§æ˜¾ç¤ºæ¯”ä¾‹ä¸º500%
         rectLimitsW.set(Point2d::kOrigin(), 2e5, 2e5);
     }
 };
 
-//! GiTransformµÄÄÚ²¿Êı¾İ
+//! GiTransformçš„å†…éƒ¨æ•°æ®
 struct GiTransform::Data : public ZoomLimit
 {
-    GiTransform*    xform;      //!< ÓµÓĞÕß
-    long        cxWnd;          //!< ÏÔÊ¾´°¿Ú¿í¶È£¬ÏñËØ
-    long        cyWnd;          //!< ÏÔÊ¾´°¿Ú¸ß¶È£¬ÏñËØ
-    long        dpiX;           //!< ÏÔÊ¾Éè±¸Ã¿Ó¢´çµÄÏñËØÊıX
-    long        dpiY;           //!< ÏÔÊ¾Éè±¸Ã¿Ó¢´çµÄÏñËØÊıY
-    bool        ydown;          //!< ÏÔÊ¾Éè±¸µÄ+Y·½ÏòÊÇ·ñÎªÏòÏÂ
-    Point2d     centerW;        //!< ÏÔÊ¾´°¿ÚÖĞĞÄµÄÊÀ½ç×ø±ê£¬Ä¬ÈÏ(0,0)
-    double      viewScale;      //!< ÏÔÊ¾±ÈÀı£¬Ä¬ÈÏ100%
-    Matrix2d    matM2W;         //!< Ä£ĞÍ×ø±êÏµµ½ÊÀ½ç×ø±êÏµµÄ±ä»»¾ØÕó£¬Ä¬ÈÏµ¥Î»¾ØÕó
+    GiTransform*    xform;      //!< æ‹¥æœ‰è€…
+    long        cxWnd;          //!< æ˜¾ç¤ºçª—å£å®½åº¦ï¼Œåƒç´ 
+    long        cyWnd;          //!< æ˜¾ç¤ºçª—å£é«˜åº¦ï¼Œåƒç´ 
+    long        dpiX;           //!< æ˜¾ç¤ºè®¾å¤‡æ¯è‹±å¯¸çš„åƒç´ æ•°X
+    long        dpiY;           //!< æ˜¾ç¤ºè®¾å¤‡æ¯è‹±å¯¸çš„åƒç´ æ•°Y
+    bool        ydown;          //!< æ˜¾ç¤ºè®¾å¤‡çš„+Yæ–¹å‘æ˜¯å¦ä¸ºå‘ä¸‹
+    Point2d     centerW;        //!< æ˜¾ç¤ºçª—å£ä¸­å¿ƒçš„ä¸–ç•Œåæ ‡ï¼Œé»˜è®¤(0,0)
+    double      viewScale;      //!< æ˜¾ç¤ºæ¯”ä¾‹ï¼Œé»˜è®¤100%
+    Matrix2d    matM2W;         //!< æ¨¡å‹åæ ‡ç³»åˆ°ä¸–ç•Œåæ ‡ç³»çš„å˜æ¢çŸ©é˜µï¼Œé»˜è®¤å•ä½çŸ©é˜µ
 
-    Matrix2d    matW2M;         //!< ÊÀ½ç×ø±êÏµµ½Ä£ĞÍ×ø±êÏµµÄ±ä»»¾ØÕó
-    Matrix2d    matD2W;         //!< ÏÔÊ¾×ø±êÏµµ½ÊÀ½ç×ø±êÏµµÄ±ä»»¾ØÕó
-    Matrix2d    matW2D;         //!< ÊÀ½ç×ø±êÏµµ½ÏÔÊ¾×ø±êÏµµÄ±ä»»¾ØÕó
-    Matrix2d    matD2M;         //!< ÏÔÊ¾×ø±êÏµµ½Ä£ĞÍ×ø±êÏµµÄ±ä»»¾ØÕó
-    Matrix2d    matM2D;         //!< Ä£ĞÍ×ø±êÏµµ½ÏÔÊ¾×ø±êÏµµÄ±ä»»¾ØÕó
-    double      w2dx;           //!< ÊÀ½çµ¥Î»¶ÔÓ¦µÄÏñËØÊıX
-    double      w2dy;           //!< ÊÀ½çµ¥Î»¶ÔÓ¦µÄÏñËØÊıY
+    Matrix2d    matW2M;         //!< ä¸–ç•Œåæ ‡ç³»åˆ°æ¨¡å‹åæ ‡ç³»çš„å˜æ¢çŸ©é˜µ
+    Matrix2d    matD2W;         //!< æ˜¾ç¤ºåæ ‡ç³»åˆ°ä¸–ç•Œåæ ‡ç³»çš„å˜æ¢çŸ©é˜µ
+    Matrix2d    matW2D;         //!< ä¸–ç•Œåæ ‡ç³»åˆ°æ˜¾ç¤ºåæ ‡ç³»çš„å˜æ¢çŸ©é˜µ
+    Matrix2d    matD2M;         //!< æ˜¾ç¤ºåæ ‡ç³»åˆ°æ¨¡å‹åæ ‡ç³»çš„å˜æ¢çŸ©é˜µ
+    Matrix2d    matM2D;         //!< æ¨¡å‹åæ ‡ç³»åˆ°æ˜¾ç¤ºåæ ‡ç³»çš„å˜æ¢çŸ©é˜µ
+    double      w2dx;           //!< ä¸–ç•Œå•ä½å¯¹åº”çš„åƒç´ æ•°X
+    double      w2dy;           //!< ä¸–ç•Œå•ä½å¯¹åº”çš„åƒç´ æ•°Y
 
-    bool        zoomEnabled;    //!< ÊÇ·ñÔÊĞí·ÅËõ
-    Point2d     tmpCenterW;     //!< µ±Ç°·ÅËõ½á¹û£¬²»ÂÛÊÇ·ñÔÊĞí·ÅËõ
-    double      tmpViewScale;   //!< µ±Ç°·ÅËõ½á¹û£¬²»ÂÛÊÇ·ñÔÊĞí·ÅËõ
-    long        zoomTimes;      //!< ·ÅËõ½á¹û¸Ä±äµÄ´ÎÊı
+    bool        zoomEnabled;    //!< æ˜¯å¦å…è®¸æ”¾ç¼©
+    Point2d     tmpCenterW;     //!< å½“å‰æ”¾ç¼©ç»“æœï¼Œä¸è®ºæ˜¯å¦å…è®¸æ”¾ç¼©
+    double      tmpViewScale;   //!< å½“å‰æ”¾ç¼©ç»“æœï¼Œä¸è®ºæ˜¯å¦å…è®¸æ”¾ç¼©
+    long        zoomTimes;      //!< æ”¾ç¼©ç»“æœæ”¹å˜çš„æ¬¡æ•°
 
     Data(GiTransform* p, bool dym) : xform(p)
         , cxWnd(1), cyWnd(1), dpiX(96), dpiY(96), ydown(dym), viewScale(1.0)
@@ -279,7 +277,7 @@ bool GiTransform::zoom(Point2d centerW, double viewScale, bool* changed)
         if (2 * halfh >= m_data->rectLimitsW.height())
             centerW.y = m_data->rectLimitsW.center().y;
 
-        // Èç¹ûÏÔÊ¾±ÈÀıºÜĞ¡Ê¹µÃ´°¿Ú³¬½ç£¬¾Í·Å´óÏÔÊ¾
+        // å¦‚æœæ˜¾ç¤ºæ¯”ä¾‹å¾ˆå°ä½¿å¾—çª—å£è¶…ç•Œï¼Œå°±æ”¾å¤§æ˜¾ç¤º
         if (2 * halfw > m_data->rectLimitsW.width()
             && 2 * halfh > m_data->rectLimitsW.height())
         {
@@ -321,35 +319,35 @@ static void AdjustCenterW(Point2d &ptW, double halfw, double halfh,
 
 bool GiTransform::zoomWnd(const POINT& pt1, const POINT& pt2, bool adjust)
 {
-    // ¼ÆËã¿ª´°¾ØĞÎµÄÖĞĞÄºÍ¿í¸ß
+    // è®¡ç®—å¼€çª—çŸ©å½¢çš„ä¸­å¿ƒå’Œå®½é«˜
     Point2d ptCen ((pt2.x + pt1.x) * 0.5, (pt2.y + pt1.y) * 0.5);
     double w = fabs(static_cast<double>(pt2.x - pt1.x));
     double h = fabs(static_cast<double>(pt2.y - pt1.y));
     if (w < 4 || h < 4)
         return false;
 
-    // ÖĞĞÄ²»±ä£¬À©´ó¿ª´°¾ØĞÎÊ¹µÃ¿í¸ß±ÈÀıºÍÏÔÊ¾´°¿ÚÏàÍ¬
+    // ä¸­å¿ƒä¸å˜ï¼Œæ‰©å¤§å¼€çª—çŸ©å½¢ä½¿å¾—å®½é«˜æ¯”ä¾‹å’Œæ˜¾ç¤ºçª—å£ç›¸åŒ
     if (h * m_data->cxWnd > w * m_data->cyWnd)
         w = h * m_data->cxWnd / m_data->cyWnd;
     else
         h = w * m_data->cyWnd / m_data->cxWnd;
 
-    // ¼ÆËã·ÅËõÇ°¾ØĞÎÖĞĞÄµÄÊÀ½ç×ø±ê
+    // è®¡ç®—æ”¾ç¼©å‰çŸ©å½¢ä¸­å¿ƒçš„ä¸–ç•Œåæ ‡
     Point2d ptW (ptCen * m_data->matD2W);
 
-    // ¼ÆËãĞÂÏÔÊ¾±ÈÀı
+    // è®¡ç®—æ–°æ˜¾ç¤ºæ¯”ä¾‹
     double scale = m_data->viewScale * m_data->cyWnd / h;
     if (!adjust && ScaleOutRange(scale, m_data))
         return false;
     scale = mgMax(scale, m_data->minViewScale);
     scale = mgMin(scale, m_data->maxViewScale);
 
-    // ¼ÆËãĞÂÏÔÊ¾±ÈÀıÏÂµÄÏÔÊ¾´°¿ÚµÄÊÀ½ç×ø±ê·¶Î§
+    // è®¡ç®—æ–°æ˜¾ç¤ºæ¯”ä¾‹ä¸‹çš„æ˜¾ç¤ºçª—å£çš„ä¸–ç•Œåæ ‡èŒƒå›´
     double halfw = m_data->cxWnd / (m_data->w2dx / m_data->viewScale * scale) * 0.5;
     double halfh = m_data->cyWnd / (m_data->w2dy / m_data->viewScale * scale) * 0.5;
     Box2d box (ptW, 2 * halfw, 2 * halfh);
 
-    // ¼ì²éÏÔÊ¾´°¿ÚµÄĞÂ×ø±ê·¶Î§ÊÇ·ñÔÚ¼«ÏŞ·¶Î§ÄÚ
+    // æ£€æŸ¥æ˜¾ç¤ºçª—å£çš„æ–°åæ ‡èŒƒå›´æ˜¯å¦åœ¨æé™èŒƒå›´å†…
     if (!m_data->rectLimitsW.isEmpty() && !m_data->rectLimitsW.isInside(box))
     {
         if (adjust)
@@ -358,21 +356,21 @@ bool GiTransform::zoomWnd(const POINT& pt1, const POINT& pt2, bool adjust)
             return false;
     }
 
-    // ¸Ä±äÏÔÊ¾±ÈÀıºÍÎ»ÖÃ
+    // æ”¹å˜æ˜¾ç¤ºæ¯”ä¾‹å’Œä½ç½®
     return m_data->zoomNoAdjust(ptW, scale);
 }
 
 bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT* rcTo, bool adjust)
 {
-    // Èç¹ûÍ¼ĞÎ·¶Î§µÄ¿í»ò¸ß½Ó½üÓÚÁã£¬¾Í·µ»Ø
+    // å¦‚æœå›¾å½¢èŒƒå›´çš„å®½æˆ–é«˜æ¥è¿‘äºé›¶ï¼Œå°±è¿”å›
     if (rectWorld.isEmpty())
         return false;
 
-    // ¼ÆËãÏñËØµ½ºÁÃ×µÄ±ÈÀı
+    // è®¡ç®—åƒç´ åˆ°æ¯«ç±³çš„æ¯”ä¾‹
     const double d2mmX = m_data->viewScale / m_data->w2dx;
     const double d2mmY = m_data->viewScale / m_data->w2dy;
 
-    // ¼ÆËãÄ¿±ê´°¿ÚÇøÓò(ºÁÃ×)
+    // è®¡ç®—ç›®æ ‡çª—å£åŒºåŸŸ(æ¯«ç±³)
     double w = 0, h = 0;
     Point2d ptCen;
 
@@ -395,7 +393,7 @@ bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT* rcTo, bool adjust)
     h *= d2mmY;
     ptCen.scaleBy(d2mmX, d2mmY);
 
-    // ¼ÆËãĞÂÏÔÊ¾±ÈÀı (ÖĞĞÄ²»±ä£¬ËõĞ¡´°¿ÚÇøÓòÊ¹µÃ¿í¸ß±ÈÀıºÍÍ¼ĞÎ·¶Î§ÏàÍ¬)
+    // è®¡ç®—æ–°æ˜¾ç¤ºæ¯”ä¾‹ (ä¸­å¿ƒä¸å˜ï¼Œç¼©å°çª—å£åŒºåŸŸä½¿å¾—å®½é«˜æ¯”ä¾‹å’Œå›¾å½¢èŒƒå›´ç›¸åŒ)
     double scale;
     if (h * rectWorld.width() > w * rectWorld.height())
     {
@@ -408,18 +406,18 @@ bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT* rcTo, bool adjust)
         scale = h / rectWorld.height();
     }
 
-    // ¼ì²éÏÔÊ¾±ÈÀı
+    // æ£€æŸ¥æ˜¾ç¤ºæ¯”ä¾‹
     if (!adjust && ScaleOutRange(scale, m_data))
         return false;
     scale = mgMax(scale, m_data->minViewScale);
     scale = mgMin(scale, m_data->maxViewScale);
 
-    // ¼ÆËãÔÚĞÂÏÔÊ¾±ÈÀıÏÂÏÔÊ¾´°¿ÚÖĞĞÄµÄÊÀ½ç×ø±ê
+    // è®¡ç®—åœ¨æ–°æ˜¾ç¤ºæ¯”ä¾‹ä¸‹æ˜¾ç¤ºçª—å£ä¸­å¿ƒçš„ä¸–ç•Œåæ ‡
     Point2d ptW;
     ptW.x = rectWorld.center().x + (m_data->cxWnd * d2mmX * 0.5 - ptCen.x) / scale;
     ptW.y = rectWorld.center().y - (m_data->cyWnd * d2mmY * 0.5 - ptCen.y) / scale;
 
-    // ¼ì²éĞÂÏÔÊ¾±ÈÀıÏÂÏÔÊ¾´°¿ÚµÄÊÀ½ç×ø±ê·¶Î§ÊÇ·ñÔÚ¼«ÏŞ·¶Î§ÄÚ
+    // æ£€æŸ¥æ–°æ˜¾ç¤ºæ¯”ä¾‹ä¸‹æ˜¾ç¤ºçª—å£çš„ä¸–ç•Œåæ ‡èŒƒå›´æ˜¯å¦åœ¨æé™èŒƒå›´å†…
     double halfw = m_data->cxWnd * d2mmX  / scale * 0.5;
     double halfh = m_data->cyWnd * d2mmY  / scale * 0.5;
     Box2d box (ptW, 2 * halfw, 2 * halfh);
@@ -444,11 +442,11 @@ bool GiTransform::zoomTo(const Point2d& pntWorld, const POINT* pxAt, bool adjust
 
 bool GiTransform::zoomPan(double dxPixel, double dyPixel, bool adjust)
 {
-    // ¼ÆËãĞÂµÄÏÔÊ¾´°¿ÚÖĞĞÄµÄÊÀ½ç×ø±ê
+    // è®¡ç®—æ–°çš„æ˜¾ç¤ºçª—å£ä¸­å¿ƒçš„ä¸–ç•Œåæ ‡
     Vector2d vec (dxPixel, dyPixel);
     Point2d ptW (m_data->centerW - vec * m_data->matD2W);
 
-    // ¼ì²éĞÂÏÔÊ¾±ÈÀıÏÂÏÔÊ¾´°¿ÚµÄÊÀ½ç×ø±ê·¶Î§ÊÇ·ñÔÚ¼«ÏŞ·¶Î§ÄÚ
+    // æ£€æŸ¥æ–°æ˜¾ç¤ºæ¯”ä¾‹ä¸‹æ˜¾ç¤ºçª—å£çš„ä¸–ç•Œåæ ‡èŒƒå›´æ˜¯å¦åœ¨æé™èŒƒå›´å†…
     if (!m_data->rectLimitsW.isEmpty())
     {
         if (m_data->zoomPanAdjust(ptW, dxPixel, dyPixel) && !adjust)
@@ -521,28 +519,28 @@ bool GiTransform::zoomByFactor(double factor, const POINT* pxAt, bool adjust)
 
 bool GiTransform::zoomScale(double viewScale, const POINT* pxAt, bool adjust)
 {
-    // ¼ì²éÏÔÊ¾±ÈÀı
+    // æ£€æŸ¥æ˜¾ç¤ºæ¯”ä¾‹
     if (!adjust && ScaleOutRange(viewScale, m_data))
         return false;
     viewScale = mgMax(viewScale, m_data->minViewScale);
     viewScale = mgMin(viewScale, m_data->maxViewScale);
 
-    // µÃµ½·ÅËõÖĞĞÄµãµÄ¿Í»§Çø×ø±ê
+    // å¾—åˆ°æ”¾ç¼©ä¸­å¿ƒç‚¹çš„å®¢æˆ·åŒºåæ ‡
     Point2d ptAt (m_data->cxWnd * 0.5,  m_data->cyWnd * 0.5);
     if (pxAt != NULL)
         ptAt.set(pxAt->x, pxAt->y);
 
-    // µÃµ½·ÅËõÖĞĞÄµãÔÚ·ÅËõÇ°µÄÊÀ½ç×ø±ê
+    // å¾—åˆ°æ”¾ç¼©ä¸­å¿ƒç‚¹åœ¨æ”¾ç¼©å‰çš„ä¸–ç•Œåæ ‡
     Point2d ptAtW (ptAt * m_data->matD2W);
 
-    // ¼ÆËãĞÂÏÔÊ¾±ÈÀıÏÂÏÔÊ¾´°¿ÚÖĞĞÄµÄÊÀ½ç×ø±ê
+    // è®¡ç®—æ–°æ˜¾ç¤ºæ¯”ä¾‹ä¸‹æ˜¾ç¤ºçª—å£ä¸­å¿ƒçš„ä¸–ç•Œåæ ‡
     Point2d ptW;
     double w2dx = m_data->w2dx / m_data->viewScale * viewScale;
     double w2dy = m_data->w2dy / m_data->viewScale * viewScale;
     ptW.x = ptAtW.x + (m_data->cxWnd * 0.5 - ptAt.x) / w2dx;
     ptW.y = ptAtW.y - (m_data->cyWnd * 0.5 - ptAt.y) / w2dy;
 
-    // ¼ì²éĞÂÏÔÊ¾±ÈÀıÏÂÏÔÊ¾´°¿ÚµÄÊÀ½ç×ø±ê·¶Î§ÊÇ·ñÔÚ¼«ÏŞ·¶Î§ÄÚ
+    // æ£€æŸ¥æ–°æ˜¾ç¤ºæ¯”ä¾‹ä¸‹æ˜¾ç¤ºçª—å£çš„ä¸–ç•Œåæ ‡èŒƒå›´æ˜¯å¦åœ¨æé™èŒƒå›´å†…
     double halfw = m_data->cxWnd / w2dx * 0.5;
     double halfh = m_data->cyWnd / w2dy * 0.5;
     Box2d box (ptW, 2 * halfw, 2 * halfh);
@@ -556,5 +554,3 @@ bool GiTransform::zoomScale(double viewScale, const POINT* pxAt, bool adjust)
 
     return m_data->zoomNoAdjust(ptW, viewScale);
 }
-
-_GEOM_END

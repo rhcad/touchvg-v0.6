@@ -1,4 +1,4 @@
-// Step1View.cpp : implementation of the CRandomShapeView class
+﻿// Step1View.cpp : implementation of the CRandomShapeView class
 //
 
 #include "stdafx.h"

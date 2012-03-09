@@ -1,4 +1,4 @@
-// BaseView.h : interface of the CBaseView class
+ï»¿// BaseView.h : interface of the CBaseView class
 //
 #pragma once
 
@@ -25,12 +25,12 @@ public:
 
 // Implementation
 protected:
-    GiTransform     m_xf;               // ×ø±êÏµ¹ÜÀí¶ÔÏó
-	GiGraphWin*		m_gs;			    // ±¾´°¿ÚµÄÍ¼ĞÎÏµÍ³¶ÔÏó
-	SIZE			m_sizePan;			// ¶¯Ì¬Æ½ÒÆÏÔÊ¾µÄ¾àÀë
+    GiTransform     m_xf;               // åæ ‡ç³»ç®¡ç†å¯¹è±¡
+	GiGraphWin*		m_gs;			    // æœ¬çª—å£çš„å›¾å½¢ç³»ç»Ÿå¯¹è±¡
+	SIZE			m_sizePan;			// åŠ¨æ€å¹³ç§»æ˜¾ç¤ºçš„è·ç¦»
 
 private:
-	COLORREF		m_crBkColor;		// ´°¿Ú±³¾°ÑÕÉ«
+	COLORREF		m_crBkColor;		// çª—å£èƒŒæ™¯é¢œè‰²
 	bool			m_bGdip;
 
 // Generated message map functions

@@ -1,4 +1,4 @@
-// giimage.cpp: ÊµÏÖÍ¼ÏñÎÄ¼ş´ò¿ªºÍÏÔÊ¾µÄ¸¨ÖúÀà GiImage
+ï»¿// giimage.cpp: å®ç°å›¾åƒæ–‡ä»¶æ‰“å¼€å’Œæ˜¾ç¤ºçš„è¾…åŠ©ç±» GiImage
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 #ifdef _WIN32
@@ -8,8 +8,6 @@
 #pragma comment(lib,"ole32.lib")
 #pragma comment(lib,"olepro32.lib")
 #endif
-
-_GEOM_BEGIN
 
 GiImage::GiImage() : m_picture(NULL), m_stream(NULL)
 {
@@ -190,5 +188,4 @@ bool GiImage::draw(GiGraphWin& graph, const Box2d& rectW, bool fast) const
     return graph.drawImage(getHmWidth(), getHmHeight(), getBitmap(), rectW, fast);
 }
 
-_GEOM_END
 #endif //_WIN32

@@ -1,4 +1,4 @@
-// NewViewDlg.cpp : implementation file
+﻿// NewViewDlg.cpp : implementation file
 //
 
 #include "stdafx.h"

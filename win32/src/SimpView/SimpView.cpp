@@ -1,4 +1,4 @@
-// SimpView.cpp : Defines the class behaviors for the application.
+﻿// SimpView.cpp : Defines the class behaviors for the application.
 //
 
 #include "stdafx.h"

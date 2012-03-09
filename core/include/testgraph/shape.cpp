@@ -1,9 +1,7 @@
-#include "shape.h"
+﻿#include "shape.h"
 #include <mgcurv.h>
 #include <mgnear.h>
 #include <stdlib.h>
-
-_GEOM_BEGIN
 
 double RandomParam::RandDbl(double dMin, double dMax)
 {
@@ -222,5 +220,3 @@ Box2d CurveItem::getExtent() const
 {
     return Box2d(count, points);
 }
-
-_GEOM_END

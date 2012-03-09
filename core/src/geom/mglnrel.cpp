@@ -1,18 +1,16 @@
-// mglnrel.cpp: ÊµÏÖÖ±ÏßÎ»ÖÃ¹ØÏµº¯Êý
+ï»¿// mglnrel.cpp: å®žçŽ°ç›´çº¿ä½ç½®å…³ç³»å‡½æ•°
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "mglnrel.h"
 
-_GEOM_BEGIN
-
-// ÅÐ¶ÏµãptÊÇ·ñÔÚÓÐÏòÖ±Ïßa->bµÄ×ó±ß (¿ªÇø¼ä)
+// åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨æœ‰å‘ç›´çº¿a->bçš„å·¦è¾¹ (å¼€åŒºé—´)
 GEOMAPI bool mgIsLeft(const Point2d& a, const Point2d& b, const Point2d& pt)
 {
     return (b-a).crossProduct(pt-a) > 0.0;
 }
 
-// ÅÐ¶ÏµãptÊÇ·ñÔÚÓÐÏòÖ±Ïßa->bµÄ×ó±ß
+// åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨æœ‰å‘ç›´çº¿a->bçš„å·¦è¾¹
 GEOMAPI bool mgIsLeft2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol)
 {
@@ -20,13 +18,13 @@ GEOMAPI bool mgIsLeft2(
     return dist > tol.equalPoint();
 }
 
-// ÅÐ¶ÏµãptÊÇ·ñÔÚÓÐÏòÖ±Ïßa->bµÄ×ó±ß»òÏßÉÏ (±ÕÇø¼ä)
+// åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨æœ‰å‘ç›´çº¿a->bçš„å·¦è¾¹æˆ–çº¿ä¸Š (é—­åŒºé—´)
 GEOMAPI bool mgIsLeftOn(const Point2d& a, const Point2d& b, const Point2d& pt)
 {
     return (b-a).crossProduct(pt-a) >= 0.0;
 }
 
-// ÅÐ¶ÏµãptÊÇ·ñÔÚÓÐÏòÖ±Ïßa->bµÄ×ó±ß»òÏßÉÏ
+// åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨æœ‰å‘ç›´çº¿a->bçš„å·¦è¾¹æˆ–çº¿ä¸Š
 GEOMAPI bool mgIsLeftOn2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol)
 {
@@ -34,13 +32,13 @@ GEOMAPI bool mgIsLeftOn2(
     return dist > -tol.equalPoint();
 }
 
-// ÅÐ¶ÏµãptÊÇ·ñÔÚÖ±Ïßa->bµÄÏßÉÏ
+// åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨ç›´çº¿a->bçš„çº¿ä¸Š
 GEOMAPI bool mgIsColinear(const Point2d& a, const Point2d& b, const Point2d& pt)
 {
     return mgIsZero((b-a).crossProduct(pt-a));
 }
 
-// ÅÐ¶ÏµãptÊÇ·ñÔÚÖ±Ïßa->bµÄÏßÉÏ
+// åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨ç›´çº¿a->bçš„çº¿ä¸Š
 GEOMAPI bool mgIsColinear2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol)
 {
@@ -48,7 +46,7 @@ GEOMAPI bool mgIsColinear2(
     return fabs(dist) < tol.equalPoint();
 }
 
-// ÅÐ¶ÏÁ½¸öÏß¶ÎabºÍcdÊÇ·ñÏà½»ÓÚÏß¶ÎÄÚ²¿
+// åˆ¤æ–­ä¸¤ä¸ªçº¿æ®µabå’Œcdæ˜¯å¦ç›¸äº¤äºŽçº¿æ®µå†…éƒ¨
 GEOMAPI bool mgIsIntersectProp(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d)
 {
@@ -61,7 +59,7 @@ GEOMAPI bool mgIsIntersectProp(
         && (mgIsLeft(c,d,a) ^ mgIsLeft(c,d,b));
 }
 
-// ÅÐ¶ÏµãptÊÇ·ñÔÚÏß¶ÎabÉÏ(±ÕÇø¼ä)
+// åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨çº¿æ®µabä¸Š(é—­åŒºé—´)
 GEOMAPI bool mgIsBetweenLine(const Point2d& a, const Point2d& b, const Point2d& pt)
 {
     if (!mgIsColinear(a, b, pt))
@@ -74,7 +72,7 @@ GEOMAPI bool mgIsBetweenLine(const Point2d& a, const Point2d& b, const Point2d& 
         return  (a.y <= pt.y && pt.y <= b.y) || (a.y >= pt.y && pt.y >= b.y);
 }
 
-// ÅÐ¶ÏµãptÊÇ·ñÔÚÏß¶ÎabÉÏ
+// åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨çº¿æ®µabä¸Š
 GEOMAPI bool mgIsBetweenLine2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol)
 {
@@ -98,7 +96,7 @@ GEOMAPI bool mgIsBetweenLine2(
     }
 }
 
-// ÒÑÖªµãptÔÚÖ±ÏßabÉÏ, ÅÐ¶ÏµãptÊÇ·ñÔÚÏß¶ÎabÉÏ(±ÕÇø¼ä)
+// å·²çŸ¥ç‚¹ptåœ¨ç›´çº¿abä¸Š, åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨çº¿æ®µabä¸Š(é—­åŒºé—´)
 GEOMAPI bool mgIsBetweenLine3(
     const Point2d& a, const Point2d& b, const Point2d& pt, Point2d* ptNear)
 {
@@ -118,7 +116,7 @@ GEOMAPI bool mgIsBetweenLine3(
     return ret;
 }
 
-// ÅÐ¶ÏÁ½¸öÏß¶ÎabºÍcdÊÇ·ñÏà½»(½»µãÔÚÏß¶Î±ÕÇø¼äÄÚ)
+// åˆ¤æ–­ä¸¤ä¸ªçº¿æ®µabå’Œcdæ˜¯å¦ç›¸äº¤(äº¤ç‚¹åœ¨çº¿æ®µé—­åŒºé—´å†…)
 GEOMAPI bool mgIsIntersect(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d)
 {
@@ -131,30 +129,30 @@ GEOMAPI bool mgIsIntersect(
         return false;
 }
 
-// ¼ÆËãµãptµ½ÎÞÇîÖ±ÏßabµÄ¾àÀë
+// è®¡ç®—ç‚¹ptåˆ°æ— ç©·ç›´çº¿abçš„è·ç¦»
 GEOMAPI double mgPtToBeeline(const Point2d& a, const Point2d& b, const Point2d& pt)
 {
     double dist = (b-a).crossProduct(pt-a);
     return dist;
 }
 
-// ¼ÆËãµãptµ½ÎÞÇîÖ±ÏßabµÄ¾àÀë
+// è®¡ç®—ç‚¹ptåˆ°æ— ç©·ç›´çº¿abçš„è·ç¦»
 GEOMAPI double mgPtToBeeline2(
     const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& ptPerp)
 {
-    // Á½µãÖØºÏ
+    // ä¸¤ç‚¹é‡åˆ
     if (a == b)
     {
         ptPerp = a;
         return a.distanceTo(pt);
     }
-    // ÊúÖ±Ïß
+    // ç«–ç›´çº¿
     else if (mgIsZero(a.x - b.x))
     {
         ptPerp.set(a.x, pt.y);
         return fabs(a.x - pt.x);
     }
-    // Ë®Æ½Ïß
+    // æ°´å¹³çº¿
     else if (mgIsZero(a.y - b.y))
     {
         ptPerp.set(pt.x, a.y);
@@ -170,7 +168,7 @@ GEOMAPI double mgPtToBeeline2(
     }
 }
 
-// ¼ÆËãµãptµ½Ïß¶ÎabµÄ×î½ü¾àÀë
+// è®¡ç®—ç‚¹ptåˆ°çº¿æ®µabçš„æœ€è¿‘è·ç¦»
 GEOMAPI double mgPtToLine(
     const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& ptNear)
 {
@@ -184,7 +182,7 @@ GEOMAPI double mgPtToLine(
     return dist;
 }
 
-// ÇóÁ½ÌõÖ±Ïß(ax+by+c=0)µÄ½»µã
+// æ±‚ä¸¤æ¡ç›´çº¿(ax+by+c=0)çš„äº¤ç‚¹
 GEOMAPI bool mgCrossLineAbc(
     double a1, double b1, double c1, double a2, double b2, double c2,
     Point2d& ptCross, const Tol& tolVec)
@@ -204,7 +202,7 @@ GEOMAPI bool mgCrossLineAbc(
     return true;
 }
 
-// ÇóÁ½ÌõÎÞÇîÖ±ÏßµÄ½»µã
+// æ±‚ä¸¤æ¡æ— ç©·ç›´çº¿çš„äº¤ç‚¹
 GEOMAPI bool mgCross2Beeline(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d, 
     Point2d& ptCross, double* pu, double* pv, const Tol& tolVec)
@@ -212,7 +210,7 @@ GEOMAPI bool mgCross2Beeline(
     double u, v, denom, cosnum;
     
     denom = (c.x-d.x)*(b.y-a.y)-(c.y-d.y)*(b.x-a.x);
-    if (mgIsZero(denom))            // Æ½ÐÐ»òÖØºÏ
+    if (mgIsZero(denom))            // å¹³è¡Œæˆ–é‡åˆ
         return false;
     
     cosnum = (b.x-a.x)*(d.x - c.x) + (b.y-a.y)*(d.y-c.y);
@@ -231,11 +229,11 @@ GEOMAPI bool mgCross2Beeline(
     return true;
 }
 
-// ÇóÁ½ÌõÏß¶ÎµÄ½»µã
-// ÊäÈë: (a.x,a.y),(b.x,b.y) µÚÒ»ÌõÏß¶ÎÉÏµÄÁ½¸öµã
-//         (c.x,c.y),(d.x,d.y) µÚ¶þÌõÏß¶ÎÉÏµÄÁ½¸öµã
-// Êä³ö: (px, py) ½»µã×ø±ê
-// ·µ»Ø: ÓÐÎÞ½»µã
+// æ±‚ä¸¤æ¡çº¿æ®µçš„äº¤ç‚¹
+// è¾“å…¥: (a.x,a.y),(b.x,b.y) ç¬¬ä¸€æ¡çº¿æ®µä¸Šçš„ä¸¤ä¸ªç‚¹
+//         (c.x,c.y),(d.x,d.y) ç¬¬äºŒæ¡çº¿æ®µä¸Šçš„ä¸¤ä¸ªç‚¹
+// è¾“å‡º: (px, py) äº¤ç‚¹åæ ‡
+// è¿”å›ž: æœ‰æ— äº¤ç‚¹
 GEOMAPI bool mgCross2Line(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d,
     Point2d& ptCross, const Tol& tolVec)
@@ -270,7 +268,7 @@ GEOMAPI bool mgCross2Line(
     return true;
 }
 
-// ÇóÏß¶ÎºÍÖ±ÏßµÄ½»µã
+// æ±‚çº¿æ®µå’Œç›´çº¿çš„äº¤ç‚¹
 GEOMAPI bool mgCrossLineBeeline(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d,
     Point2d& ptCross, double* pv, const Tol& tolVec)
@@ -298,7 +296,7 @@ GEOMAPI bool mgCrossLineBeeline(
     return true;
 }
 
-// Ïß¶Î¶ËµãµÄÇøÓò±àÂë:
+// çº¿æ®µç«¯ç‚¹çš„åŒºåŸŸç¼–ç :
 // 1001  |  1000  |  1010
 // 0001  |  0000  |  0010
 // 0101  |  0100  |  0110
@@ -316,11 +314,11 @@ static inline unsigned ClipCode(Point2d& pt, const Box2d& box)
     return code;
 }
 
-// ¹¦ÄÜ: ÓÃ¾ØÐÎ¼ô²ÃÏß¶Î
-// ²ÎÊý: [in, out] pt1 Ïß¶ÎÆðµã×ø±ê
-//       [in, out] pt2 Ïß¶ÎÖÕµã×ø±ê
-//       [in] box ¼ô²Ã¾ØÐÎ
-// ·µ»Ø: ¼ô²ÃºóÊÇ·ñÓÐ´¦ÓÚ¼ô²Ã¾ØÐÎÄÚµÄÏß¶Î²¿·Ö
+// åŠŸèƒ½: ç”¨çŸ©å½¢å‰ªè£çº¿æ®µ
+// å‚æ•°: [in, out] pt1 çº¿æ®µèµ·ç‚¹åæ ‡
+//       [in, out] pt2 çº¿æ®µç»ˆç‚¹åæ ‡
+//       [in] box å‰ªè£çŸ©å½¢
+// è¿”å›ž: å‰ªè£åŽæ˜¯å¦æœ‰å¤„äºŽå‰ªè£çŸ©å½¢å†…çš„çº¿æ®µéƒ¨åˆ†
 GEOMAPI bool mgClipLine(Point2d& pt1, Point2d& pt2, const Box2d& _box)
 {
     Box2d box (_box);
@@ -332,34 +330,34 @@ GEOMAPI bool mgClipLine(Point2d& pt1, Point2d& pt2, const Box2d& _box)
     
     for ( ; ; )
     {
-        if (!(code1 | code2))       // ÍêÈ«ÔÚ¾ØÐÎÄÚ
+        if (!(code1 | code2))       // å®Œå…¨åœ¨çŸ©å½¢å†…
             return true;
-        if (code1 & code2)          // ÍêÈ«ÔÚ¾ØÐÎÍâ
+        if (code1 & code2)          // å®Œå…¨åœ¨çŸ©å½¢å¤–
             return false;
         
         double x = 0.0, y = 0.0;
         unsigned code;
         
-        if (code1)                  // Æðµã²»ÔÚ¾ØÐÎÄÚ
+        if (code1)                  // èµ·ç‚¹ä¸åœ¨çŸ©å½¢å†…
             code = code1;
-        else                        // ÖÕµã²»ÔÚ¾ØÐÎÄÚ
+        else                        // ç»ˆç‚¹ä¸åœ¨çŸ©å½¢å†…
             code = code2;
-        if (code & 0x1000)          // ÉÏ
+        if (code & 0x1000)          // ä¸Š
         {
             x = pt1.x + (pt2.x - pt1.x) * (box.ymax - pt1.y) / (pt2.y - pt1.y);
             y = box.ymax;
         }
-        else if (code & 0x0100)     // ÏÂ
+        else if (code & 0x0100)     // ä¸‹
         {
             x = pt1.x + (pt2.x - pt1.x) * (box.ymin - pt1.y) / (pt2.y - pt1.y);
             y = box.ymin;
         }
-        else if (code & 0x0001)     // ×ó
+        else if (code & 0x0001)     // å·¦
         {
             y = pt1.y + (pt2.y - pt1.y) * (box.xmin - pt1.x) / (pt2.x - pt1.x);
             x = box.xmin;
         }
-        else if (code & 0x0010)     // ÓÒ
+        else if (code & 0x0010)     // å³
         {
             y = pt1.y + (pt2.y - pt1.y) * (box.xmax - pt1.x) / (pt2.x - pt1.x);
             x = box.xmax;
@@ -383,42 +381,42 @@ GEOMAPI bool mgClipLine(Point2d& pt1, Point2d& pt2, const Box2d& _box)
 static bool PtInArea_Edge(int &odd, const Point2d& pt, const Point2d& p1, 
                           const Point2d& p2, const Point2d& p0)
 {
-    // Èç¹û´ÓX·½ÏòÉÏP²»ÔÚ±ß[P1,P2)ÉÏ£¬ÔòÃ»ÓÐ½»µã. ÊúÖ±±ßÒ²Ã»ÓÐ
+    // å¦‚æžœä»ŽXæ–¹å‘ä¸ŠPä¸åœ¨è¾¹[P1,P2)ä¸Šï¼Œåˆ™æ²¡æœ‰äº¤ç‚¹. ç«–ç›´è¾¹ä¹Ÿæ²¡æœ‰
     if (!((p2.x > p1.x) && (pt.x >= p1.x) && (pt.x < p2.x)) &&
         !((p1.x > p2.x) && (pt.x <= p1.x) && (pt.x > p2.x)) )
     {
         return false;
     }
     
-    // Çó´ÓY¸ºÎÞÇî´óÏòÉÏµ½PµÄÉäÏßºÍ¸Ã±ßµÄ½»µã(pt.x, yy)
+    // æ±‚ä»ŽYè´Ÿæ— ç©·å¤§å‘ä¸Šåˆ°Pçš„å°„çº¿å’Œè¯¥è¾¹çš„äº¤ç‚¹(pt.x, yy)
     double yy = p1.y + (pt.x - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
-    if (pt.y > yy)      // Ïà½»
+    if (pt.y > yy)      // ç›¸äº¤
     {
-        if (mgIsZero(pt.x - p1.x))    // ½»µãÊÇ¶¥µã, Ôò±È½ÏP[i+1]ºÍP[i-1]ÊÇ·ñÔÚpt.xÍ¬²à
+        if (mgIsZero(pt.x - p1.x))    // äº¤ç‚¹æ˜¯é¡¶ç‚¹, åˆ™æ¯”è¾ƒP[i+1]å’ŒP[i-1]æ˜¯å¦åœ¨pt.xåŒä¾§
         {
             if (((p0.x > pt.x) && (p2.x > pt.x)) ||
-                ((p0.x < pt.x) && (p2.x < pt.x)) )      // Í¬²à
+                ((p0.x < pt.x) && (p2.x < pt.x)) )      // åŒä¾§
             {
                 return false;
             }
         }
-        odd = 1 - odd;      // Ôö¼ÓÒ»¸ö½»µã, ÆæÅ¼ÇÐ»»
+        odd = 1 - odd;      // å¢žåŠ ä¸€ä¸ªäº¤ç‚¹, å¥‡å¶åˆ‡æ¢
     }
     
     return true;
 }
 
-// ¹¦ÄÜ: ÅÐ¶ÏÒ»µãÊÇ·ñÔÚÒ»¶à±ßÐÎ·¶Î§ÄÚ
+// åŠŸèƒ½: åˆ¤æ–­ä¸€ç‚¹æ˜¯å¦åœ¨ä¸€å¤šè¾¹å½¢èŒƒå›´å†…
 GEOMAPI int mgPtInArea(
     const Point2d& pt, Int32 count, const Point2d* vertexs, 
     Int32& order, const Tol& tol)
 {
     Int32 i;
-    int odd = 1;    // 1: ½»µãÊýÎªÅ¼Êý, 0: ½»µãÊýÎªÆæÊý
+    int odd = 1;    // 1: äº¤ç‚¹æ•°ä¸ºå¶æ•°, 0: äº¤ç‚¹æ•°ä¸ºå¥‡æ•°
     
     for (i = 0; i < count; i++)
     {
-        // PÓëÄ³¶¥µãÖØºÏ. ·µ»Ø kPtAtVertex, order = ¶¥µãºÅ [0, count-1]
+        // Pä¸ŽæŸé¡¶ç‚¹é‡åˆ. è¿”å›ž kPtAtVertex, order = é¡¶ç‚¹å· [0, count-1]
         if (pt.isEqualTo(vertexs[i], tol))
         {
             order = i;
@@ -431,7 +429,7 @@ GEOMAPI int mgPtInArea(
         const Point2d& p1 = vertexs[i];
         const Point2d& p2 = (i+1 < count) ? vertexs[i+1] : vertexs[0];
         
-        // PÔÚÄ³Ìõ±ßÉÏ. ·µ»Ø kPtOnEdge, order = ±ßºÅ [0, count-1]
+        // Påœ¨æŸæ¡è¾¹ä¸Š. è¿”å›ž kPtOnEdge, order = è¾¹å· [0, count-1]
         if (mgIsBetweenLine2(p1, p2, pt, tol))
         {
             order = i;
@@ -443,12 +441,12 @@ GEOMAPI int mgPtInArea(
             continue;
     }
 
-    // Èç¹ûÉäÏßºÍ¶à±ßÐÎµÄ½»µãÊýÎªÅ¼Êý, Ôò p==1, PÔÚÇøÍâ, ·µ»Ø kPtOutArea
-    // ÎªÆæÊýÔòp==0, PÔÚÇøÄÚ, ·µ»Ø kPtInArea
+    // å¦‚æžœå°„çº¿å’Œå¤šè¾¹å½¢çš„äº¤ç‚¹æ•°ä¸ºå¶æ•°, åˆ™ p==1, Påœ¨åŒºå¤–, è¿”å›ž kPtOutArea
+    // ä¸ºå¥‡æ•°åˆ™p==0, Påœ¨åŒºå†…, è¿”å›ž kPtInArea
     return 0 == odd ? kPtInArea : kPtOutArea;
 }
 
-// ÅÐ¶Ï¶à±ßÐÎÊÇ·ñÎªÍ¹¶à±ßÐÎ
+// åˆ¤æ–­å¤šè¾¹å½¢æ˜¯å¦ä¸ºå‡¸å¤šè¾¹å½¢
 GEOMAPI bool mgIsConvex(Int32 count, const Point2d* vs, bool* pACW)
 {
     if (count < 3 || vs == NULL)
@@ -465,5 +463,3 @@ GEOMAPI bool mgIsConvex(Int32 count, const Point2d* vs, bool* pACW)
         *pACW = z0;
     return true;
 }
-
-_GEOM_END

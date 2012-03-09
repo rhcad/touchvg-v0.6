@@ -1,4 +1,4 @@
-#ifdef _WIN32
+﻿#ifdef _WIN32
 #include "giimagep.h"
 #include "gidrgdip.h"
 
@@ -7,8 +7,6 @@
 #include <GdiPlus.h>
 
 #define G Gdiplus
-
-_GEOM_BEGIN
 
 struct GiGdipImage::Impl
 {
@@ -301,5 +299,4 @@ bool GiGdipImage::save(const wchar_t* filename, ULONG quality)
     return ret;
 }
 
-_GEOM_END
 #endif //_WIN32

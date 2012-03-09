@@ -1,5 +1,5 @@
-//! \file mgcurv.h
-//! \brief ¶¨ÒåÇúÏß¼ÆËãº¯Êı
+ï»¿//! \file mgcurv.h
+//! \brief å®šä¹‰æ›²çº¿è®¡ç®—å‡½æ•°
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,102 +8,100 @@
 
 #include "mgrect.h"
 
-_GEOM_BEGIN
-
-//! ¼ÆËãÈı´Î±´Èû¶ûÇúÏß¶ÎµÄ²ÎÊıµã
+//! è®¡ç®—ä¸‰æ¬¡è´å¡å°”æ›²çº¿æ®µçš„å‚æ•°ç‚¹
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[in] pts 4¸öµãµÄÊı×é£¬Îª±´Èû¶ûÇúÏß¶ÎµÄ¿ØÖÆµã
-    \param[in] t Òª¼ÆËãµÄ²ÎÊıµãµÄ²ÎÊı£¬·¶Î§Îª[0, 1]
-    \param[out] ptFit ¼ÆËã³öµÄ²ÎÊıµã
+    \param[in] pts 4ä¸ªç‚¹çš„æ•°ç»„ï¼Œä¸ºè´å¡å°”æ›²çº¿æ®µçš„æ§åˆ¶ç‚¹
+    \param[in] t è¦è®¡ç®—çš„å‚æ•°ç‚¹çš„å‚æ•°ï¼ŒèŒƒå›´ä¸º[0, 1]
+    \param[out] ptFit è®¡ç®—å‡ºçš„å‚æ•°ç‚¹
     \see mgBezier4P, mgCubicSplines
 */
 GEOMAPI void mgFitBezier(const Point2d* pts, double t, Point2d& ptFit);
 
-//! ÓÃÏßÉÏËÄµã¹¹³ÉÈı´Î±´Èû¶ûÇúÏß¶Î
-/*! ¸Ã±´Èû¶ûÇúÏß¶ÎµÄÆğµãºÍÖÕµãÎª¸ø¶¨µã£¬ÖĞ¼ä¾­¹ıÁíÍâÁ½¸ö¸ø¶¨µã£¬
-    t=1/3¹ıpt2, t=2/3¹ıpt3¡£
-    ¼ÆËã³öµÄ±´Èû¶ûÇúÏß¶ÎµÄÆğµãÎªpt1¡¢ÖÕµãÎªpt4£¬ÖĞ¼äÁ½¸ö¿ØÖÆµãÎªptCtr1¡¢ptCtr2
+//! ç”¨çº¿ä¸Šå››ç‚¹æ„æˆä¸‰æ¬¡è´å¡å°”æ›²çº¿æ®µ
+/*! è¯¥è´å¡å°”æ›²çº¿æ®µçš„èµ·ç‚¹å’Œç»ˆç‚¹ä¸ºç»™å®šç‚¹ï¼Œä¸­é—´ç»è¿‡å¦å¤–ä¸¤ä¸ªç»™å®šç‚¹ï¼Œ
+    t=1/3è¿‡pt2, t=2/3è¿‡pt3ã€‚
+    è®¡ç®—å‡ºçš„è´å¡å°”æ›²çº¿æ®µçš„èµ·ç‚¹ä¸ºpt1ã€ç»ˆç‚¹ä¸ºpt4ï¼Œä¸­é—´ä¸¤ä¸ªæ§åˆ¶ç‚¹ä¸ºptCtr1ã€ptCtr2
     \ingroup _GEOMAPI_CURVE_
-    \param[in] pt1 ÏßµÄÆğµã
-    \param[in] pt2 ÏßÉÏµÄµÚÒ»¸öÖĞ¼äµã
-    \param[in] pt3 ÏßÉÏµÄµÚ¶ş¸öÖĞ¼äµã
-    \param[in] pt4 ÏßµÄÖÕµã
-    \param[out] ptCtr1 ÖĞ¼äµÚÒ»¸ö¿ØÖÆµã
-    \param[out] ptCtr2 ÖĞ¼äµÚ¶ş¸ö¿ØÖÆµã
+    \param[in] pt1 çº¿çš„èµ·ç‚¹
+    \param[in] pt2 çº¿ä¸Šçš„ç¬¬ä¸€ä¸ªä¸­é—´ç‚¹
+    \param[in] pt3 çº¿ä¸Šçš„ç¬¬äºŒä¸ªä¸­é—´ç‚¹
+    \param[in] pt4 çº¿çš„ç»ˆç‚¹
+    \param[out] ptCtr1 ä¸­é—´ç¬¬ä¸€ä¸ªæ§åˆ¶ç‚¹
+    \param[out] ptCtr2 ä¸­é—´ç¬¬äºŒä¸ªæ§åˆ¶ç‚¹
     \see mgEllipse90ToBezier, mgEllipseToBezier, mgAngleArcToBezier
 */
 GEOMAPI void mgBezier4P(
     const Point2d& pt1, const Point2d& pt2, const Point2d& pt3, 
     const Point2d& pt4, Point2d& ptCtr1, Point2d& ptCtr2);
 
-//! ÓÃ¸ø¶¨µÄÆğµãºÍÖÕµã¹¹Ôì90¶ÈÍÖÔ²»¡£¬²¢×ª»»ÎªÒ»¸öÈı´Î±´Èû¶ûÇúÏß¶Î
-/*! ÍÖÔ²»¡Îª´ÓÆğµãµ½ÖÕµãÄæÊ±Õë×ª90¶È¡£
-    ¼ÆËã³öµÄ±´Èû¶ûÇúÏß¶ÎµÄÆğµãÎªpt1¡¢ÖÕµãÎªpt4£¬ÖĞ¼äÁ½¸ö¿ØÖÆµãÎªptCtr1¡¢ptCtr2
+//! ç”¨ç»™å®šçš„èµ·ç‚¹å’Œç»ˆç‚¹æ„é€ 90åº¦æ¤­åœ†å¼§ï¼Œå¹¶è½¬æ¢ä¸ºä¸€ä¸ªä¸‰æ¬¡è´å¡å°”æ›²çº¿æ®µ
+/*! æ¤­åœ†å¼§ä¸ºä»èµ·ç‚¹åˆ°ç»ˆç‚¹é€†æ—¶é’ˆè½¬90åº¦ã€‚
+    è®¡ç®—å‡ºçš„è´å¡å°”æ›²çº¿æ®µçš„èµ·ç‚¹ä¸ºpt1ã€ç»ˆç‚¹ä¸ºpt4ï¼Œä¸­é—´ä¸¤ä¸ªæ§åˆ¶ç‚¹ä¸ºptCtr1ã€ptCtr2
     \ingroup _GEOMAPI_CURVE_
-    \param[in] ptFrom Æğµã
-    \param[in] ptTo ÖÕµã
-    \param[out] ptCtr1 ÖĞ¼äµÚÒ»¸ö¿ØÖÆµã
-    \param[out] ptCtr2 ÖĞ¼äµÚ¶ş¸ö¿ØÖÆµã
+    \param[in] ptFrom èµ·ç‚¹
+    \param[in] ptTo ç»ˆç‚¹
+    \param[out] ptCtr1 ä¸­é—´ç¬¬ä¸€ä¸ªæ§åˆ¶ç‚¹
+    \param[out] ptCtr2 ä¸­é—´ç¬¬äºŒä¸ªæ§åˆ¶ç‚¹
     \see mgBezier4P, mgEllipseToBezier, mgAngleArcToBezier
 */
 GEOMAPI void mgEllipse90ToBezier(
     const Point2d& ptFrom, const Point2d& ptTo, Point2d& ptCtr1, Point2d& ptCtr2);
 
-//! ½«Ò»¸öÍÖÔ²×ª»»Îª4¶ÎÈı´Î±´Èû¶ûÇúÏß
-/*! 4¶ÎÈı´Î±´Èû¶ûÇúÏßÊÇ°´ÄæÊ±Õë·½Ïò´ÓµÚÒ»ÏóÏŞµ½µÚËÄÏóÏŞÁ¬½Ó£¬
-    µÚÒ»¸öµãºÍ×îºóÒ»¸öµãÖØºÏÓÚ+XÖáÉÏµã(rx, 0)¡£
+//! å°†ä¸€ä¸ªæ¤­åœ†è½¬æ¢ä¸º4æ®µä¸‰æ¬¡è´å¡å°”æ›²çº¿
+/*! 4æ®µä¸‰æ¬¡è´å¡å°”æ›²çº¿æ˜¯æŒ‰é€†æ—¶é’ˆæ–¹å‘ä»ç¬¬ä¸€è±¡é™åˆ°ç¬¬å››è±¡é™è¿æ¥ï¼Œ
+    ç¬¬ä¸€ä¸ªç‚¹å’Œæœ€åä¸€ä¸ªç‚¹é‡åˆäº+Xè½´ä¸Šç‚¹(rx, 0)ã€‚
     \ingroup _GEOMAPI_CURVE_
-    \param[out] points ±´Èû¶ûÇúÏßµÄ¿ØÖÆµã£¬13¸öµã
-    \param[in] center ÍÖÔ²ĞÄ
-    \param[in] rx °ë³¤ÖáµÄ³¤¶È
-    \param[in] ry °ë¶ÌÖáµÄ³¤¶È
+    \param[out] points è´å¡å°”æ›²çº¿çš„æ§åˆ¶ç‚¹ï¼Œ13ä¸ªç‚¹
+    \param[in] center æ¤­åœ†å¿ƒ
+    \param[in] rx åŠé•¿è½´çš„é•¿åº¦
+    \param[in] ry åŠçŸ­è½´çš„é•¿åº¦
     \see mgBezier4P, mgEllipse90ToBezier, mgAngleArcToBezier
 */
 GEOMAPI void mgEllipseToBezier(
     Point2d points[13], const Point2d& center, double rx, double ry);
 
-//! ½«Ò»¸öÔ²½Ç¾ØĞÎ×ª»»Îª4¶ÎÈı´Î±´Èû¶ûÇúÏß
-/*! Õâ4¶Î±´Èû¶ûÇúÏß°´ÄæÊ±Õë·½Ïò´ÓµÚÒ»ÏóÏŞµ½µÚËÄÏóÏŞ£¬Ã¿¶Î4¸öµã£¬
-    µÚÒ»¶ÎµÄµãĞòºÅÎª[0,1,2,3]£¬ÆäÓà¶ÎµİÔöÀàÍÆ¡£
+//! å°†ä¸€ä¸ªåœ†è§’çŸ©å½¢è½¬æ¢ä¸º4æ®µä¸‰æ¬¡è´å¡å°”æ›²çº¿
+/*! è¿™4æ®µè´å¡å°”æ›²çº¿æŒ‰é€†æ—¶é’ˆæ–¹å‘ä»ç¬¬ä¸€è±¡é™åˆ°ç¬¬å››è±¡é™ï¼Œæ¯æ®µ4ä¸ªç‚¹ï¼Œ
+    ç¬¬ä¸€æ®µçš„ç‚¹åºå·ä¸º[0,1,2,3]ï¼Œå…¶ä½™æ®µé€’å¢ç±»æ¨ã€‚
     \ingroup _GEOMAPI_CURVE_
-    \param[out] points ±´Èû¶ûÇúÏßµÄ¿ØÖÆµã£¬Ã¿¶Î4¸öµã£¬¹²16¸öµã
-    \param[in] rect ¾ØĞÎÍâ¿ò£¬¹æ·¶»¯¾ØĞÎ
-    \param[in] rx X·½ÏòµÄÔ²½Ç°ë¾¶£¬·Ç¸ºÊı
-    \param[in] ry Y·½ÏòµÄÔ²½Ç°ë¾¶£¬·Ç¸ºÊı
+    \param[out] points è´å¡å°”æ›²çº¿çš„æ§åˆ¶ç‚¹ï¼Œæ¯æ®µ4ä¸ªç‚¹ï¼Œå…±16ä¸ªç‚¹
+    \param[in] rect çŸ©å½¢å¤–æ¡†ï¼Œè§„èŒƒåŒ–çŸ©å½¢
+    \param[in] rx Xæ–¹å‘çš„åœ†è§’åŠå¾„ï¼Œéè´Ÿæ•°
+    \param[in] ry Yæ–¹å‘çš„åœ†è§’åŠå¾„ï¼Œéè´Ÿæ•°
     \see mgEllipseToBezier
 */
 GEOMAPI void mgRoundRectToBeziers(
     Point2d points[16], const Box2d& rect, double rx, double ry);
 
-//! ½«Ò»¸öÍÖÔ²»¡×ª»»Îª¶à¶ÎÈı´Î±´Èû¶ûÇúÏß
-/*! 4¶ÎÈı´Î±´Èû¶ûÇúÏßÊÇ°´ÄæÊ±Õë·½Ïò´ÓµÚÒ»ÏóÏŞµ½µÚËÄÏóÏŞÁ¬½Ó£¬Ã¿Ò»¶Î4¸öµã£¬
-    µÚÒ»¸öµãºÍ×îºóÒ»¸öµãÖØºÏÓÚ+XÖáÉÏµã(rx, 0)¡£
+//! å°†ä¸€ä¸ªæ¤­åœ†å¼§è½¬æ¢ä¸ºå¤šæ®µä¸‰æ¬¡è´å¡å°”æ›²çº¿
+/*! 4æ®µä¸‰æ¬¡è´å¡å°”æ›²çº¿æ˜¯æŒ‰é€†æ—¶é’ˆæ–¹å‘ä»ç¬¬ä¸€è±¡é™åˆ°ç¬¬å››è±¡é™è¿æ¥ï¼Œæ¯ä¸€æ®µ4ä¸ªç‚¹ï¼Œ
+    ç¬¬ä¸€ä¸ªç‚¹å’Œæœ€åä¸€ä¸ªç‚¹é‡åˆäº+Xè½´ä¸Šç‚¹(rx, 0)ã€‚
     \ingroup _GEOMAPI_CURVE_
-    \param[out] points ±´Èû¶ûÇúÏßµÄ¿ØÖÆµã£¬16¸öµã
-    \param[in] center ÍÖÔ²ĞÄ
-    \param[in] rx °ë³¤ÖáµÄ³¤¶È
-    \param[in] ry °ë¶ÌÖáµÄ³¤¶È£¬Îª0ÔòÈ¡Îªrx
-    \param[in] startAngle ÆğÊ¼½Ç¶È£¬»¡¶È£¬Ïà¶ÔÓÚ+XÖá£¬ÄæÊ±ÕëÎªÕı
-    \param[in] sweepAngle ×ª½Ç£¬»¡¶È£¬Ïà¶ÔÓÚÆğÊ¼½Ç¶È£¬ÄæÊ±ÕëÎªÕı
-    \return ¼ÆËãºóµÄ¿ØÖÆµãÊı£¬µãÊıĞ¡ÓÚ4Ôò¸ø¶¨²ÎÊıÓĞ´íÎó
+    \param[out] points è´å¡å°”æ›²çº¿çš„æ§åˆ¶ç‚¹ï¼Œ16ä¸ªç‚¹
+    \param[in] center æ¤­åœ†å¿ƒ
+    \param[in] rx åŠé•¿è½´çš„é•¿åº¦
+    \param[in] ry åŠçŸ­è½´çš„é•¿åº¦ï¼Œä¸º0åˆ™å–ä¸ºrx
+    \param[in] startAngle èµ·å§‹è§’åº¦ï¼Œå¼§åº¦ï¼Œç›¸å¯¹äº+Xè½´ï¼Œé€†æ—¶é’ˆä¸ºæ­£
+    \param[in] sweepAngle è½¬è§’ï¼Œå¼§åº¦ï¼Œç›¸å¯¹äºèµ·å§‹è§’åº¦ï¼Œé€†æ—¶é’ˆä¸ºæ­£
+    \return è®¡ç®—åçš„æ§åˆ¶ç‚¹æ•°ï¼Œç‚¹æ•°å°äº4åˆ™ç»™å®šå‚æ•°æœ‰é”™è¯¯
     \see mgBezier4P, mgEllipse90ToBezier, mgEllipseToBezier, mgArc3P
 */
 GEOMAPI int mgAngleArcToBezier(
     Point2d points[16], const Point2d& center, double rx, double ry,
     double startAngle, double sweepAngle);
 
-//! ¸ø¶¨Æğµã¡¢»¡ÉÏÒ»µãºÍÖÕµã£¬¼ÆËãÔ²»¡²ÎÊı
+//! ç»™å®šèµ·ç‚¹ã€å¼§ä¸Šä¸€ç‚¹å’Œç»ˆç‚¹ï¼Œè®¡ç®—åœ†å¼§å‚æ•°
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[in] start Ô²»¡µÄÆğµã
-    \param[in] point »¡ÉÏµÄÒ»µã
-    \param[in] end Ô²»¡µÄÖÕµã
-    \param[out] center Ô²ĞÄ
-    \param[out] radius °ë¾¶
-    \param[out] startAngle Ìî³äÆğÊ¼½Ç¶È£¬ÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \param[out] sweepAngle Ìî³äÔ²»¡×ª½Ç£¬ÄæÊ±ÕëÎªÕı£¬ÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \return ÊÇ·ñ¼ÆËã³É¹¦
+    \param[in] start åœ†å¼§çš„èµ·ç‚¹
+    \param[in] point å¼§ä¸Šçš„ä¸€ç‚¹
+    \param[in] end åœ†å¼§çš„ç»ˆç‚¹
+    \param[out] center åœ†å¿ƒ
+    \param[out] radius åŠå¾„
+    \param[out] startAngle å¡«å……èµ·å§‹è§’åº¦ï¼Œä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \param[out] sweepAngle å¡«å……åœ†å¼§è½¬è§’ï¼Œé€†æ—¶é’ˆä¸ºæ­£ï¼Œä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \return æ˜¯å¦è®¡ç®—æˆåŠŸ
     \see mgArcTan, mgArcBulge, mgAngleArcToBezier
 */
 GEOMAPI bool mgArc3P(
@@ -111,17 +109,17 @@ GEOMAPI bool mgArc3P(
     Point2d& center, double& radius,
     double* startAngle = NULL, double* sweepAngle = NULL);
 
-//! ¸ø¶¨Æğµã¡¢ÖÕµãºÍÆğµãÇĞÏò£¬¼ÆËãÔ²»¡²ÎÊı
+//! ç»™å®šèµ·ç‚¹ã€ç»ˆç‚¹å’Œèµ·ç‚¹åˆ‡å‘ï¼Œè®¡ç®—åœ†å¼§å‚æ•°
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[in] start Ô²»¡µÄÆğµã
-    \param[in] end Ô²»¡µÄÖÕµã
-    \param[in] vecTan Ô²»¡µÄÆğµã´¦µÄÇĞÏòÊ¸Á¿
-    \param[out] center Ô²ĞÄ
-    \param[out] radius °ë¾¶
-    \param[out] startAngle Ìî³äÆğÊ¼½Ç¶È£¬ÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \param[out] sweepAngle Ìî³äÔ²»¡×ª½Ç£¬ÄæÊ±ÕëÎªÕı£¬ÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \return ÊÇ·ñ¼ÆËã³É¹¦
+    \param[in] start åœ†å¼§çš„èµ·ç‚¹
+    \param[in] end åœ†å¼§çš„ç»ˆç‚¹
+    \param[in] vecTan åœ†å¼§çš„èµ·ç‚¹å¤„çš„åˆ‡å‘çŸ¢é‡
+    \param[out] center åœ†å¿ƒ
+    \param[out] radius åŠå¾„
+    \param[out] startAngle å¡«å……èµ·å§‹è§’åº¦ï¼Œä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \param[out] sweepAngle å¡«å……åœ†å¼§è½¬è§’ï¼Œé€†æ—¶é’ˆä¸ºæ­£ï¼Œä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \return æ˜¯å¦è®¡ç®—æˆåŠŸ
     \see mgArc3P, mgArcBulge, mgAngleArcToBezier
 */
 GEOMAPI bool mgArcTan(
@@ -129,17 +127,17 @@ GEOMAPI bool mgArcTan(
     Point2d& center, double& radius,
     double* startAngle = NULL, double* sweepAngle = NULL);
 
-//! ¸ø¶¨ÏÒºÍ¹°¸ß¼ÆËãÔ²»¡²ÎÊı
+//! ç»™å®šå¼¦å’Œæ‹±é«˜è®¡ç®—åœ†å¼§å‚æ•°
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[in] start Ô²»¡µÄÆğµã
-    \param[in] end Ô²»¡µÄÖÕµã
-    \param[in] bulge ¹°¸ß£¬ÕıÊıÎªÄæÊ±Õë·½Ïò£¬¸ºÊıÎªË³Ê±Õë·½Ïò
-    \param[out] center Ô²ĞÄ
-    \param[out] radius °ë¾¶
-    \param[out] startAngle Ìî³äÆğÊ¼½Ç¶È£¬ÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \param[out] sweepAngle Ìî³äÔ²»¡×ª½Ç£¬ÄæÊ±ÕëÎªÕı£¬ÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \return ÊÇ·ñ¼ÆËã³É¹¦
+    \param[in] start åœ†å¼§çš„èµ·ç‚¹
+    \param[in] end åœ†å¼§çš„ç»ˆç‚¹
+    \param[in] bulge æ‹±é«˜ï¼Œæ­£æ•°ä¸ºé€†æ—¶é’ˆæ–¹å‘ï¼Œè´Ÿæ•°ä¸ºé¡ºæ—¶é’ˆæ–¹å‘
+    \param[out] center åœ†å¿ƒ
+    \param[out] radius åŠå¾„
+    \param[out] startAngle å¡«å……èµ·å§‹è§’åº¦ï¼Œä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \param[out] sweepAngle å¡«å……åœ†å¼§è½¬è§’ï¼Œé€†æ—¶é’ˆä¸ºæ­£ï¼Œä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \return æ˜¯å¦è®¡ç®—æˆåŠŸ
     \see mgArc3P, mgArcTan, mgAngleArcToBezier
 */
 GEOMAPI bool mgArcBulge(
@@ -147,132 +145,131 @@ GEOMAPI bool mgArcBulge(
     Point2d& center, double& radius,
     double* startAngle = NULL, double* sweepAngle = NULL);
 
-//! Çó½âÈı¶Ô½ÇÏß·½³Ì×é
-/*! Èı¶Ô½ÇÏß·½³Ì×éÈçÏÂËùÊ¾: \n
-    ¡¡¡¡¡¡| b0¡¡¡¡¡¡c0¡¡¡¡¡¡¡¡¡¡¡¡| \n
-    A¡¡=¡¡| a0¡¡¡¡¡¡b1¡¡¡¡¡¡c1¡¡¡¡| \n
-    ¡¡¡¡¡¡|¡¡¡¡..¡¡¡¡¡¡..¡¡¡¡.. ¡¡| \n
-    ¡¡¡¡¡¡|¡¡¡¡¡¡a[n-2]¡¡¡¡b[n-1] | \n
+//! æ±‚è§£ä¸‰å¯¹è§’çº¿æ–¹ç¨‹ç»„
+/*! ä¸‰å¯¹è§’çº¿æ–¹ç¨‹ç»„å¦‚ä¸‹æ‰€ç¤º: \n
+    ã€€ã€€ã€€| b0ã€€ã€€ã€€c0ã€€ã€€ã€€ã€€ã€€ã€€| \n
+    Aã€€=ã€€| a0ã€€ã€€ã€€b1ã€€ã€€ã€€c1ã€€ã€€| \n
+    ã€€ã€€ã€€|ã€€ã€€..ã€€ã€€ã€€..ã€€ã€€.. ã€€| \n
+    ã€€ã€€ã€€|ã€€ã€€ã€€a[n-2]ã€€ã€€b[n-1] | \n
     A * (x,y) = (rx,ry)
 
     \ingroup _GEOMAPI_BASIC_
-    \param[in] n ·½³Ì×é½×Êı£¬×îĞ¡Îª2
-    \param[in] a ÏµÊı¾ØÕóÖĞµÄ×ó¶Ô½ÇÏßÔªËØÊı×é£¬a[0..n-2]
-    \param[in,out] b ÏµÊı¾ØÕóÖĞµÄÖĞ¶Ô½ÇÏßÔªËØÊı×é£¬b[0..n-1]£¬»á±»ĞŞ¸Ä
-    \param[in] c ÏµÊı¾ØÕóÖĞµÄÓÒ¶Ô½ÇÏßÔªËØÊı×é£¬c[0..n-2]
-    \param[in,out] vs ÊäÈë·½³Ì×éµÈºÅÓÒ±ßµÄÒÑÖªn¸öÊ¸Á¿£¬Êä³öÇó½â³öµÄÎ´ÖªÊ¸Á¿
-    \return ÊÇ·ñÇó½â³É¹¦£¬Ê§°ÜÔ­Òò¿ÉÄÜÊÇ²ÎÊı´íÎó»òÒòÏµÊı¾ØÕó·ÇÖ÷½ÇÕ¼ÓÅ¶ø³öÏÖ³ıÁã
+    \param[in] n æ–¹ç¨‹ç»„é˜¶æ•°ï¼Œæœ€å°ä¸º2
+    \param[in] a ç³»æ•°çŸ©é˜µä¸­çš„å·¦å¯¹è§’çº¿å…ƒç´ æ•°ç»„ï¼Œa[0..n-2]
+    \param[in,out] b ç³»æ•°çŸ©é˜µä¸­çš„ä¸­å¯¹è§’çº¿å…ƒç´ æ•°ç»„ï¼Œb[0..n-1]ï¼Œä¼šè¢«ä¿®æ”¹
+    \param[in] c ç³»æ•°çŸ©é˜µä¸­çš„å³å¯¹è§’çº¿å…ƒç´ æ•°ç»„ï¼Œc[0..n-2]
+    \param[in,out] vs è¾“å…¥æ–¹ç¨‹ç»„ç­‰å·å³è¾¹çš„å·²çŸ¥nä¸ªçŸ¢é‡ï¼Œè¾“å‡ºæ±‚è§£å‡ºçš„æœªçŸ¥çŸ¢é‡
+    \return æ˜¯å¦æ±‚è§£æˆåŠŸï¼Œå¤±è´¥åŸå› å¯èƒ½æ˜¯å‚æ•°é”™è¯¯æˆ–å› ç³»æ•°çŸ©é˜µéä¸»è§’å ä¼˜è€Œå‡ºç°é™¤é›¶
     \see mgGaussJordan
 */
 GEOMAPI bool mgTriEquations(
     Int32 n, double *a, double *b, double *c, Vector2d *vs);
 
-//! Gauss-Jordan·¨Çó½âÏßĞÔ·½³Ì×é
+//! Gauss-Jordanæ³•æ±‚è§£çº¿æ€§æ–¹ç¨‹ç»„
 /*!
     \ingroup _GEOMAPI_BASIC_
-    \param[in] n ·½³Ì×é½×Êı£¬×îĞ¡Îª2
-    \param[in,out] mat ÏµÊı¾ØÕó£¬nÎ¬·½Õó£¬»á±»ĞŞ¸Ä
-    \param[in,out] vs ÊäÈë·½³Ì×éµÈºÅÓÒ±ßµÄÒÑÖªn¸öÊ¸Á¿£¬Êä³öÇó½â³öµÄÎ´ÖªÊ¸Á¿
-    \return ÊÇ·ñÇó½â³É¹¦£¬Ê§°ÜÔ­Òò¿ÉÄÜÊÇ²ÎÊı´íÎó»òÒòÏµÊı¾ØÕó·ÇÖ÷½ÇÕ¼ÓÅ¶ø³öÏÖ³ıÁã
+    \param[in] n æ–¹ç¨‹ç»„é˜¶æ•°ï¼Œæœ€å°ä¸º2
+    \param[in,out] mat ç³»æ•°çŸ©é˜µï¼Œnç»´æ–¹é˜µï¼Œä¼šè¢«ä¿®æ”¹
+    \param[in,out] vs è¾“å…¥æ–¹ç¨‹ç»„ç­‰å·å³è¾¹çš„å·²çŸ¥nä¸ªçŸ¢é‡ï¼Œè¾“å‡ºæ±‚è§£å‡ºçš„æœªçŸ¥çŸ¢é‡
+    \return æ˜¯å¦æ±‚è§£æˆåŠŸï¼Œå¤±è´¥åŸå› å¯èƒ½æ˜¯å‚æ•°é”™è¯¯æˆ–å› ç³»æ•°çŸ©é˜µéä¸»è§’å ä¼˜è€Œå‡ºç°é™¤é›¶
     \see mgTriEquations
 */
 GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs);
 
-//! Èı´Î²ÎÊıÑùÌõÇúÏßµÄ¶ËµãÌõ¼ş
+//! ä¸‰æ¬¡å‚æ•°æ ·æ¡æ›²çº¿çš„ç«¯ç‚¹æ¡ä»¶
 //! \see mgCubicSplines
 enum kCubicSplinesFlags
 {
-    kCubicTan1 = 1,         //!< ÆğÊ¼¼Ğ³Ö¶Ë
-    kCubicArm1 = 2,         //!< ÆğÊ¼Ğü±Û¶Ë
-    kCubicTan2 = 4,         //!< ÖÕÖ¹¼Ğ³Ö¶Ë
-    kCubicArm2 = 8,         //!< ÖÕÖ¹Ğü±Û¶Ë
-    kCubicLoop = 16,        //!< ±ÕºÏ, ÓĞ¸ÃÖµÊ±ºöÂÔÆäËû×éºÏÖµ
+    kCubicTan1 = 1,         //!< èµ·å§‹å¤¹æŒç«¯
+    kCubicArm1 = 2,         //!< èµ·å§‹æ‚¬è‡‚ç«¯
+    kCubicTan2 = 4,         //!< ç»ˆæ­¢å¤¹æŒç«¯
+    kCubicArm2 = 8,         //!< ç»ˆæ­¢æ‚¬è‡‚ç«¯
+    kCubicLoop = 16,        //!< é—­åˆ, æœ‰è¯¥å€¼æ—¶å¿½ç•¥å…¶ä»–ç»„åˆå€¼
 };
 
-//! ¼ÆËãÈı´Î²ÎÊıÑùÌõÇúÏßµÄĞÍÖµµãµÄÇĞÊ¸Á¿
-/*! Èı´Î²ÎÊıÑùÌõÇúÏßµÄ·Ö¶ÎÇúÏß·½³ÌÎª£º\n
+//! è®¡ç®—ä¸‰æ¬¡å‚æ•°æ ·æ¡æ›²çº¿çš„å‹å€¼ç‚¹çš„åˆ‡çŸ¢é‡
+/*! ä¸‰æ¬¡å‚æ•°æ ·æ¡æ›²çº¿çš„åˆ†æ®µæ›²çº¿æ–¹ç¨‹ä¸ºï¼š\n
     P[i](t) = knots[i] + knotVectors[i] * t \n
-    ¡¡¡¡¡¡+ (3*(knots[i+1] - knots[i]) - 2 * knotVectors[i] - knotVectors[i+1]) * t^2 \n
-    ¡¡¡¡¡¡+ (2*(knots[i] - knots[i+1]) + knotVectors[i] + knotVectors[i+1]) * t^3 \n
-    ÆäÖĞ 0 ¡Ü t ¡Ü 1
+    ã€€ã€€ã€€+ (3*(knots[i+1] - knots[i]) - 2 * knotVectors[i] - knotVectors[i+1]) * t^2 \n
+    ã€€ã€€ã€€+ (2*(knots[i] - knots[i+1]) + knotVectors[i] + knotVectors[i+1]) * t^3 \n
+    å…¶ä¸­ 0 â‰¤ t â‰¤ 1
 
     \ingroup _GEOMAPI_CURVE_
-    \param[in] n ĞÍÖµµãµÄµãÊı
-    \param[in] knots ĞÍÖµµã×ø±êÊı×é£¬ÔªËØ¸öÊıÎªn
-    \param[out] knotVectors ĞÍÖµµãµÄÇĞÊ¸Á¿Êı×é£¬ÔªËØ¸öÊıÎªn£¬ÓÉÍâ½ç·ÖÅäÄÚ´æ
-    \param[in] flag ÇúÏß±ß½çÌõ¼ş£¬ÓÉ kCubicSplinesFlags ¸÷ÖÖÖµ×éºÏ¶ø³É¡£\n
-        Ö¸¶¨ kCubicTan1 Ê±, knotVectors[0]±ØĞëÖ¸¶¨ÓĞĞ§µÄÇĞÊ¸Á¿£»\n
-        Ö¸¶¨ kCubicTan2 Ê±, knotVectors[n-1]±ØĞëÖ¸¶¨ÓĞĞ§µÄÇĞÊ¸Á¿¡£\n
-        Ö¸¶¨ kCubicLoop Ê±£¬knotsµÄÊ×Ä©ĞÍÖµµã²»±ØÖØºÏ£¬¼ÆËãÖĞ½«Ê×Ä©ĞÍÖµµãÊÓÎªÈÎÒâÁ½µã¡£
-    \param[in] tension ÕÅÁ¦ÏµÊı£¬0¡Ücoeff¡Ü1, Îª1Ê±C2½×Á¬Ğø, Îª0Ê±³ÉÕÛÏß
-    \return ÊÇ·ñ¼ÆËã³É¹¦
+    \param[in] n å‹å€¼ç‚¹çš„ç‚¹æ•°
+    \param[in] knots å‹å€¼ç‚¹åæ ‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn
+    \param[out] knotVectors å‹å€¼ç‚¹çš„åˆ‡çŸ¢é‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºnï¼Œç”±å¤–ç•Œåˆ†é…å†…å­˜
+    \param[in] flag æ›²çº¿è¾¹ç•Œæ¡ä»¶ï¼Œç”± kCubicSplinesFlags å„ç§å€¼ç»„åˆè€Œæˆã€‚\n
+        æŒ‡å®š kCubicTan1 æ—¶, knotVectors[0]å¿…é¡»æŒ‡å®šæœ‰æ•ˆçš„åˆ‡çŸ¢é‡ï¼›\n
+        æŒ‡å®š kCubicTan2 æ—¶, knotVectors[n-1]å¿…é¡»æŒ‡å®šæœ‰æ•ˆçš„åˆ‡çŸ¢é‡ã€‚\n
+        æŒ‡å®š kCubicLoop æ—¶ï¼Œknotsçš„é¦–æœ«å‹å€¼ç‚¹ä¸å¿…é‡åˆï¼Œè®¡ç®—ä¸­å°†é¦–æœ«å‹å€¼ç‚¹è§†ä¸ºä»»æ„ä¸¤ç‚¹ã€‚
+    \param[in] tension å¼ åŠ›ç³»æ•°ï¼Œ0â‰¤coeffâ‰¤1, ä¸º1æ—¶C2é˜¶è¿ç»­, ä¸º0æ—¶æˆæŠ˜çº¿
+    \return æ˜¯å¦è®¡ç®—æˆåŠŸ
     \see kCubicSplinesFlags, mgFitCubicSpline, mgCubicSplinesBox
 */
 GEOMAPI bool mgCubicSplines(
     Int32 n, const Point2d* knots, Vector2d* knotVectors,
     UInt32 flag = 0, double tension = 1.0);
 
-//! ÔÚÈı´ÎÑùÌõÇúÏßµÄÒ»ÌõÏÒÉÏ²åÖµµÃµ½ÄâºÍµã×ø±ê
+//! åœ¨ä¸‰æ¬¡æ ·æ¡æ›²çº¿çš„ä¸€æ¡å¼¦ä¸Šæ’å€¼å¾—åˆ°æ‹Ÿå’Œç‚¹åæ ‡
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[in] n Èı´ÎÑùÌõÇúÏßµÄĞÍÖµµãµÄµãÊı
-    \param[in] knots ĞÍÖµµã×ø±êÊı×é£¬ÔªËØ¸öÊıÎªn
-    \param[in] knotVectors ĞÍÖµµãµÄÇĞÊ¸Á¿Êı×é£¬ÔªËØ¸öÊıÎªn
-    \param[in] i ·Ö¶ÎÇúÏßĞòºÅ£¬ÔÚ0µ½(n-2)Ö®¼ä£¬Èç¹ûÇúÏßÊÇ±ÕºÏÌõ¼ş£¬Ôò¿ÉÈ¡µ½(n-1)
-    \param[in] t ·Ö¶ÎÇúÏßº¯Êı²ÎÊı£¬ÔÚ0µ½1Ö®¼ä
-    \param[out] fitPt ÄâºÍµã×ø±ê£¬µÚi¶ÎÇúÏßÉÏ²ÎÊıt¶ÔÓ¦µÄÇúÏß×ø±ê
+    \param[in] n ä¸‰æ¬¡æ ·æ¡æ›²çº¿çš„å‹å€¼ç‚¹çš„ç‚¹æ•°
+    \param[in] knots å‹å€¼ç‚¹åæ ‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn
+    \param[in] knotVectors å‹å€¼ç‚¹çš„åˆ‡çŸ¢é‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn
+    \param[in] i åˆ†æ®µæ›²çº¿åºå·ï¼Œåœ¨0åˆ°(n-2)ä¹‹é—´ï¼Œå¦‚æœæ›²çº¿æ˜¯é—­åˆæ¡ä»¶ï¼Œåˆ™å¯å–åˆ°(n-1)
+    \param[in] t åˆ†æ®µæ›²çº¿å‡½æ•°å‚æ•°ï¼Œåœ¨0åˆ°1ä¹‹é—´
+    \param[out] fitPt æ‹Ÿå’Œç‚¹åæ ‡ï¼Œç¬¬iæ®µæ›²çº¿ä¸Šå‚æ•°tå¯¹åº”çš„æ›²çº¿åæ ‡
     \see mgCubicSplines, mgCubicSplineToBezier
 */
 GEOMAPI void mgFitCubicSpline(
     Int32 n, const Point2d* knots, const Vector2d* knotVectors,
     Int32 i, double t, Point2d& fitPt);
 
-//! µÃµ½Èı´ÎÑùÌõÇúÏßµÄ·Ö¶Î±´Èû¶ûÇúÏß¶Î¿ØÖÆµã
+//! å¾—åˆ°ä¸‰æ¬¡æ ·æ¡æ›²çº¿çš„åˆ†æ®µè´å¡å°”æ›²çº¿æ®µæ§åˆ¶ç‚¹
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[in] n Èı´ÎÑùÌõÇúÏßµÄĞÍÖµµãµÄµãÊı
-    \param[in] knots ĞÍÖµµã×ø±êÊı×é£¬ÔªËØ¸öÊıÎªn
-    \param[in] knotVectors ĞÍÖµµãµÄÇĞÊ¸Á¿Êı×é£¬ÔªËØ¸öÊıÎªn
-    \param[in] i ·Ö¶ÎÇúÏßĞòºÅ£¬ÔÚ0µ½(n-2)Ö®¼ä£¬Èç¹ûÇúÏßÊÇ±ÕºÏÌõ¼ş£¬Ôò¿ÉÈ¡µ½(n-1)
-    \param[out] points ±´Èû¶ûÇúÏß¶ÎµÄ¿ØÖÆµã£¬4¸öµã
+    \param[in] n ä¸‰æ¬¡æ ·æ¡æ›²çº¿çš„å‹å€¼ç‚¹çš„ç‚¹æ•°
+    \param[in] knots å‹å€¼ç‚¹åæ ‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn
+    \param[in] knotVectors å‹å€¼ç‚¹çš„åˆ‡çŸ¢é‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn
+    \param[in] i åˆ†æ®µæ›²çº¿åºå·ï¼Œåœ¨0åˆ°(n-2)ä¹‹é—´ï¼Œå¦‚æœæ›²çº¿æ˜¯é—­åˆæ¡ä»¶ï¼Œåˆ™å¯å–åˆ°(n-1)
+    \param[out] points è´å¡å°”æ›²çº¿æ®µçš„æ§åˆ¶ç‚¹ï¼Œ4ä¸ªç‚¹
     \see mgCubicSplines, mgFitCubicSpline
 */
 GEOMAPI void mgCubicSplineToBezier(
     Int32 n, const Point2d* knots, const Vector2d* knotVectors,
     Int32 i, Point2d points[4]);
 
-//! ¼ÆËãÕÅÁ¦ÑùÌõÇúÏßµÄĞÍÖµµã²ÎÊıºÍÏÒ³¤
+//! è®¡ç®—å¼ åŠ›æ ·æ¡æ›²çº¿çš„å‹å€¼ç‚¹å‚æ•°å’Œå¼¦é•¿
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[in,out] n ĞÍÖµµãµÄµãÊı£¬Èç¹ûÓĞÖØºÏµãÔòÊä³öÊµ¼ÊµãÊı
-    \param[in,out] knots ĞÍÖµµã×ø±êÊı×é£¬ÔªËØ¸öÊıÎªn£¬ÓĞÖØºÏµãÔò»áÉ¾³ıµã×ø±ê
-    \param[in] sgm ¿ØÖÆ²ÎÊı£¬>0£¬Ò»°ãÈ¡1.5
-    \param[in] tol ³¤¶ÈÈİ²îÖµ£¬ÓÃÓÚÅĞ¶ÏÖØºÏµã
-    \param[out] sigma ¹æ·¶»¯ÕÅÁ¦ÏµÊı£¬= ¿ØÖÆ²ÎÊı / Æ½¾ùÏÒ³¤
-    \param[out] hp ÏÒ³¤Êı×é£¬ÔªËØ¸öÊıÎªn-1»òn£¬ÓÉÍâ½ç·ÖÅäÄÚ´æ
-    \param[out] knotVectors ĞÍÖµµãµÄf"(x_i)/sigma^2£¬ÔªËØ¸öÊıÎªn£¬ÓÉÍâ½ç·ÖÅäÄÚ´æ
-    \return ÊÇ·ñ¼ÆËã³É¹¦
+    \param[in,out] n å‹å€¼ç‚¹çš„ç‚¹æ•°ï¼Œå¦‚æœæœ‰é‡åˆç‚¹åˆ™è¾“å‡ºå®é™…ç‚¹æ•°
+    \param[in,out] knots å‹å€¼ç‚¹åæ ‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºnï¼Œæœ‰é‡åˆç‚¹åˆ™ä¼šåˆ é™¤ç‚¹åæ ‡
+    \param[in] sgm æ§åˆ¶å‚æ•°ï¼Œ>0ï¼Œä¸€èˆ¬å–1.5
+    \param[in] tol é•¿åº¦å®¹å·®å€¼ï¼Œç”¨äºåˆ¤æ–­é‡åˆç‚¹
+    \param[out] sigma è§„èŒƒåŒ–å¼ åŠ›ç³»æ•°ï¼Œ= æ§åˆ¶å‚æ•° / å¹³å‡å¼¦é•¿
+    \param[out] hp å¼¦é•¿æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn-1æˆ–nï¼Œç”±å¤–ç•Œåˆ†é…å†…å­˜
+    \param[out] knotVectors å‹å€¼ç‚¹çš„f"(x_i)/sigma^2ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºnï¼Œç”±å¤–ç•Œåˆ†é…å†…å­˜
+    \return æ˜¯å¦è®¡ç®—æˆåŠŸ
     \see mgFitClampedSpline
 */
 GEOMAPI bool mgClampedSplines(
     Int32& n, Point2d* knots, double sgm, double tol, double& sigma,
     double* hp, Vector2d* knotVectors);
 
-//! ÔÚÕÅÁ¦ÑùÌõÇúÏßµÄÒ»ÌõÏÒÉÏ²åÖµµÃµ½ÄâºÍµã×ø±ê
+//! åœ¨å¼ åŠ›æ ·æ¡æ›²çº¿çš„ä¸€æ¡å¼¦ä¸Šæ’å€¼å¾—åˆ°æ‹Ÿå’Œç‚¹åæ ‡
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[in] knots ĞÍÖµµã×ø±êÊı×é
-    \param[in] i ·Ö¶ÎÇúÏßĞòºÅ£¬ÔÚ0µ½(ĞÍÖµµãµÄµãÊı-1)Ö®¼ä
-    \param[in] t ·Ö¶ÎÇúÏßº¯Êı²ÎÊı£¬ÔÚ0µ½hp[i]Ö®¼ä
-    \param[in] sigma ¹æ·¶»¯ÕÅÁ¦ÏµÊı
-    \param[in] hp ÏÒ³¤Êı×é
-    \param[in] knotVectors ĞÍÖµµãµÄf"(x_i)/sigma^2Êı×é
-    \param[out] fitPt ÄâºÍµã×ø±ê£¬µÚi¶ÎÇúÏßÉÏ²ÎÊıt¶ÔÓ¦µÄÇúÏß×ø±ê
+    \param[in] knots å‹å€¼ç‚¹åæ ‡æ•°ç»„
+    \param[in] i åˆ†æ®µæ›²çº¿åºå·ï¼Œåœ¨0åˆ°(å‹å€¼ç‚¹çš„ç‚¹æ•°-1)ä¹‹é—´
+    \param[in] t åˆ†æ®µæ›²çº¿å‡½æ•°å‚æ•°ï¼Œåœ¨0åˆ°hp[i]ä¹‹é—´
+    \param[in] sigma è§„èŒƒåŒ–å¼ åŠ›ç³»æ•°
+    \param[in] hp å¼¦é•¿æ•°ç»„
+    \param[in] knotVectors å‹å€¼ç‚¹çš„f"(x_i)/sigma^2æ•°ç»„
+    \param[out] fitPt æ‹Ÿå’Œç‚¹åæ ‡ï¼Œç¬¬iæ®µæ›²çº¿ä¸Šå‚æ•°tå¯¹åº”çš„æ›²çº¿åæ ‡
     \see mgClampedSplines
 */
 GEOMAPI void mgFitClampedSpline(
     const Point2d* knots, Int32 i, double t, double sigma,
     const double* hp, const Vector2d* knotVectors, Point2d& fitPt);
 
-_GEOM_END
 #endif // __GEOMETRY_FITCURVE_H_

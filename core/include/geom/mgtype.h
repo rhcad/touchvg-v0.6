@@ -1,59 +1,53 @@
-//! \file mgtype.h
-//! \brief ¶¨ÒåÊıÑ§¼¸ºÎ¿âµÄ¼òµ¥Êı¾İÀàĞÍ VECTOR2D,POINT2D,BOX2D,MATRIX2D
+ï»¿//! \file mgtype.h
+//! \brief å®šä¹‰æ•°å­¦å‡ ä½•åº“çš„ç®€å•æ•°æ®ç±»å‹ VECTOR2D,POINT2D,BOX2D,MATRIX2D
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #ifndef __GEOMETRY_MGTYPE_H_
 #define __GEOMETRY_MGTYPE_H_
 
-#include "mgnamesp.h"
-
-_GEOM_BEGIN
-
-//! ¶şÎ¬Ê¸Á¿½á¹¹
+//! äºŒç»´çŸ¢é‡ç»“æ„
 typedef struct tagVECTOR2D
 {
-    double   x;     //!< X×ø±ê·ÖÁ¿
-    double   y;     //!< Y×ø±ê·ÖÁ¿
+    double   x;     //!< Xåæ ‡åˆ†é‡
+    double   y;     //!< Yåæ ‡åˆ†é‡
 } VECTOR2D;
 
-//! ¶şÎ¬µã½á¹¹
+//! äºŒç»´ç‚¹ç»“æ„
 typedef struct tagPOINT2D
 {
-    double   x;     //!< X×ø±ê·ÖÁ¿
-    double   y;     //!< Y×ø±ê·ÖÁ¿
+    double   x;     //!< Xåæ ‡åˆ†é‡
+    double   y;     //!< Yåæ ‡åˆ†é‡
 } POINT2D;
 
-//! ¾ØĞÎ¿ò½á¹¹
+//! çŸ©å½¢æ¡†ç»“æ„
 typedef struct tagBOX2D
 {
-    double   xmin;  //!< ¾ØĞÎ×óÏÂ½ÇX×ø±ê
-    double   ymin;  //!< ¾ØĞÎ×óÏÂ½ÇY×ø±ê
-    double   xmax;  //!< ¾ØĞÎÓÒÉÏ½ÇX×ø±ê
-    double   ymax;  //!< ¾ØĞÎÓÒÉÏ½ÇY×ø±ê
+    double   xmin;  //!< çŸ©å½¢å·¦ä¸‹è§’Xåæ ‡
+    double   ymin;  //!< çŸ©å½¢å·¦ä¸‹è§’Yåæ ‡
+    double   xmax;  //!< çŸ©å½¢å³ä¸Šè§’Xåæ ‡
+    double   ymax;  //!< çŸ©å½¢å³ä¸Šè§’Yåæ ‡
 } BOX2D;
 
-//! ¶şÎ¬Æë´Î±ä»»¾ØÕó½á¹¹
+//! äºŒç»´é½æ¬¡å˜æ¢çŸ©é˜µç»“æ„
 typedef struct tagMATRIX2D
 {
-    double   m11;   //!< ¾ØÕóÔªËØ£¬´ú±íX·½ÏòÏßĞÔ±ä»»·ÖÁ¿
-    double   m12;   //!< ¾ØÕóÔªËØ£¬´ú±íX·½ÏòÏßĞÔ±ä»»·ÖÁ¿
-    double   m21;   //!< ¾ØÕóÔªËØ£¬´ú±íY·½ÏòÏßĞÔ±ä»»·ÖÁ¿
-    double   m22;   //!< ¾ØÕóÔªËØ£¬´ú±íY·½ÏòÏßĞÔ±ä»»·ÖÁ¿
-    double   dx;    //!< ¾ØÕóÔªËØ£¬´ú±íX·½ÏòÆ½ÒÆÁ¿
-    double   dy;    //!< ¾ØÕóÔªËØ£¬´ú±íY·½ÏòÆ½ÒÆÁ¿
+    double   m11;   //!< çŸ©é˜µå…ƒç´ ï¼Œä»£è¡¨Xæ–¹å‘çº¿æ€§å˜æ¢åˆ†é‡
+    double   m12;   //!< çŸ©é˜µå…ƒç´ ï¼Œä»£è¡¨Xæ–¹å‘çº¿æ€§å˜æ¢åˆ†é‡
+    double   m21;   //!< çŸ©é˜µå…ƒç´ ï¼Œä»£è¡¨Yæ–¹å‘çº¿æ€§å˜æ¢åˆ†é‡
+    double   m22;   //!< çŸ©é˜µå…ƒç´ ï¼Œä»£è¡¨Yæ–¹å‘çº¿æ€§å˜æ¢åˆ†é‡
+    double   dx;    //!< çŸ©é˜µå…ƒç´ ï¼Œä»£è¡¨Xæ–¹å‘å¹³ç§»é‡
+    double   dy;    //!< çŸ©é˜µå…ƒç´ ï¼Œä»£è¡¨Yæ–¹å‘å¹³ç§»é‡
 } MATRIX2D;
 
-_GEOM_END
-
-// ¶¨Òå×¼È·×Ö½Ú³¤¶ÈµÄ»ù±¾Êı¾İÀàĞÍ
+// å®šä¹‰å‡†ç¡®å­—èŠ‚é•¿åº¦çš„åŸºæœ¬æ•°æ®ç±»å‹
 #ifndef Int32
-typedef signed   char  Int8;    //!< µ¥×Ö½ÚÓĞ·ûºÅÕûÊıÀàĞÍ
-typedef unsigned char  UInt8;   //!< µ¥×Ö½ÚÎŞ·ûºÅÕûÊıÀàĞÍ
-typedef signed   short Int16;   //!< Ë«×Ö½ÚÓĞ·ûºÅÕûÊıÀàĞÍ
-typedef unsigned short UInt16;  //!< Ë«×Ö½ÚÎŞ·ûºÅÕûÊıÀàĞÍ
-typedef signed   long  Int32;   //!< ËÄ×Ö½ÚÓĞ·ûºÅÕûÊıÀàĞÍ
-typedef unsigned long  UInt32;  //!< ËÄ×Ö½ÚÎŞ·ûºÅÕûÊıÀàĞÍ
+typedef signed   char  Int8;    //!< å•å­—èŠ‚æœ‰ç¬¦å·æ•´æ•°ç±»å‹
+typedef unsigned char  UInt8;   //!< å•å­—èŠ‚æ— ç¬¦å·æ•´æ•°ç±»å‹
+typedef signed   short Int16;   //!< åŒå­—èŠ‚æœ‰ç¬¦å·æ•´æ•°ç±»å‹
+typedef unsigned short UInt16;  //!< åŒå­—èŠ‚æ— ç¬¦å·æ•´æ•°ç±»å‹
+typedef signed   long  Int32;   //!< å››å­—èŠ‚æœ‰ç¬¦å·æ•´æ•°ç±»å‹
+typedef unsigned long  UInt32;  //!< å››å­—èŠ‚æ— ç¬¦å·æ•´æ•°ç±»å‹
 #endif
 
 #endif // __GEOMETRY_MGTYPE_H_

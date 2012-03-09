@@ -1,12 +1,10 @@
-// mgcurv.cpp: ÊµÏÖÇúÏßÄâºÍº¯Êı
+ï»¿// mgcurv.cpp: å®ç°æ›²çº¿æ‹Ÿå’Œå‡½æ•°
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "mgcurv.h"
 #include "mgbase.h"
 #include "mglnrel.h"
-
-_GEOM_BEGIN
 
 GEOMAPI void mgFitBezier(const Point2d* pts, double t, Point2d& ptFit)
 {
@@ -153,7 +151,7 @@ static int _mgAngleArcToBezierPlusSweep(
     int k, n;
     double endAngle;
 
-    // ¼ÆËãµÚÒ»¶ÎÍÖÔ²»¡µÄÖÕÖ¹½Ç¶È
+    // è®¡ç®—ç¬¬ä¸€æ®µæ¤­åœ†å¼§çš„ç»ˆæ­¢è§’åº¦
     if (startAngle < M_PI_2) {              // +Y
         endAngle = M_PI_2;
         k = 1;
@@ -170,40 +168,40 @@ static int _mgAngleArcToBezierPlusSweep(
         endAngle = _M_2PI;
         k = 0;
     }
-    if (endAngle - startAngle > 1e-5)       // ×ª»»µÚÒ»¶ÎÍÖÔ²»¡
+    if (endAngle - startAngle > 1e-5)       // è½¬æ¢ç¬¬ä¸€æ®µæ¤­åœ†å¼§
     {
         _mgAngleArcToBezier(points, center, rx, ry,
             startAngle, endAngle - startAngle);
         n = 4;
     }
     else
-        n = 1;                              // µÚÒ»µãÔÚÏÂ±ßÑ­»·ÄÚÉèÖÃ
+        n = 1;                              // ç¬¬ä¸€ç‚¹åœ¨ä¸‹è¾¹å¾ªç¯å†…è®¾ç½®
     sweepAngle -= (endAngle - startAngle);
     startAngle = endAngle;
-    while (sweepAngle >= M_PI_2)            // Ôö¼ÓÕû90¶È»¡
+    while (sweepAngle >= M_PI_2)            // å¢åŠ æ•´90åº¦å¼§
     {
-        if (k == 0)                         // µÚÒ»ÏóÏŞ
+        if (k == 0)                         // ç¬¬ä¸€è±¡é™
         {
             points[n-1].set(center.x + rx, center.y);
             points[n  ].set(center.x + rx, center.y + dy);
             points[n+1].set(center.x + dx, center.y + ry);
             points[n+2].set(center.x,      center.y + ry);
         }
-        else if (k == 1)                    // µÚ¶şÏóÏŞ
+        else if (k == 1)                    // ç¬¬äºŒè±¡é™
         {
             points[n-1].set(center.x,      center.y + ry);
             points[n  ].set(center.x - dx, center.y + ry);
             points[n+1].set(center.x - rx, center.y + dy);
             points[n+2].set(center.x - rx, center.y);
         }
-        else if (k == 2)                    // µÚÈıÏóÏŞ
+        else if (k == 2)                    // ç¬¬ä¸‰è±¡é™
         {
             points[n-1].set(center.x - rx, center.y);
             points[n  ].set(center.x - rx, center.y - dy);
             points[n+1].set(center.x - dx, center.y - ry);
             points[n+2].set(center.x,      center.y - ry);
         }
-        else                                // µÚËÄÏóÏŞ
+        else                                // ç¬¬å››è±¡é™
         {
             points[n-1].set(center.x,      center.y - ry);
             points[n  ].set(center.x + dx, center.y - ry);
@@ -215,7 +213,7 @@ static int _mgAngleArcToBezierPlusSweep(
         sweepAngle -= M_PI_2;
         startAngle += M_PI_2;
     }
-    if (sweepAngle > 1e-5)                  // Ôö¼ÓÓàÏÂµÄ»¡
+    if (sweepAngle > 1e-5)                  // å¢åŠ ä½™ä¸‹çš„å¼§
     {
         _mgAngleArcToBezier(&points[n-1], center, rx, ry, startAngle, sweepAngle);
         n += 3;
@@ -284,24 +282,24 @@ GEOMAPI bool mgArc3P(
     
     if (startAngle != NULL && sweepAngle != NULL)
     {
-        // ·Ö±ğ¼ÆËãÔ²ĞÄµ½ÈıµãµÄ½Ç¶È
+        // åˆ†åˆ«è®¡ç®—åœ†å¿ƒåˆ°ä¸‰ç‚¹çš„è§’åº¦
         a1 = atan2(start.y - center.y, start.x - center.x);
         b1 = atan2(point.y - center.y, point.x - center.x);
         c1 = atan2(end.y - center.y, end.x - center.x);
         
         *startAngle = a1;
         
-        // ÅĞ¶ÏÔ²»¡µÄ·½Ïò£¬¼ÆËã×ª½Ç
+        // åˆ¤æ–­åœ†å¼§çš„æ–¹å‘ï¼Œè®¡ç®—è½¬è§’
         if (a1 < c1)
         {
-            if (a1 < b1 && b1 < c1)         // ÄæÊ±Õë
+            if (a1 < b1 && b1 < c1)         // é€†æ—¶é’ˆ
                 *sweepAngle = c1-a1;
             else
                 *sweepAngle = c1-a1-_M_2PI;
         }
         else
         {
-            if (a1 > b1 && b1 > c1)         // Ë³Ê±Õë
+            if (a1 > b1 && b1 > c1)         // é¡ºæ—¶é’ˆ
                 *sweepAngle = c1-a1;
             else
                 *sweepAngle = _M_2PI-(a1-c1);
@@ -318,12 +316,12 @@ GEOMAPI bool mgArcTan(
 {
     double a, b, c;
     
-    // ÏÒµÄÖĞ´¹Ïß·½³ÌÏµÊı
+    // å¼¦çš„ä¸­å‚çº¿æ–¹ç¨‹ç³»æ•°
     a = end.x - start.x;
     b = end.y - start.y;
     c = -0.5 * (a*(end.x + start.x) + b*(end.y + start.y));
     
-    // ÇóÖĞ´¹ÏßºÍÇĞÏßµÄ½»µãcenter
+    // æ±‚ä¸­å‚çº¿å’Œåˆ‡çº¿çš„äº¤ç‚¹center
     if (!mgCrossLineAbc(a, b, c, vecTan.x, vecTan.y, 
         -vecTan.x * start.x - vecTan.y * start.y, center, Tol::gTol()))
         return false;
@@ -400,7 +398,7 @@ GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
     
     for (k = 0; k < n; k++)
     {
-        // ÕÒÖ÷Ôª. ¼´ÕÒµÚkÁĞÖĞµÚkĞĞÒÔÏÂ¾ø¶ÔÖµ×î´óµÄÔªËØ
+        // æ‰¾ä¸»å…ƒ. å³æ‰¾ç¬¬kåˆ—ä¸­ç¬¬kè¡Œä»¥ä¸‹ç»å¯¹å€¼æœ€å¤§çš„å…ƒç´ 
         m = k;
         c = mat[k*n+k];
         for (i = k+1; i < n; i++)
@@ -411,7 +409,7 @@ GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
                 c = mat[i*n+k];
             }
         }
-        // ½»»»µÚkĞĞºÍµÚmĞĞÖĞµÚkÁĞÒÔºóµÄÔªËØ
+        // äº¤æ¢ç¬¬kè¡Œå’Œç¬¬mè¡Œä¸­ç¬¬kåˆ—ä»¥åçš„å…ƒç´ 
         if (m != k)
         {
             for (j = k; j < n; j++) {
@@ -419,7 +417,7 @@ GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
             }
             tt = vs[m]; vs[m] = vs[k]; vs[k] = tt;
         }
-        // ÏûÔª. µÚkĞĞÖĞµÚkÁĞÒÔºóÔªËØ/=mat[k][k]
+        // æ¶ˆå…ƒ. ç¬¬kè¡Œä¸­ç¬¬kåˆ—ä»¥åå…ƒç´ /=mat[k][k]
         c = mat[k*n+k];
         if (mgIsZero(c))
             return false;
@@ -428,7 +426,7 @@ GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
             mat[k*n+j] *= c;
         vs[k].x *= c;
         vs[k].y *= c;
-        // ´ÓµÚk+1ĞĞÒÔÏÂÃ¿Ò»ĞĞ, ¶Ô¸ÃĞĞµÚkÁĞÒÔºó¸÷ÔªËØ-=
+        // ä»ç¬¬k+1è¡Œä»¥ä¸‹æ¯ä¸€è¡Œ, å¯¹è¯¥è¡Œç¬¬kåˆ—ä»¥åå„å…ƒç´ -=
         for (i = k+1; i < n; i++)
         {
             c = mat[i*n+k];
@@ -439,7 +437,7 @@ GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
         }
     }
     
-    // »Ø´ú
+    // å›ä»£
     for (i = n-2; i >= 0; i--)
     {
         for (j = i; j < n; j++)
@@ -487,20 +485,20 @@ static bool CalcCubicUnclosed(
     UInt32 flag, Int32 n, const Point2d* knots, 
     double* a, double* b, double* c, Vector2d* vecs)
 {
-    if (flag & kCubicTan1)          // ÆğÊ¼¼Ğ³Ö¶Ë
+    if (flag & kCubicTan1)          // èµ·å§‹å¤¹æŒç«¯
     {
         b[0] = 1.0;
         c[0] = 0.0;
-        //vecs[0] = xp0;            // vecs[0]±ØĞëÖ¸¶¨ÇĞÊ¸Á¿
+        //vecs[0] = xp0;            // vecs[0]å¿…é¡»æŒ‡å®šåˆ‡çŸ¢é‡
     }
-    else if (flag & kCubicArm1)     // ÆğÊ¼Ğü±Û¶Ë
+    else if (flag & kCubicArm1)     // èµ·å§‹æ‚¬è‡‚ç«¯
     {
         b[0] = 1.0;
         c[0] = 1.0;
         vecs[0].x = 2.0*(knots[1].x-knots[0].x);
         vecs[0].y = 2.0*(knots[1].y-knots[0].y);
     }
-    else                            // ÆğÊ¼×ÔÓÉ¶Ë
+    else                            // èµ·å§‹è‡ªç”±ç«¯
     {
         b[0] = 1.0;
         c[0] = 0.5;
@@ -508,20 +506,20 @@ static bool CalcCubicUnclosed(
         vecs[0].y = 1.5*(knots[1].y-knots[0].y);
     }
     
-    if (flag & kCubicTan2)          // ÖÕÖ¹¼Ğ³Ö¶Ë
+    if (flag & kCubicTan2)          // ç»ˆæ­¢å¤¹æŒç«¯
     {
         a[n - 2] = 0.0;
         b[n - 1] = 1.0;
-        //vecs[n - 1] = xpn;            // vecs[n-1]±ØĞëÖ¸¶¨ÇĞÊ¸Á¿
+        //vecs[n - 1] = xpn;            // vecs[n-1]å¿…é¡»æŒ‡å®šåˆ‡çŸ¢é‡
     }
-    else if (flag & kCubicArm2)     // ÖÕÖ¹Ğü±Û¶Ë
+    else if (flag & kCubicArm2)     // ç»ˆæ­¢æ‚¬è‡‚ç«¯
     {
         a[n - 2] = 1.0;
         b[n - 1] = 1.0;
         vecs[n - 1].x = 2.0*(knots[n - 1].x-knots[n - 2].x);
         vecs[n - 1].y = 2.0*(knots[n - 1].y-knots[n - 2].y);
     }
-    else                            // ÖÕÖ¹×ÔÓÉ¶Ë
+    else                            // ç»ˆæ­¢è‡ªç”±ç«¯
     {
         a[n - 2] = 0.5;
         b[n - 1] = 1.0;
@@ -550,7 +548,7 @@ GEOMAPI bool mgCubicSplines(
     if (!knots || !knotVectors || n < 2)
         return false;
     
-    if (flag & kCubicLoop)              // ±ÕºÏ
+    if (flag & kCubicLoop)              // é—­åˆ
     {
         if (n > 256)
             return false;
@@ -666,7 +664,7 @@ static double CalcClampedHp(
         dx = knots[i+1].x - knots[i].x;
         dy = knots[i+1].y - knots[i].y;
         len = mgHypot(dx, dy);
-        dx2 = dx / len;          // ·Ö¶ÎÏÒĞ±ÂÊ
+        dx2 = dx / len;          // åˆ†æ®µå¼¦æ–œç‡
         dy2 = dy / len;
         vecs[i].x = dx2 - dx1;
         vecs[i].y = dy2 - dy1;
@@ -745,13 +743,13 @@ GEOMAPI bool mgClampedSplines(
     
     n1 = n - 1;
     
-    // ¼ÆËãÊ×Ä©¶ËÁ½µãÖ®¼äµÄĞ±ÂÊ(sx1, sy1, sxn, syn)
+    // è®¡ç®—é¦–æœ«ç«¯ä¸¤ç‚¹ä¹‹é—´çš„æ–œç‡(sx1, sy1, sxn, syn)
     CalcClampedS1n(n1, knots, closed, len1, sx1, sy1, sxn, syn);
     
-    // ¼ÆËãÀÛ¼ÓÏÒ³¤s¡¢·Ö¶ÎÏÒ³¤hpºÍ·½³Ì×éÓÒ±ßÏòÁ¿
+    // è®¡ç®—ç´¯åŠ å¼¦é•¿sã€åˆ†æ®µå¼¦é•¿hpå’Œæ–¹ç¨‹ç»„å³è¾¹å‘é‡
     s = CalcClampedHp(n1, knots, hp, knotVectors, len1, sx1, sy1, sxn, syn);
 
-    // ¹æ·¶»¯ÕÅÁ¦ÏµÊı = ¿ØÖÆ²ÎÊı / Æ½¾ùÏÒ³¤
+    // è§„èŒƒåŒ–å¼ åŠ›ç³»æ•° = æ§åˆ¶å‚æ•° / å¹³å‡å¼¦é•¿
     sigma = sgm * n1 / s;
     
     double* a = new double[n * 3];
@@ -766,8 +764,8 @@ GEOMAPI bool mgClampedSplines(
     return ret;
 }
 
-// ÔÚÕÅÁ¦ÑùÌõÇúÏßµÄÒ»ÌõÏÒÉÏ²åÖµµÃµ½ÄâºÍµã×ø±ê
-// Ô­Àí£º         x"(s_i)   sinh( sigma * (s_(i+1) - s))
+// åœ¨å¼ åŠ›æ ·æ¡æ›²çº¿çš„ä¸€æ¡å¼¦ä¸Šæ’å€¼å¾—åˆ°æ‹Ÿå’Œç‚¹åæ ‡
+// åŸç†ï¼š         x"(s_i)   sinh( sigma * (s_(i+1) - s))
 //       x(s) =  ------- * ----------------------------
 //                sigma^2   sinh(sigma * h_i)
 //
@@ -777,7 +775,7 @@ GEOMAPI bool mgClampedSplines(
 //
 //            + (x_i - x"(s_i)/sigma^2 ) * (s_(i+1) - s) / h_i
 //            + (x_(i+1) - x"(s_(i+1))/sigma^2 ) * (s - s_i) / h_i
-//       ¼´ x(t) = xp[i] * sinh(sigma*(hp[i]-t)) / sinh(sigma*hp[i])
+//       å³ x(t) = xp[i] * sinh(sigma*(hp[i]-t)) / sinh(sigma*hp[i])
 //               + xp[i+1] * sinh(sigma*t) / sinh(sigma*hp[i])
 //               + (x[i] - xp[i]) * (hp[i]-t) / hp[i]
 //               + (x[i+1] - xp[i+1]) * t / hp[i]
@@ -803,5 +801,3 @@ GEOMAPI void mgFitClampedSpline(
     fitPt.x = (knotVectors[i].x * s1 + knotVectors[i+1].x * s2) *s3 + tx1*(hp[i] - t) + tx2*t;
     fitPt.y = (knotVectors[i].y * s1 + knotVectors[i+1].y * s2) *s3 + ty1*(hp[i] - t) + ty2*t;
 }
-
-_GEOM_END

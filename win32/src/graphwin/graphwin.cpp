@@ -1,7 +1,5 @@
-#include "graphwin.h"
+ï»¿#include "graphwin.h"
 #include <_gigraph.h>
-
-_GEOM_BEGIN
 
 GiGraphWin::GiGraphWin(GiTransform& xform)
     : GiGraphics(xform), m_attribDC(NULL)
@@ -30,19 +28,19 @@ bool giPrintSetup(GiTransform& xf, HDC hdc, const Box2d& rectShow, bool bWorldRe
     if (hdc == NULL || rectShow.isEmpty())
         return false;
 
-    int dpix   = GetDeviceCaps(hdc, LOGPIXELSX);        // Ã¿Ó¢´çµÄÏñËØÊı
-    int dpiy   = GetDeviceCaps(hdc, LOGPIXELSY);        // Ã¿Ó¢´çµÄÏñËØÊı
-    int width  = GetDeviceCaps(hdc, PHYSICALWIDTH);     // Ò³Ãæ¿í£¬ÏñËØ
-    int height = GetDeviceCaps(hdc, PHYSICALHEIGHT);    // Ò³Ãæ¸ß£¬ÏñËØ
-    int cx     = GetDeviceCaps(hdc, HORZRES);           // ¿É´òÓ¡¿í¶È£¬ÏñËØ
-    int cy     = GetDeviceCaps(hdc, VERTRES);           // ¿É´òÓ¡¸ß¶È£¬ÏñËØ
-    int ml     = GetDeviceCaps(hdc, PHYSICALOFFSETX);   // ×ó×îĞ¡±ß¾à£¬ÏñËØ
-    int mt     = GetDeviceCaps(hdc, PHYSICALOFFSETY);   // ÉÏ×îĞ¡±ß¾à£¬ÏñËØ
-    int mr     = width - cx - ml;                       // ÓÒ×îĞ¡±ß¾à£¬ÏñËØ
-    int mb     = height - cy - mt;                      // ÏÂ×îĞ¡±ß¾à£¬ÏñËØ
-    RECT rc    = { 0, 0, cx, cy };                      // Ö½ÉÏ´òÓ¡·¶Î§£¬ÏñËØ
+    int dpix   = GetDeviceCaps(hdc, LOGPIXELSX);        // æ¯è‹±å¯¸çš„åƒç´ æ•°
+    int dpiy   = GetDeviceCaps(hdc, LOGPIXELSY);        // æ¯è‹±å¯¸çš„åƒç´ æ•°
+    int width  = GetDeviceCaps(hdc, PHYSICALWIDTH);     // é¡µé¢å®½ï¼Œåƒç´ 
+    int height = GetDeviceCaps(hdc, PHYSICALHEIGHT);    // é¡µé¢é«˜ï¼Œåƒç´ 
+    int cx     = GetDeviceCaps(hdc, HORZRES);           // å¯æ‰“å°å®½åº¦ï¼Œåƒç´ 
+    int cy     = GetDeviceCaps(hdc, VERTRES);           // å¯æ‰“å°é«˜åº¦ï¼Œåƒç´ 
+    int ml     = GetDeviceCaps(hdc, PHYSICALOFFSETX);   // å·¦æœ€å°è¾¹è·ï¼Œåƒç´ 
+    int mt     = GetDeviceCaps(hdc, PHYSICALOFFSETY);   // ä¸Šæœ€å°è¾¹è·ï¼Œåƒç´ 
+    int mr     = width - cx - ml;                       // å³æœ€å°è¾¹è·ï¼Œåƒç´ 
+    int mb     = height - cy - mt;                      // ä¸‹æœ€å°è¾¹è·ï¼Œåƒç´ 
+    RECT rc    = { 0, 0, cx, cy };                      // çº¸ä¸Šæ‰“å°èŒƒå›´ï¼Œåƒç´ 
 
-    if (margin != NULL)     // Ö¸¶¨ÁËÒ³±ß¾à
+    if (margin != NULL)     // æŒ‡å®šäº†é¡µè¾¹è·
     {
         int n;
         if (ml < (n = MulDiv(margin->left, dpix, 2540)))
@@ -64,7 +62,7 @@ bool giPrintSetup(GiTransform& xf, HDC hdc, const Box2d& rectShow, bool bWorldRe
             rc.bottom = cy;
         }
     }
-    ::InflateRect(&rc, -1, -1);     // ËõĞ¡Ö½ÉÏ´òÓ¡·¶Î§£¬ÒÔ±ã·ÅËõºó²»¶ªÊ§ÏñËØ
+    ::InflateRect(&rc, -1, -1);     // ç¼©å°çº¸ä¸Šæ‰“å°èŒƒå›´ï¼Œä»¥ä¾¿æ”¾ç¼©åä¸ä¸¢å¤±åƒç´ 
 
     xf.setWndSize(cx, cy);
     xf.setResolution(dpix, dpiy);
@@ -174,5 +172,3 @@ bool GiGraphWin::rawTextOut(HDC hdc, int x, int y,
     return ::ExtTextOutW(hdc, x, y, options, prc, 
         str, len, reinterpret_cast<const INT *>(pDx)) != 0;
 }
-
-_GEOM_END

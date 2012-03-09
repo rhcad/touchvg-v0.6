@@ -1,4 +1,4 @@
-// giplclip.h: ¶¨Òå¶à±ßĞÎ¼ô²ÃÀà PolygonClip
+ï»¿// giplclip.h: å®šä¹‰å¤šè¾¹å½¢å‰ªè£ç±» PolygonClip
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,40 +8,38 @@
 #include <vector>
 using std::vector;
 
-// ·µ»ØSTLÊı×é(vector)±äÁ¿µÄÔªËØ¸öÊı
+// è¿”å›STLæ•°ç»„(vector)å˜é‡çš„å…ƒç´ ä¸ªæ•°
 template<class T> inline static int getSize(T& arr)
 {
     return static_cast<int>(arr.size());
 }
 
-_GEOM_BEGIN
-
-//! ¶à±ßĞÎ¼ô²ÃÀà
+//! å¤šè¾¹å½¢å‰ªè£ç±»
 class PolygonClip
 {
-    const Box2d     m_rect;         //!< ¼ô²Ã¾ØĞÎ
-    vector<Point2d> m_vs1;          //!< ¼ô²Ã½»µã»º³å
-    vector<Point2d> m_vs2;          //!< ¼ô²Ã½»µã»º³å
-    bool            m_closed;       //!< ÊÇ·ñ±ÕºÏ
+    const Box2d     m_rect;         //!< å‰ªè£çŸ©å½¢
+    vector<Point2d> m_vs1;          //!< å‰ªè£äº¤ç‚¹ç¼“å†²
+    vector<Point2d> m_vs2;          //!< å‰ªè£äº¤ç‚¹ç¼“å†²
+    bool            m_closed;       //!< æ˜¯å¦é—­åˆ
     
 public:
     
-    //! ¹¹Ôìº¯Êı
+    //! æ„é€ å‡½æ•°
     /*!
-        \param rect ¼ô²Ã¾ØĞÎ£¬±ØĞëÎª¹æ·¶»¯µÄ¾ØĞÎ
-        \param closed ½«Òª´«ÈëµÄ×ø±êĞòÁĞÊÇ¶à±ßĞÎ»¹ÊÇÕÛÏß
+        \param rect å‰ªè£çŸ©å½¢ï¼Œå¿…é¡»ä¸ºè§„èŒƒåŒ–çš„çŸ©å½¢
+        \param closed å°†è¦ä¼ å…¥çš„åæ ‡åºåˆ—æ˜¯å¤šè¾¹å½¢è¿˜æ˜¯æŠ˜çº¿
     */
     PolygonClip(const Box2d& rect, bool closed = true)
         : m_rect(rect), m_closed(closed)
     {
     }
     
-    //! ¼ô²ÃÒ»¸ö¶à±ßĞÎ
+    //! å‰ªè£ä¸€ä¸ªå¤šè¾¹å½¢
     /*!
-        \param count ¶¥µã¸öÊı
-        \param points ¶¥µã×ø±êÊı×é, ¸öÊıÎªcount
-        \param mat ¿ÉÖ¸¶¨Òª¶Ô¸ø¶¨¶¥µã½øĞĞ×ø±ê±ä»»µÄ¾ØÕó
-        \return ¼ô²Ã½á¹ûÖĞÊÇ·ñÓĞÂÖÀª±ß
+        \param count é¡¶ç‚¹ä¸ªæ•°
+        \param points é¡¶ç‚¹åæ ‡æ•°ç»„, ä¸ªæ•°ä¸ºcount
+        \param mat å¯æŒ‡å®šè¦å¯¹ç»™å®šé¡¶ç‚¹è¿›è¡Œåæ ‡å˜æ¢çš„çŸ©é˜µ
+        \return å‰ªè£ç»“æœä¸­æ˜¯å¦æœ‰è½®å»“è¾¹
     */
     bool clip(int count, const Point2d* points, const Matrix2d* mat = NULL)
     {
@@ -75,40 +73,40 @@ public:
         return true;
     }
     
-    //! ·µ»Ø¼ô²Ã½á¹ûÖĞµÄ¶¥µã¸öÊı
+    //! è¿”å›å‰ªè£ç»“æœä¸­çš„é¡¶ç‚¹ä¸ªæ•°
     int getCount() const
     {
         return getSize(m_vs2);
     }
     
-    //! ·µ»Ø¼ô²Ã½á¹ûÖĞµÄ¶¥µãÊı×é
+    //! è¿”å›å‰ªè£ç»“æœä¸­çš„é¡¶ç‚¹æ•°ç»„
     const Point2d* getPoints() const
     {
         return &m_vs2.front();
     }
     
-    //! ·µ»Ø¼ô²Ã½á¹ûÖĞµÄÖ¸¶¨ĞòºÅµÄ¶¥µã×ø±ê
+    //! è¿”å›å‰ªè£ç»“æœä¸­çš„æŒ‡å®šåºå·çš„é¡¶ç‚¹åæ ‡
     /*!
-        \param index ¶¥µãµÄĞòºÅ, >=0, ×Ô¶¯È¡µ½¶¥µã¸öÊı·¶Î§ÄÚ
-        \return ¶ÔÓ¦µÄ¶¥µã×ø±ê
+        \param index é¡¶ç‚¹çš„åºå·, >=0, è‡ªåŠ¨å–åˆ°é¡¶ç‚¹ä¸ªæ•°èŒƒå›´å†…
+        \return å¯¹åº”çš„é¡¶ç‚¹åæ ‡
     */
     const Point2d& getPoint(int index) const
     {
         return m_vs2[index % m_vs2.size()];
     }
     
-    //! ÅĞ¶Ï¼ô²ÃºóÁ½ÏàÁÚ¶¥µãÊÇ·ñ¹¹³ÉÂÖÀª±ß
+    //! åˆ¤æ–­å‰ªè£åä¸¤ç›¸é‚»é¡¶ç‚¹æ˜¯å¦æ„æˆè½®å»“è¾¹
     /*!
-        \param index ¼ô²ÃºóµÄ±ß(¿É¼û»ò²»¿É¼ûµÄ)µÄĞòºÅ, ×Ô¶¯È¡µ½[0, getCount()-1]·¶Î§ÄÚ, 
-            Îª( getCount()-1 )Ê±Ïàµ±ÓÚÊÇÊ×Î²¶¥µãµÄÁ¬Ïß
-        \return ¸Ã±ßÊÇ·ñ¹¹³ÉÂÖÀª±ß, ¼´¿É¼û±ß
+        \param index å‰ªè£åçš„è¾¹(å¯è§æˆ–ä¸å¯è§çš„)çš„åºå·, è‡ªåŠ¨å–åˆ°[0, getCount()-1]èŒƒå›´å†…, 
+            ä¸º( getCount()-1 )æ—¶ç›¸å½“äºæ˜¯é¦–å°¾é¡¶ç‚¹çš„è¿çº¿
+        \return è¯¥è¾¹æ˜¯å¦æ„æˆè½®å»“è¾¹, å³å¯è§è¾¹
     */
     bool isLinked(int index) const
     {
         const Point2d& p1 = getPoint(index);
         const Point2d& p2 = getPoint(index+1);
         
-        // ºÍ¼ô²Ã±ßÖØºÏ
+        // å’Œå‰ªè£è¾¹é‡åˆ
         if (mgIsZero(p1.x - p2.x) && (mgIsZero(p1.x - m_rect.xmin) || mgIsZero(p1.x - m_rect.xmax)))
             return false;
         if (mgIsZero(p1.y - p2.y) && (mgIsZero(p1.y - m_rect.ymin) || mgIsZero(p1.y - m_rect.ymax)))
@@ -154,14 +152,14 @@ private:
     {
         double y;
         
-        // Èç¹ûÏß¶ÎÓë¼ô²ÃÏßÏà½»£¬ÔòÊä³ö½»µã
+        // å¦‚æœçº¿æ®µä¸å‰ªè£çº¿ç›¸äº¤ï¼Œåˆ™è¾“å‡ºäº¤ç‚¹
         if ((p1.x < m_rect.xmin) != (p2.x < m_rect.xmin))
         {
             y = p1.y + (m_rect.xmin - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
             arr.push_back(Point2d(m_rect.xmin, y));
         }
         
-        // Èç¹ûÖÕµãÔÚ¿É¼û²à£¬ÔòÊä³öÖÕµã
+        // å¦‚æœç»ˆç‚¹åœ¨å¯è§ä¾§ï¼Œåˆ™è¾“å‡ºç»ˆç‚¹
         if (p2.x >= m_rect.xmin)
         {
             arr.push_back(p2);
@@ -214,5 +212,4 @@ private:
     }
 };
 
-_GEOM_END
 #endif // __GEOMETRY_POLYGONCLIP_H_

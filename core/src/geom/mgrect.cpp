@@ -1,10 +1,9 @@
-// mgrect.cpp: ÊµÏÖ¾ØÐÎ¿òÀà Box2d
+ï»¿// mgrect.cpp: å®žçŽ°çŸ©å½¢æ¡†ç±» Box2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "mgrect.h"
-
-_GEOM_BEGIN
+#include "mgmat.h"
 
 Box2d::Box2d(const BOX2D& src, bool bNormalize)
 {
@@ -135,5 +134,3 @@ Box2d& Box2d::operator*=(const Matrix2d& m)
     return set(leftBottom() * m, rightTop() * m,
         leftTop() * m, rightBottom() * m);
 }
-
-_GEOM_END

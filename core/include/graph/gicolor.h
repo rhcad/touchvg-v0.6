@@ -1,5 +1,5 @@
-//! \file gicolor.h
-//! \brief ¶¨ÒåRGBÑÕÉ«Àà: GiColor
+ï»¿//! \file gicolor.h
+//! \brief å®šä¹‰RGBé¢œè‰²ç±»: GiColor
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,9 +8,7 @@
 
 #include <mgtype.h>
 
-_GEOM_BEGIN
-
-//! RGBÑÕÉ«
+//! RGBé¢œè‰²
 struct GiColor
 {
     UInt8   r;
@@ -66,8 +64,7 @@ struct GiColor
     }
 };
 
-//! ÎŞĞ§ÑÕÉ«Öµ»ò·ÇRGBµÄÌØÊâÒâÒåÖµ
+//! æ— æ•ˆé¢œè‰²å€¼æˆ–éRGBçš„ç‰¹æ®Šæ„ä¹‰å€¼
 #define GICOLOR_INVALID GiColor(0, 0, 0, 0)
 
-_GEOM_END
 #endif // __GEOMETRY_GICOLOR_H_

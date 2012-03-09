@@ -1,5 +1,5 @@
-//! \file mgbnd.h
-//! \brief ¶¨Òå°ó¶¨¿òÀà BoundBox
+ï»¿//! \file mgbnd.h
+//! \brief å®šä¹‰ç»‘å®šæ¡†ç±» BoundBox
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,42 +8,40 @@
 
 #include "mgpnt.h"
 
-_GEOM_BEGIN
-
-//! °ó¶¨¿òÀà£¬Æ½ĞĞËÄ±ßĞÎ
+//! ç»‘å®šæ¡†ç±»ï¼Œå¹³è¡Œå››è¾¹å½¢
 /*!
     \ingroup _GEOM_CLASS_
 */
 class BoundBox
 {
 public:
-    //! ¹¹ÔìÊÕËõµ½Ô­µãµÄ°ó¶¨¿ò
+    //! æ„é€ æ”¶ç¼©åˆ°åŸç‚¹çš„ç»‘å®šæ¡†
     BoundBox()
         : m_base(Point2d::kOrigin())
         , m_dir1(Vector2d::kIdentity()), m_dir2(Vector2d::kIdentity())
     {
     }
     
-    //! ¹¹ÔìÊÕËõµ½Ïß¶ÎµÄ°ó¶¨¿ò
+    //! æ„é€ æ”¶ç¼©åˆ°çº¿æ®µçš„ç»‘å®šæ¡†
     BoundBox(const Point2d& pnt1, const Point2d& pnt2)
         : m_base(pnt1), m_dir1(pnt2 - pnt1), m_dir2(Vector2d::kIdentity())
     {
     }
     
-    //! ¸ø¶¨Ò»¸ö¶¥µãºÍÁ½¸ö±ß¹¹ÔìÆ½ĞĞËÄ±ßĞÎ
+    //! ç»™å®šä¸€ä¸ªé¡¶ç‚¹å’Œä¸¤ä¸ªè¾¹æ„é€ å¹³è¡Œå››è¾¹å½¢
     BoundBox(const Point2d& base,
         const Vector2d& dir1, const Vector2d& dir2)
         : m_base(base), m_dir1(dir1), m_dir2(dir2)
     {
     }
     
-    //! ¿½±´¹¹Ôìº¯Êı
+    //! æ‹·è´æ„é€ å‡½æ•°
     BoundBox(const BoundBox& box)
         : m_base(box.m_base), m_dir1(box.m_dir1), m_dir2(box.m_dir2)
     {
     }
     
-    //! µÃµ½°ó¶¨¿ò×ø±ê·¶Î§µÄÁ½¸ö¶Ô½Çµã×ø±ê
+    //! å¾—åˆ°ç»‘å®šæ¡†åæ ‡èŒƒå›´çš„ä¸¤ä¸ªå¯¹è§’ç‚¹åæ ‡
     void getMinMaxPoints(Point2d& pnt1, Point2d& pnt2) const
     {
         pnt1.x = mgMin(m_base.x, mgMin(m_base.x + m_dir1.x, m_base.x + m_dir2.x));
@@ -52,7 +50,7 @@ public:
         pnt2.y = mgMax(m_base.y, mgMax(m_base.y + m_dir1.y, m_base.y + m_dir2.y));
     }
     
-    //! µÃµ½°ó¶¨¿òµÄÒ»¸ö¶¥µãºÍÁ½¸ö±ß
+    //! å¾—åˆ°ç»‘å®šæ¡†çš„ä¸€ä¸ªé¡¶ç‚¹å’Œä¸¤ä¸ªè¾¹
     void get(Point2d& base, Vector2d& dir1, Vector2d& dir2) const
     {
         base = m_base;
@@ -60,7 +58,7 @@ public:
         dir2 = m_dir2;
     }
     
-    //! ÉèÖÃÎªÊÕËõµ½Ïß¶ÎµÄ°ó¶¨¿ò
+    //! è®¾ç½®ä¸ºæ”¶ç¼©åˆ°çº¿æ®µçš„ç»‘å®šæ¡†
     BoundBox& set(const Point2d& pnt1, const Point2d& pnt2)
     {
         m_base = pnt1;
@@ -69,7 +67,7 @@ public:
         return *this;
     }
     
-    //! ¸ø¶¨Ò»¸ö¶¥µãºÍÁ½¸ö±ß£¬ÉèÖÃÎªÆ½ĞĞËÄ±ßĞÎ
+    //! ç»™å®šä¸€ä¸ªé¡¶ç‚¹å’Œä¸¤ä¸ªè¾¹ï¼Œè®¾ç½®ä¸ºå¹³è¡Œå››è¾¹å½¢
     BoundBox& set(const Point2d& base, 
         const Vector2d& dir1, const Vector2d& dir2)
     {
@@ -79,25 +77,25 @@ public:
         return *this;
     }
     
-    //! À©´óµ½°üº¬Ò»¸öµã
+    //! æ‰©å¤§åˆ°åŒ…å«ä¸€ä¸ªç‚¹
     BoundBox& extend(const Point2d& pnt);
     
-    //! ÏòÍâÀ©´ó¸ø¶¨³¤¶È
+    //! å‘å¤–æ‰©å¤§ç»™å®šé•¿åº¦
     BoundBox& swell(double distance);
     
-    //! ÅĞ¶ÏÊÇ·ñ°üº¬Ò»¸öµã
+    //! åˆ¤æ–­æ˜¯å¦åŒ…å«ä¸€ä¸ªç‚¹
     bool contains(const Point2d& pnt) const;
     
-    //! ÅĞ¶ÏÊÇ·ñºÍÁíÒ»¸ö°ó¶¨¿ò·ÖÀë£¬¼´²»Ïà½»
+    //! åˆ¤æ–­æ˜¯å¦å’Œå¦ä¸€ä¸ªç»‘å®šæ¡†åˆ†ç¦»ï¼Œå³ä¸ç›¸äº¤
     bool isDisjoint(const BoundBox& box) const;
     
-    //! ÅĞ¶ÏÊÇ·ñÎª×ø±ê¾ØĞÎ
+    //! åˆ¤æ–­æ˜¯å¦ä¸ºåæ ‡çŸ©å½¢
     bool isRect() const
     {
         return mgIsZero(m_dir1.y) && mgIsZero(m_dir2.x);
     }
     
-    //! ½«Æ½ĞĞËÄ±ßĞÎÉèÖÃÎª×ø±ê¾ØĞÎ
+    //! å°†å¹³è¡Œå››è¾¹å½¢è®¾ç½®ä¸ºåæ ‡çŸ©å½¢
     BoundBox& setToRect()
     {
         Point2d pt1, pt2;
@@ -114,5 +112,4 @@ private:
     Vector2d    m_dir2;
 };
 
-_GEOM_END
 #endif // __GEOMETRY_BOUNDBOX_H_

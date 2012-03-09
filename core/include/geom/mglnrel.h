@@ -1,5 +1,5 @@
-//! \file mglnrel.h
-//! \brief ¶¨ÒåÍ¼ĞÎÎ»ÖÃ¹ØÏµº¯Êı
+ï»¿//! \file mglnrel.h
+//! \brief å®šä¹‰å›¾å½¢ä½ç½®å…³ç³»å‡½æ•°
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,278 +8,275 @@
 
 #include "mgrect.h"
 
-_GEOM_BEGIN
-
-//! ÅĞ¶ÏµãptÊÇ·ñÔÚÓĞÏòÖ±Ïßa->bµÄ×ó±ß (¿ªÇø¼ä)
+//! åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨æœ‰å‘ç›´çº¿a->bçš„å·¦è¾¹ (å¼€åŒºé—´)
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ö±ÏßµÄÆğµã
-    \param[in] b Ö±ÏßµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \return ÔÚÖ±ÏßµÄ×ó±ßÊ±·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    \param[in] a ç›´çº¿çš„èµ·ç‚¹
+    \param[in] b ç›´çº¿çš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \return åœ¨ç›´çº¿çš„å·¦è¾¹æ—¶è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 */
 GEOMAPI bool mgIsLeft(const Point2d& a, const Point2d& b, const Point2d& pt);
 
-//! ÅĞ¶ÏµãptÊÇ·ñÔÚÓĞÏòÖ±Ïßa->bµÄ×ó±ß
+//! åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨æœ‰å‘ç›´çº¿a->bçš„å·¦è¾¹
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ö±ÏßµÄÆğµã
-    \param[in] b Ö±ÏßµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÖĞµÄ³¤¶ÈÈİ²îÖµ
-    \return ÔÚÖ±ÏßµÄ×ó±ßÊ±·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    \param[in] a ç›´çº¿çš„èµ·ç‚¹
+    \param[in] b ç›´çº¿çš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶ä¸­çš„é•¿åº¦å®¹å·®å€¼
+    \return åœ¨ç›´çº¿çš„å·¦è¾¹æ—¶è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 */
 GEOMAPI bool mgIsLeft2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol);
 
-//! ÅĞ¶ÏµãptÊÇ·ñÔÚÓĞÏòÖ±Ïßa->bµÄ×ó±ß»òÏßÉÏ (±ÕÇø¼ä)
+//! åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨æœ‰å‘ç›´çº¿a->bçš„å·¦è¾¹æˆ–çº¿ä¸Š (é—­åŒºé—´)
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ö±ÏßµÄÆğµã
-    \param[in] b Ö±ÏßµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \return ÔÚÖ±ÏßµÄ×ó±ß»òÏßÉÏÊ±·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    \param[in] a ç›´çº¿çš„èµ·ç‚¹
+    \param[in] b ç›´çº¿çš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \return åœ¨ç›´çº¿çš„å·¦è¾¹æˆ–çº¿ä¸Šæ—¶è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 */
 GEOMAPI bool mgIsLeftOn(const Point2d& a, const Point2d& b, const Point2d& pt);
 
-//! ÅĞ¶ÏµãptÊÇ·ñÔÚÓĞÏòÖ±Ïßa->bµÄ×ó±ß»òÏßÉÏ
+//! åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨æœ‰å‘ç›´çº¿a->bçš„å·¦è¾¹æˆ–çº¿ä¸Š
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ö±ÏßµÄÆğµã
-    \param[in] b Ö±ÏßµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÖĞµÄ³¤¶ÈÈİ²îÖµ
-    \return ÔÚÖ±ÏßµÄ×ó±ß»òÏßÉÏÊ±·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    \param[in] a ç›´çº¿çš„èµ·ç‚¹
+    \param[in] b ç›´çº¿çš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶ä¸­çš„é•¿åº¦å®¹å·®å€¼
+    \return åœ¨ç›´çº¿çš„å·¦è¾¹æˆ–çº¿ä¸Šæ—¶è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 */
 GEOMAPI bool mgIsLeftOn2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol);
 
-//! ÅĞ¶ÏµãptÊÇ·ñÔÚÖ±Ïßa->bµÄÏßÉÏ
+//! åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨ç›´çº¿a->bçš„çº¿ä¸Š
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ö±ÏßµÄÆğµã
-    \param[in] b Ö±ÏßµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \return ÔÚÖ±ÏßÉÏÊ±·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    \param[in] a ç›´çº¿çš„èµ·ç‚¹
+    \param[in] b ç›´çº¿çš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \return åœ¨ç›´çº¿ä¸Šæ—¶è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 */
 GEOMAPI bool mgIsColinear(const Point2d& a, const Point2d& b, const Point2d& pt);
 
-//! ÅĞ¶ÏµãptÊÇ·ñÔÚÖ±Ïßa->bµÄÏßÉÏ
+//! åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨ç›´çº¿a->bçš„çº¿ä¸Š
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ö±ÏßµÄÆğµã
-    \param[in] b Ö±ÏßµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÖĞµÄ³¤¶ÈÈİ²îÖµ
-    \return ÔÚÖ±ÏßÉÏÊ±·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    \param[in] a ç›´çº¿çš„èµ·ç‚¹
+    \param[in] b ç›´çº¿çš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶ä¸­çš„é•¿åº¦å®¹å·®å€¼
+    \return åœ¨ç›´çº¿ä¸Šæ—¶è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 */
 GEOMAPI bool mgIsColinear2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol);
 
-//! ÅĞ¶ÏÁ½¸öÏß¶ÎabºÍcdÊÇ·ñÏà½»ÓÚÏß¶ÎÄÚ²¿
+//! åˆ¤æ–­ä¸¤ä¸ªçº¿æ®µabå’Œcdæ˜¯å¦ç›¸äº¤äºçº¿æ®µå†…éƒ¨
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a µÚÒ»ÌõÏß¶ÎµÄÆğµã
-    \param[in] b µÚÒ»ÌõÏß¶ÎµÄÖÕµã
-    \param[in] c µÚ¶şÌõÏß¶ÎµÄÆğµã
-    \param[in] d µÚ¶şÌõÏß¶ÎµÄÖÕµã
-    \return ÊÇ·ñÏà½»ÓÚÏß¶ÎÄÚ²¿£¬²»°üÀ¨¶Ëµã
+    \param[in] a ç¬¬ä¸€æ¡çº¿æ®µçš„èµ·ç‚¹
+    \param[in] b ç¬¬ä¸€æ¡çº¿æ®µçš„ç»ˆç‚¹
+    \param[in] c ç¬¬äºŒæ¡çº¿æ®µçš„èµ·ç‚¹
+    \param[in] d ç¬¬äºŒæ¡çº¿æ®µçš„ç»ˆç‚¹
+    \return æ˜¯å¦ç›¸äº¤äºçº¿æ®µå†…éƒ¨ï¼Œä¸åŒ…æ‹¬ç«¯ç‚¹
 */
 GEOMAPI bool mgIsIntersectProp(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d);
 
-//! ÅĞ¶ÏµãptÊÇ·ñÔÚÏß¶ÎabÉÏ(±ÕÇø¼ä)
+//! åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨çº¿æ®µabä¸Š(é—­åŒºé—´)
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ïß¶ÎµÄÆğµã
-    \param[in] b Ïß¶ÎµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \return ÔÚÏß¶ÎÉÏÊ±·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    \param[in] a çº¿æ®µçš„èµ·ç‚¹
+    \param[in] b çº¿æ®µçš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \return åœ¨çº¿æ®µä¸Šæ—¶è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 */
 GEOMAPI bool mgIsBetweenLine(const Point2d& a, const Point2d& b, const Point2d& pt);
 
-//! ÅĞ¶ÏµãptÊÇ·ñÔÚÏß¶ÎabÉÏ
+//! åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨çº¿æ®µabä¸Š
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ïß¶ÎµÄÆğµã
-    \param[in] b Ïß¶ÎµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÖĞµÄ³¤¶ÈÈİ²îÖµ
-    \return ÔÚÏß¶ÎÉÏÊ±·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    \param[in] a çº¿æ®µçš„èµ·ç‚¹
+    \param[in] b çº¿æ®µçš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶ä¸­çš„é•¿åº¦å®¹å·®å€¼
+    \return åœ¨çº¿æ®µä¸Šæ—¶è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 */
 GEOMAPI bool mgIsBetweenLine2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol);
 
-//! ÒÑÖªµãptÔÚÖ±ÏßabÉÏ, ÅĞ¶ÏµãptÊÇ·ñÔÚÏß¶ÎabÉÏ(±ÕÇø¼ä)
+//! å·²çŸ¥ç‚¹ptåœ¨ç›´çº¿abä¸Š, åˆ¤æ–­ç‚¹ptæ˜¯å¦åœ¨çº¿æ®µabä¸Š(é—­åŒºé—´)
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ïß¶ÎµÄÆğµã
-    \param[in] b Ïß¶ÎµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \param[out] ptNear ÔÚÏß¶ÎµÄÁ½¸ö¶ËµãÖĞ£¬µ½¸ø¶¨µÄµã×î½üµÄ¶Ëµã£¬ÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \return ÔÚÏß¶ÎÉÏÊ±·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    \param[in] a çº¿æ®µçš„èµ·ç‚¹
+    \param[in] b çº¿æ®µçš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \param[out] ptNear åœ¨çº¿æ®µçš„ä¸¤ä¸ªç«¯ç‚¹ä¸­ï¼Œåˆ°ç»™å®šçš„ç‚¹æœ€è¿‘çš„ç«¯ç‚¹ï¼Œä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \return åœ¨çº¿æ®µä¸Šæ—¶è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 */
 GEOMAPI bool mgIsBetweenLine3(
     const Point2d& a, const Point2d& b, const Point2d& pt, Point2d* ptNear = NULL);
 
-//! ÅĞ¶ÏÁ½¸öÏß¶ÎabºÍcdÊÇ·ñÏà½»(½»µãÔÚÏß¶Î±ÕÇø¼äÄÚ)
+//! åˆ¤æ–­ä¸¤ä¸ªçº¿æ®µabå’Œcdæ˜¯å¦ç›¸äº¤(äº¤ç‚¹åœ¨çº¿æ®µé—­åŒºé—´å†…)
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a µÚÒ»ÌõÏß¶ÎµÄÆğµã
-    \param[in] b µÚÒ»ÌõÏß¶ÎµÄÖÕµã
-    \param[in] c µÚ¶şÌõÏß¶ÎµÄÆğµã
-    \param[in] d µÚ¶şÌõÏß¶ÎµÄÖÕµã
-    \return ÊÇ·ñÏà½»ÓÚÏß¶Î±ÕÇø¼äÄÚ£¬°üÀ¨¶Ëµã
+    \param[in] a ç¬¬ä¸€æ¡çº¿æ®µçš„èµ·ç‚¹
+    \param[in] b ç¬¬ä¸€æ¡çº¿æ®µçš„ç»ˆç‚¹
+    \param[in] c ç¬¬äºŒæ¡çº¿æ®µçš„èµ·ç‚¹
+    \param[in] d ç¬¬äºŒæ¡çº¿æ®µçš„ç»ˆç‚¹
+    \return æ˜¯å¦ç›¸äº¤äºçº¿æ®µé—­åŒºé—´å†…ï¼ŒåŒ…æ‹¬ç«¯ç‚¹
 */
 GEOMAPI bool mgIsIntersect(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d);
 
-//! ¼ÆËãµãptµ½ÎŞÇîÖ±ÏßabµÄ¾àÀë
+//! è®¡ç®—ç‚¹ptåˆ°æ— ç©·ç›´çº¿abçš„è·ç¦»
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a ÎŞÇîÖ±ÏßµÄÆğµã
-    \param[in] b ÎŞÇîÖ±ÏßµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \return µãµ½ÎŞÇîÖ±ÏßµÄ¾àÀë
+    \param[in] a æ— ç©·ç›´çº¿çš„èµ·ç‚¹
+    \param[in] b æ— ç©·ç›´çº¿çš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \return ç‚¹åˆ°æ— ç©·ç›´çº¿çš„è·ç¦»
 */
 GEOMAPI double mgPtToBeeline(const Point2d& a, const Point2d& b, const Point2d& pt);
 
-//! ¼ÆËãµãptµ½ÎŞÇîÖ±ÏßabµÄ¾àÀë
+//! è®¡ç®—ç‚¹ptåˆ°æ— ç©·ç›´çº¿abçš„è·ç¦»
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a ÎŞÇîÖ±ÏßµÄÆğµã
-    \param[in] b ÎŞÇîÖ±ÏßµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \param[out] ptPerp Ö±ÏßÉÏµÄ´¹×ã
-    \return ¶ÀÁ¢µãµ½´¹×ãµÄ¾àÀë
+    \param[in] a æ— ç©·ç›´çº¿çš„èµ·ç‚¹
+    \param[in] b æ— ç©·ç›´çº¿çš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \param[out] ptPerp ç›´çº¿ä¸Šçš„å‚è¶³
+    \return ç‹¬ç«‹ç‚¹åˆ°å‚è¶³çš„è·ç¦»
 */
 GEOMAPI double mgPtToBeeline2(
     const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& ptPerp);
 
-//! ¼ÆËãµãptµ½Ïß¶ÎabµÄ×î½ü¾àÀë
+//! è®¡ç®—ç‚¹ptåˆ°çº¿æ®µabçš„æœ€è¿‘è·ç¦»
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ïß¶ÎµÄÆğµã
-    \param[in] b Ïß¶ÎµÄÖÕµã
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \param[out] ptNear Ïß¶ÎÉÏµÄ×î½üµã
-    \return ¶ÀÁ¢µãµ½×î½üµãµÄ¾àÀë
+    \param[in] a çº¿æ®µçš„èµ·ç‚¹
+    \param[in] b çº¿æ®µçš„ç»ˆç‚¹
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \param[out] ptNear çº¿æ®µä¸Šçš„æœ€è¿‘ç‚¹
+    \return ç‹¬ç«‹ç‚¹åˆ°æœ€è¿‘ç‚¹çš„è·ç¦»
 */
 GEOMAPI double mgPtToLine(
     const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& ptNear);
 
-//! ÇóÁ½ÌõÖ±Ïß(ax+by+c=0)µÄ½»µã
+//! æ±‚ä¸¤æ¡ç›´çº¿(ax+by+c=0)çš„äº¤ç‚¹
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a1 µÚÒ»ÌõÖ±ÏßµÄ±ê×¼·½³Ì²ÎÊıA
-    \param[in] b1 µÚÒ»ÌõÖ±ÏßµÄ±ê×¼·½³Ì²ÎÊıB
-    \param[in] c1 µÚÒ»ÌõÖ±ÏßµÄ±ê×¼·½³Ì²ÎÊıC
-    \param[in] a2 µÚ¶şÌõÖ±ÏßµÄ±ê×¼·½³Ì²ÎÊıA
-    \param[in] b2 µÚ¶şÌõÖ±ÏßµÄ±ê×¼·½³Ì²ÎÊıB
-    \param[in] c2 µÚ¶şÌõÖ±ÏßµÄ±ê×¼·½³Ì²ÎÊıC
-    \param[out] ptCross ½»µã
-    \param[in] tolVec ÅĞ¶ÏÆ½ĞĞµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-    \return ÊÇ·ñÓĞ½»µã
+    \param[in] a1 ç¬¬ä¸€æ¡ç›´çº¿çš„æ ‡å‡†æ–¹ç¨‹å‚æ•°A
+    \param[in] b1 ç¬¬ä¸€æ¡ç›´çº¿çš„æ ‡å‡†æ–¹ç¨‹å‚æ•°B
+    \param[in] c1 ç¬¬ä¸€æ¡ç›´çº¿çš„æ ‡å‡†æ–¹ç¨‹å‚æ•°C
+    \param[in] a2 ç¬¬äºŒæ¡ç›´çº¿çš„æ ‡å‡†æ–¹ç¨‹å‚æ•°A
+    \param[in] b2 ç¬¬äºŒæ¡ç›´çº¿çš„æ ‡å‡†æ–¹ç¨‹å‚æ•°B
+    \param[in] c2 ç¬¬äºŒæ¡ç›´çº¿çš„æ ‡å‡†æ–¹ç¨‹å‚æ•°C
+    \param[out] ptCross äº¤ç‚¹
+    \param[in] tolVec åˆ¤æ–­å¹³è¡Œçš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+    \return æ˜¯å¦æœ‰äº¤ç‚¹
 */
 GEOMAPI bool mgCrossLineAbc(
     double a1, double b1, double c1, double a2, double b2, double c2,
     Point2d& ptCross, const Tol& tolVec = Tol::gTol());
 
-//! ÇóÁ½ÌõÎŞÇîÖ±ÏßµÄ½»µã
+//! æ±‚ä¸¤æ¡æ— ç©·ç›´çº¿çš„äº¤ç‚¹
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a µÚÒ»ÌõÖ±ÏßµÄÆğµã
-    \param[in] b µÚÒ»ÌõÖ±ÏßµÄÖÕµã
-    \param[in] c µÚ¶şÌõÖ±ÏßµÄÆğµã
-    \param[in] d µÚ¶şÌõÖ±ÏßµÄÖÕµã
-    \param[out] ptCross ½»µã
-    \param[out] pu ½»µãÔÚµÚÒ»ÌõÖ±ÏßÉÏµÄ²ÎÊı£¬Èç¹ûÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \param[out] pv ½»µãÔÚµÚ¶şÌõÖ±ÏßÉÏµÄ²ÎÊı£¬Èç¹ûÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \param[in] tolVec ÅĞ¶ÏÆ½ĞĞµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-    \return ÊÇ·ñÓĞ½»µã
+    \param[in] a ç¬¬ä¸€æ¡ç›´çº¿çš„èµ·ç‚¹
+    \param[in] b ç¬¬ä¸€æ¡ç›´çº¿çš„ç»ˆç‚¹
+    \param[in] c ç¬¬äºŒæ¡ç›´çº¿çš„èµ·ç‚¹
+    \param[in] d ç¬¬äºŒæ¡ç›´çº¿çš„ç»ˆç‚¹
+    \param[out] ptCross äº¤ç‚¹
+    \param[out] pu äº¤ç‚¹åœ¨ç¬¬ä¸€æ¡ç›´çº¿ä¸Šçš„å‚æ•°ï¼Œå¦‚æœä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \param[out] pv äº¤ç‚¹åœ¨ç¬¬äºŒæ¡ç›´çº¿ä¸Šçš„å‚æ•°ï¼Œå¦‚æœä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \param[in] tolVec åˆ¤æ–­å¹³è¡Œçš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+    \return æ˜¯å¦æœ‰äº¤ç‚¹
 */
 GEOMAPI bool mgCross2Beeline(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d, 
     Point2d& ptCross, double* pu = NULL, double* pv = NULL, 
     const Tol& tolVec = Tol::gTol());
 
-//! ÇóÁ½ÌõÏß¶ÎµÄ½»µã
+//! æ±‚ä¸¤æ¡çº¿æ®µçš„äº¤ç‚¹
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a µÚÒ»ÌõÏß¶ÎµÄÆğµã
-    \param[in] b µÚÒ»ÌõÏß¶ÎµÄÖÕµã
-    \param[in] c µÚ¶şÌõÏß¶ÎµÄÆğµã
-    \param[in] d µÚ¶şÌõÏß¶ÎµÄÖÕµã
-    \param[out] ptCross ½»µã
-    \param[in] tolVec ÅĞ¶ÏÆ½ĞĞµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-    \return ÊÇ·ñÓĞ½»µã
+    \param[in] a ç¬¬ä¸€æ¡çº¿æ®µçš„èµ·ç‚¹
+    \param[in] b ç¬¬ä¸€æ¡çº¿æ®µçš„ç»ˆç‚¹
+    \param[in] c ç¬¬äºŒæ¡çº¿æ®µçš„èµ·ç‚¹
+    \param[in] d ç¬¬äºŒæ¡çº¿æ®µçš„ç»ˆç‚¹
+    \param[out] ptCross äº¤ç‚¹
+    \param[in] tolVec åˆ¤æ–­å¹³è¡Œçš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+    \return æ˜¯å¦æœ‰äº¤ç‚¹
 */
 GEOMAPI bool mgCross2Line(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d,
     Point2d& ptCross, const Tol& tolVec = Tol::gTol());
 
-//! ÇóÏß¶ÎºÍÖ±ÏßµÄ½»µã
+//! æ±‚çº¿æ®µå’Œç›´çº¿çš„äº¤ç‚¹
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] a Ïß¶ÎµÄÆğµã
-    \param[in] b Ïß¶ÎµÄÖÕµã
-    \param[in] c Ö±ÏßµÄÆğµã
-    \param[in] d Ö±ÏßµÄÖÕµã
-    \param[out] ptCross ½»µã
-    \param[out] pv ½»µãÔÚÖ±ÏßÉÏµÄ²ÎÊı£¬Èç¹ûÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \param[in] tolVec ÅĞ¶ÏÆ½ĞĞµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-    \return ÊÇ·ñÓĞ½»µã
+    \param[in] a çº¿æ®µçš„èµ·ç‚¹
+    \param[in] b çº¿æ®µçš„ç»ˆç‚¹
+    \param[in] c ç›´çº¿çš„èµ·ç‚¹
+    \param[in] d ç›´çº¿çš„ç»ˆç‚¹
+    \param[out] ptCross äº¤ç‚¹
+    \param[out] pv äº¤ç‚¹åœ¨ç›´çº¿ä¸Šçš„å‚æ•°ï¼Œå¦‚æœä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \param[in] tolVec åˆ¤æ–­å¹³è¡Œçš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+    \return æ˜¯å¦æœ‰äº¤ç‚¹
 */
 GEOMAPI bool mgCrossLineBeeline(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d,
     Point2d& ptCross, double* pv = NULL, 
     const Tol& tolVec = Tol::gTol());
 
-//! ÓÃ¾ØĞÎ¼ô²ÃÏß¶Î£¬Sutherland-CohenËã·¨
+//! ç”¨çŸ©å½¢å‰ªè£çº¿æ®µï¼ŒSutherland-Cohenç®—æ³•
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] pt1 Ïß¶ÎµÄÆğµã
-    \param[in] pt2 Ïß¶ÎµÄÖÕµã
-    \param[in] box ¼ô²Ã¾ØĞÎ£¬±ØĞëÎª·Ç¿Õ¹æ·¶»¯¾ØĞÎ
-    \return ¼ô²ÃºóÊÇ·ñÓĞ´¦ÓÚ¼ô²Ã¾ØĞÎÄÚµÄÏß¶Î²¿·Ö
+    \param[in] pt1 çº¿æ®µçš„èµ·ç‚¹
+    \param[in] pt2 çº¿æ®µçš„ç»ˆç‚¹
+    \param[in] box å‰ªè£çŸ©å½¢ï¼Œå¿…é¡»ä¸ºéç©ºè§„èŒƒåŒ–çŸ©å½¢
+    \return å‰ªè£åæ˜¯å¦æœ‰å¤„äºå‰ªè£çŸ©å½¢å†…çš„çº¿æ®µéƒ¨åˆ†
 */
 GEOMAPI bool mgClipLine(Point2d& pt1, Point2d& pt2, const Box2d& box);
 
-//! mgPtInArea µÄ·µ»ØÖµÃ¶¾Ù¶¨Òå
+//! mgPtInArea çš„è¿”å›å€¼æšä¸¾å®šä¹‰
 //! \see mgPtInArea
 enum PtInAreaRet
 {
-    kPtInArea,          //!< ÔÚ¶à±ßĞÎÄÚ
-    kPtOutArea,         //!< ÔÚ¶à±ßĞÎÍâ
-    kPtOnEdge,          //!< ÔÚµÚorder±ßÉÏ
-    kPtAtVertex,        //!< ÓëµÚorder¶¥µãÖØºÏ
+    kPtInArea,          //!< åœ¨å¤šè¾¹å½¢å†…
+    kPtOutArea,         //!< åœ¨å¤šè¾¹å½¢å¤–
+    kPtOnEdge,          //!< åœ¨ç¬¬orderè¾¹ä¸Š
+    kPtAtVertex,        //!< ä¸ç¬¬orderé¡¶ç‚¹é‡åˆ
 };
 
-//! ÅĞ¶ÏÒ»µãÊÇ·ñÔÚÒ»¶à±ßĞÎ·¶Î§ÄÚ
+//! åˆ¤æ–­ä¸€ç‚¹æ˜¯å¦åœ¨ä¸€å¤šè¾¹å½¢èŒƒå›´å†…
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] pt ¸ø¶¨µÄ²âÊÔµã
-    \param[in] count ¶à±ßĞÎµÄ¶¥µãÊı
-    \param[in] vertexs ¶à±ßĞÎµÄ¶¥µãÊı×é
-    \param[out] order ·µ»Ø kPtAtVertex Ê±£¬Êä³ö¶¥µãºÅ[0, count-1]£»\n
-        ·µ»Ø kPtOnEdge Ê±£¬Êä³ö±ßºÅ[0, count-1]£»\nÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \param[in] tol Èİ²î
-    \return ÎªÃ¶¾Ù¶¨Òå PtInAreaRet µÄ¸÷ÖÖÖµ
+    \param[in] pt ç»™å®šçš„æµ‹è¯•ç‚¹
+    \param[in] count å¤šè¾¹å½¢çš„é¡¶ç‚¹æ•°
+    \param[in] vertexs å¤šè¾¹å½¢çš„é¡¶ç‚¹æ•°ç»„
+    \param[out] order è¿”å› kPtAtVertex æ—¶ï¼Œè¾“å‡ºé¡¶ç‚¹å·[0, count-1]ï¼›\n
+        è¿”å› kPtOnEdge æ—¶ï¼Œè¾“å‡ºè¾¹å·[0, count-1]ï¼›\nä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \param[in] tol å®¹å·®
+    \return ä¸ºæšä¸¾å®šä¹‰ PtInAreaRet çš„å„ç§å€¼
     \see PtInAreaRet
 */
 GEOMAPI int mgPtInArea(
     const Point2d& pt, Int32 count, const Point2d* vertexs, 
     Int32& order, const Tol& tol = Tol::gTol());
 
-//! ÅĞ¶Ï¶à±ßĞÎÊÇ·ñÎªÍ¹¶à±ßĞÎ
+//! åˆ¤æ–­å¤šè¾¹å½¢æ˜¯å¦ä¸ºå‡¸å¤šè¾¹å½¢
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] count ¶¥µã¸öÊı
-    \param[in] vertexs ¶¥µãÊı×é
-    \param[out] pACW ¶à±ßĞÎÊÇ·ñÎªÄæÊ±Õë·½Ïò£¬ÎªNULLÔòºöÂÔ¸Ã²ÎÊı
-    \return ÊÇ·ñÎªÍ¹¶à±ßĞÎ
+    \param[in] count é¡¶ç‚¹ä¸ªæ•°
+    \param[in] vertexs é¡¶ç‚¹æ•°ç»„
+    \param[out] pACW å¤šè¾¹å½¢æ˜¯å¦ä¸ºé€†æ—¶é’ˆæ–¹å‘ï¼Œä¸ºNULLåˆ™å¿½ç•¥è¯¥å‚æ•°
+    \return æ˜¯å¦ä¸ºå‡¸å¤šè¾¹å½¢
 */
 GEOMAPI bool mgIsConvex(Int32 count, const Point2d* vertexs, bool* pACW = NULL);
 
-_GEOM_END
 #endif // __GEOMETRY_LINEREL_H_

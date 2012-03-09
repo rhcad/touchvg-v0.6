@@ -1,19 +1,17 @@
-// mgmat.cpp: ÊµÏÖ¶şÎ¬Æë´Î±ä»»¾ØÕóÀàMatrix2d
+ï»¿// mgmat.cpp: å®ç°äºŒç»´é½æ¬¡å˜æ¢çŸ©é˜µç±»Matrix2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "mgmat.h"
 
-_GEOM_BEGIN
-
-// ¹¹ÔìÎªµ¥Î»¾ØÕó
+// æ„é€ ä¸ºå•ä½çŸ©é˜µ
 Matrix2d::Matrix2d()
 {
     m11 = 1.0; m12 = 0.0; m21 = 0.0;
     m22 = 1.0; dx = 0.0; dy = 0.0;
 }
 
-// ¿½±´¹¹Ôìº¯Êı
+// æ‹·è´æ„é€ å‡½æ•°
 Matrix2d::Matrix2d(const MATRIX2D& src)
 {
     m11 = src.m11; m12 = src.m12;
@@ -21,7 +19,7 @@ Matrix2d::Matrix2d(const MATRIX2D& src)
     dx  = src.dx;  dy  = src.dy;
 }
 
-// ¸ø¶¨ÔªËØ¹¹Ôì
+// ç»™å®šå…ƒç´ æ„é€ 
 Matrix2d::Matrix2d(double _m11, double _m12, double _m21, double _m22, 
                    double _dx, double _dy)
 {
@@ -30,53 +28,53 @@ Matrix2d::Matrix2d(double _m11, double _m12, double _m21, double _m22,
     dx  = _dx;  dy  = _dy;
 }
 
-// ¸ø¶¨Á½×ø±êÖáÊ¸Á¿ºÍÔ­µã¹¹Ôì
+// ç»™å®šä¸¤åæ ‡è½´çŸ¢é‡å’ŒåŸç‚¹æ„é€ 
 Matrix2d::Matrix2d(const Vector2d& e0, const Vector2d& e1, const Point2d& origin)
 {
     setCoordSystem(e0, e1, origin);
 }
 
-// ¾ØÕó±ä»», Ê¸Á¿ * ¾ØÕó
+// çŸ©é˜µå˜æ¢, çŸ¢é‡ * çŸ©é˜µ
 Vector2d Vector2d::operator*(const Matrix2d& m) const
 {
     return Vector2d(x * m.m11 + y * m.m21, x * m.m12 + y * m.m22);
 }
 
-// ¾ØÕó±ä»», Ê¸Á¿ *= ¾ØÕó
+// çŸ©é˜µå˜æ¢, çŸ¢é‡ *= çŸ©é˜µ
 Vector2d& Vector2d::operator*=(const Matrix2d& m)
 {
     return set(x * m.m11 + y * m.m21, x * m.m12 + y * m.m22);
 }
 
-// ¾ØÕó±ä»», µã * ¾ØÕó
+// çŸ©é˜µå˜æ¢, ç‚¹ * çŸ©é˜µ
 Point2d Point2d::operator*(const Matrix2d& m) const
 {
     return Point2d(x * m.m11 + y * m.m21 + m.dx, 
         x * m.m12 + y * m.m22 + m.dy);
 }
 
-// ¾ØÕó±ä»», µã *= ¾ØÕó
+// çŸ©é˜µå˜æ¢, ç‚¹ *= çŸ©é˜µ
 Point2d& Point2d::operator*=(const Matrix2d& m)
 {
     return set(x * m.m11 + y * m.m21 + m.dx, 
         x * m.m12 + y * m.m22 + m.dy);
 }
 
-// ¶Ô¶à¸öµã½øĞĞ¾ØÕó±ä»»
+// å¯¹å¤šä¸ªç‚¹è¿›è¡ŒçŸ©é˜µå˜æ¢
 void Matrix2d::TransformPoints(Int32 count, Point2d* points) const
 {
     for (Int32 i = 0; i < count; i++)
         points[i] *= (*this);
 }
 
-// ¶Ô¶à¸öÊ¸Á¿½øĞĞ¾ØÕó±ä»»
+// å¯¹å¤šä¸ªçŸ¢é‡è¿›è¡ŒçŸ©é˜µå˜æ¢
 void Matrix2d::TransformVectors(Int32 count, Vector2d* vectors) const
 {
     for (Int32 i = 0; i < count; i++)
         vectors[i] *= (*this);
 }
 
-// ¾ØÕó³Ë·¨
+// çŸ©é˜µä¹˜æ³•
 Matrix2d Matrix2d::operator*(const Matrix2d& mat) const
 {
     Matrix2d result;
@@ -84,25 +82,25 @@ Matrix2d Matrix2d::operator*(const Matrix2d& mat) const
     return result;
 }
 
-// ¾ØÕó³Ë·¨
+// çŸ©é˜µä¹˜æ³•
 Matrix2d& Matrix2d::operator*=(const Matrix2d& mat)
 {
     return setToProduct(*this, mat);
 }
 
-// ×ó³ËÒ»¸ö¾ØÕó£¬leftSide * (*this)
+// å·¦ä¹˜ä¸€ä¸ªçŸ©é˜µï¼ŒleftSide * (*this)
 Matrix2d& Matrix2d::preMultBy(const Matrix2d& leftSide)
 {
     return setToProduct(leftSide, *this);
 }
 
-// ÓÒ³ËÒ»¸ö¾ØÕó£¬(*this) * rightSide
+// å³ä¹˜ä¸€ä¸ªçŸ©é˜µï¼Œ(*this) * rightSide
 Matrix2d& Matrix2d::postMultBy(const Matrix2d& rightSide)
 {
     return setToProduct(*this, rightSide);
 }
 
-// ÉèÖÃÎªÁ½¸ö¾ØÕóµÄ³Ë»ı
+// è®¾ç½®ä¸ºä¸¤ä¸ªçŸ©é˜µçš„ä¹˜ç§¯
 Matrix2d& Matrix2d::setToProduct(const Matrix2d& m1, const Matrix2d& m2)
 {
     return set(m1.m11 * m2.m11 + m1.m12 * m2.m21,
@@ -113,13 +111,13 @@ Matrix2d& Matrix2d::setToProduct(const Matrix2d& m1, const Matrix2d& m2)
         m1.dx  * m2.m12 + m1.dy  * m2.m22 + m2.dy);
 }
 
-// ĞĞÁĞÊ½Öµ
+// è¡Œåˆ—å¼å€¼
 double Matrix2d::det() const
 {
     return m11 * m22 - m12 * m21;
 }
 
-// ÉèÖÃÎªÄæ¾ØÕó
+// è®¾ç½®ä¸ºé€†çŸ©é˜µ
 bool Matrix2d::invert()
 {
     double d = m11 * m22 - m12 * m21;
@@ -137,7 +135,7 @@ bool Matrix2d::invert()
     return true;
 }
 
-// ·µ»ØÄæ¾ØÕó
+// è¿”å›é€†çŸ©é˜µ
 Matrix2d Matrix2d::inverse() const
 {
     Matrix2d mat (*this);
@@ -145,13 +143,13 @@ Matrix2d Matrix2d::inverse() const
     return mat;
 }
 
-// ÅĞ¶Ï¾ØÕóÊÇ·ñ¿ÉÄæ
+// åˆ¤æ–­çŸ©é˜µæ˜¯å¦å¯é€†
 bool Matrix2d::isInvertible() const
 {
     return fabs(m11 * m22 - m12 * m21) > _MGZERO;
 }
 
-// ±ÈÀı´óĞ¡
+// æ¯”ä¾‹å¤§å°
 double Matrix2d::scale() const
 {
     double sx = scaleX();
@@ -159,31 +157,31 @@ double Matrix2d::scale() const
     return fabs(sx - sy) < _MGZERO ? sx : mgHypot(sx, sy);
 }
 
-// X±ÈÀı´óĞ¡
+// Xæ¯”ä¾‹å¤§å°
 double Matrix2d::scaleX() const
 {
     return mgIsZero(m12) ? fabs(m11) : mgHypot(m11, m12);
 }
 
-// Y±ÈÀı´óĞ¡
+// Yæ¯”ä¾‹å¤§å°
 double Matrix2d::scaleY() const
 {
     return mgIsZero(m21) ? fabs(m22) : mgHypot(m21, m22);
 }
 
-// ÅĞ¶ÏÁ½¸ö¾ØÕóÊÇ·ñÏàµÈ
+// åˆ¤æ–­ä¸¤ä¸ªçŸ©é˜µæ˜¯å¦ç›¸ç­‰
 bool Matrix2d::operator==(const Matrix2d& mat) const
 {
     return isEqualTo(mat);
 }
 
-// ÅĞ¶ÏÁ½¸ö¾ØÕóÊÇ·ñ²»ÏàµÈ
+// åˆ¤æ–­ä¸¤ä¸ªçŸ©é˜µæ˜¯å¦ä¸ç›¸ç­‰
 bool Matrix2d::operator!=(const Matrix2d& mat) const
 {
     return !isEqualTo(mat);
 }
 
-// ÓÃÅ·À­¹æÔòÅĞ¶ÏÁ½¸ö¾ØÕóÊÇ·ñÏàµÈ£¬¼´ÅĞ¶Ï¾ØÕóµÄĞĞÊ¸Á¿ÊÇ·ñÏàµÈ
+// ç”¨æ¬§æ‹‰è§„åˆ™åˆ¤æ–­ä¸¤ä¸ªçŸ©é˜µæ˜¯å¦ç›¸ç­‰ï¼Œå³åˆ¤æ–­çŸ©é˜µçš„è¡ŒçŸ¢é‡æ˜¯å¦ç›¸ç­‰
 bool Matrix2d::isEqualTo(const Matrix2d& mat, const Tol& tol) const
 {
     return mgHypot(m11 - mat.m11, m12 - mat.m12) <= tol.equalVector()
@@ -191,7 +189,7 @@ bool Matrix2d::isEqualTo(const Matrix2d& mat, const Tol& tol) const
         && mgHypot(dx - mat.dx, dy - mat.dy) <= tol.equalVector();
 }
 
-// ÅĞ¶ÏÊÇ·ñÎªµ¥Î»¾ØÕó
+// åˆ¤æ–­æ˜¯å¦ä¸ºå•ä½çŸ©é˜µ
 bool Matrix2d::isIdentity() const
 {
     return mgIsZero(m11 - 1.0) && mgIsZero(m12)
@@ -199,13 +197,13 @@ bool Matrix2d::isIdentity() const
         && mgIsZero(dx) && mgIsZero(dy);
 }
 
-// ÅĞ¶Ï¾ØÕóµÄ×ø±êÖáÊ¸Á¿ÊÇ·ñ·Ö±ğË®Æ½ºÍ´¹Ö±
+// åˆ¤æ–­çŸ©é˜µçš„åæ ‡è½´çŸ¢é‡æ˜¯å¦åˆ†åˆ«æ°´å¹³å’Œå‚ç›´
 bool Matrix2d::isOrtho() const
 {
     return mgIsZero(m12) && mgIsZero(m21);
 }
 
-// µÃµ½±ÈÀı¡¢Ğı×ª¡¢¾µÏñ³É·Ö
+// å¾—åˆ°æ¯”ä¾‹ã€æ—‹è½¬ã€é•œåƒæˆåˆ†
 bool Matrix2d::isConformal(double& scaleX, double& scaleY, double& angle, 
                            bool& isMirror, Vector2d& reflex) const
 {
@@ -236,7 +234,7 @@ bool Matrix2d::isConformal(double& scaleX, double& scaleY, double& angle,
     return true;
 }
 
-// ÉèÖÃÎªÔ­µãorigin£¬×ø±êÖáÊ¸Á¿Îªe0ºÍe1µÄ×ø±êÏµ
+// è®¾ç½®ä¸ºåŸç‚¹originï¼Œåæ ‡è½´çŸ¢é‡ä¸ºe0å’Œe1çš„åæ ‡ç³»
 Matrix2d& Matrix2d::setCoordSystem(const Vector2d& e0, const Vector2d& e1, 
                                    const Point2d& origin)
 {
@@ -246,7 +244,7 @@ Matrix2d& Matrix2d::setCoordSystem(const Vector2d& e0, const Vector2d& e1,
     return *this;
 }
 
-// µÃµ½×ø±êÏµµÄÔ­µãorigin£¬×ø±êÖáÊ¸Á¿e0ºÍe1
+// å¾—åˆ°åæ ‡ç³»çš„åŸç‚¹originï¼Œåæ ‡è½´çŸ¢é‡e0å’Œe1
 void Matrix2d::getCoordSystem(Vector2d& e0, Vector2d& e1, Point2d& origin) const
 {
     e0.set(m11, m12);
@@ -254,14 +252,14 @@ void Matrix2d::getCoordSystem(Vector2d& e0, Vector2d& e1, Point2d& origin) const
     origin.set(dx, dy);
 }
 
-// ·µ»ØÔ­µãÎªorigin£¬×ø±êÖáÊ¸Á¿Îªe0ºÍe1µÄ×ø±êÏµ
+// è¿”å›åŸç‚¹ä¸ºoriginï¼Œåæ ‡è½´çŸ¢é‡ä¸ºe0å’Œe1çš„åæ ‡ç³»
 Matrix2d Matrix2d::coordSystem(const Vector2d& e0, const Vector2d& e1, 
                                const Point2d& origin)
 {
     return Matrix2d(e0, e1, origin);
 }
 
-// ·µ»Ø¸ø¶¨Ô­µã¡¢±ÈÀıºÍĞı×ª½Ç¶ÈµÄ×ø±êÏµ
+// è¿”å›ç»™å®šåŸç‚¹ã€æ¯”ä¾‹å’Œæ—‹è½¬è§’åº¦çš„åæ ‡ç³»
 Matrix2d Matrix2d::coordSystem(const Point2d& origin, double scaleX, 
                                double scaleY, double angle)
 {
@@ -271,13 +269,13 @@ Matrix2d Matrix2d::coordSystem(const Point2d& origin, double scaleX,
     return Matrix2d(c*scaleX, s*scaleX, -s*scaleY, c*scaleY, origin.x, origin.y);
 }
 
-// ÉèÖÃµ¥Î»¾ØÕó
+// è®¾ç½®å•ä½çŸ©é˜µ
 Matrix2d& Matrix2d::setToIdentity()
 {
     return set(1, 0, 0, 1, 0, 0);
 }
 
-// ÉèÖÃ¾ØÕóÔªËØ
+// è®¾ç½®çŸ©é˜µå…ƒç´ 
 Matrix2d& Matrix2d::set(double _m11, double _m12, double _m21, double _m22,
                         double _dx, double _dy)
 {
@@ -287,13 +285,13 @@ Matrix2d& Matrix2d::set(double _m11, double _m12, double _m21, double _m22,
     return *this;
 }
 
-// ÉèÖÃÎªÆ½ÒÆ±ä»»¾ØÕó
+// è®¾ç½®ä¸ºå¹³ç§»å˜æ¢çŸ©é˜µ
 Matrix2d& Matrix2d::setToTranslation(const Vector2d& vec)
 {
     return set(1.0, 0.0, 0.0, 1.0, vec.x, vec.y);
 }
 
-// ÉèÖÃÎªÒÔÒ»µãÎªÖĞĞÄµÄĞı×ª±ä»»¾ØÕó
+// è®¾ç½®ä¸ºä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ—‹è½¬å˜æ¢çŸ©é˜µ
 Matrix2d& Matrix2d::setToRotation(double angle, 
                                   const Point2d& center)
 {
@@ -303,14 +301,14 @@ Matrix2d& Matrix2d::setToRotation(double angle,
         (1 - c) * center.y - s * center.x);
 }
 
-// ÉèÖÃÎªÒÔÒ»µãÎªÖĞĞÄµÄ·ÅËõ±ä»»¾ØÕó
+// è®¾ç½®ä¸ºä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ”¾ç¼©å˜æ¢çŸ©é˜µ
 Matrix2d& Matrix2d::setToScaling(double scale, 
                                  const Point2d& center)
 {
     return setToScaling(scale, scale, center);
 }
 
-// ÉèÖÃÎªÒÔÒ»µãÎªÖĞĞÄµÄ·ÅËõ±ä»»¾ØÕó
+// è®¾ç½®ä¸ºä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ”¾ç¼©å˜æ¢çŸ©é˜µ
 Matrix2d& Matrix2d::setToScaling(double scaleX, double scaleY, 
                                  const Point2d& center)
 {
@@ -319,13 +317,13 @@ Matrix2d& Matrix2d::setToScaling(double scaleX, double scaleY,
         (1 - scaleX) * center.x, (1 - scaleY) * center.y);
 }
 
-// ÉèÖÃÎª¹ØÓÚÒ»µã¶Ô³ÆµÄ±ä»»¾ØÕó
+// è®¾ç½®ä¸ºå…³äºä¸€ç‚¹å¯¹ç§°çš„å˜æ¢çŸ©é˜µ
 Matrix2d& Matrix2d::setToMirroring(const Point2d& pnt)
 {
     return set(-1.0, 0.0, 0.0, -1.0, 2.0 * pnt.x, 2.0 * pnt.y);
 }
 
-// ÉèÖÃÎªÒÔÖ±Ïß{pnt,dir}ÎªÖĞĞÄÏßµÄ¶Ô³Æ±ä»»¾ØÕó
+// è®¾ç½®ä¸ºä»¥ç›´çº¿{pnt,dir}ä¸ºä¸­å¿ƒçº¿çš„å¯¹ç§°å˜æ¢çŸ©é˜µ
 Matrix2d& Matrix2d::setToMirroring(const Point2d& pnt, const Vector2d& dir)
 {
     double d2 = dir.lengthSqrd();
@@ -341,14 +339,14 @@ Matrix2d& Matrix2d::setToMirroring(const Point2d& pnt, const Vector2d& dir)
     return *this;
 }
 
-// ÉèÖÃÎª´íÇĞ±ä»»¾ØÕó
+// è®¾ç½®ä¸ºé”™åˆ‡å˜æ¢çŸ©é˜µ
 Matrix2d& Matrix2d::setToShearing(double sx, double sy, const Point2d& pnt)
 {
     if (mgIsZero(sy)) sy = sx;
     return set(1.0, sx, sy, 1.0, -sy * pnt.y, -sx * pnt.x);
 }
 
-// µÃµ½Æ½ÒÆ±ä»»¾ØÕó
+// å¾—åˆ°å¹³ç§»å˜æ¢çŸ©é˜µ
 Matrix2d Matrix2d::translation(const Vector2d& vec)
 {
     Matrix2d mat;
@@ -356,7 +354,7 @@ Matrix2d Matrix2d::translation(const Vector2d& vec)
     return mat;
 }
 
-// µÃµ½ÒÔÒ»µãÎªÖĞĞÄµÄĞı×ª±ä»»¾ØÕó
+// å¾—åˆ°ä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ—‹è½¬å˜æ¢çŸ©é˜µ
 Matrix2d Matrix2d::rotation(double angle, const Point2d& center)
 {
     Matrix2d mat;
@@ -364,7 +362,7 @@ Matrix2d Matrix2d::rotation(double angle, const Point2d& center)
     return mat;
 }
 
-// µÃµ½ÒÔÒ»µãÎªÖĞĞÄµÄ·ÅËõ±ä»»¾ØÕó
+// å¾—åˆ°ä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ”¾ç¼©å˜æ¢çŸ©é˜µ
 Matrix2d Matrix2d::scaling(double scale, const Point2d& center)
 {
     Matrix2d mat;
@@ -372,7 +370,7 @@ Matrix2d Matrix2d::scaling(double scale, const Point2d& center)
     return mat;
 }
 
-// µÃµ½ÒÔÒ»µãÎªÖĞĞÄµÄ·ÅËõ±ä»»¾ØÕó
+// å¾—åˆ°ä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ”¾ç¼©å˜æ¢çŸ©é˜µ
 Matrix2d Matrix2d::scaling(double scaleX, double scaleY, const Point2d& center)
 {
     Matrix2d mat;
@@ -380,7 +378,7 @@ Matrix2d Matrix2d::scaling(double scaleX, double scaleY, const Point2d& center)
     return mat;
 }
 
-// µÃµ½¹ØÓÚÒ»µã¶Ô³ÆµÄ±ä»»¾ØÕó
+// å¾—åˆ°å…³äºä¸€ç‚¹å¯¹ç§°çš„å˜æ¢çŸ©é˜µ
 Matrix2d Matrix2d::mirroring(const Point2d& pnt)
 {
     Matrix2d mat;
@@ -388,7 +386,7 @@ Matrix2d Matrix2d::mirroring(const Point2d& pnt)
     return mat;
 }
 
-// µÃµ½ÒÔÖ±Ïß{pnt,dir}ÎªÖĞĞÄÏßµÄ¶Ô³Æ±ä»»¾ØÕó
+// å¾—åˆ°ä»¥ç›´çº¿{pnt,dir}ä¸ºä¸­å¿ƒçº¿çš„å¯¹ç§°å˜æ¢çŸ©é˜µ
 Matrix2d Matrix2d::mirroring(const Point2d& pnt, const Vector2d& dir)
 {
     Matrix2d mat;
@@ -396,12 +394,10 @@ Matrix2d Matrix2d::mirroring(const Point2d& pnt, const Vector2d& dir)
     return mat;
 }
 
-// µÃµ½´íÇĞ±ä»»¾ØÕó
+// å¾—åˆ°é”™åˆ‡å˜æ¢çŸ©é˜µ
 Matrix2d Matrix2d::shearing(double sx, double sy, const Point2d& pnt)
 {
     Matrix2d mat;
     mat.setToShearing(sx, sy, pnt);
     return mat;
 }
-
-_GEOM_END

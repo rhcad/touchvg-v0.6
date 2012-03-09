@@ -1,4 +1,4 @@
-// gigraph.cpp: ÊµÏÖÍ¼ĞÎÏµÍ³ÀàGiGraphics
+ï»¿// gigraph.cpp: å®ç°å›¾å½¢ç³»ç»Ÿç±»GiGraphics
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -7,8 +7,6 @@
 #include <mglnrel.h>
 #include <mgcurv.h>
 #include "giplclip.h"
-
-_GEOM_BEGIN
 
 GiGraphics::GiGraphics(GiTransform& xform)
 {
@@ -181,14 +179,14 @@ GiColor GiGraphics::calcPenColor(const GiColor& color) const
     if (kColorMono == m_impl->colorMode && color != bk)
         ret.set(~bk.r, ~bk.g, ~bk.b);
 
-    if (m_impl->drawColors == 2           // ºÚ°×
+    if (m_impl->drawColors == 2           // é»‘ç™½
         || kColorGray == m_impl->colorMode)
     {
         unsigned char by = (unsigned char)(
             (77 * ret.r + 151 * ret.g + 28 * ret.b + 128) / 256);
         ret.set(by, by, by);
     }
-    if (m_impl->drawColors > 0 && m_impl->drawColors < 8)  // ÉÙÓÚ256É«
+    if (m_impl->drawColors > 0 && m_impl->drawColors < 8)  // å°‘äº256è‰²
     {
         ret = getNearestColor(ret);
     }
@@ -204,7 +202,7 @@ UInt16 GiGraphics::calcPenWidth(Int16 lineWidth, bool useViewScale) const
     if (m_impl->maxPenWidth <= 1)
         lineWidth = 0;
 
-    if (lineWidth > 0)      // µ¥Î»£º0.01mm
+    if (lineWidth > 0)      // å•ä½ï¼š0.01mm
     {
         px = lineWidth / 2540.0 * xf().getDpiY();
         if (useViewScale)
@@ -212,7 +210,7 @@ UInt16 GiGraphics::calcPenWidth(Int16 lineWidth, bool useViewScale) const
         w = mgRound(px);
         w = mgMin(w, (long)m_impl->maxPenWidth);
     }
-    else if (lineWidth < 0) // µ¥Î»£ºÏñËØ
+    else if (lineWidth < 0) // å•ä½ï¼šåƒç´ 
     {
         w = mgMin(-lineWidth, (int)m_impl->maxPenWidth);
     }
@@ -293,36 +291,36 @@ static bool DrawEdge(int count, int &i, Point2d* pts, Point2d &ptLast,
     pt1 = ptLast;
     ptLast = pts[i+1];
     pt2 = ptLast;
-    if (!mgClipLine(pt1, pt2, rectDraw))    // ¸Ã±ß²»¿É¼û
+    if (!mgClipLine(pt1, pt2, rectDraw))    // è¯¥è¾¹ä¸å¯è§
         return false;
 
-    si = i;                                 // ÊÕ¼¯µÚÒ»Ìõ¿É¼û±ß
+    si = i;                                 // æ”¶é›†ç¬¬ä¸€æ¡å¯è§è¾¹
     ei = i+1;
-    pts[i] = pt1;                           // ÊÕ¼¯Æğµã
-    if (pt2 != ptLast)                      // Èç¹û¸Ã±ßÖÕµã²»¿É¼û
+    pts[i] = pt1;                           // æ”¶é›†èµ·ç‚¹
+    if (pt2 != ptLast)                      // å¦‚æœè¯¥è¾¹ç»ˆç‚¹ä¸å¯è§
     {
-        pts[i+1] = pt2;                     // ÊÕ¼¯½»µã
+        pts[i+1] = pt2;                     // æ”¶é›†äº¤ç‚¹
     }
-    else                                    // ·ñÔò¼ÌĞøÊÕ¼¯ºóĞøµã
+    else                                    // å¦åˆ™ç»§ç»­æ”¶é›†åç»­ç‚¹
     {
-        i++;                                // ÏÂÒ»±ßµÄÆğµã¿É¼û£¬Ìø¹ı
-        for (; i < count - 1; i++)          // ÒÀ´Î´¦ÀíºóĞø¿É¼û±ß
+        i++;                                // ä¸‹ä¸€è¾¹çš„èµ·ç‚¹å¯è§ï¼Œè·³è¿‡
+        for (; i < count - 1; i++)          // ä¾æ¬¡å¤„ç†åç»­å¯è§è¾¹
         {
             pt1 = ptLast;
             ptLast = pts[i+1];
             pt2 = ptLast;
-            if (!mgClipLine(pt1, pt2, rectDraw)) // ¸Ã±ß²»¿É¼û
+            if (!mgClipLine(pt1, pt2, rectDraw)) // è¯¥è¾¹ä¸å¯è§
                 break;
             ei++;
-            if (pt2 != ptLast)              // ¸Ã±ßÆğµã¿É¼û£¬ÖÕµã²»¿É¼û
+            if (pt2 != ptLast)              // è¯¥è¾¹èµ·ç‚¹å¯è§ï¼Œç»ˆç‚¹ä¸å¯è§
             {
-                pts[i+1] = pt2;             // ÊÕ¼¯½»µã
+                pts[i+1] = pt2;             // æ”¶é›†äº¤ç‚¹
                 break;
             }
         }
     }
 
-    // ÏÔÊ¾ÕÒµ½µÄ¶àÌõÏß¶Î
+    // æ˜¾ç¤ºæ‰¾åˆ°çš„å¤šæ¡çº¿æ®µ
     n = ei - si + 1;
     if (n > 1)
     {
@@ -332,7 +330,7 @@ static bool DrawEdge(int count, int &i, Point2d* pts, Point2d &ptLast,
         n = 0;
         for (int j = si; j <= ei; j++)
         {
-            // ¼ÇÏÂµÚÒ»¸öµã£¬ÆäËûµãÈç¹ûºÍÉÏÒ»µã²»ÖØºÏÔò¼ÇÏÂ£¬·ñÔòÌø¹ı
+            // è®°ä¸‹ç¬¬ä¸€ä¸ªç‚¹ï¼Œå…¶ä»–ç‚¹å¦‚æœå’Œä¸Šä¸€ç‚¹ä¸é‡åˆåˆ™è®°ä¸‹ï¼Œå¦åˆ™è·³è¿‡
             if (j == si || fabs(pt1.x - pts[j].x) > 2
                 || fabs(pt1.y - pts[j].y) > 2)
             {
@@ -364,11 +362,11 @@ bool GiGraphics::drawLines(const GiContext* ctx, int count,
     bool ret = false;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    const Box2d extent (count, points);                 // Ä£ĞÍ×ø±ê·¶Î§
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÍâ
+    const Box2d extent (count, points);                 // æ¨¡å‹åæ ‡èŒƒå›´
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå¤–
         return false;
 
-    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÄÚ
+    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå†…
     {
         pxpoints.resize(count);
         POINT* lppt = &pxpoints.front();
@@ -385,10 +383,10 @@ bool GiGraphics::drawLines(const GiContext* ctx, int count,
         }
         ret = rawPolyline(ctx, lppt, n);
     }
-    else                                            // ²¿·ÖÔÚÏÔÊ¾ÇøÓòÄÚ
+    else                                            // éƒ¨åˆ†åœ¨æ˜¾ç¤ºåŒºåŸŸå†…
     {
         pointBuf.resize(count);
-        for (i = 0; i < count; i++)                 // ×ª»»µ½ÏñËØ×ø±ê
+        for (i = 0; i < count; i++)                 // è½¬æ¢åˆ°åƒç´ åæ ‡
             pointBuf[i] = points[i] * matD;
         Point2d* pts = &pointBuf.front();
 
@@ -420,11 +418,11 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
     POINT * lppt;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    const Box2d extent (count, points);                 // Ä£ĞÍ×ø±ê·¶Î§
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÍâ
+    const Box2d extent (count, points);                 // æ¨¡å‹åæ ‡èŒƒå›´
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå¤–
         return false;
 
-    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÄÚ
+    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå†…
     {
         pxpoints.resize(count);
         lppt = &pxpoints.front();
@@ -435,7 +433,7 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
     else
     {        
         pointBuf.resize(count);
-        for (i = 0; i < count; i++)                 // ×ª»»µ½ÏñËØ×ø±ê
+        for (i = 0; i < count; i++)                 // è½¬æ¢åˆ°åƒç´ åæ ‡
             pointBuf[i] = points[i] * matD;
         Point2d* pts = &pointBuf.front();
 
@@ -603,19 +601,19 @@ bool GiGraphics::drawPolygon(const GiContext* ctx, int count,
 
     bool ret = false;
 
-    const Box2d extent (count, points);                 // Ä£ĞÍ×ø±ê·¶Î§
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÍâ
+    const Box2d extent (count, points);                 // æ¨¡å‹åæ ‡èŒƒå›´
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå¤–
         return false;
 
-    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÄÚ
+    if (DRAW_MAXR(m_impl, modelUnit).isInside(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå†…
     {
         ret = _DrawPolygon(this, ctx, 
             count, points, true, true, true, modelUnit);
     }
-    else                                                // ²¿·ÖÔÚÏÔÊ¾ÇøÓòÄÚ
+    else                                                // éƒ¨åˆ†åœ¨æ˜¾ç¤ºåŒºåŸŸå†…
     {
         PolygonClip clip (m_impl->rectDraw);
-        if (!clip.clip(count, points, &S2D(xf(), modelUnit)))  // ¶à±ßĞÎ¼ô²Ã
+        if (!clip.clip(count, points, &S2D(xf(), modelUnit)))  // å¤šè¾¹å½¢å‰ªè£
             return false;
         count = clip.getCount();
         points = clip.getPoints();
@@ -651,8 +649,8 @@ bool GiGraphics::drawEllipse(const GiContext* ctx,
     if (ry < _MGZERO)
         ry = rx;
 
-    const Box2d extent (center, rx*2.0, ry*2.0);            // Ä£ĞÍ×ø±ê·¶Î§
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÍâ
+    const Box2d extent (center, rx*2.0, ry*2.0);            // æ¨¡å‹åæ ‡èŒƒå›´
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå¤–
         return false;
 
     if (mgIsZero(matD.m12) && mgIsZero(matD.m21))
@@ -698,8 +696,8 @@ bool GiGraphics::drawPie(const GiContext* ctx,
     if (ry < _MGZERO)
         ry = rx;
 
-    const Box2d extent (center, rx*2.0, ry*2.0);            // Ä£ĞÍ×ø±ê·¶Î§
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÍâ
+    const Box2d extent (center, rx*2.0, ry*2.0);            // æ¨¡å‹åæ ‡èŒƒå›´
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå¤–
         return false;
 
     Point2d points[16];
@@ -752,7 +750,7 @@ bool GiGraphics::drawRoundRect(const GiContext* ctx,
     if (ry < _MGZERO)
         ry = rx;
 
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(rect))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÍâ
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(rect))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå¤–
         return false;
 
     if (rx < _MGZERO)
@@ -813,23 +811,23 @@ bool GiGraphics::drawSplines(const GiContext* ctx, int count,
     vector<POINT> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    // ¿ª±ÙÕûĞÎÏñËØ×ø±êÊı×é
+    // å¼€è¾Ÿæ•´å½¢åƒç´ åæ ‡æ•°ç»„
     pxpoints.resize(1 + (count - 1) * 3);
     POINT *lppt = &pxpoints.front();
 
-    pt = knots[0] * matD;                               // µÚÒ»¸öBezier¶ÎµÄÆğµã
-    vec = knotVectors[0] * matD / 3.0;                  // µÚÒ»¸öBezier¶ÎµÄÆğÊ¼Ê¸Á¿
-    pt.get(lppt->x, lppt->y); lppt++;                   // ²úÉúBezier¶ÎµÄÆğµã
-    for (i = 1; i < count; i++)                         // ¼ÆËãÃ¿Ò»¸öBezier¶Î
+    pt = knots[0] * matD;                               // ç¬¬ä¸€ä¸ªBezieræ®µçš„èµ·ç‚¹
+    vec = knotVectors[0] * matD / 3.0;                  // ç¬¬ä¸€ä¸ªBezieræ®µçš„èµ·å§‹çŸ¢é‡
+    pt.get(lppt->x, lppt->y); lppt++;                   // äº§ç”ŸBezieræ®µçš„èµ·ç‚¹
+    for (i = 1; i < count; i++)                         // è®¡ç®—æ¯ä¸€ä¸ªBezieræ®µ
     {
-        (pt += vec).get(lppt->x, lppt->y); lppt++;      // ²úÉúBezier¶ÎµÄµÚ¶şµã
-        pt = knots[i] * matD;                           // Bezier¶ÎµÄÖÕµã
-        vec = knotVectors[i] * matD / 3.0;              // Bezier¶ÎµÄÖÕÖ¹Ê¸Á¿
-        (pt - vec).get(lppt->x, lppt->y); lppt++;       // ²úÉúBezier¶ÎµÄµÚÈıµã
-        pt.get(lppt->x, lppt->y); lppt++;               // ²úÉúBezier¶ÎµÄÖÕµã
+        (pt += vec).get(lppt->x, lppt->y); lppt++;      // äº§ç”ŸBezieræ®µçš„ç¬¬äºŒç‚¹
+        pt = knots[i] * matD;                           // Bezieræ®µçš„ç»ˆç‚¹
+        vec = knotVectors[i] * matD / 3.0;              // Bezieræ®µçš„ç»ˆæ­¢çŸ¢é‡
+        (pt - vec).get(lppt->x, lppt->y); lppt++;       // äº§ç”ŸBezieræ®µçš„ç¬¬ä¸‰ç‚¹
+        pt.get(lppt->x, lppt->y); lppt++;               // äº§ç”ŸBezieræ®µçš„ç»ˆç‚¹
     }
 
-    // »æÍ¼
+    // ç»˜å›¾
     return rawPolyBezier(ctx, &pxpoints.front(), getSize(pxpoints));
 }
 
@@ -850,27 +848,27 @@ bool GiGraphics::drawClosedSplines(const GiContext* ctx, int count,
     vector<POINT> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    // ¿ª±ÙÕûĞÎÏñËØ×ø±êÊı×é
+    // å¼€è¾Ÿæ•´å½¢åƒç´ åæ ‡æ•°ç»„
     pxpoints.resize(1 + count * 3);
     POINT *lppt = &pxpoints.front();
 
-    pt = knots[0] * matD;                               // µÚÒ»¸öBezier¶ÎµÄÆğµã
-    vec = knotVectors[0] * matD / 3.0;                  // µÚÒ»¸öBezier¶ÎµÄÆğÊ¼Ê¸Á¿
-    pt.get(lppt[j].x, lppt[j].y); j++;                  // ²úÉúBezier¶ÎµÄÆğµã
-    for (i = 1; i < count; i++)                         // ¼ÆËãÃ¿Ò»¸öBezier¶Î
+    pt = knots[0] * matD;                               // ç¬¬ä¸€ä¸ªBezieræ®µçš„èµ·ç‚¹
+    vec = knotVectors[0] * matD / 3.0;                  // ç¬¬ä¸€ä¸ªBezieræ®µçš„èµ·å§‹çŸ¢é‡
+    pt.get(lppt[j].x, lppt[j].y); j++;                  // äº§ç”ŸBezieræ®µçš„èµ·ç‚¹
+    for (i = 1; i < count; i++)                         // è®¡ç®—æ¯ä¸€ä¸ªBezieræ®µ
     {
-        (pt += vec).get(lppt[j].x, lppt[j].y); j++;     // ²úÉúBezier¶ÎµÄµÚ¶şµã
-        pt = knots[i] * matD;                           // Bezier¶ÎµÄÖÕµã
-        vec = knotVectors[i] * matD / 3.0;              // Bezier¶ÎµÄÖÕÖ¹Ê¸Á¿
-        (pt - vec).get(lppt[j].x, lppt[j].y); j++;      // ²úÉúBezier¶ÎµÄµÚÈıµã
-        pt.get(lppt[j].x, lppt[j].y); j++;              // ²úÉúBezier¶ÎµÄÖÕµã
+        (pt += vec).get(lppt[j].x, lppt[j].y); j++;     // äº§ç”ŸBezieræ®µçš„ç¬¬äºŒç‚¹
+        pt = knots[i] * matD;                           // Bezieræ®µçš„ç»ˆç‚¹
+        vec = knotVectors[i] * matD / 3.0;              // Bezieræ®µçš„ç»ˆæ­¢çŸ¢é‡
+        (pt - vec).get(lppt[j].x, lppt[j].y); j++;      // äº§ç”ŸBezieræ®µçš„ç¬¬ä¸‰ç‚¹
+        pt.get(lppt[j].x, lppt[j].y); j++;              // äº§ç”ŸBezieræ®µçš„ç»ˆç‚¹
     }
-    (pt += vec).get(lppt[j].x, lppt[j].y); j++;         // ²úÉúBezier¶ÎµÄµÚ¶şµã
-    lppt[j].x = 2 * lppt[0].x - lppt[1].x;              // ²úÉúBezier¶ÎµÄµÚÈıµã
+    (pt += vec).get(lppt[j].x, lppt[j].y); j++;         // äº§ç”ŸBezieræ®µçš„ç¬¬äºŒç‚¹
+    lppt[j].x = 2 * lppt[0].x - lppt[1].x;              // äº§ç”ŸBezieræ®µçš„ç¬¬ä¸‰ç‚¹
     lppt[j].y = 2 * lppt[0].y - lppt[1].y;              // K0 - V0 / 3
-    lppt[j+1] = lppt[0];                                // ²úÉúBezier¶ÎµÄÖÕµã
+    lppt[j+1] = lppt[0];                                // äº§ç”ŸBezieræ®µçš„ç»ˆç‚¹
 
-    // »æÍ¼
+    // ç»˜å›¾
     bool ret = rawBeginPath();
     if (ret)
     {
@@ -890,8 +888,8 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
     GiLock lock (&m_impl->drawRefcnt);
     count = mgMin(count, static_cast<int>(3 + (0x2000 - 1) / 3));
 
-    const Box2d extent (count, controlPoints);              // Ä£ĞÍ×ø±ê·¶Î§
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÍâ
+    const Box2d extent (count, controlPoints);              // æ¨¡å‹åæ ‡èŒƒå›´
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå¤–
         return false;
 
     int i;
@@ -900,11 +898,11 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
     vector<POINT> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    // ¿ª±ÙÕûĞÎÏñËØ×ø±êÊı×é
+    // å¼€è¾Ÿæ•´å½¢åƒç´ åæ ‡æ•°ç»„
     pxpoints.resize(1 + (count - 3) * 3);
     POINT *lppt = &pxpoints.front();
 
-    // ¼ÆËãµÚÒ»¸öÇúÏß¶Î
+    // è®¡ç®—ç¬¬ä¸€ä¸ªæ›²çº¿æ®µ
     pt1 = controlPoints[0] * matD;
     pt2 = controlPoints[1] * matD;
     pt3 = controlPoints[2] * matD;
@@ -918,7 +916,7 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
     pt.set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
     pt.get(lppt->x, lppt->y); lppt++;
 
-    // ¼ÆËãÆäÓàÇúÏß¶Î
+    // è®¡ç®—å…¶ä½™æ›²çº¿æ®µ
     for (i = 4; i < count; i++)
     {
         pt1 = pt2;
@@ -933,7 +931,7 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
         pt.get(lppt->x, lppt->y); lppt++;
     }
 
-    // »æÍ¼
+    // ç»˜å›¾
     return rawPolyBezier(ctx, &pxpoints.front(), getSize(pxpoints));
 }
 
@@ -947,8 +945,8 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
     GiLock lock (&m_impl->drawRefcnt);
     count = mgMin(count, static_cast<int>((0x2000 - 1) / 3));
 
-    const Box2d extent (count, controlPoints);              // Ä£ĞÍ×ø±ê·¶Î§
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÍâ
+    const Box2d extent (count, controlPoints);              // æ¨¡å‹åæ ‡èŒƒå›´
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå¤–
         return false;
 
     int i;
@@ -957,11 +955,11 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
     vector<POINT> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    // ¿ª±ÙÕûĞÎÏñËØ×ø±êÊı×é
+    // å¼€è¾Ÿæ•´å½¢åƒç´ åæ ‡æ•°ç»„
     pxpoints.resize(1 + count * 3);
     POINT *lppt = &pxpoints.front();
 
-    // ¼ÆËãµÚÒ»¸öÇúÏß¶Î
+    // è®¡ç®—ç¬¬ä¸€ä¸ªæ›²çº¿æ®µ
     pt1 = controlPoints[0] * matD;
     pt2 = controlPoints[1] * matD;
     pt3 = controlPoints[2] * matD;
@@ -975,7 +973,7 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
     pt.set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
     pt.get(lppt->x, lppt->y); lppt++;
 
-    // ¼ÆËãÆäÓàÇúÏß¶Î
+    // è®¡ç®—å…¶ä½™æ›²çº¿æ®µ
     for (i = 4; i < count + 3; i++)
     {
         pt1 = pt2;
@@ -990,7 +988,7 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
         pt.get(lppt->x, lppt->y); lppt++;
     }
 
-    // »æÍ¼
+    // ç»˜å›¾
     bool ret = rawBeginPath();
     if (ret)
     {
@@ -1017,8 +1015,8 @@ bool GiGraphics::drawPath(const GiContext* ctx, int count,
     Point2d pt;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    const Box2d extent (count, points);                     // Ä£ĞÍ×ø±ê·¶Î§
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // È«²¿ÔÚÏÔÊ¾ÇøÓòÍâ
+    const Box2d extent (count, points);                     // æ¨¡å‹åæ ‡èŒƒå›´
+    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // å…¨éƒ¨åœ¨æ˜¾ç¤ºåŒºåŸŸå¤–
         return false;
 
     vector<POINT> pxpoints;
@@ -1033,5 +1031,3 @@ bool GiGraphics::drawPath(const GiContext* ctx, int count,
 
     return rawPolyDraw(ctx, count, lppt, types);
 }
-
-_GEOM_END

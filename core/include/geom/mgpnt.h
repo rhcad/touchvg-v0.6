@@ -1,5 +1,5 @@
-//! \file mgpnt.h
-//! \brief ¶¨Òå¶şÎ¬µãÀà Point2d
+ï»¿//! \file mgpnt.h
+//! \brief å®šä¹‰äºŒç»´ç‚¹ç±» Point2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,236 +8,233 @@
 
 #include "mgvec.h"
 
-_GEOM_BEGIN
-
-//! ¶şÎ¬µãÀà
+//! äºŒç»´ç‚¹ç±»
 /*!
-    ±¾ÀàÓÃÓÚÃèÊö¶şÎ¬Æ½ÃæÉÏÈÎÒâÎ»ÖÃµÄµã£¬¾ßÓĞxºÍyÁ½¸ö×ø±ê·ÖÁ¿
+    æœ¬ç±»ç”¨äºæè¿°äºŒç»´å¹³é¢ä¸Šä»»æ„ä½ç½®çš„ç‚¹ï¼Œå…·æœ‰xå’Œyä¸¤ä¸ªåæ ‡åˆ†é‡
     \ingroup _GEOM_CLASS_
 */
 class Point2d : public POINT2D
 {
 public:
-    //! Ô­µã(0,0)
+    //! åŸç‚¹(0,0)
     static const Point2d& kOrigin()
     {
         static const Point2d pnt (0.0, 0.0);
         return pnt;
     }
     
-    //! ¹¹ÔìÎªÔ­µã
+    //! æ„é€ ä¸ºåŸç‚¹
     Point2d()
     {
         x = y = 0.0;
     }
     
-    //! ¹¹ÔìÎªµã(x, y)
+    //! æ„é€ ä¸ºç‚¹(x, y)
     Point2d(double xx, double yy)
     {
         x = xx; y = yy;
     }
     
-    //! ¿½±´¹¹Ôìº¯Êı
+    //! æ‹·è´æ„é€ å‡½æ•°
     Point2d(const POINT2D& src)
     {
         x = src.x; y = src.y;
     }
 
-    //! ¾ØÕó±ä»», µã * ¾ØÕó
+    //! çŸ©é˜µå˜æ¢, ç‚¹ * çŸ©é˜µ
     Point2d operator*(const Matrix2d& m) const;
 
-    //! ¾ØÕó±ä»», µã *= ¾ØÕó
+    //! çŸ©é˜µå˜æ¢, ç‚¹ *= çŸ©é˜µ
     Point2d& operator*=(const Matrix2d& m);
     
-    //! ¾ØÕó±ä»», ¾ØÕó * µã
+    //! çŸ©é˜µå˜æ¢, çŸ©é˜µ * ç‚¹
     friend Point2d operator*(const Matrix2d& m, const Point2d& pnt)
     {
         return pnt * m;
     }
     
-    //! Êı * µã
+    //! æ•° * ç‚¹
     friend Point2d operator*(double s, const Point2d& pnt)
     {
         return Point2d(pnt.x * s, pnt.y * s);
     }
     
-    //! µã * Êı
+    //! ç‚¹ * æ•°
     Point2d operator*(double s) const
     {
         return Point2d(x * s, y * s);
     }
     
-    //! µã *= Êı
+    //! ç‚¹ *= æ•°
     Point2d& operator*=(double s)
     {
         x *= s; y *= s; return *this;
     }
     
-    //! µã / Êı
+    //! ç‚¹ / æ•°
     Point2d operator/(double s) const
     {
         s = 1.0 / s;
         return Point2d(x * s, y * s);
     }
     
-    //! µã /= Êı
+    //! ç‚¹ /= æ•°
     Point2d& operator/=(double s)
     {
         s = 1.0 / s;
         x *= s; y *= s; return *this;
     }
 
-    //! ±ÈÀı·ÅËõ
+    //! æ¯”ä¾‹æ”¾ç¼©
     Point2d& scaleBy(double sx, double sy)
     {
         x *= sx; y *= sy; return *this;
     }
     
-    //! µãÀÛ¼Ó
+    //! ç‚¹ç´¯åŠ 
     Point2d operator+(const Point2d& pnt) const
     {
         return Point2d(x + pnt.x, y + pnt.y);
     }
     
-    //! µãÀÛ¼Ó
+    //! ç‚¹ç´¯åŠ 
     Point2d& operator+=(const Point2d& pnt)
     {
         x += pnt.x; y += pnt.y; return *this;
     }
 
-    //! ÓÃÊ¸Á¿Æ½ÒÆ, Ê¸Á¿ + µã = µã
+    //! ç”¨çŸ¢é‡å¹³ç§», çŸ¢é‡ + ç‚¹ = ç‚¹
     friend Point2d operator+(const Vector2d& vec, const Point2d& pnt)
     {
         return Point2d(pnt.x + vec.x, pnt.y + vec.y);
     }
     
-    //! ÓÃÊ¸Á¿Æ½ÒÆ, µã + Ê¸Á¿ = µã
+    //! ç”¨çŸ¢é‡å¹³ç§», ç‚¹ + çŸ¢é‡ = ç‚¹
     Point2d operator+(const Vector2d& vec) const
     {
         return Point2d(x + vec.x, y + vec.y);
     }
     
-    //! ÓÃÊ¸Á¿Æ½ÒÆ, µã += Ê¸Á¿
+    //! ç”¨çŸ¢é‡å¹³ç§», ç‚¹ += çŸ¢é‡
     Point2d& operator+=(const Vector2d& vec)
     {
         x += vec.x; y += vec.y; return *this;
     }
     
-    //! ÓÃÊ¸Á¿Æ½ÒÆ, µã - Ê¸Á¿ = µã
+    //! ç”¨çŸ¢é‡å¹³ç§», ç‚¹ - çŸ¢é‡ = ç‚¹
     Point2d operator-(const Vector2d& vec) const
     {
         return Point2d(x - vec.x, y - vec.y); 
     }
     
-    //! ÓÃÊ¸Á¿Æ½ÒÆ, µã -= Ê¸Á¿
+    //! ç”¨çŸ¢é‡å¹³ç§», ç‚¹ -= çŸ¢é‡
     Point2d& operator-=(const Vector2d& vec)
     {
         x -= vec.x; y -= vec.y; return *this;
     }
     
-    //! Æ½ÒÆ
+    //! å¹³ç§»
     void offset(double dx, double dy)
     {
         x += dx; y += dy;
     }
     
-    //! µÃµ½Á½µãÖ®¼äµÄÊ¸Á¿, µã - µã = Ê¸Á¿
+    //! å¾—åˆ°ä¸¤ç‚¹ä¹‹é—´çš„çŸ¢é‡, ç‚¹ - ç‚¹ = çŸ¢é‡
     Vector2d operator-(const Point2d& pnt) const
     {
         return Vector2d(x - pnt.x, y - pnt.y);
     }
     
-    //! ·µ»Ø¸ºÊ¸Á¿
+    //! è¿”å›è´ŸçŸ¢é‡
     Vector2d operator-() const
     {
         return Vector2d(-x, -y);
     }
     
-    //! ×ª»»ÎªÊ¸Á¿
+    //! è½¬æ¢ä¸ºçŸ¢é‡
     Vector2d asVector() const
     {
         return Vector2d(x, y);
     }
 
-    //! µ½Ô­µãµÄ¾àÀë
+    //! åˆ°åŸç‚¹çš„è·ç¦»
     double length() const
     {
         return mgHypot(x, y);
     }
     
-    //! Á½µã¾àÀë
+    //! ä¸¤ç‚¹è·ç¦»
     double distanceTo(const Point2d& pnt) const
     {
         return mgHypot(x - pnt.x, y - pnt.y);
     }
     
-    //! ÅĞ¶ÏÁ½¸öµãÊÇ·ñÏàµÈ
+    //! åˆ¤æ–­ä¸¤ä¸ªç‚¹æ˜¯å¦ç›¸ç­‰
     bool operator==(const Point2d& pnt) const
     {
         return isEqualTo(pnt);
     }
     
-    //! ÅĞ¶ÏÁ½¸öµãÊÇ·ñ²»ÏàµÈ
+    //! åˆ¤æ–­ä¸¤ä¸ªç‚¹æ˜¯å¦ä¸ç›¸ç­‰
     bool operator!=(const Point2d& pnt) const
     {
         return !isEqualTo(pnt);
     }
     
-    //! ÓÃÅ·À­¹æÔòÅĞ¶ÏÁ½¸öµãÊÇ·ñÏàµÈ
-    /*! Èç¹ûÁ½¸öµãµÄ¾àÀëĞ¡ÓÚ³¤¶ÈÈİ²î£¬ÔòÏàµÈ
-        \param pnt ±È½ÏµÄÁíÒ»¸öµã
-        \param tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½Æä³¤¶ÈÈİ²î
-        \return Èç¹ûÏàµÈ£¬Ôò·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    //! ç”¨æ¬§æ‹‰è§„åˆ™åˆ¤æ–­ä¸¤ä¸ªç‚¹æ˜¯å¦ç›¸ç­‰
+    /*! å¦‚æœä¸¤ä¸ªç‚¹çš„è·ç¦»å°äºé•¿åº¦å®¹å·®ï¼Œåˆ™ç›¸ç­‰
+        \param pnt æ¯”è¾ƒçš„å¦ä¸€ä¸ªç‚¹
+        \param tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶é•¿åº¦å®¹å·®
+        \return å¦‚æœç›¸ç­‰ï¼Œåˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     bool isEqualTo(const Point2d& pnt, const Tol& tol = Tol::gTol()) const
     {
         return mgHypot(x - pnt.x, y - pnt.y) <= tol.equalPoint();
     }
     
-    //! ÉèÖÃÎªµã(xx, yy)
+    //! è®¾ç½®ä¸ºç‚¹(xx, yy)
     Point2d& set(double xx, double yy)
     {
         x = xx; y = yy; return *this;
     }
     
-    //! µÃµ½ËÄÉáÎåÈëºóµÄ×ø±ê
-    /*! ÀûÓÃ¸Ãº¯Êı¿ÉÒÔ½«Ê¸Á¿×ª»»ÎªPOINT¡¢CPointÖµ
-        \param[out] xx ËÄÉáÎåÈëºóµÄX×ø±ê·ÖÁ¿
-        \param[out] yy ËÄÉáÎåÈëºóµÄY×ø±ê·ÖÁ¿
+    //! å¾—åˆ°å››èˆäº”å…¥åçš„åæ ‡
+    /*! åˆ©ç”¨è¯¥å‡½æ•°å¯ä»¥å°†çŸ¢é‡è½¬æ¢ä¸ºPOINTã€CPointå€¼
+        \param[out] xx å››èˆäº”å…¥åçš„Xåæ ‡åˆ†é‡
+        \param[out] yy å››èˆäº”å…¥åçš„Yåæ ‡åˆ†é‡
     */
     void get(long& xx, long& yy) const
     {
         xx = mgRound(x); yy = mgRound(y);
     }
     
-    //! ¼«×ø±ê·¨¼ÆËã×ø±ê
+    //! æåæ ‡æ³•è®¡ç®—åæ ‡
     /*! 
-        \param angle ¼«½Ç£¬»¡¶È
-        \param dist ¼«¾¶³¤¶È
-        \return ¼ÆËã³öµÄ×ø±ê
+        \param angle æè§’ï¼Œå¼§åº¦
+        \param dist æå¾„é•¿åº¦
+        \return è®¡ç®—å‡ºçš„åæ ‡
     */
     Point2d polarPoint(double angle, double dist) const
     {
         return Point2d(x + dist * cos(angle), y + dist * sin(angle));
     }
     
-    //! ÒÆ¶¯Ö±³ß·¨
-    /*! Ïà¶ÔÓÚÆğÊ¼µã(±¾µã)ºÍ·½Ïòµã£¬ÔÚ´¹Ö±ÑØÏß·½ÏòÆ«ÒÆÖ¸¶¨¾àÀë¼ÆËã×ø±ê
-        \param dir ·½Ïòµã
-        \param yoff ´¹Ö±ÑØÏß·½ÏòÆ«ÒÆ
-        \return ¼ÆËã³öµÄ×ø±ê
+    //! ç§»åŠ¨ç›´å°ºæ³•
+    /*! ç›¸å¯¹äºèµ·å§‹ç‚¹(æœ¬ç‚¹)å’Œæ–¹å‘ç‚¹ï¼Œåœ¨å‚ç›´æ²¿çº¿æ–¹å‘åç§»æŒ‡å®šè·ç¦»è®¡ç®—åæ ‡
+        \param dir æ–¹å‘ç‚¹
+        \param yoff å‚ç›´æ²¿çº¿æ–¹å‘åç§»
+        \return è®¡ç®—å‡ºçš„åæ ‡
     */
     Point2d rulerPoint(const Point2d& dir, double yoff) const;
 
-    //! ÒÆ¶¯Ö±³ß·¨
-    /*! Ïà¶ÔÓÚÆğÊ¼µã(±¾µã)ºÍ·½Ïòµã£¬ÔÚÑØÏß·½ÏòºÍ´¹Ö±ÑØÏß·½Ïò·Ö±ğÆ«ÒÆ¼ÆËã×ø±ê
-        \param dir ·½Ïòµã
-        \param xoff ÔÚÑØÏß·½ÏòÆ«ÒÆ
-        \param yoff ´¹Ö±ÑØÏß·½ÏòÆ«ÒÆ
-        \return ¼ÆËã³öµÄ×ø±ê
+    //! ç§»åŠ¨ç›´å°ºæ³•
+    /*! ç›¸å¯¹äºèµ·å§‹ç‚¹(æœ¬ç‚¹)å’Œæ–¹å‘ç‚¹ï¼Œåœ¨æ²¿çº¿æ–¹å‘å’Œå‚ç›´æ²¿çº¿æ–¹å‘åˆ†åˆ«åç§»è®¡ç®—åæ ‡
+        \param dir æ–¹å‘ç‚¹
+        \param xoff åœ¨æ²¿çº¿æ–¹å‘åç§»
+        \param yoff å‚ç›´æ²¿çº¿æ–¹å‘åç§»
+        \return è®¡ç®—å‡ºçš„åæ ‡
     */
     Point2d rulerPoint(const Point2d& dir, double xoff, double yoff) const;
 };
 
-_GEOM_END
 #endif // __GEOMETRY_POINT_H_

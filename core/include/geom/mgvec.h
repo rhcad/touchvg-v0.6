@@ -1,5 +1,5 @@
-//! \file mgvec.h
-//! \brief ¶¨Òå¶şÎ¬Ê¸Á¿Àà Vector2d
+ï»¿//! \file mgvec.h
+//! \brief å®šä¹‰äºŒç»´çŸ¢é‡ç±» Vector2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,176 +8,174 @@
 
 #include "mgtol.h"
 
-_GEOM_BEGIN
-
 class Matrix2d;
 
-//! ¶şÎ¬Ê¸Á¿Àà
+//! äºŒç»´çŸ¢é‡ç±»
 /*!
-    ±¾ÀàÓÃÓÚÃèÊö¶şÎ¬Æ½ÃæÉÏ¾ßÓĞ·½ÏòºÍ³¤¶ÈµÄÊ¸Á¿£¬¾ßÓĞxºÍyÁ½¸ö×ø±ê·ÖÁ¿
+    æœ¬ç±»ç”¨äºæè¿°äºŒç»´å¹³é¢ä¸Šå…·æœ‰æ–¹å‘å’Œé•¿åº¦çš„çŸ¢é‡ï¼Œå…·æœ‰xå’Œyä¸¤ä¸ªåæ ‡åˆ†é‡
     \ingroup _GEOM_CLASS_
 */
 class Vector2d : public VECTOR2D
 {
 public:
-    //! ÁãÊ¸Á¿(0,0)
+    //! é›¶çŸ¢é‡(0,0)
     static const Vector2d& kIdentity()
     {
         static const Vector2d vec (0.0, 0.0);
         return vec;
     }
     
-    //! XÖáµ¥Î»Ê¸Á¿(1,0)
+    //! Xè½´å•ä½çŸ¢é‡(1,0)
     static const Vector2d& kXAxis()
     {
         static const Vector2d vec (1.0, 0.0);
         return vec;
     }
     
-    //! YÖáµ¥Î»Ê¸Á¿(0,1)
+    //! Yè½´å•ä½çŸ¢é‡(0,1)
     static const Vector2d& kYAxis()
     {
         static const Vector2d vec (0.0, 1.0);
         return vec;
     }
     
-    //! ¹¹ÔìÎªÁãÊ¸Á¿
+    //! æ„é€ ä¸ºé›¶çŸ¢é‡
     Vector2d()
     {
         x = y = 0.0;
     }
     
-    //! ¹¹ÔìÎªÊ¸Á¿(xx, yy)
+    //! æ„é€ ä¸ºçŸ¢é‡(xx, yy)
     Vector2d(double xx, double yy)
     {
         x = xx; y = yy;
     }
     
-    //! ¿½±´¹¹Ôìº¯Êı
+    //! æ‹·è´æ„é€ å‡½æ•°
     Vector2d(const VECTOR2D& src)
     {
         x = src.x; y = src.y;
     }
 
-    //! ¾ØÕó±ä»», Ê¸Á¿ * ¾ØÕó
+    //! çŸ©é˜µå˜æ¢, çŸ¢é‡ * çŸ©é˜µ
     Vector2d operator*(const Matrix2d& m) const;
 
-    //! ¾ØÕó±ä»», Ê¸Á¿ *= ¾ØÕó
+    //! çŸ©é˜µå˜æ¢, çŸ¢é‡ *= çŸ©é˜µ
     Vector2d& operator*=(const Matrix2d& m);
 
-    //! ¾ØÕó±ä»», ¾ØÕó * Ê¸Á¿
+    //! çŸ©é˜µå˜æ¢, çŸ©é˜µ * çŸ¢é‡
     friend Vector2d operator*(const Matrix2d& m, const Vector2d& v)
     {
         return v * m;
     }
     
-    //! Ê¸Á¿¼Ó·¨
+    //! çŸ¢é‡åŠ æ³•
     Vector2d operator+(const Vector2d& v) const
     {
         return Vector2d(x + v.x, y + v.y);
     }
     
-    //! Ê¸Á¿¼Ó·¨
+    //! çŸ¢é‡åŠ æ³•
     Vector2d& operator+=(const Vector2d& v)
     {
         x += v.x; y += v.y; return *this;
     }
     
-    //! Ê¸Á¿¼õ·¨
+    //! çŸ¢é‡å‡æ³•
     Vector2d operator-(const Vector2d& v) const
     {
         return Vector2d(x - v.x, y - v.y);
     }
     
-    //! Ê¸Á¿¼õ·¨
+    //! çŸ¢é‡å‡æ³•
     Vector2d& operator-=(const Vector2d& v)
     {
         x -= v.x; y -= v.y; return *this;
     }
     
-    //! ·µ»Ø¸ºÊ¸Á¿
+    //! è¿”å›è´ŸçŸ¢é‡
     Vector2d operator-() const
     {
         return Vector2d(-x, -y);
     }
     
-    //! Ê¸Á¿·´Ïò£¬¼´½«¸ÃÊ¸Á¿ÉèÖÃÎª(-x, -y)
+    //! çŸ¢é‡åå‘ï¼Œå³å°†è¯¥çŸ¢é‡è®¾ç½®ä¸º(-x, -y)
     Vector2d& negate()
     {
         x = -x; y = -y; return *this;
     }
     
-    //! ·µ»ØÕı½»Ê¸Á¿, ¼´ÄæÊ±ÕëĞı×ª90¶È£¬Îª(-y, x)
+    //! è¿”å›æ­£äº¤çŸ¢é‡, å³é€†æ—¶é’ˆæ—‹è½¬90åº¦ï¼Œä¸º(-y, x)
     Vector2d perpVector() const
     {
         return Vector2d(-y, x);
     }
     
-    //! ±êÁ¿»ı, Êı * Ê¸Á¿
+    //! æ ‡é‡ç§¯, æ•° * çŸ¢é‡
     friend Vector2d operator*(double s, const Vector2d& v)
     {
         return Vector2d(v.x * s, v.y * s);
     }
     
-    //! ±êÁ¿»ı, Ê¸Á¿ * Êı
+    //! æ ‡é‡ç§¯, çŸ¢é‡ * æ•°
     Vector2d operator*(double s) const
     {
         return Vector2d(x * s, y * s);
     }
     
-    //! ±êÁ¿»ı, Ê¸Á¿ *= Êı
+    //! æ ‡é‡ç§¯, çŸ¢é‡ *= æ•°
     Vector2d& operator*=(double s)
     {
         x *= s; y *= s; return *this;
     }
     
-    //! ±êÁ¿»ı, Ê¸Á¿ / Êı
+    //! æ ‡é‡ç§¯, çŸ¢é‡ / æ•°
     Vector2d operator/(double s) const
     {
         s = 1.0 / s;
         return Vector2d(x * s, y * s);
     }
     
-    //! ±êÁ¿»ı, Ê¸Á¿ /= Êı
+    //! æ ‡é‡ç§¯, çŸ¢é‡ /= æ•°
     Vector2d& operator/=(double s)
     {
         s = 1.0 / s;
         x *= s; y *= s; return *this;
     }
 
-    //! ±ÈÀı·ÅËõ
+    //! æ¯”ä¾‹æ”¾ç¼©
     Vector2d& scaleBy(double sx, double sy)
     {
         x *= sx; y *= sy; return *this;
     }
     
-    //! Ê¸Á¿µã»ı, A¡¤B
+    //! çŸ¢é‡ç‚¹ç§¯, AÂ·B
     double dotProduct(const Vector2d& v) const
     {
         return (x * v.x + y * v.y);
     }
     
-    //! Ê¸Á¿µã»ı, A¡¤B
+    //! çŸ¢é‡ç‚¹ç§¯, AÂ·B
     double operator/(const Vector2d& v) const
     {
         return dotProduct(v);
     }
     
-    //! Ê¸Á¿²æ»ı(0,0,z)ÖĞµÄz, |A¡ÁB|
+    //! çŸ¢é‡å‰ç§¯(0,0,z)ä¸­çš„z, |AÃ—B|
     double crossProduct(const Vector2d& v) const
     {
         return (x * v.y - y * v.x);
     }
     
-    //! Ê¸Á¿²æ»ı(0,0,z)ÖĞµÄz, |A¡ÁB|
+    //! çŸ¢é‡å‰ç§¯(0,0,z)ä¸­çš„z, |AÃ—B|
     double operator*(const Vector2d& v) const
     {
         return crossProduct(v);
     }    
     
-    //! Ê¸Á¿½Ç¶È, ÓëXÖáµÄ¼Ğ½Ç, [0, PI)
+    //! çŸ¢é‡è§’åº¦, ä¸Xè½´çš„å¤¹è§’, [0, PI)
     /*!
-        ´Ó+XÖá·½ÏòÄæÊ±ÕëĞı×ªµ½±¾Ê¸Á¿ËùÔÚ·½ÏòÊ±ÎªÕı£¬Ë³Ê±ÕëÎª¸º
+        ä»+Xè½´æ–¹å‘é€†æ—¶é’ˆæ—‹è½¬åˆ°æœ¬çŸ¢é‡æ‰€åœ¨æ–¹å‘æ—¶ä¸ºæ­£ï¼Œé¡ºæ—¶é’ˆä¸ºè´Ÿ
     */
     double angle() const
     {
@@ -185,15 +183,15 @@ public:
         return len < _MGZERO ? 0.0 : acos(x / len);
     }
     
-    //! Ê¸Á¿½Ç¶È, ´ÓXÖáÄæÊ±Õë·½ÏòÎªÕı, [-PI, PI)
+    //! çŸ¢é‡è§’åº¦, ä»Xè½´é€†æ—¶é’ˆæ–¹å‘ä¸ºæ­£, [-PI, PI)
     double angle2() const
     {
         return (mgIsZero(x) && mgIsZero(y)) ? 0.0 : atan2(y, x);
     }
     
-    //! Ê¸Á¿¼Ğ½Ç, [0, PI)
+    //! çŸ¢é‡å¤¹è§’, [0, PI)
     /*!
-        ´Ó±¾Ê¸Á¿·½ÏòÄæÊ±ÕëĞı×ªµ½ÁíÒ»¸öÊ¸Á¿ v ËùÔÚ·½ÏòÊ±ÎªÕı£¬Ë³Ê±ÕëÎª¸º
+        ä»æœ¬çŸ¢é‡æ–¹å‘é€†æ—¶é’ˆæ—‹è½¬åˆ°å¦ä¸€ä¸ªçŸ¢é‡ v æ‰€åœ¨æ–¹å‘æ—¶ä¸ºæ­£ï¼Œé¡ºæ—¶é’ˆä¸ºè´Ÿ
     */
     double angleTo(const Vector2d& v) const
     {
@@ -201,7 +199,7 @@ public:
         return len < _MGZERO ? 0.0 : acos(dotProduct(v) / len);
     }
     
-    //! ÑØÄæÊ±Õë·½Ïòµ½Ö¸¶¨Ê¸Á¿µÄ×ª½Ç, [-PI, PI)
+    //! æ²¿é€†æ—¶é’ˆæ–¹å‘åˆ°æŒ‡å®šçŸ¢é‡çš„è½¬è§’, [-PI, PI)
     double angleTo2(const Vector2d& v) const
     {
         double crossz = crossProduct(v);
@@ -209,20 +207,20 @@ public:
         return (mgIsZero(dot) && mgIsZero(crossz)) ? 0.0 : atan2(crossz, dot);
     }
     
-    //! Ê¸Á¿³¤¶È
+    //! çŸ¢é‡é•¿åº¦
     double length() const
     {
         return mgHypot(x, y);
     }
     
-    //! Ê¸Á¿³¤¶ÈµÄÆ½·½
+    //! çŸ¢é‡é•¿åº¦çš„å¹³æ–¹
     double lengthSqrd() const
     {
         return mgSquare(x, y);
     }
     
-    //! ·µ»Øµ¥Î»Ê¸Á¿
-    /*! Èç¹û±¾Ê¸Á¿ÎªÁãÊ¸Á¿£¬Ôò¸´ÖÆ±¾Ê¸Á¿
+    //! è¿”å›å•ä½çŸ¢é‡
+    /*! å¦‚æœæœ¬çŸ¢é‡ä¸ºé›¶çŸ¢é‡ï¼Œåˆ™å¤åˆ¶æœ¬çŸ¢é‡
     */
     Vector2d unitVector() const
     {
@@ -233,10 +231,10 @@ public:
             return *this;
     }
     
-    //! Ê¸Á¿µ¥Î»»¯
-    /*! ¼´½«±¾Ê¸Á¿µÄ³¤¶È¸Ä³É1£¬Èç¹û±¾Ê¸Á¿ÎªÁãÊ¸Á¿£¬Ôò²»¸Ä±ä±¾Ê¸Á¿
-        \param tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½Æä³¤¶ÈÈİ²î
-        \return Èç¹û±¾Ê¸Á¿ÎªÁãÊ¸Á¿£¬Ôò·µ»Øfalse£¬·ñÔò·µ»Øtrue
+    //! çŸ¢é‡å•ä½åŒ–
+    /*! å³å°†æœ¬çŸ¢é‡çš„é•¿åº¦æ”¹æˆ1ï¼Œå¦‚æœæœ¬çŸ¢é‡ä¸ºé›¶çŸ¢é‡ï¼Œåˆ™ä¸æ”¹å˜æœ¬çŸ¢é‡
+        \param tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶é•¿åº¦å®¹å·®
+        \return å¦‚æœæœ¬çŸ¢é‡ä¸ºé›¶çŸ¢é‡ï¼Œåˆ™è¿”å›falseï¼Œå¦åˆ™è¿”å›true
     */
     bool normalize(const Tol& tol = Tol::gTol())
     {
@@ -247,197 +245,196 @@ public:
         return ret;
     }
     
-    //! ÅĞ¶ÏÊÇ·ñÊÇµ¥Î»Ê¸Á¿
-    /*! Èç¹û±¾Ê¸Á¿µÄ³¤¶ÈºÍ1Ïà²îĞ¡ÓÚ³¤¶ÈÈİ²î£¬ÔòÒ²Îªµ¥Î»Ê¸Á¿
-        \param tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½Æä³¤¶ÈÈİ²î
-        \return Èç¹û±¾Ê¸Á¿Îªµ¥Î»Ê¸Á¿£¬Ôò·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    //! åˆ¤æ–­æ˜¯å¦æ˜¯å•ä½çŸ¢é‡
+    /*! å¦‚æœæœ¬çŸ¢é‡çš„é•¿åº¦å’Œ1ç›¸å·®å°äºé•¿åº¦å®¹å·®ï¼Œåˆ™ä¹Ÿä¸ºå•ä½çŸ¢é‡
+        \param tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶é•¿åº¦å®¹å·®
+        \return å¦‚æœæœ¬çŸ¢é‡ä¸ºå•ä½çŸ¢é‡ï¼Œåˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     bool isUnitVector(const Tol& tol = Tol::gTol()) const
     {
         return fabs(mgHypot(x, y) - 1.0) < tol.equalPoint();
     }
     
-    //! ÅĞ¶ÏÊÇ·ñÊÇÁãÊ¸Á¿
-    /*! Èç¹û±¾Ê¸Á¿µÄ³¤¶ÈĞ¡ÓÚ³¤¶ÈÈİ²î£¬ÔòÎªÁãÊ¸Á¿
-        \param tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½Æä³¤¶ÈÈİ²î
-        \return Èç¹û±¾Ê¸Á¿ÎªÁãÊ¸Á¿£¬Ôò·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    //! åˆ¤æ–­æ˜¯å¦æ˜¯é›¶çŸ¢é‡
+    /*! å¦‚æœæœ¬çŸ¢é‡çš„é•¿åº¦å°äºé•¿åº¦å®¹å·®ï¼Œåˆ™ä¸ºé›¶çŸ¢é‡
+        \param tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶é•¿åº¦å®¹å·®
+        \return å¦‚æœæœ¬çŸ¢é‡ä¸ºé›¶çŸ¢é‡ï¼Œåˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     bool isZeroVector(const Tol& tol = Tol::gTol()) const
     {
         return mgHypot(x, y) < tol.equalPoint();
     }
     
-    //! ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñÏàµÈ
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦ç›¸ç­‰
     bool operator==(const Vector2d& v) const
     {
         return isEqualTo(v);
     }
     
-    //! ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñ²»ÏàµÈ
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦ä¸ç›¸ç­‰
     bool operator!=(const Vector2d& v) const
     {
         return !isEqualTo(v);
     }
     
-    //! ÓÃÅ·À­¹æÔòÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñÏàµÈ
-    /*! Èç¹ûÁ½¸öÊ¸Á¿Ïà¼õµÄ²îÊ¸Á¿µÄ³¤¶È²»´óÓÚÊ¸Á¿Èİ²î£¬ÔòÏàµÈ
-        \param v ±È½ÏµÄÁíÒ»¸öÊ¸Á¿
-        \param tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²î
-        \return Èç¹ûÏàµÈ£¬Ôò·µ»Øtrue£¬·ñÔò·µ»Øfalse
+    //! ç”¨æ¬§æ‹‰è§„åˆ™åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦ç›¸ç­‰
+    /*! å¦‚æœä¸¤ä¸ªçŸ¢é‡ç›¸å‡çš„å·®çŸ¢é‡çš„é•¿åº¦ä¸å¤§äºçŸ¢é‡å®¹å·®ï¼Œåˆ™ç›¸ç­‰
+        \param v æ¯”è¾ƒçš„å¦ä¸€ä¸ªçŸ¢é‡
+        \param tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®
+        \return å¦‚æœç›¸ç­‰ï¼Œåˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
     */
     bool isEqualTo(const Vector2d& v, const Tol& tol = Tol::gTol()) const
     {
         return mgHypot(x - v.x, y - v.y) <= tol.equalVector();
     }
     
-    //! ÉèÖÃÎªÊ¸Á¿(xx, yy)
+    //! è®¾ç½®ä¸ºçŸ¢é‡(xx, yy)
     Vector2d& set(double xx, double yy)
     {
         x = xx; y = yy; return *this;
     }
     
-    //! ÉèÖÃÊ¸Á¿µÄ½Ç¶ÈºÍ³¤¶È
+    //! è®¾ç½®çŸ¢é‡çš„è§’åº¦å’Œé•¿åº¦
     /*!
-        \param angle Ê¸Á¿µÄ½Ç¶È£¬»¡¶È
-        \param len Ê¸Á¿µÄ³¤¶È
-        \return ±¾Ê¸Á¿µÄÒıÓÃ
+        \param angle çŸ¢é‡çš„è§’åº¦ï¼Œå¼§åº¦
+        \param len çŸ¢é‡çš„é•¿åº¦
+        \return æœ¬çŸ¢é‡çš„å¼•ç”¨
     */
     Vector2d& setAngleLength(double angle, double len)
     {
         return set(len * cos(angle), len * sin(angle));
     }
     
-    //! µÃµ½ËÄÉáÎåÈëºóµÄÕûÊı´óĞ¡
-    /*! ÀûÓÃ¸Ãº¯Êı¿ÉÒÔ½«Ê¸Á¿×ª»»ÎªSIZE¡¢CSizeÖµ
-        \param[out] cx ËÄÉáÎåÈëºóµÄX×ø±ê·ÖÁ¿
-        \param[out] cy ËÄÉáÎåÈëºóµÄY×ø±ê·ÖÁ¿
+    //! å¾—åˆ°å››èˆäº”å…¥åçš„æ•´æ•°å¤§å°
+    /*! åˆ©ç”¨è¯¥å‡½æ•°å¯ä»¥å°†çŸ¢é‡è½¬æ¢ä¸ºSIZEã€CSizeå€¼
+        \param[out] cx å››èˆäº”å…¥åçš„Xåæ ‡åˆ†é‡
+        \param[out] cy å››èˆäº”å…¥åçš„Yåæ ‡åˆ†é‡
     */
     void get(long& cx, long& cy) const
     {
         cx = mgRound(x); cy = mgRound(y);
     }
 
-    //! ÅĞ¶ÏÊÇ·ñÔÚÖ¸¶¨Ê¸Á¿µÄÓÒ²à£¬¼´ÑØÄæÊ±Õë·½Ïò×ªµ½Ö¸¶¨Ê¸Á¿Ê±×î½ü
+    //! åˆ¤æ–­æ˜¯å¦åœ¨æŒ‡å®šçŸ¢é‡çš„å³ä¾§ï¼Œå³æ²¿é€†æ—¶é’ˆæ–¹å‘è½¬åˆ°æŒ‡å®šçŸ¢é‡æ—¶æœ€è¿‘
     bool isRightOf(const Vector2d& vec) const
     {
         return crossProduct(vec) > 0.0;
     }
 
-    //! ÅĞ¶ÏÊÇ·ñÔÚÖ¸¶¨Ê¸Á¿µÄ×ó²à£¬¼´ÑØË³Ê±Õë·½Ïò×ªµ½Ö¸¶¨Ê¸Á¿Ê±×î½ü
+    //! åˆ¤æ–­æ˜¯å¦åœ¨æŒ‡å®šçŸ¢é‡çš„å·¦ä¾§ï¼Œå³æ²¿é¡ºæ—¶é’ˆæ–¹å‘è½¬åˆ°æŒ‡å®šçŸ¢é‡æ—¶æœ€è¿‘
     bool isLeftOf(const Vector2d& vec) const
     {
         return crossProduct(vec) < 0.0;
     }
     
-    //! ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñÆ½ĞĞ
-    /*! ÅĞ¶Ï±¾Ê¸Á¿ºÍÁíÒ»¸öÊ¸Á¿ÊÇ·ñÆ½ĞĞ£¬ÁãÊ¸Á¿ºÍÈÎºÎÊ¸Á¿Æ½ĞĞ
-        \param[in] vec ÁíÒ»¸öÊ¸Á¿
-        \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-        \return ÊÇ·ñÆ½ĞĞ
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦å¹³è¡Œ
+    /*! åˆ¤æ–­æœ¬çŸ¢é‡å’Œå¦ä¸€ä¸ªçŸ¢é‡æ˜¯å¦å¹³è¡Œï¼Œé›¶çŸ¢é‡å’Œä»»ä½•çŸ¢é‡å¹³è¡Œ
+        \param[in] vec å¦ä¸€ä¸ªçŸ¢é‡
+        \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+        \return æ˜¯å¦å¹³è¡Œ
     */
     bool isParallelTo(const Vector2d& vec, const Tol& tol = Tol::gTol()) const;
     
-    //! ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñÆ½ĞĞ
-    /*! ÅĞ¶Ï±¾Ê¸Á¿ºÍÁíÒ»¸öÊ¸Á¿ÊÇ·ñÆ½ĞĞ£¬²¢¼ì²éÁãÊ¸Á¿¡£
-        ÁãÊ¸Á¿ºÍÈÎºÎÊ¸Á¿Æ½ĞĞ
-        \param[in] vec ÁíÒ»¸öÊ¸Á¿
-        \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-        \param[out] nonzero ÕâÁ½¸öÊ¸Á¿ÖĞÊÇ·ñÃ»ÓĞÁãÊ¸Á¿
-        \return ÊÇ·ñÆ½ĞĞ
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦å¹³è¡Œ
+    /*! åˆ¤æ–­æœ¬çŸ¢é‡å’Œå¦ä¸€ä¸ªçŸ¢é‡æ˜¯å¦å¹³è¡Œï¼Œå¹¶æ£€æŸ¥é›¶çŸ¢é‡ã€‚
+        é›¶çŸ¢é‡å’Œä»»ä½•çŸ¢é‡å¹³è¡Œ
+        \param[in] vec å¦ä¸€ä¸ªçŸ¢é‡
+        \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+        \param[out] nonzero è¿™ä¸¤ä¸ªçŸ¢é‡ä¸­æ˜¯å¦æ²¡æœ‰é›¶çŸ¢é‡
+        \return æ˜¯å¦å¹³è¡Œ
     */
     bool isParallelTo(const Vector2d& vec, const Tol& tol, bool& nonzero) const;
     
-    //! ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñÍ¬Ïò
-    /*! ÅĞ¶Ï±¾Ê¸Á¿ºÍÁíÒ»¸öÊ¸Á¿ÊÇ·ñÍ¬Ïò£¬ÁãÊ¸Á¿ºÍÈÎºÎÊ¸Á¿¶¼²»Í¬Ïò
-        \param[in] vec ÁíÒ»¸öÊ¸Á¿
-        \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-        \return ÊÇ·ñÍ¬Ïò
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦åŒå‘
+    /*! åˆ¤æ–­æœ¬çŸ¢é‡å’Œå¦ä¸€ä¸ªçŸ¢é‡æ˜¯å¦åŒå‘ï¼Œé›¶çŸ¢é‡å’Œä»»ä½•çŸ¢é‡éƒ½ä¸åŒå‘
+        \param[in] vec å¦ä¸€ä¸ªçŸ¢é‡
+        \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+        \return æ˜¯å¦åŒå‘
     */
     bool isCodirectionalTo(const Vector2d& vec, const Tol& tol = Tol::gTol()) const;
     
-    //! ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñÍ¬Ïò
-    /*! ÅĞ¶Ï±¾Ê¸Á¿ºÍÁíÒ»¸öÊ¸Á¿ÊÇ·ñÍ¬Ïò£¬²¢¼ì²éÁãÊ¸Á¿¡£
-        ÁãÊ¸Á¿ºÍÈÎºÎÊ¸Á¿¶¼²»Í¬Ïò
-        \param[in] vec ÁíÒ»¸öÊ¸Á¿
-        \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-        \param[out] nonzero ÕâÁ½¸öÊ¸Á¿ÖĞÊÇ·ñÃ»ÓĞÁãÊ¸Á¿
-        \return ÊÇ·ñÍ¬Ïò
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦åŒå‘
+    /*! åˆ¤æ–­æœ¬çŸ¢é‡å’Œå¦ä¸€ä¸ªçŸ¢é‡æ˜¯å¦åŒå‘ï¼Œå¹¶æ£€æŸ¥é›¶çŸ¢é‡ã€‚
+        é›¶çŸ¢é‡å’Œä»»ä½•çŸ¢é‡éƒ½ä¸åŒå‘
+        \param[in] vec å¦ä¸€ä¸ªçŸ¢é‡
+        \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+        \param[out] nonzero è¿™ä¸¤ä¸ªçŸ¢é‡ä¸­æ˜¯å¦æ²¡æœ‰é›¶çŸ¢é‡
+        \return æ˜¯å¦åŒå‘
     */
     bool isCodirectionalTo(const Vector2d& vec, const Tol& tol, bool& nonzero) const;
     
-    //! ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñ·´Ïò
-    /*! ÅĞ¶Ï±¾Ê¸Á¿ºÍÁíÒ»¸öÊ¸Á¿ÊÇ·ñ·´Ïò£¬ÁãÊ¸Á¿ºÍÈÎºÎÊ¸Á¿¶¼²»·´Ïò
-        \param[in] vec ÁíÒ»¸öÊ¸Á¿
-        \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-        \return ÊÇ·ñ·´Ïò
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦åå‘
+    /*! åˆ¤æ–­æœ¬çŸ¢é‡å’Œå¦ä¸€ä¸ªçŸ¢é‡æ˜¯å¦åå‘ï¼Œé›¶çŸ¢é‡å’Œä»»ä½•çŸ¢é‡éƒ½ä¸åå‘
+        \param[in] vec å¦ä¸€ä¸ªçŸ¢é‡
+        \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+        \return æ˜¯å¦åå‘
     */
     bool isOppositeTo(const Vector2d& vec, const Tol& tol = Tol::gTol()) const;
     
-    //! ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñ·´Ïò
-    /*! ÅĞ¶Ï±¾Ê¸Á¿ºÍÁíÒ»¸öÊ¸Á¿ÊÇ·ñ·´Ïò£¬²¢¼ì²éÁãÊ¸Á¿¡£
-        ÁãÊ¸Á¿ºÍÈÎºÎÊ¸Á¿¶¼²»·´Ïò
-        \param[in] vec ÁíÒ»¸öÊ¸Á¿
-        \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-        \param[out] nonzero ÕâÁ½¸öÊ¸Á¿ÖĞÊÇ·ñÃ»ÓĞÁãÊ¸Á¿
-        \return ÊÇ·ñ·´Ïò
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦åå‘
+    /*! åˆ¤æ–­æœ¬çŸ¢é‡å’Œå¦ä¸€ä¸ªçŸ¢é‡æ˜¯å¦åå‘ï¼Œå¹¶æ£€æŸ¥é›¶çŸ¢é‡ã€‚
+        é›¶çŸ¢é‡å’Œä»»ä½•çŸ¢é‡éƒ½ä¸åå‘
+        \param[in] vec å¦ä¸€ä¸ªçŸ¢é‡
+        \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+        \param[out] nonzero è¿™ä¸¤ä¸ªçŸ¢é‡ä¸­æ˜¯å¦æ²¡æœ‰é›¶çŸ¢é‡
+        \return æ˜¯å¦åå‘
     */
     bool isOppositeTo(const Vector2d& vec, const Tol& tol, bool& nonzero) const;
     
-    //! ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñ´¹Ö±
-    /*! ÅĞ¶Ï±¾Ê¸Á¿ºÍÁíÒ»¸öÊ¸Á¿ÊÇ·ñÆ½ĞĞ£¬ÁãÊ¸Á¿ºÍÈÎºÎÊ¸Á¿¶¼²»´¹Ö±
-        \param[in] vec ÁíÒ»¸öÊ¸Á¿
-        \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-        \return ÊÇ·ñ´¹Ö±
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦å‚ç›´
+    /*! åˆ¤æ–­æœ¬çŸ¢é‡å’Œå¦ä¸€ä¸ªçŸ¢é‡æ˜¯å¦å¹³è¡Œï¼Œé›¶çŸ¢é‡å’Œä»»ä½•çŸ¢é‡éƒ½ä¸å‚ç›´
+        \param[in] vec å¦ä¸€ä¸ªçŸ¢é‡
+        \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+        \return æ˜¯å¦å‚ç›´
     */
     bool isPerpendicularTo(const Vector2d& vec, const Tol& tol = Tol::gTol()) const;
     
-    //! ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñ´¹Ö±
-    /*! ÅĞ¶Ï±¾Ê¸Á¿ºÍÁíÒ»¸öÊ¸Á¿ÊÇ·ñÆ½ĞĞ£¬²¢¼ì²éÁãÊ¸Á¿¡£
-        ÁãÊ¸Á¿ºÍÈÎºÎÊ¸Á¿¶¼²»´¹Ö±
-        \param[in] vec ÁíÒ»¸öÊ¸Á¿
-        \param[in] tol ÅĞ¶ÏµÄÈİ²î£¬ÓÃµ½ÆäÊ¸Á¿Èİ²îÖµ
-        \param[out] nonzero ÕâÁ½¸öÊ¸Á¿ÖĞÊÇ·ñÃ»ÓĞÁãÊ¸Á¿
-        \return ÊÇ·ñ´¹Ö±
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦å‚ç›´
+    /*! åˆ¤æ–­æœ¬çŸ¢é‡å’Œå¦ä¸€ä¸ªçŸ¢é‡æ˜¯å¦å¹³è¡Œï¼Œå¹¶æ£€æŸ¥é›¶çŸ¢é‡ã€‚
+        é›¶çŸ¢é‡å’Œä»»ä½•çŸ¢é‡éƒ½ä¸å‚ç›´
+        \param[in] vec å¦ä¸€ä¸ªçŸ¢é‡
+        \param[in] tol åˆ¤æ–­çš„å®¹å·®ï¼Œç”¨åˆ°å…¶çŸ¢é‡å®¹å·®å€¼
+        \param[out] nonzero è¿™ä¸¤ä¸ªçŸ¢é‡ä¸­æ˜¯å¦æ²¡æœ‰é›¶çŸ¢é‡
+        \return æ˜¯å¦å‚ç›´
     */
     bool isPerpendicularTo(const Vector2d& vec, const Tol& tol, bool& nonzero) const;
 
-    //! Çó±¾Ê¸Á¿Í¶Ó°µ½Ê¸Á¿xAxisÉÏµÄ´¹Ö±¾àÀë
-    /*! ÔÚxAxisµÄÄæÊ±Õë·½ÏòÊ±·µ»ØÕıÖµ£¬Ë³Ê±ÕëÔò·µ»Ø¸ºÖµ
-        \param[in] xAxis Í¶Ó°µ½µÄÊ¸Á¿
-        \return ´¹Ö±Í¶Ó°¾àÀë£¬ÓĞÕı¸º
+    //! æ±‚æœ¬çŸ¢é‡æŠ•å½±åˆ°çŸ¢é‡xAxisä¸Šçš„å‚ç›´è·ç¦»
+    /*! åœ¨xAxisçš„é€†æ—¶é’ˆæ–¹å‘æ—¶è¿”å›æ­£å€¼ï¼Œé¡ºæ—¶é’ˆåˆ™è¿”å›è´Ÿå€¼
+        \param[in] xAxis æŠ•å½±åˆ°çš„çŸ¢é‡
+        \return å‚ç›´æŠ•å½±è·ç¦»ï¼Œæœ‰æ­£è´Ÿ
     */
     double distanceToVector(const Vector2d& xAxis) const;
     
-    //! Çó±¾Ê¸Á¿ÔÚÊ¸Á¿xAxisÉÏµÄÍ¶Ó°±ÈÀı
-    /*! Í¶Ó°Ê¸Á¿ = xAxis * Í¶Ó°±ÈÀı \n
-        Í¶Ó°±ÈÀıÔÚ0µ½1Ö®¼äÊ±±íÊ¾Í¶Ó°Ê¸Á¿ÊÇxAxisÄÚµÄÒ»²¿·Ö
-        \param[in] xAxis Í¶Ó°µ½µÄÊ¸Á¿
-        \return Í¶Ó°±ÈÀı£¬ÓĞÕı¸º
+    //! æ±‚æœ¬çŸ¢é‡åœ¨çŸ¢é‡xAxisä¸Šçš„æŠ•å½±æ¯”ä¾‹
+    /*! æŠ•å½±çŸ¢é‡ = xAxis * æŠ•å½±æ¯”ä¾‹ \n
+        æŠ•å½±æ¯”ä¾‹åœ¨0åˆ°1ä¹‹é—´æ—¶è¡¨ç¤ºæŠ•å½±çŸ¢é‡æ˜¯xAxiså†…çš„ä¸€éƒ¨åˆ†
+        \param[in] xAxis æŠ•å½±åˆ°çš„çŸ¢é‡
+        \return æŠ•å½±æ¯”ä¾‹ï¼Œæœ‰æ­£è´Ÿ
     */
     double projectScaleToVector(const Vector2d& xAxis) const;
     
-    //! Çó±¾Ê¸Á¿ÔÚÊ¸Á¿xAxisÉÏµÄÍ¶Ó°Ê¸Á¿ºÍ´¹Ö±Ê¸Á¿
-    /*! ½«±¾Ê¸Á¿Í¶Ó°µ½xAxis£¬¼ÆËãÍ¶Ó°±ÈÀı£¬
-        ÕıÍ¶Ó°Ê¸Á¿ = xAxis * Í¶Ó°±ÈÀı£¬±¾Ê¸Á¿ = proj + perp
-        \param[in] xAxis Í¶Ó°µ½µÄÊ¸Á¿
-        \param[out] proj ÕıÍ¶Ó°Ê¸Á¿
-        \param[out] perp ´¹Ö±Í¶Ó°Ê¸Á¿
-        \return Í¶Ó°±ÈÀı£¬ÓĞÕı¸º
+    //! æ±‚æœ¬çŸ¢é‡åœ¨çŸ¢é‡xAxisä¸Šçš„æŠ•å½±çŸ¢é‡å’Œå‚ç›´çŸ¢é‡
+    /*! å°†æœ¬çŸ¢é‡æŠ•å½±åˆ°xAxisï¼Œè®¡ç®—æŠ•å½±æ¯”ä¾‹ï¼Œ
+        æ­£æŠ•å½±çŸ¢é‡ = xAxis * æŠ•å½±æ¯”ä¾‹ï¼Œæœ¬çŸ¢é‡ = proj + perp
+        \param[in] xAxis æŠ•å½±åˆ°çš„çŸ¢é‡
+        \param[out] proj æ­£æŠ•å½±çŸ¢é‡
+        \param[out] perp å‚ç›´æŠ•å½±çŸ¢é‡
+        \return æŠ•å½±æ¯”ä¾‹ï¼Œæœ‰æ­£è´Ÿ
     */
     double projectResolveVector(const Vector2d& xAxis, 
         Vector2d& proj, Vector2d& perp) const;
     
-    //! Ê¸Á¿·Ö½â
-    /*! ½«±¾Ê¸Á¿ÔÚÁ½¸ö²»¹²ÏßµÄ·ÇÁãÊ¸Á¿ÉÏ½øĞĞÊ¸Á¿·Ö½â, ±¾Ê¸Á¿ = u*uAxis+v*vAxis
-        \param[in] uAxis uÖáÊ¸Á¿
-        \param[in] vAxis vÖáÊ¸Á¿
-        \param[out] u ÔÚuÖáÉÏµÄÊ¸Á¿·ÖÁ¿ÏµÊı£¬Ê¸Á¿·ÖÁ¿ = uAxis * u
-        \param[out] v ÔÚvÖáÉÏµÄÊ¸Á¿·ÖÁ¿ÏµÊı£¬Ê¸Á¿·ÖÁ¿ = vAxis * v
-        \return ÊÇ·ñÇó½â³É¹¦£¬uAxisºÍvAxis¹²ÏßÊ±Ê§°Ü
+    //! çŸ¢é‡åˆ†è§£
+    /*! å°†æœ¬çŸ¢é‡åœ¨ä¸¤ä¸ªä¸å…±çº¿çš„éé›¶çŸ¢é‡ä¸Šè¿›è¡ŒçŸ¢é‡åˆ†è§£, æœ¬çŸ¢é‡ = u*uAxis+v*vAxis
+        \param[in] uAxis uè½´çŸ¢é‡
+        \param[in] vAxis vè½´çŸ¢é‡
+        \param[out] u åœ¨uè½´ä¸Šçš„çŸ¢é‡åˆ†é‡ç³»æ•°ï¼ŒçŸ¢é‡åˆ†é‡ = uAxis * u
+        \param[out] v åœ¨vè½´ä¸Šçš„çŸ¢é‡åˆ†é‡ç³»æ•°ï¼ŒçŸ¢é‡åˆ†é‡ = vAxis * v
+        \return æ˜¯å¦æ±‚è§£æˆåŠŸï¼ŒuAxiså’ŒvAxiså…±çº¿æ—¶å¤±è´¥
     */
     bool resolveVector(const Vector2d& uAxis, const Vector2d& vAxis, 
         double& u, double& v) const;
 };
 
-_GEOM_END
 #endif // __GEOMETRY_VECTOR_H_

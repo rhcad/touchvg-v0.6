@@ -1,4 +1,4 @@
-// gidrgdi.cpp: ÊµÏÖÓÃGDIÊµÏÖµÄÍ¼ĞÎÏµÍ³ÀàGiGraphGdi
+ï»¿// gidrgdi.cpp: å®ç°ç”¨GDIå®ç°çš„å›¾å½¢ç³»ç»Ÿç±»GiGraphGdi
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 #ifdef _WIN32
@@ -6,9 +6,7 @@
 #include <_gigraph.h>
 #include <gdiobj.h>
 
-_GEOM_BEGIN
-
-// ÅĞ¶ÏÊÇ·ñÊÇWindows NT4/2000¼°ÒÔºó
+// åˆ¤æ–­æ˜¯å¦æ˜¯Windows NT4/2000åŠä»¥å
 static bool giIsNT()
 {
     static int flag = 0;
@@ -34,11 +32,11 @@ static bool giIsNT()
     }
 }
 
-//! DrawImplÀàµÄ»ù±¾Êı¾İ
+//! DrawImplç±»çš„åŸºæœ¬æ•°æ®
 struct GdiDrawImplBase
 {
-    GiGraphGdi*     m_this;             //!< ÓµÓĞÕß
-    HDC             m_hdc;              //!< ÏÔÊ¾DC
+    GiGraphGdi*     m_this;             //!< æ‹¥æœ‰è€…
+    HDC             m_hdc;              //!< æ˜¾ç¤ºDC
 
     GdiDrawImplBase(GiGraphGdi* pThis)
         : m_this(pThis), m_hdc(NULL)
@@ -46,7 +44,7 @@ struct GdiDrawImplBase
     }
 };
 
-//! ¹ÜÀíºó±¸»º³åÎ»Í¼µÄ¸¨ÖúÀà
+//! ç®¡ç†åå¤‡ç¼“å†²ä½å›¾çš„è¾…åŠ©ç±»
 class CachedBmp
 {
 public:
@@ -81,18 +79,18 @@ private:
     HBITMAP m_cachedBmp;
 };
 
-//! GiGraphGdiµÄÄÚ²¿ÊµÏÖÀà
+//! GiGraphGdiçš„å†…éƒ¨å®ç°ç±»
 class GiGraphGdi::DrawImpl : public GdiDrawImplBase
 {
 public:
-    GiContext       m_context;          //!< µ±Ç°»æÍ¼²ÎÊı
-    HGDIOBJ         m_pen;              //!< µ±Ç°»æÍ¼²ÎÊı¶ÔÓ¦µÄ»­±Ê
-    HGDIOBJ         m_brush;            //!< µ±Ç°»æÍ¼²ÎÊı¶ÔÓ¦µÄ»­Ë¢
+    GiContext       m_context;          //!< å½“å‰ç»˜å›¾å‚æ•°
+    HGDIOBJ         m_pen;              //!< å½“å‰ç»˜å›¾å‚æ•°å¯¹åº”çš„ç”»ç¬”
+    HGDIOBJ         m_brush;            //!< å½“å‰ç»˜å›¾å‚æ•°å¯¹åº”çš„ç”»åˆ·
 
-    HDC             m_buffDC;           //!< »º³åDC
-    HBITMAP         m_buffBmp;          //!< »º³åÎ»Í¼
-    HGDIOBJ         m_buffOldBmp;       //!< »º³åDCÖĞÔ­À´µÄÎ»Í¼
-    CachedBmp       m_cachedBmp[2];     //!< ºó±¸»º³åÎ»Í¼
+    HDC             m_buffDC;           //!< ç¼“å†²DC
+    HBITMAP         m_buffBmp;          //!< ç¼“å†²ä½å›¾
+    HGDIOBJ         m_buffOldBmp;       //!< ç¼“å†²DCä¸­åŸæ¥çš„ä½å›¾
+    CachedBmp       m_cachedBmp[2];     //!< åå¤‡ç¼“å†²ä½å›¾
 
     DrawImpl(GiGraphGdi* pThis) : GdiDrawImplBase(pThis)
     {
@@ -272,7 +270,7 @@ bool GiGraphGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
 
     ::SetBkMode(m_draw->getDrawDC(), TRANSPARENT);
 
-    // ÉèÖÃÕÛÏßĞ±½ÓÁ¬½ÓµÄ×îĞ¡¼Ğ½ÇÎª60¶È
+    // è®¾ç½®æŠ˜çº¿æ–œæ¥è¿æ¥çš„æœ€å°å¤¹è§’ä¸º60åº¦
     ::SetMiterLimit(m_draw->getDrawDC(), 
         static_cast<float>(1.0 / sin(_M_PI_6)), NULL);
 
@@ -682,10 +680,10 @@ bool GiGraphGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
     {
         RECT rc, rcDraw, rcFrom;
 
-        // rc: Õû¸öÍ¼Ïñ¶ÔÓ¦µÄÏÔÊ¾×ø±êÇøÓò
+        // rc: æ•´ä¸ªå›¾åƒå¯¹åº”çš„æ˜¾ç¤ºåæ ‡åŒºåŸŸ
         (rectW * xf().worldToDisplay()).get(rc.left, rc.top, rc.right, rc.bottom);
 
-        // rcDraw: Í¼Ïñ¾­¼ô²ÃºóµÄ¿ÉÏÔÊ¾²¿·Ö
+        // rcDraw: å›¾åƒç»å‰ªè£åçš„å¯æ˜¾ç¤ºéƒ¨åˆ†
         if (!IntersectRect(&rcDraw, &rc, &m_impl->clipBox))
             return false;
 
@@ -693,13 +691,13 @@ bool GiGraphGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
         width = MulDiv(hmWidth, GetDeviceCaps(hdc, LOGPIXELSX), 2540);
         height = MulDiv(hmHeight, GetDeviceCaps(hdc, LOGPIXELSY), 2540);
 
-        // rcFrom: rcDrawÔÚÔ­Ê¼Í¼ÏñÉÏ¶ÔÓ¦µÄÍ¼Ïñ·¶Î§
+        // rcFrom: rcDrawåœ¨åŸå§‹å›¾åƒä¸Šå¯¹åº”çš„å›¾åƒèŒƒå›´
         rcFrom.left = MulDiv(rcDraw.left - rc.left, width, rc.right - rc.left);
         rcFrom.top = MulDiv(rcDraw.top - rc.top, height, rc.bottom - rc.top);
         rcFrom.right = MulDiv(rcDraw.right - rc.left, width, rc.right - rc.left);
         rcFrom.bottom = MulDiv(rcDraw.bottom - rc.top, height, rc.bottom - rc.top);
 
-        // ¸ù¾İrectWÕı¸º¾ö¶¨ÊÇ·ñµßµ¹ÏÔÊ¾Í¼Ïñ
+        // æ ¹æ®rectWæ­£è´Ÿå†³å®šæ˜¯å¦é¢ å€’æ˜¾ç¤ºå›¾åƒ
         if (rectW.xmin > rectW.xmax)
             mgSwap(rcDraw.left, rcDraw.right);
         if (rectW.ymin > rectW.ymax)
@@ -729,5 +727,4 @@ bool GiGraphGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
     return ret ? true : false;
 }
 
-_GEOM_END
 #endif //_WIN32

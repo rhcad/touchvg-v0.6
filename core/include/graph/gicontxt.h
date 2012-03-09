@@ -1,17 +1,14 @@
-//! \file gicontxt.h
-//! \brief ¶¨Òå»æÍ¼»·¾³Àà GiContext
+ï»¿//! \file gicontxt.h
+//! \brief å®šä¹‰ç»˜å›¾çŽ¯å¢ƒç±» GiContext
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #ifndef __GEOMETRY_DRAWCONTEXT_H_
 #define __GEOMETRY_DRAWCONTEXT_H_
 
-#include "gidef.h"
 #include "gicolor.h"
 
-_GEOM_BEGIN
-
-//! ÏßÐÍ
+//! çº¿åž‹
 enum kLineStyle {
     kLineSolid = 0,
     kLineDash,          //!< -------
@@ -21,26 +18,26 @@ enum kLineStyle {
     kLineNull
 };
 
-//! »æÍ¼²ÎÊýÉÏÏÂÎÄÀà
-/*! ÓÃÓÚÔÚÍ¼ÐÎÏµÍ³µÄ»æÍ¼º¯ÊýÖÐ´«Èë»æÍ¼²ÎÊý
+//! ç»˜å›¾å‚æ•°ä¸Šä¸‹æ–‡ç±»
+/*! ç”¨äºŽåœ¨å›¾å½¢ç³»ç»Ÿçš„ç»˜å›¾å‡½æ•°ä¸­ä¼ å…¥ç»˜å›¾å‚æ•°
     \ingroup _GRAPH_INTERFACE_
 */
 class GiContext
 {
 public:
-    //! Ä¬ÈÏ¹¹Ôìº¯Êý
-    /*! »æÍ¼²ÎÊýÎª1ÏñËØ¿íµÄºÚÊµÏß¡¢²»Ìî³ä
+    //! é»˜è®¤æž„é€ å‡½æ•°
+    /*! ç»˜å›¾å‚æ•°ä¸º1åƒç´ å®½çš„é»‘å®žçº¿ã€ä¸å¡«å……
     */
     GiContext() : m_type(0), m_lineStyle(kLineSolid), m_lineWidth(0)
         , m_lineColor(GiColor::Black()), m_fillColor(GICOLOR_INVALID)
     {
     }
     
-    //! Ö¸¶¨ÏßÌõ²ÎÊýÀ´¹¹Ôì
-    /*! Ìî³ä²ÎÊýÎª²»Ìî³ä
-        \param width Ïß¿í£¬ÕýÊý±íÊ¾µ¥Î»Îª0.01mm£¬Áã±íÊ¾1ÏñËØ¿í£¬¸ºÊýÊ±±íÊ¾µ¥Î»ÎªÏñËØ
-        \param color ÏßÌõÑÕÉ«£¬ GICOLOR_INVALID ±íÊ¾²»»­ÏßÌõ
-        \param style ÏßÐÍ£¬È¡ÖµÎª kLineSolid µÈ
+    //! æŒ‡å®šçº¿æ¡å‚æ•°æ¥æž„é€ 
+    /*! å¡«å……å‚æ•°ä¸ºä¸å¡«å……
+        \param width çº¿å®½ï¼Œæ­£æ•°è¡¨ç¤ºå•ä½ä¸º0.01mmï¼Œé›¶è¡¨ç¤º1åƒç´ å®½ï¼Œè´Ÿæ•°æ—¶è¡¨ç¤ºå•ä½ä¸ºåƒç´ 
+        \param color çº¿æ¡é¢œè‰²ï¼Œ GICOLOR_INVALID è¡¨ç¤ºä¸ç”»çº¿æ¡
+        \param style çº¿åž‹ï¼Œå–å€¼ä¸º kLineSolid ç­‰
     */
     GiContext(Int16 width, GiColor color = GiColor::Black(), kLineStyle style = kLineSolid)
         : m_type(0), m_lineStyle(style), m_lineWidth(width)
@@ -48,7 +45,7 @@ public:
     {
     }
 
-    //! ¿½±´¹¹Ôìº¯Êý
+    //! æ‹·è´æž„é€ å‡½æ•°
     GiContext(const GiContext& src)
     {
         m_lineStyle = src.m_lineStyle;
@@ -57,7 +54,7 @@ public:
         m_fillColor = src.m_fillColor;
     }
 
-    //! ¸³Öµ²Ù×÷·ûº¯Êý
+    //! èµ‹å€¼æ“ä½œç¬¦å‡½æ•°
     GiContext& operator=(const GiContext& src)
     {
         if (this != &src)
@@ -70,111 +67,111 @@ public:
         return *this;
     }
 
-    //! ·µ»ØÏßÐÍ
+    //! è¿”å›žçº¿åž‹
     kLineStyle getLineStyle() const
     {
         return m_lineColor.invalid() ? kLineNull : m_lineStyle;
     }
 
-    //! ÉèÖÃÏßÐÍ
+    //! è®¾ç½®çº¿åž‹
     void setLineStyle(kLineStyle style)
     {
         m_lineStyle = style;
     }
 
-    //! ·µ»ØÏß¿í
-    /*! ÕýÊý±íÊ¾µ¥Î»Îª0.01mm£¬Áã±íÊ¾1ÏñËØ¿í£¬¸ºÊýÊ±±íÊ¾µ¥Î»ÎªÏñËØ
+    //! è¿”å›žçº¿å®½
+    /*! æ­£æ•°è¡¨ç¤ºå•ä½ä¸º0.01mmï¼Œé›¶è¡¨ç¤º1åƒç´ å®½ï¼Œè´Ÿæ•°æ—¶è¡¨ç¤ºå•ä½ä¸ºåƒç´ 
     */
     Int16 getLineWidth() const
     {
         return m_lineWidth;
     }
 
-    //! ÉèÖÃÏß¿í
+    //! è®¾ç½®çº¿å®½
     /*!
-        \param width Ïß¿í£¬ÕýÊý±íÊ¾µ¥Î»Îª0.01mm£¬Áã±íÊ¾1ÏñËØ¿í£¬¸ºÊýÊ±±íÊ¾µ¥Î»ÎªÏñËØ
+        \param width çº¿å®½ï¼Œæ­£æ•°è¡¨ç¤ºå•ä½ä¸º0.01mmï¼Œé›¶è¡¨ç¤º1åƒç´ å®½ï¼Œè´Ÿæ•°æ—¶è¡¨ç¤ºå•ä½ä¸ºåƒç´ 
     */
     void setLineWidth(Int16 width)
     {
         m_lineWidth = width;
     }
 
-    //! ·µ»ØÊÇ·ñÎª¿ÕÏß£¬¼´²»»­Ïß
+    //! è¿”å›žæ˜¯å¦ä¸ºç©ºçº¿ï¼Œå³ä¸ç”»çº¿
     bool isNullLine() const
     {
         return m_lineStyle == kLineNull || m_lineColor.invalid();
     }
 
-    //! ÉèÖÃÎª¿ÕÏß£¬¼´²»»­Ïß
-    /*! Èç¹ûÒª»Ö¸´³ÉÆÕÍ¨»­Ïß×´Ì¬£¬¿Éµ÷setLineStyle(kLineSolid)
+    //! è®¾ç½®ä¸ºç©ºçº¿ï¼Œå³ä¸ç”»çº¿
+    /*! å¦‚æžœè¦æ¢å¤æˆæ™®é€šç”»çº¿çŠ¶æ€ï¼Œå¯è°ƒsetLineStyle(kLineSolid)
     */
     void setNullLine()
     {
         m_lineStyle = kLineNull;
     }
 
-    //! ·µ»ØÏßÌõÑÕÉ«
+    //! è¿”å›žçº¿æ¡é¢œè‰²
     GiColor getLineColor() const
     {
         return m_lineColor;
     }
 
-    //! ÉèÖÃÏßÌõÑÕÉ«£¬ GICOLOR_INVALID ±íÊ¾²»»­ÏßÌõ
+    //! è®¾ç½®çº¿æ¡é¢œè‰²ï¼Œ GICOLOR_INVALID è¡¨ç¤ºä¸ç”»çº¿æ¡
     void setLineColor(const GiColor& color)
     {
         m_lineColor = color;
     }
 
-    //! ·µ»ØÏßÌõÍ¸Ã÷¶È
+    //! è¿”å›žçº¿æ¡é€æ˜Žåº¦
     UInt8 getLineAlpha() const
     {
         return m_lineColor.a;
     }
 
-    //! ÉèÖÃÏßÌõÍ¸Ã÷¶È£¬0µ½255£¬0±íÊ¾È«Í¸Ã÷£¬255±íÊ¾²»Í¸Ã÷
+    //! è®¾ç½®çº¿æ¡é€æ˜Žåº¦ï¼Œ0åˆ°255ï¼Œ0è¡¨ç¤ºå…¨é€æ˜Žï¼Œ255è¡¨ç¤ºä¸é€æ˜Ž
     void setLineAlpha(UInt8 alpha)
     {
         m_lineColor.a = alpha;
     }
 
-    //! ·µ»ØÊÇ·ñÌî³ä
+    //! è¿”å›žæ˜¯å¦å¡«å……
     bool hasFillColor() const
     {
         return !m_fillColor.invalid();
     }
 
-    //! ÉèÖÃÎª²»Ìî³ä
+    //! è®¾ç½®ä¸ºä¸å¡«å……
     void setNoFillColor()
     {
         m_fillColor = GICOLOR_INVALID;
     }
 
-    //! ·µ»ØÌî³äÑÕÉ«
+    //! è¿”å›žå¡«å……é¢œè‰²
     GiColor getFillColor() const
     {
         return m_fillColor;
     }
 
-    //! ÉèÖÃÌî³äÑÕÉ«£¬ GICOLOR_INVALID ±íÊ¾²»Ìî³ä
+    //! è®¾ç½®å¡«å……é¢œè‰²ï¼Œ GICOLOR_INVALID è¡¨ç¤ºä¸å¡«å……
     void setFillColor(const GiColor& color)
     {
         m_fillColor = color;
     }
 
-    //! ·µ»ØÌî³äÍ¸Ã÷¶È
+    //! è¿”å›žå¡«å……é€æ˜Žåº¦
     UInt8 getFillAlpha() const
     {
         return m_fillColor.a;
     }
 
-    //! ÉèÖÃÌî³äÍ¸Ã÷¶È£¬0µ½255£¬0±íÊ¾È«Í¸Ã÷£¬255±íÊ¾²»Í¸Ã÷
+    //! è®¾ç½®å¡«å……é€æ˜Žåº¦ï¼Œ0åˆ°255ï¼Œ0è¡¨ç¤ºå…¨é€æ˜Žï¼Œ255è¡¨ç¤ºä¸é€æ˜Ž
     void setFillAlpha(UInt8 alpha)
     {
         m_fillColor.a = alpha;
     }
 
-    //! ·µ»Ø»æÍ¼»·¾³ÀàÐÍ£¬¹©ÅÉÉúÀàÓÃ
-    /*! ±¾ÀàÊ¼ÖÕ·µ»Ø1£¬ÅÉÉúÀà¿ÉÉèÖÃ m_type ÎªÆäËûÖµ
+    //! è¿”å›žç»˜å›¾çŽ¯å¢ƒç±»åž‹ï¼Œä¾›æ´¾ç”Ÿç±»ç”¨
+    /*! æœ¬ç±»å§‹ç»ˆè¿”å›ž1ï¼Œæ´¾ç”Ÿç±»å¯è®¾ç½® m_type ä¸ºå…¶ä»–å€¼
     */
     int getType() const
     {
@@ -182,13 +179,12 @@ public:
     }
 
 protected:
-    int         m_type;            //!< ÅÉÉúÀà¿ÉÖ¸¶¨ÆäËûÖµÀ´±íÊ¾²»Í¬ÀàÐÍ
+    int         m_type;            //!< æ´¾ç”Ÿç±»å¯æŒ‡å®šå…¶ä»–å€¼æ¥è¡¨ç¤ºä¸åŒç±»åž‹
 private:
-    kLineStyle  m_lineStyle;       //!< ÏßÐÍ
-    Int16       m_lineWidth;       //!< Ïß¿í, >0: 0.01mm, =0: 1px, <0:px
+    kLineStyle  m_lineStyle;       //!< çº¿åž‹
+    Int16       m_lineWidth;       //!< çº¿å®½, >0: 0.01mm, =0: 1px, <0:px
     GiColor     m_lineColor;
     GiColor     m_fillColor;
 };
 
-_GEOM_END
 #endif // __GEOMETRY_DRAWCONTEXT_H_

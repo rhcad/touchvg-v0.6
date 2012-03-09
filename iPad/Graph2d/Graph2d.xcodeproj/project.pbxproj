@@ -28,7 +28,6 @@
 		7E9CE81D1500BA0B00487BEF /* mgdef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8101500BA0B00487BEF /* mgdef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE81E1500BA0B00487BEF /* mglnrel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8111500BA0B00487BEF /* mglnrel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE81F1500BA0B00487BEF /* mgmat.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8121500BA0B00487BEF /* mgmat.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E9CE8201500BA0B00487BEF /* mgnamesp.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8131500BA0B00487BEF /* mgnamesp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8211500BA0B00487BEF /* mgnear.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8141500BA0B00487BEF /* mgnear.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8221500BA0B00487BEF /* mgpnt.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8151500BA0B00487BEF /* mgpnt.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8231500BA0B00487BEF /* mgrect.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8161500BA0B00487BEF /* mgrect.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -84,7 +83,6 @@
 		7E9CE8101500BA0B00487BEF /* mgdef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgdef.h; path = ../../core/include/geom/mgdef.h; sourceTree = "<group>"; };
 		7E9CE8111500BA0B00487BEF /* mglnrel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mglnrel.h; path = ../../core/include/geom/mglnrel.h; sourceTree = "<group>"; };
 		7E9CE8121500BA0B00487BEF /* mgmat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgmat.h; path = ../../core/include/geom/mgmat.h; sourceTree = "<group>"; };
-		7E9CE8131500BA0B00487BEF /* mgnamesp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgnamesp.h; path = ../../core/include/geom/mgnamesp.h; sourceTree = "<group>"; };
 		7E9CE8141500BA0B00487BEF /* mgnear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgnear.h; path = ../../core/include/geom/mgnear.h; sourceTree = "<group>"; };
 		7E9CE8151500BA0B00487BEF /* mgpnt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgpnt.h; path = ../../core/include/geom/mgpnt.h; sourceTree = "<group>"; };
 		7E9CE8161500BA0B00487BEF /* mgrect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgrect.h; path = ../../core/include/geom/mgrect.h; sourceTree = "<group>"; };
@@ -222,7 +220,6 @@
 				7E9CE8101500BA0B00487BEF /* mgdef.h */,
 				7E9CE8111500BA0B00487BEF /* mglnrel.h */,
 				7E9CE8121500BA0B00487BEF /* mgmat.h */,
-				7E9CE8131500BA0B00487BEF /* mgnamesp.h */,
 				7E9CE8141500BA0B00487BEF /* mgnear.h */,
 				7E9CE8151500BA0B00487BEF /* mgpnt.h */,
 				7E9CE8161500BA0B00487BEF /* mgrect.h */,
@@ -246,7 +243,6 @@
 				7E9CE81D1500BA0B00487BEF /* mgdef.h in Headers */,
 				7E9CE81E1500BA0B00487BEF /* mglnrel.h in Headers */,
 				7E9CE81F1500BA0B00487BEF /* mgmat.h in Headers */,
-				7E9CE8201500BA0B00487BEF /* mgnamesp.h in Headers */,
 				7E9CE8211500BA0B00487BEF /* mgnear.h in Headers */,
 				7E9CE8221500BA0B00487BEF /* mgpnt.h in Headers */,
 				7E9CE8231500BA0B00487BEF /* mgrect.h in Headers */,
@@ -310,7 +306,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
-				ORGANIZATIONNAME = "github.com/rhcad";
+				ORGANIZATIONNAME = github.com/rhcad;
 			};
 			buildConfigurationList = 4AE2C1CC1424998500C67987 /* Build configuration list for PBXProject "Graph2d" */;
 			compatibilityVersion = "Xcode 3.2";

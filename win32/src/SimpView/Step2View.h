@@ -1,4 +1,4 @@
-// Step2View.h : interface of the CScrollShapeView class
+ï»¿// Step2View.h : interface of the CScrollShapeView class
 //
 #pragma once
 
@@ -38,7 +38,7 @@ private:
 	void OnVScrThumbTrack(SCROLLINFO &si, UINT nPos);
 
 private:
-	RECT			m_rcLimits;			// ¹ö¶¯Ìõ¼«ÏŞ·¶Î§
-	RECT			m_rcScrWnd;			// ¹ö¶¯Ìõµ±Ç°´°¿Ú
-	bool			m_bRealPan;			// ¶¯Ì¬Æ½ÒÆÊ±, true:Á¢¼´ÏÔÊ¾ĞÂÄÚÈİ, false:½öÆ½ÒÆ´°¿ÚÍ¼Ïñ
+	RECT			m_rcLimits;			// æ»šåŠ¨æ¡æé™èŒƒå›´
+	RECT			m_rcScrWnd;			// æ»šåŠ¨æ¡å½“å‰çª—å£
+	bool			m_bRealPan;			// åŠ¨æ€å¹³ç§»æ—¶, true:ç«‹å³æ˜¾ç¤ºæ–°å†…å®¹, false:ä»…å¹³ç§»çª—å£å›¾åƒ
 };

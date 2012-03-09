@@ -1,4 +1,4 @@
-// Step2View.cpp : implementation of the CScrollShapeView class
+ï»¿// Step2View.cpp : implementation of the CScrollShapeView class
 //
 
 #include "stdafx.h"
@@ -34,7 +34,7 @@ int CScrollShapeView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CRandomShapeView::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
-	// ÏÔÊ¾³ö¹ö¶¯Ìõ£¬ÔİÊ±Ë«Ïò¶¼²»¿É¹ö¶¯
+	// æ˜¾ç¤ºå‡ºæ»šåŠ¨æ¡ï¼Œæš‚æ—¶åŒå‘éƒ½ä¸å¯æ»šåŠ¨
 	//
 	SCROLLINFO si;
 	si.cbSize = sizeof(si);
@@ -54,23 +54,23 @@ void CScrollShapeView::OnZoomed()
 
 	Box2d rect;
 
-	// m_rcLimits: ¼«ÏŞ·¶Î§¶ÔÓ¦µÄ×ø±ê·¶Î§, ÏñËØ
+	// m_rcLimits: æé™èŒƒå›´å¯¹åº”çš„åæ ‡èŒƒå›´, åƒç´ 
 	rect = m_shapes.getExtent() * m_xf.modelToDisplay();
 	rect.inflate(1, 1);
 	rect.get(m_rcLimits.left, m_rcLimits.top, m_rcLimits.right, m_rcLimits.bottom);
 
-	// m_rcScrWnd: µ±Ç°´°¿Ú¶ÔÓ¦µÄ×ø±ê·¶Î§, ÏñËØ
+	// m_rcScrWnd: å½“å‰çª—å£å¯¹åº”çš„åæ ‡èŒƒå›´, åƒç´ 
 	rect = Box2d(m_xf.getCenterW(),
 		m_xf.getWidth() / m_xf.getWorldToDisplayX(),
 		m_xf.getHeight() / m_xf.getWorldToDisplayY());
 	rect *= m_xf.worldToDisplay();
 	rect.get(m_rcScrWnd.left, m_rcScrWnd.top, m_rcScrWnd.right, m_rcScrWnd.bottom);
 
-	// ÒÔm_rcLimits×óÉÏ½ÇÎªÔ­µãµ÷Õûm_rcScrWndºÍm_rcLimits
+	// ä»¥m_rcLimitså·¦ä¸Šè§’ä¸ºåŸç‚¹è°ƒæ•´m_rcScrWndå’Œm_rcLimits
 	::OffsetRect(&m_rcScrWnd, -m_rcLimits.left, -m_rcLimits.top);
 	::OffsetRect(&m_rcLimits, -m_rcLimits.left, -m_rcLimits.top);
 
-	// ±ÜÃâm_rcScrWnd²¿·Ö³¬³öm_rcLimits
+	// é¿å…m_rcScrWndéƒ¨åˆ†è¶…å‡ºm_rcLimits
 	::UnionRect(&m_rcLimits, &m_rcLimits, &m_rcScrWnd);
 
 	SCROLLINFO si;

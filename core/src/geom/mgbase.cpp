@@ -1,12 +1,10 @@
-// mgbase.cpp: ÊµÏÖ»ù±¾¼ÆËã¹¦ÄÜº¯Êı
+ï»¿// mgbase.cpp: å®ç°åŸºæœ¬è®¡ç®—åŠŸèƒ½å‡½æ•°
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "mgbase.h"
 
-_GEOM_BEGIN
-
-// ½«Êı×ª»»µ½ÊıÖµ·¶Î§[tmin, tmax)ÄÚ
+// å°†æ•°è½¬æ¢åˆ°æ•°å€¼èŒƒå›´[tmin, tmax)å†…
 GEOMAPI double mgToRange(double value, double tmin, double tmax)
 {
     while (value < tmin)
@@ -16,31 +14,31 @@ GEOMAPI double mgToRange(double value, double tmin, double tmax)
     return value;
 }
 
-// Ê¹½Ç¶ÈÔÚ[0, 2PI)Ö®¼ä
+// ä½¿è§’åº¦åœ¨[0, 2PI)ä¹‹é—´
 GEOMAPI double mgTo0_2PI(double angle)
 {
     return mgToRange(angle, 0.0, _M_2PI);
 }
 
-// Ê¹½Ç¶ÈÔÚ[-PI, PI)Ö®¼ä
+// ä½¿è§’åº¦åœ¨[-PI, PI)ä¹‹é—´
 GEOMAPI double mgToPI(double angle)
 {
     return mgToRange(angle, -M_PI, M_PI);
 }
 
-// ½Ç¶È´Ó¶È×ª»»µ½»¡¶È
+// è§’åº¦ä»åº¦è½¬æ¢åˆ°å¼§åº¦
 GEOMAPI double mgDeg2Rad(double deg)
 {
     return deg * _M_D2R;
 }
 
-// ½Ç¶È´Ó»¡¶È×ª»»µ½¶È
+// è§’åº¦ä»å¼§åº¦è½¬æ¢åˆ°åº¦
 GEOMAPI double mgRad2Deg(double rad)
 {
     return rad * _M_R2D;
 }
 
-// ¶È·ÖÃë×ª»»µ½½Ç¶È(¶È)
+// åº¦åˆ†ç§’è½¬æ¢åˆ°è§’åº¦(åº¦)
 GEOMAPI double mgDms2Deg(double angle)
 {
     int nDeg, nMin;
@@ -66,7 +64,7 @@ GEOMAPI double mgDms2Deg(double angle)
     return sign * (nDeg + nMin / 60.0 + angle / 3600.0);
 }
 
-// ½Ç¶È(¶È)×ª»»µ½¶È·ÖÃë
+// è§’åº¦(åº¦)è½¬æ¢åˆ°åº¦åˆ†ç§’
 GEOMAPI double mgDeg2Dms(double angle)
 {
     int nDeg, nMin;
@@ -104,7 +102,7 @@ GEOMAPI double mgDeg2Dms(double angle)
     return sign * (nDeg + nMin / 100.0 + dSecond / 10000.0);
 }
 
-// ÇóÁ½¸ö½Ç¶ÈµÄ½ÇÆ½·ÖÏß½Ç¶È, [0, 2PI)
+// æ±‚ä¸¤ä¸ªè§’åº¦çš„è§’å¹³åˆ†çº¿è§’åº¦, [0, 2PI)
 GEOMAPI double mgMidAngle(double fromAngle, double toAngle)
 {
     fromAngle = mgTo0_2PI(fromAngle);
@@ -117,7 +115,7 @@ GEOMAPI double mgMidAngle(double fromAngle, double toAngle)
     return (fromAngle + toAngle) / 2;
 }
 
-// ÇóÁ½¸ö½Ç¶ÈµÄ¼Ğ½Ç, [-PI, PI)
+// æ±‚ä¸¤ä¸ªè§’åº¦çš„å¤¹è§’, [-PI, PI)
 GEOMAPI double mgDiffAngle(double fromAngle, double toAngle)
 {
     fromAngle = mgTo0_2PI(fromAngle);
@@ -129,7 +127,7 @@ GEOMAPI double mgDiffAngle(double fromAngle, double toAngle)
     return mgToPI(toAngle - fromAngle);
 }
 
-// ¼ÆËã×î´ó¹«Ô¼Êı
+// è®¡ç®—æœ€å¤§å…¬çº¦æ•°
 GEOMAPI long mgGcd(long x, long y)
 {
     while (x != y)
@@ -140,7 +138,7 @@ GEOMAPI long mgGcd(long x, long y)
     return x;
 }
 
-// ËÄÉáÎåÈë. Ğ¡ÊıÎ»[-6£¬7]. eg: mgRoundReal(1.25, 1)=1.3
+// å››èˆäº”å…¥. å°æ•°ä½[-6ï¼Œ7]. eg: mgRoundReal(1.25, 1)=1.3
 GEOMAPI double mgRoundReal(double value, int decimal)
 {
     if (decimal < -6) decimal = -6;
@@ -149,5 +147,3 @@ GEOMAPI double mgRoundReal(double value, int decimal)
     long double l = floorl(e10n * value + 0.5);
     return static_cast<double>(l / e10n);
 }
-
-_GEOM_END

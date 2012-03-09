@@ -211,10 +211,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\geom\mgnamesp.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\core\include\geom\mgnear.h"
 				>
 			</File>

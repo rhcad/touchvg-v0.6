@@ -1,10 +1,8 @@
-// mgnearbz.cpp: ÊµÏÖ±´Èû¶ûÇúÏß¶Î×î½üµã¼ÆËãº¯Êı mgNearestOnBezier
+ï»¿// mgnearbz.cpp: å®ç°è´å¡å°”æ›²çº¿æ®µæœ€è¿‘ç‚¹è®¡ç®—å‡½æ•° mgNearestOnBezier
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "mgcurv.h"
-
-_GEOM_BEGIN
 
 #define DEGREE  3           // Cubic Bezier curve
 #define W_DEGREE 5          // Degree of eqn to find roots of
@@ -338,7 +336,7 @@ static int FindRoots(const Point2d* w, int degree, double* t, int depth)
     return (left_count+right_count);
 }
 
-// ¼ÆËãÒ»µãµ½Èı´Î±´Èû¶ûÇúÏß¶ÎÉÏµÄ×î½üµã
+// è®¡ç®—ä¸€ç‚¹åˆ°ä¸‰æ¬¡è´å¡å°”æ›²çº¿æ®µä¸Šçš„æœ€è¿‘ç‚¹
 // Parameters :
 //      pt: The user-supplied point
 //      pts: Control points of cubic Bezier
@@ -392,5 +390,3 @@ GEOMAPI void mgNearestOnBezier(
     // printf("t : %4.12f\n", t);
     ptNear = (BezierPoint(pts, DEGREE, t, (Point2d *)NULL, (Point2d *)NULL));
 }
-
-_GEOM_END

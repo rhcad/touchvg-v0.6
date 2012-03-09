@@ -1,12 +1,10 @@
-// mgvec.cpp: ÊµÏÖ¶şÎ¬Ê¸Á¿ÀàVector2d
+ï»¿// mgvec.cpp: å®ç°äºŒç»´çŸ¢é‡ç±»Vector2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "mgpnt.h"
 
-_GEOM_BEGIN
-
-// ÒÆ¶¯Ö±³ß·¨£¬ÒÔ±¾µãÏòdir·½ÏòµãÑØÏßÎªÖ±³ß±ß£¬ÔÚ´¹Ö±ÑØÏß·½ÏòÆ«ÒÆyoff
+// ç§»åŠ¨ç›´å°ºæ³•ï¼Œä»¥æœ¬ç‚¹å‘diræ–¹å‘ç‚¹æ²¿çº¿ä¸ºç›´å°ºè¾¹ï¼Œåœ¨å‚ç›´æ²¿çº¿æ–¹å‘åç§»yoff
 Point2d Point2d::rulerPoint(const Point2d& dir, double yoff) const
 {
     double len = distanceTo(dir);
@@ -19,7 +17,7 @@ Point2d Point2d::rulerPoint(const Point2d& dir, double yoff) const
     }
 }
 
-// ÒÆ¶¯Ö±³ß·¨£¬dir·½Ïòµã£¬ÔÚÑØÏß·½ÏòÆ«ÒÆxoff£¬´¹Ö±ÑØÏß·½ÏòÆ«ÒÆyoff
+// ç§»åŠ¨ç›´å°ºæ³•ï¼Œdiræ–¹å‘ç‚¹ï¼Œåœ¨æ²¿çº¿æ–¹å‘åç§»xoffï¼Œå‚ç›´æ²¿çº¿æ–¹å‘åç§»yoff
 Point2d Point2d::rulerPoint(const Point2d& dir, double xoff, double yoff) const
 {
     double len = distanceTo(dir);
@@ -34,7 +32,7 @@ Point2d Point2d::rulerPoint(const Point2d& dir, double xoff, double yoff) const
     }
 }
 
-// ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñÆ½ĞĞ
+// åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦å¹³è¡Œ
 bool Vector2d::isParallelTo(const Vector2d& vec, const Tol& tol) const
 {
     double cosfz = dotProduct(vec);
@@ -42,7 +40,7 @@ bool Vector2d::isParallelTo(const Vector2d& vec, const Tol& tol) const
     return (fabs(sinfz) <= fabs(cosfz) * tol.equalVector());
 }
 
-// ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñÆ½ĞĞ
+// åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦å¹³è¡Œ
 bool Vector2d::isParallelTo(const Vector2d& vec, 
                             const Tol& tol, bool& nonzero) const
 {
@@ -59,17 +57,17 @@ bool Vector2d::isParallelTo(const Vector2d& vec,
     return ret;
 }
 
-// ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñÍ¬Ïò
+// åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦åŒå‘
 bool Vector2d::isCodirectionalTo(const Vector2d& vec, const Tol& tol) const
 {
     double cosfz = dotProduct(vec);
-    if (cosfz < -_MGZERO)          // Í¬ÏòÔòcos(¼Ğ½Ç)½Ó½ü1.0
+    if (cosfz < -_MGZERO)          // åŒå‘åˆ™cos(å¤¹è§’)æ¥è¿‘1.0
         return false;
     double sinfz = crossProduct(vec);
     return (fabs(sinfz) <= cosfz * tol.equalVector());
 }
 
-// ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñÍ¬Ïò
+// åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦åŒå‘
 bool Vector2d::isCodirectionalTo(const Vector2d& vec, 
                                  const Tol& tol, bool& nonzero) const
 {
@@ -90,17 +88,17 @@ bool Vector2d::isCodirectionalTo(const Vector2d& vec,
     return ret;
 }
 
-// ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñ·´Ïò
+// åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦åå‘
 bool Vector2d::isOppositeTo(const Vector2d& vec, const Tol& tol) const
 {
     double cosfz = dotProduct(vec);
-    if (cosfz > -_MGZERO)          // ·´ÏòÔòcos(¼Ğ½Ç)½Ó½ü-1.0
+    if (cosfz > -_MGZERO)          // åå‘åˆ™cos(å¤¹è§’)æ¥è¿‘-1.0
         return false;
     double sinfz = crossProduct(vec);
     return (fabs(sinfz) <= (-cosfz) * tol.equalVector());
 }
 
-// ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñ·´Ïò
+// åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦åå‘
 bool Vector2d::isOppositeTo(const Vector2d& vec, 
                             const Tol& tol, bool& nonzero) const
 {
@@ -121,7 +119,7 @@ bool Vector2d::isOppositeTo(const Vector2d& vec,
     return ret;
 }
 
-// ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñ´¹Ö±
+// åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦å‚ç›´
 bool Vector2d::isPerpendicularTo(const Vector2d& vec, const Tol& tol) const
 {
     double sinfz = fabs(crossProduct(vec));
@@ -131,7 +129,7 @@ bool Vector2d::isPerpendicularTo(const Vector2d& vec, const Tol& tol) const
     return (cosfz <= sinfz * tol.equalVector());
 }
 
-// ÅĞ¶ÏÁ½¸öÊ¸Á¿ÊÇ·ñ´¹Ö±
+// åˆ¤æ–­ä¸¤ä¸ªçŸ¢é‡æ˜¯å¦å‚ç›´
 bool Vector2d::isPerpendicularTo(const Vector2d& vec, 
                                  const Tol& tol, bool& nonzero) const
 {
@@ -147,8 +145,8 @@ bool Vector2d::isPerpendicularTo(const Vector2d& vec,
     return ret;
 }
 
-// Çó±¾Ê¸Á¿Í¶Ó°µ½Ê¸Á¿xAxisÉÏµÄ´¹Ö±¾àÀë
-// ÔÚxAxisµÄÄæÊ±Õë·½ÏòÊ±·µ»ØÕıÖµ£¬Ë³Ê±ÕëÔò·µ»Ø¸ºÖµ
+// æ±‚æœ¬çŸ¢é‡æŠ•å½±åˆ°çŸ¢é‡xAxisä¸Šçš„å‚ç›´è·ç¦»
+// åœ¨xAxisçš„é€†æ—¶é’ˆæ–¹å‘æ—¶è¿”å›æ­£å€¼ï¼Œé¡ºæ—¶é’ˆåˆ™è¿”å›è´Ÿå€¼
 double Vector2d::distanceToVector(const Vector2d& xAxis) const
 {
     double len = xAxis.length();
@@ -157,7 +155,7 @@ double Vector2d::distanceToVector(const Vector2d& xAxis) const
     return xAxis.crossProduct(*this) / len;
 }
 
-// Çó±¾Ê¸Á¿ÔÚÊ¸Á¿xAxisÉÏµÄÍ¶Ó°±ÈÀı, Í¶Ó°Ê¸Á¿ = xAxis * Í¶Ó°±ÈÀı
+// æ±‚æœ¬çŸ¢é‡åœ¨çŸ¢é‡xAxisä¸Šçš„æŠ•å½±æ¯”ä¾‹, æŠ•å½±çŸ¢é‡ = xAxis * æŠ•å½±æ¯”ä¾‹
 double Vector2d::projectScaleToVector(const Vector2d& xAxis) const
 {
     double d2 = xAxis.lengthSqrd();
@@ -166,7 +164,7 @@ double Vector2d::projectScaleToVector(const Vector2d& xAxis) const
     return dotProduct(xAxis) / d2;
 }
 
-// Çó±¾Ê¸Á¿ÔÚÊ¸Á¿xAxisÉÏµÄÍ¶Ó°Ê¸Á¿ºÍ´¹Ö±Ê¸Á¿
+// æ±‚æœ¬çŸ¢é‡åœ¨çŸ¢é‡xAxisä¸Šçš„æŠ•å½±çŸ¢é‡å’Œå‚ç›´çŸ¢é‡
 double Vector2d::projectResolveVector(const Vector2d& xAxis, 
                                       Vector2d& proj, Vector2d& perp) const
 {
@@ -176,7 +174,7 @@ double Vector2d::projectResolveVector(const Vector2d& xAxis,
     return s;
 }
 
-// ½«±¾Ê¸Á¿ÔÚÁ½¸ö²»¹²ÏßµÄ·ÇÁãÊ¸Á¿ÉÏ½øĞĞÊ¸Á¿·Ö½â, vec = u*uAxis+v*vAxis
+// å°†æœ¬çŸ¢é‡åœ¨ä¸¤ä¸ªä¸å…±çº¿çš„éé›¶çŸ¢é‡ä¸Šè¿›è¡ŒçŸ¢é‡åˆ†è§£, vec = u*uAxis+v*vAxis
 bool Vector2d::resolveVector(const Vector2d& uAxis, const Vector2d& vAxis, 
                              double& u, double& v) const
 {
@@ -190,5 +188,3 @@ bool Vector2d::resolveVector(const Vector2d& uAxis, const Vector2d& vAxis,
     v = uAxis.crossProduct(*this) / denom;
     return true;
 }
-
-_GEOM_END

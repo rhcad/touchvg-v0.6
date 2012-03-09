@@ -1,5 +1,5 @@
-//! \file gidef.h
-//! \brief ¶¨ÒåÍ¼ĞÎ½Ó¿Ú¿âµÄ»ù±¾ºê
+ï»¿//! \file gidef.h
+//! \brief å®šä¹‰å›¾å½¢æ¥å£åº“çš„åŸºæœ¬å®
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 

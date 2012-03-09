@@ -1,5 +1,5 @@
-//! \file giimage.h
-//! \brief ¶¨ÒåÍ¼ÏñÎÄ¼ş´ò¿ªºÍÏÔÊ¾µÄ¸¨ÖúÀà GiImage
+ï»¿//! \file giimage.h
+//! \brief å®šä¹‰å›¾åƒæ–‡ä»¶æ‰“å¼€å’Œæ˜¾ç¤ºçš„è¾…åŠ©ç±» GiImage
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -10,66 +10,64 @@
 #include <ocidl.h>
 #include <objidl.h>
 
-_GEOM_BEGIN
-
-//! ´ò¿ªÎÄ¼ş´íÎóÀàĞÍ
+//! æ‰“å¼€æ–‡ä»¶é”™è¯¯ç±»å‹
 enum kOpenImageError
 {
-    kOpenImage_OK,              //!< ³É¹¦
-    kOpenImage_NullString,      //!< ÎÄ¼şÃûÎª¿Õ
-    kOpenImage_FileNotExist,    //!< ÎÄ¼ş²»´æÔÚ
-    kOpenImage_NullFile,        //!< ¿ÕÎÄ¼ş
-    kOpenImage_ReadFail,        //!< ¶ÁÈ¡ÄÚÈİÊ§°Ü
-    kOpenImage_TooLarge,        //!< ÎÄ¼şÌ«´ó, ³¬¹ı16M
-    kOpenImage_NoMemory,        //!< ÄÚ´æ²»×ã
-    kOpenImage_NotPicture,      //!< ²»ÄÜÊ¶±ğÍ¼Ïñ¸ñÊ½
+    kOpenImage_OK,              //!< æˆåŠŸ
+    kOpenImage_NullString,      //!< æ–‡ä»¶åä¸ºç©º
+    kOpenImage_FileNotExist,    //!< æ–‡ä»¶ä¸å­˜åœ¨
+    kOpenImage_NullFile,        //!< ç©ºæ–‡ä»¶
+    kOpenImage_ReadFail,        //!< è¯»å–å†…å®¹å¤±è´¥
+    kOpenImage_TooLarge,        //!< æ–‡ä»¶å¤ªå¤§, è¶…è¿‡16M
+    kOpenImage_NoMemory,        //!< å†…å­˜ä¸è¶³
+    kOpenImage_NotPicture,      //!< ä¸èƒ½è¯†åˆ«å›¾åƒæ ¼å¼
 };
 
-//! Í¼ÏñÎÄ¼ş´ò¿ªºÍÏÔÊ¾µÄ¸¨ÖúÀà
+//! å›¾åƒæ–‡ä»¶æ‰“å¼€å’Œæ˜¾ç¤ºçš„è¾…åŠ©ç±»
 /*!
-    ±¾Àà²ÉÓÃ OleLoadPicture ½âÎöÍ¼Ïñ¸ñÊ½£¬ÎÄ¼ş´óĞ¡²»³¬¹ı16M£¬
-    Èç¹ûÊ¹ÓÃGDI+Í¼ĞÎÏµÍ³ GiGraphGdip ,Ôò½¨Òé¸ÄÓÃ GiGdipImage ÀàÀ´´ò¿ªºÍÏÔÊ¾Í¼ĞÎ
+    æœ¬ç±»é‡‡ç”¨ OleLoadPicture è§£æå›¾åƒæ ¼å¼ï¼Œæ–‡ä»¶å¤§å°ä¸è¶…è¿‡16Mï¼Œ
+    å¦‚æœä½¿ç”¨GDI+å›¾å½¢ç³»ç»Ÿ GiGraphGdip ,åˆ™å»ºè®®æ”¹ç”¨ GiGdipImage ç±»æ¥æ‰“å¼€å’Œæ˜¾ç¤ºå›¾å½¢
     \ingroup _GRAPH_INTERFACE_
 */
 class GiImage
 {
 public:
-    //! Ä¬ÈÏ¹¹Ôìº¯Êı
+    //! é»˜è®¤æ„é€ å‡½æ•°
     GiImage();
 
-    //! ¹¹Ôìº¯Êı£¬´ò¿ªÖ¸¶¨µÄÎÄ¼ş
+    //! æ„é€ å‡½æ•°ï¼Œæ‰“å¼€æŒ‡å®šçš„æ–‡ä»¶
     GiImage(const char* filename);
 
-    //! ¹¹Ôìº¯Êı£¬´ò¿ªÖ¸¶¨µÄÎÄ¼ş
+    //! æ„é€ å‡½æ•°ï¼Œæ‰“å¼€æŒ‡å®šçš„æ–‡ä»¶
     GiImage(const wchar_t* filename);
 
-    //! Îö¹¹º¯Êı
+    //! ææ„å‡½æ•°
     ~GiImage();
 
-    //! ÊÍ·ÅÄÚ´æ
+    //! é‡Šæ”¾å†…å­˜
     void clear();
 
-    //! ´ò¿ªÖ¸¶¨µÄÍ¼ÏñÎÄ¼ş
+    //! æ‰“å¼€æŒ‡å®šçš„å›¾åƒæ–‡ä»¶
     bool open(const char* filename, kOpenImageError* perr = NULL);
 
-    //! ´ò¿ªÖ¸¶¨µÄÍ¼ÏñÎÄ¼ş
+    //! æ‰“å¼€æŒ‡å®šçš„å›¾åƒæ–‡ä»¶
     bool open(const wchar_t* filename, kOpenImageError* perr = NULL);
 
-    //! ·µ»ØÍ¼ÏñÔ­Ê¼¿í¶È£¬µ¥Î»ÎªHIMETRIC(0.01mm)
+    //! è¿”å›å›¾åƒåŸå§‹å®½åº¦ï¼Œå•ä½ä¸ºHIMETRIC(0.01mm)
     long getHmWidth() const;
 
-    //! ·µ»ØÍ¼ÏñÔ­Ê¼¸ß¶È£¬µ¥Î»ÎªHIMETRIC(0.01mm)
+    //! è¿”å›å›¾åƒåŸå§‹é«˜åº¦ï¼Œå•ä½ä¸ºHIMETRIC(0.01mm)
     long getHmHeight() const;
 
-    //! ·µ»ØÍ¼Ïñ×ÊÔ´¾ä±ú
+    //! è¿”å›å›¾åƒèµ„æºå¥æŸ„
     HBITMAP getBitmap() const;
 
-    //! ÏÔÊ¾Í¼Ïñ£¨Ğı×ª½Ç¶ÈÎª90¶ÈµÄÕûÊı±¶£©
+    //! æ˜¾ç¤ºå›¾åƒï¼ˆæ—‹è½¬è§’åº¦ä¸º90åº¦çš„æ•´æ•°å€ï¼‰
     /*!
-        \param graph Í¼ĞÎÏµÍ³
-        \param rectW Õû¸öÍ¼Ïñ¶ÔÓ¦µÄÊÀ½ç×ø±êÇøÓò
-        \param fast ÏÔÊ¾·½Ê½. true: ¿ìËÙÏÔÊ¾, false: ¸ß¾«¶ÈÏÔÊ¾
-        \return ÊÇ·ñÏÔÊ¾³É¹¦
+        \param graph å›¾å½¢ç³»ç»Ÿ
+        \param rectW æ•´ä¸ªå›¾åƒå¯¹åº”çš„ä¸–ç•Œåæ ‡åŒºåŸŸ
+        \param fast æ˜¾ç¤ºæ–¹å¼. true: å¿«é€Ÿæ˜¾ç¤º, false: é«˜ç²¾åº¦æ˜¾ç¤º
+        \return æ˜¯å¦æ˜¾ç¤ºæˆåŠŸ
     */
     bool draw(GiGraphWin& graph, const Box2d& rectW, bool fast = false) const;
 
@@ -78,5 +76,4 @@ private:
     IStream*    m_stream;
 };
 
-_GEOM_END
 #endif // __GEOMETRY_IMAGE_H_

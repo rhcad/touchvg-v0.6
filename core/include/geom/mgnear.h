@@ -1,5 +1,5 @@
-//! \file mgnear.h
-//! \brief ¶¨ÒåÇóÇúÏßÉÏ×î½üµãµÄº¯Êı
+ï»¿//! \file mgnear.h
+//! \brief å®šä¹‰æ±‚æ›²çº¿ä¸Šæœ€è¿‘ç‚¹çš„å‡½æ•°
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,114 +8,111 @@
 
 #include "mgrect.h"
 
-_GEOM_BEGIN
-
-//! ¼ÆËãÒ»µãµ½Èı´Î±´Èû¶ûÇúÏß¶ÎÉÏµÄ×î½üµã
+//! è®¡ç®—ä¸€ç‚¹åˆ°ä¸‰æ¬¡è´å¡å°”æ›²çº¿æ®µä¸Šçš„æœ€è¿‘ç‚¹
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[in] pt ÇúÏß¶ÎÍâ¸ø¶¨µÄµã
-    \param[in] pts Èı´Î±´Èû¶ûÇúÏß¶ÎµÄ¿ØÖÆµã£¬4¸öµã
-    \param[out] ptNear ÇúÏß¶ÎÉÏµÄ×î½üµã
+    \param[in] pt æ›²çº¿æ®µå¤–ç»™å®šçš„ç‚¹
+    \param[in] pts ä¸‰æ¬¡è´å¡å°”æ›²çº¿æ®µçš„æ§åˆ¶ç‚¹ï¼Œ4ä¸ªç‚¹
+    \param[out] ptNear æ›²çº¿æ®µä¸Šçš„æœ€è¿‘ç‚¹
 */
 GEOMAPI void mgNearestOnBezier(
     const Point2d& pt, const Point2d* pts, Point2d& ptNear);
 
-//! ¼ÆËã±´Èû¶ûÇúÏßµÄ°ó¶¨¿ò
+//! è®¡ç®—è´å¡å°”æ›²çº¿çš„ç»‘å®šæ¡†
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[out] box °ó¶¨¿ò
-    \param[in] count µãµÄ¸öÊı£¬ÖÁÉÙÎª4£¬±ØĞëÎª3µÄ±¶Êı¼Ó1
-    \param[in] points ¿ØÖÆµãºÍ¶ËµãµÄÊı×é£¬µãÊıÎªcount
-    \param[in] closed ÊÇ·ñÎª±ÕºÏÇúÏß
+    \param[out] box ç»‘å®šæ¡†
+    \param[in] count ç‚¹çš„ä¸ªæ•°ï¼Œè‡³å°‘ä¸º4ï¼Œå¿…é¡»ä¸º3çš„å€æ•°åŠ 1
+    \param[in] points æ§åˆ¶ç‚¹å’Œç«¯ç‚¹çš„æ•°ç»„ï¼Œç‚¹æ•°ä¸ºcount
+    \param[in] closed æ˜¯å¦ä¸ºé—­åˆæ›²çº¿
     \see mgCubicSplines
 */
 GEOMAPI void mgBeziersBox(
     Box2d& box, Int32 count, const Point2d* points, bool closed = false);
 
-//! ¼ÆËãÈı´ÎÑùÌõÇúÏßµÄ°ó¶¨¿ò
+//! è®¡ç®—ä¸‰æ¬¡æ ·æ¡æ›²çº¿çš„ç»‘å®šæ¡†
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[out] box °ó¶¨¿ò
-    \param[in] n Èı´ÎÑùÌõÇúÏßµÄĞÍÖµµãµÄµãÊı
-    \param[in] knots ĞÍÖµµã×ø±êÊı×é£¬ÔªËØ¸öÊıÎªn
-    \param[in] knotVectors ĞÍÖµµãµÄÇĞÊ¸Á¿Êı×é£¬ÔªËØ¸öÊıÎªn
-    \param[in] closed ÊÇ·ñÎª±ÕºÏÇúÏß
+    \param[out] box ç»‘å®šæ¡†
+    \param[in] n ä¸‰æ¬¡æ ·æ¡æ›²çº¿çš„å‹å€¼ç‚¹çš„ç‚¹æ•°
+    \param[in] knots å‹å€¼ç‚¹åæ ‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn
+    \param[in] knotVectors å‹å€¼ç‚¹çš„åˆ‡çŸ¢é‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn
+    \param[in] closed æ˜¯å¦ä¸ºé—­åˆæ›²çº¿
     \see mgCubicSplines
 */
 GEOMAPI void mgCubicSplinesBox(
     Box2d& box, Int32 n, const Point2d* knots, 
     const Vector2d* knotVectors, bool closed = false);
 
-//! ¼ÆËãµãµ½Èı´ÎÑùÌõÇúÏßµÄ×î½ü¾àÀë
+//! è®¡ç®—ç‚¹åˆ°ä¸‰æ¬¡æ ·æ¡æ›²çº¿çš„æœ€è¿‘è·ç¦»
 /*!
     \ingroup _GEOMAPI_CURVE_
-    \param[in] n Èı´ÎÑùÌõÇúÏßµÄĞÍÖµµãµÄµãÊı
-    \param[in] knots ĞÍÖµµã×ø±êÊı×é£¬ÔªËØ¸öÊıÎªn
-    \param[in] knotVectors ĞÍÖµµãµÄÇĞÊ¸Á¿Êı×é£¬ÔªËØ¸öÊıÎªn
-    \param[in] closed ÊÇ·ñÎª±ÕºÏÇúÏß
-    \param[in] pt ÇúÏß¶ÎÍâ¸ø¶¨µÄµã
-    \param[in] dTol ¾àÀë¹«²î£¬ÕıÊı£¬³¬³öÔò²»¼ÆËã×î½üµã
-    \param[out] ptNear ÇúÏßÉÏµÄ×î½üµã
-    \param[out] nSegment ×î½üµãËùÔÚÇúÏß¶ÎµÄĞòºÅ£¬[0,n-2]£¬±ÕºÏÊ±Îª[0,n-1]£¬¸ºÊı±íÊ¾Ê§°Ü
-    \return ¸ø¶¨µÄµãµ½×î½üµãµÄ¾àÀë£¬Ê§°ÜÊ±Îª¼«´óÊı
+    \param[in] n ä¸‰æ¬¡æ ·æ¡æ›²çº¿çš„å‹å€¼ç‚¹çš„ç‚¹æ•°
+    \param[in] knots å‹å€¼ç‚¹åæ ‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn
+    \param[in] knotVectors å‹å€¼ç‚¹çš„åˆ‡çŸ¢é‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn
+    \param[in] closed æ˜¯å¦ä¸ºé—­åˆæ›²çº¿
+    \param[in] pt æ›²çº¿æ®µå¤–ç»™å®šçš„ç‚¹
+    \param[in] dTol è·ç¦»å…¬å·®ï¼Œæ­£æ•°ï¼Œè¶…å‡ºåˆ™ä¸è®¡ç®—æœ€è¿‘ç‚¹
+    \param[out] ptNear æ›²çº¿ä¸Šçš„æœ€è¿‘ç‚¹
+    \param[out] nSegment æœ€è¿‘ç‚¹æ‰€åœ¨æ›²çº¿æ®µçš„åºå·ï¼Œ[0,n-2]ï¼Œé—­åˆæ—¶ä¸º[0,n-1]ï¼Œè´Ÿæ•°è¡¨ç¤ºå¤±è´¥
+    \return ç»™å®šçš„ç‚¹åˆ°æœ€è¿‘ç‚¹çš„è·ç¦»ï¼Œå¤±è´¥æ—¶ä¸ºæå¤§æ•°
     \see mgCubicSplines
 */
 GEOMAPI double mgCubicSplinesHit(
     Int32 n, const Point2d* knots, const Vector2d* knotVectors, bool closed, 
     const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment);
 
-//! ¼ÆËãµãµ½ÕÛÏß»ò¶à±ßĞÎµÄ×î½ü¾àÀë
+//! è®¡ç®—ç‚¹åˆ°æŠ˜çº¿æˆ–å¤šè¾¹å½¢çš„æœ€è¿‘è·ç¦»
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] n ¶¥µãÊı
-    \param[in] points ¶¥µã×ø±êÊı×é£¬ÔªËØ¸öÊıÎªn
-    \param[in] closed ÊÇ·ñÎª¶à±ßĞÎ
-    \param[in] pt Í¼ĞÎÍâ¸ø¶¨µÄµã
-    \param[in] dTol ¾àÀë¹«²î£¬ÕıÊı£¬³¬³öÔò²»¼ÆËã×î½üµã
-    \param[out] ptNear Í¼ĞÎÉÏµÄ×î½üµã
-    \param[out] nSegment ×î½üµãËùÔÚÏß¶ÎµÄĞòºÅ£¬[0,n-2]£¬±ÕºÏÊ±Îª[0,n-1]£¬¸ºÊı±íÊ¾Ê§°Ü
-    \return ¸ø¶¨µÄµãµ½×î½üµãµÄ¾àÀë£¬Ê§°ÜÊ±Îª¼«´óÊı
+    \param[in] n é¡¶ç‚¹æ•°
+    \param[in] points é¡¶ç‚¹åæ ‡æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºn
+    \param[in] closed æ˜¯å¦ä¸ºå¤šè¾¹å½¢
+    \param[in] pt å›¾å½¢å¤–ç»™å®šçš„ç‚¹
+    \param[in] dTol è·ç¦»å…¬å·®ï¼Œæ­£æ•°ï¼Œè¶…å‡ºåˆ™ä¸è®¡ç®—æœ€è¿‘ç‚¹
+    \param[out] ptNear å›¾å½¢ä¸Šçš„æœ€è¿‘ç‚¹
+    \param[out] nSegment æœ€è¿‘ç‚¹æ‰€åœ¨çº¿æ®µçš„åºå·ï¼Œ[0,n-2]ï¼Œé—­åˆæ—¶ä¸º[0,n-1]ï¼Œè´Ÿæ•°è¡¨ç¤ºå¤±è´¥
+    \return ç»™å®šçš„ç‚¹åˆ°æœ€è¿‘ç‚¹çš„è·ç¦»ï¼Œå¤±è´¥æ—¶ä¸ºæå¤§æ•°
 */
 GEOMAPI double mgLinesHit(
     Int32 n, const Point2d* points, bool closed, 
     const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment);
 
-//! ¼ÆËãµãµ½Ô²½Ç¾ØĞÎµÄ×î½ü¾àÀë
+//! è®¡ç®—ç‚¹åˆ°åœ†è§’çŸ©å½¢çš„æœ€è¿‘è·ç¦»
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] rect Íâ½Ó¾ØĞÎ£¬±ØĞëÎª¹æ·¶»¯¾ØĞÎ
-    \param[in] rx Ë®Æ½·½ÏòµÄÔ²½Ç°ë¾¶£¬·Ç¸ºÊı
-    \param[in] ry ´¹Ö±·½ÏòµÄÔ²½Ç°ë¾¶£¬Îª0ÔòÈ¡Îªrx
-    \param[in] pt Í¼ĞÎÍâ¸ø¶¨µÄµã
-    \param[in] dTol ¾àÀë¹«²î£¬ÕıÊı£¬³¬³öÔò²»¼ÆËã×î½üµã
-    \param[out] ptNear Í¼ĞÎÉÏµÄ×î½üµã
-    \param[out] nSegment ×î½üµãËùÔÚ¶ÎµÄĞòºÅ¡£¸ºÊı±íÊ¾Ê§°Ü£»
-        0µ½3Îª´Ó×óÉÏ½ÇÆğË³Ê±ÕëµÄËÄ¸öÔ²½Ç£»4µ½7Îª¶¥ÓÒµ××ó
-    \return ¸ø¶¨µÄµãµ½×î½üµãµÄ¾àÀë£¬Ê§°ÜÊ±Îª¼«´óÊı
+    \param[in] rect å¤–æ¥çŸ©å½¢ï¼Œå¿…é¡»ä¸ºè§„èŒƒåŒ–çŸ©å½¢
+    \param[in] rx æ°´å¹³æ–¹å‘çš„åœ†è§’åŠå¾„ï¼Œéè´Ÿæ•°
+    \param[in] ry å‚ç›´æ–¹å‘çš„åœ†è§’åŠå¾„ï¼Œä¸º0åˆ™å–ä¸ºrx
+    \param[in] pt å›¾å½¢å¤–ç»™å®šçš„ç‚¹
+    \param[in] dTol è·ç¦»å…¬å·®ï¼Œæ­£æ•°ï¼Œè¶…å‡ºåˆ™ä¸è®¡ç®—æœ€è¿‘ç‚¹
+    \param[out] ptNear å›¾å½¢ä¸Šçš„æœ€è¿‘ç‚¹
+    \param[out] nSegment æœ€è¿‘ç‚¹æ‰€åœ¨æ®µçš„åºå·ã€‚è´Ÿæ•°è¡¨ç¤ºå¤±è´¥ï¼›
+        0åˆ°3ä¸ºä»å·¦ä¸Šè§’èµ·é¡ºæ—¶é’ˆçš„å››ä¸ªåœ†è§’ï¼›4åˆ°7ä¸ºé¡¶å³åº•å·¦
+    \return ç»™å®šçš„ç‚¹åˆ°æœ€è¿‘ç‚¹çš„è·ç¦»ï¼Œå¤±è´¥æ—¶ä¸ºæå¤§æ•°
 */
 GEOMAPI double mgRoundRectHit(
     const Box2d& rect, double rx, double ry, 
     const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment);
 
-//! µÃµ½¾ØĞÎµÄ8¸ö¿ØÖÆÊÖ±ú×ø±ê
+//! å¾—åˆ°çŸ©å½¢çš„8ä¸ªæ§åˆ¶æ‰‹æŸ„åæ ‡
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in] rect ¾ØĞÎ£¬±ØĞëÎª¹æ·¶»¯¾ØĞÎ
-    \param[in] nHandle ¿ØÖÆÊÖ±úµÄĞòºÅ£¬0µ½7£¬
-        0µ½3Îª´Ó×óÉÏ½ÇÆğË³Ê±ÕëµÄËÄ¸ö½Çµã£»4µ½7Îª¶¥ÓÒµ××óµÄÖĞµã£»ÆäÓàÎªÖĞĞÄµã
-    \param[out] pt ¿ØÖÆÊÖ±úµÄ×ø±ê
+    \param[in] rect çŸ©å½¢ï¼Œå¿…é¡»ä¸ºè§„èŒƒåŒ–çŸ©å½¢
+    \param[in] nHandle æ§åˆ¶æ‰‹æŸ„çš„åºå·ï¼Œ0åˆ°7ï¼Œ
+        0åˆ°3ä¸ºä»å·¦ä¸Šè§’èµ·é¡ºæ—¶é’ˆçš„å››ä¸ªè§’ç‚¹ï¼›4åˆ°7ä¸ºé¡¶å³åº•å·¦çš„ä¸­ç‚¹ï¼›å…¶ä½™ä¸ºä¸­å¿ƒç‚¹
+    \param[out] pt æ§åˆ¶æ‰‹æŸ„çš„åæ ‡
 */
 GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 nHandle, Point2d& pt);
 
-//! ÒÆ¶¯¾ØĞÎµÄÒ»¸ö¿ØÖÆÊÖ±ú
+//! ç§»åŠ¨çŸ©å½¢çš„ä¸€ä¸ªæ§åˆ¶æ‰‹æŸ„
 /*!
     \ingroup _GEOMAPI_LNREL_
-    \param[in,out] rect ¾ØĞÎ£¬±ØĞëÎª¹æ·¶»¯¾ØĞÎ
-    \param[in] nHandle ¿ØÖÆÊÖ±úµÄĞòºÅ£¬0µ½7£¬
-        0µ½3Îª´Ó×óÉÏ½ÇÆğË³Ê±ÕëµÄËÄ¸ö½Çµã£»4µ½7Îª¶¥ÓÒµ××óµÄÖĞµã£»ÆäÓàÎªÖĞĞÄµã
-    \param[in] pt ¿ØÖÆÊÖ±úµÄĞÂ×ø±ê
+    \param[in,out] rect çŸ©å½¢ï¼Œå¿…é¡»ä¸ºè§„èŒƒåŒ–çŸ©å½¢
+    \param[in] nHandle æ§åˆ¶æ‰‹æŸ„çš„åºå·ï¼Œ0åˆ°7ï¼Œ
+        0åˆ°3ä¸ºä»å·¦ä¸Šè§’èµ·é¡ºæ—¶é’ˆçš„å››ä¸ªè§’ç‚¹ï¼›4åˆ°7ä¸ºé¡¶å³åº•å·¦çš„ä¸­ç‚¹ï¼›å…¶ä½™ä¸ºä¸­å¿ƒç‚¹
+    \param[in] pt æ§åˆ¶æ‰‹æŸ„çš„æ–°åæ ‡
 */
 GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 nHandle, const Point2d& pt);
 
-_GEOM_END
 #endif // __GEOMETRY_CURVENEAR_H_

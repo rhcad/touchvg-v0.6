@@ -1,5 +1,5 @@
-//! \file mgmat.h
-//! \brief ¶¨Òå¶şÎ¬Æë´Î±ä»»¾ØÕóÀà Matrix2d
+ï»¿//! \file mgmat.h
+//! \brief å®šä¹‰äºŒç»´é½æ¬¡å˜æ¢çŸ©é˜µç±» Matrix2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,288 +8,285 @@
 
 #include "mgpnt.h"
 
-_GEOM_BEGIN
-
-//! ¶şÎ¬Æë´Î±ä»»¾ØÕóÀà
+//! äºŒç»´é½æ¬¡å˜æ¢çŸ©é˜µç±»
 /*!
     \ingroup _GEOM_CLASS_
     
-    ±ä»»¾ØÕóÀàMatrixÓÃÓÚ¶şÎ¬Í¼ĞÎµÄ·ÂÉä±ä»»¡£¾ØÕó M µÄĞÎÊ½Îª: \n
-    ¡¡¡¡e0x¡¡e0y¡¡0 \n
-    ¡¡¡¡e1x¡¡e1y¡¡0 \n
-    ¡¡¡¡dx¡¡¡¡dy¡¡1 \n
-    ÆäÖĞ¾ØÕó A: \n
-    ¡¡¡¡e0x¡¡e0y \n
-    ¡¡¡¡e1x¡¡e1y \n
-    ³ÆÎª M µÄÏßĞÔ²¿·Ö£¬Æä×÷ÓÃÊÇ¶ÔÍ¼ĞÎ½øĞĞÉìËõ¡¢Ğı×ª¡¢¶Ô³ÆºÍ´íÇĞµÈ±ä»»¡£\n
-    ĞĞÏòÁ¿ T (dx, dy) ³ÆÎª M µÄÆ½ÒÆ²¿·Ö£¬Æä×÷ÓÃÊÇ¶ÔÍ¼ĞÎ½øĞĞÆ½ÒÆ±ä»»¡£\n
+    å˜æ¢çŸ©é˜µç±»Matrixç”¨äºäºŒç»´å›¾å½¢çš„ä»¿å°„å˜æ¢ã€‚çŸ©é˜µ M çš„å½¢å¼ä¸º: \n
+    ã€€ã€€e0xã€€e0yã€€0 \n
+    ã€€ã€€e1xã€€e1yã€€0 \n
+    ã€€ã€€dxã€€ã€€dyã€€1 \n
+    å…¶ä¸­çŸ©é˜µ A: \n
+    ã€€ã€€e0xã€€e0y \n
+    ã€€ã€€e1xã€€e1y \n
+    ç§°ä¸º M çš„çº¿æ€§éƒ¨åˆ†ï¼Œå…¶ä½œç”¨æ˜¯å¯¹å›¾å½¢è¿›è¡Œä¼¸ç¼©ã€æ—‹è½¬ã€å¯¹ç§°å’Œé”™åˆ‡ç­‰å˜æ¢ã€‚\n
+    è¡Œå‘é‡ T (dx, dy) ç§°ä¸º M çš„å¹³ç§»éƒ¨åˆ†ï¼Œå…¶ä½œç”¨æ˜¯å¯¹å›¾å½¢è¿›è¡Œå¹³ç§»å˜æ¢ã€‚\n
     
-    PointµÄµãpntµÄ¶ÔÓ¦±ä»»µãÎª P x M£¬ĞĞÊ¸Á¿ P = (pnt.x, pnt.y, 1.0) \n
-    VectorµÄÊ¸Á¿vecµÄ¶ÔÓ¦±ä»»Ê¸Á¿Îª V x M£¬M µÄÆ½ÒÆ²¿·Ö²»²ÎÓë¼ÆËã¡£\n
+    Pointçš„ç‚¹pntçš„å¯¹åº”å˜æ¢ç‚¹ä¸º P x Mï¼Œè¡ŒçŸ¢é‡ P = (pnt.x, pnt.y, 1.0) \n
+    Vectorçš„çŸ¢é‡vecçš„å¯¹åº”å˜æ¢çŸ¢é‡ä¸º V x Mï¼ŒM çš„å¹³ç§»éƒ¨åˆ†ä¸å‚ä¸è®¡ç®—ã€‚\n
     
-    Ã¿¸ö¾ØÕó M ¶ÔÓ¦Ò»¸ö×ø±êÏµ£¬Æä×ø±êÔ­µãÎª(dx, dy)£¬×ø±êÖáÎªÊ¸Á¿(e0x, e0y)ºÍ
-    (e1x, e1y)¡£M Îª½«(0,0)(1,0)(0,1)Ó³Éäµ½(dx, dy)(e0x, e0y)(e1x, e1y)µÄ¾ØÕó¡£
+    æ¯ä¸ªçŸ©é˜µ M å¯¹åº”ä¸€ä¸ªåæ ‡ç³»ï¼Œå…¶åæ ‡åŸç‚¹ä¸º(dx, dy)ï¼Œåæ ‡è½´ä¸ºçŸ¢é‡(e0x, e0y)å’Œ
+    (e1x, e1y)ã€‚M ä¸ºå°†(0,0)(1,0)(0,1)æ˜ å°„åˆ°(dx, dy)(e0x, e0y)(e1x, e1y)çš„çŸ©é˜µã€‚
 */
 class Matrix2d : public MATRIX2D
 {
 public:
-    //! µ¥Î»¾ØÕó
+    //! å•ä½çŸ©é˜µ
     static const Matrix2d& kIdentity()
     {
         static const Matrix2d mat;
         return mat;
     }
     
-    //! ¹¹ÔìÎªµ¥Î»¾ØÕó
+    //! æ„é€ ä¸ºå•ä½çŸ©é˜µ
     Matrix2d();
     
-    //! ¿½±´¹¹Ôìº¯Êı
+    //! æ‹·è´æ„é€ å‡½æ•°
     Matrix2d(const MATRIX2D& src);
     
-    //! ¸ø¶¨ÔªËØ¹¹Ôì
+    //! ç»™å®šå…ƒç´ æ„é€ 
     Matrix2d(double _m11, double _m12, double _m21, double _m22,
         double _dx, double _dy);
     
-    //! ¸ø¶¨Á½×ø±êÖáÊ¸Á¿ºÍÔ­µã¹¹Ôì
-    /*! Ïà¶ÔÓÚ¾ø¶Ô×ø±êÏµ¹¹Ôì³öĞÂµÄ×ø±êÏµ¾ØÕó¡£
-        Èç¹ûÕâÁ½¸ö×ø±êÖáÊ¸Á¿²»Õı½»£¬Ôò¹¹Ôì³ö·ÅÉä×ø±êÏµ£¬·ñÔòÎªÕı½»×ø±êÏµ
-        \param e0 XÖáÒ»¸öµ¥Î»µÄÊ¸Á¿
-        \param e1 YÖáÒ»¸öµ¥Î»µÄÊ¸Á¿
-        \param origin ĞÂ×ø±êÏµµÄÔ­µã
+    //! ç»™å®šä¸¤åæ ‡è½´çŸ¢é‡å’ŒåŸç‚¹æ„é€ 
+    /*! ç›¸å¯¹äºç»å¯¹åæ ‡ç³»æ„é€ å‡ºæ–°çš„åæ ‡ç³»çŸ©é˜µã€‚
+        å¦‚æœè¿™ä¸¤ä¸ªåæ ‡è½´çŸ¢é‡ä¸æ­£äº¤ï¼Œåˆ™æ„é€ å‡ºæ”¾å°„åæ ‡ç³»ï¼Œå¦åˆ™ä¸ºæ­£äº¤åæ ‡ç³»
+        \param e0 Xè½´ä¸€ä¸ªå•ä½çš„çŸ¢é‡
+        \param e1 Yè½´ä¸€ä¸ªå•ä½çš„çŸ¢é‡
+        \param origin æ–°åæ ‡ç³»çš„åŸç‚¹
     */
     Matrix2d(const Vector2d& e0, const Vector2d& e1,
         const Point2d& origin);
     
-    //! ¾ØÕó³Ë·¨
+    //! çŸ©é˜µä¹˜æ³•
     Matrix2d operator*(const Matrix2d& mat) const;
     
-    //! ¾ØÕó³Ë·¨
+    //! çŸ©é˜µä¹˜æ³•
     Matrix2d& operator*=(const Matrix2d& mat);
     
-    //! ×ó³ËÒ»¸ö¾ØÕó£¬leftSide * (*this)
+    //! å·¦ä¹˜ä¸€ä¸ªçŸ©é˜µï¼ŒleftSide * (*this)
     Matrix2d& preMultBy(const Matrix2d& leftSide);
     
-    //! ÓÒ³ËÒ»¸ö¾ØÕó£¬(*this) * rightSide
+    //! å³ä¹˜ä¸€ä¸ªçŸ©é˜µï¼Œ(*this) * rightSide
     Matrix2d& postMultBy(const Matrix2d& rightSide);
     
-    //! ÉèÖÃÎªÁ½¸ö¾ØÕóµÄ³Ë»ı (m1 * m2)
+    //! è®¾ç½®ä¸ºä¸¤ä¸ªçŸ©é˜µçš„ä¹˜ç§¯ (m1 * m2)
     Matrix2d& setToProduct(const Matrix2d& m1, const Matrix2d& m2);
     
-    //! ¶Ô¶à¸öµã½øĞĞ¾ØÕó±ä»»
+    //! å¯¹å¤šä¸ªç‚¹è¿›è¡ŒçŸ©é˜µå˜æ¢
     /*!
-        \param[in] count µãµÄ¸öÊı
-        \param[in,out] points Òª±ä»»µÄµãµÄÊı×é£¬ÔªËØ¸öÊıÎªcount
+        \param[in] count ç‚¹çš„ä¸ªæ•°
+        \param[in,out] points è¦å˜æ¢çš„ç‚¹çš„æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºcount
     */
     void TransformPoints(Int32 count, Point2d* points) const;
 
-    //! ¶Ô¶à¸öÊ¸Á¿½øĞĞ¾ØÕó±ä»»
-    /*! ¶ÔÊ¸Á¿½øĞĞ¾ØÕó±ä»»Ê±£¬¾ØÕóµÄÆ½ÒÆ·ÖÁ¿²¿·Ö²»Æğ×÷ÓÃ
-        \param[in] count Ê¸Á¿µÄ¸öÊı
-        \param[in,out] vectors Òª±ä»»µÄÊ¸Á¿µÄÊı×é£¬ÔªËØ¸öÊıÎªcount
+    //! å¯¹å¤šä¸ªçŸ¢é‡è¿›è¡ŒçŸ©é˜µå˜æ¢
+    /*! å¯¹çŸ¢é‡è¿›è¡ŒçŸ©é˜µå˜æ¢æ—¶ï¼ŒçŸ©é˜µçš„å¹³ç§»åˆ†é‡éƒ¨åˆ†ä¸èµ·ä½œç”¨
+        \param[in] count çŸ¢é‡çš„ä¸ªæ•°
+        \param[in,out] vectors è¦å˜æ¢çš„çŸ¢é‡çš„æ•°ç»„ï¼Œå…ƒç´ ä¸ªæ•°ä¸ºcount
     */
     void TransformVectors(Int32 count, Vector2d* vectors) const;
     
-    //! ĞĞÁĞÊ½Öµ
+    //! è¡Œåˆ—å¼å€¼
     double det() const;
     
-    //! ÉèÖÃÎªÄæ¾ØÕó
+    //! è®¾ç½®ä¸ºé€†çŸ©é˜µ
     /*!
-        \return ÊÇ·ñ¿ÉÄæ£¬Èç¹û²»¿ÉÄæÔòÉèÖÃÎªµ¥Î»¾ØÕó
+        \return æ˜¯å¦å¯é€†ï¼Œå¦‚æœä¸å¯é€†åˆ™è®¾ç½®ä¸ºå•ä½çŸ©é˜µ
     */
     bool invert();
     
-    //! ·µ»ØÄæ¾ØÕó
+    //! è¿”å›é€†çŸ©é˜µ
     Matrix2d inverse() const;
     
-    //! ÅĞ¶Ï¾ØÕóÊÇ·ñ¿ÉÄæ
+    //! åˆ¤æ–­çŸ©é˜µæ˜¯å¦å¯é€†
     bool isInvertible() const;
     
-    //! ±ÈÀı´óĞ¡
+    //! æ¯”ä¾‹å¤§å°
     double scale() const;
     
-    //! X±ÈÀı´óĞ¡
+    //! Xæ¯”ä¾‹å¤§å°
     double scaleX() const;
     
-    //! Y±ÈÀı´óĞ¡
+    //! Yæ¯”ä¾‹å¤§å°
     double scaleY() const;
     
-    //! ÅĞ¶ÏÁ½¸ö¾ØÕóÊÇ·ñÏàµÈ
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ©é˜µæ˜¯å¦ç›¸ç­‰
     bool operator==(const Matrix2d& mat) const;
     
-    //! ÅĞ¶ÏÁ½¸ö¾ØÕóÊÇ·ñ²»ÏàµÈ
+    //! åˆ¤æ–­ä¸¤ä¸ªçŸ©é˜µæ˜¯å¦ä¸ç›¸ç­‰
     bool operator!=(const Matrix2d& mat) const;
     
-    //! ÓÃÅ·À­¹æÔòÅĞ¶ÏÁ½¸ö¾ØÕóÊÇ·ñÏàµÈ£¬¼´ÅĞ¶Ï¾ØÕóµÄĞĞÊ¸Á¿ÊÇ·ñÏàµÈ
+    //! ç”¨æ¬§æ‹‰è§„åˆ™åˆ¤æ–­ä¸¤ä¸ªçŸ©é˜µæ˜¯å¦ç›¸ç­‰ï¼Œå³åˆ¤æ–­çŸ©é˜µçš„è¡ŒçŸ¢é‡æ˜¯å¦ç›¸ç­‰
     bool isEqualTo(const Matrix2d& mat, const Tol& tol = Tol::gTol()) const;
 
-    //! ÅĞ¶ÏÊÇ·ñÎªµ¥Î»¾ØÕó
+    //! åˆ¤æ–­æ˜¯å¦ä¸ºå•ä½çŸ©é˜µ
     bool isIdentity() const;
 
-    //! ÅĞ¶Ï¾ØÕóµÄ×ø±êÖáÊ¸Á¿ÊÇ·ñ·Ö±ğË®Æ½ºÍ´¹Ö±
+    //! åˆ¤æ–­çŸ©é˜µçš„åæ ‡è½´çŸ¢é‡æ˜¯å¦åˆ†åˆ«æ°´å¹³å’Œå‚ç›´
     bool isOrtho() const;
     
-    //! µÃµ½±ÈÀı¡¢Ğı×ª¡¢¾µÏñ³É·Ö
+    //! å¾—åˆ°æ¯”ä¾‹ã€æ—‹è½¬ã€é•œåƒæˆåˆ†
     /*!
-        \param[out] scaleX ¾ØÕóµÄX·½Ïò·ÅËõ±ÈÀı
-        \param[out] scaleY ¾ØÕóµÄY·½Ïò·ÅËõ±ÈÀı
-        \param[out] angle ¾ØÕóµÄĞı×ª½Ç¶È£¬»¡¶È
-        \param[out] isMirror ¾ØÕóÖĞÊÇ·ñº¬ÓĞ¶Ô³Æ³É·Ö
-        \param[out] reflex ¾ØÕóÖĞµÄ¶Ô³ÆÖá·½ÏòÊ¸Á¿(Èç¹ûÓĞ¶Ô³Æ³É·Ö)
-        \return ÊÇ·ñÇó½â³É¹¦£¬¾ØÕóµÄXÖáºÍYÖá²»´¹Ö±ÔòÊ§°Ü
+        \param[out] scaleX çŸ©é˜µçš„Xæ–¹å‘æ”¾ç¼©æ¯”ä¾‹
+        \param[out] scaleY çŸ©é˜µçš„Yæ–¹å‘æ”¾ç¼©æ¯”ä¾‹
+        \param[out] angle çŸ©é˜µçš„æ—‹è½¬è§’åº¦ï¼Œå¼§åº¦
+        \param[out] isMirror çŸ©é˜µä¸­æ˜¯å¦å«æœ‰å¯¹ç§°æˆåˆ†
+        \param[out] reflex çŸ©é˜µä¸­çš„å¯¹ç§°è½´æ–¹å‘çŸ¢é‡(å¦‚æœæœ‰å¯¹ç§°æˆåˆ†)
+        \return æ˜¯å¦æ±‚è§£æˆåŠŸï¼ŒçŸ©é˜µçš„Xè½´å’ŒYè½´ä¸å‚ç›´åˆ™å¤±è´¥
     */
     bool isConformal(double& scaleX, double& scaleY, double& angle,
         bool& isMirror, Vector2d& reflex) const;
     
-    //! ÉèÖÃÎªÔ­µãÎªorigin£¬×ø±êÖáÊ¸Á¿Îªe0ºÍe1µÄ×ø±êÏµ
+    //! è®¾ç½®ä¸ºåŸç‚¹ä¸ºoriginï¼Œåæ ‡è½´çŸ¢é‡ä¸ºe0å’Œe1çš„åæ ‡ç³»
     Matrix2d& setCoordSystem(
         const Vector2d& e0, const Vector2d& e1, const Point2d& origin);
     
-    //! µÃµ½×ø±êÏµµÄÔ­µãorigin£¬×ø±êÖáÊ¸Á¿e0ºÍe1
+    //! å¾—åˆ°åæ ‡ç³»çš„åŸç‚¹originï¼Œåæ ‡è½´çŸ¢é‡e0å’Œe1
     void getCoordSystem(
         Vector2d& e0, Vector2d& e1, Point2d& origin) const;
     
-    //! ·µ»ØÔ­µãÎªorigin£¬×ø±êÖáÊ¸Á¿Îªe0ºÍe1µÄ×ø±êÏµ
+    //! è¿”å›åŸç‚¹ä¸ºoriginï¼Œåæ ‡è½´çŸ¢é‡ä¸ºe0å’Œe1çš„åæ ‡ç³»
     static Matrix2d coordSystem(
         const Vector2d& e0, const Vector2d& e1, const Point2d& origin);
     
-    //! ·µ»Ø¸ø¶¨Ô­µã¡¢±ÈÀıºÍĞı×ª½Ç¶ÈµÄ×ø±êÏµ
+    //! è¿”å›ç»™å®šåŸç‚¹ã€æ¯”ä¾‹å’Œæ—‹è½¬è§’åº¦çš„åæ ‡ç³»
     /*!
-        \param origin ĞÂ×ø±êÏµµÄÔ­µã×ø±ê
-        \param scaleX XÖáµÄ±ÈÀıÏµÊı
-        \param scaleY YÖáµÄ±ÈÀıÏµÊı£¬Îª0ÔòÈ¡ÎªscaleX
-        \param angle XÖáµÄĞı×ª½Ç¶È£¬»¡¶È
-        \return ĞÂ×ø±êÏµµÄ¾ØÕó
+        \param origin æ–°åæ ‡ç³»çš„åŸç‚¹åæ ‡
+        \param scaleX Xè½´çš„æ¯”ä¾‹ç³»æ•°
+        \param scaleY Yè½´çš„æ¯”ä¾‹ç³»æ•°ï¼Œä¸º0åˆ™å–ä¸ºscaleX
+        \param angle Xè½´çš„æ—‹è½¬è§’åº¦ï¼Œå¼§åº¦
+        \return æ–°åæ ‡ç³»çš„çŸ©é˜µ
     */
     static Matrix2d coordSystem(const Point2d& origin, 
         double scaleX, double scaleY = 0.0, double angle = 0.0);
     
-    //! ÉèÖÃÎªµ¥Î»¾ØÕó
+    //! è®¾ç½®ä¸ºå•ä½çŸ©é˜µ
     Matrix2d& setToIdentity();
     
-    //! ÉèÖÃ¾ØÕóÔªËØ
+    //! è®¾ç½®çŸ©é˜µå…ƒç´ 
     Matrix2d& set(double _m11, double _m12, double _m21, double _m22,
         double _dx, double _dy);
     
-    //! ÉèÖÃÎªÆ½ÒÆ±ä»»¾ØÕó
+    //! è®¾ç½®ä¸ºå¹³ç§»å˜æ¢çŸ©é˜µ
     /*!
-        \param vec Æ½ÒÆÊ¸Á¿
-        \return ¸Ä±äºóµÄ±¾¶ÔÏóµÄÒıÓÃ
+        \param vec å¹³ç§»çŸ¢é‡
+        \return æ”¹å˜åçš„æœ¬å¯¹è±¡çš„å¼•ç”¨
     */
     Matrix2d& setToTranslation(const Vector2d& vec);
     
-    //! ÉèÖÃÎªÒÔÒ»µãÎªÖĞĞÄµÄĞı×ª±ä»»¾ØÕó
+    //! è®¾ç½®ä¸ºä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ—‹è½¬å˜æ¢çŸ©é˜µ
     /*!
-        \param angle Ğı×ª½Ç¶È£¬»¡¶È£¬ÄæÊ±ÕëÎªÕı
-        \param center Ğı×ªÖĞĞÄµã
-        \return ¸Ä±äºóµÄ±¾¶ÔÏóµÄÒıÓÃ
+        \param angle æ—‹è½¬è§’åº¦ï¼Œå¼§åº¦ï¼Œé€†æ—¶é’ˆä¸ºæ­£
+        \param center æ—‹è½¬ä¸­å¿ƒç‚¹
+        \return æ”¹å˜åçš„æœ¬å¯¹è±¡çš„å¼•ç”¨
     */
     Matrix2d& setToRotation(double angle, 
         const Point2d& center = Point2d::kOrigin());
     
-    //! ÉèÖÃÎªÒÔÒ»µãÎªÖĞĞÄµÄ·ÅËõ±ä»»¾ØÕó
+    //! è®¾ç½®ä¸ºä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ”¾ç¼©å˜æ¢çŸ©é˜µ
     /*!
-        \param scale ·ÅËõ±ÈÀı
-        \param center ·ÅËõÖĞĞÄµã
-        \return ¸Ä±äºóµÄ±¾¶ÔÏóµÄÒıÓÃ
+        \param scale æ”¾ç¼©æ¯”ä¾‹
+        \param center æ”¾ç¼©ä¸­å¿ƒç‚¹
+        \return æ”¹å˜åçš„æœ¬å¯¹è±¡çš„å¼•ç”¨
     */
     Matrix2d& setToScaling(double scale, 
         const Point2d& center = Point2d::kOrigin());
     
-    //! ÉèÖÃÎªÒÔÒ»µãÎªÖĞĞÄµÄ·ÅËõ±ä»»¾ØÕó
+    //! è®¾ç½®ä¸ºä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ”¾ç¼©å˜æ¢çŸ©é˜µ
     /*!
-        \param scaleX ÔÚX·½ÏòÉÏµÄ·ÅËõ±ÈÀı
-        \param scaleY ÔÚY·½ÏòÉÏµÄ·ÅËõ±ÈÀı£¬Èç¹ûÎª0ÔòÈ¡ÎªscaleX
-        \param center ·ÅËõÖĞĞÄµã
-        \return ¸Ä±äºóµÄ±¾¶ÔÏóµÄÒıÓÃ
+        \param scaleX åœ¨Xæ–¹å‘ä¸Šçš„æ”¾ç¼©æ¯”ä¾‹
+        \param scaleY åœ¨Yæ–¹å‘ä¸Šçš„æ”¾ç¼©æ¯”ä¾‹ï¼Œå¦‚æœä¸º0åˆ™å–ä¸ºscaleX
+        \param center æ”¾ç¼©ä¸­å¿ƒç‚¹
+        \return æ”¹å˜åçš„æœ¬å¯¹è±¡çš„å¼•ç”¨
     */
     Matrix2d& setToScaling(double scaleX, double scaleY, 
         const Point2d& center = Point2d::kOrigin());
     
-    //! ÉèÖÃÎª¹ØÓÚÒ»µã¶Ô³ÆµÄ±ä»»¾ØÕó
+    //! è®¾ç½®ä¸ºå…³äºä¸€ç‚¹å¯¹ç§°çš„å˜æ¢çŸ©é˜µ
     /*!
-        \param pnt ¶Ô³ÆÖĞĞÄµã
-        \return ¸Ä±äºóµÄ±¾¶ÔÏóµÄÒıÓÃ
+        \param pnt å¯¹ç§°ä¸­å¿ƒç‚¹
+        \return æ”¹å˜åçš„æœ¬å¯¹è±¡çš„å¼•ç”¨
     */
     Matrix2d& setToMirroring(const Point2d& pnt = Point2d::kOrigin());
     
-    //! ÉèÖÃÎªÒÔÖ±Ïß(pnt,dir)ÎªÖĞĞÄÏßµÄ¶Ô³Æ±ä»»¾ØÕó
+    //! è®¾ç½®ä¸ºä»¥ç›´çº¿(pnt,dir)ä¸ºä¸­å¿ƒçº¿çš„å¯¹ç§°å˜æ¢çŸ©é˜µ
     /*!
-        \param pnt ¶Ô³ÆÖĞĞÄÏßÉÏµÄÒ»µã
-        \param dir ¶Ô³ÆÖĞĞÄÏßµÄ·½ÏòÊ¸Á¿
-        \return ¸Ä±äºóµÄ±¾¶ÔÏóµÄÒıÓÃ
+        \param pnt å¯¹ç§°ä¸­å¿ƒçº¿ä¸Šçš„ä¸€ç‚¹
+        \param dir å¯¹ç§°ä¸­å¿ƒçº¿çš„æ–¹å‘çŸ¢é‡
+        \return æ”¹å˜åçš„æœ¬å¯¹è±¡çš„å¼•ç”¨
     */
     Matrix2d& setToMirroring(const Point2d& pnt, const Vector2d& dir);
     
-    //! ÉèÖÃÎª´íÇĞ±ä»»¾ØÕó
+    //! è®¾ç½®ä¸ºé”™åˆ‡å˜æ¢çŸ©é˜µ
     /*!
-        \param sx ÔÚX·½ÏòÉÏµÄ´íÇĞ±ÈÀı
-        \param sy ÔÚY·½ÏòÉÏµÄ´íÇĞ±ÈÀı£¬Èç¹ûÎª0ÔòÈ¡Îªsx
-        \param pnt ´íÇĞ»ùµã£¬ÔÚ¸ÃµãÉÏµÄµã±ä»»ºóÎ»ÖÃ²»±ä
-        \return ¸Ä±äºóµÄ±¾¶ÔÏóµÄÒıÓÃ
+        \param sx åœ¨Xæ–¹å‘ä¸Šçš„é”™åˆ‡æ¯”ä¾‹
+        \param sy åœ¨Yæ–¹å‘ä¸Šçš„é”™åˆ‡æ¯”ä¾‹ï¼Œå¦‚æœä¸º0åˆ™å–ä¸ºsx
+        \param pnt é”™åˆ‡åŸºç‚¹ï¼Œåœ¨è¯¥ç‚¹ä¸Šçš„ç‚¹å˜æ¢åä½ç½®ä¸å˜
+        \return æ”¹å˜åçš„æœ¬å¯¹è±¡çš„å¼•ç”¨
     */
     Matrix2d& setToShearing(double sx, double sy, 
         const Point2d& pnt = Point2d::kOrigin());
     
-    //! µÃµ½Æ½ÒÆ±ä»»¾ØÕó
+    //! å¾—åˆ°å¹³ç§»å˜æ¢çŸ©é˜µ
     /*!
-        \param vec Æ½ÒÆÊ¸Á¿
-        \return ĞÂµÄ±ä»»¾ØÕó
+        \param vec å¹³ç§»çŸ¢é‡
+        \return æ–°çš„å˜æ¢çŸ©é˜µ
     */
     static Matrix2d translation(const Vector2d& vec);
     
-    //! µÃµ½ÒÔÒ»µãÎªÖĞĞÄµÄĞı×ª±ä»»¾ØÕó
+    //! å¾—åˆ°ä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ—‹è½¬å˜æ¢çŸ©é˜µ
     /*!
-        \param angle Ğı×ª½Ç¶È£¬»¡¶È£¬ÄæÊ±ÕëÎªÕı
-        \param center Ğı×ªÖĞĞÄµã
-        \return ĞÂµÄ±ä»»¾ØÕó
+        \param angle æ—‹è½¬è§’åº¦ï¼Œå¼§åº¦ï¼Œé€†æ—¶é’ˆä¸ºæ­£
+        \param center æ—‹è½¬ä¸­å¿ƒç‚¹
+        \return æ–°çš„å˜æ¢çŸ©é˜µ
     */
     static Matrix2d rotation(double angle, 
         const Point2d& center = Point2d::kOrigin());
     
-    //! µÃµ½ÒÔÒ»µãÎªÖĞĞÄµÄ·ÅËõ±ä»»¾ØÕó
+    //! å¾—åˆ°ä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ”¾ç¼©å˜æ¢çŸ©é˜µ
     /*!
-        \param scale ·ÅËõ±ÈÀı
-        \param center ·ÅËõÖĞĞÄµã
-        \return ĞÂµÄ±ä»»¾ØÕó
+        \param scale æ”¾ç¼©æ¯”ä¾‹
+        \param center æ”¾ç¼©ä¸­å¿ƒç‚¹
+        \return æ–°çš„å˜æ¢çŸ©é˜µ
     */
     static Matrix2d scaling(double scale, 
         const Point2d& center = Point2d::kOrigin());
     
-    //! µÃµ½ÒÔÒ»µãÎªÖĞĞÄµÄ·ÅËõ±ä»»¾ØÕó
+    //! å¾—åˆ°ä»¥ä¸€ç‚¹ä¸ºä¸­å¿ƒçš„æ”¾ç¼©å˜æ¢çŸ©é˜µ
     /*!
-        \param scaleX ÔÚX·½ÏòÉÏµÄ·ÅËõ±ÈÀı
-        \param scaleY ÔÚY·½ÏòÉÏµÄ·ÅËõ±ÈÀı£¬Èç¹ûÎª0ÔòÈ¡ÎªscaleX
-        \param center ·ÅËõÖĞĞÄµã
-        \return ĞÂµÄ±ä»»¾ØÕó
+        \param scaleX åœ¨Xæ–¹å‘ä¸Šçš„æ”¾ç¼©æ¯”ä¾‹
+        \param scaleY åœ¨Yæ–¹å‘ä¸Šçš„æ”¾ç¼©æ¯”ä¾‹ï¼Œå¦‚æœä¸º0åˆ™å–ä¸ºscaleX
+        \param center æ”¾ç¼©ä¸­å¿ƒç‚¹
+        \return æ–°çš„å˜æ¢çŸ©é˜µ
     */
     static Matrix2d scaling(double scaleX, double scaleY, 
         const Point2d& center = Point2d::kOrigin());
     
-    //! µÃµ½¹ØÓÚÒ»µã¶Ô³ÆµÄ±ä»»¾ØÕó
+    //! å¾—åˆ°å…³äºä¸€ç‚¹å¯¹ç§°çš„å˜æ¢çŸ©é˜µ
     /*!
-        \param pnt ¶Ô³ÆÖĞĞÄµã
-        \return ĞÂµÄ±ä»»¾ØÕó
+        \param pnt å¯¹ç§°ä¸­å¿ƒç‚¹
+        \return æ–°çš„å˜æ¢çŸ©é˜µ
     */
     static Matrix2d mirroring(const Point2d& pnt = Point2d::kOrigin());
     
-    //! µÃµ½ÒÔÖ±Ïß(pnt,dir)ÎªÖĞĞÄÏßµÄ¶Ô³Æ±ä»»¾ØÕó
+    //! å¾—åˆ°ä»¥ç›´çº¿(pnt,dir)ä¸ºä¸­å¿ƒçº¿çš„å¯¹ç§°å˜æ¢çŸ©é˜µ
     /*!
-        \param pnt ¶Ô³ÆÖĞĞÄÏßÉÏµÄÒ»µã
-        \param dir ¶Ô³ÆÖĞĞÄÏßµÄ·½ÏòÊ¸Á¿
-        \return ĞÂµÄ±ä»»¾ØÕó
+        \param pnt å¯¹ç§°ä¸­å¿ƒçº¿ä¸Šçš„ä¸€ç‚¹
+        \param dir å¯¹ç§°ä¸­å¿ƒçº¿çš„æ–¹å‘çŸ¢é‡
+        \return æ–°çš„å˜æ¢çŸ©é˜µ
     */
     static Matrix2d mirroring(const Point2d& pnt, const Vector2d& dir);
     
-    //! µÃµ½´íÇĞ±ä»»¾ØÕó
+    //! å¾—åˆ°é”™åˆ‡å˜æ¢çŸ©é˜µ
     /*!
-        \param sx ÔÚX·½ÏòÉÏµÄ´íÇĞ±ÈÀı
-        \param sy ÔÚY·½ÏòÉÏµÄ´íÇĞ±ÈÀı£¬Èç¹ûÎª0ÔòÈ¡Îªsx
-        \param pnt ´íÇĞ»ùµã£¬ÔÚ¸ÃµãÉÏµÄµã±ä»»ºóÎ»ÖÃ²»±ä
-        \return ĞÂµÄ±ä»»¾ØÕó
+        \param sx åœ¨Xæ–¹å‘ä¸Šçš„é”™åˆ‡æ¯”ä¾‹
+        \param sy åœ¨Yæ–¹å‘ä¸Šçš„é”™åˆ‡æ¯”ä¾‹ï¼Œå¦‚æœä¸º0åˆ™å–ä¸ºsx
+        \param pnt é”™åˆ‡åŸºç‚¹ï¼Œåœ¨è¯¥ç‚¹ä¸Šçš„ç‚¹å˜æ¢åä½ç½®ä¸å˜
+        \return æ–°çš„å˜æ¢çŸ©é˜µ
     */
     static Matrix2d shearing(double sx, double sy, 
         const Point2d& pnt = Point2d::kOrigin());
 };
 
-_GEOM_END
 #endif // __GEOMETRY_MATRIX_H_

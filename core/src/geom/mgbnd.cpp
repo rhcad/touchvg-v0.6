@@ -1,26 +1,24 @@
-// mgbnd.cpp: ÊµÏÖ°ó¶¨¿òÀàBoundBox
+ï»¿// mgbnd.cpp: å®ç°ç»‘å®šæ¡†ç±»BoundBox
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "mgbnd.h"
 
-_GEOM_BEGIN
-
-// À©´óµ½°üº¬Ò»¸öµã
+// æ‰©å¤§åˆ°åŒ…å«ä¸€ä¸ªç‚¹
 BoundBox& BoundBox::extend(const Point2d& pnt)
 {
     Vector2d vec = pnt - m_base;
     
-    // Èç¹û°ó¶¨¿òÎªµã£¬¾ÍÀ©´óµ½Ïß¶Î
+    // å¦‚æœç»‘å®šæ¡†ä¸ºç‚¹ï¼Œå°±æ‰©å¤§åˆ°çº¿æ®µ
     if (m_dir1.isZeroVector() && m_dir2.isZeroVector())
         m_dir1 = vec;
-    // Èç¹û¸ÃµãºÍ°ó¶¨¿òÔ­µãÖØºÏ
+    // å¦‚æœè¯¥ç‚¹å’Œç»‘å®šæ¡†åŸç‚¹é‡åˆ
     else if (vec.isZeroVector())
         return *this;
-    // Èç¹û°ó¶¨¿òÁ½±ßÆ½ĞĞ»òÒ»±ßÎªÁã
+    // å¦‚æœç»‘å®šæ¡†ä¸¤è¾¹å¹³è¡Œæˆ–ä¸€è¾¹ä¸ºé›¶
     else if (m_dir1.isParallelTo(m_dir2))
     {
-        // m_dir1È¡Îª·Ç¿Õ±ß
+        // m_dir1å–ä¸ºéç©ºè¾¹
         if (m_dir1.isZeroVector())
         {
             Vector2d v = m_dir1;
@@ -28,7 +26,7 @@ BoundBox& BoundBox::extend(const Point2d& pnt)
             m_dir2 = v;
         }
         
-        // ÇóÁ½Ìõ±ßÔÚm_dir1ÉÏµÄÍ¶Ó°
+        // æ±‚ä¸¤æ¡è¾¹åœ¨m_dir1ä¸Šçš„æŠ•å½±
         double proj1 = 1.0;
         double proj2 = m_dir2.projectScaleToVector(m_dir1);
         if (proj2 > 0.0)
@@ -38,17 +36,17 @@ BoundBox& BoundBox::extend(const Point2d& pnt)
             proj2 = 0.0;
         }
         
-        // ÇóvecÔÚm_dir1ÉÏµÄÍ¶Ó°
+        // æ±‚vecåœ¨m_dir1ä¸Šçš„æŠ•å½±
         Vector2d vecProj, vecPerp;
         double projv = vec.projectResolveVector(m_dir1, vecProj, vecPerp);
         
-        // À©´óÁ½Ìõ±ßÔÚm_dir1ÉÏµÄÍ¶Ó°ÒÔ°üº¬Ö¸¶¨µã
+        // æ‰©å¤§ä¸¤æ¡è¾¹åœ¨m_dir1ä¸Šçš„æŠ•å½±ä»¥åŒ…å«æŒ‡å®šç‚¹
         if (projv > proj1)
             proj1 = projv;
         else if (projv < proj2)
             proj2 = projv;
         
-        // ¼ÆËãÁ½Ìõ±ß
+        // è®¡ç®—ä¸¤æ¡è¾¹
         m_dir2 = m_dir1 * proj2 + vecPerp;
         if (proj1 > 1.0)
             m_dir1 *= proj1;
@@ -75,7 +73,7 @@ BoundBox& BoundBox::extend(const Point2d& pnt)
     return *this;
 }
 
-// ÏòÍâÀ©´ó¸ø¶¨³¤¶È
+// å‘å¤–æ‰©å¤§ç»™å®šé•¿åº¦
 BoundBox& BoundBox::swell(double distance)
 {
     if (m_dir1.isZeroVector() && m_dir2.isZeroVector())
@@ -88,7 +86,7 @@ BoundBox& BoundBox::swell(double distance)
     }
     else if (m_dir1.isParallelTo(m_dir2))
     {
-        // m_dir1È¡Îª·Ç¿Õ±ß
+        // m_dir1å–ä¸ºéç©ºè¾¹
         if (m_dir1.isZeroVector())
         {
             Vector2d v = m_dir1;
@@ -97,7 +95,7 @@ BoundBox& BoundBox::swell(double distance)
         }
         distance = fabs(distance) / m_dir1.length();
         
-        // ÇóÁ½Ìõ±ßÔÚm_dir1ÉÏµÄÍ¶Ó°
+        // æ±‚ä¸¤æ¡è¾¹åœ¨m_dir1ä¸Šçš„æŠ•å½±
         double proj1 = 1.0;
         double proj2 = m_dir2.projectScaleToVector(m_dir1);
         if (proj2 > 0.0)
@@ -132,7 +130,7 @@ BoundBox& BoundBox::swell(double distance)
     return *this;
 }
 
-// ÅĞ¶ÏÊÇ·ñ°üº¬Ò»¸öµã
+// åˆ¤æ–­æ˜¯å¦åŒ…å«ä¸€ä¸ªç‚¹
 bool BoundBox::contains(const Point2d& pnt) const
 {
     double x, y;
@@ -156,7 +154,7 @@ bool BoundBox::contains(const Point2d& pnt) const
     }
 }
 
-// ÅĞ¶ÏÊÇ·ñºÍÁíÒ»¸ö°ó¶¨¿ò²»Ïà½»
+// åˆ¤æ–­æ˜¯å¦å’Œå¦ä¸€ä¸ªç»‘å®šæ¡†ä¸ç›¸äº¤
 bool BoundBox::isDisjoint(const BoundBox& box) const
 {
     if (box.m_dir1.isZeroVector() && box.m_dir2.isZeroVector())
@@ -181,5 +179,3 @@ bool BoundBox::isDisjoint(const BoundBox& box) const
     }
     return false;
 }
-
-_GEOM_END

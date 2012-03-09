@@ -1,5 +1,5 @@
-//! \file giimagep.h
-//! \brief ¶¨ÒåGDI+Í¼ÏñÎÄ¼şµÄ¸¨ÖúÀà GiGdipImage
+ï»¿//! \file giimagep.h
+//! \brief å®šä¹‰GDI+å›¾åƒæ–‡ä»¶çš„è¾…åŠ©ç±» GiGdipImage
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -9,83 +9,81 @@
 #include "graphwin.h"
 #include <ocidl.h>
 
-_GEOM_BEGIN
-
-//! GDI+Í¼ÏñÎÄ¼şµÄ¸¨ÖúÀà
+//! GDI+å›¾åƒæ–‡ä»¶çš„è¾…åŠ©ç±»
 /*!
-    Ö§³Ö BMP/JPEG/GIF/TIFF/PNG/WMF/EMF/ICON ÎÄ¼ş
+    æ”¯æŒ BMP/JPEG/GIF/TIFF/PNG/WMF/EMF/ICON æ–‡ä»¶
     \ingroup _GRAPH_INTERFACE_
 */
 class GiGdipImage
 {
 public:
-    //! ¹¹Ôìº¯Êı£¬¿É´ò¿ªÖ¸¶¨µÄÎÄ¼ş
+    //! æ„é€ å‡½æ•°ï¼Œå¯æ‰“å¼€æŒ‡å®šçš„æ–‡ä»¶
     GiGdipImage(const wchar_t* filename = L"");
 
-    //! ´Ó¸ø¶¨µÄÎ»Í¼¹¹Ôì
+    //! ä»ç»™å®šçš„ä½å›¾æ„é€ 
     GiGdipImage(HBITMAP hbm);
 
-    //! Îö¹¹º¯Êı
+    //! ææ„å‡½æ•°
     ~GiGdipImage();
 
-    //! ÊÍ·ÅÄÚ´æ
+    //! é‡Šæ”¾å†…å­˜
     void clear();
 
-    //! ´ò¿ªÖ¸¶¨µÄÍ¼ÏñÎÄ¼ş
+    //! æ‰“å¼€æŒ‡å®šçš„å›¾åƒæ–‡ä»¶
     bool open(const wchar_t* filename);
 
-    //! ·µ»ØX·Ö±æÂÊ
+    //! è¿”å›Xåˆ†è¾¨ç‡
     long getDpiX() const;
 
-    //! ·µ»ØY·Ö±æÂÊ
+    //! è¿”å›Yåˆ†è¾¨ç‡
     long getDpiY() const;
 
-    //! ·µ»ØÍ¼ÏñÏñËØ¿í¶È
+    //! è¿”å›å›¾åƒåƒç´ å®½åº¦
     long getWidth() const;
 
-    //! ·µ»ØÍ¼ÏñÏñËØ¸ß¶È
+    //! è¿”å›å›¾åƒåƒç´ é«˜åº¦
     long getHeight() const;
 
-    //! ·µ»ØÍ¼ÏñÔ­Ê¼¿í¶È£¬µ¥Î»ÎªHIMETRIC(0.01mm)
+    //! è¿”å›å›¾åƒåŸå§‹å®½åº¦ï¼Œå•ä½ä¸ºHIMETRIC(0.01mm)
     long getHmWidth() const;
 
-    //! ·µ»ØÍ¼ÏñÔ­Ê¼¸ß¶È£¬µ¥Î»ÎªHIMETRIC(0.01mm)
+    //! è¿”å›å›¾åƒåŸå§‹é«˜åº¦ï¼Œå•ä½ä¸ºHIMETRIC(0.01mm)
     long getHmHeight() const;
 
-    //! ´´½¨GDIÍ¼Ïñ×ÊÔ´
+    //! åˆ›å»ºGDIå›¾åƒèµ„æº
     HBITMAP createBitmap(GiColor bkColor = GiColor::White()) const;
 
-    //! ÏÔÊ¾Í¼Ïñ£¨Ğı×ª½Ç¶ÈÎª90¶ÈµÄÕûÊı±¶£©
+    //! æ˜¾ç¤ºå›¾åƒï¼ˆæ—‹è½¬è§’åº¦ä¸º90åº¦çš„æ•´æ•°å€ï¼‰
     /*!
-        \param graph Í¼ĞÎÏµÍ³£¬Èç¹û²»ÊÇ GiGraphGdip ÀàĞÍÔò×Ô¶¯È¡HBITMAPÀ´ÏÔÊ¾
-        \param rectW Õû¸öÍ¼Ïñ¶ÔÓ¦µÄÊÀ½ç×ø±êÇøÓò
-        \param fast ÏÔÊ¾·½Ê½. true: ¿ìËÙÏÔÊ¾, false: ¸ß¾«¶ÈÏÔÊ¾
-        \return ÊÇ·ñÏÔÊ¾³É¹¦
+        \param graph å›¾å½¢ç³»ç»Ÿï¼Œå¦‚æœä¸æ˜¯ GiGraphGdip ç±»å‹åˆ™è‡ªåŠ¨å–HBITMAPæ¥æ˜¾ç¤º
+        \param rectW æ•´ä¸ªå›¾åƒå¯¹åº”çš„ä¸–ç•Œåæ ‡åŒºåŸŸ
+        \param fast æ˜¾ç¤ºæ–¹å¼. true: å¿«é€Ÿæ˜¾ç¤º, false: é«˜ç²¾åº¦æ˜¾ç¤º
+        \return æ˜¯å¦æ˜¾ç¤ºæˆåŠŸ
     */
     bool draw(GiGraphWin& graph, const Box2d& rectW, bool fast = false) const;
 
-    //! ´´½¨ĞÂµÄËõÂÔÍ¼
+    //! åˆ›å»ºæ–°çš„ç¼©ç•¥å›¾
     /*!
-        \param maxWidth ĞÂÍ¼ÏñµÄ×î´óÏñËØ¿í¶È£¬0±íÊ¾²»ËõĞ¡
-        \param maxHeight ĞÂÍ¼ÏñµÄ×î´óÏñËØ¸ß¶È£¬0±íÊ¾²»ËõĞ¡
-        \return ĞÂµÄËõÂÔÍ¼£¬ĞèÒªÓÃ delete ÊÍ·Å
+        \param maxWidth æ–°å›¾åƒçš„æœ€å¤§åƒç´ å®½åº¦ï¼Œ0è¡¨ç¤ºä¸ç¼©å°
+        \param maxHeight æ–°å›¾åƒçš„æœ€å¤§åƒç´ é«˜åº¦ï¼Œ0è¡¨ç¤ºä¸ç¼©å°
+        \return æ–°çš„ç¼©ç•¥å›¾ï¼Œéœ€è¦ç”¨ delete é‡Šæ”¾
     */
     GiGdipImage* thumbnailImage(UInt32 maxWidth = 0, UInt32 maxHeight = 0);
 
-    //! ±£´æĞÂÍ¼Ïñµ½ÎÄ¼ş
+    //! ä¿å­˜æ–°å›¾åƒåˆ°æ–‡ä»¶
     /*!
-        \param filename ÎÄ¼şÈ«Ãû
-        \param quality JPEGÖÊÁ¿, 0µ½100
-        \return ÊÇ·ñÖ´ĞĞ³É¹¦
+        \param filename æ–‡ä»¶å…¨å
+        \param quality JPEGè´¨é‡, 0åˆ°100
+        \return æ˜¯å¦æ‰§è¡ŒæˆåŠŸ
     */
     bool save(const wchar_t* filename, ULONG quality = 100);
 
-    //! µÃµ½Í¼Æ¬ºó×ºÃû¶ÔÓ¦µÄÍ¼Ïñ±àÂë¸ñÊ½´®
+    //! å¾—åˆ°å›¾ç‰‡åç¼€åå¯¹åº”çš„å›¾åƒç¼–ç æ ¼å¼ä¸²
     /*!
-        \param[in] filename ÎÄ¼şÃû£¬Ö»Òª°üº¬ÓĞºó×ºÃû¾ÍĞĞ£¬ÀıÈç¡°1.jpg¡±
-        \param[out] format Ìî³äÍ¼Ïñ±àÂë¸ñÊ½Ãû³Æ£¬ÀıÈç¡°image/jpeg¡±
-        \param[out] clsidEncoder Ìî³äÍ¼Ïñ±àÂëÆ÷GUID
-        \return ÊÇ·ñ²éÑ¯³É¹¦
+        \param[in] filename æ–‡ä»¶åï¼Œåªè¦åŒ…å«æœ‰åç¼€åå°±è¡Œï¼Œä¾‹å¦‚â€œ1.jpgâ€
+        \param[out] format å¡«å……å›¾åƒç¼–ç æ ¼å¼åç§°ï¼Œä¾‹å¦‚â€œimage/jpegâ€
+        \param[out] clsidEncoder å¡«å……å›¾åƒç¼–ç å™¨GUID
+        \return æ˜¯å¦æŸ¥è¯¢æˆåŠŸ
     */
     static bool getEncoder(const wchar_t* filename, WCHAR format[20], CLSID& clsidEncoder);
 
@@ -94,5 +92,4 @@ private:
     Impl*   m_impl;
 };
 
-_GEOM_END
 #endif // __GEOMETRY_GDIPIMAGE_H_

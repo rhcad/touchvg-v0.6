@@ -1,9 +1,7 @@
-#ifndef _TEST_SHAPE_H
+﻿#ifndef _TEST_SHAPE_H
 #define _TEST_SHAPE_H
 
 #include <gigraph.h>
-
-_GEOM_BEGIN
 
 class ShapeItem
 {
@@ -95,5 +93,4 @@ struct RandomParam
     static UInt8 RandUInt8(long nMin, long nMax);
 };
 
-_GEOM_END
 #endif // _TEST_SHAPE_H

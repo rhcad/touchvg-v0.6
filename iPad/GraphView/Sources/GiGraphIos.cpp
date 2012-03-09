@@ -1,4 +1,4 @@
-// GiGraphIos.cpp
+﻿// GiGraphIos.cpp
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 

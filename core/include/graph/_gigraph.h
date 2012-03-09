@@ -1,36 +1,34 @@
-// _gigraph.h: ¶¨ÒåGiGraphicsÀàµÄÄÚ²¿³ÉÔ±
+ï»¿// _gigraph.h: å®šä¹‰GiGraphicsç±»çš„å†…éƒ¨æˆå‘˜
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
 #include "gigraph.h"
 
-_GEOM_BEGIN
-
-//! GiGraphicsµÄÄÚ²¿ÊµÏÖÀà
+//! GiGraphicsçš„å†…éƒ¨å®ç°ç±»
 class GiGraphicsImpl
 {
 public:
     enum { CLIP_INFLATE = 10 };
 
-    GiGraphics*  pThis;             //!< Í¼ĞÎÏµÍ³
-    GiTransform& xform;             //!< ×ø±êÏµ¹ÜÀí¶ÔÏó
+    GiGraphics*  pThis;             //!< å›¾å½¢ç³»ç»Ÿ
+    GiTransform& xform;             //!< åæ ‡ç³»ç®¡ç†å¯¹è±¡
 
-    UInt8       maxPenWidth;        //!< ×î´óÏñËØÏß¿í
-    bool        antiAlias;          //!< µ±Ç°ÊÇ·ñÊÇ·´×ßÑùÄ£Ê½
+    UInt8       maxPenWidth;        //!< æœ€å¤§åƒç´ çº¿å®½
+    bool        antiAlias;          //!< å½“å‰æ˜¯å¦æ˜¯åèµ°æ ·æ¨¡å¼
 
-    long        lastZoomTimes;      //!< ¼ÇÏÂµÄ·ÅËõ½á¹û¸Ä±ä´ÎÊı
-    long        drawRefcnt;         //!< »æÍ¼Ëø¶¨¼ÆÊı
-    bool        isPrint;            //!< ÊÇ·ñ´òÓ¡»ò´òÓ¡Ô¤ÀÀ
-    int         drawColors;         //!< »æÍ¼DCÑÕÉ«Êı
-    int         colorMode;          //!< ÑÕÉ«Ä£Ê½, enum kColorMode
-    RECT        clipBox0;           //!< ¿ªÊ¼»æÍ¼Ê±µÄ¼ô²Ã¿ò(LP)
+    long        lastZoomTimes;      //!< è®°ä¸‹çš„æ”¾ç¼©ç»“æœæ”¹å˜æ¬¡æ•°
+    long        drawRefcnt;         //!< ç»˜å›¾é”å®šè®¡æ•°
+    bool        isPrint;            //!< æ˜¯å¦æ‰“å°æˆ–æ‰“å°é¢„è§ˆ
+    int         drawColors;         //!< ç»˜å›¾DCé¢œè‰²æ•°
+    int         colorMode;          //!< é¢œè‰²æ¨¡å¼, enum kColorMode
+    RECT        clipBox0;           //!< å¼€å§‹ç»˜å›¾æ—¶çš„å‰ªè£æ¡†(LP)
 
-    RECT        clipBox;            //!< ¼ô²Ã¿ò(LP)
-    Box2d       rectDraw;           //!< ¼ô²Ã¾ØĞÎ£¬±ÈclipBoxÂÔ´ó
-    Box2d       rectDrawM;          //!< ¼ô²Ã¾ØĞÎ£¬Ä£ĞÍ×ø±ê
-    Box2d       rectDrawW;          //!< ¼ô²Ã¾ØĞÎ£¬ÊÀ½ç×ø±ê
-    Box2d       rectDrawMaxM;       //!< ×î´ó¼ô²Ã¾ØĞÎ£¬Ä£ĞÍ×ø±ê
-    Box2d       rectDrawMaxW;       //!< ×î´ó¼ô²Ã¾ØĞÎ£¬ÊÀ½ç×ø±ê
+    RECT        clipBox;            //!< å‰ªè£æ¡†(LP)
+    Box2d       rectDraw;           //!< å‰ªè£çŸ©å½¢ï¼Œæ¯”clipBoxç•¥å¤§
+    Box2d       rectDrawM;          //!< å‰ªè£çŸ©å½¢ï¼Œæ¨¡å‹åæ ‡
+    Box2d       rectDrawW;          //!< å‰ªè£çŸ©å½¢ï¼Œä¸–ç•Œåæ ‡
+    Box2d       rectDrawMaxM;       //!< æœ€å¤§å‰ªè£çŸ©å½¢ï¼Œæ¨¡å‹åæ ‡
+    Box2d       rectDrawMaxW;       //!< æœ€å¤§å‰ªè£çŸ©å½¢ï¼Œä¸–ç•Œåæ ‡
 
     static long& screenDPI()
     {
@@ -67,7 +65,7 @@ private:
     void operator=(const GiGraphicsImpl&);
 };
 
-//! Í¼ĞÎÏµÍ³µÄ»æÍ¼ÒıÓÃËø¶¨¸¨ÖúÀà
+//! å›¾å½¢ç³»ç»Ÿçš„ç»˜å›¾å¼•ç”¨é”å®šè¾…åŠ©ç±»
 class GiLock
 {
     long*  m_refcount;
@@ -81,5 +79,3 @@ public:
         giInterlockedDecrement(m_refcount);
     }
 };
-
-_GEOM_END

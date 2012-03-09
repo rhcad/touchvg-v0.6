@@ -1,4 +1,4 @@
-// ChildFrm.cpp : implementation of the CStep1Frame class
+﻿// ChildFrm.cpp : implementation of the CStep1Frame class
 //
 
 #include "stdafx.h"

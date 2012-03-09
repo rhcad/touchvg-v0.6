@@ -1,23 +1,23 @@
-//! \file gdiobj.h
-//! \brief �����ʵ��GDI��Դ������ KGDIObject
+﻿//! \file gdiobj.h
+//! \brief 定义和实现GDI资源管理类 KGDIObject
 
 #ifndef __GDIOBJ_H_
 #define __GDIOBJ_H_
 
-//! GDI��Դ������
+//! GDI资源管理类
 class KGDIObject
 {
 public:
-    //! Ĭ�Ϲ��캯��
+    //! 默认构造函数
     KGDIObject() : m_hOld(NULL), m_hdc(NULL), m_hObj(NULL), m_bCreated(false)
     {
     }
     
-    //! ָ����Դ����Ĺ��캯��
-    /*! ���hdc��hObjΪ�գ��򲻽���Դѡ���豸����������������ֵ
-        \param hdc �豸�������ľ��
-        \param hObj GDI��Դ��������续�ʡ���ˢ��������Դ���
-        \param bCreated ������GDI��Դ����Ƿ���Ҫ�Զ��ͷ�
+    //! 指定资源句柄的构造函数
+    /*! 如果hdc或hObj为空，则不将资源选入设备描述表，仅记下其值
+        \param hdc 设备描述表的句柄
+        \param hObj GDI资源句柄，例如画笔、画刷、字体资源句柄
+        \param bCreated 给定的GDI资源句柄是否需要自动释放
     */
     KGDIObject(HDC hdc, HGDIOBJ hObj, bool bCreated = true)
         : m_hOld(NULL), m_hdc(hdc), m_hObj(hObj), m_bCreated(bCreated)
@@ -26,16 +26,16 @@ public:
             m_hOld = ::SelectObject(hdc, hObj);
     }
     
-    //! �����������Զ��ͷ�
+    //! 析构函数，自动释放
     ~KGDIObject()
     {
         Detach();
     }
     
-    //! ָ���µ�GDI��Դ���ͷ�ԭ������Դ����
+    //! 指定新的GDI资源，释放原来的资源引用
     /*!
-        \param hObj GDI��Դ��������续�ʡ���ˢ��������Դ���
-        \param bCreated ������GDI��Դ����Ƿ���Ҫ�Զ��ͷ�
+        \param hObj GDI资源句柄，例如画笔、画刷、字体资源句柄
+        \param bCreated 给定的GDI资源句柄是否需要自动释放
     */
     void Attach(HGDIOBJ hObj, bool bCreated = true)
     {
@@ -48,8 +48,8 @@ public:
             m_hOld = ::SelectObject(m_hdc, hObj);
     }
     
-    //! �ͷŶ���Դ������
-    /*! ����ڹ����Attach������ָ��bCreatedΪtrue�����Զ�ɾ��GDI��Դ
+    //! 释放对资源的引用
+    /*! 如果在构造或Attach函数中指定bCreated为true，则将自动删除GDI资源
     */
     void Detach()
     {
@@ -64,13 +64,13 @@ public:
         }
     }
     
-    //! ����GDI��Դ���
+    //! 返回GDI资源句柄
     HGDIOBJ GetHandle() const
     {
         return m_hObj;
     }
     
-    //! �����µ��豸������, ��������δ����GDI��Դʱʹ��
+    //! 设置新的设备描述表, 必须是在未引用GDI资源时使用
     void SetHDC(HDC hdc)
     {
         if (m_hObj == NULL)

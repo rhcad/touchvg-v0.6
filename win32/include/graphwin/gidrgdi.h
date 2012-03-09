@@ -1,5 +1,5 @@
-//! \file gidrgdi.h
-//! \brief ¶¨ÒåÓÃGDIÊµÏÖµÄÍ¼ÐÎÏµÍ³Àà GiGraphGdi
+ï»¿//! \file gidrgdi.h
+//! \brief å®šä¹‰ç”¨GDIå®žçŽ°çš„å›¾å½¢ç³»ç»Ÿç±» GiGraphGdi
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,10 +8,8 @@
 
 #include "graphwin.h"
 
-_GEOM_BEGIN
-
-//! ÓÃGDIÊµÏÖµÄÍ¼ÐÎÏµÍ³Àà
-/*! ±¾ÀàµÄ getGraphType() ÖµÎª 1
+//! ç”¨GDIå®žçŽ°çš„å›¾å½¢ç³»ç»Ÿç±»
+/*! æœ¬ç±»çš„ getGraphType() å€¼ä¸º 1
     \ingroup _GRAPH_INTERFACE_
 */
 class GiGraphGdi : public GiGraphWin
@@ -75,5 +73,4 @@ private:
     DrawImpl*   m_draw;
 };
 
-_GEOM_END
 #endif // __GEOMETRY_DRAWGDI_H_

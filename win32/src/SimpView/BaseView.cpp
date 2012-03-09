@@ -1,4 +1,4 @@
-// BaseView.cpp : implementation of the CBaseView class
+ï»¿// BaseView.cpp : implementation of the CBaseView class
 //
 
 #include "stdafx.h"
@@ -67,30 +67,30 @@ BOOL CBaseView::PreCreateWindow(CREATESTRUCT& cs)
 
 BOOL CBaseView::OnEraseBkgnd(CDC*) 
 {
-	return TRUE;							// ÔÚOnPaintÖÐ»áÇå³ý±³¾°
+	return TRUE;							// åœ¨OnPaintä¸­ä¼šæ¸…é™¤èƒŒæ™¯
 }
 
 void CBaseView::OnPaint() 
 {
 	CPaintDC dc(this);
 
-	dc.SetBkColor(m_crBkColor);				// ÎªÍ¼ÐÎÏµÍ³ÉèÖÃ±³¾°É«
+	dc.SetBkColor(m_crBkColor);				// ä¸ºå›¾å½¢ç³»ç»Ÿè®¾ç½®èƒŒæ™¯è‰²
 
-	if (m_gs->beginPaint(dc.GetSafeHdc()))	// ×¼±¸»æÍ¼£¬Ê¹ÓÃ»æÍ¼»º³å
+	if (m_gs->beginPaint(dc.GetSafeHdc()))	// å‡†å¤‡ç»˜å›¾ï¼Œä½¿ç”¨ç»˜å›¾ç¼“å†²
 	{
-		// ÏÔÊ¾ÏÈÇ°±£´æµÄÕýÊ½Í¼ÐÎÄÚÈÝ
+		// æ˜¾ç¤ºå…ˆå‰ä¿å­˜çš„æ­£å¼å›¾å½¢å†…å®¹
 		if (m_sizePan.cx != 0 || m_sizePan.cy != 0)
-			m_gs->clearWnd();			// Çå³ý±³¾°
+			m_gs->clearWnd();			// æ¸…é™¤èƒŒæ™¯
 		if (!m_gs->drawCachedBitmap(m_sizePan.cx, m_sizePan.cy))
 		{
 			if (0 == m_sizePan.cx && 0 == m_sizePan.cy)
-				m_gs->clearWnd();		// Çå³ý±³¾°
-			OnDraw(m_gs);				// ÏÔÊ¾ÕýÊ½Í¼ÐÎ
-			m_gs->saveCachedBitmap();	// ±£´æÕýÊ½Í¼ÐÎÄÚÈÝ
+				m_gs->clearWnd();		// æ¸…é™¤èƒŒæ™¯
+			OnDraw(m_gs);				// æ˜¾ç¤ºæ­£å¼å›¾å½¢
+			m_gs->saveCachedBitmap();	// ä¿å­˜æ­£å¼å›¾å½¢å†…å®¹
 		}
-		OnDynDraw(m_gs);				// ÏÔÊ¾¶¯Ì¬Í¼ÐÎ
+		OnDynDraw(m_gs);				// æ˜¾ç¤ºåŠ¨æ€å›¾å½¢
 
-		m_gs->endPaint();				// Ìá½»»æÍ¼½á¹ûµ½´°¿Ú
+		m_gs->endPaint();				// æäº¤ç»˜å›¾ç»“æžœåˆ°çª—å£
 	}
 }
 
@@ -98,7 +98,7 @@ void CBaseView::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
 
-	// ÉèÖÃÏÔÊ¾´°¿ÚµÄ´óÐ¡Îª¿Í»§Çø´óÐ¡(²»°üº¬¹ö¶¯Ìõ)
+	// è®¾ç½®æ˜¾ç¤ºçª—å£çš„å¤§å°ä¸ºå®¢æˆ·åŒºå¤§å°(ä¸åŒ…å«æ»šåŠ¨æ¡)
 	if (nType != SIZE_MINIMIZED && cx > 1 && cy > 1)
 	{
 		m_xf.setWndSize(cx, cy);

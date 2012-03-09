@@ -1,4 +1,4 @@
-// gipath.cpp: ÊµÏÖÂ·¾¶ÀàGiPath
+ï»¿// gipath.cpp: å®ç°è·¯å¾„ç±»GiPath
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -8,7 +8,7 @@
 #include <vector>
 using std::vector;
 
-// ·µ»ØSTLÊı×é(vector)±äÁ¿µÄÔªËØ¸öÊı
+// è¿”å›STLæ•°ç»„(vector)å˜é‡çš„å…ƒç´ ä¸ªæ•°
 template<class T> inline static int getSize(T& arr)
 {
     return static_cast<int>(arr.size());
@@ -21,15 +21,13 @@ template<class T> inline static int getSize(T& arr)
 #define PT_MOVETO           0x06
 #endif // PT_LINETO
 
-_GEOM_BEGIN
-
-//! GiPathµÄÄÚ²¿Êı¾İÀà
+//! GiPathçš„å†…éƒ¨æ•°æ®ç±»
 class GiPath::Data
 {
 public:
-    std::vector<Point2d>    points;         //!< Ã¿¸ö½ÚµãµÄ×ø±ê
-    std::vector<UInt8>      types;          //!< Ã¿¸ö½ÚµãµÄÀàĞÍ, PT_LINETO µÈ
-    int                     beginIndex;     //!< ĞÂÍ¼ĞÎµÄÆğÊ¼½Úµã(¼´MOVETO½Úµã)µÄĞòºÅ
+    std::vector<Point2d>    points;         //!< æ¯ä¸ªèŠ‚ç‚¹çš„åæ ‡
+    std::vector<UInt8>      types;          //!< æ¯ä¸ªèŠ‚ç‚¹çš„ç±»å‹, PT_LINETO ç­‰
+    int                     beginIndex;     //!< æ–°å›¾å½¢çš„èµ·å§‹èŠ‚ç‚¹(å³MOVETOèŠ‚ç‚¹)çš„åºå·
 };
 
 GiPath::GiPath()
@@ -267,16 +265,16 @@ bool GiPath::closeFigure()
 
 static int AngleToBezier(Point2d* pts, double radius)
 {
-    const Vector2d vec1 (pts[1] - pts[0]);      // µÚÒ»Ìõ±ß
-    const Vector2d vec2 (pts[2] - pts[1]);      // µÚ¶şÌõ±ß
+    const Vector2d vec1 (pts[1] - pts[0]);      // ç¬¬ä¸€æ¡è¾¹
+    const Vector2d vec2 (pts[2] - pts[1]);      // ç¬¬äºŒæ¡è¾¹
 
-    const double dHalfAngle = 0.5 * fabs(vec1.angleTo2(vec2));  // ¼Ğ½ÇµÄÒ»°ë
-    if (dHalfAngle < 1e-4 || fabs(dHalfAngle - M_PI_2) < 1e-4)  // Á½Ìõ±ßÆ½ĞĞ
+    const double dHalfAngle = 0.5 * fabs(vec1.angleTo2(vec2));  // å¤¹è§’çš„ä¸€åŠ
+    if (dHalfAngle < 1e-4 || fabs(dHalfAngle - M_PI_2) < 1e-4)  // ä¸¤æ¡è¾¹å¹³è¡Œ
         return 0;
 
     const double dDist1 = 0.5 * vec1.length();
     const double dDist2 = 0.5 * vec2.length();
-    double dArc = radius / tan(dHalfAngle);    // Ô²»¡ÔÚ±ßÉÏµÄÍ¶Ó°³¤¶È
+    double dArc = radius / tan(dHalfAngle);    // åœ†å¼§åœ¨è¾¹ä¸Šçš„æŠ•å½±é•¿åº¦
     if (dArc > dDist1 || dArc > dDist2)
     {
         double dArcOld = dArc;
@@ -357,5 +355,3 @@ bool GiPath::genericRoundLines(int count, const Point2d* points,
 
     return true;
 }
-
-_GEOM_END

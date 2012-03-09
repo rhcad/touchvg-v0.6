@@ -1,4 +1,4 @@
-// gidrgdip.cpp: ÊµÏÖÓÃGDI+ÊµÏÖµÄÍ¼ĞÎÏµÍ³ÀàGiGraphGdip
+ï»¿// gidrgdip.cpp: å®ç°ç”¨GDI+å®ç°çš„å›¾å½¢ç³»ç»Ÿç±»GiGraphGdip
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 #ifdef _WIN32
@@ -14,20 +14,18 @@
 
 #define G Gdiplus
 
-_GEOM_BEGIN
-
-//! DrawImplÀàµÄ»ù±¾Êı¾İ
+//! DrawImplç±»çš„åŸºæœ¬æ•°æ®
 struct GdipDrawImplBase
 {
-    GiGraphGdip*        m_this;             //!< ÓµÓĞÕß
-    G::Graphics*        m_gs;               //!< »æÍ¼Êä³ö¶ÔÏó
-    G::Graphics*        m_memGs;            //!< »º³å»æÍ¼ÓÃµÄÊä³ö¶ÔÏó
+    GiGraphGdip*        m_this;             //!< æ‹¥æœ‰è€…
+    G::Graphics*        m_gs;               //!< ç»˜å›¾è¾“å‡ºå¯¹è±¡
+    G::Graphics*        m_memGs;            //!< ç¼“å†²ç»˜å›¾ç”¨çš„è¾“å‡ºå¯¹è±¡
 
-    GiContext           m_context;          //!< µ±Ç°»æÍ¼²ÎÊı
-    G::Pen*             m_pen;              //!< µ±Ç°»æÍ¼²ÎÊı¶ÔÓ¦µÄ»­±Ê
-    G::SolidBrush*      m_brush;            //!< µ±Ç°»æÍ¼²ÎÊı¶ÔÓ¦µÄ»­Ë¢
-    bool                m_penNull;          //!< µ±Ç°ÊÇ·ñÊÇ¿Õ»­±Ê
-    bool                m_brushNull;        //!< µ±Ç°ÊÇ·ñÊÇ¿Õ»­Ë¢
+    GiContext           m_context;          //!< å½“å‰ç»˜å›¾å‚æ•°
+    G::Pen*             m_pen;              //!< å½“å‰ç»˜å›¾å‚æ•°å¯¹åº”çš„ç”»ç¬”
+    G::SolidBrush*      m_brush;            //!< å½“å‰ç»˜å›¾å‚æ•°å¯¹åº”çš„ç”»åˆ·
+    bool                m_penNull;          //!< å½“å‰æ˜¯å¦æ˜¯ç©ºç”»ç¬”
+    bool                m_brushNull;        //!< å½“å‰æ˜¯å¦æ˜¯ç©ºç”»åˆ·
 
     GdipDrawImplBase(GiGraphGdip* pThis)
         : m_this(pThis), m_gs(NULL), m_memGs(NULL)
@@ -125,15 +123,15 @@ struct GdipDrawImplBase
     }
 };
 
-//! GiGraphGdipµÄÄÚ²¿ÊµÏÖÀà
+//! GiGraphGdipçš„å†…éƒ¨å®ç°ç±»
 class GiGraphGdip::DrawImpl : public GdipDrawImplBase
 {
 public:
-    GiColor               m_bkColor;          //!< µ±Ç°±³¾°É«
-    G::GraphicsPath*    m_path;             //!< Â·¾¶¶ÔÏó
+    GiColor               m_bkColor;          //!< å½“å‰èƒŒæ™¯è‰²
+    G::GraphicsPath*    m_path;             //!< è·¯å¾„å¯¹è±¡
 
-    G::Bitmap*          m_memBitmap;        //!< »º³åÎ»Í¼
-    G::CachedBitmap*    m_cachedBmp[2];     //!< ºó±¸»º³åÎ»Í¼
+    G::Bitmap*          m_memBitmap;        //!< ç¼“å†²ä½å›¾
+    G::CachedBitmap*    m_cachedBmp[2];     //!< åå¤‡ç¼“å†²ä½å›¾
 
 private:
     static long         c_graphCount;       //!< GiGraphGdip count
@@ -157,7 +155,7 @@ public:
         if (1 == InterlockedIncrement(&c_graphCount))
         {
             G::SolidBrush* p = new G::SolidBrush(G::Color());
-            if (p != NULL)      // Íâ½çÒÑ³õÊ¼»¯
+            if (p != NULL)      // å¤–ç•Œå·²åˆå§‹åŒ–
             {
                 delete p;
             }
@@ -917,10 +915,10 @@ bool GiGraphGdip::DrawImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp,
 {
     RECT rc, rcDraw, rcFrom;
 
-    // rc: Õû¸öÍ¼Ïñ¶ÔÓ¦µÄÏÔÊ¾×ø±êÇøÓò
+    // rc: æ•´ä¸ªå›¾åƒå¯¹åº”çš„æ˜¾ç¤ºåæ ‡åŒºåŸŸ
     (rectW * m_this->xf().worldToDisplay()).get(rc.left, rc.top, rc.right, rc.bottom);
 
-    // rcDraw: Í¼Ïñ¾­¼ô²ÃºóµÄ¿ÉÏÔÊ¾²¿·Ö
+    // rcDraw: å›¾åƒç»å‰ªè£åçš„å¯æ˜¾ç¤ºéƒ¨åˆ†
     if (!IntersectRect(&rcDraw, &rc, &pImpl->clipBox))
         return false;
 
@@ -928,13 +926,13 @@ bool GiGraphGdip::DrawImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp,
     width = MulDiv(hmWidth, m_this->xf().getDpiX(), 2540);
     height = MulDiv(hmHeight, m_this->xf().getDpiY(), 2540);
 
-    // rcFrom: rcDrawÔÚÔ­Ê¼Í¼ÏñÉÏ¶ÔÓ¦µÄÍ¼Ïñ·¶Î§
+    // rcFrom: rcDrawåœ¨åŸå§‹å›¾åƒä¸Šå¯¹åº”çš„å›¾åƒèŒƒå›´
     rcFrom.left = MulDiv(rcDraw.left - rc.left, width, rc.right - rc.left);
     rcFrom.top = MulDiv(rcDraw.top - rc.top, height, rc.bottom - rc.top);
     rcFrom.right = MulDiv(rcDraw.right - rc.left, width, rc.right - rc.left);
     rcFrom.bottom = MulDiv(rcDraw.bottom - rc.top, height, rc.bottom - rc.top);
 
-    // ¸ù¾İrectWÕı¸º¾ö¶¨ÊÇ·ñµßµ¹ÏÔÊ¾Í¼Ïñ
+    // æ ¹æ®rectWæ­£è´Ÿå†³å®šæ˜¯å¦é¢ å€’æ˜¾ç¤ºå›¾åƒ
     if (rectW.xmin > rectW.xmax)
         mgSwap(rcDraw.left, rcDraw.right);
     if (rectW.ymin > rectW.ymax)
@@ -990,5 +988,4 @@ bool GiGraphGdip::drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp,
     return ret;
 }
 
-_GEOM_END
 #endif //_WIN32

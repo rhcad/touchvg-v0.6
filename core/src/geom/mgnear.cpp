@@ -1,4 +1,4 @@
-// mgnear.cpp: ÊµÏÖÇúÏß×î½üµã¼ÆËãº¯Êı
+ï»¿// mgnear.cpp: å®ç°æ›²çº¿æœ€è¿‘ç‚¹è®¡ç®—å‡½æ•°
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: GPL, https://github.com/rhcad/graph2d
 
@@ -6,12 +6,10 @@
 #include "mgcurv.h"
 #include "mglnrel.h"
 
-_GEOM_BEGIN
-
 GEOMAPI void mgBeziersBox(
     Box2d& box, Int32 count, const Point2d* points, bool /*closed*/)
 {
-    box.set(count, points); // TODO: ´ıÕÒµ½¸üºÃµÄËã·¨
+    box.set(count, points); // TODO: å¾…æ‰¾åˆ°æ›´å¥½çš„ç®—æ³•
 }
 
 GEOMAPI void mgCubicSplinesBox(
@@ -134,7 +132,7 @@ static void _RoundRectHit(
     double dx = rect.width() * 0.5 - rx;
     double dy = rect.height() * 0.5 - ry;
     
-    // °´ÄæÊ±Õë·½Ïò´ÓµÚÒ»ÏóÏŞµ½µÚËÄÏóÏŞÁ¬½ÓµÄËÄ¶Î
+    // æŒ‰é€†æ—¶é’ˆæ–¹å‘ä»ç¬¬ä¸€è±¡é™åˆ°ç¬¬å››è±¡é™è¿æ¥çš„å››æ®µ
     mgEllipseToBezier(ptsBezier, rect.center(), rx, ry);
     
     pts[3] = ptsBezier[0];
@@ -188,19 +186,19 @@ GEOMAPI double mgRoundRectHit(
     Point2d pts[8];
     const Box2d rectTol (pt, 2 * dTol, 2 * dTol);
     
-    // ¶¥±ßÉÏµÄÁ½¸öÔ²»¡ÇĞµã£¬×ó£¬ÓÒ
+    // é¡¶è¾¹ä¸Šçš„ä¸¤ä¸ªåœ†å¼§åˆ‡ç‚¹ï¼Œå·¦ï¼Œå³
     pts[0] = RoundRectTan(0, 1, rect, rx);
     pts[1] = RoundRectTan(1, 0, rect, rx);
     
-    // ÓÒ±ßÉÏµÄÁ½¸öÔ²»¡ÇĞµã£¬ÉÏ£¬ÏÂ
+    // å³è¾¹ä¸Šçš„ä¸¤ä¸ªåœ†å¼§åˆ‡ç‚¹ï¼Œä¸Šï¼Œä¸‹
     pts[2] = RoundRectTan(1, 2, rect, ry);
     pts[3] = RoundRectTan(2, 1, rect, ry);
     
-    // µ×±ßÉÏµÄÁ½¸öÔ²»¡ÇĞµã£¬ÓÒ£¬×ó
+    // åº•è¾¹ä¸Šçš„ä¸¤ä¸ªåœ†å¼§åˆ‡ç‚¹ï¼Œå³ï¼Œå·¦
     pts[4] = RoundRectTan(2, 3, rect, rx);
     pts[5] = RoundRectTan(3, 2, rect, rx);
     
-    // ×ó±ßÉÏµÄÁ½¸öÔ²»¡ÇĞµã£¬ÏÂ£¬ÉÏ
+    // å·¦è¾¹ä¸Šçš„ä¸¤ä¸ªåœ†å¼§åˆ‡ç‚¹ï¼Œä¸‹ï¼Œä¸Š
     pts[6] = RoundRectTan(3, 0, rect, ry);
     pts[7] = RoundRectTan(0, 3, rect, ry);
     
@@ -270,5 +268,3 @@ GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 nHandle, const Point2d& pt)
         rect.set(pts[3].x, pts[2].y, pts[1].x, pts[0].y);
     }
 }
-
-_GEOM_END
