@@ -12,6 +12,7 @@
 #ifndef __IPHONE_5_0
 @property (nonatomic, retain) UIWindow *window;
 #endif
+@property (nonatomic, retain) GraphViewController *controller;
 
 @end
 ////////////////////////////////////////////////////////////////
@@ -21,11 +22,12 @@
 @implementation AppDelegate
 
 @synthesize window = _window;
-
+@synthesize controller = _controller;
 
 - (void)dealloc {
     
-    self.window = nil;
+    [_controller release];
+    [_window release];
     
     [super dealloc];
 }
@@ -34,13 +36,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.backgroundColor = [UIColor darkGrayColor];
+    _controller = [[GraphViewController alloc] init];
     
-    GraphViewController *controller = [[GraphViewController alloc] init];
-    [self.window addSubview:controller.view];
-    [controller release];
-    
-    [self.window makeKeyAndVisible];
+    [_window addSubview:_controller.view];
+    [_window makeKeyAndVisible];
     
     return YES;
 }
