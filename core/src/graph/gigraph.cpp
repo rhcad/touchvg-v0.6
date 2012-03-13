@@ -636,9 +636,13 @@ bool GiGraphics::drawPolygon(const GiContext* ctx, int count,
     return ret;
 }
 
-bool GiGraphics::drawEllipse(const GiContext* ctx, 
-                             const Point2d& center, double rx, double ry, 
-                             bool modelUnit)
+bool GiGraphics::drawEllipse(const GiContext* ctx, const Box2d& rect, bool modelUnit)
+{
+    return drawEllipse(ctx, rect.center(), rect.width() / 2, rect.height() / 2, modelUnit);
+}
+
+bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center, 
+                             double rx, double ry, bool modelUnit)
 {
     if (m_impl->drawRefcnt == 0 || rx < _MGZERO)
         return false;

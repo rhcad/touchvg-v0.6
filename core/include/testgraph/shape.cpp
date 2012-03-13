@@ -42,7 +42,8 @@ void RandomParam::initShapes(Shapes* shapes)
         
         if (2 == type)
         {
-            CurveItem* shape = new CurveItem(RandInt(3, 20));
+            CurveType curveType = (CurveType)RandInt(0, kCubicSplines);
+            CurveItem* shape = new CurveItem(RandInt(3, 20), curveType);
             shapes->setShape(i, shape);
             curveCount--;
             
@@ -58,6 +59,7 @@ void RandomParam::initShapes(Shapes* shapes)
                     shape->points[i] = shape->points[i-1] + Vector2d(RandDbl(-200.0, 200.0), RandDbl(-200.0, 200.0));
                 }
             }
+            shape->applyPoints();
         }
         else if (1 == type)
         {
@@ -196,11 +198,13 @@ Box2d ArcItem::getExtent() const
 // CurveItem
 //
 
-CurveItem::CurveItem() : count(0), points(NULL)
+CurveItem::CurveItem(CurveType type)
+    : curveType(type), count(0), points(NULL), knotVectors(NULL)
 {
 }
 
-CurveItem::CurveItem(int n) : count(n), points(new Point2d[n])
+CurveItem::CurveItem(int n, CurveType type)
+    : curveType(type), count(n), points(new Point2d[n]), knotVectors(NULL)
 {
 }
 
@@ -208,12 +212,38 @@ CurveItem::~CurveItem()
 {
     if (points)
         delete[] points;
+    if (knotVectors)
+        delete[] knotVectors;
+}
+
+void CurveItem::applyPoints()
+{
+    if (kCubicSplines == curveType) {
+        if (!knotVectors)
+            knotVectors = new Vector2d[count];
+        mgCubicSplines(count, points, knotVectors);
+    }
 }
 
 void CurveItem::draw(GiGraphics* gs) const
 {
     GiContext context(lineWidth, lineColor, lineStyle);
-    gs->drawBSplines(&context, count, points);
+    GiContext ctxaux(0, GiColor(128,128,128,64), kLineDash);
+    
+    gs->drawLines(&ctxaux, count, points);
+    
+    if (knotVectors) {
+        gs->drawSplines(&context, count, points, knotVectors);
+        ctxaux.setLineColor(GiColor(0,0,128,32));
+        ctxaux.setFillColor(GiColor(128,128,128,32));
+        for (int i = 0; i < count; i++) {
+            gs->drawLine(&ctxaux, points[i], points[i] + knotVectors[i]);
+            gs->drawEllipse(&ctxaux, points[i] + knotVectors[i], 1);
+        }
+    }
+    else {
+        gs->drawBSplines(&context, count, points);
+    }
 }
 
 Box2d CurveItem::getExtent() const

@@ -74,11 +74,12 @@ public:
 
 GiColor giFromCGColor(CGColorRef color)
 {
+    int num = CGColorGetNumberOfComponents(color);
     const CGFloat *rgba = CGColorGetComponents(color);
     return rgba ? GiColor((UInt8)mgRound(rgba[0] * 255),
                           (UInt8)mgRound(rgba[1] * 255),
-                          (UInt8)mgRound(rgba[2] * 255),
-                          (UInt8)mgRound(rgba[3] * 255)) : GICOLOR_INVALID;
+                          num > 2 ? (UInt8)mgRound(rgba[2] * 255) : 255,
+                          num > 3 ? (UInt8)mgRound(rgba[3] * 255) : 255) : GiColor::Invalid();
 }
 
 GiGraphIos::GiGraphIos(GiTransform& xform)

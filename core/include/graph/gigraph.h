@@ -277,6 +277,15 @@ public:
     bool drawEllipse(const GiContext* ctx, 
         const Point2d& center, double rx, double ry = 0.0, 
         bool modelUnit = true);
+    
+    //! 绘制并填充椭圆，模型坐标或世界坐标
+    /*!
+        \param ctx 绘图参数，为NULL时取为上一个绘图参数
+        \param rect 椭圆外框
+        \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
+        \return 是否显示成功。失败原因为参数错误或超出剪裁区域
+     */
+    bool drawEllipse(const GiContext* ctx, const Box2d& rect, bool modelUnit = true);
 
     //! 绘制并填充椭圆弧饼图，模型坐标或世界坐标
     /*! 绘制一个由椭圆弧和两个半径相交闭合而成的饼状楔形图。
@@ -302,8 +311,7 @@ public:
         \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
     */
-    bool drawRect(const GiContext* ctx, const Box2d& rect, 
-        bool modelUnit = true);
+    bool drawRect(const GiContext* ctx, const Box2d& rect, bool modelUnit = true);
 
     //! 绘制并填充圆角矩形，模型坐标或世界坐标
     /*! 
@@ -315,8 +323,7 @@ public:
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
     */
     bool drawRoundRect(const GiContext* ctx, 
-        const Box2d& rect, double rx, double ry = 0.0, 
-        bool modelUnit = true);
+        const Box2d& rect, double rx, double ry = 0.0, bool modelUnit = true);
 
 
     //! 绘制三次参数样条曲线，模型坐标或世界坐标

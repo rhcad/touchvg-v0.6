@@ -58,7 +58,6 @@
 		4AE2C1DF1424998500C67987 /* Graph2dUnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Graph2dUnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AE2C2691424A47000C67987 /* Graph2dTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graph2dTests.h; path = UnitTests/Graph2dTests.h; sourceTree = SOURCE_ROOT; };
 		4AE2C26A1424A47000C67987 /* Graph2dTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Graph2dTests.m; path = UnitTests/Graph2dTests.m; sourceTree = SOURCE_ROOT; };
-		4AE2C26E1424A80500C67987 /* Graph2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graph2d.h; path = Headers/Graph2d.h; sourceTree = "<group>"; };
 		4AE2C2921424A99700C67987 /* UnitTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "UnitTests-Info.plist"; path = "UnitTests/Resources/UnitTests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		4AE2C2941424AA6E00C67987 /* Library.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Library.xcconfig; path = Configurations/Library.xcconfig; sourceTree = "<group>"; };
 		4AE2C2951424AA6E00C67987 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Project.xcconfig; path = Configurations/Project.xcconfig; sourceTree = "<group>"; };
@@ -120,7 +119,6 @@
 		4AE2C1C71424998500C67987 = {
 			isa = PBXGroup;
 			children = (
-				4AE2C26E1424A80500C67987 /* Graph2d.h */,
 				4AE2C29F1424ACE700C67987 /* Graph2d_Prefix.pch */,
 				7E9CE80C1500B9E400487BEF /* Headers */,
 				4AE2C21514249CD300C67987 /* Sources */,

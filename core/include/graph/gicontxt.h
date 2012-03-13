@@ -29,19 +29,19 @@ public:
     /*! 绘图参数为1像素宽的黑实线、不填充
     */
     GiContext() : m_type(0), m_lineStyle(kLineSolid), m_lineWidth(0)
-        , m_lineColor(GiColor::Black()), m_fillColor(GICOLOR_INVALID)
+        , m_lineColor(GiColor::Black()), m_fillColor(GiColor::Invalid())
     {
     }
     
     //! 指定线条参数来构造
     /*! 填充参数为不填充
         \param width 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
-        \param color 线条颜色， GICOLOR_INVALID 表示不画线条
+        \param color 线条颜色， GiColor::Invalid() 表示不画线条
         \param style 线型，取值为 kLineSolid 等
     */
     GiContext(Int16 width, GiColor color = GiColor::Black(), kLineStyle style = kLineSolid)
         : m_type(0), m_lineStyle(style), m_lineWidth(width)
-        , m_lineColor(color), m_fillColor(GICOLOR_INVALID)
+        , m_lineColor(color), m_fillColor(GiColor::Invalid())
     {
     }
 
@@ -116,7 +116,7 @@ public:
         return m_lineColor;
     }
 
-    //! 设置线条颜色， GICOLOR_INVALID 表示不画线条
+    //! 设置线条颜色， GiColor::Invalid() 表示不画线条
     void setLineColor(const GiColor& color)
     {
         m_lineColor = color;
@@ -143,7 +143,7 @@ public:
     //! 设置为不填充
     void setNoFillColor()
     {
-        m_fillColor = GICOLOR_INVALID;
+        m_fillColor = GiColor::Invalid();
     }
 
     //! 返回填充颜色
@@ -152,7 +152,7 @@ public:
         return m_fillColor;
     }
 
-    //! 设置填充颜色， GICOLOR_INVALID 表示不填充
+    //! 设置填充颜色， GiColor::Invalid() 表示不填充
     void setFillColor(const GiColor& color)
     {
         m_fillColor = color;

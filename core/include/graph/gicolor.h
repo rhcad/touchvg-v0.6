@@ -31,6 +31,7 @@ struct GiColor
 
     static GiColor White() { return GiColor(255, 255, 255); }
     static GiColor Black() { return GiColor(0, 0, 0); }
+    static GiColor Invalid() { return GiColor(0, 0, 0, 0); }
 
     void set(UInt8 _r, UInt8 _g, UInt8 _b)
     {
@@ -63,8 +64,5 @@ struct GiColor
         return !operator==(src);
     }
 };
-
-//! 无效颜色值或非RGB的特殊意义值
-#define GICOLOR_INVALID GiColor(0, 0, 0, 0)
 
 #endif // __GEOMETRY_GICOLOR_H_

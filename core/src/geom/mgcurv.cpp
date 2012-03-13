@@ -577,8 +577,8 @@ GEOMAPI bool mgCubicSplines(
 }
 
 GEOMAPI void mgFitCubicSpline(
-                              Int32 n, const Point2d* knots, const Vector2d* knotVectors,
-                              Int32 i, double t, Point2d& fitPt)
+    Int32 n, const Point2d* knots, const Vector2d* knotVectors,
+    Int32 i, double t, Point2d& fitPt)
 {
     double b2, b3;
     int i1 = i % n;
@@ -594,8 +594,8 @@ GEOMAPI void mgFitCubicSpline(
 }
 
 GEOMAPI void mgCubicSplineToBezier(
-                                   Int32 n, const Point2d* knots, const Vector2d* knotVectors,
-                                   Int32 i, Point2d points[4])
+    Int32 n, const Point2d* knots, const Vector2d* knotVectors,
+    Int32 i, Point2d points[4])
 {
     int i1 = i % n;
     int i2 = (i+1) % n;
@@ -782,9 +782,9 @@ GEOMAPI bool mgClampedSplines(
     //       s_i <= s <= s_(i+1), 0 <= t <= hp[i]
     //       s_0 = 0, s_i = s_(i-1) + h_i, h_i = | P[i+1]P[i] |
 GEOMAPI void mgFitClampedSpline(
-                                const Point2d* knots, 
-                                Int32 i, double t, double sigma,
-                                const double* hp, const Vector2d* knotVectors, Point2d& fitPt)
+    const Point2d* knots, 
+    Int32 i, double t, double sigma,
+    const double* hp, const Vector2d* knotVectors, Point2d& fitPt)
 {
     double s1, s2, s3, tx1, ty1, tx2, ty2;
     double div_hp0 = 1.0 / hp[i];

@@ -6,7 +6,7 @@
 #ifndef __GEOMETRY_GRAPHIOS_H_
 #define __GEOMETRY_GRAPHIOS_H_
 
-#include <gigraph.h>
+#include <Graph2d/gigraph.h>
 #include <CoreGraphics/CGContext.h>
 
 class GiGraphIosImpl;

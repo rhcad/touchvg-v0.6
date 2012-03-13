@@ -40,16 +40,24 @@ public:
     virtual Box2d getExtent() const;
 };
 
+enum CurveType {
+    kBSplines,
+    kCubicSplines,
+};
+
 class CurveItem : public ShapeItem
 {
 public:
-    long        count;
+    CurveType   curveType;
+    Int32       count;
     Point2d*    points;
+    Vector2d*   knotVectors;
     
-    CurveItem();
-    CurveItem(int n);
+    CurveItem(CurveType curveType = kBSplines);
+    CurveItem(int n, CurveType curveType);
     virtual ~CurveItem();
     
+    void applyPoints();
     virtual void draw(GiGraphics* gs) const;
     virtual Box2d getExtent() const;
 };
