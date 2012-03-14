@@ -1,4 +1,4 @@
-﻿// BaseView.cpp : implementation of the CBaseView class
+// BaseView.cpp : implementation of the CBaseView class
 //
 
 #include "stdafx.h"

@@ -1,4 +1,4 @@
-﻿//! \file mgvec.h
+//! \file mgvec.h
 //! \brief 定义二维矢量类 Vector2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

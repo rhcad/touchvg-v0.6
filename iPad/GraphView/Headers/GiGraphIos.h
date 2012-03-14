@@ -1,4 +1,4 @@
-﻿//! \file GiGraphIos.h
+//! \file GiGraphIos.h
 //! \brief Define the graphics class for iOS: GiGraphIos
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

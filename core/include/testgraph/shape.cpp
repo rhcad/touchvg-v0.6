@@ -1,4 +1,4 @@
-﻿#include "shape.h"
+#include "shape.h"
 #include <mgcurv.h>
 #include <mgnear.h>
 #include <stdlib.h>

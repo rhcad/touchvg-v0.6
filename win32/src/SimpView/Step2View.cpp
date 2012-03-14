@@ -1,4 +1,4 @@
-﻿// Step2View.cpp : implementation of the CScrollShapeView class
+// Step2View.cpp : implementation of the CScrollShapeView class
 //
 
 #include "stdafx.h"

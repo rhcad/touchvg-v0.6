@@ -1,4 +1,4 @@
-﻿#ifndef _TEST_SHAPE_H
+#ifndef _TEST_SHAPE_H
 #define _TEST_SHAPE_H
 
 #include <gigraph.h>

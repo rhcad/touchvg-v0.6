@@ -1,4 +1,4 @@
-﻿//! \file mgtol.h
+//! \file mgtol.h
 //! \brief 定义容差类 Tol
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

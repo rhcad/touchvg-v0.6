@@ -1,4 +1,4 @@
-﻿//! \file mgnear.h
+//! \file mgnear.h
 //! \brief 定义求曲线上最近点的函数
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

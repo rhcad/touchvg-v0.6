@@ -1,4 +1,4 @@
-﻿//! \file mgpnt.h
+//! \file mgpnt.h
 //! \brief 定义二维点类 Point2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

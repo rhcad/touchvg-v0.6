@@ -1,4 +1,4 @@
-﻿// gidrgdip.cpp: 实现用GDI+实现的图形系统类GiGraphGdip
+// gidrgdip.cpp: 实现用GDI+实现的图形系统类GiGraphGdip
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 #ifdef _WIN32

@@ -1,4 +1,4 @@
-﻿//! \file gicolor.h
+//! \file gicolor.h
 //! \brief 定义RGB颜色类: GiColor
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

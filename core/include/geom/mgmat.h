@@ -1,4 +1,4 @@
-﻿//! \file mgmat.h
+//! \file mgmat.h
 //! \brief 定义二维齐次变换矩阵类 Matrix2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

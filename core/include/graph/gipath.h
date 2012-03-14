@@ -1,4 +1,4 @@
-﻿//! \file gipath.h
+//! \file gipath.h
 //! \brief 定义矢量路径类 GiPath
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

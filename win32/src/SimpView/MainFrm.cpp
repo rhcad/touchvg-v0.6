@@ -1,4 +1,4 @@
-﻿// MainFrm.cpp : implementation of the CMainFrame class
+// MainFrm.cpp : implementation of the CMainFrame class
 //
 
 #include "stdafx.h"

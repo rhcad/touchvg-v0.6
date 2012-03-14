@@ -1,4 +1,4 @@
-﻿// mgnearbz.cpp: 实现贝塞尔曲线段最近点计算函数 mgNearestOnBezier
+// mgnearbz.cpp: 实现贝塞尔曲线段最近点计算函数 mgNearestOnBezier
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 

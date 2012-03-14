@@ -1,4 +1,4 @@
-﻿// gixform.cpp: 实现坐标系管理类GiTransform
+// gixform.cpp: 实现坐标系管理类GiTransform
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 

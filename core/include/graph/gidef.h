@@ -1,4 +1,4 @@
-﻿//! \file gidef.h
+//! \file gidef.h
 //! \brief 定义图形接口库的基本宏
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

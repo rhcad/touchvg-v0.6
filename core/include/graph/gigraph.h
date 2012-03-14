@@ -1,4 +1,4 @@
-﻿//! \file gigraph.h
+//! \file gigraph.h
 //! \brief 定义图形系统类 GiGraphics
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

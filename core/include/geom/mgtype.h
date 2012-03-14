@@ -1,4 +1,4 @@
-﻿//! \file mgtype.h
+//! \file mgtype.h
 //! \brief 定义数学几何库的简单数据类型 VECTOR2D,POINT2D,BOX2D,MATRIX2D
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

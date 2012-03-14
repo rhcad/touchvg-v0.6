@@ -1,4 +1,4 @@
-﻿//! \file mgcurv.h
+//! \file mgcurv.h
 //! \brief 定义曲线计算函数
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

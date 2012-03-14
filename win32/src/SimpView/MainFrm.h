@@ -1,4 +1,4 @@
-﻿// MainFrm.h : interface of the CMainFrame class
+// MainFrm.h : interface of the CMainFrame class
 //
 #pragma once
 

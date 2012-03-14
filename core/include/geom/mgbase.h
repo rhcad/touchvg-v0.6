@@ -1,4 +1,4 @@
-﻿//! \file mgbase.h
+//! \file mgbase.h
 //! \brief 定义基本计算功能函数
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

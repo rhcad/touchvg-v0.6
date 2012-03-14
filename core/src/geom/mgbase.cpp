@@ -1,4 +1,4 @@
-﻿// mgbase.cpp: 实现基本计算功能函数
+// mgbase.cpp: 实现基本计算功能函数
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 

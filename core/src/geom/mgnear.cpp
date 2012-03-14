@@ -1,4 +1,4 @@
-﻿// mgnear.cpp: 实现曲线最近点计算函数
+// mgnear.cpp: 实现曲线最近点计算函数
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 

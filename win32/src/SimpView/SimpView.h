@@ -1,4 +1,4 @@
-﻿// SimpView.h : main header file for the SIMPVIEW application
+// SimpView.h : main header file for the SIMPVIEW application
 //
 
 #if !defined(AFX_SIMPVIEW_H__D7AC4E71_EFC2_456A_9436_6E0D2E86AEF7__INCLUDED_)

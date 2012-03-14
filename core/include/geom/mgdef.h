@@ -1,4 +1,4 @@
-﻿//! \file mgdef.h
+//! \file mgdef.h
 //! \brief 定义数学几何库的常量和宏
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

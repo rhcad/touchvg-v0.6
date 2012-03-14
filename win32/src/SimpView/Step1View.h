@@ -1,4 +1,4 @@
-﻿// Step1View.h : interface of the CRandomShapeView class
+// Step1View.h : interface of the CRandomShapeView class
 //
 #pragma once
 

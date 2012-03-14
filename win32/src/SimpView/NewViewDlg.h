@@ -1,4 +1,4 @@
-﻿// NewViewDlg.h : header file
+// NewViewDlg.h : header file
 //
 #pragma once
 

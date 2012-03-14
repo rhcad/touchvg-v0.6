@@ -1,4 +1,4 @@
-﻿//! \file mglnrel.h
+//! \file mglnrel.h
 //! \brief 定义图形位置关系函数
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

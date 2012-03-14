@@ -1,4 +1,4 @@
-﻿// ChildFrm.h : interface of the CStep1Frame class
+// ChildFrm.h : interface of the CStep1Frame class
 //
 #pragma once
 

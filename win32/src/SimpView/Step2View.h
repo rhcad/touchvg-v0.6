@@ -1,4 +1,4 @@
-﻿// Step2View.h : interface of the CScrollShapeView class
+// Step2View.h : interface of the CScrollShapeView class
 //
 #pragma once
 

@@ -1,4 +1,4 @@
-﻿//! \file giimage.h
+//! \file giimage.h
 //! \brief 定义图像文件打开和显示的辅助类 GiImage
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

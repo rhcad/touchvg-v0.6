@@ -1,4 +1,4 @@
-﻿// BaseView.h : interface of the CBaseView class
+// BaseView.h : interface of the CBaseView class
 //
 #pragma once
 

@@ -1,4 +1,4 @@
-﻿//! \file gdiobj.h
+//! \file gdiobj.h
 //! \brief 定义和实现GDI资源管理类 KGDIObject
 
 #ifndef __GDIOBJ_H_

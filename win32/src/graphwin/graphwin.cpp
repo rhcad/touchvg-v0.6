@@ -1,4 +1,4 @@
-﻿#include "graphwin.h"
+#include "graphwin.h"
 #include <_gigraph.h>
 
 GiGraphWin::GiGraphWin(GiTransform& xform)
