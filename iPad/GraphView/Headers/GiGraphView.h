@@ -1,6 +1,6 @@
 ﻿// GiGraphView.h
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #import <UIKit/UIKit.h>
 

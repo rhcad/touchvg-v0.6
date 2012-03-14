@@ -1,6 +1,6 @@
 ﻿// mgbase.cpp: 实现基本计算功能函数
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #include "mgbase.h"
 

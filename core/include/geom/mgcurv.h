@@ -1,7 +1,7 @@
 ﻿//! \file mgcurv.h
 //! \brief 定义曲线计算函数
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #ifndef __GEOMETRY_FITCURVE_H_
 #define __GEOMETRY_FITCURVE_H_

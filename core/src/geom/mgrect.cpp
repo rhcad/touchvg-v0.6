@@ -1,6 +1,6 @@
 ﻿// mgrect.cpp: 实现矩形框类 Box2d
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #include "mgrect.h"
 #include "mgmat.h"

@@ -1,7 +1,7 @@
 ﻿//! \file gidef.h
 //! \brief 定义图形接口库的基本宏
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #ifndef __GEOMETRY_GIDEF_H_
 #define __GEOMETRY_GIDEF_H_

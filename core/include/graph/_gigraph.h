@@ -1,6 +1,6 @@
 ﻿// _gigraph.h: 定义GiGraphics类的内部成员
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #include "gigraph.h"
 

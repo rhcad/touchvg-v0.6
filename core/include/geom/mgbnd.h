@@ -1,7 +1,7 @@
 ﻿//! \file mgbnd.h
 //! \brief 定义绑定框类 BoundBox
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #ifndef __GEOMETRY_BOUNDBOX_H_
 #define __GEOMETRY_BOUNDBOX_H_

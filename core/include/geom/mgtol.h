@@ -1,7 +1,7 @@
 ﻿//! \file mgtol.h
 //! \brief 定义容差类 Tol
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #ifndef __GEOMETRY_MGTOL_H_
 #define __GEOMETRY_MGTOL_H_

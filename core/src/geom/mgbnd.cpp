@@ -1,6 +1,6 @@
 ﻿// mgbnd.cpp: 实现绑定框类BoundBox
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #include "mgbnd.h"
 

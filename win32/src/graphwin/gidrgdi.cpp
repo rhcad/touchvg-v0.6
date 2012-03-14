@@ -1,6 +1,6 @@
 ﻿// gidrgdi.cpp: 实现用GDI实现的图形系统类GiGraphGdi
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 #ifdef _WIN32
 #include "gidrgdi.h"
 #include <_gigraph.h>

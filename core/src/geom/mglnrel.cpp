@@ -1,6 +1,6 @@
 ﻿// mglnrel.cpp: 实现直线位置关系函数
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #include "mglnrel.h"
 

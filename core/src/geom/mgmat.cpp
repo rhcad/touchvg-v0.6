@@ -1,6 +1,6 @@
 ﻿// mgmat.cpp: 实现二维齐次变换矩阵类Matrix2d
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #include "mgmat.h"
 

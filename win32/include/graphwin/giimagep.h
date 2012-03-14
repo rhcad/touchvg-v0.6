@@ -1,7 +1,7 @@
 ﻿//! \file giimagep.h
 //! \brief 定义GDI+图像文件的辅助类 GiGdipImage
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #ifndef __GEOMETRY_GDIPIMAGE_H_
 #define __GEOMETRY_GDIPIMAGE_H_

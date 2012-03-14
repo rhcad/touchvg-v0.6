@@ -1,6 +1,6 @@
 ﻿// GiGraphIos.cpp
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #include "GiGraphIos.h"
 #include <CoreGraphics/CGBitmapContext.h>

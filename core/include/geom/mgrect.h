@@ -1,7 +1,7 @@
 ﻿//! \file mgrect.h
 //! \brief 定义矩形框类 Box2d
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #ifndef __GEOMETRY_RECT_H_
 #define __GEOMETRY_RECT_H_

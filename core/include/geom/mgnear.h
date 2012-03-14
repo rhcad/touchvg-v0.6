@@ -1,7 +1,7 @@
 ﻿//! \file mgnear.h
 //! \brief 定义求曲线上最近点的函数
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: GPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/graph2d
 
 #ifndef __GEOMETRY_CURVENEAR_H_
 #define __GEOMETRY_CURVENEAR_H_
