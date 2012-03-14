@@ -1,4 +1,4 @@
-graph2d - A lightweight graphics (Mini-CAD) framework using C++ for iOS, Android and Windows.
+graph2d - A lightweight graphics framework using C++ for iOS and Windows.
 https://github.com/rhcad/graph2d
 
 Open-source license: Lesser GPL
