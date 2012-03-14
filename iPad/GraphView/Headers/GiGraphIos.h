@@ -26,7 +26,7 @@ public:
     GiGraphIos& operator=(const GiGraphIos& src);
 
 public:
-    bool beginPaint(CGContextRef context, bool fast = false);
+    bool beginPaint(CGContextRef context, bool buffered = true, bool fast = false);
     void endPaint(bool draw = true);
 
     virtual void clearWnd();

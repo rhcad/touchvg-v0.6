@@ -62,9 +62,19 @@
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (_graph->beginPaint(context, _fastDraw))
+    if (_graph->beginPaint(context, true, _fastDraw))
     {
-        [self draw:_graph];
+        if (_fastDraw) {
+            [self draw:_graph];
+        }
+        else {
+            if (!_graph->drawCachedBitmap(0, 0)) {
+                [self draw:_graph];
+                _graph->saveCachedBitmap();
+            }
+            [self dynDraw:_graph];
+        }
+        
         _graph->endPaint();
     }
 }
@@ -73,19 +83,23 @@
 {
 }
 
+- (void)dynDraw:(GiGraphics*)gs
+{
+}
+
 - (void)addGestureRecognizers
 {
-    UIPinchGestureRecognizer *twoFingerPinch =
-        [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingerPinch:)];
-    [self addGestureRecognizer:twoFingerPinch];
-    [twoFingerPinch release];
+    UIPinchGestureRecognizer *twoFingersPinch =
+        [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPinch:)];
+    [self addGestureRecognizer:twoFingersPinch];
+    [twoFingersPinch release];
 
-    UIPanGestureRecognizer *twoFingerPan =
-        [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingerPan:)];
-    [twoFingerPan setMinimumNumberOfTouches:2];
-    [twoFingerPan setMaximumNumberOfTouches:2];
-    [self addGestureRecognizer:twoFingerPan];
-    [twoFingerPan release];
+    UIPanGestureRecognizer *twoFingersPan =
+        [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
+    [twoFingersPan setMinimumNumberOfTouches:2];
+    [twoFingersPan setMaximumNumberOfTouches:2];
+    [self addGestureRecognizer:twoFingersPan];
+    [twoFingersPan release];
 
     UIPanGestureRecognizer *oneFingerPan =
         [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
@@ -93,26 +107,26 @@
     [self addGestureRecognizer:oneFingerPan];
     [oneFingerPan release];
 
-    UITapGestureRecognizer *oneFingersTwoTaps =
-        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingersTwoTaps:)];
-    [oneFingersTwoTaps setNumberOfTapsRequired:2];
-    [self addGestureRecognizer:oneFingersTwoTaps];
-    [oneFingersTwoTaps release];
+    UITapGestureRecognizer *oneFingerTwoTaps =
+        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerTwoTaps:)];
+    [oneFingerTwoTaps setNumberOfTapsRequired:2];
+    [self addGestureRecognizer:oneFingerTwoTaps];
+    [oneFingerTwoTaps release];
     
     UITapGestureRecognizer *twoFingersTwoTaps =
-    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersTwoTaps)];
+    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersTwoTaps:)];
     [twoFingersTwoTaps setNumberOfTapsRequired:2];
     [twoFingersTwoTaps setNumberOfTouchesRequired:2];
     [self addGestureRecognizer:twoFingersTwoTaps];
     [twoFingersTwoTaps release];
 }
 
-- (void)twoFingerPinch:(UIPinchGestureRecognizer *)sender
+- (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
     if (sender.state == UIGestureRecognizerStateBegan) {
         Point2d centerW;
         _xform->getZoomValue(centerW, _lastViewScale);
-        _lastCenter = CGPointMake(centerW.x, centerW.y);
+        _lastCenterW = CGPointMake(centerW.x, centerW.y);
         _firstPoint = [sender locationInView:self];
         _lastPoint = _firstPoint;
         _fastDraw = YES;
@@ -124,7 +138,7 @@
     }
     
     POINT at = { _firstPoint.x, _firstPoint.y };
-    _xform->zoom(Point2d(_lastCenter.x, _lastCenter.y), _lastViewScale);
+    _xform->zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);
     _xform->zoomByFactor(sender.scale - 1, &at);
     
     CGPoint point = ([sender numberOfTouches] < 2) ? _lastPoint : [sender locationInView:self];
@@ -134,45 +148,47 @@
     [self setNeedsDisplay];
 }
 
-- (void)twoFingerPan:(UIPanGestureRecognizer *)sender
-{
-}
-
-- (void)oneFingerPan:(UIPanGestureRecognizer *)sender
+- (void)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
     if (sender.state == UIGestureRecognizerStateBegan) {
         Point2d centerW;
         _xform->getZoomValue(centerW, _lastViewScale);
-        _lastCenter = CGPointMake(centerW.x, centerW.y);
+        _lastCenterW = CGPointMake(centerW.x, centerW.y);
         _fastDraw = YES;
     }
     else
     {
         _fastDraw = (sender.state == UIGestureRecognizerStateChanged);
     }
-
+    
     CGPoint translation = [sender translationInView:self];
-    _xform->zoom(Point2d(_lastCenter.x, _lastCenter.y), _lastViewScale);
+    _xform->zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);
     _xform->zoomPan(translation.x, translation.y);
     
     [self setNeedsDisplay];
 }
 
-- (void)oneFingersTwoTaps:(UITapGestureRecognizer *)sender
+- (void)oneFingerPan:(UIPanGestureRecognizer *)sender
+{
+    [self twoFingersPan:sender];
+}
+
+- (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
     POINT at = { point.x, point.y };
     
-    if (_doubleZoomed) {
+    if (_doubleZoomed)  // restory zoom scale
+    {
         _doubleZoomed = NO;
-        _xform->zoom(Point2d(_centerBefore.x, _centerBefore.y), _scaleBefore);
+        _xform->zoom(Point2d(_centerBeforeDbl.x, _centerBeforeDbl.y), _scaleBeforeDbl);
         [self setNeedsDisplay];
     }
-    else
+    else                // zoomin at the point
     {
         Point2d centerW;
-        _xform->getZoomValue(centerW, _scaleBefore);
-        _centerBefore = CGPointMake(centerW.x, centerW.y);
+        _xform->getZoomValue(centerW, _scaleBeforeDbl);
+        _centerBeforeDbl = CGPointMake(centerW.x, centerW.y);
         
         if (_xform->zoomByFactor(2, &at)) {
             _xform->zoomTo(Point2d(point.x, point.y) * _xform->displayToWorld());
@@ -182,7 +198,7 @@
     }
 }
 
-- (void)twoFingersTwoTaps
+- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
 {
 }
 

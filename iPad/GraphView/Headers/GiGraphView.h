@@ -14,24 +14,25 @@ class GiGraphics;
     
     BOOL            _fastDraw;
     double          _lastViewScale;
-    CGPoint         _lastCenter;
+    CGPoint         _lastCenterW;
     CGPoint         _firstPoint;
     CGPoint         _lastPoint;
     
     BOOL            _doubleZoomed;
-    double          _scaleBefore;
-    CGPoint         _centerBefore;
+    double          _scaleBeforeDbl;
+    CGPoint         _centerBeforeDbl;
 }
 
 - (void)draw:(GiGraphics*)gs;
+- (void)dynDraw:(GiGraphics*)gs;
 
 - (void)afterCreated;
 - (void)addGestureRecognizers;
 
-- (void)twoFingerPinch:(UIPinchGestureRecognizer *)recognizer;
-- (void)twoFingerPan:(UIPanGestureRecognizer *)recognizer;
-- (void)oneFingerPan:(UIPanGestureRecognizer *)recognizer;
-- (void)oneFingersTwoTaps:(UITapGestureRecognizer *)sender;
-- (void)twoFingersTwoTaps;
+- (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
+- (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
+- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender;
+- (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
+- (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;
 
 @end

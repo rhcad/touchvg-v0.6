@@ -15,10 +15,13 @@ public:
     GiColor         _bkcolor;
     GiContext       _gictx;
     bool            _fast;
+    CGImageRef      _caches[2];
 
     GiGraphIosImpl(GiGraphIos* p) : _this(p), _context(NULL), _buffctx(NULL)
         , _bkcolor(GiColor::White()), _fast(false)
     {
+        _caches[0] = NULL;
+        _caches[1] = NULL;
     }
     
     CGContextRef getContext() const
@@ -98,6 +101,7 @@ GiGraphIos::GiGraphIos(const GiGraphIos& src)
 
 GiGraphIos::~GiGraphIos()
 {
+    clearCachedBitmap();
     delete m_draw;
 }
 
@@ -107,7 +111,7 @@ GiGraphIos& GiGraphIos::operator=(const GiGraphIos& src)
     return *this;
 }
 
-bool GiGraphIos::beginPaint(CGContextRef context, bool fast)
+bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
 {
     if (isDrawing() || context == NULL)
         return false;
@@ -118,9 +122,11 @@ bool GiGraphIos::beginPaint(CGContextRef context, bool fast)
 
     m_draw->_context = context;
     m_draw->_fast = fast;
-    m_draw->createBufferBitmap(xf().getWidth(), xf().getHeight());
+    if (buffered) {
+        m_draw->createBufferBitmap(xf().getWidth(), xf().getHeight());
+        context = m_draw->getContext();
+    }
 
-    context = m_draw->getContext();
     CGContextSetAllowsAntialiasing(context, !fast && isAntiAliasMode());
     CGContextSetShouldAntialias(context, !fast && isAntiAliasMode());
     CGContextSetFlatness(context, fast ? 20 : 1);
@@ -150,11 +156,9 @@ void GiGraphIos::endPaint(bool draw)
 
 void GiGraphIosImpl::createBufferBitmap(int width, int height)
 {
-    if (!_buffctx) {
-        _buffctx = CGBitmapContextCreate(NULL, width, height, 8, width * 4,
-                                         CGColorSpaceCreateDeviceRGB(), 
-                                         kCGImageAlphaPremultipliedLast);
-    }
+    _buffctx = CGBitmapContextCreate(NULL, width, height, 8, width * 4,
+                                     CGColorSpaceCreateDeviceRGB(), 
+                                     kCGImageAlphaPremultipliedLast);
 }
 
 void GiGraphIos::clearWnd()
@@ -165,30 +169,66 @@ void GiGraphIos::clearWnd()
 
 bool GiGraphIos::drawCachedBitmap(int x, int y, bool secondBmp)
 {
-    return false;
+    CGImageRef img = m_draw->_caches[secondBmp ? 1 : 0];
+    bool ret = false;
+    
+    if (m_draw->_context && img) {
+        CGContextDrawImage(m_draw->getContext(), 
+                           CGRectMake(x, y, CGImageGetWidth(img), CGImageGetHeight(img)), 
+                           img);
+        ret = true;
+    }
+    
+    return ret;
 }
 
 bool GiGraphIos::drawCachedBitmap2(const GiGraphics* p, bool secondBmp)
 {
-    return false;
+    bool ret = false;
+    
+    if (p && p->getGraphType() == getGraphType()) {
+        GiGraphIos* gs = (GiGraphIos*)p;
+        CGImageRef img = gs->m_draw->_caches[secondBmp ? 1 : 0];
+        
+        if (m_draw->_context && img) {
+            CGContextDrawImage(m_draw->getContext(), 
+                               CGRectMake(0, 0, CGImageGetWidth(img), CGImageGetHeight(img)), 
+                               img);
+            ret = true;
+        }
+    }
+    
+    return ret;
 }
 
 void GiGraphIos::saveCachedBitmap(bool secondBmp)
 {
+    int n = secondBmp ? 1 : 0;
+    if (m_draw->_caches[n])
+        CGImageRelease(m_draw->_caches[n]);
+    m_draw->_caches[n] = CGBitmapContextCreateImage(m_draw->getContext());
 }
 
 bool GiGraphIos::hasCachedBitmap(bool secondBmp) const
 {
-    return false;
+    return !!m_draw->_caches[secondBmp ? 1 : 0];
 }
 
 void GiGraphIos::clearCachedBitmap()
 {
+    if (m_draw->_caches[0]) {
+        CGImageRelease(m_draw->_caches[0]);
+        m_draw->_caches[0] = NULL;
+    }
+    if (m_draw->_caches[1]) {
+        CGImageRelease(m_draw->_caches[1]);
+        m_draw->_caches[1] = NULL;
+    }
 }
 
 bool GiGraphIos::isBufferedDrawing() const
 {
-    return false;
+    return !!m_draw->_buffctx;
 }
 
 int GiGraphIos::getScreenDpi() const

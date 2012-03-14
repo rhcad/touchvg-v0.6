@@ -11,4 +11,6 @@ class Shapes;
     Shapes*     _shapes;
 }
 
+- (void)reset;
+
 @end

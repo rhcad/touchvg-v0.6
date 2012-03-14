@@ -226,7 +226,7 @@ void GiTransform::setViewScaleRange(double minScale, double maxScale)
     minScale = mgMin(minScale, 0.5);
 
     maxScale = mgMax(maxScale, 1.0);
-    maxScale = mgMin(maxScale, 20.0);
+    maxScale = mgMin(maxScale, 50.0);
 
     m_data->minViewScale = minScale;
     m_data->maxViewScale = maxScale;

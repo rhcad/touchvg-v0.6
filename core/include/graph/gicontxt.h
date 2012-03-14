@@ -38,10 +38,12 @@ public:
         \param width 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
         \param color 线条颜色， GiColor::Invalid() 表示不画线条
         \param style 线型，取值为 kLineSolid 等
+        \param fillColor 填充颜色， GiColor::Invalid() 表示不填充
     */
-    GiContext(Int16 width, GiColor color = GiColor::Black(), kLineStyle style = kLineSolid)
+    GiContext(Int16 width, GiColor color = GiColor::Black(), 
+              kLineStyle style = kLineSolid, const GiColor& fillColor = GiColor::Invalid())
         : m_type(0), m_lineStyle(style), m_lineWidth(width)
-        , m_lineColor(color), m_fillColor(GiColor::Invalid())
+        , m_lineColor(color), m_fillColor(fillColor)
     {
     }
 

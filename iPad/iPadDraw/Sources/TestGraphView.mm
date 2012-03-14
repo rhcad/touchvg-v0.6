@@ -42,7 +42,7 @@
     _shapes->draw(gs);
 }
 
-- (void)twoFingersTwoTaps
+- (void)reset
 {
     RandomParam param;
     param.lineCount = RandomParam::RandInt(0, 200);
@@ -54,6 +54,32 @@
     _shapes = new Shapes(param.getShapeCount());
     param.initShapes(_shapes);
     
+    [self setNeedsDisplay];
+}
+
+- (void)dynDraw:(GiGraphics*)gs
+{
+    if (!CGPointEqualToPoint(_lastPoint, _firstPoint)) {
+        GiContext context(0, GiColor(128,0,0,128), kLineSolid, GiColor(128,0,0,64));
+        gs->rawLine(&context, _firstPoint.x, _firstPoint.y, _lastPoint.x, _lastPoint.y);
+        gs->rawEllipse(&context, _firstPoint.x - 10, _firstPoint.y - 10, 20, 20);
+        gs->rawEllipse(&context, _lastPoint.x - 10, _lastPoint.y - 10, 20, 20);
+    }
+}
+
+- (void)oneFingerPan:(UIPanGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        _firstPoint = [sender locationInView:self];
+        _lastPoint = _firstPoint;
+    }
+    if (sender.state != UIGestureRecognizerStateChanged) {
+        _lastPoint = _firstPoint;
+        [self setNeedsDisplay];
+        return;
+    }
+    
+    _lastPoint = [sender locationInView:self];
     [self setNeedsDisplay];
 }
 
