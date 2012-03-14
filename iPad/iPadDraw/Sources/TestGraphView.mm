@@ -1,6 +1,5 @@
 // TestGraphView.mm
-// Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// Created by Zhang Yungui on 2012-3-2.
 
 #import "TestGraphView.h"
 #include "../../../core/include/testgraph/shape.cpp"

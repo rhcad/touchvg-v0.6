@@ -201,7 +201,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
-				ORGANIZATIONNAME = github.com/rhcad;
+				ORGANIZATIONNAME = com.yourcompany;
 			};
 			buildConfigurationList = 4AC4D329142455C50055F4CA /* Build configuration list for PBXProject "iPadDraw" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -398,7 +398,7 @@
 			baseConfigurationReference = 4AC4D3B61424795D0055F4CA /* Project.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: github.com/rhcad";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: com.yourcompany";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -446,7 +446,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: github.com/rhcad";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: com.yourcompany";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;

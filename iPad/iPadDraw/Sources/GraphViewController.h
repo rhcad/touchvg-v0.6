@@ -1,11 +1,10 @@
 // GraphViewController.h
-// Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// Created by Zhang Yungui on 2012-3-2.
 
 #import <UIKit/UIKit.h>
+#import <GraphView/GiViewController.h>
 
-
-@interface GraphViewController : UIViewController {
+@interface GraphViewController : GiViewController {
     
 }
 

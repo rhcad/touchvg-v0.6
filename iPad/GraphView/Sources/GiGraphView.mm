@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #import "GiGraphView.h"
-#include <GiGraphIos.h>
+#include "GiGraphIos.h"
 
 @implementation GiGraphView
 

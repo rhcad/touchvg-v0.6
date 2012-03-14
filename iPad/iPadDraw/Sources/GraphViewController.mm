@@ -1,20 +1,10 @@
 // GraphViewController.mm
-// Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// Created by Zhang Yungui on 2012-3-2.
 
 #import "GraphViewController.h"
 #import "TestGraphView.h"
 
 @implementation GraphViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)dealloc
 {
@@ -23,15 +13,9 @@
 
 - (void)didReceiveMemoryWarning
 {
-    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
-#pragma mark - View lifecycle
-
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView
 {
     CGRect rect = [[UIScreen mainScreen] applicationFrame];
@@ -42,45 +26,15 @@
     [view release];
 }
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)motionShake
 {
-	return YES;     // supported orientations
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self becomeFirstResponder];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [self resignFirstResponder];
-    [super viewDidDisappear:animated];
-}
-
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
-
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
-{
-    if (motion == UIEventSubtypeMotionShake)
-    {
-        TestGraphView *view = (TestGraphView *)self.view;
-        [view reset];
-    }
+    TestGraphView *view = (TestGraphView *)self.view;
+    [view reset];
 }
 
 @end
