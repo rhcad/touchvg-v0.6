@@ -11,11 +11,12 @@ class GiGraphics;
     GiTransform*    _xform;
     GiGraphics*     _graph;
     
-    BOOL            _fastDraw;
-    double          _lastViewScale;
-    CGPoint         _lastCenterW;
     CGPoint         _firstPoint;
     CGPoint         _lastPoint;
+    
+    BOOL            _zooming;
+    double          _lastViewScale;
+    CGPoint         _lastCenterW;
     
     BOOL            _doubleZoomed;
     double          _scaleBeforeDbl;

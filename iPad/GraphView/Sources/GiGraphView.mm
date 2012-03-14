@@ -45,7 +45,7 @@
 - (void)afterCreated
 {
     self.multipleTouchEnabled = YES;
-    _fastDraw = NO;
+    _zooming = NO;
     _doubleZoomed = NO;
 
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
@@ -63,9 +63,9 @@
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (gs->beginPaint(context, true, _fastDraw))
+    if (gs->beginPaint(context, true, _zooming))
     {
-        if (_fastDraw) {
+        if (_zooming) {
             [self draw:gs];
         }
         else {
@@ -128,14 +128,15 @@
         Point2d centerW;
         _xform->getZoomValue(centerW, _lastViewScale);
         _lastCenterW = CGPointMake(centerW.x, centerW.y);
+
         _firstPoint = [sender locationInView:self];
         _lastPoint = _firstPoint;
-        _fastDraw = YES;
+        _zooming = YES;
         _doubleZoomed = NO;
     }
     else
     {
-        _fastDraw = (sender.state == UIGestureRecognizerStateChanged);
+        _zooming = (sender.state == UIGestureRecognizerStateChanged);
     }
     
     POINT at = { _firstPoint.x, _firstPoint.y };
@@ -155,11 +156,11 @@
         Point2d centerW;
         _xform->getZoomValue(centerW, _lastViewScale);
         _lastCenterW = CGPointMake(centerW.x, centerW.y);
-        _fastDraw = YES;
+        _zooming = YES;
     }
     else
     {
-        _fastDraw = (sender.state == UIGestureRecognizerStateChanged);
+        _zooming = (sender.state == UIGestureRecognizerStateChanged);
     }
     
     CGPoint translation = [sender translationInView:self];
@@ -179,7 +180,7 @@
     CGPoint point = [sender locationInView:self];
     POINT at = { point.x, point.y };
     
-    if (_doubleZoomed)  // restory zoom scale
+    if (_doubleZoomed)  // restore zoom scale
     {
         _doubleZoomed = NO;
         _xform->zoom(Point2d(_centerBeforeDbl.x, _centerBeforeDbl.y), _scaleBeforeDbl);

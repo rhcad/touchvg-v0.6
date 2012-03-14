@@ -74,14 +74,14 @@
         _firstPoint = [sender locationInView:self];
         _lastPoint = _firstPoint;
     }
-    if (sender.state != UIGestureRecognizerStateChanged) {
+    else if (sender.state == UIGestureRecognizerStateChanged) {
+        _lastPoint = [sender locationInView:self];
+        [self setNeedsDisplay];
+    }
+    else {
         _lastPoint = _firstPoint;
         [self setNeedsDisplay];
-        return;
     }
-    
-    _lastPoint = [sender locationInView:self];
-    [self setNeedsDisplay];
 }
 
 @end
