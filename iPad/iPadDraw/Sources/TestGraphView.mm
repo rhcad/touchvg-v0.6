@@ -54,6 +54,7 @@
     _shapes = new Shapes(param.getShapeCount());
     param.initShapes(_shapes);
     
+    _graph->clearCachedBitmap();
     [self setNeedsDisplay];
 }
 

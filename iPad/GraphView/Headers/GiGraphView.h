@@ -5,12 +5,11 @@
 #import <UIKit/UIKit.h>
 
 class GiTransform;
-class GiGraphIos;
 class GiGraphics;
 
 @interface GiGraphView : UIView {
     GiTransform*    _xform;
-    GiGraphIos*     _graph;
+    GiGraphics*     _graph;
     
     BOOL            _fastDraw;
     double          _lastViewScale;

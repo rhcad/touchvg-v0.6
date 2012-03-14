@@ -58,24 +58,25 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
+    GiGraphIos* gs = (GiGraphIos*)_graph;
     
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (_graph->beginPaint(context, true, _fastDraw))
+    if (gs->beginPaint(context, true, _fastDraw))
     {
         if (_fastDraw) {
-            [self draw:_graph];
+            [self draw:gs];
         }
         else {
-            if (!_graph->drawCachedBitmap(0, 0)) {
-                [self draw:_graph];
-                _graph->saveCachedBitmap();
+            if (!gs->drawCachedBitmap(0, 0)) {
+                [self draw:gs];
+                gs->saveCachedBitmap();
             }
-            [self dynDraw:_graph];
+            [self dynDraw:gs];
         }
         
-        _graph->endPaint();
+        gs->endPaint();
     }
 }
 
