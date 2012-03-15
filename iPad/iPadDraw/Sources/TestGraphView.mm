@@ -6,6 +6,15 @@
 
 @implementation TestGraphView
 
+- (void)dealloc
+{
+    if (_shapes) {
+        delete _shapes;
+        _shapes = NULL;
+    }
+    [super dealloc];
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -27,25 +36,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    if (_shapes) {
-        delete _shapes;
-        _shapes = NULL;
-    }
-    [super dealloc];
-}
-
-- (void)draw:(GiGraphics*)gs
-{
-    _shapes->draw(gs);
-}
-
-- (void)shakeMotion
-{
-    [self reset];
-}
-
 - (void)reset
 {
     RandomParam param;
@@ -62,6 +52,12 @@
     [self setNeedsDisplay];
 }
 
+- (void)draw:(GiGraphics*)gs
+{
+    _shapes->draw(gs);
+    [super draw:gs];
+}
+
 - (void)dynDraw:(GiGraphics*)gs
 {
     if (!CGPointEqualToPoint(_lastPoint, _firstPoint)) {
@@ -70,21 +66,37 @@
         gs->rawEllipse(&context, _firstPoint.x - 10, _firstPoint.y - 10, 20, 20);
         gs->rawEllipse(&context, _lastPoint.x - 10, _lastPoint.y - 10, 20, 20);
     }
+    [super dynDraw:gs];
+}
+
+- (void)shakeMotion
+{
+    if (self.viewMode == GiViewModeView) {
+        [self reset];
+    }
+    else {
+        [super shakeMotion];
+    }
 }
 
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        _firstPoint = [sender locationInView:self];
-        _lastPoint = _firstPoint;
-    }
-    else if (sender.state == UIGestureRecognizerStateChanged) {
-        _lastPoint = [sender locationInView:self];
-        [self setNeedsDisplay];
+    if (self.viewMode == GiViewModeView) {
+        if (sender.state == UIGestureRecognizerStateBegan) {
+            _firstPoint = [sender locationInView:self];
+            _lastPoint = _firstPoint;
+        }
+        else if (sender.state == UIGestureRecognizerStateChanged) {
+            _lastPoint = [sender locationInView:self];
+            [self setNeedsDisplay];
+        }
+        else {
+            _lastPoint = _firstPoint;
+            [self setNeedsDisplay];
+        }
     }
     else {
-        _lastPoint = _firstPoint;
-        [self setNeedsDisplay];
+        [super oneFingerPan:sender];
     }
 }
 

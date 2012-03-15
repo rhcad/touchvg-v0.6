@@ -7,9 +7,17 @@
 class GiTransform;
 class GiGraphics;
 
+typedef enum {
+    GiViewModeView,
+    GiViewModeSelect,
+    GiViewModeCreateShape,
+    GiViewModeMax
+} GiViewMode;
+
 @interface GiGraphView : UIView {
     GiTransform*    _xform;
     GiGraphics*     _graph;
+    GiViewMode      _viewMode;
     
     CGPoint         _firstPoint;
     CGPoint         _lastPoint;
@@ -24,20 +32,17 @@ class GiGraphics;
 }
 
 @property (nonatomic,readonly) GiTransform* xform;
-@property (nonatomic,readonly) GiGraphics* graph;
+@property (nonatomic,readonly) GiGraphics*  graph;
+@property (nonatomic)          GiViewMode   viewMode;
+@property (nonatomic,readonly) BOOL         zooming;
 
 - (void)draw:(GiGraphics*)gs;
 - (void)dynDraw:(GiGraphics*)gs;
+
 - (void)setAnimating:(BOOL)animated;
+- (void)shakeMotion;
 
 - (void)afterCreated;
-- (void)addGestureRecognizers;
-
-- (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
-- (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
-- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender;
-- (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
-- (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;
-- (void)shakeMotion;
+- (void)setViewMode:(GiViewMode)mode;
 
 @end

@@ -5,10 +5,32 @@
 #import "GiGraphView.h"
 #include "GiGraphIos.h"
 
+@interface GiGraphView(GestureRecognizer)
+
+- (void)addGestureRecognizers;
+- (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
+- (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
+- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender;
+- (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
+- (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;
+- (void)oneFingerOneTap:(UITapGestureRecognizer *)sender;
+
+@end
+
+@interface GiGraphView(Zooming)
+
+- (void)dynZooming:(UIPinchGestureRecognizer *)sender;
+- (void)dynPanning:(UIPanGestureRecognizer *)sender;
+- (void)switchZoomed:(UIGestureRecognizer *)sender;
+
+@end
+
 @implementation GiGraphView
 
 @synthesize xform = _xform;
 @synthesize graph = _graph;
+@synthesize viewMode = _viewMode;
+@synthesize zooming = _zooming;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -49,6 +71,7 @@
 {
     self.multipleTouchEnabled = YES;
     self.contentMode = UIViewContentModeRedraw;
+    _viewMode = GiViewModeView;
     _zooming = NO;
     _doubleZoomed = NO;
 
@@ -100,6 +123,22 @@
         _zooming &= ~0x2;
 }
 
+- (void)shakeMotion
+{
+}
+
+- (void)setViewMode:(GiViewMode)mode
+{
+    if (mode >= GiViewModeView && mode < GiViewModeMax) {
+        _viewMode = mode;
+        _lastPoint = _firstPoint;
+    }
+}
+
+@end
+
+@implementation GiGraphView(GestureRecognizer)
+
 - (void)addGestureRecognizers
 {
     UIPinchGestureRecognizer *twoFingersPinch =
@@ -127,20 +166,57 @@
     [oneFingerTwoTaps release];
     
     UITapGestureRecognizer *twoFingersTwoTaps =
-    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersTwoTaps:)];
+        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersTwoTaps:)];
     [twoFingersTwoTaps setNumberOfTapsRequired:2];
     [twoFingersTwoTaps setNumberOfTouchesRequired:2];
     [self addGestureRecognizer:twoFingersTwoTaps];
     [twoFingersTwoTaps release];
+    
+    UITapGestureRecognizer *oneFingerOneTap =
+        [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
+    [self addGestureRecognizer:oneFingerOneTap];
+    [oneFingerOneTap release];
 }
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
+{
+    [self dynZooming:sender];
+}
+
+- (void)twoFingersPan:(UIPanGestureRecognizer *)sender
+{
+    [self dynPanning:sender];
+}
+
+- (void)oneFingerPan:(UIPanGestureRecognizer *)sender
+{
+}
+
+- (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
+{
+}
+
+- (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
+{
+    [self switchZoomed:sender];
+}
+
+- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
+{
+    self.viewMode = (GiViewMode)((_viewMode + 1) % GiViewModeMax);
+}
+
+@end
+
+@implementation GiGraphView(Zooming)
+
+- (void)dynZooming:(UIPinchGestureRecognizer *)sender
 {
     if (sender.state == UIGestureRecognizerStateBegan) {
         Point2d centerW;
         _xform->getZoomValue(centerW, _lastViewScale);
         _lastCenterW = CGPointMake(centerW.x, centerW.y);
-
+        
         _firstPoint = [sender locationInView:self];
         _lastPoint = _firstPoint;
         _zooming = YES;
@@ -162,7 +238,7 @@
     [self setNeedsDisplay];
 }
 
-- (void)twoFingersPan:(UIPanGestureRecognizer *)sender
+- (void)dynPanning:(UIPanGestureRecognizer *)sender
 {
     if (sender.state == UIGestureRecognizerStateBegan) {
         Point2d centerW;
@@ -182,12 +258,7 @@
     [self setNeedsDisplay];
 }
 
-- (void)oneFingerPan:(UIPanGestureRecognizer *)sender
-{
-    [self twoFingersPan:sender];
-}
-
-- (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
+- (void)switchZoomed:(UIGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
     POINT at = { point.x, point.y };
@@ -210,14 +281,6 @@
             [self setNeedsDisplay];
         }
     }
-}
-
-- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
-{
-}
-
-- (void)shakeMotion
-{
 }
 
 @end
