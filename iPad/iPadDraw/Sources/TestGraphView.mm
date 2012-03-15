@@ -41,6 +41,11 @@
     _shapes->draw(gs);
 }
 
+- (void)shakeMotion
+{
+    [self reset];
+}
+
 - (void)reset
 {
     RandomParam param;

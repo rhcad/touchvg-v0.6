@@ -3,6 +3,8 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #import "GiViewController.h"
+#import "GiGraphView.h"
+#include <Graph2d/gigraph.h>
 
 @implementation GiViewController
 
@@ -17,6 +19,14 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
+    [self clearCachedData];
+}
+
+- (void)clearCachedData
+{
+    GiGraphView* gview = (GiGraphView*)self.view;
+    if (gview)
+        gview.graph->clearCachedBitmap();
 }
 
 #pragma mark - View motion
@@ -24,6 +34,21 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
 	return YES;     // supported orientations
+}
+
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation duration:(NSTimeInterval)duration
+{
+    GiGraphView* gview = (GiGraphView*)self.view;
+    [gview setAnimating:YES];
+    [super willRotateToInterfaceOrientation:orientation duration:duration];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    GiGraphView* gview = (GiGraphView*)self.view;
+    [gview setAnimating:NO];
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -44,12 +69,9 @@
 {
     if (motion == UIEventSubtypeMotionShake)
     {
-        [self motionShake];
+        GiGraphView* gview = (GiGraphView*)self.view;
+        [gview shakeMotion];
     }
-}
-
-- (void)motionShake
-{
 }
 
 @end

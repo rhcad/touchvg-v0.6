@@ -31,10 +31,4 @@
     [super viewDidUnload];
 }
 
-- (void)motionShake
-{
-    TestGraphView *view = (TestGraphView *)self.view;
-    [view reset];
-}
-
 @end

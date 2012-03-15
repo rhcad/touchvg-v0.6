@@ -7,6 +7,9 @@
 
 @implementation GiGraphView
 
+@synthesize xform = _xform;
+@synthesize graph = _graph;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -45,6 +48,7 @@
 - (void)afterCreated
 {
     self.multipleTouchEnabled = YES;
+    self.contentMode = UIViewContentModeRedraw;
     _zooming = NO;
     _doubleZoomed = NO;
 
@@ -63,7 +67,7 @@
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (gs->beginPaint(context, true, _zooming))
+    if (gs->beginPaint(context, true, !!_zooming))
     {
         if (_zooming) {
             [self draw:gs];
@@ -86,6 +90,14 @@
 
 - (void)dynDraw:(GiGraphics*)gs
 {
+}
+
+- (void)setAnimating:(BOOL)animated
+{
+    if (animated)
+        _zooming |= 0x2;
+    else
+        _zooming &= ~0x2;
 }
 
 - (void)addGestureRecognizers
@@ -201,6 +213,10 @@
 }
 
 - (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
+{
+}
+
+- (void)shakeMotion
 {
 }
 

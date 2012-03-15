@@ -23,8 +23,12 @@ class GiGraphics;
     CGPoint         _centerBeforeDbl;
 }
 
+@property (nonatomic,readonly) GiTransform* xform;
+@property (nonatomic,readonly) GiGraphics* graph;
+
 - (void)draw:(GiGraphics*)gs;
 - (void)dynDraw:(GiGraphics*)gs;
+- (void)setAnimating:(BOOL)animated;
 
 - (void)afterCreated;
 - (void)addGestureRecognizers;
@@ -34,5 +38,6 @@ class GiGraphics;
 - (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender;
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;
+- (void)shakeMotion;
 
 @end

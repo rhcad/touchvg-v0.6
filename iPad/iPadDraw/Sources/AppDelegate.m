@@ -53,7 +53,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
-    // TODO:
+    [_controller clearCachedData];
 }
 
 

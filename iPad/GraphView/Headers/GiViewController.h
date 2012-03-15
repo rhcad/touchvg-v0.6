@@ -8,6 +8,6 @@
     
 }
 
-- (void)motionShake;
+- (void)clearCachedData;
 
 @end
