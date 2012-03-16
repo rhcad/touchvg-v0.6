@@ -22,9 +22,9 @@
         srand((unsigned)time(NULL));
         
         RandomParam param;
-        param.lineCount = 1000;
-        param.arcCount = 500;
-        param.curveCount = 200;
+        param.lineCount = 100;
+        param.arcCount = 50;
+        param.curveCount = 20;
         param.randomLineStyle = true;
         
         _shapes = new Shapes(param.getShapeCount());
@@ -123,7 +123,15 @@
 - (void)drawShape:(void*)shape graphics:(GiGraphics*)gs context:(const GiContext *)ctx
 {
     ShapeItem* item = (ShapeItem*)shape;
-    return item->draw(gs);
+    return item->draw(gs, ctx);
+}
+
+- (double)hitTest:(void*)shape limits:(const BOX2D*)box
+{
+    ShapeItem* item = (ShapeItem*)shape;
+    double dist = 1e30;
+    item->hitTest(*box, dist);
+    return dist;
 }
 
 @end

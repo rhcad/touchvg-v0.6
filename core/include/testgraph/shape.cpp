@@ -198,6 +198,15 @@ Box2d LineItem::getExtent() const
     return Box2d(startpt, endpt);
 }
 
+void LineItem::hitTest(const Box2d& limits, double& dist)
+{
+    Point2d pts[] = { startpt, endpt };
+    Point2d ptNear;
+    Int32 segment;
+    
+    dist = mgLinesHit(2, pts, false, limits.center(), limits.width(), ptNear, segment);
+}
+
 // ArcItem
 //
 
@@ -217,6 +226,12 @@ Box2d ArcItem::getExtent() const
     mgBeziersBox(rect, count, points);
 
     return rect;
+}
+
+void ArcItem::hitTest(const Box2d& limits, double& dist)
+{
+    Point2d points[16];
+    int count = mgAngleArcToBezier(points, center, rx, ry, startAngle, sweepAngle);
 }
 
 // CurveItem
@@ -272,5 +287,12 @@ void CurveItem::draw(GiGraphics* gs, const GiContext *ctx) const
 
 Box2d CurveItem::getExtent() const
 {
-    return Box2d(count, points);
+    Box2d rect;
+    mgBeziersBox(rect, count, points);
+    
+    return rect;
+}
+
+void CurveItem::hitTest(const Box2d& limits, double& dist)
+{
 }

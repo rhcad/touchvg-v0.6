@@ -11,6 +11,7 @@
 - (void*)getNextShape:(void**)it { return NULL; }
 - (BOX2D)getShapeExtent:(void*)shape { return Box2d(); }
 - (void)drawShape:(void*)shape graphics:(GiGraphics*)gs context:(const GiContext *)ctx {}
+- (double)hitTest:(void*)shape limits:(const BOX2D*)box { return DBL_MAX; }
 
 @end
 
@@ -69,7 +70,7 @@
     self.multipleTouchEnabled = YES;
     self.contentMode = UIViewContentModeRedraw;
     _drawingDelegate = Nil;
-    _viewMode = GiViewModeView;
+    _viewMode = GiViewModeSelect;
     _zooming = NO;
     _doubleZoomed = NO;
 
@@ -98,8 +99,8 @@
             }
             [self dynDraw:gs];
             if (_drawingDelegate &&
-                [_drawingDelegate performSelector:@selector(dynDraw:)]) {
-                [_drawingDelegate dynDraw:gs];
+                [_drawingDelegate performSelector:@selector(dynDraw)]) {
+                [_drawingDelegate dynDraw];
             }
         }
         

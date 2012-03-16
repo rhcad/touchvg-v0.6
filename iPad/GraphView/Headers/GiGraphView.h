@@ -69,4 +69,6 @@ class GiContext;
 - (BOX2D)getShapeExtent:(void*)shape;
 - (void)drawShape:(void*)shape graphics:(GiGraphics*)gs context:(const GiContext *)ctx;
 
+- (double)hitTest:(void*)shape limits:(const BOX2D*)box;
+
 @end

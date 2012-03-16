@@ -15,6 +15,6 @@
 }
 
 - (void)clearCachedData;
-- (void)dynDraw:(void*)gs;
+- (void)dynDraw;
 
 @end

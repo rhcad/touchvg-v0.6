@@ -25,6 +25,8 @@
 - (void)viewDidLoad
 {
     _gview = (GiGraphView*)self.view;
+    [_gview setDrawingDelegate:self];
+    
     _selector = [[GiSelectController alloc]initWithView:_gview];
     _commands = [[GiCommandController alloc]initWithView:_gview];
     
@@ -101,12 +103,12 @@
     }
 }
 
-- (void)dynDraw:(void*)gs
+- (void)dynDraw
 {
     if (_gview.viewMode == GiViewModeSelect)
-        [_selector dynDraw:(GiGraphics*)gs];
+        [_selector dynDraw:_gview.graph];
     if (_gview.viewMode == GiViewModeCommand)
-        [_commands dynDraw:(GiGraphics*)gs];
+        [_commands dynDraw:_gview.graph];
 }
 
 @end

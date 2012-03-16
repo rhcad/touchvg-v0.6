@@ -15,6 +15,7 @@ public:
     
     virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const = 0;
     virtual Box2d getExtent() const = 0;
+    virtual void hitTest(const Box2d& limits, double& dist) = 0;
 };
 
 class LineItem : public ShapeItem
@@ -25,6 +26,7 @@ public:
 
     virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
     virtual Box2d getExtent() const;
+    virtual void hitTest(const Box2d& limits, double& dist);
 };
 
 class ArcItem : public ShapeItem
@@ -38,6 +40,7 @@ public:
 
     virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
     virtual Box2d getExtent() const;
+    virtual void hitTest(const Box2d& limits, double& dist);
 };
 
 enum CurveType {
@@ -60,6 +63,7 @@ public:
     void applyPoints();
     virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
     virtual Box2d getExtent() const;
+    virtual void hitTest(const Box2d& limits, double& dist);
 };
 
 class Shapes

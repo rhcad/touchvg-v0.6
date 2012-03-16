@@ -8,6 +8,8 @@
 
 @interface GiSelectController : NSObject<GiMotionHandler> {
     GiGraphView*    _view;
+    void*           _section[100];
+    int             _count;
 }
 
 - (id)initWithView:(GiGraphView*)view;
