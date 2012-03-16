@@ -13,7 +13,7 @@ public:
     ShapeItem() {}
     virtual ~ShapeItem() {}
     
-    virtual void draw(GiGraphics* gs) const = 0;
+    virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const = 0;
     virtual Box2d getExtent() const = 0;
 };
 
@@ -23,7 +23,7 @@ public:
     Point2d     startpt;
     Point2d     endpt;
 
-    virtual void draw(GiGraphics* gs) const;
+    virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
     virtual Box2d getExtent() const;
 };
 
@@ -36,7 +36,7 @@ public:
     double      startAngle;
     double      sweepAngle;
 
-    virtual void draw(GiGraphics* gs) const;
+    virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
     virtual Box2d getExtent() const;
 };
 
@@ -58,7 +58,7 @@ public:
     virtual ~CurveItem();
     
     void applyPoints();
-    virtual void draw(GiGraphics* gs) const;
+    virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
     virtual Box2d getExtent() const;
 };
 
@@ -75,7 +75,7 @@ public:
     void recalcExtent();
     void setShape(long index, ShapeItem* shape);
 
-    void draw(GiGraphics* gs) const;
+    void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
 
 private:
     long            m_count;

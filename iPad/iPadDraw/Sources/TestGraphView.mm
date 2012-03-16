@@ -52,12 +52,6 @@
     [self setNeedsDisplay];
 }
 
-- (void)draw:(GiGraphics*)gs
-{
-    _shapes->draw(gs);
-    [super draw:gs];
-}
-
 - (void)dynDraw:(GiGraphics*)gs
 {
     if (!CGPointEqualToPoint(_lastPoint, _firstPoint)) {
@@ -69,35 +63,67 @@
     [super dynDraw:gs];
 }
 
-- (void)shakeMotion
+- (BOOL)undoMotion
 {
-    if (self.viewMode == GiViewModeView) {
-        [self reset];
-    }
-    else {
-        [super shakeMotion];
-    }
+    if (self.viewMode != GiViewModeView)
+        return [super undoMotion];
+
+    [self reset];
+    return YES;
 }
 
-- (void)oneFingerPan:(UIPanGestureRecognizer *)sender
+- (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    if (self.viewMode == GiViewModeView) {
-        if (sender.state == UIGestureRecognizerStateBegan) {
-            _firstPoint = [sender locationInView:self];
-            _lastPoint = _firstPoint;
-        }
-        else if (sender.state == UIGestureRecognizerStateChanged) {
-            _lastPoint = [sender locationInView:self];
-            [self setNeedsDisplay];
-        }
-        else {
-            _lastPoint = _firstPoint;
-            [self setNeedsDisplay];
-        }
+    if (self.viewMode != GiViewModeView)
+        return [super oneFingerPan:sender];
+    
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        _firstPoint = [sender locationInView:self];
+        _lastPoint = _firstPoint;
+    }
+    else if (sender.state == UIGestureRecognizerStateChanged) {
+        _lastPoint = [sender locationInView:self];
+        [self setNeedsDisplay];
     }
     else {
-        [super oneFingerPan:sender];
+        _lastPoint = _firstPoint;
+        [self setNeedsDisplay];
     }
+    
+    return YES;
+}
+
+#pragma mark - ShapeProvider
+
+- (void*)getFirstShape:(void**)it
+{
+    if (_shapes->getShapeCount() > 0) {
+        *it = (void*)0;
+        return _shapes->getShape(0);
+    }
+    return NULL;
+}
+
+- (void*)getNextShape:(void**)it
+{
+    int index = 1 + (int)*it;
+    if (index > 0 && index < _shapes->getShapeCount()) {
+        *it = (void*)index;
+        return _shapes->getShape(index);
+    }
+    return NULL;
+}
+
+- (BOX2D)getShapeExtent:(void*)shape
+{
+    ShapeItem* item = (ShapeItem*)shape;
+    return item->getExtent();
+}
+
+- (void)drawShape:(void*)shape graphics:(GiGraphics*)gs context:(const GiContext *)ctx
+{
+    ShapeItem* item = (ShapeItem*)shape;
+    return item->draw(gs);
 }
 
 @end

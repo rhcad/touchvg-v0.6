@@ -1,7 +1,6 @@
 // TestGraphView.h
 // Created by Zhang Yungui on 2012-3-2.
 
-#import <UIKit/UIKit.h>
 #import <GraphView/GiGraphView.h>
 
 class Shapes;

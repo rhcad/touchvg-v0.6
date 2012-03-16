@@ -145,7 +145,7 @@ void Shapes::setShape(long index, ShapeItem* shape)
     }
 }
 
-void Shapes::draw(GiGraphics* gs) const
+void Shapes::draw(GiGraphics* gs, const GiContext *ctx) const
 {
     Box2d clip(gs->getClipModel());
     
@@ -160,12 +160,36 @@ void Shapes::draw(GiGraphics* gs) const
     gs->drawRect(&context, m_extent);
 }
 
+static inline Int16 useLineWidth(Int16 width, const GiContext *ctx, GiGraphics* gs)
+{
+    if (ctx && !ctx->isNullLine()) {
+        if (width > 0)
+            width = -gs->calcPenWidth(width, false);
+        return width + ctx->getLineWidth();
+    }
+    return width;
+}
+
+static inline GiColor useLineColor(const GiColor& color, const GiContext *ctx)
+{
+    if (ctx && !ctx->isNullLine())
+        return ctx->getLineColor();
+    return color;
+}
+
+static inline GiColor useFillColor(const GiColor& color, const GiContext *ctx)
+{
+    if (ctx && ctx->hasFillColor())
+        return ctx->getFillColor();
+    return color;
+}
+
 // LineItem
 //
 
-void LineItem::draw(GiGraphics* gs) const
+void LineItem::draw(GiGraphics* gs, const GiContext *ctx) const
 {
-    GiContext context(lineWidth, lineColor, lineStyle);
+    GiContext context(useLineWidth(lineWidth,ctx,gs), useLineColor(lineColor,ctx), lineStyle);
     gs->drawLine(&context, startpt, endpt);
 }
 
@@ -177,9 +201,9 @@ Box2d LineItem::getExtent() const
 // ArcItem
 //
 
-void ArcItem::draw(GiGraphics* gs) const
+void ArcItem::draw(GiGraphics* gs, const GiContext *ctx) const
 {
-    GiContext context(lineWidth, lineColor, lineStyle);
+    GiContext context(useLineWidth(lineWidth,ctx,gs), useLineColor(lineColor,ctx), lineStyle);
     gs->drawArc(&context, center, 
         rx, ry, startAngle, sweepAngle);
 }
@@ -225,9 +249,9 @@ void CurveItem::applyPoints()
     }
 }
 
-void CurveItem::draw(GiGraphics* gs) const
+void CurveItem::draw(GiGraphics* gs, const GiContext *ctx) const
 {
-    GiContext context(lineWidth, lineColor, lineStyle);
+    GiContext context(useLineWidth(lineWidth,ctx,gs), useLineColor(lineColor,ctx), lineStyle);
     GiContext ctxaux(0, GiColor(128,128,128,64), kLineDash);
     
     gs->drawLines(&ctxaux, count, points);

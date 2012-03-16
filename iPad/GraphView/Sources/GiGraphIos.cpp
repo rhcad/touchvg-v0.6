@@ -6,6 +6,15 @@
 #include <CoreGraphics/CGBitmapContext.h>
 #include <stdlib.h>
 
+static const CGFloat patDash[]      = { 5, 5 };
+static const CGFloat patDot[]       = { 1, 3 };
+static const CGFloat patDashDot[]   = { 10, 2, 2, 2 };
+static const CGFloat dashDotdot[]   = { 20, 2, 2, 2, 2, 2 };
+struct LPatten { int n; const CGFloat* arr; };
+static const LPatten lpattens[] = {
+    { 0, NULL }, { 2, patDash }, { 2, patDot }, { 4, patDashDot }, { 6, dashDotdot }
+};
+
 class GiGraphIosImpl
 {
 public:
@@ -33,6 +42,13 @@ public:
     {
         return (CGFloat)c / 255.0f;
     }
+    
+    void makeLinePattern(CGFloat* dest, const CGFloat* src, int n, int w)
+    {
+        for (int i = 0; i < n; i++) {
+            dest[i] = src[i] * w;
+        }
+    }
 
     bool setPen(const GiContext* ctx)
     {
@@ -50,6 +66,19 @@ public:
                                        toFloat(color.b), toFloat(color.a));
             int w = _this->calcPenWidth(ctx->getLineWidth());
             CGContextSetLineWidth(getContext(), _fast && w > 1 ? w - 1 : w);
+            
+            int style = ctx->getLineStyle();
+            CGFloat pattern[6];
+            
+            if (style >= 0 && style < sizeof(lpattens)/sizeof(lpattens[0])) {
+                if (lpattens[style].arr && !_fast) {
+                    makeLinePattern(pattern, lpattens[style].arr, lpattens[style].n, w);
+                    CGContextSetLineDash(getContext(), 0, pattern, lpattens[style].n);
+                }
+                else {
+                    CGContextSetLineDash(getContext(), 0, NULL, 0);
+                }
+            }
         }
 
         return !ctx->isNullLine();

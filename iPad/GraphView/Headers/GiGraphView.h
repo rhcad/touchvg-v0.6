@@ -10,14 +10,28 @@ class GiGraphics;
 typedef enum {
     GiViewModeView,
     GiViewModeSelect,
-    GiViewModeCreateShape,
+    GiViewModeCommand,
     GiViewModeMax
 } GiViewMode;
 
-@interface GiGraphView : UIView {
+@protocol GiMotionHandler
+
+- (void)dynDraw:(GiGraphics*)gs;
+- (BOOL)undoMotion;
+- (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
+- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender;
+- (BOOL)twoFingersTwoTaps:(UITapGestureRecognizer *)sender;
+- (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender;
+- (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;
+- (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender;
+
+@end
+
+@interface GiGraphView : UIView<GiMotionHandler> {
     GiTransform*    _xform;
     GiGraphics*     _graph;
     GiViewMode      _viewMode;
+    id              _drawingDelegate;
     
     CGPoint         _firstPoint;
     CGPoint         _lastPoint;
@@ -36,13 +50,23 @@ typedef enum {
 @property (nonatomic)          GiViewMode   viewMode;
 @property (nonatomic,readonly) BOOL         zooming;
 
-- (void)draw:(GiGraphics*)gs;
-- (void)dynDraw:(GiGraphics*)gs;
-
 - (void)setAnimating:(BOOL)animated;
-- (void)shakeMotion;
+- (void)setViewMode:(GiViewMode)mode;
+- (void)setDrawingDelegate:(id)d;
 
 - (void)afterCreated;
-- (void)setViewMode:(GiViewMode)mode;
+- (void)draw:(GiGraphics*)gs;
+
+@end
+
+#include <Graph2d/mgtype.h>
+class GiContext;
+
+@interface GiGraphView(ShapeProvider)
+
+- (void*)getFirstShape:(void**)it;
+- (void*)getNextShape:(void**)it;
+- (BOX2D)getShapeExtent:(void*)shape;
+- (void)drawShape:(void*)shape graphics:(GiGraphics*)gs context:(const GiContext *)ctx;
 
 @end

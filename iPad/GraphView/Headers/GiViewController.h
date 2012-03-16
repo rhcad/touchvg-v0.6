@@ -4,10 +4,17 @@
 
 #import <UIKit/UIKit.h>
 
+@class GiGraphView;
+@class GiSelectController;
+@class GiCommandController;
+
 @interface GiViewController : UIViewController {
-    
+    GiGraphView*            _gview;
+    GiSelectController*     _selector;
+    GiCommandController*    _commands;
 }
 
 - (void)clearCachedData;
+- (void)dynDraw:(void*)gs;
 
 @end
