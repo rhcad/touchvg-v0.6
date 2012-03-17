@@ -62,9 +62,6 @@ GEOMAPI double mgCubicSplinesHit(
     Int32 n, const Point2d* knots, const Vector2d* knotVectors, bool closed, 
     const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment);
 
-GEOMAPI Int32 mgBSplinesToBeziers(
-    Point2d points[/*1+n*3*/], Int32 n, const Point2d* controlPoints, bool closed);
-
 //! 计算点到折线或多边形的最近距离
 /*!
     \ingroup _GEOMAPI_LNREL_

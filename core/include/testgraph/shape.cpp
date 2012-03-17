@@ -152,7 +152,7 @@ void Shapes::draw(GiGraphics* gs, const GiContext *ctx) const
     for (int i = 0; i < m_count; i++)
     {
         if (m_shapes[i]->getExtent().isIntersect(clip)) {
-            m_shapes[i]->draw(gs);
+            m_shapes[i]->draw(gs, ctx);
         }
     }
     

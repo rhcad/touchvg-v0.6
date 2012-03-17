@@ -239,6 +239,18 @@ GEOMAPI void mgCubicSplineToBezier(
     Int32 n, const Point2d* knots, const Vector2d* knotVectors,
     Int32 i, Point2d points[4]);
 
+//! 得到三次B样条曲线的分段贝塞尔曲线段控制点
+/*!
+    \ingroup _GEOMAPI_CURVE_
+    \param[out] points 贝塞尔曲线的控制点，要预先分配(1+n*3)个点的空间
+    \param n B样条曲线控制点的点数，至少为4
+    \param controlPoints B样条曲线控制点坐标数组，点数为n
+    \param closed 三次B样条曲线是否为闭合曲线
+    \return 实际转换的贝塞尔曲线控制点的个数
+*/
+GEOMAPI Int32 mgBSplinesToBeziers(
+    Point2d points[/*1+n*3*/], Int32 n, const Point2d* controlPoints, bool closed);
+
 //! 计算张力样条曲线的型值点参数和弦长
 /*!
     \ingroup _GEOMAPI_CURVE_

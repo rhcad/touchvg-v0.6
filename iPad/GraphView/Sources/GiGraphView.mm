@@ -167,7 +167,7 @@
 
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    return NO;
+    return [self dynPanning:sender];
 }
 
 - (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender

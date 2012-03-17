@@ -105,9 +105,10 @@
 - (BOOL)hitTest:(void**)shapeFound point:(CGPoint)point
 {
     Box2d limits(Box2d(Point2d(point.x, point.y), 50, 50) * _view.xform->displayToModel());
-    double minDist = DBL_MAX;
+    double minDist = limits.width();
     void *it, *shape;
     
+    *shapeFound = NULL;
     for (shape = [_view getFirstShape:&it]; shape; shape = [_view getNextShape:&it]) {
         Box2d box = [_view getShapeExtent:shape];
         if (limits.isIntersect(box)) {
@@ -119,7 +120,7 @@
         }
     }
     
-    return minDist < 1e10;
+    return *shapeFound != NULL;
 }
 
 @end
