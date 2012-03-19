@@ -34,7 +34,7 @@
     GiContext context(-4, GiColor(0, 0, 255, 55));
     
     for (int i = 0; i < _count; i++) {
-        [_view drawShape:_section[i] graphics:gs context:&context];
+        [_view drawShape:_selection[i] graphics:gs context:&context];
     }
 }
 
@@ -96,7 +96,7 @@
 - (void)addToSelection:(void*)shape
 {
     if (_count < 100) {
-        _section[_count] = shape;
+        _selection[_count] = shape;
         _count++;
         [_view setNeedsDisplay];
     }

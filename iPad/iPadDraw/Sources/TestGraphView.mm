@@ -54,9 +54,6 @@
 
 - (BOOL)undoMotion
 {
-    if (self.viewMode != GiViewModeView)
-        return [super undoMotion];
-
     [self reset];
     return YES;
 }
