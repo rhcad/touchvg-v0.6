@@ -195,6 +195,14 @@
 				RelativePath="..\..\..\core\include\shape\mgshape.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\core\include\shape\mgshapes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\include\shape\mgshapest.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

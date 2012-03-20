@@ -55,7 +55,7 @@ void CScrollShapeView::OnZoomed()
 	Box2d rect;
 
 	// m_rcLimits: 极限范围对应的坐标范围, 像素
-	rect = m_shapes.getExtent() * m_xf.modelToDisplay();
+	rect = m_shapes->getExtent() * m_xf.modelToDisplay();
 	rect.inflate(1, 1);
 	rect.get(m_rcLimits.left, m_rcLimits.top, m_rcLimits.right, m_rcLimits.bottom);
 

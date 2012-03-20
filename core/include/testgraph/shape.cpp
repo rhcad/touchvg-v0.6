@@ -1,6 +1,14 @@
 #include "shape.h"
+#include <gishape.h>
 #include <mgbasicsp.h>
 #include <stdlib.h>
+#include <mgshapest.h>
+#include <vector>
+
+MgShapes* createShapes()
+{
+    return new MgShapesT<std::vector<GiShape*> >;
+}
 
 double RandomParam::RandDbl(double dMin, double dMax)
 {
@@ -19,14 +27,16 @@ UInt8 RandomParam::RandUInt8(long nMin, long nMax)
 
 void RandomParam::setShapeProp(GiShape* shape)
 {
-    shape->context.setLineColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(1, 255)));
-    shape->context.setLineWidth((Int16)RandInt(-10, 200));
-    shape->context.setLineStyle((kLineStyle)(randomLineStyle ? RandInt(kLineSolid, kLineNull) : kLineSolid));
+    shape->context()->setLineColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(1, 255)));
+    shape->context()->setLineWidth((Int16)RandInt(-10, 200));
+    shape->context()->setLineStyle((kLineStyle)(randomLineStyle ? RandInt(kLineSolid, kLineNull) : kLineSolid));
 }
 
-void RandomParam::initShapes(Shapes* shapes)
+void RandomParam::initShapes(MgShapes* shapes)
 {
-    for (int i = 0; i < shapes->getShapeCount(); i++)
+    shapes->clear();
+
+    for (long n = getShapeCount(); n > 0; n--)
     {
         int type = RandInt(0, 2);
         GiShape* sp = NULL;
@@ -42,24 +52,23 @@ void RandomParam::initShapes(Shapes* shapes)
         
         if (2 == type)
         {
-            GiShapeT<MgSplines> *shape = new GiShapeT<MgSplines>;
+            GiShapeT<MgSplines> shape;
 
-            shape->shape.resize(RandInt(3, 20));
-            shapes->setShape(i, shape);
-            sp = shape;
+            shape._shape.resize(RandInt(3, 20));
+            sp = shapes->addShape(shape);
             curveCount--;
             
-            setShapeProp(shape);
-            for (UInt32 i = 0; i < shape->getPointCount(); i++)
+            setShapeProp(sp);
+            for (UInt32 i = 0; i < sp->shape()->getPointCount(); i++)
             {
                 if (0 == i)
                 {
-                    shape->setPoint(i, 
+                    sp->shape()->setPoint(i, 
                         Point2d(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0)));
                 }
                 else
                 {
-                    shape->setPoint(i, shape->getPoint(i-1)
+                    sp->shape()->setPoint(i, sp->shape()->getPoint(i-1)
                         + Vector2d(RandDbl(-200.0, 200.0), RandDbl(-200.0, 200.0)));
                 }
             }
@@ -69,10 +78,7 @@ void RandomParam::initShapes(Shapes* shapes)
             arcCount--;
             /*
             ArcItem* shape = new ArcItem();
-            shapes->setShape(i, shape);
-            sp = shape;
-            
-            setShapeProp(shape);
+            setShapeProp(sp);
             shape->center.set(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0));
             shape->rx = RandDbl(1.0, 1000.0);
             shape->ry = RandDbl(1.0, 1000.0);
@@ -87,89 +93,14 @@ void RandomParam::initShapes(Shapes* shapes)
 
         if (NULL == sp)
         {
-            GiShapeT<MgLine> *shape = new GiShapeT<MgLine>;
+            GiShapeT<MgLine> shape;
 
-            shapes->setShape(i, shape);
-            sp = shape;
-            
-            setShapeProp(shape);
-            shape->setPoint(0, Point2d(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0)));
-            shape->setPoint(1, Point2d(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0)));
+            sp = shapes->addShape(shape);
+            setShapeProp(sp);
+            sp->shape()->setPoint(0, Point2d(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0)));
+            sp->shape()->setPoint(1, Point2d(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0)));
         }
 
-        sp->update();
+        sp->shape()->update();
     }
-
-    shapes->update();
-}
-
-// Shapes
-//
-
-Shapes::Shapes(int shapeCount)
-    : m_count(0), m_shapes(NULL)
-{
-    if (shapeCount > 0)
-    {
-        m_count = shapeCount;
-        m_shapes = new GiShape*[shapeCount];
-        for (int i=0; i<shapeCount; i++)
-            m_shapes[i] = NULL;
-    }
-}
-
-Shapes::~Shapes()
-{
-    for (int i = 0; i < m_count; i++)
-        delete m_shapes[i];
-    delete[] m_shapes;
-}
-
-long Shapes::getShapeCount() const
-{
-    return m_count;
-}
-
-GiShape* Shapes::getShape(long index) const
-{
-    return index >= 0 && index < m_count ? m_shapes[index] : NULL;
-}
-
-Box2d Shapes::getExtent() const
-{
-    return m_extent;
-}
-
-void Shapes::update()
-{
-    m_extent.empty();
-    for (int i = 0; i < m_count; i++)
-    {
-        m_extent.unionWith(m_shapes[i]->getExtent());
-    }
-}
-
-void Shapes::setShape(long index, GiShape* shape)
-{
-    if (index >= 0 && index < m_count
-        && shape != NULL && shape != m_shapes[index])
-    {
-        delete m_shapes[index];
-        m_shapes[index] = shape;
-    }
-}
-
-void Shapes::draw(GiGraphics* gs, const GiContext *ctx) const
-{
-    Box2d clip(gs->getClipModel());
-    
-    for (int i = 0; i < m_count; i++)
-    {
-        if (m_shapes[i]->getExtent().isIntersect(clip)) {
-            m_shapes[i]->draw(*gs, ctx);
-        }
-    }
-    
-    GiContext context(0, GiColor(128, 128, 128, 150), kLineDot);
-    gs->drawRect(&context, m_extent);
 }

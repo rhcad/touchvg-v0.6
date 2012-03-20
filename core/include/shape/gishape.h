@@ -3,95 +3,51 @@
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
-#ifndef __GEOMETRY_GISHAPE_H_
-#define __GEOMETRY_GISHAPE_H_
+#ifndef __GEOMETRY_GISHAPE_TEMPL_H_
+#define __GEOMETRY_GISHAPE_TEMPL_H_
 
 #include <gigraph.h>
 #include <mgshape.h>
 
-struct GiShape : MgShape
-{
-    GiContext   context;
-
-    virtual bool draw(GiGraphics& gs, const GiContext *ctxsel = NULL) const = 0;
-};
-
-template <class Shape>
+//! 矢量图形模板类
+/*! \ingroup _GEOM_SHAPE_
+*/
+template <class ShapeT, class ContextT = GiContext>
 class GiShapeT : public GiShape
 {
 public:
-    Shape       shape;
+    ShapeT      _shape;
+    ContextT    _context;
+    UInt32      _id;
+    MgShapes*   _parent;
 
-    GiShapeT()
+    GiShapeT() : _id(0), _parent(NULL)
     {
     }
 
-    MgShape* p()
+    virtual ~GiShapeT()
     {
-        return &shape;
     }
 
-    const MgShape* p() const
+    GiContext* context()
     {
-        return &shape;
+        return &_context;
     }
 
-    bool draw(GiGraphics& gs, const GiContext *ctxsel = NULL) const
+    MgShape* shape()
     {
-        GiContext ctx(getContext(gs, ctxsel));
-        return draw(gs, ctx);
+        return &_shape;
     }
 
-    GiContext getContext(GiGraphics& gs, const GiContext *ctxsel) const
+    const MgShape* shape() const
     {
-        GiContext ctx(context);
-
-        if (ctxsel && !ctxsel->isNullLine()) {
-            Int16 width = ctx.getLineWidth();
-            if (width > 0)
-                width = - (Int16)gs.calcPenWidth(width);
-            ctx.setLineWidth(width + ctxsel->getLineWidth());
-        }
-
-        if (ctxsel && !ctxsel->isNullLine())
-            ctx.setLineColor(ctxsel->getLineColor());
-
-        if (ctxsel && !ctxsel->isNullLine())
-            ctx.setLineStyle(ctxsel->getLineStyle());
-
-        if (ctxsel && ctxsel->hasFillColor())
-            ctx.setFillColor(ctxsel->getFillColor());
-
-        return ctx;
+        return &_shape;
     }
 
-public:
-    MgObject* clone() const
+    bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const
     {
-        GiShapeT<Shape> *p = new GiShapeT<Shape>;
-        p->copy(*this);
-        return p;
-    }
-
-    void copy(const MgObject& src)
-    {
-        if (src.isKindOf(Type())) {
-            const GiShapeT<Shape> *p = (const GiShapeT<Shape> *)&src;
-            shape = p->shape;
-            context = p->context;
-        }
-    }
-
-    bool equals(const MgObject& src) const
-    {
-        bool ret = false;
-
-        if (src.isKindOf(Type())) {
-            const GiShapeT<Shape> *_src = (const GiShapeT<Shape> *)&src;
-            ret = (p()->equals(_src->shape) && context == _src->context);
-        }
-
-        return ret;
+        ContextT tmpctx(getContext(gs, ctx));
+        return shape()->draw(gs, tmpctx);
     }
 
     void release()
@@ -99,71 +55,55 @@ public:
         delete this;
     }
 
-    UInt32 getType() const
+    GiShape* clone() const
     {
-        return Shape::Type();
+        GiShapeT<ShapeT, ContextT> *p = new GiShapeT<ShapeT, ContextT>;
+
+        p->shape()->copy(_shape);
+        p->_context = _context;
+
+        return p;
     }
 
-    bool isKindOf(UInt32 type) const
+    UInt32 getID() const
     {
-        return p()->isKindOf(type);
+        return _id;
     }
 
-    static UInt32 Type()
+    MgShapes* getParent() const
     {
-        return Shape::Type();
+        return _parent;
     }
 
-    Box2d getExtent() const
+    void setParent(MgShapes* p, UInt32 id)
     {
-        return p()->getExtent();
+        _parent = p;
+        _id = id;
     }
 
-    void update()
+protected:
+    ContextT getContext(GiGraphics& gs, const GiContext *ctx) const
     {
-        p()->update();
-    }
+        ContextT tmpctx(_context);
 
-    void transform(const Matrix2d& mat)
-    {
-        p()->transform(mat);
-    }
+        if (ctx && !ctx->isNullLine()) {
+            Int16 width = tmpctx.getLineWidth();
+            if (width > 0)
+                width = - (Int16)gs.calcPenWidth(width);
+            tmpctx.setLineWidth(width + ctx->getLineWidth());
+        }
 
-    void clear()
-    {
-        p()->clear();
-    }
+        if (ctx && !ctx->isNullLine())
+            tmpctx.setLineColor(ctx->getLineColor());
 
-    UInt32 getPointCount() const
-    {
-        return p()->getPointCount();
-    }
+        if (ctx && !ctx->isNullLine())
+            tmpctx.setLineStyle(ctx->getLineStyle());
 
-    Point2d getPoint(UInt32 index) const
-    {
-        return p()->getPoint(index);
-    }
+        if (ctx && ctx->hasFillColor())
+            tmpctx.setFillColor(ctx->getFillColor());
 
-    void setPoint(UInt32 index, const Point2d& pt)
-    {
-        p()->setPoint(index, pt);
-    }
-
-    bool isClosed() const
-    {
-        return p()->isClosed();
-    }
-
-    double hitTest(const Point2d& pt, double tol, 
-        Point2d& ptNear, Int32& segment) const
-    {
-        return p()->hitTest(pt, tol, ptNear, segment);
-    }
-
-    bool draw(GiGraphics& gs, const GiContext& ctx) const
-    {
-        return p()->draw(gs, ctx);
+        return tmpctx;
     }
 };
 
-#endif // __GEOMETRY_GISHAPE_H_
+#endif // __GEOMETRY_GISHAPE_TEMPL_H_

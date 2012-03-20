@@ -12,10 +12,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 CRandomShapeView::CRandomShapeView(RandomParam& param)
-	: CBaseView(param.getShapeCount())
-    , m_selection(NULL)
+	: m_selection(NULL)
 {
-	param.initShapes(&m_shapes);
+	param.initShapes(m_shapes);
 }
 
 CRandomShapeView::~CRandomShapeView()
@@ -30,9 +29,14 @@ END_MESSAGE_MAP()
 
 void CRandomShapeView::OnDynDraw(GiGraphics* gs)
 {
-    if (m_selection) {
+    if (m_selection)
+    {
         GiContext context(-4, GiColor(0, 0, 255, 55));
         m_selection->draw(*gs, &context);
+
+        context.setLineWidth(0);
+        gs->drawEllipse(&context, Box2d(m_ptNear, 1, 1));
+        gs->drawLine(&context, m_ptNear, m_ptSnap);
     }
     CBaseView::OnDynDraw(gs);
 }
@@ -40,32 +44,11 @@ void CRandomShapeView::OnDynDraw(GiGraphics* gs)
 void CRandomShapeView::OnMouseMove(UINT nFlags, CPoint point)
 {
     CBaseView::OnMouseMove(nFlags, point);
-
-    Box2d limits(Point2d(point.x, point.y), 10, 10);
-    limits *= m_xf.displayToModel();
-
-    double minDist = limits.width();
-    GiShape* selection = NULL;
-
-    for (int i = 0; i < m_shapes.getShapeCount(); i++)
-    {
-        GiShape* shape = m_shapes.getShape(i);
-        if (shape->getExtent().isIntersect(limits))
-        {
-            Point2d ptNear;
-            Int32 segment;
-            double dist = shape->hitTest(limits.center(), 
-                limits.width() / 2, ptNear, segment);
-
-            if (minDist > dist) {
-                minDist = dist;
-                selection = shape;
-            }
-        }
-    }
-
-    if (m_selection != selection) {
-        m_selection = selection;
-        Invalidate();
-    }
+    
+    Box2d rect(Point2d(point.x, point.y), 50, 0);
+    
+    rect *= m_xf.displayToModel();
+    m_ptSnap = rect.center();
+    m_selection = m_shapes->hitTest(rect, m_ptNear, m_segment);
+    Invalidate();
 }

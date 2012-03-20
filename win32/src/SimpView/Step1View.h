@@ -34,4 +34,7 @@ protected:
 // Implementation
 private:
     GiShape*    m_selection;
+    Point2d     m_ptNear;
+    Point2d     m_ptSnap;
+    Int32       m_segment;
 };

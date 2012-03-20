@@ -8,10 +8,10 @@ class CBaseView : public CWnd
 {
 // Construction
 public:
-	CBaseView(int shapeCount);
+	CBaseView();
 	virtual ~CBaseView();
 
-    Shapes m_shapes;
+    MgShapes*   m_shapes;
 
 // Overrides
 	// ClassWizard generated virtual function overrides

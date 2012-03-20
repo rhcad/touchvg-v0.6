@@ -11,6 +11,25 @@
 class Matrix2d;
 class GiGraphics;
 class GiContext;
+class MgShape;
+struct MgShapes;
+
+//! 矢量图形接口
+/*! \ingroup _GEOM_SHAPE_
+*/
+struct GiShape
+{
+    virtual GiContext* context() = 0;
+    virtual MgShape* shape() = 0;
+    virtual const MgShape* shape() const = 0;
+    virtual bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
+    virtual void release() = 0;
+    virtual GiShape* clone() const = 0;
+
+    virtual UInt32 getID() const = 0;
+    virtual MgShapes* getParent() const = 0;
+    virtual void setParent(MgShapes* p, UInt32 id) = 0;
+};
 
 //! 图形对象基类
 /*! \ingroup _GEOM_SHAPE_

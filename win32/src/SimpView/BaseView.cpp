@@ -13,8 +13,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-CBaseView::CBaseView(int shapeCount) : m_shapes(shapeCount)
+CBaseView::CBaseView()
 {
+    m_shapes = createShapes();
+
 	m_sizePan.cx = m_sizePan.cy = 0;
 	m_bGdip = true;
 	m_crBkColor = GetSysColor(COLOR_WINDOW);
@@ -27,6 +29,8 @@ CBaseView::CBaseView(int shapeCount) : m_shapes(shapeCount)
 
 CBaseView::~CBaseView()
 {
+    if (m_shapes)
+        m_shapes->release();
 	delete m_gs;
 }
 
@@ -113,12 +117,12 @@ void CBaseView::OnZoomed()
 
 void CBaseView::OnDraw(GiGraphics* gs)
 {
-	m_shapes.draw(gs);
+	m_shapes->draw(*gs);
 }
 
 void CBaseView::OnZoomExtent() 
 {
-	if (m_xf.zoomTo(m_shapes.getExtent() * m_xf.modelToWorld(), NULL))
+	if (m_xf.zoomTo(m_shapes->getExtent() * m_xf.modelToWorld(), NULL))
 	{
 		OnZoomed();
 	}
