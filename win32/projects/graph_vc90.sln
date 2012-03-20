@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graph", "msvc\graph_vc90.vc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphwin", "msvc\graphwin_vc90.vcproj", "{B7977082-BDE5-43D2-83B8-1BCF55BC363E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shape", "msvc\shape_vc90.vcproj", "{71448894-4C03-46D6-A696-7A40B7D50DEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +33,10 @@ Global
 		{B7977082-BDE5-43D2-83B8-1BCF55BC363E}.Debug|Win32.Build.0 = Debug|Win32
 		{B7977082-BDE5-43D2-83B8-1BCF55BC363E}.Release|Win32.ActiveCfg = Release|Win32
 		{B7977082-BDE5-43D2-83B8-1BCF55BC363E}.Release|Win32.Build.0 = Release|Win32
+		{71448894-4C03-46D6-A696-7A40B7D50DEB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{71448894-4C03-46D6-A696-7A40B7D50DEB}.Debug|Win32.Build.0 = Debug|Win32
+		{71448894-4C03-46D6-A696-7A40B7D50DEB}.Release|Win32.ActiveCfg = Release|Win32
+		{71448894-4C03-46D6-A696-7A40B7D50DEB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

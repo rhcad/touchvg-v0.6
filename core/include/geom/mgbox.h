@@ -1,4 +1,4 @@
-//! \file mgrect.h
+//! \file mgbox.h
 //! \brief 定义矩形框类 Box2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d

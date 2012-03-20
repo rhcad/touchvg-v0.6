@@ -32,7 +32,7 @@ void CRandomShapeView::OnDynDraw(GiGraphics* gs)
 {
     if (m_selection) {
         GiContext context(-4, GiColor(0, 0, 255, 55));
-        m_selection->draw(gs, &context);
+        m_selection->draw(*gs, &context);
     }
     CBaseView::OnDynDraw(gs);
 }
@@ -45,15 +45,18 @@ void CRandomShapeView::OnMouseMove(UINT nFlags, CPoint point)
     limits *= m_xf.displayToModel();
 
     double minDist = limits.width();
-    ShapeItem* selection = NULL;
+    GiShape* selection = NULL;
 
     for (int i = 0; i < m_shapes.getShapeCount(); i++)
     {
-        ShapeItem* shape = m_shapes.getShape(i);
+        GiShape* shape = m_shapes.getShape(i);
         if (shape->getExtent().isIntersect(limits))
         {
-            double dist = _DBL_MAX;
-            shape->hitTest(limits, dist);
+            Point2d ptNear;
+            Int32 segment;
+            double dist = shape->hitTest(limits.center(), 
+                limits.width() / 2, ptNear, segment);
+
             if (minDist > dist) {
                 minDist = dist;
                 selection = shape;

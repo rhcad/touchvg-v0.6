@@ -33,5 +33,5 @@ protected:
 
 // Implementation
 private:
-    ShapeItem*  m_selection;
+    GiShape*    m_selection;
 };

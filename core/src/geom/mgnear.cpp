@@ -9,23 +9,41 @@
 GEOMAPI void mgBeziersBox(
     Box2d& box, Int32 count, const Point2d* points, bool /*closed*/)
 {
-    box.set(count, points); // TODO: 待找到更好的算法
+    const int SPLITN = 4;
+    Point2d fits[SPLITN + 1];
+
+    box.empty();
+    for (Int32 i = 0; i + 3 < count; i += 3)
+    {
+        for (int j = 1; j < SPLITN; j++)
+            mgFitBezier(points + i, 1.0 / SPLITN * j, fits[j]);
+        fits[0] = points[i];
+        fits[SPLITN] = points[i+3];
+        box.unionWith(Box2d(SPLITN + 1, fits));
+    }
+}
+
+static Box2d mgBeziersBox2(const Point2d* points, Int32 count = 4)
+{
+    Box2d box;
+    mgBeziersBox(box, count, points);
+    return box;
 }
 
 GEOMAPI void mgCubicSplinesBox(
     Box2d& box, Int32 n, const Point2d* knots, 
     const Vector2d* knotVectors, bool closed)
 {
-    box.set(n, knots);
-    for (Int32 i = 0; i + 1 < n; i++)
+    Int32 n2 = (closed && n > 1) ? n + 1 : n;
+
+    box.empty();
+    for (Int32 i = 0; i + 1 < n2; i++)
     {
-        box.unionWith(knots[i] + knotVectors[i] / 3.0);
-        box.unionWith(knots[i + 1] - knotVectors[i + 1] / 3.0);
-    }
-    if (closed && n > 1)
-    {
-        box.unionWith(knots[n - 1] + knotVectors[n - 1] / 3.0);
-        box.unionWith(knots[0] - knotVectors[0] / 3.0);
+        Point2d pts[4] = { knots[i], 
+            knots[i] + knotVectors[i] / 3.0, 
+            knots[(i + 1) % n] - knotVectors[(i + 1) % n] / 3.0, 
+            knots[(i + 1) % n] };
+        box.unionWith(mgBeziersBox2(pts));
     }
 }
 
@@ -37,12 +55,13 @@ GEOMAPI double mgCubicSplinesHit(
     double dDist, dDistMin = _DBL_MAX;
     Point2d pts[4];
     const Box2d rect (pt, 2 * dTol, 2 * dTol);
+    Int32 n2 = (closed && n > 1) ? n + 1 : n;
 
     nSegment = -1;
-    for (Int32 i = 0; i + 1 < n; i++)
+    for (Int32 i = 0; i + 1 < n2; i++)
     {
         mgCubicSplineToBezier(n, knots, knotVectors, i, pts);
-        if (rect.isIntersect(Box2d(4, pts)))
+        if (rect.isIntersect(mgBeziersBox2(pts)))
         {
             mgNearestOnBezier(pt, pts, ptTemp);
             dDist = pt.distanceTo(ptTemp);
@@ -51,21 +70,6 @@ GEOMAPI double mgCubicSplinesHit(
                 dDistMin = dDist;
                 ptNear = ptTemp;
                 nSegment = i;
-            }
-        }
-    }
-    if (closed && n > 1)
-    {
-        mgCubicSplineToBezier(n, knots, knotVectors, n - 1, pts);
-        if (rect.isIntersect(Box2d(4, pts)))
-        {
-            mgNearestOnBezier(pt, pts, ptTemp);
-            dDist = pt.distanceTo(ptTemp);
-            if (dDist <= dTol && dDist < dDistMin)
-            {
-                dDistMin = dDist;
-                ptNear = ptTemp;
-                nSegment = n - 1;
             }
         }
     }
@@ -110,31 +114,20 @@ GEOMAPI double mgLinesHit(
     Point2d ptTemp;
     double dDist, dDistMin = _DBL_MAX;
     const Box2d rect (pt, 2 * dTol, 2 * dTol);
+    Int32 n2 = (closed && n > 1) ? n + 1 : n;
 
     nSegment = -1;
-    for (Int32 i = 0; i + 1 < n; i++)
+    for (Int32 i = 0; i + 1 < n2; i++)
     {
-        if (rect.isIntersect(Box2d(points[i], points[i + 1])))
+        const Point2d& pt2 = points[(i + 1) % n];
+        if (rect.isIntersect(Box2d(points[i], pt2)))
         {
-            dDist = mgPtToLine(points[i], points[i + 1], pt, ptTemp);
+            dDist = mgPtToLine(points[i], pt2, pt, ptTemp);
             if (dDist <= dTol && dDist < dDistMin)
             {
                 dDistMin = dDist;
                 ptNear = ptTemp;
                 nSegment = i;
-            }
-        }
-    }
-    if (closed && n > 1)
-    {
-        if (rect.isIntersect(Box2d(points[n - 1], points[0])))
-        {
-            dDist = mgPtToLine(points[n - 1], points[0], pt, ptTemp);
-            if (dDist <= dTol && dDist < dDistMin)
-            {
-                dDistMin = dDist;
-                ptNear = ptTemp;
-                nSegment = n - 1;
             }
         }
     }

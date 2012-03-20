@@ -6,7 +6,7 @@
 #ifndef __GEOMETRY_LINEREL_H_
 #define __GEOMETRY_LINEREL_H_
 
-#include "mgrect.h"
+#include "mgbox.h"
 
 //! 判断点pt是否在有向直线a->b的左边 (开区间)
 /*!

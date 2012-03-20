@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="geom"
-	ProjectGUID="{02C5A405-AEA8-43B1-A0C3-62D78CC7B434}"
-	RootNamespace="geom"
+	Name="shape"
+	ProjectGUID="{71448894-4C03-46D6-A696-7A40B7D50DEB}"
+	RootNamespace="shape"
 	SccLocalPath="."
 	TargetFrameworkVersion="131072"
 	>
@@ -17,11 +17,12 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
+			Name="Release|Win32"
 			OutputDirectory="..\..\..\build\$(ConfigurationName)"
 			IntermediateDirectory="..\..\..\build\$(ConfigurationName)\obj\$(ProjectName)"
 			ConfigurationType="4"
-			CharacterSet="2"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -40,14 +41,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\src\geom"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
+				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\..\core\include\shape;..\..\..\core\src\shape"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				RuntimeLibrary="2"
 				WarningLevel="4"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 				DisableSpecificWarnings="4819"
 			/>
 			<Tool
@@ -79,12 +77,11 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
+			Name="Debug|Win32"
 			OutputDirectory="..\..\..\build\$(ConfigurationName)"
 			IntermediateDirectory="..\..\..\build\$(ConfigurationName)\obj\$(ProjectName)"
 			ConfigurationType="4"
-			CharacterSet="2"
-			WholeProgramOptimization="1"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -104,11 +101,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\src\geom"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
-				RuntimeLibrary="2"
+				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\..\core\include\shape;..\..\..\core\src\shape"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
 				WarningLevel="4"
-				DebugInformationFormat="3"
+				DebugInformationFormat="4"
 				DisableSpecificWarnings="4819"
 			/>
 			<Tool
@@ -148,39 +147,31 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\core\src\geom\mgbase.cpp"
+				RelativePath="..\..\..\core\src\shape\mgellipse.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\geom\mgbnd.cpp"
+				RelativePath="..\..\..\core\src\shape\mgline.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\geom\mgbox.cpp"
+				RelativePath="..\..\..\core\src\shape\mglines.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\geom\mgcurv.cpp"
+				RelativePath="..\..\..\core\src\shape\mgrdrect.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\geom\mglnrel.cpp"
+				RelativePath="..\..\..\core\src\shape\mgrect.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\geom\mgmat.cpp"
+				RelativePath="..\..\..\core\src\shape\mgshape.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\geom\mgnear.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\geom\mgnearbz.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\geom\mgvec.cpp"
+				RelativePath="..\..\..\core\src\shape\mgsplines.cpp"
 				>
 			</File>
 		</Filter>
@@ -189,51 +180,19 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\..\core\include\geom\mgbase.h"
+				RelativePath="..\..\..\core\include\shape\_mgshape.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\geom\mgbnd.h"
+				RelativePath="..\..\..\core\include\shape\gishape.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\geom\mgbox.h"
+				RelativePath="..\..\..\core\include\shape\mgbasicsp.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\geom\mgcurv.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\geom\mgdef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\geom\mglnrel.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\geom\mgmat.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\geom\mgnear.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\geom\mgpnt.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\geom\mgtol.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\geom\mgtype.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\geom\mgvec.h"
+				RelativePath="..\..\..\core\include\shape\mgshape.h"
 				>
 			</File>
 		</Filter>

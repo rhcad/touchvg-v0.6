@@ -6,7 +6,7 @@
 #ifndef __GEOMETRY_FITCURVE_H_
 #define __GEOMETRY_FITCURVE_H_
 
-#include "mgrect.h"
+#include "mgbox.h"
 
 //! 计算三次贝塞尔曲线段的参数点
 /*!

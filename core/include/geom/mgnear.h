@@ -6,7 +6,7 @@
 #ifndef __GEOMETRY_CURVENEAR_H_
 #define __GEOMETRY_CURVENEAR_H_
 
-#include "mgrect.h"
+#include "mgbox.h"
 
 //! 计算一点到三次贝塞尔曲线段上的最近点
 /*!
@@ -25,7 +25,7 @@ GEOMAPI void mgNearestOnBezier(
     \param[in] count 点的个数，至少为4，必须为3的倍数加1
     \param[in] points 控制点和端点的数组，点数为count
     \param[in] closed 是否为闭合曲线
-    \see mgCubicSplines
+    \see mgCubicSplines, mgBeziersBox2
 */
 GEOMAPI void mgBeziersBox(
     Box2d& box, Int32 count, const Point2d* points, bool closed = false);
@@ -88,7 +88,7 @@ GEOMAPI double mgLinesHit(
     \param[in] dTol 距离公差，正数，超出则不计算最近点
     \param[out] ptNear 图形上的最近点
     \param[out] nSegment 最近点所在段的序号。负数表示失败；
-        0到3为从左上角起顺时针的四个圆角；4到7为顶右底左
+        0到3为从左上角起顺时针的四个圆角（有圆角半径时）；4到7为顶右底左边。
     \return 给定的点到最近点的距离，失败时为极大数
 */
 GEOMAPI double mgRoundRectHit(

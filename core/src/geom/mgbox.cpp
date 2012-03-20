@@ -1,8 +1,8 @@
-// mgrect.cpp: 实现矩形框类 Box2d
+// mgbox.cpp: 实现矩形框类 Box2d
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
-#include "mgrect.h"
+#include "mgbox.h"
 #include "mgmat.h"
 
 Box2d::Box2d(const BOX2D& src, bool bNormalize)

@@ -220,18 +220,18 @@ public:
     }
     
     //! 移动直尺法
-    /*! 相对于起始点(本点)和方向点，在垂直沿线方向偏移指定距离计算坐标
-        \param dir 方向点
-        \param yoff 垂直沿线方向偏移
+    /*! 相对于起始点(本点)和方向点，在垂直沿线方向(→↑)偏移指定距离计算坐标
+        \param dir 方向点，本点→方向点
+        \param yoff 垂直沿线方向偏移，方向点↑偏移
         \return 计算出的坐标
     */
     Point2d rulerPoint(const Point2d& dir, double yoff) const;
 
     //! 移动直尺法
     /*! 相对于起始点(本点)和方向点，在沿线方向和垂直沿线方向分别偏移计算坐标
-        \param dir 方向点
-        \param xoff 在沿线方向偏移
-        \param yoff 垂直沿线方向偏移
+        \param dir 方向点，本点→方向点
+        \param xoff 在沿线方向(→)偏移
+        \param yoff 垂直沿线方向(↑)偏移
         \return 计算出的坐标
     */
     Point2d rulerPoint(const Point2d& dir, double xoff, double yoff) const;

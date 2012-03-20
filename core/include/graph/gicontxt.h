@@ -69,6 +69,21 @@ public:
         return *this;
     }
 
+    //! 比较相等操作符函数
+    bool operator==(const GiContext& src) const
+    {
+        return m_lineStyle == src.m_lineStyle
+            && m_lineWidth == src.m_lineWidth
+            && m_lineColor == src.m_lineColor
+            && m_fillColor == src.m_fillColor;
+    }
+
+    //! 比较不相等操作符函数
+    bool operator!=(const GiContext& src) const
+    {
+        return !operator==(src);
+    }
+
     //! 返回线型
     kLineStyle getLineStyle() const
     {

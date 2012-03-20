@@ -1,72 +1,7 @@
 #ifndef _TEST_SHAPE_H
 #define _TEST_SHAPE_H
 
-#include <gigraph.h>
-
-class ShapeItem
-{
-public:
-    GiColor     lineColor;
-    Int16       lineWidth;
-    kLineStyle  lineStyle;
-
-    ShapeItem() {}
-    virtual ~ShapeItem() {}
-    
-    virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const = 0;
-    virtual Box2d getExtent() const = 0;
-    virtual void hitTest(const Box2d& limits, double& dist) = 0;
-};
-
-class LineItem : public ShapeItem
-{
-public:
-    Point2d     startpt;
-    Point2d     endpt;
-
-    virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
-    virtual Box2d getExtent() const;
-    virtual void hitTest(const Box2d& limits, double& dist);
-};
-
-class ArcItem : public ShapeItem
-{
-public:
-    Point2d     center;
-    double      rx;
-    double      ry;
-    double      startAngle;
-    double      sweepAngle;
-
-    virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
-    virtual Box2d getExtent() const;
-    virtual void hitTest(const Box2d& limits, double& dist);
-};
-
-enum CurveType {
-    kBSplines,
-    kCubicSplines,
-};
-
-class CurveItem : public ShapeItem
-{
-public:
-    CurveType   curveType;
-    Int32       count;
-    Point2d*    points;
-    Vector2d*   knotVectors;
-    Point2d*    bzpts;
-    Int32       bzcount;
-    
-    CurveItem(CurveType curveType = kBSplines);
-    CurveItem(int n, CurveType curveType);
-    virtual ~CurveItem();
-    
-    void applyPoints();
-    virtual void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
-    virtual Box2d getExtent() const;
-    virtual void hitTest(const Box2d& limits, double& dist);
-};
+#include <gishape.h>
 
 class Shapes
 {
@@ -75,17 +10,17 @@ public:
     ~Shapes();
 
     long getShapeCount() const;
-    ShapeItem* getShape(long index) const;
+    GiShape* getShape(long index) const;
     Box2d getExtent() const;
 
-    void recalcExtent();
-    void setShape(long index, ShapeItem* shape);
+    void update();
+    void setShape(long index, GiShape* shape);
 
     void draw(GiGraphics* gs, const GiContext *ctx = NULL) const;
 
 private:
     long            m_count;
-    ShapeItem**     m_shapes;
+    GiShape**       m_shapes;
     Box2d           m_extent;
 };
 
@@ -100,7 +35,7 @@ struct RandomParam
 
     long getShapeCount() const { return lineCount + arcCount + curveCount; }
     void initShapes(Shapes* shapes);
-    void setShapeProp(ShapeItem* shape);
+    void setShapeProp(GiShape* shape);
 
     static double RandDbl(double dMin, double dMax);
     static long RandInt(long nMin, long nMax);

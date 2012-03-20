@@ -7,7 +7,7 @@
 #define __GEOMETRY_TRANSFORMSYS_H_
 
 #include "gidef.h"
-#include <mgrect.h>
+#include <mgbox.h>
 #include <mgmat.h>
 
 //! 坐标系管理类
@@ -263,8 +263,8 @@ public:
         \param mat 变换矩阵，在原来的模型坐标系基础上施加附加的几何变换，
             即设置模型坐标系的变换矩阵为原来矩阵乘以指定矩阵xMat的结果
     */
-    GiSaveModelTransform(GiTransform* xform, const Matrix2d& mat)
-        : m_xform(xform)
+    GiSaveModelTransform(const GiTransform* xform, const Matrix2d& mat)
+        : m_xform(const_cast<GiTransform*>(xform))
         , m_mat(xform->modelToWorld())
     {
         m_xform->setModelTransform(m_mat * mat);

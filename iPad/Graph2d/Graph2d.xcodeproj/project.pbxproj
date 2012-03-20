@@ -16,7 +16,7 @@
 		7E9CE7FF1500B8F100487BEF /* mgmat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F61500B8F100487BEF /* mgmat.cpp */; };
 		7E9CE8001500B8F100487BEF /* mgnear.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F71500B8F100487BEF /* mgnear.cpp */; };
 		7E9CE8011500B8F100487BEF /* mgnearbz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F81500B8F100487BEF /* mgnearbz.cpp */; };
-		7E9CE8021500B8F100487BEF /* mgrect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F91500B8F100487BEF /* mgrect.cpp */; };
+		7E9CE8021500B8F100487BEF /* mgbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F91500B8F100487BEF /* mgbox.cpp */; };
 		7E9CE8031500B8F100487BEF /* mgvec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7FA1500B8F100487BEF /* mgvec.cpp */; };
 		7E9CE8081500B90700487BEF /* gigraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE8041500B90700487BEF /* gigraph.cpp */; };
 		7E9CE8091500B90700487BEF /* gipath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE8051500B90700487BEF /* gipath.cpp */; };
@@ -30,7 +30,7 @@
 		7E9CE81F1500BA0B00487BEF /* mgmat.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8121500BA0B00487BEF /* mgmat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8211500BA0B00487BEF /* mgnear.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8141500BA0B00487BEF /* mgnear.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8221500BA0B00487BEF /* mgpnt.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8151500BA0B00487BEF /* mgpnt.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E9CE8231500BA0B00487BEF /* mgrect.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8161500BA0B00487BEF /* mgrect.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7E9CE8231500BA0B00487BEF /* mgbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8161500BA0B00487BEF /* mgbox.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8241500BA0B00487BEF /* mgtol.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8171500BA0B00487BEF /* mgtol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8251500BA0B00487BEF /* mgtype.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8181500BA0B00487BEF /* mgtype.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8261500BA0B00487BEF /* mgvec.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8191500BA0B00487BEF /* mgvec.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -70,7 +70,7 @@
 		7E9CE7F61500B8F100487BEF /* mgmat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgmat.cpp; path = ../../core/src/geom/mgmat.cpp; sourceTree = "<group>"; };
 		7E9CE7F71500B8F100487BEF /* mgnear.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgnear.cpp; path = ../../core/src/geom/mgnear.cpp; sourceTree = "<group>"; };
 		7E9CE7F81500B8F100487BEF /* mgnearbz.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgnearbz.cpp; path = ../../core/src/geom/mgnearbz.cpp; sourceTree = "<group>"; };
-		7E9CE7F91500B8F100487BEF /* mgrect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgrect.cpp; path = ../../core/src/geom/mgrect.cpp; sourceTree = "<group>"; };
+		7E9CE7F91500B8F100487BEF /* mgbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgbox.cpp; path = ../../core/src/geom/mgbox.cpp; sourceTree = "<group>"; };
 		7E9CE7FA1500B8F100487BEF /* mgvec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgvec.cpp; path = ../../core/src/geom/mgvec.cpp; sourceTree = "<group>"; };
 		7E9CE8041500B90700487BEF /* gigraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gigraph.cpp; path = ../../core/src/graph/gigraph.cpp; sourceTree = "<group>"; };
 		7E9CE8051500B90700487BEF /* gipath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gipath.cpp; path = ../../core/src/graph/gipath.cpp; sourceTree = "<group>"; };
@@ -84,7 +84,7 @@
 		7E9CE8121500BA0B00487BEF /* mgmat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgmat.h; path = ../../core/include/geom/mgmat.h; sourceTree = "<group>"; };
 		7E9CE8141500BA0B00487BEF /* mgnear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgnear.h; path = ../../core/include/geom/mgnear.h; sourceTree = "<group>"; };
 		7E9CE8151500BA0B00487BEF /* mgpnt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgpnt.h; path = ../../core/include/geom/mgpnt.h; sourceTree = "<group>"; };
-		7E9CE8161500BA0B00487BEF /* mgrect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgrect.h; path = ../../core/include/geom/mgrect.h; sourceTree = "<group>"; };
+		7E9CE8161500BA0B00487BEF /* mgbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgbox.h; path = ../../core/include/geom/mgbox.h; sourceTree = "<group>"; };
 		7E9CE8171500BA0B00487BEF /* mgtol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgtol.h; path = ../../core/include/geom/mgtol.h; sourceTree = "<group>"; };
 		7E9CE8181500BA0B00487BEF /* mgtype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgtype.h; path = ../../core/include/geom/mgtype.h; sourceTree = "<group>"; };
 		7E9CE8191500BA0B00487BEF /* mgvec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgvec.h; path = ../../core/include/geom/mgvec.h; sourceTree = "<group>"; };
@@ -185,7 +185,7 @@
 				7E9CE7F61500B8F100487BEF /* mgmat.cpp */,
 				7E9CE7F71500B8F100487BEF /* mgnear.cpp */,
 				7E9CE7F81500B8F100487BEF /* mgnearbz.cpp */,
-				7E9CE7F91500B8F100487BEF /* mgrect.cpp */,
+				7E9CE7F91500B8F100487BEF /* mgbox.cpp */,
 				7E9CE7FA1500B8F100487BEF /* mgvec.cpp */,
 			);
 			name = geom;
@@ -220,7 +220,7 @@
 				7E9CE8121500BA0B00487BEF /* mgmat.h */,
 				7E9CE8141500BA0B00487BEF /* mgnear.h */,
 				7E9CE8151500BA0B00487BEF /* mgpnt.h */,
-				7E9CE8161500BA0B00487BEF /* mgrect.h */,
+				7E9CE8161500BA0B00487BEF /* mgbox.h */,
 				7E9CE8171500BA0B00487BEF /* mgtol.h */,
 				7E9CE8181500BA0B00487BEF /* mgtype.h */,
 				7E9CE8191500BA0B00487BEF /* mgvec.h */,
@@ -243,7 +243,7 @@
 				7E9CE81F1500BA0B00487BEF /* mgmat.h in Headers */,
 				7E9CE8211500BA0B00487BEF /* mgnear.h in Headers */,
 				7E9CE8221500BA0B00487BEF /* mgpnt.h in Headers */,
-				7E9CE8231500BA0B00487BEF /* mgrect.h in Headers */,
+				7E9CE8231500BA0B00487BEF /* mgbox.h in Headers */,
 				7E9CE8241500BA0B00487BEF /* mgtol.h in Headers */,
 				7E9CE8251500BA0B00487BEF /* mgtype.h in Headers */,
 				7E9CE8261500BA0B00487BEF /* mgvec.h in Headers */,
@@ -362,7 +362,7 @@
 				7E9CE7FF1500B8F100487BEF /* mgmat.cpp in Sources */,
 				7E9CE8001500B8F100487BEF /* mgnear.cpp in Sources */,
 				7E9CE8011500B8F100487BEF /* mgnearbz.cpp in Sources */,
-				7E9CE8021500B8F100487BEF /* mgrect.cpp in Sources */,
+				7E9CE8021500B8F100487BEF /* mgbox.cpp in Sources */,
 				7E9CE8031500B8F100487BEF /* mgvec.cpp in Sources */,
 				7E9CE8081500B90700487BEF /* gigraph.cpp in Sources */,
 				7E9CE8091500B90700487BEF /* gipath.cpp in Sources */,
