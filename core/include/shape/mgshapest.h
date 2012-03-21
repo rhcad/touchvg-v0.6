@@ -17,6 +17,7 @@ template <typename Container /*=std::vector<MgShape*>*/ >
 class MgShapesT : public MgShapes
 {
     typedef MgShapesT<Container> ThisClass;
+    typedef typename Container::const_iterator const_iterator;
 public:
     MgShapesT()
     {
@@ -94,23 +95,24 @@ public:
     MgShape* getFirstShape(void*& it) const
     {
         it = (void*)0;
-        return _shapes.empty() ? NULL : _shapes[0];
+        _it = _shapes.begin();
+        return _shapes.empty() ? NULL : _shapes.front();
     }
     
     MgShape* getNextShape(void*& it) const
     {
-        UInt32 index = 1 + (UInt32)it;
-        if (index < _shapes.size()) {
-            it = (void*)index;
-            return _shapes[index];
+        int i = (int)it;
+        if (0 == i && _it != _shapes.end()) {
+            _it++;
+            if (_it != _shapes.end())
+                return *_it;
         }
         return NULL;
     }
 
     MgShape* findShape(UInt32 id) const
     {
-        typename Container::const_iterator it = _shapes.begin();
-        for (; it != _shapes.end(); ++it)
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
         {
             if ((*it)->getID() == id)
                 return *it;
@@ -121,9 +123,7 @@ public:
     Box2d getExtent() const
     {
         Box2d extent;
-        typename Container::const_iterator it = _shapes.begin();
-
-        for (; it != _shapes.end(); ++it)
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
         {
             extent.unionWith((*it)->shape()->getExtent());
         }
@@ -134,10 +134,9 @@ public:
     MgShape* hitTest(const Box2d& limits, Point2d& ptNear, Int32& segment) const
     {
         MgShape* retshape = NULL;
-        typename Container::const_iterator it = _shapes.begin();
         double distMin = limits.width();
 
-        for (; it != _shapes.end(); ++it)
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
         {
             const MgBaseShape* shape = (*it)->shape();
 
@@ -163,9 +162,8 @@ public:
     void draw(GiGraphics& gs, const GiContext *ctx = NULL) const
     {
         Box2d clip(gs.getClipModel());
-        typename Container::const_iterator it = _shapes.begin();
-
-        for (; it != _shapes.end(); ++it)
+        
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
         {
             if ((*it)->shape()->getExtent().isIntersect(clip))
                 (*it)->draw(gs, ctx);
@@ -186,7 +184,8 @@ private:
     }
 
 protected:
-    Container   _shapes;
+    Container               _shapes;
+    mutable const_iterator  _it;
 };
 
 #endif // __GEOMETRY_MGSHAPES_TEMPL_H_

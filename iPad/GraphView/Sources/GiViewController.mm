@@ -4,7 +4,9 @@
 
 #import "GiViewController.h"
 #import "GiSelectController.h"
-#include <Graph2d/gigraph.h>
+#import "GiGraphView.h"
+#include <Graph2d/mgshapest.h>
+#include <list>
 
 @interface GiViewController(GestureRecognizer)
 
@@ -21,9 +23,18 @@
 
 @implementation GiViewController
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _command = Nil;
+        _shapesCreated = NULL;
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
-    _command = Nil;
     [[self gview] setDrawingDelegate:self];
     _selector = [[GiSelectController alloc]initWithView:[self gview]];
     
@@ -33,7 +44,22 @@
 - (void)dealloc
 {
     [_selector release];
+    if (_shapesCreated) {
+        ((MgShapes*)_shapesCreated)->release();
+        _shapesCreated = NULL;
+    }
     [super dealloc];
+}
+
+- (void)createGraphView:(CGRect)frame
+{
+    GiGraphView *view = [[GiGraphView alloc] initWithFrame:frame];
+    
+    self.view = view;
+    view.shapes = new MgShapesT<std::list<MgShape*> >;
+    _shapesCreated = view.shapes;
+    
+    [view release];
 }
 
 - (void)didReceiveMemoryWarning
@@ -53,13 +79,12 @@
 - (id)setCommand:(id)cmd
 {
     assert(!cmd || [cmd conformsToProtocol:@protocol(GiMotionHandler)]);
-    id old = _command;
+    id oldcmd = _command;
     
+    [[self getCommand] cancel:self.view];
     _command = cmd;
-    [old cancel:self.view];
-    [_selector cancel:self.view];
     
-    return old;
+    return oldcmd;
 }
 
 #pragma mark - View motion
@@ -104,15 +129,13 @@
 
 - (void)undoMotion
 {
-    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
-    if (![cmd undoMotion:self.view])
+    if (![[self getCommand] undoMotion:self.view])
         [[self gview] undoMotion:self.view];
 }
 
 - (void)dynDraw
 {
-    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
-    [cmd dynDraw: [[self gview] getGraph]];
+    [[self getCommand] dynDraw: [[self gview] getGraph]];
 }
 
 @end
@@ -128,7 +151,7 @@
 
 - (id<GiMotionHandler>)getCommand
 {
-    return (id<GiMotionHandler>)_command;
+    return (id<GiMotionHandler>)(_command ? _command : _selector);
 }
 
 - (void)addGestureRecognizers
@@ -165,36 +188,31 @@
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
-    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
-    if (![cmd twoFingersPinch:sender])
+    if (![[self getCommand] twoFingersPinch:sender])
         [[self gview] twoFingersPinch:sender];
 }
 
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
-    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
-    if (![cmd twoFingersPan:sender])
+    if (![[self getCommand] twoFingersPan:sender])
         [[self gview] twoFingersPan:sender];
 }
 
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
-    if (![cmd oneFingerPan:sender])
+    if (![[self getCommand] oneFingerPan:sender])
         [[self gview] oneFingerPan:sender];
 }
 
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
-    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
-    if (![cmd oneFingerOneTap:sender])
+    if (![[self getCommand] oneFingerOneTap:sender])
         [[self gview] oneFingerOneTap:sender];
 }
 
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
-    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
-    if (![cmd oneFingerTwoTaps:sender])
+    if (![[self getCommand] oneFingerTwoTaps:sender])
         [[self gview] oneFingerTwoTaps:sender];
 }
 

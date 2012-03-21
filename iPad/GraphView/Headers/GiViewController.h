@@ -4,12 +4,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class GiSelectController;
-
-// 图形视图的控制器类
+// 图形视图控制器类
 @interface GiViewController : UIViewController {
-    GiSelectController* _selector;  // 选择编辑命令
-    id      _command;               // 当前绘图命令，必须支持 GiMotionHandler
+    id      _selector;              // 选择编辑命令
+    id      _command;               // 当前绘图命令
+    void*   _shapesCreated;         // 创建的图形列表
 }
 
 - (void)clearCachedData;            // 清除缓冲数据
@@ -18,5 +17,8 @@
 
 // 设置当前绘图命令，必须支持 GiMotionHandler，可为Nil
 - (id)setCommand:(id)cmd;
+
+// 创建图形视图(GiGraphView)和图形列表，不需要图形视图的派生类时使用
+- (void)createGraphView:(CGRect)frame;
 
 @end
