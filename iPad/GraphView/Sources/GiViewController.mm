@@ -3,17 +3,16 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #import "GiViewController.h"
-#import "GiGraphView.h"
 #import "GiSelectController.h"
-#import "GiCmdController.h"
 #include <Graph2d/gigraph.h>
 
 @interface GiViewController(GestureRecognizer)
 
+- (id<GiView, GiMotionHandler>)gview;
+- (id<GiMotionHandler>)getCommand;
 - (void)addGestureRecognizers;
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
-- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender;
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender;
@@ -24,11 +23,9 @@
 
 - (void)viewDidLoad
 {
-    _gview = (GiGraphView*)self.view;
-    [_gview setDrawingDelegate:self];
-    
-    _selector = [[GiSelectController alloc]initWithView:_gview];
-    _commands = [[GiCommandController alloc]initWithView:_gview];
+    _command = Nil;
+    [[self gview] setDrawingDelegate:self];
+    _selector = [[GiSelectController alloc]initWithView:[self gview]];
     
     [self addGestureRecognizers];
 }
@@ -36,7 +33,6 @@
 - (void)dealloc
 {
     [_selector release];
-    [_commands release];
     [super dealloc];
 }
 
@@ -51,7 +47,17 @@
 
 - (void)clearCachedData
 {
-    _gview.graph->clearCachedBitmap();
+    [[self gview] getGraph]->clearCachedBitmap();
+}
+
+- (id)setCommand:(id)cmd
+{
+    assert(!cmd || [cmd conformsToProtocol:@protocol(GiMotionHandler)]);
+    id old = _command;
+    
+    _command = cmd;
+    
+    return old;
 }
 
 #pragma mark - View motion
@@ -63,13 +69,13 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation duration:(NSTimeInterval)duration
 {
-    [_gview setAnimating:YES];
+    [[self gview] setAnimating:YES];
     [super willRotateToInterfaceOrientation:orientation duration:duration];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    [_gview setAnimating:NO];
+    [[self gview] setAnimating:NO];
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
@@ -91,29 +97,33 @@
 {
     if (motion == UIEventSubtypeMotionShake)
     {
-        BOOL ret = NO;
-        
-        if (_gview.viewMode == GiViewModeSelect)
-            ret = [_selector undoMotion];
-        if (_gview.viewMode == GiViewModeCommand)
-            ret = [_commands undoMotion];
-        
-        if (!ret)
-            ret = [_gview undoMotion];
+        id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
+        if (![cmd undoMotion:self.view])
+            [[self gview] undoMotion:self.view];
     }
 }
 
 - (void)dynDraw
 {
-    if (_gview.viewMode == GiViewModeSelect)
-        [_selector dynDraw:_gview.graph];
-    if (_gview.viewMode == GiViewModeCommand)
-        [_commands dynDraw:_gview.graph];
+    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
+    [cmd dynDraw: [[self gview] getGraph]];
 }
 
 @end
 
 @implementation GiViewController(GestureRecognizer)
+
+- (id<GiView, GiMotionHandler>)gview
+{
+    assert([self.view conformsToProtocol:@protocol(GiView)]);
+    assert([self.view conformsToProtocol:@protocol(GiMotionHandler)]);
+    return (id<GiView, GiMotionHandler>)self.view;
+}
+
+- (id<GiMotionHandler>)getCommand
+{
+    return (id<GiMotionHandler>)_command;
+}
 
 - (void)addGestureRecognizers
 {
@@ -141,13 +151,6 @@
     [self.view addGestureRecognizer:oneFingerTwoTaps];
     [oneFingerTwoTaps release];
     
-    UITapGestureRecognizer *twoFingersTwoTaps =
-    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersTwoTaps:)];
-    [twoFingersTwoTaps setNumberOfTapsRequired:2];
-    [twoFingersTwoTaps setNumberOfTouchesRequired:2];
-    [self.view addGestureRecognizer:twoFingersTwoTaps];
-    [twoFingersTwoTaps release];
-    
     UITapGestureRecognizer *oneFingerOneTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
     [self.view addGestureRecognizer:oneFingerOneTap];
@@ -156,85 +159,37 @@
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
-    BOOL ret = NO;
-    
-    if (_gview.viewMode == GiViewModeSelect)
-        ret = [_selector twoFingersPinch:sender];
-    if (_gview.viewMode == GiViewModeCommand)
-        ret = [_commands twoFingersPinch:sender];
-    
-    if (!ret)
-        ret = [_gview twoFingersPinch:sender];
+    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
+    if (![cmd twoFingersPinch:sender])
+        [[self gview] twoFingersPinch:sender];
 }
 
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
-    BOOL ret = NO;
-    
-    if (_gview.viewMode == GiViewModeSelect)
-        ret = [_selector twoFingersPan:sender];
-    if (_gview.viewMode == GiViewModeCommand)
-        ret = [_commands twoFingersPan:sender];
-    
-    if (!ret)
-        ret = [_gview twoFingersPan:sender];
+    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
+    if (![cmd twoFingersPan:sender])
+        [[self gview] twoFingersPan:sender];
 }
 
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    BOOL ret = NO;
-    
-    if (_gview.viewMode == GiViewModeSelect)
-        ret = [_selector oneFingerPan:sender];
-    if (_gview.viewMode == GiViewModeCommand)
-        ret = [_commands oneFingerPan:sender];
-    
-    if (!ret)
-        ret = [_gview oneFingerPan:sender];
+    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
+    if (![cmd oneFingerPan:sender])
+        [[self gview] oneFingerPan:sender];
 }
 
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
-    BOOL ret = NO;
-    
-    if (_gview.viewMode == GiViewModeSelect)
-        ret = [_selector oneFingerOneTap:sender];
-    if (_gview.viewMode == GiViewModeCommand)
-        ret = [_commands oneFingerOneTap:sender];
-    
-    if (!ret)
-        ret = [_gview oneFingerOneTap:sender];
+    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
+    if (![cmd oneFingerOneTap:sender])
+        [[self gview] oneFingerOneTap:sender];
 }
 
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
-    BOOL ret = NO;
-    
-    if (_gview.viewMode == GiViewModeSelect)
-        ret = [_selector oneFingerTwoTaps:sender];
-    if (_gview.viewMode == GiViewModeCommand)
-        ret = [_commands oneFingerTwoTaps:sender];
-    
-    if (!ret)
-        ret = [_gview oneFingerTwoTaps:sender];
-}
-
-- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
-{
-    BOOL ret = NO;
-    
-    if (_gview.viewMode == GiViewModeSelect)
-        ret = [_selector twoFingersTwoTaps:sender];
-    if (_gview.viewMode == GiViewModeCommand)
-        ret = [_commands twoFingersTwoTaps:sender];
-    
-    if (!ret)
-        ret = [_gview twoFingersTwoTaps:sender];
-    
-    if (!ret) {
-        [_selector undoMotion];
-        //_gview.viewMode = (GiViewMode)((_gview.viewMode + 1) % GiViewModeMax);
-    }
+    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
+    if (![cmd oneFingerTwoTaps:sender])
+        [[self gview] oneFingerTwoTaps:sender];
 }
 
 @end

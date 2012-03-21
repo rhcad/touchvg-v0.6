@@ -19,14 +19,13 @@
 @synthesize shapes = _shapes;
 @synthesize xform = _xform;
 @synthesize graph = _graph;
-@synthesize viewMode = _viewMode;
 @synthesize zooming = _zooming;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _shapes = NULL; // need to set by subclass
+        _shapes = NULL; // need to set by the subclass
         _xform = new GiTransform();
         _graph = new GiGraphIos(*_xform);
         [self afterCreated];
@@ -38,7 +37,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        _shapes = NULL; // need to set by subclass
+        _shapes = NULL; // need to set by the subclass
         _xform = new GiTransform();
         _graph = new GiGraphIos(*_xform);
         [self afterCreated];
@@ -68,7 +67,6 @@
     self.multipleTouchEnabled = YES;
     self.contentMode = UIViewContentModeRedraw;
     _drawingDelegate = Nil;
-    _viewMode = GiViewModeSelect;
     _zooming = NO;
     _doubleZoomed = NO;
 
@@ -107,11 +105,23 @@
 
 - (void)draw:(GiGraphics*)gs
 {
-    _shapes->draw(*gs);
+    if (_shapes)
+        _shapes->draw(*gs);
 }
 
-- (void)dynDraw:(GiGraphics*)gs
+- (MgShapes*)getShapes
 {
+    return _shapes;
+}
+
+- (GiTransform*)getXform
+{
+    return _xform;
+}
+
+- (GiGraphics*)getGraph
+{
+    return _graph;
 }
 
 - (void)setDrawingDelegate:(id)d
@@ -127,17 +137,13 @@
         _zooming &= ~0x2;
 }
 
-- (void)setViewMode:(GiViewMode)mode
+- (void)redraw
 {
-    if (mode >= GiViewModeView && mode < GiViewModeMax) {
-        _viewMode = mode;
-        _lastPoint = _firstPoint;
-    }
+    [self setNeedsDisplay];
 }
 
-- (BOOL)undoMotion
+- (void)dynDraw:(GiGraphics*)gs
 {
-    return NO;
 }
 
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender
@@ -155,19 +161,9 @@
     return [self dynPanning:sender];
 }
 
-- (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender
-{
-    return NO;
-}
-
 - (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
     return [self switchZoomed:sender];
-}
-
-- (BOOL)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
-{
-    return NO;
 }
 
 @end

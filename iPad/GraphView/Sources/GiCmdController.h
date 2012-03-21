@@ -2,14 +2,12 @@
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 // License: LGPL, https://github.com/rhcad/graph2d
 
-#import "GiGraphView.h"
-
-@class GiGraphView;
+#import <Graph2d/GiMotionHandler.h>
 
 @interface GiCommandController : NSObject<GiMotionHandler> {
-    GiGraphView*    _view;
+    id<GiView>      _view;
 }
 
-- (id)initWithView:(GiGraphView*)view;
+- (id)initWithView:(id<GiView>)view;
 
 @end

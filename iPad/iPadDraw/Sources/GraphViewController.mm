@@ -21,7 +21,6 @@
     CGRect rect = [[UIScreen mainScreen] applicationFrame];
     rect.origin.y = 0;
     TestGraphView *view = [[TestGraphView alloc] initWithFrame:rect];
-    view.backgroundColor = [UIColor whiteColor];
     self.view = view;
     [view release];
 }

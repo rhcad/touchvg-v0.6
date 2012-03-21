@@ -3,6 +3,7 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #import "GiSelectController.h"
+#include <Graph2d/mgshapes.h>
 #include <Graph2d/gigraph.h>
 
 @interface GiSelectController(Internal)
@@ -14,7 +15,7 @@
 
 @implementation GiSelectController
 
-- (id)initWithView:(GiGraphView*)view
+- (id)initWithView:(id<GiView>)view
 {
     self = [super init];
     if (self) {
@@ -38,11 +39,11 @@
     }
 }
 
-- (BOOL)undoMotion
+- (BOOL)undoMotion:(id)view
 {
     if (_count > 0) {
         _count = 0;
-        [_view setNeedsDisplay];
+        [_view redraw];
     }
     
     return YES;
@@ -98,17 +99,17 @@
     if (_count < 100) {
         _selection[_count] = shape;
         _count++;
-        [_view setNeedsDisplay];
+        [_view redraw];
     }
 }
 
 - (BOOL)hitTest:(MgShape**)shapeFound point:(CGPoint)point
 {
-    Box2d limits(Box2d(Point2d(point.x, point.y), 50, 50) * _view.xform->displayToModel());
+    Box2d limits(Box2d(Point2d(point.x, point.y), 50, 50) * [_view getXform]->displayToModel());
     Point2d ptNear;
     Int32 segment;
     
-    *shapeFound = _view.shapes->hitTest(limits, ptNear, segment);
+    *shapeFound = [_view getShapes]->hitTest(limits, ptNear, segment);
     
     return *shapeFound != NULL;
 }

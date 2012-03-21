@@ -1,4 +1,4 @@
-//! \file mgshapes.h
+//! \file mgshapest.h
 //! \brief 定义图形列表类 MgShapesT
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
@@ -68,7 +68,7 @@ public:
 
     void clear()
     {
-        Container::iterator it = _shapes.begin();
+        typename Container::iterator it = _shapes.begin();
         for (; it != _shapes.end(); ++it)
             (*it)->release();
         _shapes.clear();
@@ -108,7 +108,7 @@ public:
 
     MgShape* findShape(UInt32 id) const
     {
-        Container::const_iterator it = _shapes.begin();
+        typename Container::const_iterator it = _shapes.begin();
         for (; it != _shapes.end(); ++it)
         {
             if ((*it)->getID() == id)
@@ -120,7 +120,7 @@ public:
     Box2d getExtent() const
     {
         Box2d extent;
-        Container::const_iterator it = _shapes.begin();
+        typename Container::const_iterator it = _shapes.begin();
 
         for (; it != _shapes.end(); ++it)
         {
@@ -133,7 +133,7 @@ public:
     MgShape* hitTest(const Box2d& limits, Point2d& ptNear, Int32& segment) const
     {
         MgShape* retshape = NULL;
-        Container::const_iterator it = _shapes.begin();
+        typename Container::const_iterator it = _shapes.begin();
         double distMin = limits.width();
 
         for (; it != _shapes.end(); ++it)
@@ -162,7 +162,7 @@ public:
     void draw(GiGraphics& gs, const GiContext *ctx = NULL) const
     {
         Box2d clip(gs.getClipModel());
-        Container::const_iterator it = _shapes.begin();
+        typename Container::const_iterator it = _shapes.begin();
 
         for (; it != _shapes.end(); ++it)
         {

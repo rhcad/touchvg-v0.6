@@ -7,7 +7,7 @@
 
 @implementation GiCommandController
 
-- (id)initWithView:(GiGraphView*)view
+- (id)initWithView:(id<GiView>)view
 {
     self = [super init];
     if (self) {
@@ -25,7 +25,7 @@
 {
 }
 
-- (BOOL)undoMotion
+- (BOOL)undoMotion:(id)view
 {
     return NO;
 }

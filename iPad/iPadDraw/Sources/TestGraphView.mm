@@ -8,10 +8,6 @@
 
 - (void)dealloc
 {
-    if (_shapes) {
-        delete _shapes;
-        _shapes = NULL;
-    }
     [super dealloc];
 }
 
@@ -20,6 +16,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         _shapes = createShapes();
+        self.backgroundColor = [UIColor whiteColor];
         
         srand((unsigned)time(NULL));
         
@@ -51,7 +48,7 @@
     [self setNeedsDisplay];
 }
 
-- (BOOL)undoMotion
+- (BOOL)undoMotion:(id)view
 {
     [self reset];
     return YES;
