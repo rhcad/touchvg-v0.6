@@ -16,7 +16,7 @@ struct RandomParam
 
     long getShapeCount() const { return lineCount + arcCount + curveCount; }
     void initShapes(MgShapes* shapes);
-    void setShapeProp(GiShape* shape);
+    void setShapeProp(MgShape* shape);
 
     static double RandDbl(double dMin, double dMax);
     static long RandInt(long nMin, long nMax);

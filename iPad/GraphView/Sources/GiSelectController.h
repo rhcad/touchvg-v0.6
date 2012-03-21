@@ -9,7 +9,7 @@
 
 @interface GiSelectController : NSObject<GiMotionHandler> {
     GiGraphView*    _view;
-    GiShape*        _selection[100];
+    MgShape*        _selection[100];
     int             _count;
 }
 

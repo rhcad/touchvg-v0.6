@@ -141,7 +141,7 @@ double MgBaseLines::_hitTest(const Point2d& pt, double tol,
 // MgLines
 //
 
-MGSHAPE_IMPLEMENT(MgLines, MgBaseLines)
+MG_IMPLEMENT_CREATE(MgLines)
 
 MgLines::MgLines()
 {

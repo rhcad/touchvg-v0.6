@@ -1,5 +1,5 @@
 #include "shape.h"
-#include <gishape.h>
+#include <mgshapet.h>
 #include <mgbasicsp.h>
 #include <stdlib.h>
 #include <mgshapest.h>
@@ -7,7 +7,7 @@
 
 MgShapes* createShapes()
 {
-    return new MgShapesT<std::vector<GiShape*> >;
+    return new MgShapesT<std::vector<MgShape*> >;
 }
 
 double RandomParam::RandDbl(double dMin, double dMax)
@@ -25,7 +25,7 @@ UInt8 RandomParam::RandUInt8(long nMin, long nMax)
     return (UInt8)RandInt(nMin, nMax);
 }
 
-void RandomParam::setShapeProp(GiShape* shape)
+void RandomParam::setShapeProp(MgShape* shape)
 {
     shape->context()->setLineColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(1, 255)));
     shape->context()->setLineWidth((Int16)RandInt(-10, 200));
@@ -39,7 +39,7 @@ void RandomParam::initShapes(MgShapes* shapes)
     for (long n = getShapeCount(); n > 0; n--)
     {
         int type = RandInt(0, 2);
-        GiShape* sp = NULL;
+        MgShape* sp = NULL;
         
         if (0 == type && 0 == lineCount)
             type = 1;
@@ -52,7 +52,7 @@ void RandomParam::initShapes(MgShapes* shapes)
         
         if (2 == type)
         {
-            GiShapeT<MgSplines> shape;
+            MgShapeT<MgSplines> shape;
 
             shape._shape.resize(RandInt(3, 20));
             sp = shapes->addShape(shape);
@@ -93,7 +93,7 @@ void RandomParam::initShapes(MgShapes* shapes)
 
         if (NULL == sp)
         {
-            GiShapeT<MgLine> shape;
+            MgShapeT<MgLine> shape;
 
             sp = shapes->addShape(shape);
             setShapeProp(sp);

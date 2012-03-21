@@ -7,7 +7,7 @@
 #include <mgnear.h>
 #include <mgcurv.h>
 
-MGSHAPE_IMPLEMENT(MgSplines, MgBaseLines)
+MG_IMPLEMENT_CREATE(MgSplines)
 
 MgSplines::MgSplines() : _knotVectors(NULL), _bzcount(0)
 {

@@ -151,7 +151,7 @@ double MgBaseRect::_hitTest(const Point2d& pt, double tol,
 // MgRect
 //
 
-MGSHAPE_IMPLEMENT(MgRect, MgBaseRect)
+MG_IMPLEMENT_CREATE(MgRect)
 
 MgRect::MgRect()
 {

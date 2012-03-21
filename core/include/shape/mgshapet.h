@@ -1,10 +1,10 @@
-//! \file gishape.h
-//! \brief 定义矢量图形模板类 GiShapeT
+//! \file mgshapet.h
+//! \brief 定义矢量图形模板类 MgShapeT
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
-#ifndef __GEOMETRY_GISHAPE_TEMPL_H_
-#define __GEOMETRY_GISHAPE_TEMPL_H_
+#ifndef __GEOMETRY_MGSHAPE_TEMPL_H_
+#define __GEOMETRY_MGSHAPE_TEMPL_H_
 
 #include <gigraph.h>
 #include <mgshape.h>
@@ -13,19 +13,20 @@
 /*! \ingroup _GEOM_SHAPE_
 */
 template <class ShapeT, class ContextT = GiContext>
-class GiShapeT : public GiShape
+class MgShapeT : public MgShape
 {
+    typedef MgShapeT<ShapeT, ContextT> ThisClass;
 public:
     ShapeT      _shape;
     ContextT    _context;
     UInt32      _id;
     MgShapes*   _parent;
 
-    GiShapeT() : _id(0), _parent(NULL)
+    MgShapeT() : _id(0), _parent(NULL)
     {
     }
 
-    virtual ~GiShapeT()
+    virtual ~MgShapeT()
     {
     }
 
@@ -34,12 +35,12 @@ public:
         return &_context;
     }
 
-    MgShape* shape()
+    MgBaseShape* shape()
     {
         return &_shape;
     }
 
-    const MgShape* shape() const
+    const MgBaseShape* shape() const
     {
         return &_shape;
     }
@@ -50,19 +51,52 @@ public:
         return shape()->draw(gs, tmpctx);
     }
 
+    static UInt32 Type() { return 9; }
+    UInt32 getType() const { return Type(); }
+
+    bool isKindOf(UInt32 type) const
+    {
+        return type == Type() || type == MgShape::Type();
+    }
+
     void release()
     {
         delete this;
     }
 
-    GiShape* clone() const
+    MgObject* clone() const
     {
-        GiShapeT<ShapeT, ContextT> *p = new GiShapeT<ShapeT, ContextT>;
+        ThisClass *p = new ThisClass;
 
         p->shape()->copy(_shape);
         p->_context = _context;
 
         return p;
+    }
+
+    void copy(const MgObject& src)
+    {
+        if (src.isKindOf(Type())) {
+            const ThisClass& _src = (const ThisClass&)src;
+            shape()->copy(_src._shape);
+            _context = _src._context;
+        }
+        else if (src.isKindOf(ShapeT::Type())) {
+            shape()->copy((const ShapeT&)src);
+        }
+    }
+    
+    bool equals(const MgObject& src) const
+    {
+        bool ret = false;
+
+        if (src.isKindOf(Type())) {
+            const ThisClass& _src = (const ThisClass&)src;
+            ret = shape()->equals(_src._shape)
+                && _context == _src._context;
+        }
+
+        return ret;
     }
 
     UInt32 getID() const
@@ -106,4 +140,4 @@ protected:
     }
 };
 
-#endif // __GEOMETRY_GISHAPE_TEMPL_H_
+#endif // __GEOMETRY_MGSHAPE_TEMPL_H_

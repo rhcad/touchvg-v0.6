@@ -184,10 +184,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\shape\gishape.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\core\include\shape\mgbasicsp.h"
 				>
 			</File>
@@ -201,6 +197,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\shape\mgshapest.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\include\shape\mgshapet.h"
 				>
 			</File>
 		</Filter>

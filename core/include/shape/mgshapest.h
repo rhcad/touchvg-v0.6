@@ -10,11 +10,12 @@
 
 //! 图形列表类
 /*! \ingroup _GEOM_SHAPE_
-    \param Container 包含(GiShape*)的容器类型
+    \param Container 包含(MgShape*)的容器类型
 */
-template <typename Container /*=std::vector<GiShape*>*/ >
+template <typename Container /*=std::vector<MgShape*>*/ >
 class MgShapesT : public MgShapes
 {
+    typedef MgShapesT<Container> ThisClass;
 public:
     MgShapesT()
     {
@@ -25,9 +26,44 @@ public:
         clear();
     }
 
+    static UInt32 Type() { return 8; }
+    UInt32 getType() const { return Type(); }
+
+    bool isKindOf(UInt32 type) const
+    {
+        return type == Type() || type == MgShapes::Type();
+    }
+
     void release()
     {
         delete this;
+    }
+
+    MgObject* clone() const
+    {
+        ThisClass *p = new ThisClass;
+        return p;
+    }
+
+    void copy(const MgObject& src)
+    {
+        if (src.isKindOf(Type())) {
+            const ThisClass& _src = (const ThisClass&)src;
+            if (&_src != this) {
+            }
+        }
+    }
+    
+    bool equals(const MgObject& src) const
+    {
+        bool ret = false;
+
+        if (src.isKindOf(Type())) {
+            const ThisClass& _src = (const ThisClass&)src;
+            ret = (_shapes == _src._shapes);
+        }
+
+        return ret;
     }
 
     void clear()
@@ -38,9 +74,9 @@ public:
         _shapes.clear();
     }
 
-    GiShape* addShape(const GiShape& src)
+    MgShape* addShape(const MgShape& src)
     {
-        GiShape* p = src.clone();
+        MgShape* p = (MgShape*)src.clone();
         if (p)
         {
             p->setParent(this, getNewID());
@@ -54,13 +90,13 @@ public:
         return _shapes.size();
     }
 
-    GiShape* getFirstShape(void*& it) const
+    MgShape* getFirstShape(void*& it) const
     {
         it = (void*)0;
         return _shapes.empty() ? NULL : _shapes[0];
     }
     
-    GiShape* getNextShape(void*& it) const
+    MgShape* getNextShape(void*& it) const
     {
         UInt32 index = 1 + (UInt32)it;
         if (index < _shapes.size()) {
@@ -70,7 +106,7 @@ public:
         return NULL;
     }
 
-    GiShape* findShape(UInt32 id) const
+    MgShape* findShape(UInt32 id) const
     {
         Container::const_iterator it = _shapes.begin();
         for (; it != _shapes.end(); ++it)
@@ -94,15 +130,15 @@ public:
         return extent;
     }
 
-    GiShape* hitTest(const Box2d& limits, Point2d& ptNear, Int32& segment) const
+    MgShape* hitTest(const Box2d& limits, Point2d& ptNear, Int32& segment) const
     {
-        GiShape* retshape = NULL;
+        MgShape* retshape = NULL;
         Container::const_iterator it = _shapes.begin();
         double distMin = limits.width();
 
         for (; it != _shapes.end(); ++it)
         {
-            const MgShape* shape = (*it)->shape();
+            const MgBaseShape* shape = (*it)->shape();
 
             if (shape->getExtent().isIntersect(limits))
             {

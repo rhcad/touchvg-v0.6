@@ -7,8 +7,8 @@
 
 @interface GiSelectController(Internal)
 
-- (BOOL)hitTest:(GiShape**)shapeFound point:(CGPoint)point;
-- (void)addToSelection:(GiShape*)shape;
+- (BOOL)hitTest:(MgShape**)shapeFound point:(CGPoint)point;
+- (void)addToSelection:(MgShape*)shape;
 
 @end
 
@@ -75,7 +75,7 @@
 
 - (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
-    GiShape *shape = NULL;
+    MgShape *shape = NULL;
     
     if ([self hitTest:&shape point:[sender locationInView:sender.view]]) {
         _count = 0;
@@ -93,7 +93,7 @@
 
 @implementation GiSelectController(Internal)
 
-- (void)addToSelection:(GiShape*)shape
+- (void)addToSelection:(MgShape*)shape
 {
     if (_count < 100) {
         _selection[_count] = shape;
@@ -102,7 +102,7 @@
     }
 }
 
-- (BOOL)hitTest:(GiShape**)shapeFound point:(CGPoint)point
+- (BOOL)hitTest:(MgShape**)shapeFound point:(CGPoint)point
 {
     Box2d limits(Box2d(Point2d(point.x, point.y), 50, 50) * _view.xform->displayToModel());
     Point2d ptNear;

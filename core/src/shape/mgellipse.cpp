@@ -7,7 +7,7 @@
 #include <mgnear.h>
 #include <mgcurv.h>
 
-MGSHAPE_IMPLEMENT(MgEllipse, MgBaseRect)
+MG_IMPLEMENT_CREATE(MgEllipse)
 
 MgEllipse::MgEllipse()
 {

@@ -1,5 +1,5 @@
 //! \file mgshape.h
-//! \brief 定义矢量图形基类 MgShape
+//! \brief 定义矢量图形基类 MgBaseShape 和 MgShape
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
@@ -11,25 +11,9 @@
 class Matrix2d;
 class GiGraphics;
 class GiContext;
-class MgShape;
+class MgBaseShape;
+struct MgShape;
 struct MgShapes;
-
-//! 矢量图形接口
-/*! \ingroup _GEOM_SHAPE_
-*/
-struct GiShape
-{
-    virtual GiContext* context() = 0;
-    virtual MgShape* shape() = 0;
-    virtual const MgShape* shape() const = 0;
-    virtual bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
-    virtual void release() = 0;
-    virtual GiShape* clone() const = 0;
-
-    virtual UInt32 getID() const = 0;
-    virtual MgShapes* getParent() const = 0;
-    virtual void setParent(MgShapes* p, UInt32 id) = 0;
-};
 
 //! 图形对象基类
 /*! \ingroup _GEOM_SHAPE_
@@ -55,18 +39,35 @@ struct MgObject
     virtual bool isKindOf(UInt32 type) const = 0;
 };
 
+//! 矢量图形接口
+/*! \ingroup _GEOM_SHAPE_
+*/
+struct MgShape : public MgObject
+{
+    static UInt32 Type() { return 2; }
+
+    virtual GiContext* context() = 0;
+    virtual MgBaseShape* shape() = 0;
+    virtual const MgBaseShape* shape() const = 0;
+    virtual bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
+
+    virtual UInt32 getID() const = 0;
+    virtual MgShapes* getParent() const = 0;
+    virtual void setParent(MgShapes* p, UInt32 id) = 0;
+};
+
 //! 矢量图形基类
 /*! \ingroup _GEOM_SHAPE_
 */
-class MgShape : public MgObject
+class MgBaseShape : public MgObject
 {
 protected:
-    MgShape();
-    virtual ~MgShape();
+    MgBaseShape();
+    virtual ~MgBaseShape();
 
 public:
     //! 返回本对象的类型
-    static UInt32 Type() { return 1; }
+    static UInt32 Type() { return 3; }
 
     //! 返回图形模型坐标范围
     virtual Box2d getExtent() const;
@@ -112,8 +113,8 @@ protected:
     Box2d   _extent;
 
 protected:
-    void _copy(const MgShape& src);
-    bool _equals(const MgShape& src) const;
+    void _copy(const MgBaseShape& src);
+    bool _equals(const MgBaseShape& src) const;
     bool _isKindOf(UInt32 type) const;
     void _update();
     void _transform(const Matrix2d& mat);
@@ -122,55 +123,55 @@ protected:
 };
 
 #if !defined(_MSC_VER) || _MSC_VER <= 1200
-#define MGSHAPE_DECLARE0(Base)                  \
+#define MG_DECLARE_DYNAMIC(Cls, Base)                           \
     typedef Base __super;
 #else
-#define MGSHAPE_DECLARE0(Base)
+#define MG_DECLARE_DYNAMIC(Cls, Base)
 #endif
 
-#define MGSHAPE_DECLARE2(Cls, Base, TypeNum)    \
-    MGSHAPE_DECLARE0(Base)                      \
-public:                                         \
-    Cls();                                      \
-    virtual ~Cls();                             \
-    static Cls* create();                       \
-    static UInt32 Type() { return TypeNum; }    \
-protected:                                      \
-    bool _isKindOf(UInt32 type) const;          \
-protected:                                      \
-    bool _draw(GiGraphics& gs, const GiContext& ctx) const; \
-private:                                        \
-    virtual MgObject* clone() const;            \
-    virtual void copy(const MgObject& src);     \
-    virtual void release();                     \
-    virtual bool equals(const MgObject& src) const;     \
-    virtual UInt32 getType() const { return Type(); }   \
+#define MG_INHERIT_CREATE(Cls, Base, TypeNum)                   \
+    MG_DECLARE_DYNAMIC(Cls, Base)                               \
+public:                                                         \
+    Cls();                                                      \
+    virtual ~Cls();                                             \
+    static Cls* create();                                       \
+    static UInt32 Type() { return TypeNum; }                    \
+protected:                                                      \
+    bool _isKindOf(UInt32 type) const;                          \
+protected:                                                      \
+    bool _draw(GiGraphics& gs, const GiContext& ctx) const;     \
+private:                                                        \
+    virtual MgObject* clone() const;                            \
+    virtual void copy(const MgObject& src);                     \
+    virtual void release();                                     \
+    virtual bool equals(const MgObject& src) const;             \
+    virtual UInt32 getType() const { return Type(); }           \
     virtual bool isKindOf(UInt32 type) const { return _isKindOf(type); } \
-    virtual void update();                      \
-    virtual void transform(const Matrix2d& mat);    \
-    virtual void clear();                       \
-    virtual UInt32 getPointCount() const;       \
-    virtual Point2d getPoint(UInt32 index) const;  \
-    virtual void setPoint(UInt32 index, const Point2d& pt); \
-    virtual bool isClosed() const;              \
-    virtual double hitTest(const Point2d& pt, double tol,   \
-        Point2d& ptNear, Int32& segment) const; \
+    virtual void update();                                      \
+    virtual void transform(const Matrix2d& mat);                \
+    virtual void clear();                                       \
+    virtual UInt32 getPointCount() const;                       \
+    virtual Point2d getPoint(UInt32 index) const;               \
+    virtual void setPoint(UInt32 index, const Point2d& pt);     \
+    virtual bool isClosed() const;                              \
+    virtual double hitTest(const Point2d& pt, double tol,       \
+        Point2d& ptNear, Int32& segment) const;                 \
     virtual bool draw(GiGraphics& gs, const GiContext& ctx) const;
 
-#define MGSHAPE_DECLARE(Cls, Base, TypeNum)     \
-    MGSHAPE_DECLARE2(Cls, Base, TypeNum)        \
-protected:                                      \
-    void _copy(const Cls& src);                 \
-    bool _equals(const Cls& src) const;         \
-protected:                                      \
-    void _update();                             \
-    void _transform(const Matrix2d& mat);       \
-    void _clear();                              \
-    double _hitTest(const Point2d& pt, double tol,  \
-        Point2d& ptNear, Int32& segment) const; \
-    UInt32 _getPointCount() const;              \
-    Point2d _getPoint(UInt32 index) const;      \
-    void _setPoint(UInt32 index, const Point2d& pt);    \
-    bool _isClosed() const;                     \
+#define MG_DECLARE_CREATE(Cls, Base, TypeNum)                   \
+    MG_INHERIT_CREATE(Cls, Base, TypeNum)                       \
+protected:                                                      \
+    void _copy(const Cls& src);                                 \
+    bool _equals(const Cls& src) const;                         \
+protected:                                                      \
+    void _update();                                             \
+    void _transform(const Matrix2d& mat);                       \
+    void _clear();                                              \
+    double _hitTest(const Point2d& pt, double tol,              \
+        Point2d& ptNear, Int32& segment) const;                 \
+    UInt32 _getPointCount() const;                              \
+    Point2d _getPoint(UInt32 index) const;                      \
+    void _setPoint(UInt32 index, const Point2d& pt);            \
+    bool _isClosed() const;                                     \
 
 #endif // __GEOMETRY_MGSHAPE_H_

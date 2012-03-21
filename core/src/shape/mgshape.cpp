@@ -1,52 +1,52 @@
-// mgshape.cpp: 实现矢量图形基类 MgShape
+// mgshape.cpp: 实现矢量图形基类 MgBaseShape
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #include "mgshape.h"
 
-MgShape::MgShape()
+MgBaseShape::MgBaseShape()
 {
 }
 
-MgShape::~MgShape()
+MgBaseShape::~MgBaseShape()
 {
 }
 
-void MgShape::_copy(const MgShape& src)
+void MgBaseShape::_copy(const MgBaseShape& src)
 {
     _extent = src._extent;
 }
 
-bool MgShape::_equals(const MgShape&) const
+bool MgBaseShape::_equals(const MgBaseShape&) const
 {
     return true;
 }
 
-bool MgShape::_isKindOf(UInt32 type) const
+bool MgBaseShape::_isKindOf(UInt32 type) const
 {
     return type == Type();
 }
 
-Box2d MgShape::getExtent() const
+Box2d MgBaseShape::getExtent() const
 {
     return _extent;
 }
 
-void MgShape::_update()
+void MgBaseShape::_update()
 {
 }
 
-void MgShape::_transform(const Matrix2d& mat)
+void MgBaseShape::_transform(const Matrix2d& mat)
 {
     _extent *= mat;
 }
 
-void MgShape::_clear()
+void MgBaseShape::_clear()
 {
     _extent.empty();
 }
 
-bool MgShape::_draw(GiGraphics&, const GiContext&) const
+bool MgBaseShape::_draw(GiGraphics&, const GiContext&) const
 {
     return false;
 }

@@ -7,7 +7,7 @@
 #include <mgnear.h>
 #include <mgcurv.h>
 
-MGSHAPE_IMPLEMENT(MgRoundRect, MgBaseRect)
+MG_IMPLEMENT_CREATE(MgRoundRect)
 
 MgRoundRect::MgRoundRect() : _rx(0), _ry(0)
 {

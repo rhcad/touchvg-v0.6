@@ -6,7 +6,7 @@
 #include <_mgshape.h>
 #include <mgnear.h>
 
-MGSHAPE_IMPLEMENT(MgLine, MgShape)
+MG_IMPLEMENT_CREATE(MgLine)
 
 MgLine::MgLine()
 {

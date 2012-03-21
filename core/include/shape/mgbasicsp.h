@@ -11,9 +11,9 @@
 //! 线段图形类
 /*! \ingroup _GEOM_SHAPE_
 */
-class MgLine : public MgShape
+class MgLine : public MgBaseShape
 {
-    MGSHAPE_DECLARE(MgLine, MgShape, 10)
+    MG_DECLARE_CREATE(MgLine, MgBaseShape, 10)
 public:
     //! 返回起点
     const Point2d& startPoint() const { return _points[0]; }
@@ -28,12 +28,12 @@ private:
 //! 矩形图形基类
 /*! \ingroup _GEOM_SHAPE_
 */
-class MgBaseRect : public MgShape
+class MgBaseRect : public MgBaseShape
 {
-    MGSHAPE_DECLARE0(MgShape)
+    MG_DECLARE_DYNAMIC(MgBaseRect, MgBaseShape)
 public:
     //! 返回本对象的类型
-    static UInt32 Type() { return 2; }
+    static UInt32 Type() { return 4; }
 
     //! 返回中心点
     Point2d getCenter() const;
@@ -89,7 +89,7 @@ protected:
 */
 class MgRect : public MgBaseRect
 {
-    MGSHAPE_DECLARE2(MgRect, MgBaseRect, 11)
+    MG_INHERIT_CREATE(MgRect, MgBaseRect, 11)
 };
 
 //! 椭圆图形类
@@ -97,7 +97,7 @@ class MgRect : public MgBaseRect
 */
 class MgEllipse : public MgBaseRect
 {
-    MGSHAPE_DECLARE2(MgEllipse, MgBaseRect, 12)
+    MG_INHERIT_CREATE(MgEllipse, MgBaseRect, 12)
 public:
     //! 返回X半轴长度
     double getRadiusX() const;
@@ -122,7 +122,7 @@ protected:
 */
 class MgRoundRect : public MgBaseRect
 {
-    MGSHAPE_DECLARE2(MgRoundRect, MgBaseRect, 13)
+    MG_INHERIT_CREATE(MgRoundRect, MgBaseRect, 13)
 public:
     //! 返回X圆角半径
     double getRadiusX() const { return _rx; }
@@ -148,12 +148,12 @@ protected:
 //! 折线基类
 /*! \ingroup _GEOM_SHAPE_
 */
-class MgBaseLines : public MgShape
+class MgBaseLines : public MgBaseShape
 {
-    MGSHAPE_DECLARE0(MgShape)
+    MG_DECLARE_DYNAMIC(MgBaseLines, MgBaseShape)
 public:
     //! 返回本对象的类型
-    static UInt32 Type() { return 3; }
+    static UInt32 Type() { return 5; }
 
     //! 设置是否闭合
     void setClosed(bool closed);
@@ -198,7 +198,7 @@ protected:
 */
 class MgLines : public MgBaseLines
 {
-    MGSHAPE_DECLARE2(MgLines, MgBaseLines, 15)
+    MG_INHERIT_CREATE(MgLines, MgBaseLines, 15)
 };
 
 //! 三次参数样条曲线类
@@ -206,7 +206,7 @@ class MgLines : public MgBaseLines
 */
 class MgSplines : public MgBaseLines
 {
-    MGSHAPE_DECLARE2(MgSplines, MgBaseLines, 16)
+    MG_INHERIT_CREATE(MgSplines, MgBaseLines, 16)
 protected:
     void _update();
     double _hitTest(const Point2d& pt, double tol, 
