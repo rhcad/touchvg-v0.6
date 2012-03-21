@@ -2,12 +2,18 @@
 // Created by Zhang Yungui on 2012-3-2.
 
 #import "TestGraphView.h"
+#include <Graph2d/mgshapest.h>
+#include <vector>
 #include "../../../core/include/testgraph/shape.cpp"
 
 @implementation TestGraphView
 
 - (void)dealloc
 {
+    if (_shapes) {
+        _shapes->release();
+        _shapes = NULL;
+    }
     [super dealloc];
 }
 
@@ -15,8 +21,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _shapes = createShapes();
-        self.backgroundColor = [UIColor whiteColor];
+        _shapes = new MgShapesT<std::vector<MgShape*> >;
         
         srand((unsigned)time(NULL));
         
@@ -43,9 +48,7 @@
     param.randomLineStyle = true;
     
     param.initShapes(_shapes);
-    
-    _graph->clearCachedBitmap();
-    [self setNeedsDisplay];
+    [self setShapes:_shapes];
 }
 
 - (BOOL)undoMotion:(id)view

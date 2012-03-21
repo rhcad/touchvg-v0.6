@@ -47,10 +47,6 @@
 
 - (void)dealloc
 {
-    if (_shapes) {
-        _shapes->release();
-        _shapes = NULL;
-    }
     if (_graph) {
         delete _graph;
         _graph = NULL;
@@ -66,6 +62,8 @@
 {
     self.multipleTouchEnabled = YES;
     self.contentMode = UIViewContentModeRedraw;
+    self.backgroundColor = [UIColor whiteColor];
+    
     _drawingDelegate = Nil;
     _zooming = NO;
     _doubleZoomed = NO;
@@ -122,6 +120,13 @@
 - (GiGraphics*)getGraph
 {
     return _graph;
+}
+
+- (void)setShapes:(MgShapes*)data
+{
+    _shapes = data;
+    _graph->clearCachedBitmap();
+    [self setNeedsDisplay];
 }
 
 - (void)setDrawingDelegate:(id)d

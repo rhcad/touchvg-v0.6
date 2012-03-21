@@ -56,6 +56,8 @@
     id old = _command;
     
     _command = cmd;
+    [old cancel:self.view];
+    [_selector cancel:self.view];
     
     return old;
 }
@@ -95,12 +97,16 @@
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
-    if (motion == UIEventSubtypeMotionShake)
-    {
-        id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
-        if (![cmd undoMotion:self.view])
-            [[self gview] undoMotion:self.view];
+    if (motion == UIEventSubtypeMotionShake) {
+        [self undoMotion];
     }
+}
+
+- (void)undoMotion
+{
+    id<GiMotionHandler> cmd = [self getCommand] ? [self getCommand] : _selector;
+    if (![cmd undoMotion:self.view])
+        [[self gview] undoMotion:self.view];
 }
 
 - (void)dynDraw

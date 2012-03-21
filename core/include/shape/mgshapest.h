@@ -1,5 +1,5 @@
 //! \file mgshapest.h
-//! \brief 定义图形列表类 MgShapesT
+//! \brief 定义图形列表模板类 MgShapesT
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
@@ -7,10 +7,11 @@
 #define __GEOMETRY_MGSHAPES_TEMPL_H_
 
 #include <mgshapes.h>
+#include <gigraph.h>
 
-//! 图形列表类
+//! 图形列表模板类
 /*! \ingroup _GEOM_SHAPE_
-    \param Container 包含(MgShape*)的容器类型
+    \param Container 包含(MgShape*)的vector、list等容器类型
 */
 template <typename Container /*=std::vector<MgShape*>*/ >
 class MgShapesT : public MgShapes

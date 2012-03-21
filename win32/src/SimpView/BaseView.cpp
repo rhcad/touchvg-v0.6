@@ -6,6 +6,8 @@
 #include "BaseView.h"
 #include <gidrgdip.h>
 #include <gidrgdi.h>
+#include <mgshapest.h>
+#include <vector>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -15,7 +17,7 @@ static char THIS_FILE[] = __FILE__;
 
 CBaseView::CBaseView()
 {
-    m_shapes = createShapes();
+    m_shapes = new MgShapesT<std::vector<MgShape*> >;
 
 	m_sizePan.cx = m_sizePan.cy = 0;
 	m_bGdip = true;

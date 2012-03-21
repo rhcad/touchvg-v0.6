@@ -4,32 +4,33 @@
 
 #import <Graph2d/GiMotionHandler.h>
 
-// ¶ÀÕ¼ÏÔÊ¾µÄÍ¼ĞÎÊÓÍ¼Àà
+// ç‹¬å æ˜¾ç¤ºçš„å›¾å½¢è§†å›¾ç±»
 @interface GiGraphView : UIView<GiView, GiMotionHandler> {
-    MgShapes*       _shapes;                // Í¼ĞÎÁĞ±í
-    GiTransform*    _xform;                 // ×ø±êÏµ¶ÔÏó
-    GiGraphics*     _graph;                 // Í¼ĞÎÏÔÊ¾¶ÔÏó
-    id              _drawingDelegate;       // ¶¯Ì¬»æÍ¼ÓÃµÄÎ¯ÍĞ¿ØÖÆÆ÷¶ÔÏó
+    MgShapes*       _shapes;                // å›¾å½¢åˆ—è¡¨
+    GiTransform*    _xform;                 // åæ ‡ç³»å¯¹è±¡
+    GiGraphics*     _graph;                 // å›¾å½¢æ˜¾ç¤ºå¯¹è±¡
+    id              _drawingDelegate;       // åŠ¨æ€ç»˜å›¾ç”¨çš„å§”æ‰˜æ§åˆ¶å™¨å¯¹è±¡
     
-    CGPoint         _firstPoint;            // ¶¯Ì¬·ÅËõÓÃµÄ¿ªÊ¼µã
-    CGPoint         _lastPoint;             // ¶¯Ì¬·ÅËõÓÃµÄÉÏ´Îµã
+    CGPoint         _firstPoint;            // åŠ¨æ€æ”¾ç¼©ç”¨çš„å¼€å§‹ç‚¹
+    CGPoint         _lastPoint;             // åŠ¨æ€æ”¾ç¼©ç”¨çš„ä¸Šæ¬¡ç‚¹
     
-    BOOL            _zooming;               // ÊÇ·ñÕıÔÚ¶¯Ì¬·ÅËõ»òÆ½ÒÆ
-    double          _lastViewScale;         // ¶¯Ì¬·ÅËõÇ°µÄÏÔÊ¾±ÈÀı
-    CGPoint         _lastCenterW;           // ¶¯Ì¬·ÅËõÇ°µÄÊÓÍ¼ÖĞĞÄÊÀ½ç×ø±ê
+    BOOL            _zooming;               // æ˜¯å¦æ­£åœ¨åŠ¨æ€æ”¾ç¼©æˆ–å¹³ç§»
+    double          _lastViewScale;         // åŠ¨æ€æ”¾ç¼©å‰çš„æ˜¾ç¤ºæ¯”ä¾‹
+    CGPoint         _lastCenterW;           // åŠ¨æ€æ”¾ç¼©å‰çš„è§†å›¾ä¸­å¿ƒä¸–ç•Œåæ ‡
     
-    BOOL            _doubleZoomed;          // ÊÇ·ñÎª¾Ö²¿·Å´ó×´Ì¬
-    double          _scaleBeforeDbl;        // ¾Ö²¿·Å´óÇ°µÄÏÔÊ¾±ÈÀı
-    CGPoint         _centerBeforeDbl;       // ¾Ö²¿·Å´óÇ°µÄÊÓÍ¼ÖĞĞÄÊÀ½ç×ø±ê
+    BOOL            _doubleZoomed;          // æ˜¯å¦ä¸ºå±€éƒ¨æ”¾å¤§çŠ¶æ€
+    double          _scaleBeforeDbl;        // å±€éƒ¨æ”¾å¤§å‰çš„æ˜¾ç¤ºæ¯”ä¾‹
+    CGPoint         _centerBeforeDbl;       // å±€éƒ¨æ”¾å¤§å‰çš„è§†å›¾ä¸­å¿ƒä¸–ç•Œåæ ‡
 }
 
-@property (nonatomic,readonly) MgShapes*    shapes;     // Í¼ĞÎÁĞ±í
-@property (nonatomic,readonly) GiTransform* xform;      // ×ø±êÏµ¶ÔÏó
-@property (nonatomic,readonly) GiGraphics*  graph;      // Í¼ĞÎÏÔÊ¾¶ÔÏó
-@property (nonatomic,readonly) BOOL         zooming;    // ÊÇ·ñÕıÔÚ¶¯Ì¬·ÅËõ»òÆ½ÒÆ
+@property (nonatomic)          MgShapes*    shapes;     // å›¾å½¢åˆ—è¡¨
+@property (nonatomic,readonly) GiTransform* xform;      // åæ ‡ç³»å¯¹è±¡
+@property (nonatomic,readonly) GiGraphics*  graph;      // å›¾å½¢æ˜¾ç¤ºå¯¹è±¡
+@property (nonatomic,readonly) BOOL         zooming;    // æ˜¯å¦æ­£åœ¨åŠ¨æ€æ”¾ç¼©æˆ–å¹³ç§»
 
 - (void)afterCreated;
 - (void)draw:(GiGraphics*)gs;
 
 @end
+
 

@@ -6,16 +6,17 @@
 
 @class GiSelectController;
 
-// Í¼ĞÎÊÓÍ¼µÄ¿ØÖÆÆ÷Àà
+// å›¾å½¢è§†å›¾çš„æ§åˆ¶å™¨ç±»
 @interface GiViewController : UIViewController {
-    GiSelectController* _selector;  // Ñ¡Ôñ±à¼­ÃüÁî
-    id      _command;               // µ±Ç°»æÍ¼ÃüÁî£¬±ØĞëÖ§³Ö GiMotionHandler
+    GiSelectController* _selector;  // é€‰æ‹©ç¼–è¾‘å‘½ä»¤
+    id      _command;               // å½“å‰ç»˜å›¾å‘½ä»¤ï¼Œå¿…é¡»æ”¯æŒ GiMotionHandler
 }
 
-- (void)clearCachedData;            // Çå³ı»º³åÊı¾İ
-- (void)dynDraw;                    // ¹©Í¼ĞÎÊÓÍ¼¶¯Ì¬ÏÔÊ¾Ê±µ÷ÓÃ
+- (void)clearCachedData;            // æ¸…é™¤ç¼“å†²æ•°æ®
+- (void)undoMotion;                 // è§¦å‘æ™ƒåŠ¨æˆ–æ’¤é”€æ“ä½œ
+- (void)dynDraw;                    // ä¾›å›¾å½¢è§†å›¾åŠ¨æ€æ˜¾ç¤ºæ—¶è°ƒç”¨
 
-// ÉèÖÃµ±Ç°»æÍ¼ÃüÁî£¬±ØĞëÖ§³Ö GiMotionHandler£¬¿ÉÎªNil
+// è®¾ç½®å½“å‰ç»˜å›¾å‘½ä»¤ï¼Œå¿…é¡»æ”¯æŒ GiMotionHandlerï¼Œå¯ä¸ºNil
 - (id)setCommand:(id)cmd;
 
 @end

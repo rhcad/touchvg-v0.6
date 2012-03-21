@@ -8,26 +8,28 @@ struct MgShapes;
 class GiTransform;
 class GiGraphics;
 
-// Í¼ĞÎÊÓÍ¼Ğ­Òé
+// å›¾å½¢è§†å›¾åè®®
 @protocol GiView
 
-- (MgShapes*)getShapes;                 // µÃµ½Í¼ĞÎÁĞ±í
-- (GiTransform*)getXform;               // µÃµ½×ø±êÏµ¶ÔÏó
-- (GiGraphics*)getGraph;                // µÃµ½Í¼ĞÎÏÔÊ¾¶ÔÏó
+- (MgShapes*)getShapes;                 // å¾—åˆ°å›¾å½¢åˆ—è¡¨
+- (GiTransform*)getXform;               // å¾—åˆ°åæ ‡ç³»å¯¹è±¡
+- (GiGraphics*)getGraph;                // å¾—åˆ°å›¾å½¢æ˜¾ç¤ºå¯¹è±¡
 
-- (void)setAnimating:(BOOL)animated;    // ·­×ª»ò¶¯»­ÏÔÊ¾Ê±Í¨ÖªÊÓÍ¼
-- (void)setDrawingDelegate:(id)d;       // ÉèÖÃ¶¯Ì¬»æÍ¼ÓÃµÄ¿ØÖÆÆ÷¶ÔÏó
+- (void)setShapes:(MgShapes*)data;      // è®¾ç½®å›¾å½¢åˆ—è¡¨
+- (void)setAnimating:(BOOL)animated;    // ç¿»è½¬æˆ–åŠ¨ç”»æ˜¾ç¤ºæ—¶é€šçŸ¥è§†å›¾
+- (void)setDrawingDelegate:(id)d;       // è®¾ç½®åŠ¨æ€ç»˜å›¾ç”¨çš„æ§åˆ¶å™¨å¯¹è±¡
 
-- (void)redraw;                         // ±ê¼ÇÊÓÍ¼´ı¸üĞÂÏÔÊ¾
+- (void)redraw;                         // æ ‡è®°è§†å›¾å¾…æ›´æ–°æ˜¾ç¤º
 
 @end
 
-// Í¼ĞÎÊÓÍ¼¶¯×÷ÃüÁîĞ­Òé
+// å›¾å½¢è§†å›¾åŠ¨ä½œå‘½ä»¤åè®®
 @protocol GiMotionHandler
 @optional
 
-- (void)dynDraw:(GiGraphics*)gs;        // ¶¯Ì¬ÏÔÊ¾Í¼ĞÎ
-- (BOOL)undoMotion:(id)view;            // »Î¶¯»ò³·Ïú²Ù×÷
+- (void)dynDraw:(GiGraphics*)gs;        // åŠ¨æ€æ˜¾ç¤ºå›¾å½¢
+- (BOOL)cancel:(id)view;                // å–æ¶ˆå‘½ä»¤
+- (BOOL)undoMotion:(id)view;            // æ™ƒåŠ¨æˆ–æ’¤é”€æ“ä½œ
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
 - (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender;
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender;
@@ -35,3 +37,4 @@ class GiGraphics;
 - (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender;
 
 @end
+

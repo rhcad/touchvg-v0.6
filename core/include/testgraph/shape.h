@@ -3,8 +3,6 @@
 
 #include <mgshapes.h>
 
-MgShapes* createShapes();
-
 struct RandomParam
 {
     long lineCount;

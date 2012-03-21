@@ -2,13 +2,6 @@
 #include <mgshapet.h>
 #include <mgbasicsp.h>
 #include <stdlib.h>
-#include <mgshapest.h>
-#include <vector>
-
-MgShapes* createShapes()
-{
-    return new MgShapesT<std::vector<MgShape*> >;
-}
 
 double RandomParam::RandDbl(double dMin, double dMax)
 {

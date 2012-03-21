@@ -44,9 +44,9 @@
     if (_count > 0) {
         _count = 0;
         [_view redraw];
+        return YES;
     }
-    
-    return YES;
+    return NO;
 }
 
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender
