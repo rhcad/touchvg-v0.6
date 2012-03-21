@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "NewViewDlg.h"
-#include "shape.h"
+#include "RandomShape.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -18,9 +18,11 @@ CNewViewDlg::CNewViewDlg(CWnd* pParent /*=NULL*/)
 	//{{AFX_DATA_INIT(CNewViewDlg)
 	m_bScrollBar = TRUE;
 	m_bRandomLineStyle = TRUE;
+    m_bWithCmd = TRUE;
 	//}}AFX_DATA_INIT
     m_nLineCount = RandomParam::RandInt(0, 1000);
 	m_nArcCount = RandomParam::RandInt(0, 600);
+    m_nCurveCount = RandomParam::RandInt(0, 200);
 }
 
 void CNewViewDlg::DoDataExchange(CDataExchange* pDX)
@@ -31,8 +33,11 @@ void CNewViewDlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxLong(pDX, m_nLineCount, 0, 50000);
 	DDX_Text(pDX, IDC_NEW_ARCCOUNT, m_nArcCount);
 	DDV_MinMaxLong(pDX, m_nArcCount, 0, 50000);
+    DDX_Text(pDX, IDC_NEW_CURVE_COUNT, m_nCurveCount);
+	DDV_MinMaxLong(pDX, m_nCurveCount, 0, 50000);
 	DDX_Check(pDX, IDC_NEW_SCROLLBAR, m_bScrollBar);
 	DDX_Check(pDX, IDC_NEW_RANDLNSTYLE, m_bRandomLineStyle);
+    DDX_Check(pDX, IDC_NEW_WITHCMD, m_bWithCmd);
 	//}}AFX_DATA_MAP
 }
 

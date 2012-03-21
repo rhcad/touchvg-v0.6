@@ -41,6 +41,8 @@ BEGIN_MESSAGE_MAP(CBaseView, CWnd)
 	ON_WM_ERASEBKGND()
 	ON_WM_PAINT()
 	ON_WM_SIZE()
+    ON_UPDATE_COMMAND_UI(ID_VIEW_GRAY, OnUpdateViewGray)
+	ON_COMMAND(ID_VIEW_GRAY, OnViewGray)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_GDIP, OnUpdateViewGdip)
 	ON_COMMAND(ID_VIEW_GDIP, OnViewGdip)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_ANTIALIAS, OnUpdateAntiAlias)
@@ -128,6 +130,19 @@ void CBaseView::OnZoomExtent()
 	{
 		OnZoomed();
 	}
+}
+
+void CBaseView::OnViewGray() 
+{
+	m_gs->setColorMode(GiGraphics::kColorGray == m_gs->getColorMode()
+        ? GiGraphics::kColorReal : GiGraphics::kColorGray);
+    m_gs->clearCachedBitmap();
+    Invalidate();
+}
+
+void CBaseView::OnUpdateViewGray(CCmdUI* pCmdUI) 
+{
+	pCmdUI->SetCheck(GiGraphics::kColorGray == m_gs->getColorMode() ? 1 : 0);
 }
 
 void CBaseView::OnUpdateViewGdip(CCmdUI* pCmdUI) 

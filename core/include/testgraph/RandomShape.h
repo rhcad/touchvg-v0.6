@@ -1,5 +1,5 @@
-#ifndef _TEST_SHAPE_H
-#define _TEST_SHAPE_H
+#ifndef _TEST_RANDOMSHAPE_H
+#define _TEST_RANDOMSHAPE_H
 
 #include <mgshapes.h>
 
@@ -21,4 +21,4 @@ struct RandomParam
     static UInt8 RandUInt8(long nMin, long nMax);
 };
 
-#endif // _TEST_SHAPE_H
+#endif // _TEST_RANDOMSHAPE_H

@@ -7,7 +7,7 @@
 #include "MainFrm.h"
 #include "ChildFrm.h"
 #include "NewViewDlg.h"
-#include "Step2View.h"
+#include "Step3View.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -81,8 +81,12 @@ CWnd* CreateChildView(UINT nFrameID)
 		RandomParam param;
 		param.lineCount = dlg.m_nLineCount;
 		param.arcCount = dlg.m_nArcCount;
+        param.curveCount = dlg.m_nCurveCount;
 		param.randomLineStyle = !!dlg.m_bRandomLineStyle;
-		if (dlg.m_bScrollBar)
+
+        if (dlg.m_bWithCmd)
+            pView = new CDrawShapeView(param);
+		else if (dlg.m_bScrollBar)
 			pView = new CScrollShapeView(param);
 		else
 			pView = new CRandomShapeView(param);

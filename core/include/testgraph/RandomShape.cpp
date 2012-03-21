@@ -1,4 +1,4 @@
-#include "shape.h"
+#include "RandomShape.h"
 #include <mgshapet.h>
 #include <mgbasicsp.h>
 #include <stdlib.h>

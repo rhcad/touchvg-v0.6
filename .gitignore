@@ -1,9 +1,9 @@
 build
-Build
 *.ncb
 *.opt
 *.suo
 *.user
+*.aps
 *.o
 *.a
 *~

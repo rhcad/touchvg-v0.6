@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -27,18 +27,18 @@ LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
     "#define _AFX_NO_OLE_RESOURCES\r\n"
@@ -65,66 +65,77 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON    DISCARDABLE     "SimpView.ico"
+IDR_MAINFRAME           ICON                    "SimpView.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Menu
 //
 
-IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+IDR_MAINFRAME MENU 
 BEGIN
     POPUP "文件(&F)"
     BEGIN
-        MENUITEM "新建(&N)...\tCtrl+N",         ID_FILE_NEW
+        MENUITEM "新建(&N)...\tCtrl+N",           ID_FILE_NEW
         MENUITEM SEPARATOR
-        MENUITEM "退出(&X)",                    ID_APP_EXIT
+        MENUITEM "退出(&X)",                      ID_APP_EXIT
     END
     POPUP "查看(&V)"
     BEGIN
-        MENUITEM "状态栏(&S)",                  ID_VIEW_STATUS_BAR
+        MENUITEM "状态栏(&S)",                    ID_VIEW_STATUS_BAR
     END
     POPUP "帮助(&H)"
     BEGIN
-        MENUITEM "关于 SimpView(&A)",           ID_APP_ABOUT
+        MENUITEM "关于 SimpView(&A)",             ID_APP_ABOUT
     END
 END
 
-IDR_STEP1_VIEW MENU PRELOAD DISCARDABLE 
+IDR_STEP1_VIEW MENU 
 BEGIN
     POPUP "文件(&F)"
     BEGIN
-        MENUITEM "新建(&N)...\tCtrl+N",         ID_FILE_NEW
-        MENUITEM "关闭(&C)",                    ID_FILE_CLOSE
+        MENUITEM "新建(&N)...\tCtrl+N",           ID_FILE_NEW
+        MENUITEM "关闭(&C)",                      ID_FILE_CLOSE
         MENUITEM SEPARATOR
-        MENUITEM "退出(&X)",                    ID_APP_EXIT
+        MENUITEM "退出(&X)",                      ID_APP_EXIT
+    END
+    POPUP "绘图(&D)"
+    BEGIN
+        MENUITEM "选择(&S)",                      ID_CMD_SELECT
+        MENUITEM SEPARATOR
+        MENUITEM "线段(&L)",                      ID_CMD_LINE
+        MENUITEM "矩形(&R)",                      ID_CMD_RECT
+        MENUITEM "椭圆(&E)",                      ID_CMD_ELLIPSE
+        MENUITEM "折线(&P)",                      ID_CMD_LINES
+        MENUITEM "曲线(&V)",                      ID_CMD_SPLINES
     END
     POPUP "查看(&V)"
     BEGIN
-        MENUITEM "状态栏(&S)",                  ID_VIEW_STATUS_BAR
+        MENUITEM "状态栏(&S)",                    ID_VIEW_STATUS_BAR
         MENUITEM SEPARATOR
-        MENUITEM "使用GDI&+\tCtrl+G",           ID_VIEW_GDIP
-        MENUITEM "反走样(&A)\tCtrl+L",          ID_VIEW_ANTIALIAS
-        MENUITEM "背景颜色(&B)...",             ID_VIEW_BKCOLOR
+        MENUITEM "灰度显示(&G)",                  ID_VIEW_GRAY
+        MENUITEM "使用GDI&+\tCtrl+G",             ID_VIEW_GDIP
+        MENUITEM "反走样(&A)\tCtrl+L",            ID_VIEW_ANTIALIAS
+        MENUITEM "背景颜色(&B)...",               ID_VIEW_BKCOLOR
         MENUITEM SEPARATOR
-        MENUITEM "全部显示(&E)\tCtrl+E",        ID_ZOOM_EXTENT
-        MENUITEM "放大(&I)\t+",                 ID_VIEW_ZOOMIN
-        MENUITEM "缩小(&O)\t-",                 ID_VIEW_ZOOMOUT
-        MENUITEM "左移(&L)\tLeft",              ID_PAN_LEFT
-        MENUITEM "右移(&R)\tRight",             ID_PAN_RIGHT
-        MENUITEM "上移(&U)\tUp",                ID_PAN_UP
-        MENUITEM "下移(&D)\tDown",              ID_PAN_DOWN
+        MENUITEM "全部显示(&E)\tCtrl+E",          ID_ZOOM_EXTENT
+        MENUITEM "放大(&I)\t+",                   ID_VIEW_ZOOMIN
+        MENUITEM "缩小(&O)\t-",                   ID_VIEW_ZOOMOUT
+        MENUITEM "左移(&L)\tLeft",                ID_PAN_LEFT
+        MENUITEM "右移(&R)\tRight",               ID_PAN_RIGHT
+        MENUITEM "上移(&U)\tUp",                  ID_PAN_UP
+        MENUITEM "下移(&D)\tDown",                ID_PAN_DOWN
     END
     POPUP "窗口(&W)"
     BEGIN
-        MENUITEM "层叠(&C)",                    ID_WINDOW_CASCADE
-        MENUITEM "水平平铺(&H)",                ID_WINDOW_TILE_HORZ
-        MENUITEM "垂直平铺(&V)",                ID_WINDOW_TILE_VERT
-        MENUITEM "排列图标(&A)",                ID_WINDOW_ARRANGE
+        MENUITEM "层叠(&C)",                      ID_WINDOW_CASCADE
+        MENUITEM "水平平铺(&H)",                  ID_WINDOW_TILE_HORZ
+        MENUITEM "垂直平铺(&V)",                  ID_WINDOW_TILE_VERT
+        MENUITEM "排列图标(&A)",                  ID_WINDOW_ARRANGE
     END
     POPUP "帮助(&H)"
     BEGIN
-        MENUITEM "关于 SimpView(&A)",           ID_APP_ABOUT
+        MENUITEM "关于 SimpView(&A)",             ID_APP_ABOUT
     END
 END
 
@@ -134,7 +145,7 @@ END
 // Accelerator
 //
 
-IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+IDR_MAINFRAME ACCELERATORS 
 BEGIN
     "-",            ID_VIEW_ZOOMOUT,        ASCII,  NOINVERT
     "=",            ID_VIEW_ZOOMIN,         ASCII,  NOINVERT
@@ -160,38 +171,38 @@ END
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 235, 55
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_ABOUTBOX DIALOG  0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "关于 SimpView"
 FONT 9, "宋体"
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
-    LTEXT           "图形接口库简单显示测试 1.0 版",IDC_STATIC,40,10,117,8,
-                    SS_NOPREFIX
+    LTEXT           "图形接口库简单显示测试 1.0 版",IDC_STATIC,40,10,117,8,SS_NOPREFIX
     LTEXT           "版权所有 (C) 2009",IDC_STATIC,40,25,119,8
     DEFPUSHBUTTON   "确定",IDOK,178,7,50,14,WS_GROUP
 END
 
-IDD_NEW_VIEW DIALOG DISCARDABLE  0, 0, 162, 91
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_NEW_VIEW DIALOGEX 0, 0, 233, 83
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "新建视图"
-FONT 9, "宋体"
+FONT 9, "宋体", 0, 0, 0x0
 BEGIN
-    GROUPBOX        "随机图形最大数量",IDC_STATIC,7,7,87,50
-    LTEXT           "线段数:",IDC_STATIC,14,21,29,8
-    EDITTEXT        IDC_NEW_LINECOUNT,47,18,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "圆弧数:",IDC_STATIC,14,39,29,8
-    EDITTEXT        IDC_NEW_ARCCOUNT,47,36,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    CONTROL         "随机线型",IDC_NEW_RANDLNSTYLE,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,7,62,48,10
-    CONTROL         "有滚动条",IDC_NEW_SCROLLBAR,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,7,74,48,10
-    DEFPUSHBUTTON   "确定",IDOK,105,7,50,14
-    PUSHBUTTON      "取消",IDCANCEL,105,24,50,14
+    GROUPBOX        "随机图形最大数量",IDC_STATIC,7,7,87,69
+    LTEXT           "线段数:",IDC_STATIC,14,22,29,8
+    EDITTEXT        IDC_NEW_LINECOUNT,47,19,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "圆弧数:",IDC_STATIC,14,40,29,8
+    EDITTEXT        IDC_NEW_ARCCOUNT,47,37,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "曲线数:",IDC_STATIC,14,58,29,8
+    EDITTEXT        IDC_NEW_CURVE_COUNT,47,55,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    GROUPBOX        "选项",IDC_STATIC,100,7,67,69
+    CONTROL         "随机线型",IDC_NEW_RANDLNSTYLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,109,19,48,10
+    CONTROL         "有滚动条",IDC_NEW_SCROLLBAR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,109,33,48,10
+    CONTROL         "绘图选择",IDC_NEW_WITHCMD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,109,47,48,10
+    DEFPUSHBUTTON   "确定",IDOK,176,7,50,14
+    PUSHBUTTON      "取消",IDCANCEL,176,24,50,14
 END
 
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
@@ -214,18 +225,13 @@ BEGIN
     BEGIN
         BLOCK "080404b0"
         BEGIN
-            VALUE "Comments", "\0"
-            VALUE "CompanyName", "\0"
-            VALUE "FileDescription", "图形接口库简单显示测试程序\0"
-            VALUE "FileVersion", "1, 0, 0, 1\0"
-            VALUE "InternalName", "SimpView\0"
-            VALUE "LegalCopyright", "版权所有 (C) 2009\0"
-            VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "SimpView.EXE\0"
-            VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "图形接口库\0"
-            VALUE "ProductVersion", "1, 0, 0, 1\0"
-            VALUE "SpecialBuild", "\0"
+            VALUE "FileDescription", "图形接口库简单显示测试程序"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "SimpView"
+            VALUE "LegalCopyright", "版权所有 (C) 2009"
+            VALUE "OriginalFilename", "SimpView.EXE"
+            VALUE "ProductName", "图形接口库"
+            VALUE "ProductVersion", "1, 0, 0, 1"
         END
     END
     BLOCK "VarFileInfo"
@@ -234,8 +240,6 @@ BEGIN
     END
 END
 
-#endif    // !_MAC
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -243,7 +247,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
+GUIDELINES DESIGNINFO 
 BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
@@ -256,9 +260,9 @@ BEGIN
     IDD_NEW_VIEW, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 155
+        RIGHTMARGIN, 226
         TOPMARGIN, 7
-        BOTTOMMARGIN, 84
+        BOTTOMMARGIN, 76
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -269,19 +273,19 @@ END
 // String Table
 //
 
-STRINGTABLE PRELOAD DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDR_MAINFRAME           "图形接口库简单显示测试"
     IDR_STEP1_VIEW          "\nShape\nStep1"
 END
 
-STRINGTABLE PRELOAD DISCARDABLE 
+STRINGTABLE 
 BEGIN
     AFX_IDS_APP_TITLE       "SimpView"
     AFX_IDS_IDLEMESSAGE     "就绪"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_INDICATOR_EXT        "扩展名"
     ID_INDICATOR_CAPS       "大写"
@@ -291,25 +295,25 @@ BEGIN
     ID_INDICATOR_REC        "记录"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_FILE_NEW             "建立新文档\n新建"
     ID_FILE_CLOSE           "关闭活动文档\n关闭"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_APP_ABOUT            "显示程序信息，版本号和版权\n关于"
     ID_APP_EXIT             "退出应用程序；提示保存文档\n退出"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_NEXT_PANE            "切换到下一个窗格\n下一窗格"
     ID_PREV_PANE            "切换回前一个窗格\n前一窗格"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_WINDOW_ARRANGE       "将图标排列在窗口底部\n排列图标"
     ID_WINDOW_CASCADE       "排列窗口成相互重叠\n层叠窗口"
@@ -318,7 +322,7 @@ BEGIN
     ID_WINDOW_SPLIT         "将活动的窗口分隔成窗格\n分隔"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_EDIT_CLEAR           "删除被选对象\n删除"
     ID_EDIT_CLEAR_ALL       "全部删除\n全部删除"
@@ -333,12 +337,12 @@ BEGIN
     ID_EDIT_REDO            "重新执行先前已撤消的操作\n重新执行"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_VIEW_STATUS_BAR      "显示或隐藏状态栏\n显隐状态栏"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     AFX_IDS_SCSIZE          "改变窗口大小"
     AFX_IDS_SCMOVE          "改变窗口位置"
@@ -349,15 +353,16 @@ BEGIN
     AFX_IDS_SCCLOSE         "关闭活动的窗口并提示保存所有文档"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     AFX_IDS_SCRESTORE       "把窗口恢复到正常大小"
     AFX_IDS_SCTASKLIST      "激活任务表"
     AFX_IDS_MDICHILD        "激活该窗口"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
+    ID_VIEW_GRAY            "切换是否以绘图模式显示图形\n灰度显示"
     ID_VIEW_GDIP            "切换显示视图时是使用GDI还是GDI+\n使用GDI+"
     ID_VIEW_BKCOLOR         "改变视图的背景颜色\n背景颜色"
     ID_VIEW_ZOOMIN          "放大显示\n放大"
@@ -370,11 +375,21 @@ BEGIN
     ID_ZOOM_EXTENT          "在窗口中显示全部图形\n全部显示"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     ID_INDICATOR_X          "X: 0000.00"
     ID_INDICATOR_Y          "Y: 0000.00"
     ID_INDICATOR_VIEWSCALE  "100.00%"
+    ID_CMD_SELECT           "取消绘图命令，开始选择图形\n选择"
+    ID_CMD_LINE             "绘制直线段\n线段"
+    ID_CMD_RECT             "绘制矩形图形\n矩形"
+    ID_CMD_ELLIPSE          "绘制椭圆图形\n椭圆"
+    ID_CMD_LINES            "绘制折线图形\n折线"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_CMD_SPLINES          "绘制曲线图形\n曲线"
 END
 
 #endif    // Chinese (P.R.C.) resources

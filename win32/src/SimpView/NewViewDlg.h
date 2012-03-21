@@ -13,8 +13,10 @@ public:
 	enum { IDD = IDD_NEW_VIEW };
 	long	m_nLineCount;
 	long	m_nArcCount;
+    long	m_nCurveCount;
 	BOOL	m_bScrollBar;
 	BOOL	m_bRandomLineStyle;
+    BOOL	m_bWithCmd;
 	//}}AFX_DATA
 
 // Overrides

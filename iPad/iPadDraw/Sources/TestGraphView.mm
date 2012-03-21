@@ -4,7 +4,7 @@
 #import "TestGraphView.h"
 #include <Graph2d/mgshapest.h>
 #include <vector>
-#include "../../../core/include/testgraph/shape.cpp"
+#include "../../../core/include/testgraph/RandomShape.cpp"
 
 @implementation TestGraphView
 

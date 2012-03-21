@@ -2,7 +2,7 @@
 //
 #pragma once
 
-#include "shape.h"
+#include "RandomShape.h"
 
 class CBaseView : public CWnd
 {
@@ -39,6 +39,8 @@ protected:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+    afx_msg void OnUpdateViewGray(CCmdUI* pCmdUI);
+	afx_msg void OnViewGray();
 	afx_msg void OnUpdateViewGdip(CCmdUI* pCmdUI);
 	afx_msg void OnViewGdip();
 	afx_msg void OnUpdateAntiAlias(CCmdUI* pCmdUI);
