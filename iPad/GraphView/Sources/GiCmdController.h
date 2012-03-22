@@ -4,10 +4,10 @@
 
 #import <Graph2d/GiMotionHandler.h>
 
-@interface GiCommandController : NSObject<GiMotionHandler> {
-    id<GiView>      _view;
-}
+struct MgMotion;
 
-- (id)initWithView:(id<GiView>)view;
+@interface GiCommandController : NSObject<GiMotionHandler> {
+    MgMotion    *_motion;
+}
 
 @end

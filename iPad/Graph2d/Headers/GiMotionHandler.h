@@ -19,6 +19,7 @@ class GiGraphics;
 - (void)setAnimating:(BOOL)animated;    // 翻转或动画显示时通知视图
 - (void)setDrawingDelegate:(id)d;       // 设置动态绘图用的控制器对象
 
+- (void)regen;                          // 标记视图待重新构建显示
 - (void)redraw;                         // 标记视图待更新显示
 
 @end
@@ -28,8 +29,8 @@ class GiGraphics;
 @optional
 
 - (void)dynDraw:(GiGraphics*)gs;        // 动态显示图形
-- (BOOL)cancel:(id)view;                // 取消命令
-- (BOOL)undoMotion:(id)view;            // 晃动或撤销操作
+- (BOOL)cancel;                         // 取消命令
+- (BOOL)undoMotion;                     // 晃动或撤销操作
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
 - (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender;
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender;

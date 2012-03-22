@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "Step3View.h"
+#include <mgcmd.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -28,6 +29,22 @@ BEGIN_MESSAGE_MAP(CDrawShapeView, CScrollShapeView)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
+class MgViewProxy : public MgView
+{
+    CBaseView*  _view;
+public:
+    MgViewProxy(CBaseView* view) : _view(view) {}
+private:
+    MgShapes* shapes() { return _view->m_shapes; }
+    GiTransform* xform() { return &_view->m_xf; }
+    GiGraphics* graph() { return _view->m_gs; }
+    void redraw() { _view->Invalidate(); }
+    void regen() {
+        _view->m_gs->clearCachedBitmap();
+        _view->Invalidate();
+    }
+};
+
 void CDrawShapeView::OnUpdateCmds(CCmdUI* pCmdUI)
 {
     pCmdUI->SetCheck(m_nCmdID == pCmdUI->m_nID ? 1 : 0);
@@ -40,6 +57,10 @@ void CDrawShapeView::OnCmds(UINT nID)
 
 void CDrawShapeView::OnDynDraw(GiGraphics* gs)
 {
+    MgCommand* cmd = mgGetCommandManager()->getCommand();
+    if (cmd) {
+        //cmd->draw()
+    }
 }
 
 void CDrawShapeView::OnMouseMove(UINT nFlags, CPoint point)

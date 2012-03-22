@@ -124,8 +124,7 @@
 - (void)setShapes:(MgShapes*)data
 {
     _shapes = data;
-    _graph->clearCachedBitmap();
-    [self setNeedsDisplay];
+    [self regen];
 }
 
 - (void)setDrawingDelegate:(id)d
@@ -139,6 +138,12 @@
         _zooming |= 0x2;
     else
         _zooming &= ~0x2;
+}
+
+- (void)regen
+{
+    _graph->clearCachedBitmap();
+    [self setNeedsDisplay];
 }
 
 - (void)redraw

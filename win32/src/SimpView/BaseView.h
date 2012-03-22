@@ -11,7 +11,9 @@ public:
 	CBaseView();
 	virtual ~CBaseView();
 
-    MgShapes*   m_shapes;
+    MgShapes*       m_shapes;
+    GiTransform     m_xf;               // 坐标系管理对象
+	GiGraphWin*		m_gs;			    // 本窗口的图形系统对象
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -25,8 +27,6 @@ public:
 
 // Implementation
 protected:
-    GiTransform     m_xf;               // 坐标系管理对象
-	GiGraphWin*		m_gs;			    // 本窗口的图形系统对象
 	SIZE			m_sizePan;			// 动态平移显示的距离
 
 private:

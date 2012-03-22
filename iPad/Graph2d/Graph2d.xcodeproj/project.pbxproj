@@ -41,6 +41,9 @@
 		7E9CE8321500BA2100487BEF /* gigraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE82B1500BA2100487BEF /* gigraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8331500BA2100487BEF /* gipath.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE82C1500BA2100487BEF /* gipath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8341500BA2100487BEF /* gixform.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE82D1500BA2100487BEF /* gixform.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D1AAC17151B1D5C00F2392F /* mgcmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D1AAC16151B1D5C00F2392F /* mgcmd.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D1AAC1A151B34C300F2392F /* mgcmdmgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D1AAC19151B34C300F2392F /* mgcmdmgr.cpp */; };
+		9D1AAC1C151B352200F2392F /* mgcmdmgr.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D1AAC1B151B352200F2392F /* mgcmdmgr.h */; };
 		9D8A669D1519B02100509DD2 /* GiMotionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D8A669C1519B02100509DD2 /* GiMotionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9D6324A1450CB2400A3CC75 /* _mgshape.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632441450CB2400A3CC75 /* _mgshape.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9D6324B1450CB2400A3CC75 /* mgshapet.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632451450CB2400A3CC75 /* mgshapet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -109,6 +112,9 @@
 		7E9CE82B1500BA2100487BEF /* gigraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gigraph.h; path = ../../core/include/graph/gigraph.h; sourceTree = "<group>"; };
 		7E9CE82C1500BA2100487BEF /* gipath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gipath.h; path = ../../core/include/graph/gipath.h; sourceTree = "<group>"; };
 		7E9CE82D1500BA2100487BEF /* gixform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gixform.h; path = ../../core/include/graph/gixform.h; sourceTree = "<group>"; };
+		9D1AAC16151B1D5C00F2392F /* mgcmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgcmd.h; path = ../../core/include/shape/mgcmd.h; sourceTree = "<group>"; };
+		9D1AAC19151B34C300F2392F /* mgcmdmgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgcmdmgr.cpp; path = ../../core/src/shape/mgcmdmgr.cpp; sourceTree = "<group>"; };
+		9D1AAC1B151B352200F2392F /* mgcmdmgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgcmdmgr.h; path = ../../core/src/shape/mgcmdmgr.h; sourceTree = "<group>"; };
 		9D8A669C1519B02100509DD2 /* GiMotionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiMotionHandler.h; path = Headers/GiMotionHandler.h; sourceTree = "<group>"; };
 		C9D632441450CB2400A3CC75 /* _mgshape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _mgshape.h; path = ../../core/include/shape/_mgshape.h; sourceTree = "<group>"; };
 		C9D632451450CB2400A3CC75 /* mgshapet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgshapet.h; path = ../../core/include/shape/mgshapet.h; sourceTree = "<group>"; };
@@ -278,6 +284,7 @@
 		C9D632421450CABC00A3CC75 /* shape */ = {
 			isa = PBXGroup;
 			children = (
+				9D1AAC16151B1D5C00F2392F /* mgcmd.h */,
 				C9D632441450CB2400A3CC75 /* _mgshape.h */,
 				C9D632451450CB2400A3CC75 /* mgshapet.h */,
 				C9D632461450CB2400A3CC75 /* mgbasicsp.h */,
@@ -291,6 +298,8 @@
 		C9D632431450CAC300A3CC75 /* shape */ = {
 			isa = PBXGroup;
 			children = (
+				9D1AAC1B151B352200F2392F /* mgcmdmgr.h */,
+				9D1AAC19151B34C300F2392F /* mgcmdmgr.cpp */,
 				C9D632501450CB3200A3CC75 /* mgellipse.cpp */,
 				C9D632511450CB3200A3CC75 /* mgline.cpp */,
 				C9D632521450CB3200A3CC75 /* mglines.cpp */,
@@ -334,8 +343,10 @@
 				C9D6324E1450CB2400A3CC75 /* mgshapes.h in Headers */,
 				C9D6324F1450CB2400A3CC75 /* mgshapest.h in Headers */,
 				9D8A669D1519B02100509DD2 /* GiMotionHandler.h in Headers */,
+				9D1AAC17151B1D5C00F2392F /* mgcmd.h in Headers */,
 				7E9CE80A1500B90700487BEF /* giplclip.h in Headers */,
 				7E9CE82E1500BA2100487BEF /* _gigraph.h in Headers */,
+				9D1AAC1C151B352200F2392F /* mgcmdmgr.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +466,7 @@
 				C9D6325B1450CB3200A3CC75 /* mgrect.cpp in Sources */,
 				C9D6325C1450CB3200A3CC75 /* mgshape.cpp in Sources */,
 				C9D6325D1450CB3200A3CC75 /* mgsplines.cpp in Sources */,
+				9D1AAC1A151B34C300F2392F /* mgcmdmgr.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

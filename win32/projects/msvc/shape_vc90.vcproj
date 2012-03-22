@@ -147,6 +147,10 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath="..\..\..\core\src\shape\mgcmdmgr.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\src\shape\mgellipse.cpp"
 				>
 			</File>
@@ -185,6 +189,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\shape\mgbasicsp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\include\shape\mgcmd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\src\shape\mgcmdmgr.h"
 				>
 			</File>
 			<File

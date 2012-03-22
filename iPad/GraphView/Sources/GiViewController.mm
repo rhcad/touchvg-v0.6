@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #import "GiViewController.h"
-#import "GiSelectController.h"
+#import "GiCmdController.h"
 #import "GiGraphView.h"
 #include <Graph2d/mgshapest.h>
 #include <list>
@@ -31,9 +31,8 @@
 {
     self = [super init];
     if (self) {
-        _command = Nil;
+        _command = [[GiCommandController alloc]init];
         _shapesCreated = NULL;
-        _overlayView = Nil;
         for (int i = 0; i < RECOGNIZER_COUNT; i++)
             _recognizers[i] = Nil;
         _gestureRecognizerUsed = YES;
@@ -44,15 +43,13 @@
 - (void)viewDidLoad
 {
     [[self gview] setDrawingDelegate:self];
-    _selector = [[GiSelectController alloc]initWithView:[self gview]];
-    
     [self addGestureRecognizers];
 }
 
 - (void)dealloc
 {
-    [_selector release];
-    [_overlayView release];
+    [_command release];
+    
     if (_shapesCreated) {
         ((MgShapes*)_shapesCreated)->release();
         _shapesCreated = NULL;
@@ -66,31 +63,17 @@
 
 - (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor
 {
-    GiGraphView *view = [[GiGraphView alloc] initWithFrame:frame];
+    GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
-    self.view = view;
-    view.backgroundColor = bkColor;
-    [view setDrawingDelegate:self];
+    self.view = aview;
+    aview.backgroundColor = bkColor;
+    [aview setDrawingDelegate:self];
     
-    view.shapes = new MgShapesT<std::list<MgShape*> >;
-    _shapesCreated = view.shapes;
+    aview.shapes = new MgShapesT<std::list<MgShape*> >;
+    _shapesCreated = aview.shapes;
     
-    [view release];
+    [aview release];
     return self.view;
-}
-
-- (id)createOverlayView:(UIView*)view
-{
-    GiOverlayView *ov = [[GiOverlayView alloc] initWithView:view];
-    
-    _overlayView = ov;
-    [ov setDrawingDelegate:self];
-    
-    ov.shapes = new MgShapesT<std::list<MgShape*> >;
-    _shapesCreated = ov.shapes;
-    
-    [ov release];
-    return _overlayView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -112,7 +95,7 @@
     assert(!cmd || [cmd conformsToProtocol:@protocol(GiMotionHandler)]);
     id oldcmd = _command;
     
-    [[self getCommand] cancel:self.view];
+    [[self getCommand] cancel];
     _command = cmd;
     
     return oldcmd;
@@ -160,8 +143,8 @@
 
 - (void)undoMotion
 {
-    if (![[self getCommand] undoMotion:self.view])
-        [[self motionView] undoMotion:self.view];
+    if (![[self getCommand] undoMotion])
+        [[self motionView] undoMotion];
 }
 
 - (void)dynDraw
@@ -191,7 +174,7 @@
 
 - (id<GiMotionHandler>)getCommand
 {
-    return (id<GiMotionHandler>)(_command ? _command : _selector);
+    return (id<GiMotionHandler>)_command;
 }
 
 - (void)addGestureRecognizers

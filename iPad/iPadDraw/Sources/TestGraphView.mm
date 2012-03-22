@@ -52,7 +52,7 @@
     [self setShapes:_shapes];
 }
 
-- (BOOL)undoMotion:(id)view
+- (BOOL)undoMotion
 {
     [self reset];
     return YES;
