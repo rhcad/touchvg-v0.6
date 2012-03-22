@@ -10,8 +10,10 @@
 
 @interface GiViewController(GestureRecognizer)
 
-- (id<GiView, GiMotionHandler>)gview;
+- (id<GiView>)gview;
+- (id<GiMotionHandler>)motionView;
 - (id<GiMotionHandler>)getCommand;
+
 - (void)addGestureRecognizers;
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
@@ -23,6 +25,8 @@
 
 @implementation GiViewController
 
+@synthesize gestureRecognizerUsed = _gestureRecognizerUsed;
+
 - (id)init
 {
     self = [super init];
@@ -30,6 +34,9 @@
         _command = Nil;
         _shapesCreated = NULL;
         _overlayView = Nil;
+        for (int i = 0; i < RECOGNIZER_COUNT; i++)
+            _recognizers[i] = Nil;
+        _gestureRecognizerUsed = YES;
     }
     return self;
 }
@@ -50,6 +57,10 @@
         ((MgShapes*)_shapesCreated)->release();
         _shapesCreated = NULL;
     }
+    for (int i = 0; i < RECOGNIZER_COUNT; i++) {
+        [_recognizers[i] release];
+        _recognizers[i] = Nil;
+    }
     [super dealloc];
 }
 
@@ -59,6 +70,8 @@
     
     self.view = view;
     view.backgroundColor = bkColor;
+    [view setDrawingDelegate:self];
+    
     view.shapes = new MgShapesT<std::list<MgShape*> >;
     _shapesCreated = view.shapes;
     
@@ -71,6 +84,8 @@
     GiOverlayView *ov = [[GiOverlayView alloc] initWithView:view];
     
     _overlayView = ov;
+    [ov setDrawingDelegate:self];
+    
     ov.shapes = new MgShapesT<std::list<MgShape*> >;
     _shapesCreated = ov.shapes;
     
@@ -146,23 +161,32 @@
 - (void)undoMotion
 {
     if (![[self getCommand] undoMotion:self.view])
-        [[self gview] undoMotion:self.view];
+        [[self motionView] undoMotion:self.view];
 }
 
 - (void)dynDraw
 {
-    [[self getCommand] dynDraw: [[self gview] getGraph]];
+    GiGraphics* gs = [[self gview] getGraph];
+    if (gs->isDrawing()) {
+        [[self getCommand] dynDraw: gs];
+    }
 }
 
 @end
 
 @implementation GiViewController(GestureRecognizer)
 
-- (id<GiView, GiMotionHandler>)gview
+- (id<GiView>)gview
 {
     assert([self.view conformsToProtocol:@protocol(GiView)]);
-    assert([self.view conformsToProtocol:@protocol(GiMotionHandler)]);
-    return (id<GiView, GiMotionHandler>)self.view;
+    return (id<GiView>)self.view;
+}
+
+- (id<GiMotionHandler>)motionView
+{
+    if ([self.view conformsToProtocol:@protocol(GiMotionHandler)])
+        return (id<GiMotionHandler>)self.view;
+    return Nil;
 }
 
 - (id<GiMotionHandler>)getCommand
@@ -172,64 +196,82 @@
 
 - (void)addGestureRecognizers
 {
+    int n = 0;
+    
     UIPinchGestureRecognizer *twoFingersPinch =
     [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPinch:)];
-    [self.view addGestureRecognizer:twoFingersPinch];
-    [twoFingersPinch release];
+    _recognizers[n++] = twoFingersPinch;
     
     UIPanGestureRecognizer *twoFingersPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
     [twoFingersPan setMinimumNumberOfTouches:2];
     [twoFingersPan setMaximumNumberOfTouches:2];
-    [self.view addGestureRecognizer:twoFingersPan];
-    [twoFingersPan release];
+    _recognizers[n++] = twoFingersPan;
     
     UIPanGestureRecognizer *oneFingerPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
     [oneFingerPan setMaximumNumberOfTouches:1];
-    [self.view addGestureRecognizer:oneFingerPan];
-    [oneFingerPan release];
+    _recognizers[n++] = oneFingerPan;
     
     UITapGestureRecognizer *oneFingerTwoTaps =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerTwoTaps:)];
     [oneFingerTwoTaps setNumberOfTapsRequired:2];
-    [self.view addGestureRecognizer:oneFingerTwoTaps];
-    [oneFingerTwoTaps release];
+    _recognizers[n++] = oneFingerTwoTaps;
     
     UITapGestureRecognizer *oneFingerOneTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
-    [self.view addGestureRecognizer:oneFingerOneTap];
-    [oneFingerOneTap release];
+    [oneFingerOneTap requireGestureRecognizerToFail:oneFingerTwoTaps];
+    _recognizers[n++] = oneFingerOneTap;
+    
+    if (_gestureRecognizerUsed) {
+        for (int i = 0; i < RECOGNIZER_COUNT; i++)
+            [self.view addGestureRecognizer:_recognizers[i]];
+    }
+}
+
+- (void)setGestureRecognizerUsed:(BOOL)used
+{
+    if (_gestureRecognizerUsed != used) {
+        if (_gestureRecognizerUsed) {
+            for (int i = 0; i < RECOGNIZER_COUNT; i++)
+                [self.view removeGestureRecognizer:_recognizers[i]];
+        }
+        _gestureRecognizerUsed = used;
+        if (_gestureRecognizerUsed) {
+            for (int i = 0; i < RECOGNIZER_COUNT; i++)
+                [self.view addGestureRecognizer:_recognizers[i]];
+        }
+    }
 }
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
     if (![[self getCommand] twoFingersPinch:sender])
-        [[self gview] twoFingersPinch:sender];
+        [[self motionView] twoFingersPinch:sender];
 }
 
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
     if (![[self getCommand] twoFingersPan:sender])
-        [[self gview] twoFingersPan:sender];
+        [[self motionView] twoFingersPan:sender];
 }
 
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
     if (![[self getCommand] oneFingerPan:sender])
-        [[self gview] oneFingerPan:sender];
+        [[self motionView] oneFingerPan:sender];
 }
 
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
     if (![[self getCommand] oneFingerOneTap:sender])
-        [[self gview] oneFingerOneTap:sender];
+        [[self motionView] oneFingerOneTap:sender];
 }
 
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
     if (![[self getCommand] oneFingerTwoTaps:sender])
-        [[self gview] oneFingerTwoTaps:sender];
+        [[self motionView] oneFingerTwoTaps:sender];
 }
 
 @end

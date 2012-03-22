@@ -6,15 +6,21 @@
 
 // 图形视图控制器类
 @interface GiViewController : UIViewController {
-    id      _selector;              // 选择编辑命令
-    id      _command;               // 当前绘图命令
-    void*   _shapesCreated;         // 创建的图形列表
-    id      _overlayView;           // 创建的浮动视图
+    id      _selector;                  // 选择编辑命令
+    id      _command;                   // 当前绘图命令
+    void*   _shapesCreated;             // 创建的图形列表
+    id      _overlayView;               // 创建的浮动视图
+    BOOL    _gestureRecognizerUsed;     // 是否使用手势识别器处理触摸消息
+    
+    enum { RECOGNIZER_COUNT = 5 };
+    UIGestureRecognizer* _recognizers[RECOGNIZER_COUNT];
 }
 
-- (void)clearCachedData;            // 清除缓冲数据
-- (void)undoMotion;                 // 触发晃动或撤销操作
-- (void)dynDraw;                    // 供图形视图动态显示时调用
+@property (nonatomic)   BOOL    gestureRecognizerUsed;  // 是否使用手势识别器处理触摸消息
+
+- (void)clearCachedData;                // 清除缓冲数据，下次重新构建显示
+- (void)undoMotion;                     // 触发晃动或撤销操作
+- (void)dynDraw;                        // 供图形视图动态显示时调用
 
 // 设置当前绘图命令，必须支持 GiMotionHandler，可为Nil
 - (id)setCommand:(id)cmd;
