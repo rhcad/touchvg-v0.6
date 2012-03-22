@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4ACBCB381425D73E00212514 /* GraphViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* GraphViewTests.m */; };
 		4AE2C1E71424998500C67987 /* libGraphView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE2C1D21424998500C67987 /* libGraphView.a */; };
+		9D30756F151AC8D60088B538 /* GiOverlayView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D30756E151AC8D60088B538 /* GiOverlayView.mm */; };
 		9D98C69A1512D9D100DA83AE /* GiSelectController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D98C6981512D9D100DA83AE /* GiSelectController.h */; };
 		9D98C69B1512D9D100DA83AE /* GiSelectController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D98C6991512D9D100DA83AE /* GiSelectController.mm */; };
 		9D98C69E1512DEBE00DA83AE /* GiCmdController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D98C69C1512DEBE00DA83AE /* GiCmdController.h */; };
@@ -64,6 +65,7 @@
 		4AE2C2951424AA6E00C67987 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Project.xcconfig; path = Configurations/Project.xcconfig; sourceTree = "<group>"; };
 		4AE2C2961424AA6E00C67987 /* UnitTests.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = UnitTests.xcconfig; path = Configurations/UnitTests.xcconfig; sourceTree = "<group>"; };
 		4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphView_Prefix.pch; path = Headers/GraphView_Prefix.pch; sourceTree = "<group>"; };
+		9D30756E151AC8D60088B538 /* GiOverlayView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiOverlayView.mm; path = Sources/GiOverlayView.mm; sourceTree = "<group>"; };
 		9D98C6981512D9D100DA83AE /* GiSelectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiSelectController.h; path = Sources/GiSelectController.h; sourceTree = "<group>"; };
 		9D98C6991512D9D100DA83AE /* GiSelectController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiSelectController.mm; path = Sources/GiSelectController.mm; sourceTree = "<group>"; };
 		9D98C69C1512DEBE00DA83AE /* GiCmdController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiCmdController.h; path = Sources/GiCmdController.h; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 		4AE2C21514249CD300C67987 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				9D30756E151AC8D60088B538 /* GiOverlayView.mm */,
 				9D98C69D1512DEBE00DA83AE /* GiCmdController.mm */,
 				9D98C6991512D9D100DA83AE /* GiSelectController.mm */,
 				C99CC9ED1448795600802345 /* GiViewController.mm */,
@@ -335,6 +338,7 @@
 				C99CC9EE1448795600802345 /* GiViewController.mm in Sources */,
 				9D98C69B1512D9D100DA83AE /* GiSelectController.mm in Sources */,
 				9D98C69F1512DEBE00DA83AE /* GiCmdController.mm in Sources */,
+				9D30756F151AC8D60088B538 /* GiOverlayView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
