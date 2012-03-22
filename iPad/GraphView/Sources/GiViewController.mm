@@ -29,6 +29,7 @@
     if (self) {
         _command = Nil;
         _shapesCreated = NULL;
+        _overlayView = Nil;
     }
     return self;
 }
@@ -44,6 +45,7 @@
 - (void)dealloc
 {
     [_selector release];
+    [_overlayView release];
     if (_shapesCreated) {
         ((MgShapes*)_shapesCreated)->release();
         _shapesCreated = NULL;
@@ -51,15 +53,29 @@
     [super dealloc];
 }
 
-- (void)createGraphView:(CGRect)frame
+- (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor
 {
     GiGraphView *view = [[GiGraphView alloc] initWithFrame:frame];
     
     self.view = view;
+    view.backgroundColor = bkColor;
     view.shapes = new MgShapesT<std::list<MgShape*> >;
     _shapesCreated = view.shapes;
     
     [view release];
+    return self.view;
+}
+
+- (id)createOverlayView:(UIView*)view
+{
+    GiOverlayView *ov = [[GiOverlayView alloc] initWithView:view];
+    
+    _overlayView = ov;
+    ov.shapes = new MgShapesT<std::list<MgShape*> >;
+    _shapesCreated = ov.shapes;
+    
+    [ov release];
+    return _overlayView;
 }
 
 - (void)didReceiveMemoryWarning

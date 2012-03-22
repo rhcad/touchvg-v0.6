@@ -38,3 +38,6 @@ class GiGraphics;
 
 @end
 
+#ifdef __GEOMETRY_GICOLOR_H_
+GiColor giFromCGColor(CGColorRef color);    // CGColor转为RGB颜色
+#endif

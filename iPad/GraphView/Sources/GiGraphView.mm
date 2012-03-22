@@ -62,7 +62,6 @@
 {
     self.multipleTouchEnabled = YES;
     self.contentMode = UIViewContentModeRedraw;
-    self.backgroundColor = [UIColor whiteColor];
     
     _drawingDelegate = Nil;
     _zooming = NO;

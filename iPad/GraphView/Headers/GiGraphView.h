@@ -33,4 +33,21 @@
 
 @end
 
+// 附加在其他窗口视图上的图形视图类
+@interface GiOverlayView : NSObject<GiView> {
+    UIView*         _view;                  // 宿主视图
+    MgShapes*       _shapes;                // 图形列表
+    GiTransform*    _xform;                 // 坐标系对象
+    GiGraphics*     _graph;                 // 图形显示对象
+    id              _drawingDelegate;       // 动态绘图用的委托控制器对象
+}
 
+@property (nonatomic)          MgShapes*    shapes;     // 图形列表
+@property (nonatomic,readonly) GiTransform* xform;      // 坐标系对象
+@property (nonatomic,readonly) GiGraphics*  graph;      // 图形显示对象
+
+- (id)initWithView:(UIView*)view;           // 给定已有窗口视图初始化本对象
+- (void)drawOnView:(CGContextRef)context;   // 显示图形
+- (void)draw:(GiGraphics*)gs;               // 显示图形，由drawOnView调用
+
+@end

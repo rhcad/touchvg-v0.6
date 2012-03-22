@@ -9,6 +9,7 @@
     id      _selector;              // 选择编辑命令
     id      _command;               // 当前绘图命令
     void*   _shapesCreated;         // 创建的图形列表
+    id      _overlayView;           // 创建的浮动视图
 }
 
 - (void)clearCachedData;            // 清除缓冲数据
@@ -19,6 +20,9 @@
 - (id)setCommand:(id)cmd;
 
 // 创建图形视图(GiGraphView)和图形列表，不需要图形视图的派生类时使用
-- (void)createGraphView:(CGRect)frame;
+- (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor;
+
+// 在已有窗口视图上创建浮动图形视图(GiOverlayView)和图形列表，不需要图形视图的派生类时使用
+- (id)createOverlayView:(UIView*)view;
 
 @end
