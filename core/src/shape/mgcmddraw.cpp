@@ -91,6 +91,9 @@ bool MgCommandDraw::longPress(const MgMotion* /*sender*/)
 
 bool MgCommandDraw::_touchBegan(const MgMotion* sender)
 {
+    if (sender->view->context()) {
+        *m_shape->context() = *sender->view->context();
+    }
     sender->view->redraw();
     return true;
 }

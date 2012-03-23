@@ -53,7 +53,7 @@ struct MgCommandManager {
     virtual const char* getCommandName() = 0;
     virtual MgCommand* getCommand() = 0;
     virtual bool setCommand(const MgMotion* sender, const char* name) = 0;
-    virtual void cancel(const MgMotion* sender) = 0;
+    virtual bool cancel(const MgMotion* sender) = 0;
     virtual void unloadCommands() = 0;
 };
 

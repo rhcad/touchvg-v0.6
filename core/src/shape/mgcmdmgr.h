@@ -19,7 +19,7 @@ private:
     virtual const char* getCommandName();
     virtual MgCommand* getCommand();
     virtual bool setCommand(const MgMotion* sender, const char* name);
-    virtual void cancel(const MgMotion* sender);
+    virtual bool cancel(const MgMotion* sender);
     virtual void unloadCommands();
 
 private:

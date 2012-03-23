@@ -6,10 +6,15 @@
 
 struct MgMotion;
 class MgViewProxy;
+class GiContext;
 
 @interface GiCommandController : NSObject<GiMotionHandler> {
     MgMotion    *_motion;
     MgViewProxy *_mgview;
+    GiContext   *_context;
 }
+
+@property (nonatomic,readonly)  GiContext*      context;
+@property (nonatomic)           const char*     commandName;
 
 @end

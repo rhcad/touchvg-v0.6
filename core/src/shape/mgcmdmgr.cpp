@@ -57,10 +57,11 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
     return it != _cmds.end() && it->second->initialize(sender);
 }
 
-void MgCmdManagerImpl::cancel(const MgMotion* sender)
+bool MgCmdManagerImpl::cancel(const MgMotion* sender)
 {
     CMDS::iterator it = _cmds.find(_cmdname);
     if (it != _cmds.end()) {
-        it->second->cancel(sender);
+        return it->second->cancel(sender);
     }
+    return false;
 }

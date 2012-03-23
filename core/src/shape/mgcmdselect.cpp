@@ -87,15 +87,15 @@ bool MgCommandSelect::longPress(const MgMotion* /*sender*/)
 
 bool MgCommandSelect::touchBegan(const MgMotion* /*sender*/)
 {
-    return false;
+    return true;
 }
 
 bool MgCommandSelect::touchMoved(const MgMotion* /*sender*/)
 {
-    return false;
+    return true;
 }
 
 bool MgCommandSelect::touchEnded(const MgMotion* /*sender*/)
 {
-    return false;
+    return true;
 }

@@ -3,16 +3,16 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #import "GiViewController.h"
-#import "GiCmdController.h"
-#import "GiGraphView.h"
 #include <Graph2d/mgshapest.h>
 #include <list>
+#import "GiCmdController.h"
+#import "GiGraphView.h"
 
 @interface GiViewController(GestureRecognizer)
 
 - (id<GiView>)gview;
-- (id<GiMotionHandler>)motionView;
-- (id<GiMotionHandler>)getCommand;
+- (id<GiMotionHandler>)motionView:(SEL)aSelector;
+- (id<GiMotionHandler>)getCommand:(SEL)aSelector;
 
 - (void)addGestureRecognizers;
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
@@ -26,6 +26,10 @@
 @implementation GiViewController
 
 @synthesize gestureRecognizerUsed = _gestureRecognizerUsed;
+@synthesize lineWidth;
+@synthesize lineColor;
+@synthesize fillColor;
+@synthesize commandName;
 
 - (id)init
 {
@@ -95,10 +99,53 @@
     assert(!cmd || [cmd conformsToProtocol:@protocol(GiMotionHandler)]);
     id oldcmd = _command;
     
-    [[self getCommand] cancel];
+    [[self getCommand:@selector(cancel)] cancel];
     _command = cmd;
     
     return oldcmd;
+}
+
+
+- (const char*)getCommandName {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    return cmd.commandName;
+}
+
+- (void)setCommandName:(const char*)name {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    cmd.commandName = name;
+}
+
+- (int)getLineWidth {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    return cmd.context->getLineWidth();
+}
+
+- (void)setLineWidth:(int)w {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    cmd.context->setLineWidth(w);
+}
+
+- (UIColor*)getLineColor {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    GiColor c = cmd.context->getLineColor();
+    return [UIColor colorWithRed:c.r green:c.g blue:c.b alpha:c.a];
+}
+
+- (void)setLineColor:(UIColor*)c {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    cmd.context->setLineColor(giFromCGColor(c.CGColor));
+}
+
+- (UIColor*)getFillColor {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    GiColor c = cmd.context->getFillColor();
+    return [UIColor colorWithRed:c.r green:c.g blue:c.b alpha:c.a];
+}
+
+- (void)setFillColor:(UIColor*)c {
+    GiCommandController* cmd = (GiCommandController*)_command;
+    cmd.context->setFillColor(giFromCGColor(c.CGColor));
 }
 
 #pragma mark - View motion
@@ -143,15 +190,15 @@
 
 - (void)undoMotion
 {
-    if (![[self getCommand] undoMotion])
-        [[self motionView] undoMotion];
+    if (![[self getCommand:@selector(undoMotion)] undoMotion])
+        [[self motionView:@selector(undoMotion)] undoMotion];
 }
 
 - (void)dynDraw
 {
     GiGraphics* gs = [[self gview] getGraph];
     if (gs->isDrawing()) {
-        [[self getCommand] dynDraw: gs];
+        [[self getCommand:@selector(dynDraw:)] dynDraw: gs];
     }
 }
 
@@ -165,16 +212,19 @@
     return (id<GiView>)self.view;
 }
 
-- (id<GiMotionHandler>)motionView
+- (id<GiMotionHandler>)motionView:(SEL)aSelector
 {
-    if ([self.view conformsToProtocol:@protocol(GiMotionHandler)])
+    if ([self.view conformsToProtocol:@protocol(GiMotionHandler)]
+        && [self.view respondsToSelector:aSelector]) {
         return (id<GiMotionHandler>)self.view;
+    }
     return Nil;
 }
 
-- (id<GiMotionHandler>)getCommand
+- (id<GiMotionHandler>)getCommand:(SEL)aSelector
 {
-    return (id<GiMotionHandler>)_command;
+    return [_command respondsToSelector:aSelector] ?
+        (id<GiMotionHandler>)_command : Nil;
 }
 
 - (void)addGestureRecognizers
@@ -229,32 +279,32 @@
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
-    if (![[self getCommand] twoFingersPinch:sender])
-        [[self motionView] twoFingersPinch:sender];
+    if (![[self getCommand:@selector(twoFingersPinch:)] twoFingersPinch:sender])
+        [[self motionView:@selector(twoFingersPinch:)] twoFingersPinch:sender];
 }
 
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
-    if (![[self getCommand] twoFingersPan:sender])
-        [[self motionView] twoFingersPan:sender];
+    if (![[self getCommand:@selector(twoFingersPan:)] twoFingersPan:sender])
+        [[self motionView:@selector(twoFingersPan:)] twoFingersPan:sender];
 }
 
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    if (![[self getCommand] oneFingerPan:sender])
-        [[self motionView] oneFingerPan:sender];
+    if (![[self getCommand:@selector(oneFingerPan:)] oneFingerPan:sender])
+        [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
 }
 
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
-    if (![[self getCommand] oneFingerOneTap:sender])
-        [[self motionView] oneFingerOneTap:sender];
+    if (![[self getCommand:@selector(oneFingerOneTap:)] oneFingerOneTap:sender])
+        [[self motionView:@selector(oneFingerOneTap:)] oneFingerOneTap:sender];
 }
 
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
-    if (![[self getCommand] oneFingerTwoTaps:sender])
-        [[self motionView] oneFingerTwoTaps:sender];
+    if (![[self getCommand:@selector(oneFingerTwoTaps:)] oneFingerTwoTaps:sender])
+        [[self motionView:@selector(oneFingerTwoTaps:)] oneFingerTwoTaps:sender];
 }
 
 @end

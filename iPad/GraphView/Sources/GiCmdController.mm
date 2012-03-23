@@ -15,14 +15,18 @@
 class MgViewProxy : public MgView
 {
 public:
+    GiContext*      _context;
     id<GiView>      view;
-    MgViewProxy() : view(Nil) {}
+    MgViewProxy(GiContext* ctx) : _context(ctx), view(Nil) {}
 private:
     MgShapes* shapes() { return [view getShapes]; }
     GiTransform* xform() { return [view getXform]; }
     GiGraphics* graph() { return [view getGraph]; }
     void regen() { [view regen]; }
     void redraw() { [view redraw]; }
+    const GiContext* context() { return _context; }
+    bool shapeWillAdded(MgShape* shape) { return true; }
+    bool shapeWillDeleted(MgShape* shape) { return true; }
 };
 
 @implementation GiCommandController(Internal)
@@ -44,11 +48,15 @@ private:
 
 @implementation GiCommandController
 
+@synthesize context = _context;
+@synthesize commandName;
+
 - (id)init
 {
     self = [super init];
     if (self) {
-        _mgview = new MgViewProxy;
+        _context = new GiContext(-3);
+        _mgview = new MgViewProxy(_context);
         _motion = new MgMotion;
         _motion->view = _mgview;
     }
@@ -59,7 +67,16 @@ private:
 {
     delete _motion;
     delete _mgview;
+    delete _context;
     [super dealloc];
+}
+
+- (const char*)getCommandName {
+    return mgGetCommandManager()->getCommandName();
+}
+
+- (void)setCommandName:(const char*)name {
+    mgGetCommandManager()->setCommand(_motion, name);
 }
 
 - (void)dynDraw:(GiGraphics*)gs
@@ -97,13 +114,13 @@ private:
             _motion->lastPoint = _motion->point;
             _motion->lastPointM = _motion->pointM;
             
-            ret = cmd->touchesBegan(_motion);
+            ret = cmd->touchBegan(_motion);
         }
         else if (sender.state == UIGestureRecognizerStateChanged) {
-            ret = cmd->touchesMoved(_motion);
+            ret = cmd->touchMoved(_motion);
         }
         else if (sender.state == UIGestureRecognizerStateEnded) {
-            ret = cmd->touchesEnded(_motion);
+            ret = cmd->touchEnded(_motion);
         }
         else {
             ret = cmd->cancel(_motion);

@@ -30,6 +30,19 @@
 #endif
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.commandName = "select";
+}
+
+- (void)undoMotion
+{
+    static int n = 0;
+    const char* names[] = { "select", "splines", "lines", "rect" };
+    self.commandName = names[++n % 4];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
