@@ -3,61 +3,106 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #include "mgcmddraw.h"
+#include <assert.h>
 
-MgCommandDraw::MgCommandDraw()
+MgCommandDraw::MgCommandDraw() : m_shape(NULL), m_step(0)
 {
 }
 
 MgCommandDraw::~MgCommandDraw()
 {
+    if (m_shape) {
+        m_shape->release();
+        m_shape = NULL;
+    }
 }
 
 bool MgCommandDraw::cancel(const MgMotion* sender)
 {
-    sender; return false;
+    if (m_step > 0) {
+        m_step = 0;
+        m_shape->shape()->clear();
+        sender->view->redraw();
+        return true;
+    }
+    return false;
 }
 
-bool MgCommandDraw::initialize(const MgMotion* sender)
+bool MgCommandDraw::_initialize(MgShape* (*creator)(), const MgMotion* sender)
 {
-    sender; return true;
+    if (!m_shape)
+    {
+        m_shape = creator();
+        assert(m_shape && m_shape->shape());
+    }
+    m_step = 0;
+    m_shape->shape()->clear();
+    if (sender->view->context()) {
+        *m_shape->context() = *sender->view->context();
+    }
+
+    return true;
+}
+
+bool MgCommandDraw::_addshape(const MgMotion* sender)
+{
+    bool ret = sender->view->shapeWillAdded(m_shape);
+
+    if (ret) {
+        sender->view->shapes()->addShape(*m_shape);
+        sender->view->regen();
+    }
+    if (sender->view->context()) {
+        *m_shape->context() = *sender->view->context();
+    }
+
+    return ret;
 }
 
 bool MgCommandDraw::undo(const MgMotion* sender)
 {
-    sender; return false;
+    if (m_step > 0) {
+        m_step--;
+        sender->view->redraw();
+        return true;
+    }
+    return false;
 }
 
-bool MgCommandDraw::draw(const MgMotion* sender, GiGraphics* gs)
+bool MgCommandDraw::draw(const MgMotion* /*sender*/, GiGraphics* gs)
 {
-    sender; return false;
+    return m_step > 0 && m_shape->draw(*gs);
 }
 
-bool MgCommandDraw::click(const MgMotion* sender)
+bool MgCommandDraw::click(const MgMotion* /*sender*/)
 {
-    sender; return false;
+    return false;
 }
 
-bool MgCommandDraw::doubleClick(const MgMotion* sender)
+bool MgCommandDraw::doubleClick(const MgMotion* /*sender*/)
 {
-    sender; return false;
+    return false;
 }
 
-bool MgCommandDraw::longPress(const MgMotion* sender)
+bool MgCommandDraw::longPress(const MgMotion* /*sender*/)
 {
-    sender; return false;
+    return false;
 }
 
-bool MgCommandDraw::touchesBegan(const MgMotion* sender)
+bool MgCommandDraw::_touchBegan(const MgMotion* sender)
 {
-    sender; return false;
+    sender->view->redraw();
+    return true;
 }
 
-bool MgCommandDraw::touchesMoved(const MgMotion* sender)
+bool MgCommandDraw::_touchMoved(const MgMotion* sender)
 {
-    sender; return false;
+    sender->view->redraw();
+    return true;
 }
 
-bool MgCommandDraw::touchesEnded(const MgMotion* sender)
+bool MgCommandDraw::_touchEnded(const MgMotion* sender)
 {
-    sender; return false;
+    sender->view->redraw();
+    return true;
 }

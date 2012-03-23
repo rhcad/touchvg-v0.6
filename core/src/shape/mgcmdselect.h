@@ -6,6 +6,7 @@
 #define __GEOMETRY_MGCOMMAND_SELECT_H_
 
 #include <mgcmd.h>
+#include <vector>
 
 class MgCommandSelect : public MgCommand
 {
@@ -27,9 +28,15 @@ private:
     virtual bool click(const MgMotion* sender);
     virtual bool doubleClick(const MgMotion* sender);
     virtual bool longPress(const MgMotion* sender);
-    virtual bool touchesBegan(const MgMotion* sender);
-    virtual bool touchesMoved(const MgMotion* sender);
-    virtual bool touchesEnded(const MgMotion* sender);
+    virtual bool touchBegan(const MgMotion* sender);
+    virtual bool touchMoved(const MgMotion* sender);
+    virtual bool touchEnded(const MgMotion* sender);
+
+private:
+    std::vector<UInt32>     m_selection;
+    UInt32                  m_id;
+    Point2d                 m_ptNear;
+    Int32                   m_segment;
 };
 
 #endif // __GEOMETRY_MGCOMMAND_SELECT_H_

@@ -12,10 +12,13 @@
 //! 图形视图接口
 struct MgView {
     virtual MgShapes* shapes() = 0;             //!< 得到图形列表
-    virtual GiTransform* xform() = 0;           //!<  得到坐标系对象
-    virtual GiGraphics* graph() = 0;            //!<  得到图形显示对象
-    virtual void regen() = 0;                   //!<  标记视图待重新构建显示
-    virtual void redraw() = 0;                  //!<  标记视图待更新显示
+    virtual GiTransform* xform() = 0;           //!< 得到坐标系对象
+    virtual GiGraphics* graph() = 0;            //!< 得到图形显示对象
+    virtual void regen() = 0;                   //!< 标记视图待重新构建显示
+    virtual void redraw() = 0;                  //!< 标记视图待更新显示
+    virtual const GiContext* context() = 0;     //!< 得到当前绘图属性
+    virtual bool shapeWillAdded(MgShape* shape) = 0;    //!< 通知将添加图形
+    virtual bool shapeWillDeleted(MgShape* shape) = 0;  //!< 通知将删除图形
 };
 
 //! 命令参数
@@ -40,9 +43,9 @@ struct MgCommand {
     virtual bool click(const MgMotion* sender) = 0;
     virtual bool doubleClick(const MgMotion* sender) = 0;
     virtual bool longPress(const MgMotion* sender) = 0;
-    virtual bool touchesBegan(const MgMotion* sender) = 0;
-    virtual bool touchesMoved(const MgMotion* sender) = 0;
-    virtual bool touchesEnded(const MgMotion* sender) = 0;
+    virtual bool touchBegan(const MgMotion* sender) = 0;
+    virtual bool touchMoved(const MgMotion* sender) = 0;
+    virtual bool touchEnded(const MgMotion* sender) = 0;
 };
 
 //! 命令管理器接口

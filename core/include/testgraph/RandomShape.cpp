@@ -18,11 +18,11 @@ UInt8 RandomParam::RandUInt8(long nMin, long nMax)
     return (UInt8)RandInt(nMin, nMax);
 }
 
-void RandomParam::setShapeProp(MgShape* shape)
+void RandomParam::setShapeProp(GiContext* context)
 {
-    shape->context()->setLineColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(1, 255)));
-    shape->context()->setLineWidth((Int16)RandInt(-10, 200));
-    shape->context()->setLineStyle((kLineStyle)(randomLineStyle ? RandInt(kLineSolid, kLineNull) : kLineSolid));
+    context->setLineColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(1, 255)));
+    context->setLineWidth((Int16)RandInt(-10, 200));
+    context->setLineStyle((kLineStyle)(randomLineStyle ? RandInt(kLineSolid, kLineNull) : kLineSolid));
 }
 
 void RandomParam::initShapes(MgShapes* shapes)
@@ -51,7 +51,7 @@ void RandomParam::initShapes(MgShapes* shapes)
             sp = shapes->addShape(shape);
             curveCount--;
             
-            setShapeProp(sp);
+            setShapeProp(sp->context());
             for (UInt32 i = 0; i < sp->shape()->getPointCount(); i++)
             {
                 if (0 == i)
@@ -71,7 +71,7 @@ void RandomParam::initShapes(MgShapes* shapes)
             arcCount--;
             /*
             ArcItem* shape = new ArcItem();
-            setShapeProp(sp);
+            setShapeProp(sp->context());
             shape->center.set(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0));
             shape->rx = RandDbl(1.0, 1000.0);
             shape->ry = RandDbl(1.0, 1000.0);
@@ -89,7 +89,7 @@ void RandomParam::initShapes(MgShapes* shapes)
             MgShapeT<MgLine> shape;
 
             sp = shapes->addShape(shape);
-            setShapeProp(sp);
+            setShapeProp(sp->context());
             sp->shape()->setPoint(0, Point2d(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0)));
             sp->shape()->setPoint(1, Point2d(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0)));
         }

@@ -3,6 +3,8 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #include "mgdrawrect.h"
+#include <mgshapet.h>
+#include <mgbasicsp.h>
 
 MgCmdDrawRect::MgCmdDrawRect()
 {
@@ -10,4 +12,43 @@ MgCmdDrawRect::MgCmdDrawRect()
 
 MgCmdDrawRect::~MgCmdDrawRect()
 {
+}
+
+bool MgCmdDrawRect::initialize(const MgMotion* sender)
+{
+    return _initialize(MgShapeT<MgRect>::create, sender);
+}
+
+bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
+{
+    m_step = 1;
+    ((MgBaseRect*)m_shape->shape())->setRect(Box2d(sender->pointM, sender->pointM));
+    m_shape->shape()->update();
+
+    return _touchBegan(sender);
+}
+
+bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
+{
+    ((MgBaseRect*)m_shape->shape())->setRect(Box2d(sender->startPointM, sender->pointM));
+    m_shape->shape()->update();
+
+    return _touchMoved(sender);
+}
+
+bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
+{
+    ((MgBaseRect*)m_shape->shape())->setRect(Box2d(sender->startPointM, sender->pointM));
+    m_shape->shape()->update();
+
+    double minDist = (Vector2d(10, 10) * sender->view->xform()->displayToModel()).length();
+
+    if (! ((MgBaseRect*)m_shape->shape())->isEmpty(minDist)) {
+        _addshape(sender);
+    }
+
+    m_shape->shape()->clear();
+    m_step = 0;
+
+    return _touchEnded(sender);
 }

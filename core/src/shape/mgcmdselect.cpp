@@ -14,50 +14,88 @@ MgCommandSelect::~MgCommandSelect()
 
 bool MgCommandSelect::cancel(const MgMotion* sender)
 {
-    sender; return false;
+    if (!m_selection.empty())
+        return undo(sender);
+    return false;
 }
 
-bool MgCommandSelect::initialize(const MgMotion* sender)
+bool MgCommandSelect::initialize(const MgMotion* /*sender*/)
 {
-    sender; return true;
+    m_selection.clear();
+    m_id = 0;
+    m_segment = -1;
+
+    return true;
 }
 
 bool MgCommandSelect::undo(const MgMotion* sender)
 {
-    sender; return false;
+    if (!m_selection.empty()) {
+        m_selection.clear();
+        sender->view->redraw();
+        return true;
+    }
+    return false;
 }
 
 bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
 {
-    sender; return false;
+    std::vector<UInt32>::const_iterator it;
+    GiContext context(-6, GiColor(0, 0, 255, 50));
+
+    for (it = m_selection.begin(); it != m_selection.end(); ++it)
+    {
+        const MgShape* shape = sender->view->shapes()->findShape(*it);
+        if (shape)
+            shape->draw(*gs, &context);
+    }
+
+    return true;
 }
 
 bool MgCommandSelect::click(const MgMotion* sender)
 {
-    sender; return false;
+    Box2d limits(Point2d(sender->point.x, sender->point.y), 50, 0);
+    MgShape* shape;
+    Point2d ptNear;
+    Int32 segment = -1;
+    
+    shape = sender->view->shapes()->hitTest(
+        limits * sender->view->xform()->displayToModel(),
+        ptNear, segment);
+    UInt32 id = shape ? shape->getID() : 0;
+
+    if (m_selection.empty() && !shape)
+        return true;
+
+    m_selection.clear();
+    m_selection.push_back(id);
+    sender->view->redraw();
+
+    return true;
 }
 
-bool MgCommandSelect::doubleClick(const MgMotion* sender)
+bool MgCommandSelect::doubleClick(const MgMotion* /*sender*/)
 {
-    sender; return false;
+    return false;
 }
 
-bool MgCommandSelect::longPress(const MgMotion* sender)
+bool MgCommandSelect::longPress(const MgMotion* /*sender*/)
 {
-    sender; return false;
+    return false;
 }
 
-bool MgCommandSelect::touchesBegan(const MgMotion* sender)
+bool MgCommandSelect::touchBegan(const MgMotion* /*sender*/)
 {
-    sender; return false;
+    return false;
 }
 
-bool MgCommandSelect::touchesMoved(const MgMotion* sender)
+bool MgCommandSelect::touchMoved(const MgMotion* /*sender*/)
 {
-    sender; return false;
+    return false;
 }
 
-bool MgCommandSelect::touchesEnded(const MgMotion* sender)
+bool MgCommandSelect::touchEnded(const MgMotion* /*sender*/)
 {
-    sender; return false;
+    return false;
 }

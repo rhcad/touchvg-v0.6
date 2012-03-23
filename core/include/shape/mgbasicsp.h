@@ -51,13 +51,13 @@ public:
     double getAngle() const;
 
     //! 返回是否为空矩形
-    bool isEmpty() const;
+    bool isEmpty(double minDist) const;
 
     //! 返回是否为水平矩形
     bool isOrtho() const;
 
     //! 设置矩形
-    void setRect(const Box2d& rect, double angle);
+    void setRect(const Box2d& rect, double angle = 0.0);
 
     //! 设置四个角点
     void setRect(const Point2d points[4]);

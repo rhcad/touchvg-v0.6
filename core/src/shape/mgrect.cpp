@@ -58,8 +58,8 @@ bool MgBaseRect::_isKindOf(UInt32 type) const
 void MgBaseRect::_update()
 {
     double yoff = _points[2].distanceTo(_points[1]);
-    _points[2] = _points[0].rulerPoint(_points[1], -yoff);
-    _points[3] = _points[1].rulerPoint(_points[0], yoff);
+    _points[2] = _points[1].rulerPoint(_points[0], yoff);
+    _points[3] = _points[0].rulerPoint(_points[1], -yoff);
     _extent.set(4, _points);
     __super::_update();
 }
@@ -104,9 +104,9 @@ double MgBaseRect::getAngle() const
     return (_points[1] - _points[0]).angle2();
 }
 
-bool MgBaseRect::isEmpty() const
+bool MgBaseRect::isEmpty(double minDist) const
 {
-    return _points[2] == _points[0];
+    return _points[2].distanceTo(_points[0]) < mgMax(minDist, _MGZERO);
 }
 
 bool MgBaseRect::isOrtho() const

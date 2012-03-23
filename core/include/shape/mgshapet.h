@@ -51,6 +51,11 @@ public:
         return shape()->draw(gs, tmpctx);
     }
 
+    static MgShape* create()
+    {
+        return new ThisClass;
+    }
+
     static UInt32 Type() { return 9; }
     UInt32 getType() const { return Type(); }
 
@@ -69,6 +74,7 @@ public:
         ThisClass *p = new ThisClass;
 
         p->shape()->copy(_shape);
+        p->shape()->update();
         p->_context = _context;
 
         return p;

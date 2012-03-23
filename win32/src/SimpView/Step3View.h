@@ -14,6 +14,7 @@ public:
 
 // Attributes
 public:
+    GiContext   m_context;
 
 // Operations
 public:
@@ -34,7 +35,7 @@ protected:
     afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
     afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
     afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
-    afx_msg void OnDelayLButtonUp();
+    afx_msg LRESULT OnDelayLButtonUp(WPARAM wp, LPARAM lp);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -43,7 +44,7 @@ private:
     class MgViewProxy : public MgView
     {
     public:
-        CBaseView*      view;
+        CDrawShapeView* view;
         MgViewProxy() : view(NULL) {}
     private:
         MgShapes* shapes() { return view->m_shapes; }
@@ -54,6 +55,12 @@ private:
             view->m_gs->clearCachedBitmap();
             view->Invalidate();
         }
+        const GiContext* context() {
+            RandomParam().setShapeProp(&view->m_context);
+            return &view->m_context;
+        }
+        bool shapeWillAdded(MgShape*) { return true; }
+        bool shapeWillDeleted(MgShape*) { return true; }
     };
 
     const char* getCmdName(UINT nID) const;

@@ -7,7 +7,7 @@
 
 #include "mgcmddraw.h"
 
-class MgCmdDrawLines : public MgCommandDraw
+class MgCmdDrawLines : public MgCmdBaseLines
 {
 public:
     MgCmdDrawLines();
@@ -19,6 +19,7 @@ public:
 private:
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
+    virtual bool initialize(const MgMotion* sender);
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_LINES_H_

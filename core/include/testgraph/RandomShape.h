@@ -10,11 +10,11 @@ struct RandomParam
     long curveCount;
     bool randomLineStyle;
     
-    RandomParam() : lineCount(10), arcCount(10), curveCount(10), randomLineStyle(false) {}
+    RandomParam() : lineCount(10), arcCount(10), curveCount(10), randomLineStyle(true) {}
 
     long getShapeCount() const { return lineCount + arcCount + curveCount; }
     void initShapes(MgShapes* shapes);
-    void setShapeProp(MgShape* shape);
+    void setShapeProp(GiContext* context);
 
     static double RandDbl(double dMin, double dMax);
     static long RandInt(long nMin, long nMax);

@@ -13,17 +13,39 @@ public:
     MgCommandDraw();
     virtual ~MgCommandDraw();
     
-private:
+protected:
+    bool _initialize(MgShape* (*creator)(), const MgMotion* sender);
+    bool _touchBegan(const MgMotion* sender);
+    bool _touchMoved(const MgMotion* sender);
+    bool _touchEnded(const MgMotion* sender);
+    bool _addshape(const MgMotion* sender);
+
     virtual bool cancel(const MgMotion* sender);
-    virtual bool initialize(const MgMotion* sender);
     virtual bool undo(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual bool click(const MgMotion* sender);
     virtual bool doubleClick(const MgMotion* sender);
     virtual bool longPress(const MgMotion* sender);
-    virtual bool touchesBegan(const MgMotion* sender);
-    virtual bool touchesMoved(const MgMotion* sender);
-    virtual bool touchesEnded(const MgMotion* sender);
+
+protected:
+    MgShape*    m_shape;
+    UInt32      m_step;
+};
+
+class MgCmdBaseLines : public MgCommandDraw
+{
+public:
+    MgCmdBaseLines();
+    virtual ~MgCmdBaseLines();
+
+protected:
+    virtual bool touchBegan(const MgMotion* sender);
+    virtual bool touchMoved(const MgMotion* sender);
+    virtual bool touchEnded(const MgMotion* sender);
+
+protected:
+    virtual bool canAddPoint(const MgMotion* sender);
+    virtual bool canAddShape(const MgMotion* sender);
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_H_

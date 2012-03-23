@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "Step3View.h"
-#include <afxpriv.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -15,7 +14,7 @@ static char THIS_FILE[] = __FILE__;
 const UINT WM_DELAY_LBUTTONUP = WM_USER + 101;
 
 CDrawShapeView::CDrawShapeView(RandomParam& param)
-	: CScrollShapeView(param), m_cmdID(ID_CMD_SELECT)
+	: CScrollShapeView(param), m_cmdID(0)
     , m_moved(FALSE), m_delayUp(FALSE), m_downTime(0), m_downFlags(0)
 {
     m_mgview.view = this;
@@ -34,7 +33,7 @@ BEGIN_MESSAGE_MAP(CDrawShapeView, CScrollShapeView)
     ON_WM_LBUTTONDOWN()
     ON_WM_LBUTTONUP()
     ON_WM_LBUTTONDBLCLK()
-    ON_MESSAGE_VOID(WM_DELAY_LBUTTONUP, OnDelayLButtonUp)
+    ON_MESSAGE(WM_DELAY_LBUTTONUP, OnDelayLButtonUp)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -78,7 +77,9 @@ void CDrawShapeView::OnMouseMove(UINT nFlags, CPoint point)
 {
     CBaseView::OnMouseMove(nFlags, point);
 
-    if ((nFlags & MK_LBUTTON) && (m_downFlags & MK_LBUTTON))
+    if (!m_delayUp
+        && (nFlags & MK_LBUTTON)
+        && (m_downFlags & MK_LBUTTON))
     {
         MgCommand* cmd = mgGetCommandManager()->getCommand();
 
@@ -88,11 +89,11 @@ void CDrawShapeView::OnMouseMove(UINT nFlags, CPoint point)
         if (!m_moved && mgHypot(point.x - m_motion.startPoint.x, point.y - m_motion.startPoint.y) > 5)
         {
             m_moved = TRUE;
-            if (cmd) cmd->touchesBegan(&m_motion);
+            if (cmd) cmd->touchBegan(&m_motion);
         }
         else if (m_moved)
         {
-            if (cmd) cmd->touchesMoved(&m_motion);
+            if (cmd) cmd->touchMoved(&m_motion);
         }
 
         m_motion.lastPoint = m_motion.point;
@@ -105,17 +106,14 @@ void CDrawShapeView::OnLButtonDown(UINT nFlags, CPoint point)
     CBaseView::OnLButtonDown(nFlags, point);
     SetCapture();
 
-    if (!m_delayUp)
-    {
-        m_motion.startPoint = point;
-        m_motion.startPointM = Point2d(point.x, point.y) * m_xf.displayToModel();
-        m_motion.point = m_motion.startPoint;
-        m_motion.pointM = m_motion.startPointM;
-        m_moved = FALSE;
-        m_delayUp = FALSE;
-        m_downTime = GetTickCount();
-        m_downFlags = nFlags;
-    }
+    m_motion.startPoint = point;
+    m_motion.startPointM = Point2d(point.x, point.y) * m_xf.displayToModel();
+    m_motion.point = m_motion.startPoint;
+    m_motion.pointM = m_motion.startPointM;
+    m_moved = FALSE;
+    m_delayUp = FALSE;
+    m_downTime = GetTickCount();
+    m_downFlags = nFlags;
 }
 
 void CDrawShapeView::OnLButtonUp(UINT nFlags, CPoint point)
@@ -123,25 +121,36 @@ void CDrawShapeView::OnLButtonUp(UINT nFlags, CPoint point)
     CBaseView::OnLButtonUp(nFlags, point);
     ReleaseCapture();
 
-    if (m_moved)
+    if (m_delayUp)
+    {
+        m_delayUp = FALSE;
+    }
+    else if (m_moved)
     {
         MgCommand* cmd = mgGetCommandManager()->getCommand();
-        if (cmd) cmd->touchesEnded(&m_motion);
+        if (cmd) cmd->touchEnded(&m_motion);
     }
-    else if (!m_delayUp && point == m_motion.startPoint)
+    else if (point == m_motion.startPoint)
     {
-        PostMessage(WM_DELAY_LBUTTONUP);
+        PostMessage(WM_DELAY_LBUTTONUP, m_downTime, m_downFlags);
         m_delayUp = TRUE;
     }
 }
 
-void CDrawShapeView::OnDelayLButtonUp()
+LRESULT CDrawShapeView::OnDelayLButtonUp(WPARAM wp, LPARAM lp)
 {
-    if (m_delayUp)
+    long downTime = wp;
+    UINT downFlags = lp;
+
+    if (downTime != m_downTime)
     {
-        if (GetTickCount() - m_downTime < 5000)
+        m_delayUp = FALSE;
+    }
+    else if (m_delayUp)
+    {
+        if (GetTickCount() - m_downTime < 100)
         {
-            PostMessage(WM_DELAY_LBUTTONUP);
+            PostMessage(WM_DELAY_LBUTTONUP, downTime, downFlags);
         }
         else
         {
@@ -152,6 +161,8 @@ void CDrawShapeView::OnDelayLButtonUp()
             m_downFlags = 0;
         }
     }
+
+    return 0;
 }
 
 void CDrawShapeView::OnLButtonDblClk(UINT nFlags, CPoint point)

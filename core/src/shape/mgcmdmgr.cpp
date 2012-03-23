@@ -44,6 +44,14 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
     cancel(sender);
 
     CMDS::iterator it = _cmds.find(name);
+    if (it == _cmds.end())
+    {
+        MgCommand* cmd = mgCreateCommand(name);
+        if (cmd) {
+            _cmds[name] = cmd;
+            it = _cmds.find(name);
+        }
+    }
     _cmdname = (it != _cmds.end()) ? name : "";
 
     return it != _cmds.end() && it->second->initialize(sender);
