@@ -53,7 +53,7 @@ struct MgShape : public MgObject
 
     virtual UInt32 getID() const = 0;
     virtual MgShapes* getParent() const = 0;
-    virtual void setParent(MgShapes* p, UInt32 id) = 0;
+    virtual void setParent(MgShapes* p, UInt32 nID) = 0;
 };
 
 //! 矢量图形基类

@@ -5,9 +5,11 @@
 #import <Graph2d/GiMotionHandler.h>
 
 struct MgMotion;
+class MgViewProxy;
 
 @interface GiCommandController : NSObject<GiMotionHandler> {
     MgMotion    *_motion;
+    MgViewProxy *_mgview;
 }
 
 @end

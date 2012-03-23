@@ -31,8 +31,10 @@ struct MgMotion {
 
 //! 命令接口
 struct MgCommand {
-    virtual UInt32 getID() const = 0;
+    virtual const char* getName() const = 0;
+    virtual void release() = 0;
     virtual bool cancel(const MgMotion* sender) = 0;
+    virtual bool initialize(const MgMotion* sender) = 0;
     virtual bool undo(const MgMotion* sender) = 0;
     virtual bool draw(const MgMotion* sender, GiGraphics* gs) = 0;
     virtual bool click(const MgMotion* sender) = 0;
@@ -45,9 +47,11 @@ struct MgCommand {
 
 //! 命令管理器接口
 struct MgCommandManager {
-    virtual UInt32 getCommandID() = 0;
+    virtual const char* getCommandName() = 0;
     virtual MgCommand* getCommand() = 0;
-    virtual bool setCommandID(UInt32 cmdID) = 0;
+    virtual bool setCommand(const MgMotion* sender, const char* name) = 0;
+    virtual void cancel(const MgMotion* sender) = 0;
+    virtual void unloadCommands() = 0;
 };
 
 //! 返回命令管理器

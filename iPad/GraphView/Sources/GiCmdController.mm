@@ -14,15 +14,15 @@
 
 class MgViewProxy : public MgView
 {
-    id<GiView>  _view;
 public:
-    MgViewProxy(id<GiView> view) : _view(view) {}
+    id<GiView>      view;
+    MgViewProxy() : view(Nil) {}
 private:
-    MgShapes* shapes() { return [_view getShapes]; }
-    GiTransform* xform() { return [_view getXform]; }
-    GiGraphics* graph() { return [_view getGraph]; }
-    void regen() { [_view regen]; }
-    void redraw() { [_view redraw]; }
+    MgShapes* shapes() { return [view getShapes]; }
+    GiTransform* xform() { return [view getXform]; }
+    GiGraphics* graph() { return [view getGraph]; }
+    void regen() { [view regen]; }
+    void redraw() { [view redraw]; }
 };
 
 @implementation GiCommandController(Internal)
@@ -48,8 +48,9 @@ private:
 {
     self = [super init];
     if (self) {
+        _mgview = new MgViewProxy;
         _motion = new MgMotion;
-        _motion->view = NULL;
+        _motion->view = _mgview;
     }
     return self;
 }
@@ -57,27 +58,27 @@ private:
 - (void)dealloc
 {
     delete _motion;
+    delete _mgview;
     [super dealloc];
 }
 
 - (void)dynDraw:(GiGraphics*)gs
 {
     MgCommand* cmd = mgGetCommandManager()->getCommand();
-    if (cmd && _motion->view) {
+    if (cmd && _mgview->view) {
         cmd->draw(_motion, gs);
     }
 }
 
 - (BOOL)cancel
 {
-    MgCommand* cmd = mgGetCommandManager()->getCommand();
-    return cmd && _motion->view && cmd->cancel(_motion);
+    return _mgview->view && mgGetCommandManager()->cancel(_motion);
 }
 
 - (BOOL)undoMotion
 {
     MgCommand* cmd = mgGetCommandManager()->getCommand();
-    return cmd && _motion->view && cmd->undo(_motion);
+    return cmd && _mgview->view && cmd->undo(_motion);
 }
 
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
@@ -87,8 +88,7 @@ private:
     
     if (cmd)
     {
-        MgViewProxy view([self toView:sender]);
-        _motion->view = &view;
+        _mgview->view = [self toView:sender];
         [self convertPoint:[sender locationInView:sender.view]];
         
         if (sender.state == UIGestureRecognizerStateBegan) {
@@ -122,8 +122,7 @@ private:
     BOOL ret = NO;
     
     if (cmd) {
-        MgViewProxy view([self toView:sender]);
-        _motion->view = &view;
+        _mgview->view = [self toView:sender];
         [self convertPoint:[sender locationInView:sender.view]];
         
         ret = cmd->doubleClick(_motion);
@@ -141,8 +140,7 @@ private:
     BOOL ret = NO;
     
     if (cmd) {
-        MgViewProxy view([self toView:sender]);
-        _motion->view = &view;
+        _mgview->view = [self toView:sender];
         [self convertPoint:[sender locationInView:sender.view]];
         
         ret = cmd->click(_motion);

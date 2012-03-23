@@ -6,6 +6,8 @@
 #define __GEOMETRY_MGCOMMAND_MANAGER_H_
 
 #include <mgcmd.h>
+#include <map>
+#include <string>
 
 class MgCmdManagerImpl : public MgCommandManager
 {
@@ -14,9 +16,16 @@ public:
     virtual ~MgCmdManagerImpl();
     
 private:
-    virtual UInt32 getCommandID();
+    virtual const char* getCommandName();
     virtual MgCommand* getCommand();
-    virtual bool setCommandID(UInt32 cmdID);
+    virtual bool setCommand(const MgMotion* sender, const char* name);
+    virtual void cancel(const MgMotion* sender);
+    virtual void unloadCommands();
+
+private:
+    typedef std::map<std::string, MgCommand*> CMDS;
+    CMDS            _cmds;
+    std::string     _cmdname;
 };
 
 #endif // __GEOMETRY_MGCOMMAND_MANAGER_H_

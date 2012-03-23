@@ -110,11 +110,11 @@ public:
         return NULL;
     }
 
-    MgShape* findShape(UInt32 id) const
+    MgShape* findShape(UInt32 nID) const
     {
         for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
         {
-            if ((*it)->getID() == id)
+            if ((*it)->getID() == nID)
                 return *it;
         }
         return NULL;
@@ -173,14 +173,14 @@ public:
 private:
     UInt32 getNewID()
     {
-        UInt32 id = 1;
+        UInt32 nID = 1;
 
         if (!_shapes.empty())
-            id = _shapes.back()->getID() + 1;
-        while (findShape(id))
-            id++;
+            nID = _shapes.back()->getID() + 1;
+        while (findShape(nID))
+            nID++;
 
-        return id;
+        return nID;
     }
 
 protected:

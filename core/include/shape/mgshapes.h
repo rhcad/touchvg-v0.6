@@ -18,7 +18,7 @@ struct MgShapes : public MgObject
     virtual UInt32 getShapeCount() const = 0;
     virtual MgShape* getFirstShape(void*& it) const = 0;
     virtual MgShape* getNextShape(void*& it) const = 0;
-    virtual MgShape* findShape(UInt32 id) const = 0;
+    virtual MgShape* findShape(UInt32 nID) const = 0;
     virtual Box2d getExtent() const = 0;
 
     virtual MgShape* hitTest(const Box2d& limits, Point2d& ptNear, Int32& segment) const = 0;

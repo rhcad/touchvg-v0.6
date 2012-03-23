@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Step2View.h"
+#include <mgcmd.h>
 
 class CDrawShapeView : public CScrollShapeView
 {
@@ -30,10 +31,38 @@ protected:
     afx_msg void OnUpdateCmds(CCmdUI* pCmdUI);
     afx_msg void OnCmds(UINT nID);
     afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+    afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+    afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+    afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+    afx_msg void OnDelayLButtonUp();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
 // Implementation
 private:
-    UINT    m_nCmdID;
+    class MgViewProxy : public MgView
+    {
+    public:
+        CBaseView*      view;
+        MgViewProxy() : view(NULL) {}
+    private:
+        MgShapes* shapes() { return view->m_shapes; }
+        GiTransform* xform() { return &view->m_xf; }
+        GiGraphics* graph() { return view->m_gs; }
+        void redraw() { view->Invalidate(); }
+        void regen() {
+            view->m_gs->clearCachedBitmap();
+            view->Invalidate();
+        }
+    };
+
+    const char* getCmdName(UINT nID) const;
+
+    UINT        m_cmdID;
+    MgViewProxy m_mgview;
+    MgMotion    m_motion;
+    BOOL        m_moved;
+    BOOL        m_delayUp;
+    long        m_downTime;
+    UINT        m_downFlags;
 };

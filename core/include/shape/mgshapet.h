@@ -109,10 +109,10 @@ public:
         return _parent;
     }
 
-    void setParent(MgShapes* p, UInt32 id)
+    void setParent(MgShapes* p, UInt32 nID)
     {
         _parent = p;
-        _id = id;
+        _id = nID;
     }
 
 protected:
