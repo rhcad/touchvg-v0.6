@@ -40,7 +40,13 @@
 {
     static int n = 0;
     const char* names[] = { "select", "splines", "lines", "rect" };
+    
     self.commandName = names[++n % 4];
+    self.lineColor = [UIColor colorWithRed:rand()%256/256.0f 
+                                     green:rand()%256/256.0f 
+                                      blue:rand()%256/256.0f
+                                     alpha:(50+rand()%200)/256.0f];
+    self.lineWidth = -(rand()%20+1);
 }
 
 - (void)viewDidUnload
