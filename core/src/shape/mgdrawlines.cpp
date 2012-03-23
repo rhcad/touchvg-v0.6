@@ -28,6 +28,20 @@ MgCmdBaseLines::~MgCmdBaseLines()
 {
 }
 
+bool MgCmdBaseLines::draw(const MgMotion* sender, GiGraphics* gs)
+{
+    if (m_step > 1) {
+        GiContext ctxaux(0, GiColor(64, 64, 64, 128), kLineSolid, GiColor(0, 64, 64, 168));
+        double radius = (Vector2d(5, 5) * gs->xf().displayToModel()).length();
+        
+        for (UInt32 i = 0; i < m_shape->shape()->getPointCount(); i++) {
+            gs->drawEllipse(&ctxaux, m_shape->shape()->getPoint(i), radius);
+        }
+    }
+    
+    return MgCommandDraw::draw(sender, gs);
+}
+
 bool MgCmdBaseLines::touchBegan(const MgMotion* sender)
 {
     ((MgBaseLines*)m_shape->shape())->resize(2);

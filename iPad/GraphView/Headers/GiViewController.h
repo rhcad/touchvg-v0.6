@@ -32,4 +32,7 @@
 // 创建图形视图(GiGraphView)和图形列表，不需要图形视图的派生类时使用
 - (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor;
 
+// 在已有视图中创建子图形视图(GiGraphView)和图形列表
+- (UIView*)createSubGraphView:(UIView*)parentView;
+
 @end

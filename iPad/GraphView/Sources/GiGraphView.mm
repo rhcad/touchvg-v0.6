@@ -19,6 +19,7 @@
 @synthesize shapes = _shapes;
 @synthesize xform = _xform;
 @synthesize graph = _graph;
+@synthesize enableZoom = _enableZoom;
 @synthesize zooming = _zooming;
 
 - (id)initWithFrame:(CGRect)frame
@@ -66,6 +67,7 @@
     _drawingDelegate = Nil;
     _zooming = NO;
     _doubleZoomed = NO;
+    _enableZoom = YES;
 
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _xform->setViewScaleRange(0.01, 20.0);
@@ -157,22 +159,22 @@
 
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
-    return [self dynZooming:sender];
+    return _enableZoom && [self dynZooming:sender];
 }
 
 - (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
-    return [self dynPanning:sender];
+    return _enableZoom && [self dynPanning:sender];
 }
 
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    return [self dynPanning:sender];
+    return _enableZoom && [self dynPanning:sender];
 }
 
 - (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
-    return [self switchZoomed:sender];
+    return _enableZoom && [self switchZoomed:sender];
 }
 
 @end

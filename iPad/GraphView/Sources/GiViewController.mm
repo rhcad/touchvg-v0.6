@@ -80,6 +80,24 @@
     return self.view;
 }
 
+- (UIView*)createSubGraphView:(UIView*)parentView
+{
+    GiGraphView *aview = [[GiGraphView alloc] initWithFrame:parentView.bounds];
+    
+    self.view = aview;
+    aview.backgroundColor = [UIColor clearColor];
+    aview.enableZoom = NO;
+    [aview setDrawingDelegate:self];
+    
+    [parentView addSubview:aview];
+    
+    aview.shapes = new MgShapesT<std::list<MgShape*> >;
+    _shapesCreated = aview.shapes;
+    
+    [aview release];
+    return self.view;
+}
+
 - (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.

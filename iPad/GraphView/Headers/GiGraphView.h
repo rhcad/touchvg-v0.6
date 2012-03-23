@@ -14,6 +14,7 @@
     CGPoint         _firstPoint;            // 动态放缩用的开始点
     CGPoint         _lastPoint;             // 动态放缩用的上次点
     
+    BOOL            _enableZoom;            // 是否允许放缩或平移
     BOOL            _zooming;               // 是否正在动态放缩或平移
     double          _lastViewScale;         // 动态放缩前的显示比例
     CGPoint         _lastCenterW;           // 动态放缩前的视图中心世界坐标
@@ -26,6 +27,7 @@
 @property (nonatomic)          MgShapes*    shapes;     // 图形列表
 @property (nonatomic,readonly) GiTransform* xform;      // 坐标系对象
 @property (nonatomic,readonly) GiGraphics*  graph;      // 图形显示对象
+@property (nonatomic)          BOOL         enableZoom; // 是否允许放缩或平移
 @property (nonatomic,readonly) BOOL         zooming;    // 是否正在动态放缩或平移
 
 - (void)afterCreated;

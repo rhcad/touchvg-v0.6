@@ -39,6 +39,7 @@ public:
     virtual ~MgCmdBaseLines();
 
 protected:
+    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);

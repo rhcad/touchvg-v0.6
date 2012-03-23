@@ -42,12 +42,18 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
 {
     std::vector<UInt32>::const_iterator it;
     GiContext context(-6, GiColor(0, 0, 255, 50));
+    GiContext ctxaux(0, GiColor(64, 64, 64, 128), kLineSolid, GiColor(0, 64, 64, 168));
+    double radius = (Vector2d(5, 5) * gs->xf().displayToModel()).length();
 
     for (it = m_selection.begin(); it != m_selection.end(); ++it)
     {
         const MgShape* shape = sender->view->shapes()->findShape(*it);
-        if (shape)
+        if (shape) {
             shape->draw(*gs, &context);
+            for (UInt32 i = 0; i < shape->shape()->getPointCount(); i++) {
+                gs->drawEllipse(&ctxaux, shape->shape()->getPoint(i), radius);
+            }
+        }
     }
 
     return true;
