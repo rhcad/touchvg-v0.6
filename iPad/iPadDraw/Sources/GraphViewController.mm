@@ -107,7 +107,7 @@ static const NSUInteger kDashLineTag    = 4;
 	[self.view addSubview:_downview];
     [_downview release];
     
-    CGFloat btnx = BTN_XDIFF;
+    CGFloat btnx = barFrame.size.width / 2 - (BTN_XDIFF + BAR_HEIGHT) * 4;
     redBtn = [self addButton:@"redbrush.png" action:@selector(colorBtnPress:)
                         frame:CGRectMake(btnx, 0, BAR_HEIGHT, BAR_HEIGHT)];
     redBtn.tag = kRedTag;
