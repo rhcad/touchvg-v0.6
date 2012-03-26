@@ -1,4 +1,5 @@
-// mgcmddraw.h: 定义绘图命令基类
+//! \file mgcmddraw.h
+//! \brief 定义绘图命令基类 MgCommandDraw 和 MgCmdBaseLines
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
@@ -7,6 +8,9 @@
 
 #include <mgcmd.h>
 
+//! 绘图命令基类
+/*! \ingroup _GEOM_SHAPE_
+*/
 class MgCommandDraw : public MgCommand
 {
 public:
@@ -32,6 +36,9 @@ protected:
     UInt32      m_step;
 };
 
+//! 折线曲线绘图命令基类
+/*! \ingroup _GEOM_SHAPE_
+*/
 class MgCmdBaseLines : public MgCommandDraw
 {
 public:

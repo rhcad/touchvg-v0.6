@@ -1,4 +1,5 @@
-// mgdrawlines.h: 定义折线绘图命令类
+//! \file mgdrawlines.h
+//! \brief 定义折线绘图命令类 MgCmdDrawLines
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
@@ -7,6 +8,9 @@
 
 #include "mgcmddraw.h"
 
+//! 折线绘图命令类
+/*! \ingroup _GEOM_SHAPE_
+*/
 class MgCmdDrawLines : public MgCmdBaseLines
 {
 public:

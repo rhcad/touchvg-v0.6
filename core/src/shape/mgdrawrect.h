@@ -1,4 +1,5 @@
-// mgdrawrect.h: 定义矩形绘图命令类
+//! \file mgdrawrect.h
+//! \brief 定义矩形绘图命令类 MgCmdDrawRect
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
@@ -7,6 +8,9 @@
 
 #include "mgcmddraw.h"
 
+//! 矩形绘图命令类
+/*! \ingroup _GEOM_SHAPE_
+*/
 class MgCmdDrawRect : public MgCommandDraw
 {
 public:

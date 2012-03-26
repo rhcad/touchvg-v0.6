@@ -114,19 +114,19 @@ private:
             _motion->lastPoint = _motion->point;
             _motion->lastPointM = _motion->pointM;
             
-            undoFired = NO;
+            _undoFired = NO;
             ret = cmd->touchBegan(_motion);
         }
         else if (sender.state == UIGestureRecognizerStateChanged) {
             if (sender.numberOfTouches > 1) {
-                if (!undoFired) {
-                    undoFired = YES;
+                if (!_undoFired) {
+                    _undoFired = YES;
                     cmd->undo(_motion);
                 }
                 ret = YES;
             }
             else {
-                undoFired = NO;
+                _undoFired = NO;
                 ret = cmd->touchMoved(_motion);
             }
         }

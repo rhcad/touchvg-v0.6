@@ -1,4 +1,5 @@
-// _gigraph.h: 定义GiGraphics类的内部成员
+//! \file _gigraph.h
+//! \brief 定义GiGraphics类的内部成员
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 

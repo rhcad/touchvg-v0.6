@@ -10,6 +10,8 @@
 #include <MgShapes.h>
 
 //! 图形视图接口
+/*! \ingroup _GEOM_SHAPE_
+*/
 struct MgView {
     virtual MgShapes* shapes() = 0;             //!< 得到图形列表
     virtual GiTransform* xform() = 0;           //!< 得到坐标系对象
@@ -22,6 +24,8 @@ struct MgView {
 };
 
 //! 命令参数
+/*! \ingroup _GEOM_SHAPE_
+*/
 struct MgMotion {
     MgView*     view;                           //!< 图形视图
     POINT       startPoint;                     //!< 开始点，视图坐标
@@ -33,6 +37,8 @@ struct MgMotion {
 };
 
 //! 命令接口
+/*! \ingroup _GEOM_SHAPE_
+*/
 struct MgCommand {
     virtual const char* getName() const = 0;
     virtual void release() = 0;
@@ -49,6 +55,9 @@ struct MgCommand {
 };
 
 //! 命令管理器接口
+/*! \ingroup _GEOM_SHAPE_
+    \see mgGetCommandManager
+*/
 struct MgCommandManager {
     virtual const char* getCommandName() = 0;
     virtual MgCommand* getCommand() = 0;
@@ -58,6 +67,8 @@ struct MgCommandManager {
 };
 
 //! 返回命令管理器
+/*! \ingroup _GEOM_SHAPE_
+*/
 MgCommandManager* mgGetCommandManager();
 
 #endif // __GEOMETRY_MGCOMMAND_H_

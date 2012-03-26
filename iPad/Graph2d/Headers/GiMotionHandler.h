@@ -1,4 +1,5 @@
-// GiMotionHandler.h
+//! \file GiMotionHandler.h
+//! \brief 定义图形视图协议 GiView 和 GiMotionHandler
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 // License: LGPL, https://github.com/rhcad/graph2d
 
@@ -8,34 +9,38 @@ struct MgShapes;
 class GiTransform;
 class GiGraphics;
 
-// 图形视图协议
+//! 图形视图协议
+/*! \ingroup _GRAPH_IOS_
+*/
 @protocol GiView
 
-- (MgShapes*)getShapes;                 // 得到图形列表
-- (GiTransform*)getXform;               // 得到坐标系对象
-- (GiGraphics*)getGraph;                // 得到图形显示对象
+- (MgShapes*)getShapes;                 //!< 得到图形列表
+- (GiTransform*)getXform;               //!< 得到坐标系对象
+- (GiGraphics*)getGraph;                //!< 得到图形显示对象
 
-- (void)setShapes:(MgShapes*)data;      // 设置图形列表
-- (void)setAnimating:(BOOL)animated;    // 翻转或动画显示时通知视图
-- (void)setDrawingDelegate:(id)d;       // 设置动态绘图用的控制器对象
+- (void)setShapes:(MgShapes*)data;      //!< 设置图形列表
+- (void)setAnimating:(BOOL)animated;    //!< 翻转或动画显示时通知视图
+- (void)setDrawingDelegate:(id)d;       //!< 设置动态绘图用的控制器对象
 
-- (void)regen;                          // 标记视图待重新构建显示
-- (void)redraw;                         // 标记视图待更新显示
+- (void)regen;                          //!< 标记视图待重新构建显示
+- (void)redraw;                         //!< 标记视图待更新显示
 
 @end
 
-// 图形视图动作命令协议
+//! 图形视图动作命令协议
+/*! \ingroup _GRAPH_IOS_
+*/
 @protocol GiMotionHandler
 @optional
 
-- (void)dynDraw:(GiGraphics*)gs;        // 动态显示图形
-- (BOOL)cancel;                         // 取消命令
-- (BOOL)undoMotion;                     // 晃动或撤销操作
-- (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
-- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender;
-- (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender;
-- (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;
-- (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender;
+- (void)dynDraw:(GiGraphics*)gs;        //!< 动态显示图形
+- (BOOL)cancel;                         //!< 取消命令
+- (BOOL)undoMotion;                     //!< 晃动或撤销操作
+- (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender; //!< 双指放缩手势
+- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender;     //!< 双指滑动手势
+- (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender;      //!< 单指滑动手势
+- (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;  //!< 双击手势
+- (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender;   //!< 单击手势
 
 @end
 

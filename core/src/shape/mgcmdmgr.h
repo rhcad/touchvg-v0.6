@@ -1,4 +1,5 @@
-// mgcmdmgr.h: 定义命令管理器类
+//! \file mgcmdmgr.h
+//! \brief 定义命令管理器实现类 MgCmdManagerImpl
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
@@ -9,6 +10,9 @@
 #include <map>
 #include <string>
 
+//! 命令管理器实现类
+/*! \ingroup _GEOM_SHAPE_
+*/
 class MgCmdManagerImpl : public MgCommandManager
 {
 public:

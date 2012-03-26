@@ -115,6 +115,7 @@ protected:
     调用了该函数后不需要再调用 setResolution 和 setWndSize 函数。\n
     本函数必须先于 beginPaint 函数被调用。
 
+    \param xf 待设置的坐标系对象
     \param prtDC 打印机或绘图仪的设备描述表句柄
     \param rectShow 要打印的图形范围，是否为世界坐标由bWorldRect决定。\n
         如果是模型坐标矩形，应直接传入模型坐标，由本函数采用缺省模型变化矩阵计算。

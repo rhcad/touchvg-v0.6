@@ -1,4 +1,5 @@
-// mgcmdselect.h: 定义选择命令类
+//! \file mgcmdselect.h
+//! \brief 定义选择命令类 MgCommandSelect
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
@@ -8,6 +9,9 @@
 #include <mgcmd.h>
 #include <vector>
 
+//! 选择命令类
+/*! \ingroup _GEOM_SHAPE_
+*/
 class MgCommandSelect : public MgCommand
 {
 public:

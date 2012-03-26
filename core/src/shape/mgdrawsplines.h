@@ -1,4 +1,5 @@
-// mgdrawsplines.h: 定义曲线绘图命令类
+//! \file mgdrawsplines.h
+//! \brief 定义样条曲线绘图命令类 MgCmdDrawSplines
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/graph2d
 
@@ -7,6 +8,9 @@
 
 #include "mgcmddraw.h"
 
+//! 样条曲线绘图命令类
+/*! \ingroup _GEOM_SHAPE_
+*/
 class MgCmdDrawSplines : public MgCmdBaseLines
 {
 public:

@@ -1,0 +1,47 @@
+/*!
+	\defgroup _GEOM_CLASS_ 几何对象类
+	\defgroup _GEOMAPI_BASIC_ 基本计算函数
+	\defgroup _GEOMAPI_LNREL_ 图形位置函数
+	\defgroup _GEOMAPI_CURVE_ 曲线计算函数
+	\defgroup _GRAPH_INTERFACE_ 图形接口类
+	\defgroup _GEOM_SHAPE_ 图形实体类
+	\defgroup _GRAPH_IOS_ iOS图形接口类
+*/
+
+/*! \mainpage 通用矢量图形框架 编程文档
+
+	\section sectinoIntro 概述
+
+	欢迎使用通用矢量图形框架(https://github.com/rhcad/graph2d)的编程文档，欢迎反馈意见。\n
+	通用图形平台库包含数学几何库（geom）、图形接口库（graph）、图形实体库（shape），是采用C++实现的静态链接库。\n
+	- 数学几何库（geom）包含了基本的线性代数计算和几何对象类。\n
+	- 图形接口库（graph）包含了各种显示类、符号类，用于屏幕显示、打印。\n
+	- 图形实体库（shape）包含跨平台矢量图形类和交互命令类。\n
+	- Windows图形接口库（win32/graphwin）采用GDI或GDI+实现，字符串为Unicode编码。\n
+	- iOS图形接口库（iPad/GraphView）采用CoreGraphics库和ObjC语言实现，还包含了iOS视图和交互控制器。
+
+	\section sectionDOM 接口说明
+
+	通用图形平台库的接口说明分为以下部分：
+	
+	- \ref _GEOM_CLASS_ "几何对象类" \n
+		数学几何库的几何对象类，包含矢量、坐标、变换矩阵、矩形框等类。\n\n
+
+	- \ref _GEOMAPI_BASIC_ "基本计算函数" \n
+		数学几何库的基本计算功能函数。\n\n
+
+	- \ref _GEOMAPI_LNREL_ "图形位置函数" \n
+		数学几何库的点、直线、曲线、多边形的位置关系函数。\n\n
+
+	- \ref _GEOMAPI_CURVE_ "曲线计算函数" \n
+		数学几何库的曲线拟合、转换、绑定框等计算函数。\n\n
+
+	- \ref _GRAPH_INTERFACE_ "图形接口类" \n
+		图形接口库的各种显示类、符号类，用于屏幕显示、打印。\n\n
+
+	- \ref _GEOM_SHAPE_ "图形实体类" \n
+		图形实体库包含跨平台矢量图形类和交互命令类。\n\n
+		
+	- \ref _GRAPH_IOS_ "iOS图形接口类" \n
+		iOS图形接口库（iPad/GraphView）采用CoreGraphics实现，还包含了iOS视图和交互控制器。\n\n
+*/
