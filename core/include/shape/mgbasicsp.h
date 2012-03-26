@@ -22,7 +22,7 @@ public:
     const Point2d& endPoint() const { return _points[1]; }
     
     //! 返回终点
-    const Point2d& center() const { return (_points[0] + _points[1]) / 2; }
+    Point2d center() const { return (_points[0] + _points[1]) / 2; }
     
 protected:
     UInt32 getHandleCount() const;

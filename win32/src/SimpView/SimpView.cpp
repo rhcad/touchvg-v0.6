@@ -54,6 +54,7 @@ BOOL CSimpViewApp::InitInstance()
 
 	pFrame->ShowWindow(m_nCmdShow);
 	pFrame->UpdateWindow();
+    pFrame->PostMessage(WM_COMMAND, ID_FILE_NEW);
 
 	return TRUE;
 }
