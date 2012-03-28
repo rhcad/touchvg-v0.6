@@ -190,9 +190,6 @@ public:
     }
     
     //! 矢量夹角, [0, PI)
-    /*!
-        从本矢量方向逆时针旋转到另一个矢量 v 所在方向时为正，顺时针为负
-    */
     double angleTo(const Vector2d& v) const
     {
         double len = mgHypot(x, y) * mgHypot(v.x, v.y);
@@ -200,6 +197,9 @@ public:
     }
     
     //! 沿逆时针方向到指定矢量的转角, [-PI, PI)
+    /*!
+        从本矢量方向逆时针旋转到另一个矢量 v 所在方向时为正，顺时针为负
+    */
     double angleTo2(const Vector2d& v) const
     {
         double crossz = crossProduct(v);

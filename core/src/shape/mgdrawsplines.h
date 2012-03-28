@@ -11,7 +11,7 @@
 //! 样条曲线绘图命令类
 /*! \ingroup _GEOM_SHAPE_
 */
-class MgCmdDrawSplines : public MgCmdBaseLines
+class MgCmdDrawSplines : public MgCommandDraw
 {
 public:
     MgCmdDrawSplines();
@@ -23,9 +23,16 @@ public:
 private:
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
+    
     virtual bool initialize(const MgMotion* sender);
-
-    virtual bool canAddPoint(const MgMotion* sender, bool ended);
+    virtual bool undo(bool &enableRecall, const MgMotion* sender);
+    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
+    virtual bool touchBegan(const MgMotion* sender);
+    virtual bool touchMoved(const MgMotion* sender);
+    virtual bool touchEnded(const MgMotion* sender);
+    
+private:
+    bool canAddPoint(const MgMotion* sender, bool ended);
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_SPLINES_H_

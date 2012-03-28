@@ -40,18 +40,18 @@ struct MgMotion {
 /*! \ingroup _GEOM_SHAPE_
 */
 struct MgCommand {
-    virtual const char* getName() const = 0;
-    virtual void release() = 0;
-    virtual bool cancel(const MgMotion* sender) = 0;
-    virtual bool initialize(const MgMotion* sender) = 0;
-    virtual bool undo(const MgMotion* sender) = 0;
-    virtual bool draw(const MgMotion* sender, GiGraphics* gs) = 0;
-    virtual bool click(const MgMotion* sender) = 0;
-    virtual bool doubleClick(const MgMotion* sender) = 0;
-    virtual bool longPress(const MgMotion* sender) = 0;
-    virtual bool touchBegan(const MgMotion* sender) = 0;
-    virtual bool touchMoved(const MgMotion* sender) = 0;
-    virtual bool touchEnded(const MgMotion* sender) = 0;
+    virtual const char* getName() const = 0;            //!< 返回命令名称
+    virtual void release() = 0;                         //!< 销毁对象
+    virtual bool cancel(const MgMotion* sender) = 0;    //!< 取消命令
+    virtual bool initialize(const MgMotion* sender) = 0;    //!< 开始命令
+    virtual bool undo(bool &enableRecall, const MgMotion* sender) = 0;  //!< 回退一步
+    virtual bool draw(const MgMotion* sender, GiGraphics* gs) = 0;  //!< 显示动态图形
+    virtual bool click(const MgMotion* sender) = 0;         //!< 点击
+    virtual bool doubleClick(const MgMotion* sender) = 0;   //!< 双击
+    virtual bool longPress(const MgMotion* sender) = 0;     //!< 长按
+    virtual bool touchBegan(const MgMotion* sender) = 0;    //!< 开始滑动
+    virtual bool touchMoved(const MgMotion* sender) = 0;    //!< 正在滑动
+    virtual bool touchEnded(const MgMotion* sender) = 0;    //!< 滑动结束
 };
 
 //! 命令管理器接口

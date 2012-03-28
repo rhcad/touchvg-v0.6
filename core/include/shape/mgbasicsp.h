@@ -218,6 +218,10 @@ class MgLines : public MgBaseLines
 class MgSplines : public MgBaseLines
 {
     MG_INHERIT_CREATE(MgSplines, MgBaseLines, 16)
+public:
+    //! 去掉多余点，同时仍然光滑
+    void smooth(double tol);
+    
 protected:
     void _update();
     double _hitTest(const Point2d& pt, double tol, 

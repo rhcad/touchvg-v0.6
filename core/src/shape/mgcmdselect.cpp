@@ -14,9 +14,10 @@ MgCommandSelect::~MgCommandSelect()
 
 bool MgCommandSelect::cancel(const MgMotion* sender)
 {
-    bool ret = undo(sender);
-    ret = undo(sender) || ret;
-    return undo(sender) || ret;
+    bool recall;
+    bool ret = undo(recall, sender);
+    ret = undo(recall, sender) || ret;
+    return undo(recall, sender) || ret;
 }
 
 bool MgCommandSelect::initialize(const MgMotion* /*sender*/)
@@ -28,7 +29,7 @@ bool MgCommandSelect::initialize(const MgMotion* /*sender*/)
     return true;
 }
 
-bool MgCommandSelect::undo(const MgMotion* sender)
+bool MgCommandSelect::undo(bool &, const MgMotion* sender)
 {
     if (m_clonesp) {                             // 正在拖改
         m_clonesp->release();

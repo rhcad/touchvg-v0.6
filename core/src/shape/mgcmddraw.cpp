@@ -59,7 +59,7 @@ bool MgCommandDraw::_addshape(const MgMotion* sender)
     return ret;
 }
 
-bool MgCommandDraw::undo(const MgMotion* sender)
+bool MgCommandDraw::_undo(const MgMotion* sender)
 {
     if (m_step > 0) {
         m_step--;

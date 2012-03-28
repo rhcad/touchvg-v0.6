@@ -23,38 +23,20 @@ protected:
     bool _touchMoved(const MgMotion* sender);
     bool _touchEnded(const MgMotion* sender);
     bool _addshape(const MgMotion* sender);
+    bool _undo(const MgMotion* sender);
 
     virtual bool cancel(const MgMotion* sender);
-    virtual bool undo(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual bool click(const MgMotion* sender);
     virtual bool doubleClick(const MgMotion* sender);
     virtual bool longPress(const MgMotion* sender);
+    
+private:
+    UInt32 getStep() { return m_step; }
 
 protected:
     MgShape*    m_shape;
     UInt32      m_step;
-};
-
-//! 折线曲线绘图命令基类
-/*! \ingroup _GEOM_SHAPE_
-*/
-class MgCmdBaseLines : public MgCommandDraw
-{
-public:
-    MgCmdBaseLines();
-    virtual ~MgCmdBaseLines();
-
-protected:
-    virtual bool undo(const MgMotion* sender);
-    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
-    virtual bool touchBegan(const MgMotion* sender);
-    virtual bool touchMoved(const MgMotion* sender);
-    virtual bool touchEnded(const MgMotion* sender);
-
-protected:
-    virtual bool canAddPoint(const MgMotion* sender, bool ended);
-    virtual bool canAddShape(const MgMotion* sender);
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_H_

@@ -548,10 +548,8 @@ GEOMAPI bool mgCubicSplines(
     if (!knots || !knotVectors || n < 2)
         return false;
     
-    if (flag & kCubicLoop)              // 闭合
+    if ((flag & kCubicLoop) && n <= 512)    // 闭合
     {
-        if (n > 256)
-            return false;
         double* a = new double[n * n];
         ret = a && CalcCubicClosed(n, a, knotVectors, knots);
         delete[] a;

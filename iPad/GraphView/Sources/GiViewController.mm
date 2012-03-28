@@ -354,8 +354,17 @@
     }
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    GiCommandController* cmd = (GiCommandController*)_command;
+    [cmd touchesBegan:touches];
+    [super touchesBegan:touches withEvent:event];
+}
+
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+    }
     if (![[self getCommand:@selector(oneFingerPan:)] oneFingerPan:sender])
         [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
 }

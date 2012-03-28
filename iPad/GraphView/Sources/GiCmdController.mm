@@ -95,7 +95,14 @@ private:
 - (BOOL)undoMotion
 {
     MgCommand* cmd = mgGetCommandManager()->getCommand();
-    return cmd && _mgview->view && cmd->undo(_motion);
+    bool recall;
+    return cmd && _mgview->view && cmd->undo(recall, _motion);
+}
+
+- (void)touchesBegan:(NSSet *)touches
+{
+    UITouch *touch = [touches anyObject];
+    _downPoint = [touch locationInView:touch.view];
 }
 
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
@@ -106,7 +113,12 @@ private:
     if (cmd)
     {
         _mgview->view = [self toView:sender];
-        [self convertPoint:[sender locationInView:sender.view]];
+        
+        CGPoint point = [sender locationInView:sender.view];
+        if (sender.state == UIGestureRecognizerStateBegan)
+            [self convertPoint:_downPoint];
+        else
+            [self convertPoint:point];
         
         if (sender.state == UIGestureRecognizerStateBegan) {
             _motion->startPoint = _motion->point;
@@ -118,15 +130,20 @@ private:
             ret = cmd->touchBegan(_motion);
         }
         else if (sender.state == UIGestureRecognizerStateChanged) {
-            if (sender.numberOfTouches > 1) {
-                if (!_undoFired) {
-                    _undoFired = YES;
-                    cmd->undo(_motion);
+            if (sender.numberOfTouches > 1) {   // 滑动时有两个手指
+                bool recall = false;
+                double dist = mgHypot(_motion->point.x - _motion->lastPoint.x, 
+                                      _motion->point.y - _motion->lastPoint.y);
+                if (!_undoFired && dist > 10) { // 双指滑动超过10像素可再触发Undo操作
+                    if (cmd->undo(recall, _motion) && !recall)  // 触发一次Undo操作
+                        _undoFired = YES;       // 另一个手指不松开也不再触发Undo操作
+                    _motion->lastPoint = _motion->point;    // 用于检测下次双指滑动距离
+                    _motion->lastPointM = _motion->pointM;
                 }
-                ret = YES;
+                return YES;                     // 直接返回，不记录lastPoint
             }
-            else {
-                _undoFired = NO;
+            else {                              // 单指滑动
+                _undoFired = NO;                // 允许再触发Undo操作
                 ret = cmd->touchMoved(_motion);
             }
         }

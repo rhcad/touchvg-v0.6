@@ -19,6 +19,11 @@ bool MgCmdDrawRect::initialize(const MgMotion* sender)
     return _initialize(MgShapeT<MgRect>::create, sender);
 }
 
+bool MgCmdDrawRect::undo(bool &, const MgMotion* sender)
+{
+    return MgCommandDraw::_undo(sender);
+}
+
 bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
 {
     m_step = 1;

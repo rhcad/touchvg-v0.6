@@ -30,6 +30,8 @@ Box2d& Box2d::set(const Point2d& p1, const Point2d& p2)
     ymin = mgMin(p1.y, p2.y);
     xmax = mgMax(p1.x, p2.x);
     ymax = mgMax(p1.y, p2.y);
+    if (isEmpty())
+        inflate(Tol::gTol().equalPoint());
     return *this;
 }
 
@@ -39,6 +41,8 @@ Box2d& Box2d::set(double x1, double y1, double x2, double y2)
     ymin = mgMin(y1, y2);
     xmax = mgMax(x1, x2);
     ymax = mgMax(y1, y2);
+    if (isEmpty())
+        inflate(Tol::gTol().equalPoint());
     return *this;
 }
 
@@ -49,6 +53,8 @@ Box2d& Box2d::set(const Point2d& p1, const Point2d& p2,
     ymin = mgMin(mgMin(p1.y, p2.y), mgMin(p3.y, p4.y));
     xmax = mgMax(mgMax(p1.x, p2.x), mgMax(p3.x, p4.x));
     ymax = mgMax(mgMax(p1.y, p2.y), mgMax(p3.y, p4.y));
+    if (isEmpty())
+        inflate(Tol::gTol().equalPoint());
     return *this;
 }
 
@@ -69,6 +75,8 @@ Box2d& Box2d::set(Int32 count, const Point2d* points)
         if (ymax < points[i].y)
             ymax = points[i].y;
     }
+    if (isEmpty())
+        inflate(Tol::gTol().equalPoint());
 
     return *this;
 }

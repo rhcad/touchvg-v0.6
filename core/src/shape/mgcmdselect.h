@@ -27,7 +27,7 @@ private:
 
     virtual bool cancel(const MgMotion* sender);
     virtual bool initialize(const MgMotion* sender);
-    virtual bool undo(const MgMotion* sender);
+    virtual bool undo(bool &enableRecall, const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual bool click(const MgMotion* sender);
     virtual bool doubleClick(const MgMotion* sender);
@@ -37,6 +37,7 @@ private:
     virtual bool touchEnded(const MgMotion* sender);
 
 private:
+    UInt32 getStep() { return 0; }
     MgShape* hitTestAll(const MgMotion* sender, Point2d &ptNear, Int32 &segment);
     MgShape* getSelectedShape(const MgMotion* sender);
     bool canSelect(MgShape* shape, const MgMotion* sender);
