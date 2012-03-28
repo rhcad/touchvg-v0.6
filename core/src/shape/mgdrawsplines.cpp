@@ -58,11 +58,12 @@ bool MgCmdDrawSplines::touchBegan(const MgMotion* sender)
 bool MgCmdDrawSplines::touchMoved(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
-    double closelen = sender->view->xform()->displayToModel(20);
+    
+    double closelen  = sender->view->xform()->displayToModel(20);
     double closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
-    bool closed = (m_step > 2 && closedist < closelen
-                   && m_shape->shape()->getExtent().width() > closedist
-                   && m_shape->shape()->getExtent().height() > closedist);
+    bool   closed    = (m_step > 2 && closedist < closelen
+                        && m_shape->shape()->getExtent().width() > closedist
+                        && m_shape->shape()->getExtent().height() > closedist);
     
     if (m_step > 2 && m_shape->shape()->isClosed() != closed) {
         lines->setClosed(closed);
@@ -88,25 +89,6 @@ bool MgCmdDrawSplines::touchMoved(const MgMotion* sender)
 bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
 {
     MgSplines* splines = (MgSplines*)m_shape->shape();
-    double closelen = sender->view->xform()->displayToModel(20);
-    double closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
-    bool closed = (m_step > 2 && closedist < closelen
-                   && m_shape->shape()->getExtent().width() > closedist
-                   && m_shape->shape()->getExtent().height() > closedist);
-    
-    if (m_step > 2 && m_shape->shape()->isClosed() != closed) {
-        splines->setClosed(closed);
-        if (closed)
-            splines->removePoint(m_step);
-        else
-            splines->addPoint(sender->pointM);
-    }
-    if (!closed) {
-        m_shape->shape()->setPoint(m_step, sender->pointM);
-        if (m_step > 0 && !canAddPoint(sender, true))
-            splines->removePoint(m_step);
-    }
-    m_shape->shape()->update();
     
     if (m_step > 1) {
         splines->smooth(sender->view->xform()->displayToModel(5));

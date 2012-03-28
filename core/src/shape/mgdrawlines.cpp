@@ -58,8 +58,12 @@ bool MgCmdDrawLines::touchBegan(const MgMotion* sender)
 bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
-    bool closed = (m_step > 2 && sender->pointM.distanceTo(m_shape->shape()->getPoint(0))
-                   < sender->view->xform()->displayToModel(20));
+    
+    double closelen  = sender->view->xform()->displayToModel(20);
+    double closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
+    bool   closed    = (m_step > 2 && closedist < closelen
+                        && m_shape->shape()->getExtent().width() > closedist
+                        && m_shape->shape()->getExtent().height() > closedist);
     
     if (m_step > 2 && m_shape->shape()->isClosed() != closed) {
         lines->setClosed(closed);
@@ -85,8 +89,12 @@ bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
 bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
-    bool closed = (m_step > 2 && sender->pointM.distanceTo(m_shape->shape()->getPoint(0))
-                   < sender->view->xform()->displayToModel(20));
+    
+    double closelen  = sender->view->xform()->displayToModel(20);
+    double closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
+    bool   closed    = (m_step > 2 && closedist < closelen
+                        && m_shape->shape()->getExtent().width() > closedist
+                        && m_shape->shape()->getExtent().height() > closedist);
     
     if (m_step > 2 && m_shape->shape()->isClosed() != closed) {
         lines->setClosed(closed);
