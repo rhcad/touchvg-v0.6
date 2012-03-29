@@ -4,7 +4,7 @@
 
 #include "mgcmderase.h"
 #include <algorithm>
-#include <string>
+#include <functional>
 
 MgCommandErase::MgCommandErase()
 {
