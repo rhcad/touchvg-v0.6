@@ -95,6 +95,11 @@
             [self draw:gs];
             gs->saveCachedBitmap();
         }
+        
+        GiContext ctx(0, GiColor(64, 64, 64, 172));
+        gs->rawLine(&ctx, self.center.x - 20, self.center.y, self.center.x + 20, self.center.y);
+        gs->rawLine(&ctx, self.center.x, self.center.y - 20, self.center.x, self.center.y + 20);
+        
         if ([_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
             [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
         }
@@ -105,10 +110,6 @@
 
 - (void)draw:(GiGraphics*)gs
 {
-    GiContext ctx(0, GiColor(64, 64, 64, 172));
-    gs->rawLine(&ctx, self.center.x - 20, self.center.y, self.center.x + 20, self.center.y);
-    gs->rawLine(&ctx, self.center.x, self.center.y - 20, self.center.x, self.center.y + 20);
-    
     if ([_gview getShapes]) {
         [_gview getShapes]->draw(*gs);
     }
