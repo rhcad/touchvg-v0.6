@@ -4,6 +4,8 @@
 
 #include "mgcmddraw.h"
 #include <assert.h>
+#include <mgshapet.h>
+#include <mgbasicsp.h>
 
 MgCommandDraw::MgCommandDraw() : m_shape(NULL), m_step(0)
 {
@@ -74,9 +76,23 @@ bool MgCommandDraw::draw(const MgMotion* /*sender*/, GiGraphics* gs)
     return m_step > 0 && m_shape->draw(*gs);
 }
 
-bool MgCommandDraw::click(const MgMotion* /*sender*/)
+bool MgCommandDraw::click(const MgMotion* sender)
 {
-    return false;
+    MgShapeT<MgLine> line;
+    
+    if (sender->view->context()) {
+        *line.context() = *sender->view->context();
+    }
+    
+    line.shape()->setPoint(0, sender->pointM);
+    line.shape()->setPoint(1, sender->pointM);
+        
+    if (sender->view->shapeWillAdded(&line)) {
+        sender->view->shapes()->addShape(line);
+        sender->view->regen();
+    }
+    
+    return true;
 }
 
 bool MgCommandDraw::doubleClick(const MgMotion* /*sender*/)

@@ -345,17 +345,20 @@
     UIPanGestureRecognizer *twoFingersPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
     [twoFingersPan setMaximumNumberOfTouches:2];
+    twoFingersPan.delaysTouchesEnded = NO;
     _recognizers[t][n++] = twoFingersPan;
-    
-    UITapGestureRecognizer *oneFingerTwoTaps =
-    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerTwoTaps:)];
-    [oneFingerTwoTaps setNumberOfTapsRequired:2];
-    _recognizers[t][n++] = oneFingerTwoTaps;
     
     UITapGestureRecognizer *oneFingerOneTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
-    [oneFingerOneTap requireGestureRecognizerToFail:oneFingerTwoTaps];
+    oneFingerOneTap.delaysTouchesEnded = NO;
+    [oneFingerOneTap requireGestureRecognizerToFail:twoFingersPan];
     _recognizers[t][n++] = oneFingerOneTap;
+    
+    /*UITapGestureRecognizer *oneFingerTwoTaps =
+     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerTwoTaps:)];
+     [oneFingerTwoTaps setNumberOfTapsRequired:2];
+     [oneFingerTwoTaps requireGestureRecognizerToFail:twoFingersPan];
+     _recognizers[t][n++] = oneFingerTwoTaps;*/
     
     _touchCount = 0;
     if (_gestureRecognizerUsed) {
@@ -407,7 +410,7 @@
                 [zview redraw];
         }
     }
-    else {
+    else if (_touchCount > 1) {
         if (![[self getCommand:@selector(twoFingersPan:)] twoFingersPan:sender]) {
             [[self motionView:@selector(twoFingersPan:)] twoFingersPan:sender];
         }

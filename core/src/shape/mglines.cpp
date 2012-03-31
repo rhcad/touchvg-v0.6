@@ -135,7 +135,7 @@ void MgBaseLines::insertPoint(Int32 segment, const Point2d& pt)
 
 void MgBaseLines::removePoint(UInt32 index)
 {
-    if (index < _count)
+    if (index < _count && _count > 1)
     {
         for (UInt32 i = index + 1; i < _count; i++)
             _points[i - 1] = _points[i];

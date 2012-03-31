@@ -342,8 +342,16 @@ bool GiGraphIos::rawLine(const GiContext* ctx,
 
     if (ret)
     {
-        CGContextMoveToPoint(m_draw->getContext(), x1, y1);
-        CGContextAddLineToPoint(m_draw->getContext(), x2, y2);
+        if (x2 == x1 && y2 == y1) {
+            int w = calcPenWidth(m_draw->_gictx.getLineWidth());
+            int w2 = w / 2;
+            CGContextMoveToPoint(m_draw->getContext(), x1 - w2, y1 - w2);
+            CGContextAddLineToPoint(m_draw->getContext(), x2 + w - w2, y2 + w - w2);
+        }
+        else {
+            CGContextMoveToPoint(m_draw->getContext(), x1, y1);
+            CGContextAddLineToPoint(m_draw->getContext(), x2, y2);
+        }
         CGContextStrokePath(m_draw->getContext());
     }
 
