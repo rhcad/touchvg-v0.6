@@ -10,6 +10,7 @@
 
 @synthesize graph = _graph;
 @synthesize pointW = _pointW;
+@synthesize scale = _scale;
 
 - (id)initWithFrame:(CGRect)frame graphView:(id<GiView>)gview
 {
@@ -18,8 +19,10 @@
         _xform = new GiTransform();
         _graph = new GiGraphIos(*_xform);
         _xform->setViewScaleRange(1, 50);
+        _graph->setMaxPenWidth(10);
         _gview = gview;
         _drawingDelegate = Nil;
+        _scale = 3;
         
         self.multipleTouchEnabled = YES;
         self.contentMode = UIViewContentModeRedraw;
@@ -68,12 +71,13 @@
 }
 
 - (void)setDrawingDelegate:(id)d {
-    _drawingDelegate = d;
+    _drawingDelegate = (UIResponder*)d;
 }
 
 - (void)regen {
     _graph->clearCachedBitmap();
     [self setNeedsDisplay];
+    [_gview regen];
 }
 
 - (void)redraw {
@@ -86,7 +90,7 @@
     GiGraphIos* gs = (GiGraphIos*)_graph;
     
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    _xform->zoom(_xform->getCenterW(), [_gview getXform]->getViewScale() * 3);
+    _xform->zoom(_xform->getCenterW(), [_gview getXform]->getViewScale() * _scale);
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
     if (gs->beginPaint(context))
@@ -117,6 +121,12 @@
     Point2d ptd(Point2d(_pointW.x, _pointW.y) * _xform->worldToDisplay());
     gs->rawLine(&ctx, ptd.x - 20, ptd.y, ptd.x + 20, ptd.y);
     gs->rawLine(&ctx, ptd.x, ptd.y - 20, ptd.x, ptd.y + 20);
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_drawingDelegate touchesBegan:touches withEvent:event];
+    [super touchesBegan:touches withEvent:event];
 }
 
 @end

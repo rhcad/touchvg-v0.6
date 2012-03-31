@@ -14,7 +14,6 @@
 - (id<GiMotionHandler>)motionView:(SEL)aSelector;
 - (id<GiMotionHandler>)getCommand:(SEL)aSelector;
 - (void)updateMagnifierCenter:(CGPoint)point;
-- (void)convertFromMagnifier:(UIGestureRecognizer *)sender;
 
 - (void)addGestureRecognizers:(int)t view:(UIView*)view;
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
@@ -99,9 +98,9 @@
     return self.view;
 }
 
-- (UIView*)createSubGraphView:(UIView*)parentView shapes:(void*)sp
+- (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame shapes:(void*)sp
 {
-    GiGraphView *aview = [[GiGraphView alloc] initWithFrame:parentView.bounds];
+    GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
     self.view = aview;
     aview.backgroundColor = [UIColor clearColor];
@@ -125,11 +124,12 @@
     return self.view;
 }
 
-- (void)createMagnifierView:(UIView*)parentView frame:(CGRect)frame
+- (void)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale
 {
     GiMagnifierView *aview = [[GiMagnifierView alloc] initWithFrame:frame graphView:[self gview]];
     _magnifierView = aview;
     aview.backgroundColor = [UIColor clearColor];
+    aview.scale = scale;
     
     [aview setDrawingDelegate:self];
     [parentView addSubview:aview];
@@ -378,7 +378,6 @@
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
-    [self convertFromMagnifier:sender];
     if (![[self getCommand:@selector(twoFingersPinch:)] twoFingersPinch:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(twoFingersPinch:)] twoFingersPinch:sender];
@@ -393,8 +392,17 @@
     if (1 == _touchCount) {
         [self oneFingerPan:sender];
     }
+    else if (sender.view == _magnifierView) {
+        if (sender.state == UIGestureRecognizerStateChanged) {
+            CGPoint off = [sender translationInView:sender.view];
+            [sender setTranslation:CGPointZero inView:sender.view];
+            
+            GiMagnifierView *zview = (GiMagnifierView *)_magnifierView;
+            if ([zview getXform]->zoomPan(off.x, off.y))
+                [zview redraw];
+        }
+    }
     else {
-        [self convertFromMagnifier:sender];
         if (![[self getCommand:@selector(twoFingersPan:)] twoFingersPan:sender]) {
             [[self motionView:@selector(twoFingersPan:)] twoFingersPan:sender];
         }
@@ -409,7 +417,9 @@
     GiCommandController* cmd = (GiCommandController*)_command;
     [cmd touchesBegan:point];
     
-    [super touchesBegan:touches withEvent:event];
+    if (touch.view == self.view) {
+        [super touchesBegan:touches withEvent:event];
+    }
 }
 
 - (void)updateMagnifierCenter:(CGPoint)point
@@ -440,33 +450,8 @@
     zview.pointW = [cmd getPointModel];
 }
 
-- (void)convertFromMagnifier:(UIGestureRecognizer *)sender
-{
-    if ([sender numberOfTouches] == 0)
-        return;
-    
-    GiCommandController* cmd = (GiCommandController*)_command;
-    GiMagnifierView *zview = (GiMagnifierView *)_magnifierView;
-    CGPoint point = [sender locationInView:sender.view];
-    
-    if (sender.view == _magnifierView) {
-        Point2d ptw(Point2d(point.x, point.y) * zview.graph->xf().displayToWorld());
-        ptw *= [[self gview]getXform]->worldToDisplay();
-        
-        point = CGPointMake(ptw.x, ptw.y);
-        [cmd setTouchPoint:point view:self.view];
-        
-        if (sender.state == UIGestureRecognizerStateBegan)
-            [cmd touchesBegan:point];
-    }
-    else {
-        [cmd setTouchPoint:point view:sender.view];
-    }
-}
-
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    [self convertFromMagnifier:sender];
     if (![[self getCommand:@selector(oneFingerPan:)] oneFingerPan:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
@@ -479,7 +464,6 @@
 
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
-    [self convertFromMagnifier:sender];
     if (![[self getCommand:@selector(oneFingerOneTap:)] oneFingerOneTap:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerOneTap:)] oneFingerOneTap:sender];
@@ -491,7 +475,6 @@
 
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
-    [self convertFromMagnifier:sender];
     if (![[self getCommand:@selector(oneFingerTwoTaps:)] oneFingerTwoTaps:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerTwoTaps:)] oneFingerTwoTaps:sender];

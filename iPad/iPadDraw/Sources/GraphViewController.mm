@@ -97,10 +97,10 @@ static const NSUInteger kDashLineTag    = 4;
     [_graph createGraphView:viewFrame backgroundColor:[UIColor grayColor] shapes:NULL];
     [self.view addSubview:_graph.view];
     
-    UIView *magnifierView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, 200, 200)];
+    UIView *magnifierView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, 250, 250)];
     magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.7f];
     [self.view addSubview:magnifierView];
-    [_graph createMagnifierView:magnifierView frame:magnifierView.bounds];
+    [_graph createMagnifierView:magnifierView frame:magnifierView.bounds scale:4];
     [magnifierView release];
     
     CGRect barFrame = rect;
@@ -159,6 +159,12 @@ static const NSUInteger kDashLineTag    = 4;
     return btn;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self colorBtnPress:yellowbtn];
+}
+
 - (IBAction)showPenView:(id)sender
 {
 	UIButton* btnsrc = (UIButton*)sender;
@@ -178,7 +184,7 @@ static const NSUInteger kDashLineTag    = 4;
     
     UISlider *sliderWidth = [[UISlider alloc] initWithFrame:CGRectMake(14,20,211, 40)];
 	[sliderWidth addTarget:self action:@selector(lineWidthChange:) forControlEvents:UIControlEventValueChanged];
-    sliderWidth.value = _graph.lineWidth < 0 ? _graph.lineWidth / -20.0f : 0;    
+    sliderWidth.value = _graph.lineWidth / 500.0f;    
 	[calloutView addSubview:sliderWidth];
 	[sliderWidth release];
 	
@@ -247,7 +253,7 @@ static const NSUInteger kDashLineTag    = 4;
 - (IBAction)lineWidthChange:(id)sender // 线条宽度调整
 {
     UISlider *slider = (UISlider *)sender;
-    _graph.lineWidth = -20 * slider.value;
+    _graph.lineWidth = 500.0f * slider.value;
 }
 
 - (IBAction)alphaChange:(id)sender  // 透明度调整
@@ -280,7 +286,7 @@ static const NSUInteger kDashLineTag    = 4;
 	[wrapview addSubview:mapbtn];
 	[mapbtn release];
     
-    [calloutView.graph createSubGraphView:mapbtn shapes:_graph.shapes];
+    [calloutView.graph createSubGraphView:mapbtn frame:mapbtn.bounds shapes:_graph.shapes];
     calloutView.graph.commandName = "splines";
 }
 

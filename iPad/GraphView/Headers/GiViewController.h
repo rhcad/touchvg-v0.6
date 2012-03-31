@@ -66,9 +66,9 @@
     \param shapes 已有的共享图形列表，如果为NULL则自动创建图形列表
     \return 创建子图形视图(GiGraphView)
  */
-- (UIView*)createSubGraphView:(UIView*)parentView shapes:(void*)shapes;
+- (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame shapes:(void*)shapes;
 
 //! 在给定视图内创建放大镜视图
-- (void)createMagnifierView:(UIView*)parentView frame:(CGRect)frame;
+- (void)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale;
 
 @end

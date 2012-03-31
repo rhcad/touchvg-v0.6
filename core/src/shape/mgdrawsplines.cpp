@@ -83,7 +83,7 @@ bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
     
     if (m_step > 1) {
         int w = getLineHalfWidth(m_shape, sender->view->graph());
-        splines->smooth(sender->view->xform()->displayToModel(2 + w));
+        splines->smooth(sender->view->xform()->displayToModel(3 + w));
         _addshape(sender);
     }
     
@@ -93,24 +93,7 @@ bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
     return _touchEnded(sender);
 }
 
-bool MgCmdDrawSplines::canAddPoint(const MgMotion* sender, bool ended)
+bool MgCmdDrawSplines::canAddPoint(const MgMotion* /*sender*/, bool /*ended*/)
 {
-    /*double minDist = sender->view->xform()->displayToModel(3);
-    Point2d endPt  = m_shape->shape()->getPoint(m_step - 1);
-    double distToEnd = endPt.distanceTo(sender->pointM);
-    double turnAngle = 90;
-    
-    if (m_step > 1)
-    {
-        Point2d lastPt = m_shape->shape()->getPoint(m_step - 2);
-        turnAngle = (endPt - lastPt).angleTo(sender->pointM - endPt);
-        turnAngle = mgRad2Deg(fabs(turnAngle));
-    }
-    
-    if (distToEnd < minDist)
-        return false;
-    if (!ended && sin(turnAngle) * distToEnd < 1)
-        return false;*/
-    
     return true;
 }

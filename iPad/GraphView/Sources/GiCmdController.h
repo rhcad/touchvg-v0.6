@@ -19,7 +19,6 @@ class MgViewProxy;
     GiContext   *_context;          //!< 当前绘图属性
     BOOL        _undoFired;         //!< 是否已向命令触发Undo消息(滑动中变为双指)
     CGPoint     _downPoint;         //!< 开始触摸时的位置
-    CGPoint     _point;             //!< setTouchPoint
 }
 
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称
@@ -30,7 +29,6 @@ class MgViewProxy;
 
 - (id)init:(UIView**)auxview;
 - (void)touchesBegan:(CGPoint)point;
-- (void)setTouchPoint:(CGPoint)point view:(UIView*)view;
 - (CGPoint)getPointModel;
 
 @end

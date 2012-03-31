@@ -7,6 +7,7 @@
 
 @interface GiCommandController(Internal)
 
+- (void)setView:(UIGestureRecognizer*)sender;
 - (void)convertPoint:(CGPoint)pt;
 
 @end
@@ -38,6 +39,12 @@ private:
 
 @implementation GiCommandController(Internal)
 
+- (void)setView:(UIGestureRecognizer*)sender
+{
+    assert([sender.view conformsToProtocol:@protocol(GiView)]);
+    _mgview->view = (id<GiView>)sender.view;
+}
+
 - (void)convertPoint:(CGPoint)pt
 {
     _motion->point.x = mgRound(pt.x);
@@ -59,7 +66,7 @@ private:
 {
     self = [super init];
     if (self) {
-        _context = new GiContext(-3, GiColor(0, 0, 0, 128));
+        _context = new GiContext(50, GiColor(0, 0, 0, 128));
         _mgview = new MgViewProxy(_context, auxview);
         _motion = new MgMotion;
         _motion->view = _mgview;
@@ -188,13 +195,6 @@ private:
     _downPoint = point;
 }
 
-- (void)setTouchPoint:(CGPoint)point view:(UIView*)view
-{
-    assert([view conformsToProtocol:@protocol(GiView)]);
-    _mgview->view = (id<GiView>)view;
-    _point = point;
-}
-
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
     MgCommand* cmd = mgGetCommandManager()->getCommand();
@@ -202,10 +202,11 @@ private:
     
     if (cmd)
     {
+        [self setView:sender];
         if (sender.state == UIGestureRecognizerStateBegan)
             [self convertPoint:_downPoint];
         else
-            [self convertPoint:_point];
+            [self convertPoint:[sender locationInView:sender.view]];
         
         if (sender.state == UIGestureRecognizerStateBegan) {
             _motion->startPoint = _motion->point;
@@ -254,7 +255,8 @@ private:
     BOOL ret = NO;
     
     if (cmd) {
-        [self convertPoint:_point];
+        [self setView:sender];
+        [self convertPoint:[sender locationInView:sender.view]];
         _motion->startPoint = _motion->point;
         _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
@@ -272,7 +274,8 @@ private:
     BOOL ret = NO;
     
     if (cmd) {
-        [self convertPoint:_point];
+        [self setView:sender];
+        [self convertPoint:[sender locationInView:sender.view]];
         _motion->startPoint = _motion->point;
         _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
