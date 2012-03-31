@@ -78,9 +78,9 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
 
 int getLineHalfWidth(const MgShape* shape, GiGraphics* gs)
 {
-    int width = shape->context()->getLineWidth();
+    Int16 width = shape->context()->getLineWidth();
     if (width > 0)
-        width = - (int)gs->calcPenWidth(width);
+        width = - (Int16)gs->calcPenWidth(width);
     return mgMax(1, - width / 2);
 }
 
@@ -149,7 +149,7 @@ bool MgCommandSelect::canSelect(MgShape* shape, const MgMotion* sender)
                                             m_ptNear, m_segment) <= limits.width() / 2;
 }
 
-Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const MgMotion* sender, const Point2d& pointM)
+Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const Point2d& pointM)
 {
     UInt32 handleIndex = 0;
     double minDist = _DBL_MAX;
@@ -163,7 +163,7 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const MgMotion* sender, co
         }
     }
     
-    if (nearDist < minDist / 2
+    if (nearDist < minDist / 3
         && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
         m_insertPoint = true;
@@ -190,7 +190,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
                    && canSelect(shape, sender));
     
     if (canSelAgain) {
-        handleIndex = hitTestHandles(shape, sender, sender->pointM);
+        handleIndex = hitTestHandles(shape, sender->pointM);
         if (m_handleIndex != handleIndex || m_insertPoint) {
             m_handleIndex = handleIndex;
         }
@@ -239,13 +239,14 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
     
     m_insertPoint = false;
     canSelect(m_clonesp, sender);   // calc m_ptNear
-    m_handleIndex = (m_clonesp && m_handleIndex > 0) ? hitTestHandles(m_clonesp, sender, sender->pointM) : 0;
+    m_handleIndex = (m_clonesp && m_handleIndex > 0)
+        ? hitTestHandles(m_clonesp, sender->pointM) : 0;
     
     if (m_insertPoint && m_clonesp->shape()->isKindOf(MgBaseLines::Type())) {
         MgBaseLines* lines = (MgBaseLines*)m_clonesp->shape();
         lines->insertPoint(m_segment, m_ptNear);
         m_clonesp->shape()->update();
-        m_handleIndex = hitTestHandles(m_clonesp, sender, m_ptNear);
+        m_handleIndex = hitTestHandles(m_clonesp, m_ptNear);
     }
     
     sender->view->redraw();
@@ -291,7 +292,7 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
         
         if (m_handleIndex > 0) {
             m_insertPoint = false;
-            m_handleIndex = hitTestHandles(shape, sender, sender->pointM);
+            m_handleIndex = hitTestHandles(shape, sender->pointM);
         }
     }
     

@@ -42,7 +42,7 @@ private:
     MgShape* hitTestAll(const MgMotion* sender, Point2d &ptNear, Int32 &segment);
     MgShape* getSelectedShape(const MgMotion* sender);
     bool canSelect(MgShape* shape, const MgMotion* sender);
-    Int32 hitTestHandles(MgShape* shape, const MgMotion* sender, const Point2d& pointM);
+    Int32 hitTestHandles(MgShape* shape, const Point2d& pointM);
     
     UInt32                  m_id;               // 选中图形的ID
     Point2d                 m_ptNear;           // 图形上的最近点
