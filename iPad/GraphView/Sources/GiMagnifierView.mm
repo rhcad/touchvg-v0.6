@@ -47,8 +47,8 @@
 
 - (BOOL)isActiveView
 {
-    return ([_drawingDelegate respondsToSelector:@selector(getActiveView)]
-            && self == [_drawingDelegate performSelector:@selector(getActiveView)]);
+    return ([_drawingDelegate respondsToSelector:@selector(activeView)]
+            && self == [_drawingDelegate performSelector:@selector(activeView)]);
 }
 
 - (void)setPointW:(CGPoint)pt {
