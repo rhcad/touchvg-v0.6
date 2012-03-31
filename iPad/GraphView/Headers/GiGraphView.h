@@ -49,14 +49,17 @@
     UIResponder*    _drawingDelegate;       //!< 动态绘图用的委托控制器对象
     CGPoint         _pointW;                //!< 实际图形视图的当前点，世界坐标
     CGFloat         _scale;                 //!< 放大倍数
+    BOOL            _lockRedraw;            //!< 禁止放大镜动态显示
 }
 
 @property (nonatomic,readonly) GiGraphics*  graph;      //!< 图形显示对象
 @property (nonatomic)          CGPoint      pointW;     //!< 实际图形视图的当前点，世界坐标
 @property (nonatomic)          CGFloat      scale;      //!< 放大倍数
+@property (nonatomic)          BOOL         lockRedraw; //!< 禁止放大镜动态显示
 
 - (id)initWithFrame:(CGRect)frame graphView:(id<GiView>)gview;
 - (void)draw:(GiGraphics*)gs;
 - (void)dynDraw:(GiGraphics*)gs;
+- (BOOL)isActiveView;
 
 @end

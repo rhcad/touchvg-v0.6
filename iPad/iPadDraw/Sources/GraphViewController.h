@@ -39,7 +39,11 @@
 - (IBAction)backtoDraw:(id)sender;      // 返回自由绘制（在画直线或者虚线后，需要该方法返回）
 - (IBAction)showPaletee:(id)sender;     // 显示调色板
 
-- (UIButton *)addButton:(NSString *)imgname action:(SEL)action frame:(CGRect)frame;
+- (IBAction)lockMagnifier:(id)sender;   // 切换是否禁止放大镜动态显示
+- (IBAction)resizeMagnifier:(id)sender;   // 切换放大镜视图大小
+
+- (UIButton *)addButton:(NSString *)imgname action:(SEL)action bar:(UIView*)bar
+                      x:(CGFloat*)x size:(CGFloat)size diffx:(CGFloat)diffx;
 - (void)showUnlightButtons;             // 显示全部非高亮钮
 
 @end

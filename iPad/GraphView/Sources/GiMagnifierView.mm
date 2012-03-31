@@ -11,6 +11,7 @@
 @synthesize graph = _graph;
 @synthesize pointW = _pointW;
 @synthesize scale = _scale;
+@synthesize lockRedraw = _lockRedraw;
 
 - (id)initWithFrame:(CGRect)frame graphView:(id<GiView>)gview
 {
@@ -23,6 +24,7 @@
         _gview = gview;
         _drawingDelegate = Nil;
         _scale = 3;
+        _lockRedraw = YES;
         
         self.multipleTouchEnabled = YES;
         self.contentMode = UIViewContentModeRedraw;
@@ -43,11 +45,19 @@
     [super dealloc];
 }
 
+- (BOOL)isActiveView
+{
+    return ([_drawingDelegate respondsToSelector:@selector(getActiveView)]
+            && self == [_drawingDelegate performSelector:@selector(getActiveView)]);
+}
+
 - (void)setPointW:(CGPoint)pt {
     _pointW = pt;
     Point2d ptd = Point2d(pt.x, pt.y) * _xform->worldToDisplay();
+    BOOL inside = CGRectContainsPoint(CGRectInset(self.bounds, 20, 20), CGPointMake(ptd.x, ptd.y));
+    BOOL locked = _lockRedraw && ![self isActiveView];
     
-    if (!CGRectContainsPoint(CGRectInset(self.bounds, 20, 20), CGPointMake(ptd.x, ptd.y))) { 
+    if (!locked && !inside) { 
         _xform->zoom(Point2d(pt.x, pt.y), _xform->getViewScale());
     }
 }
@@ -75,6 +85,7 @@
 }
 
 - (void)regen {
+    _xform->zoom(Point2d(_pointW.x, _pointW.y), [_gview getXform]->getViewScale() * _scale);
     _graph->clearCachedBitmap();
     [self setNeedsDisplay];
     [_gview regen];
@@ -95,7 +106,7 @@
     
     if (gs->beginPaint(context))
     {
-        if ([[self gestureRecognizers]count] > 0 && !gs->drawCachedBitmap(0, 0)) {
+        if (!gs->drawCachedBitmap(0, 0)) {
             [self draw:gs];
             gs->saveCachedBitmap();
         }
@@ -113,7 +124,9 @@
 
 - (void)dynDraw:(GiGraphics*)gs
 {
-    if ([_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
+    BOOL locked = _lockRedraw && ![self isActiveView];
+    
+    if (!locked && [_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
         [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
     }
     

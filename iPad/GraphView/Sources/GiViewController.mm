@@ -27,6 +27,8 @@
 @implementation GiViewController
 
 @synthesize gestureRecognizerUsed = _gestureRecognizerUsed;
+@synthesize magnifierView = _magnifierView;
+@synthesize activeView = _activeView;
 @synthesize lineWidth;
 @synthesize lineColor;
 @synthesize fillColor;
@@ -41,6 +43,7 @@
     self = [super init];
     if (self) {
         _magnifierView = Nil;
+        _activeView = Nil;
         _command = [[GiCommandController alloc]init:&_magnifierView];
         _shapesCreated = NULL;
         for (int t = 0; t < 2; t++) {
@@ -54,6 +57,7 @@
 
 - (void)viewDidLoad
 {
+    _activeView = self.view;
     [[self gview] setDrawingDelegate:self];
     [self addGestureRecognizers:0 view:self.view];
 }
@@ -124,7 +128,7 @@
     return self.view;
 }
 
-- (void)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale
+- (UIView*)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale
 {
     GiMagnifierView *aview = [[GiMagnifierView alloc] initWithFrame:frame graphView:[self gview]];
     _magnifierView = aview;
@@ -136,6 +140,7 @@
     [self addGestureRecognizers:1 view:aview];
     
     [aview release];
+    return _magnifierView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -417,6 +422,7 @@
     GiCommandController* cmd = (GiCommandController*)_command;
     [cmd touchesBegan:point];
     
+    _activeView = touch.view;
     if (touch.view == self.view) {
         [super touchesBegan:touches withEvent:event];
     }

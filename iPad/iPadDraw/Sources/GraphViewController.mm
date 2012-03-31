@@ -22,6 +22,7 @@
 #else
 
 #import "SCCalloutView.h"
+#import <GraphView/GiGraphView.h>
 
 // SCCalloutGraphView
 
@@ -98,10 +99,30 @@ static const NSUInteger kDashLineTag    = 4;
     [self.view addSubview:_graph.view];
     
     UIView *magnifierView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, 250, 250)];
-    magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.7f];
+    magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.9f];
     [self.view addSubview:magnifierView];
-    [_graph createMagnifierView:magnifierView frame:magnifierView.bounds scale:4];
     [magnifierView release];
+    
+    CGFloat magbtnw = 32;
+    CGRect magbarRect = CGRectMake(0, 0, magnifierView.bounds.size.width, magbtnw);
+    UIButton *magbarView = [[UIButton alloc]initWithFrame:magbarRect];
+    [magbarView setImage:[UIImage imageNamed:@"downview.png"] forState: UIControlStateNormal];
+	magbarView.alpha = 0.6;
+    magbarView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	[magnifierView addSubview:magbarView];
+    [magbarView release];
+    
+    CGRect maggraphRect = magnifierView.bounds;
+    maggraphRect.origin.y = magbtnw;
+    maggraphRect.size.height -= magbtnw;
+    UIView *magView = [_graph createMagnifierView:magnifierView frame:maggraphRect scale:4];
+    magView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
+                                | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin
+                                | UIViewAutoresizingFlexibleBottomMargin);
+    
+    CGFloat magbtnx = 4;
+    [self addButton:@"back.png" action:@selector(lockMagnifier:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    [self addButton:@"clearview.png" action:@selector(resizeMagnifier:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
     
     CGRect barFrame = rect;
     barFrame.size.height = BAR_HEIGHT;
@@ -115,47 +136,42 @@ static const NSUInteger kDashLineTag    = 4;
     
     CGFloat btnx = barFrame.size.width / 2 - (BTN_XDIFF + BAR_HEIGHT) * 4;
     redBtn = [self addButton:@"redbrush.png" action:@selector(colorBtnPress:)
-                        frame:CGRectMake(btnx, 0, BAR_HEIGHT, BAR_HEIGHT)];
+                         bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
     redBtn.tag = kRedTag;
-	
-    btnx += BAR_HEIGHT + BTN_XDIFF;
-    blueBtn = [self addButton:@"bluebrush.png" action:@selector(colorBtnPress:)
-                        frame:CGRectMake(btnx, 0, BAR_HEIGHT, BAR_HEIGHT)];
-	blueBtn.tag = kBlueTag;
-	
-    btnx += BAR_HEIGHT + BTN_XDIFF;
-    yellowbtn = [self addButton:@"yellowbrush.png" action:@selector(colorBtnPress:)
-                        frame:CGRectMake(btnx, 0, BAR_HEIGHT, BAR_HEIGHT)];
-	yellowbtn.tag = kYellowTag;
-	
-    btnx += BAR_HEIGHT + BTN_XDIFF;
-    colorbtn = [self addButton:@"colormix.png" action:@selector(showPaletee:)
-                        frame:CGRectMake(btnx, 0, BAR_HEIGHT, BAR_HEIGHT)];
     
-    btnx += BAR_HEIGHT + BTN_XDIFF;
+    blueBtn = [self addButton:@"bluebrush.png" action:@selector(colorBtnPress:)
+                          bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+    blueBtn.tag = kBlueTag;
+    
+    yellowbtn = [self addButton:@"yellowbrush.png" action:@selector(colorBtnPress:)
+                            bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+    yellowbtn.tag = kYellowTag;
+    
+    colorbtn = [self addButton:@"colormix.png" action:@selector(showPaletee:)
+                           bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+    
     brushbtn = [self addButton:@"brush.png" action:@selector(showPenView:)
-                        frame:CGRectMake(btnx, 0, BAR_HEIGHT, BAR_HEIGHT)];
-	
-    btnx += BAR_HEIGHT + BTN_XDIFF;
+                           bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];	
+    
     erasebtn = [self addButton:@"erase.png" action:@selector(eraseColor:)
-                        frame:CGRectMake(btnx, 0, BAR_HEIGHT, BAR_HEIGHT)];
-	
-    btnx += BAR_HEIGHT + BTN_XDIFF;
+                           bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+    
     clearbtn = [self addButton:@"clearview.png" action:@selector(clearView:)
-                        frame:CGRectMake(btnx, 0, BAR_HEIGHT, BAR_HEIGHT)];
-	
-    btnx += BAR_HEIGHT + BTN_XDIFF;
-    backbtn = [self addButton:@"back.png" action:@selector(backToView:)
-                        frame:CGRectMake(btnx, 0, BAR_HEIGHT, BAR_HEIGHT)];
+                           bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+    
+    backbtn  = [self addButton:@"back.png" action:@selector(backToView:)
+                           bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
 }
 
-- (UIButton *)addButton:(NSString *)imgname action:(SEL)action frame:(CGRect)frame
+- (UIButton *)addButton:(NSString *)imgname action:(SEL)action bar:(UIView*)bar
+                      x:(CGFloat*)x size:(CGFloat)size diffx:(CGFloat)diffx
 {
-    UIButton *btn = [[UIButton alloc]initWithFrame:frame];
+    UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(*x, 0, size, size)];
     [btn setImage:[UIImage imageNamed:imgname] forState: UIControlStateNormal];
     [btn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    [_downview addSubview:btn];
+    [bar addSubview:btn];
     [btn release];
+    *x += size + diffx;
     return btn;
 }
 
@@ -163,6 +179,31 @@ static const NSUInteger kDashLineTag    = 4;
 {
     [super viewDidLoad];
     [self colorBtnPress:yellowbtn];
+}
+
+- (IBAction)lockMagnifier:(id)sender
+{
+    GiMagnifierView *magnifierView = (GiMagnifierView*)_graph.magnifierView;
+    magnifierView.lockRedraw = !magnifierView.lockRedraw;
+}
+
+- (IBAction)resizeMagnifier:(id)sender
+{
+    UIView *mview = _graph.magnifierView.superview;
+    CGSize totalsize = _graph.view.bounds.size;
+    CGSize size = mview.frame.size;
+    
+    if (size.width > totalsize.width - 20 || size.height > totalsize.height - 20)
+        mview.frame = CGRectMake(10, 10, 100, 100);
+    else if (size.width > totalsize.width * 0.75f || size.height > totalsize.height * 0.75f)
+        mview.frame = _graph.view.bounds;
+    else {
+        size = CGSizeMake(size.width * 2, size.height * 2);
+        if (size.width > totalsize.width - 20 || size.height > totalsize.height - 20)
+            mview.frame = _graph.view.bounds;
+        else
+            mview.frame = CGRectMake(10, 10, size.width, size.height);
+    }
 }
 
 - (IBAction)showPenView:(id)sender

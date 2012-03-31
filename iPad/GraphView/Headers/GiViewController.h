@@ -15,12 +15,15 @@
     BOOL    _gestureRecognizerUsed;     //!< 是否使用手势识别器处理触摸消息
     int     _touchCount;                //!< 开始触摸时的手指数
     UIView  *_magnifierView;            //!< 放大镜视图
+    UIView  *_activeView;               //!< 当前图形视图
     
     enum { RECOGNIZER_COUNT = 4 };
     UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT];
 }
 
-@property (nonatomic,readonly)  void*   shapes;     //!< 图形列表, MgShapes*
+@property (nonatomic,readonly)  void*   shapes;         //!< 图形列表, MgShapes*
+@property (nonatomic,readonly)  UIView* magnifierView;  //!< 放大镜视图
+@property (nonatomic,readonly)  UIView* activeView;     //!< 当前图形视图
 
 //! 当前命令名称
 @property (nonatomic)         const char*   commandName;
@@ -56,19 +59,26 @@
     \param frame 视图位置大小
     \param bkColor 背景色
     \param shapes 已有的共享图形列表，如果为NULL则自动创建图形列表
-    \return 创建子图形视图(GiGraphView)
+    \return 创建的子图形视图(GiGraphView)
  */
 - (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor shapes:(void*)shapes;
 
 //! 在已有视图中创建子图形视图(GiGraphView)和图形列表
 /*!
     \param parentView 已有视图，将创建其子视图
+    \param frame 视图位置大小，可取为 parentView.bounds
     \param shapes 已有的共享图形列表，如果为NULL则自动创建图形列表
-    \return 创建子图形视图(GiGraphView)
+    \return 创建的子图形视图(GiGraphView)
  */
 - (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame shapes:(void*)shapes;
 
 //! 在给定视图内创建放大镜视图
-- (void)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale;
+/*!
+    \param parentView 已有视图，将创建其子视图
+    \param frame 视图位置大小，可取为 parentView.bounds
+    \param scale 放大镜视图相对于图形视图(GiGraphView)的显示放大倍数，大于1时放大，小于1时缩小
+    \return 创建的放大镜视图(GiMagnifierView)
+ */
+- (UIView*)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale;
 
 @end
