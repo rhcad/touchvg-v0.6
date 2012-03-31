@@ -145,9 +145,8 @@ bool MgCommandSelect::canSelect(MgShape* shape, const MgMotion* sender)
 {
     Box2d limits(Point2d(sender->startPoint.x, sender->startPoint.y), 50, 0);
     limits *= sender->view->xform()->displayToModel();
-    double d = shape->shape()->hitTest(limits.center(), limits.width() / 2, m_ptNear, m_segment);
-    
-    return d <= limits.width() / 2;
+    return shape && shape->shape()->hitTest(limits.center(), limits.width() / 2, 
+                                            m_ptNear, m_segment) <= limits.width() / 2;
 }
 
 Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const MgMotion* sender, const Point2d& pointM)
