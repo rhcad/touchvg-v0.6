@@ -17,12 +17,12 @@ UInt32 mgGetSelection(MgCommand* cmd, MgView* view, UInt32 count, MgShape** shap
     return 0;
 }
 
-UInt32 MgCommandSelect::getSelection(MgView* view, UInt32 count, MgShape** shapes)
+UInt32 MgCommandSelect::getSelection(MgView* /*view*/, UInt32 count, MgShape** shapes)
 {
     if (count < 1 || !shapes)
         return m_selection.size();
     
-    count = mgMin(count, m_selection.size());
+    count = mgMin(count, (UInt32)m_selection.size());
     for (UInt32 i = 0; i < count; i++)
         shapes[i] = m_selection[i];
     m_showSel = false;      // 禁止亮显选中图形，以便外部可动态修改图形属性并原样显示
@@ -91,7 +91,7 @@ int getLineHalfWidth(const MgShape* shape, GiGraphics* gs)
     return mgMax(1, - width / 2);
 }
 
-bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
+bool MgCommandSelect::draw(const MgMotion* /*sender*/, GiGraphics* gs)
 {
     const std::vector<MgShape*>& shapes = m_cloneShapes.empty() ? m_selection : m_cloneShapes;
     std::vector<MgShape*>::const_iterator it;
