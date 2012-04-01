@@ -180,7 +180,7 @@
     return _enableZoom && [self dynPanning:sender];
 }
 
-- (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
+- (BOOL)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
 {
     return _enableZoom && [self switchZoomed:sender];
 }

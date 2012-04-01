@@ -53,12 +53,27 @@
 
 - (void)setPointW:(CGPoint)pt {
     _pointW = pt;
+    if (!_lockRedraw || [self isActiveView])
+        [self setPointWandRedraw:pt];
+}
+
+- (void)setPointWandRedraw:(CGPoint)pt
+{
+    _pointW = pt;
     Point2d ptd = Point2d(pt.x, pt.y) * _xform->worldToDisplay();
     BOOL inside = CGRectContainsPoint(CGRectInset(self.bounds, 20, 20), CGPointMake(ptd.x, ptd.y));
-    BOOL locked = _lockRedraw && ![self isActiveView];
     
-    if (!locked && !inside) { 
+    if (!inside) {
         _xform->zoom(Point2d(pt.x, pt.y), _xform->getViewScale());
+    }
+    [self setNeedsDisplay];
+}
+
+- (void)zoomPan:(CGPoint)translation
+{
+    if (_xform->zoomPan(translation.x, translation.y)) {
+        _pointW = CGPointMake(_xform->getCenterW().x, _xform->getCenterW().y);
+        [self setNeedsDisplay];
     }
 }
 

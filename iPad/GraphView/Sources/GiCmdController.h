@@ -18,7 +18,6 @@ class MgViewProxy;
     MgViewProxy *_mgview;           //!< 命令所用视图
     GiContext   *_context;          //!< 当前绘图属性
     BOOL        _undoFired;         //!< 是否已向命令触发Undo消息(滑动中变为双指)
-    CGPoint     _downPoint;         //!< 开始触摸时的位置
 }
 
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称
@@ -28,7 +27,7 @@ class MgViewProxy;
 @property (nonatomic)   GiColor         fillColor;      //!< 填充颜色，clearColor 表示不填充
 
 - (id)init:(UIView**)auxview;
-- (void)touchesBegan:(CGPoint)point;
+- (void)touchesBegan:(CGPoint)point view:(UIView*)sender;
 - (CGPoint)getPointModel;
 
 @end

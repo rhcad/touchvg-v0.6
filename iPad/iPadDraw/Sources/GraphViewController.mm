@@ -98,7 +98,7 @@ static const NSUInteger kDashLineTag    = 4;
     [_graph createGraphView:viewFrame backgroundColor:[UIColor grayColor] shapes:NULL];
     [self.view addSubview:_graph.view];
     
-    UIView *magnifierView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, 250, 250)];
+    UIView *magnifierView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, 200, 200)];
     magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.9f];
     [self.view addSubview:magnifierView];
     [magnifierView release];
@@ -123,6 +123,7 @@ static const NSUInteger kDashLineTag    = 4;
     CGFloat magbtnx = 4;
     [self addButton:@"back.png" action:@selector(lockMagnifier:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
     [self addButton:@"clearview.png" action:@selector(resizeMagnifier:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    [self addButton:@"erase.png" action:@selector(fireUndo:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
     
     CGRect barFrame = rect;
     barFrame.size.height = BAR_HEIGHT;
@@ -193,10 +194,12 @@ static const NSUInteger kDashLineTag    = 4;
     CGSize totalsize = _graph.view.bounds.size;
     CGSize size = mview.frame.size;
     
-    if (size.width > totalsize.width - 20 || size.height > totalsize.height - 20)
+    if (size.width > totalsize.width - 20 || size.height > totalsize.height - 20) {
         mview.frame = CGRectMake(10, 10, 100, 100);
-    else if (size.width > totalsize.width * 0.75f || size.height > totalsize.height * 0.75f)
+    }
+    else if (size.width > totalsize.width * 0.75f || size.height > totalsize.height * 0.75f) {
         mview.frame = _graph.view.bounds;
+    }
     else {
         size = CGSizeMake(size.width * 2, size.height * 2);
         if (size.width > totalsize.width - 20 || size.height > totalsize.height - 20)
@@ -204,6 +207,11 @@ static const NSUInteger kDashLineTag    = 4;
         else
             mview.frame = CGRectMake(10, 10, size.width, size.height);
     }
+}
+
+- (IBAction)fireUndo:(id)sender
+{
+    [_graph undoMotion];
 }
 
 - (IBAction)showPenView:(id)sender

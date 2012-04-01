@@ -170,6 +170,7 @@ bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
     CGContextSetFlatness(context, fast ? 20 : 1);
 
     CGContextSetMiterLimit(context, (CGFloat)(1.0 / sin(_M_PI_6)));  // 60 deg.
+    CGContextSetLineCap(context, kCGLineCapRound);
 
     return true;
 }
@@ -342,16 +343,8 @@ bool GiGraphIos::rawLine(const GiContext* ctx,
 
     if (ret)
     {
-        if (x2 == x1 && y2 == y1) {
-            float w = calcPenWidth(m_draw->_gictx.getLineWidth());
-            float w2 = w / 2.0f;
-            CGContextMoveToPoint(m_draw->getContext(), x1 - w2, y1 - w2);
-            CGContextAddLineToPoint(m_draw->getContext(), x2 + w - w2 - 1, y2 + w - w2 - 1);
-        }
-        else {
-            CGContextMoveToPoint(m_draw->getContext(), x1, y1);
-            CGContextAddLineToPoint(m_draw->getContext(), x2, y2);
-        }
+        CGContextMoveToPoint(m_draw->getContext(), x1, y1);
+        CGContextAddLineToPoint(m_draw->getContext(), x2, y2);
         CGContextStrokePath(m_draw->getContext());
     }
 

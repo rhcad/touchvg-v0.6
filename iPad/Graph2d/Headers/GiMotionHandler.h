@@ -39,8 +39,9 @@ class GiGraphics;
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender; //!< 双指放缩手势
 - (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender;     //!< 双指滑动手势
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender;      //!< 单指滑动手势
-- (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;  //!< 双击手势
-- (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender;   //!< 单击手势
+- (BOOL)twoFingersTwoTaps:(UITapGestureRecognizer *)sender; //!< 双指双击手势
+- (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;  //!< 单指双击手势
+- (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender;   //!< 单指单击手势
 
 @end
 

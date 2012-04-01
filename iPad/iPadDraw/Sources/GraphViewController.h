@@ -41,6 +41,7 @@
 
 - (IBAction)lockMagnifier:(id)sender;   // 切换是否禁止放大镜动态显示
 - (IBAction)resizeMagnifier:(id)sender;   // 切换放大镜视图大小
+- (IBAction)fireUndo:(id)sender;        // 回退一步
 
 - (UIButton *)addButton:(NSString *)imgname action:(SEL)action bar:(UIView*)bar
                       x:(CGFloat*)x size:(CGFloat)size diffx:(CGFloat)diffx;

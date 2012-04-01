@@ -17,7 +17,7 @@
     UIView  *_magnifierView;            //!< 放大镜视图
     UIView  *_activeView;               //!< 当前图形视图
     
-    enum { RECOGNIZER_COUNT = 3 };
+    enum { RECOGNIZER_COUNT = 5 };
     UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT];
 }
 

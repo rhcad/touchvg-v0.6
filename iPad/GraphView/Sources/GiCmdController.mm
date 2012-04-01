@@ -4,10 +4,11 @@
 
 #import "GiCmdController.h"
 #include <Graph2d/mgcmd.h>
+#include <vector>
 
 @interface GiCommandController(Internal)
 
-- (void)setView:(UIGestureRecognizer*)sender;
+- (BOOL)setView:(UIView*)view;
 - (void)convertPoint:(CGPoint)pt;
 
 @end
@@ -39,10 +40,11 @@ private:
 
 @implementation GiCommandController(Internal)
 
-- (void)setView:(UIGestureRecognizer*)sender
+- (BOOL)setView:(UIView*)view
 {
-    assert([sender.view conformsToProtocol:@protocol(GiView)]);
-    _mgview->view = (id<GiView>)sender.view;
+    if ([view conformsToProtocol:@protocol(GiView)])
+        _mgview->view = (id<GiView>)view;
+    return !!_mgview->view;
 }
 
 - (void)convertPoint:(CGPoint)pt
@@ -99,9 +101,13 @@ private:
 }
 
 - (void)setLineWidth:(int)w {
-    MgShape* shape = NULL;
-    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
-        shape->context()->setLineWidth(w);
+    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL);
+    std::vector<MgShape*> shapes(n, NULL);
+    
+    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front()) == n) {
+        for (UInt32 i = 0; i < n; i++) {
+            shapes[i]->context()->setLineWidth(w);
+        }
         _motion->view->redraw();
     }
     else {
@@ -118,9 +124,13 @@ private:
 }
 
 - (void)setLineColor:(GiColor)c {
-    MgShape* shape = NULL;
-    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
-        shape->context()->setLineColor(c);
+    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL);
+    std::vector<MgShape*> shapes(n, NULL);
+    
+    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front()) == n) {
+        for (UInt32 i = 0; i < n; i++) {
+            shapes[i]->context()->setLineColor(c);
+        }
         _motion->view->redraw();
     }
     else {
@@ -137,9 +147,13 @@ private:
 }
 
 - (void)setFillColor:(GiColor)c {
-    MgShape* shape = NULL;
-    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
-        shape->context()->setFillColor(c);
+    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL);
+    std::vector<MgShape*> shapes(n, NULL);
+    
+    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front()) == n) {
+        for (UInt32 i = 0; i < n; i++) {
+            shapes[i]->context()->setFillColor(c);
+        }
         _motion->view->redraw();
     }
     else {
@@ -156,9 +170,13 @@ private:
 }
 
 - (void)setLineStyle:(int)style {
-    MgShape* shape = NULL;
-    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
-        shape->context()->setLineStyle((kLineStyle)style);
+    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL);
+    std::vector<MgShape*> shapes(n, NULL);
+    
+    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front()) == n) {
+        for (UInt32 i = 0; i < n; i++) {
+            shapes[i]->context()->setLineStyle((kLineStyle)style);
+        }
         _motion->view->redraw();
     }
     else {
@@ -190,9 +208,15 @@ private:
     return cmd && _mgview->view && cmd->undo(recall, _motion);
 }
 
-- (void)touchesBegan:(CGPoint)point
+- (void)touchesBegan:(CGPoint)point view:(UIView*)sender
 {
-    _downPoint = point;
+    if ([self setView:sender]) {
+        [self convertPoint:point];
+        _motion->startPoint = _motion->point;
+        _motion->startPointM = _motion->pointM;
+        _motion->lastPoint = _motion->point;
+        _motion->lastPointM = _motion->pointM;
+    }
 }
 
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
@@ -202,18 +226,12 @@ private:
     
     if (cmd)
     {
-        [self setView:sender];
-        if (sender.state == UIGestureRecognizerStateBegan)
-            [self convertPoint:_downPoint];
-        else
+        [self setView:sender.view];
+        if (sender.state != UIGestureRecognizerStateBegan && [sender numberOfTouches]) {
             [self convertPoint:[sender locationInView:sender.view]];
+        }
         
         if (sender.state == UIGestureRecognizerStateBegan) {
-            _motion->startPoint = _motion->point;
-            _motion->startPointM = _motion->pointM;
-            _motion->lastPoint = _motion->point;
-            _motion->lastPointM = _motion->pointM;
-            
             _undoFired = NO;
             ret = cmd->touchBegan(_motion);
         }
@@ -255,7 +273,7 @@ private:
     BOOL ret = NO;
     
     if (cmd) {
-        [self setView:sender];
+        [self setView:sender.view];
         [self convertPoint:[sender locationInView:sender.view]];
         _motion->startPoint = _motion->point;
         _motion->startPointM = _motion->pointM;
@@ -274,7 +292,7 @@ private:
     BOOL ret = NO;
     
     if (cmd) {
-        [self setView:sender];
+        [self setView:sender.view];
         [self convertPoint:[sender locationInView:sender.view]];
         _motion->startPoint = _motion->point;
         _motion->startPointM = _motion->pointM;

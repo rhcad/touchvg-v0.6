@@ -20,7 +20,7 @@ public:
 
     static const char* Name() { return "select"; }
     static MgCommand* Create() { return new MgCommandSelect; }
-    int getSelection(MgView* view, int count, MgShape** shapes);
+    UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes);
     
 private:
     virtual const char* getName() const { return Name(); }
@@ -44,11 +44,17 @@ private:
     bool canSelect(MgShape* shape, const MgMotion* sender);
     Int32 hitTestHandles(MgShape* shape, const Point2d& pointM);
     
+    typedef std::vector<MgShape*>::iterator sel_iterator;
+    sel_iterator getSelectedPostion(MgShape* shape);
+    bool isSelected(MgShape* shape);
+    
+private:
+    std::vector<MgShape*>   m_selection;        // 选中的图形
+    std::vector<MgShape*>   m_cloneShapes;      // 选中图形的复制对象
     UInt32                  m_id;               // 选中图形的ID
     Point2d                 m_ptNear;           // 图形上的最近点
     Int32                   m_segment;          // 点中的是图行上的哪部分
     UInt32                  m_handleIndex;      // 点中的是哪个控制点
-    MgShape                 *m_clonesp;         // 选中图形的复制对象
     bool                    m_insertPoint;      // 是否可插入新点
     bool                    m_showSel;          // 是否亮显选中的图形
 };

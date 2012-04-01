@@ -5,8 +5,10 @@
 #include "mgcmdselect.h"
 #include <mgbasicsp.h>
 #include <string.h>
+#include <algorithm>
+#include <functional>
 
-int mgGetSelection(MgCommand* cmd, MgView* view, int count, MgShape** shapes)
+UInt32 mgGetSelection(MgCommand* cmd, MgView* view, UInt32 count, MgShape** shapes)
 {
     if (cmd && strcmp(cmd->getName(), MgCommandSelect::Name()) == 0) {
         MgCommandSelect* sel = (MgCommandSelect*)cmd;
@@ -15,18 +17,20 @@ int mgGetSelection(MgCommand* cmd, MgView* view, int count, MgShape** shapes)
     return 0;
 }
 
-int MgCommandSelect::getSelection(MgView* view, int count, MgShape** shapes)
+UInt32 MgCommandSelect::getSelection(MgView* view, UInt32 count, MgShape** shapes)
 {
     if (count < 1 || !shapes)
-        return m_id ? 1 : 0;
+        return m_selection.size();
     
-    *shapes = view->shapes()->findShape(m_id);
-    m_showSel = false;
+    count = mgMin(count, m_selection.size());
+    for (UInt32 i = 0; i < count; i++)
+        shapes[i] = m_selection[i];
+    m_showSel = false;      // 禁止亮显选中图形，以便外部可动态修改图形属性并原样显示
     
-    return *shapes ? 1 : 0;
+    return count;
 }
 
-MgCommandSelect::MgCommandSelect() : m_clonesp(NULL), m_showSel(true)
+MgCommandSelect::MgCommandSelect()
 {
 }
 
@@ -48,28 +52,31 @@ bool MgCommandSelect::initialize(const MgMotion* /*sender*/)
     m_segment = -1;
     m_handleIndex = 0;
     m_showSel = true;
+    m_selection.clear();
 
     return true;
 }
 
 bool MgCommandSelect::undo(bool &, const MgMotion* sender)
 {
-    if (m_clonesp) {                                // 正在拖改
-        m_clonesp->release();
-        m_clonesp = NULL;
+    if (!m_cloneShapes.empty()) {                   // 正在拖改
+        for (sel_iterator it = m_cloneShapes.begin(); it != m_cloneShapes.end(); ++it)
+            (*it)->release();
+        m_cloneShapes.clear();
         m_insertPoint = false;
         sender->view->redraw();
         return true;
     }
-    if (m_id != 0 && m_handleIndex != 0) {          // 控制点修改状态
+    if (m_id != 0 && m_handleIndex > 0) {           // 控制点修改状态
         m_handleIndex = 0;                          // 回退到图形整体选中状态
         sender->view->redraw();
         return true;
     }
-    if (m_id != 0) {                                // 图形整体选中状态
+    if (!m_selection.empty()) {                     // 图形整体选中状态
         m_id = 0;
         m_segment = -1;
         m_handleIndex = 0;
+        m_selection.clear();
         sender->view->redraw();
         return true;
     }
@@ -86,23 +93,25 @@ int getLineHalfWidth(const MgShape* shape, GiGraphics* gs)
 
 bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
 {
-    const MgShape* spsel = getSelectedShape(sender);
-    const MgShape* shape = m_clonesp ? m_clonesp : spsel;
-    if (!shape)
-        return false;
+    const std::vector<MgShape*>& shapes = m_cloneShapes.empty() ? m_selection : m_cloneShapes;
+    std::vector<MgShape*>::const_iterator it;
     
-    if (m_showSel) {    // 选中时比原图形宽4像素，控制点修改时仅亮显控制点
+    if (m_showSel) {        // 选中时比原图形宽4像素，控制点修改时仅亮显控制点
         GiContext ctx(m_handleIndex > 0 ? 0 : -4, GiColor(0, 0, 255, m_handleIndex > 0 ? 50 : 128));
-        shape->draw(*gs, &ctx);
+        for (it = shapes.begin(); it != shapes.end(); ++it)
+            (*it)->draw(*gs, &ctx);
     }
     else {
         GiContext ctxbk(0, gs->getBkColor());
-        shape->draw(*gs, &ctxbk);       // 擦掉原图形
-        shape->draw(*gs);               // 按实际属性动态显示
+        for (it = shapes.begin(); it != shapes.end(); ++it)
+            (*it)->draw(*gs, &ctxbk);   // 擦掉原图形
+        for (it = shapes.begin(); it != shapes.end(); ++it)
+            (*it)->draw(*gs);           // 按实际属性动态显示
     }
     
-    if (m_handleIndex > 0 && m_showSel) {
+    if (shapes.size() == 1 && m_handleIndex > 0 && m_showSel) {
         GiContext ctxhd(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
+        const MgShape* shape = shapes.front();
         int radiuspx = mgMin(8, 2 + mgMax(4, getLineHalfWidth(shape, gs)));
         double radius = gs->xf().displayToModel(radiuspx);
         double r2 = gs->xf().displayToModel(4 + radiuspx);
@@ -110,22 +119,38 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
             gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(i), radius);
         }
-        if (m_clonesp || !m_insertPoint) {
+        if (!m_cloneShapes.empty() || !m_insertPoint) {
             gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(m_handleIndex - 1), r2);
-            if (m_clonesp)
-                gs->drawEllipse(&ctxhd, spsel->shape()->getHandlePoint(m_handleIndex - 1), r2);
+            if (!m_cloneShapes.empty()) {
+                gs->drawEllipse(&ctxhd, m_selection.front()->shape()->getHandlePoint(m_handleIndex - 1), r2);
+            }
         }
-        if (m_insertPoint && m_clonesp) {
+        if (m_insertPoint && !m_cloneShapes.empty()) {
             GiContext insertctx(ctxhd);
             insertctx.setFillColor(GiColor(255, 0, 0, 240));
             gs->drawEllipse(&insertctx, m_ptNear, r2);
         }
-        if (m_clonesp) {
-            gs->drawEllipse(&ctxhd, spsel->shape()->getHandlePoint(m_handleIndex-1), radius);
+        if (!m_cloneShapes.empty()) {
+            gs->drawEllipse(&ctxhd, m_selection.front()->shape()->getHandlePoint(m_handleIndex-1), radius);
         }
     }
     
     return true;
+}
+
+MgCommandSelect::sel_iterator MgCommandSelect::getSelectedPostion(MgShape* shape)
+{
+    sel_iterator it = m_selection.end();
+    if (shape) {
+        it = std::find_if(m_selection.begin(), m_selection.end(),
+                          std::bind2nd(std::equal_to<MgShape*>(), shape));
+    }
+    return it;
+}
+
+bool MgCommandSelect::isSelected(MgShape* shape)
+{
+    return getSelectedPostion(shape) != m_selection.end();
 }
 
 MgShape* MgCommandSelect::hitTestAll(const MgMotion* sender, Point2d &ptNear, Int32 &segment)
@@ -138,7 +163,8 @@ MgShape* MgCommandSelect::hitTestAll(const MgMotion* sender, Point2d &ptNear, In
 
 MgShape* MgCommandSelect::getSelectedShape(const MgMotion* sender)
 {
-    return sender->view->shapes()->findShape(m_id);
+    MgShape* p = sender->view->shapes()->findShape(m_id);
+    return (!p && !m_selection.empty()) ? m_selection.front() : p;
 }
 
 bool MgCommandSelect::canSelect(MgShape* shape, const MgMotion* sender)
@@ -180,34 +206,45 @@ bool MgCommandSelect::click(const MgMotion* sender)
     MgShape* shape;
     bool    canSelAgain;
     
-    if (!m_showSel) {
-        m_showSel = true;
-        sender->view->regen();
+    if (!m_showSel) {                   // 上次是禁止亮显
+        m_showSel = true;               // 恢复亮显选中的图形
+        sender->view->regen();          // 可能图形属性已变，重新构建显示
     }
-    m_insertPoint = false;
-    shape = getSelectedShape(sender);
-    canSelAgain = (shape && (m_handleIndex > 0 || shape->getID() == m_id)
-                   && canSelect(shape, sender));
     
-    if (canSelAgain) {
-        handleIndex = hitTestHandles(shape, sender->pointM);
+    m_insertPoint = false;              // 默认不是插入点，在hitTestHandles中设置
+    shape = getSelectedShape(sender);   // 取上次选中的图形
+    canSelAgain = (m_selection.size() == 1  // 多选时不进入热点状态
+                   && (m_handleIndex > 0 || shape->getID() == m_id)
+                   && canSelect(shape, sender));    // 仅检查这个图形能否选中
+    
+    if (canSelAgain) {                  // 可再次选中同一图形，不论其他图形能否选中
+        handleIndex = hitTestHandles(shape, sender->pointM);    // 检查是否切换热点
         if (m_handleIndex != handleIndex || m_insertPoint) {
             m_handleIndex = handleIndex;
         }
     }
-    else if (shape && m_handleIndex > 0) {
-        m_handleIndex = 0;
+    else if (shape && m_handleIndex > 0) {  // 上次是热点状态，在该图形外的较远处点击
+        m_handleIndex = 0;                  // 恢复到整体选中状态
     }
-    else {
+    else {                                  // 上次是整体选中状态或没有选中
         shape = hitTestAll(sender, ptNear, segment);
-        UInt32 id = shape ? shape->getID() : 0;
         
-        if (m_id != id || handleIndex > 0) {
-            m_id = id;
-            m_ptNear = ptNear;
-            m_segment = segment;
-            m_handleIndex = 0;
+        if (shape && isSelected(shape)) {   // 点击已选图形，从选择集中移除
+            m_selection.erase(getSelectedPostion(shape));
+            m_id = 0;
         }
+        else if (shape && !isSelected(shape)) { // 点击新图形，加入选择集
+            m_selection.push_back(shape);
+            m_id = shape->getID();
+        }
+        else if (!m_selection.empty()) {    // 在空白处点击清除选择集
+            m_selection.clear();
+            m_id = 0;
+        }
+        
+        m_ptNear = ptNear;
+        m_segment = segment;
+        m_handleIndex = 0;
     }
     sender->view->redraw();
     
@@ -226,27 +263,33 @@ bool MgCommandSelect::longPress(const MgMotion* /*sender*/)
 
 bool MgCommandSelect::touchBegan(const MgMotion* sender)
 {
-    MgShape* shape = getSelectedShape(sender);
+    sel_iterator it;
+    MgShape* shape = NULL;
     
-    if (m_clonesp)
-        m_clonesp->release();
-    m_clonesp = shape ? (MgShape*)shape->clone() : NULL;
+    for (it = m_cloneShapes.begin(); it != m_cloneShapes.end(); ++it)
+        (*it)->release();
+    m_cloneShapes.clear();
+    for (it = m_selection.begin(); it != m_selection.end(); ++it) {
+        shape = (MgShape*)((*it)->clone());
+        m_cloneShapes.push_back(shape);
+    }
     
     if (!m_showSel) {
         m_showSel = true;
         sender->view->regen();
     }
     
-    m_insertPoint = false;
-    canSelect(m_clonesp, sender);   // calc m_ptNear
-    m_handleIndex = (m_clonesp && m_handleIndex > 0)
-        ? hitTestHandles(m_clonesp, sender->pointM) : 0;
+    m_insertPoint = false;                          // setted in hitTestHandles
+    if (m_cloneShapes.size() == 1)
+        canSelect(shape, sender);   // calc m_ptNear
+    m_handleIndex = (m_cloneShapes.size() == 1 && m_handleIndex > 0)
+        ? hitTestHandles(shape, sender->pointM) : 0;
     
-    if (m_insertPoint && m_clonesp->shape()->isKindOf(MgBaseLines::Type())) {
-        MgBaseLines* lines = (MgBaseLines*)m_clonesp->shape();
+    if (m_insertPoint && shape->shape()->isKindOf(MgBaseLines::Type())) {
+        MgBaseLines* lines = (MgBaseLines*)(shape->shape());
         lines->insertPoint(m_segment, m_ptNear);
-        m_clonesp->shape()->update();
-        m_handleIndex = hitTestHandles(m_clonesp, m_ptNear);
+        shape->shape()->update();
+        m_handleIndex = hitTestHandles(shape, m_ptNear);
     }
     
     sender->view->redraw();
@@ -256,23 +299,31 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
 
 bool MgCommandSelect::touchMoved(const MgMotion* sender)
 {
-    MgShape* shape = getSelectedShape(sender);
-    
-    if (m_clonesp && shape) {
-        m_clonesp->shape()->copy(*(shape->shape()));
-        if (m_insertPoint && m_clonesp->shape()->isKindOf(MgBaseLines::Type())) {
-            MgBaseLines* lines = (MgBaseLines*)m_clonesp->shape();
+    for (size_t i = 0; i < m_cloneShapes.size(); i++) {
+        MgBaseShape* shape = m_cloneShapes[i]->shape();
+        
+        shape->copy(*m_selection[i]->shape());
+        if (m_insertPoint && shape->isKindOf(MgBaseLines::Type())) {
+            MgBaseLines* lines = (MgBaseLines*)shape;
             lines->insertPoint(m_segment, m_ptNear);
         }
         if (m_handleIndex > 0) {
             double tol = sender->view->xform()->displayToModel(10);
-            m_clonesp->shape()->setHandlePoint(m_handleIndex - 1, sender->pointM, tol);
+            shape->setHandlePoint(m_handleIndex - 1, sender->pointM, tol);
         }
         else {
-            m_clonesp->shape()->offset(sender->pointM - sender->startPointM, m_segment);
+            shape->offset(sender->pointM - sender->startPointM, m_segment);
         }
-        m_clonesp->shape()->update();
+        shape->update();
         sender->view->redraw();
+    }
+    
+    if (m_cloneShapes.empty()) {            // 没有选中图形时就滑动多选
+        MgShape* shape = hitTestAll(sender, m_ptNear, m_segment);
+        if (shape && !isSelected(shape)) {
+            m_selection.push_back(shape);
+            sender->view->redraw();
+        }
     }
     
     return true;
@@ -280,20 +331,23 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
 
 bool MgCommandSelect::touchEnded(const MgMotion* sender)
 {
-    MgShape* shape = getSelectedShape(sender);
+    MgShape* shape = NULL;
     
-    if (m_clonesp && shape) {
-        shape->shape()->copy(*(m_clonesp->shape()));
+    for (size_t i = 0; i < m_cloneShapes.size(); i++) {
+        shape = m_selection[i];
+        
+        shape->shape()->copy(*m_cloneShapes[i]->shape());
         shape->shape()->update();
         sender->view->regen();
         
-        m_clonesp->release();
-        m_clonesp = NULL;
-        
-        if (m_handleIndex > 0) {
-            m_insertPoint = false;
-            m_handleIndex = hitTestHandles(shape, sender->pointM);
-        }
+        m_cloneShapes[i]->release();
+        m_cloneShapes[i] = NULL;
+    }
+    m_cloneShapes.clear();
+    
+    if (m_handleIndex > 0) {
+        m_insertPoint = false;
+        m_handleIndex = hitTestHandles(shape, sender->pointM);
     }
     
     return true;

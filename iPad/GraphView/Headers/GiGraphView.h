@@ -58,6 +58,9 @@
 @property (nonatomic)          BOOL         lockRedraw; //!< 禁止放大镜动态显示
 
 - (id)initWithFrame:(CGRect)frame graphView:(id<GiView>)gview;
+- (void)zoomPan:(CGPoint)ranslation;
+- (void)setPointWandRedraw:(CGPoint)pt;
+
 - (void)draw:(GiGraphics*)gs;
 - (void)dynDraw:(GiGraphics*)gs;
 - (BOOL)isActiveView;

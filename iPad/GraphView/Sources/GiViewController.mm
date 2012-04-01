@@ -13,12 +13,13 @@
 - (id<GiView>)gview;
 - (id<GiMotionHandler>)motionView:(SEL)aSelector;
 - (id<GiMotionHandler>)getCommand:(SEL)aSelector;
-- (void)updateMagnifierCenter:(CGPoint)point;
+- (void)updateMagnifierCenter:(UIGestureRecognizer *)sender;
 
 - (void)addGestureRecognizers:(int)t view:(UIView*)view;
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
+- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender;
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender;
 
@@ -337,28 +338,37 @@
     if (_recognizers[t][0])
         return;
     
-    int n = 0;
+    // 双指捏合手势
     UIPinchGestureRecognizer *twoFingersPinch =
     [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPinch:)];
-    _recognizers[t][n++] = twoFingersPinch;
+    _recognizers[t][0] = twoFingersPinch;
     
+    // 双指滑动、单指滑动手势
     UIPanGestureRecognizer *twoFingersPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
-    [twoFingersPan setMaximumNumberOfTouches:2];
+    twoFingersPan.maximumNumberOfTouches = 2;
     twoFingersPan.delaysTouchesEnded = NO;
-    _recognizers[t][n++] = twoFingersPan;
+    _recognizers[t][1] = twoFingersPan;
     
+    // 单指点击手势
     UITapGestureRecognizer *oneFingerOneTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
     oneFingerOneTap.delaysTouchesEnded = NO;
-    [oneFingerOneTap requireGestureRecognizerToFail:twoFingersPan];
-    _recognizers[t][n++] = oneFingerOneTap;
+    [oneFingerOneTap requireGestureRecognizerToFail:twoFingersPan]; // 不是滑动才算点击
+    _recognizers[t][2] = oneFingerOneTap;
     
-    /*UITapGestureRecognizer *oneFingerTwoTaps =
-     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerTwoTaps:)];
-     [oneFingerTwoTaps setNumberOfTapsRequired:2];
-     [oneFingerTwoTaps requireGestureRecognizerToFail:twoFingersPan];
-     _recognizers[t][n++] = oneFingerTwoTaps;*/
+    // 单指双击手势
+    UITapGestureRecognizer *oneFingerTwoTaps =
+    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerTwoTaps:)];
+    oneFingerTwoTaps.numberOfTapsRequired = 2;
+    _recognizers[t][3] = oneFingerTwoTaps;
+    
+    // 双指双击手势
+    UITapGestureRecognizer *twoFingersTwoTaps =
+    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersTwoTaps:)];
+    twoFingersTwoTaps.numberOfTapsRequired = 2;
+    twoFingersTwoTaps.numberOfTouchesRequired = 2;
+    _recognizers[t][4] = twoFingersTwoTaps;
     
     _touchCount = 0;
     if (_gestureRecognizerUsed) {
@@ -390,6 +400,7 @@
         && sender.view == self.view) {
         [[self motionView:@selector(twoFingersPinch:)] twoFingersPinch:sender];
     }
+    [self updateMagnifierCenter:sender];
 }
 
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender
@@ -402,18 +413,16 @@
     }
     else if (sender.view == _magnifierView) {
         if (sender.state == UIGestureRecognizerStateChanged) {
-            CGPoint off = [sender translationInView:sender.view];
-            [sender setTranslation:CGPointZero inView:sender.view];
-            
             GiMagnifierView *zview = (GiMagnifierView *)_magnifierView;
-            if ([zview getXform]->zoomPan(off.x, off.y))
-                [zview redraw];
+            [zview zoomPan:[sender translationInView:sender.view]];
+            [sender setTranslation:CGPointZero inView:sender.view];
         }
     }
     else if (_touchCount > 1) {
         if (![[self getCommand:@selector(twoFingersPan:)] twoFingersPan:sender]) {
             [[self motionView:@selector(twoFingersPan:)] twoFingersPan:sender];
         }
+        [self updateMagnifierCenter:sender];
     }
 }
 
@@ -423,40 +432,12 @@
     CGPoint point = [touch locationInView:touch.view];
     
     GiCommandController* cmd = (GiCommandController*)_command;
-    [cmd touchesBegan:point];
+    [cmd touchesBegan:point view:touch.view];
     
     _activeView = touch.view;
     if (touch.view == self.view) {
         [super touchesBegan:touches withEvent:event];
     }
-}
-
-- (void)updateMagnifierCenter:(CGPoint)point
-{
-    GiCommandController* cmd = (GiCommandController*)_command;
-    GiMagnifierView *zview = (GiMagnifierView *)_magnifierView;
-    CGPoint ptzoom = [zview convertPoint:point fromView:self.view];
-    
-    if (CGRectContainsPoint(CGRectInset(zview.bounds, -20, -20), ptzoom)) {
-        CGPoint cen;
-        
-        if (point.x < self.view.bounds.size.width / 2) {
-            cen.x = self.view.bounds.size.width - zview.superview.frame.size.width / 2 - 10;
-        }
-        else {
-            cen.x = zview.superview.frame.size.width / 2 + 10;
-        }
-        if (point.y < self.view.bounds.size.height / 2) {
-            cen.y = self.view.bounds.size.height - zview.superview.frame.size.height / 2 - 10;
-        }
-        else {
-            cen.y = zview.superview.frame.size.height / 2 + 10;
-        }
-        
-        zview.superview.center = [zview.superview.superview convertPoint:cen fromView:self.view];
-    }
-    
-    zview.pointW = [cmd getPointModel];
 }
 
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
@@ -465,9 +446,7 @@
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
     }
-    if (_magnifierView && sender.view == self.view && [sender numberOfTouches]) {
-        [self updateMagnifierCenter:[sender locationInView:sender.view]];
-    }
+    [self updateMagnifierCenter:sender];
     [_magnifierView setNeedsDisplay];
 }
 
@@ -477,9 +456,7 @@
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerOneTap:)] oneFingerOneTap:sender];
     }
-    if (_magnifierView && sender.view == self.view && [sender numberOfTouches]) {
-        [self updateMagnifierCenter:[sender locationInView:sender.view]];
-    }
+    [self updateMagnifierCenter:sender];
 }
 
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
@@ -488,8 +465,55 @@
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerTwoTaps:)] oneFingerTwoTaps:sender];
     }
-    if (_magnifierView && sender.view == self.view && [sender numberOfTouches]) {
-        [self updateMagnifierCenter:[sender locationInView:sender.view]];
+    [self updateMagnifierCenter:sender];
+}
+
+- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
+{
+    if (![[self getCommand:@selector(twoFingersTwoTaps:)] twoFingersTwoTaps:sender]
+        && sender.view == self.view) {
+        [[self motionView:@selector(twoFingersTwoTaps:)] twoFingersTwoTaps:sender];
+    }
+    [self updateMagnifierCenter:sender];
+}
+
+- (void)updateMagnifierCenter:(UIGestureRecognizer *)sender
+{
+    if (!_magnifierView || sender.view != self.view)
+        return;
+    
+    GiCommandController* cmd = (GiCommandController*)_command;
+    GiMagnifierView *zview = (GiMagnifierView *)_magnifierView;
+    
+    if ([sender numberOfTouches] > 0) {
+        CGPoint point  = [sender locationInView:sender.view];
+        CGPoint ptzoom = [zview convertPoint:point fromView:self.view];
+        
+        if (CGRectContainsPoint(CGRectInset(zview.bounds, -20, -20), ptzoom)) {
+            CGPoint cen;
+            
+            if (point.x < self.view.bounds.size.width / 2) {
+                cen.x = self.view.bounds.size.width - zview.superview.frame.size.width / 2 - 10;
+            }
+            else {
+                cen.x = zview.superview.frame.size.width / 2 + 10;
+            }
+            if (point.y < self.view.bounds.size.height / 2) {
+                cen.y = self.view.bounds.size.height - zview.superview.frame.size.height / 2 - 10;
+            }
+            else {
+                cen.y = zview.superview.frame.size.height / 2 + 10;
+            }
+            
+            zview.superview.center = [zview.superview.superview convertPoint:cen fromView:self.view];
+        }
+    }
+    
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [zview setPointWandRedraw:[cmd getPointModel]];
+    }
+    else {
+        [zview setPointW:[cmd getPointModel]];
     }
 }
 
