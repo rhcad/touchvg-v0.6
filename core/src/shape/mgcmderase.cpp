@@ -17,6 +17,7 @@ MgCommandErase::~MgCommandErase()
 bool MgCommandErase::cancel(const MgMotion* sender)
 {
     bool recall;
+    m_down = false;
     return undo(recall, sender);
 }
 
@@ -39,12 +40,15 @@ bool MgCommandErase::undo(bool &enableRecall, const MgMotion* sender)
 
 bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
 {
-    GiContext ctx(0, GiColor(64, 64, 64, 192), kLineDot);
+    GiContext ctx(-4, GiColor(64, 64, 64, 128));
     
     if (m_down) {
-        GiContext ctxshap(0, GiColor(0, 0, 255, 64), kLineSolid, GiColor(0, 0, 255, 64));
-        Box2d limits(Point2d(sender->point.x, sender->point.y), 20, 0);
-        gs->drawRect(&ctxshap, limits * sender->view->xform()->displayToModel());
+        GiContext ctxshap(0, GiColor(0, 0, 255, 128), kLineDash, GiColor(0, 0, 255, 10));
+        bool antiAlias = gs->isAntiAliasMode();
+        
+        gs->setAntiAliasMode(false);
+        gs->drawRect(&ctxshap, Box2d(sender->startPointM, sender->pointM));
+        gs->setAntiAliasMode(antiAlias);
     }
     for (std::vector<MgShape*>::const_iterator it = m_deleted.begin();
          it != m_deleted.end(); ++it) {
@@ -96,12 +100,14 @@ bool MgCommandErase::touchBegan(const MgMotion* sender)
 
 bool MgCommandErase::touchMoved(const MgMotion* sender)
 {
-    MgShape* shape = hitTest(sender);
+    Box2d snap(sender->startPointM, sender->pointM);
+    void *it;
+    MgShape* shape = sender->view->shapes()->getFirstShape(it);
     
-    if (shape && std::find_if(m_deleted.begin(), m_deleted.end(),
-                              std::bind2nd(std::equal_to<MgShape*>(), shape)) == m_deleted.end()) {
-        m_deleted.push_back(shape);
-        sender->view->redraw();
+    m_deleted.clear();
+    for (; shape; shape = sender->view->shapes()->getNextShape(it)) {
+        if (shape->shape()->getExtent().isIntersect(snap))
+            m_deleted.push_back(shape);
     }
     sender->view->redraw();
     

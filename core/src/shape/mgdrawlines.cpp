@@ -110,8 +110,11 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
     }
     m_shape->shape()->update();
     
-    if (m_step > 2) {
+    if (m_step > 1) {
         _addshape(sender);
+    }
+    else {
+        click(sender);  // add a point
     }
 
     m_shape->shape()->clear();

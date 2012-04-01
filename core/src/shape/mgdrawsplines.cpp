@@ -86,6 +86,9 @@ bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
         splines->smooth(sender->view->xform()->displayToModel(3 + w));
         _addshape(sender);
     }
+    else {
+        click(sender);  // add a point
+    }
     
     m_shape->shape()->clear();
     m_step = 0;

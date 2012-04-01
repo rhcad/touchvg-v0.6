@@ -97,9 +97,10 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     std::vector<MgShape*>::const_iterator it;
     
     if (m_showSel) {        // 选中时比原图形宽4像素，控制点修改时仅亮显控制点
-        GiContext ctx(m_handleIndex > 0 ? 0 : -4, GiColor(0, 0, 255, m_handleIndex > 0 ? 50 : 128));
-        for (it = shapes.begin(); it != shapes.end(); ++it)
-            (*it)->draw(*gs, &ctx);
+        GiContext ctxshape(m_handleIndex > 0 ? 0 : -4, GiColor(0, 0, 255, m_handleIndex > 0 ? 50 : 128));
+        for (it = shapes.begin(); it != shapes.end(); ++it) {
+            (*it)->draw(*gs, &ctxshape);
+        }
     }
     else {
         GiContext ctxbk(0, gs->getBkColor());
@@ -331,10 +332,14 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
 
 bool MgCommandSelect::touchEnded(const MgMotion* sender)
 {
-    MgShape* shape = NULL;
+    if (m_insertPoint && sender->pointM.distanceTo(m_ptNear)
+        < sender->view->xform()->displayToModel(10)) {  // 拖动刚新加的点到起始点时取消新增
+        m_cloneShapes[0]->release();
+        m_cloneShapes.clear();
+    }
     
     for (size_t i = 0; i < m_cloneShapes.size(); i++) {
-        shape = m_selection[i];
+        MgShape* shape = m_selection[i];
         
         shape->shape()->copy(*m_cloneShapes[i]->shape());
         shape->shape()->update();
@@ -347,7 +352,7 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
     
     if (m_handleIndex > 0) {
         m_insertPoint = false;
-        m_handleIndex = hitTestHandles(shape, sender->pointM);
+        m_handleIndex = hitTestHandles(m_selection[0], sender->pointM);
     }
     
     return true;
