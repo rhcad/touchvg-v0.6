@@ -63,7 +63,7 @@ bool MgCommandDraw::_addshape(const MgMotion* sender)
 
 bool MgCommandDraw::_undo(const MgMotion* sender)
 {
-    if (m_step > 0) {
+    if (m_step > 1) {
         m_step--;
         sender->view->redraw();
         return true;

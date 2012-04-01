@@ -338,37 +338,48 @@
     if (_recognizers[t][0])
         return;
     
+    int n = 0;
+    
     // 双指捏合手势
     UIPinchGestureRecognizer *twoFingersPinch =
     [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPinch:)];
-    _recognizers[t][0] = twoFingersPinch;
+    _recognizers[t][n++] = twoFingersPinch;
     
-    // 双指滑动、单指滑动手势
+    // 双指滑动手势
     UIPanGestureRecognizer *twoFingersPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
     twoFingersPan.maximumNumberOfTouches = 2;
+    twoFingersPan.minimumNumberOfTouches = 2;
     twoFingersPan.delaysTouchesEnded = NO;
-    _recognizers[t][1] = twoFingersPan;
+    [twoFingersPan requireGestureRecognizerToFail:twoFingersPinch];
+    _recognizers[t][n++] = twoFingersPan;
+    
+    // 单指滑动手势
+    UIPanGestureRecognizer *oneFingerPan =
+    [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
+    oneFingerPan.maximumNumberOfTouches = 2;
+    oneFingerPan.delaysTouchesEnded = NO;
+    _recognizers[t][n++] = oneFingerPan;
     
     // 单指点击手势
     UITapGestureRecognizer *oneFingerOneTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
     oneFingerOneTap.delaysTouchesEnded = NO;
-    [oneFingerOneTap requireGestureRecognizerToFail:twoFingersPan]; // 不是滑动才算点击
-    _recognizers[t][2] = oneFingerOneTap;
+    [oneFingerOneTap requireGestureRecognizerToFail:oneFingerPan];  // 不是滑动才算点击
+    _recognizers[t][n++] = oneFingerOneTap;
     
     // 单指双击手势
     UITapGestureRecognizer *oneFingerTwoTaps =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerTwoTaps:)];
     oneFingerTwoTaps.numberOfTapsRequired = 2;
-    _recognizers[t][3] = oneFingerTwoTaps;
+    _recognizers[t][n++] = oneFingerTwoTaps;
     
     // 双指双击手势
     UITapGestureRecognizer *twoFingersTwoTaps =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersTwoTaps:)];
     twoFingersTwoTaps.numberOfTapsRequired = 2;
     twoFingersTwoTaps.numberOfTouchesRequired = 2;
-    _recognizers[t][4] = twoFingersTwoTaps;
+    _recognizers[t][n++] = twoFingersTwoTaps;
     
     _touchCount = 0;
     if (_gestureRecognizerUsed) {
@@ -391,6 +402,20 @@
             [self.view addGestureRecognizer:_recognizers[0][i]];
             [_magnifierView addGestureRecognizer:_recognizers[1][i]];
         }
+    }
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInView:touch.view];
+    
+    GiCommandController* cmd = (GiCommandController*)_command;
+    [cmd touchesBegan:point view:touch.view];
+    
+    _activeView = touch.view;
+    if (touch.view == self.view) {
+        [super touchesBegan:touches withEvent:event];
     }
 }
 
@@ -426,28 +451,22 @@
     }
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [touch locationInView:touch.view];
-    
-    GiCommandController* cmd = (GiCommandController*)_command;
-    [cmd touchesBegan:point view:touch.view];
-    
-    _activeView = touch.view;
-    if (touch.view == self.view) {
-        [super touchesBegan:touches withEvent:event];
-    }
-}
-
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    if (![[self getCommand:@selector(oneFingerPan:)] oneFingerPan:sender]
-        && sender.view == self.view) {
-        [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        _touchCount = [sender numberOfTouches];
     }
-    [self updateMagnifierCenter:sender];
-    [_magnifierView setNeedsDisplay];
+    if (2 == _touchCount) {
+        [self twoFingersPan:sender];
+    }
+    else if (1 == _touchCount) {
+        if (![[self getCommand:@selector(oneFingerPan:)] oneFingerPan:sender]
+            && sender.view == self.view) {
+            [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
+        }
+        [self updateMagnifierCenter:sender];
+        [_magnifierView setNeedsDisplay];
+    }
 }
 
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender

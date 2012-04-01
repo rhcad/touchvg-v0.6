@@ -23,7 +23,7 @@ bool MgCmdDrawSplines::initialize(const MgMotion* sender)
 bool MgCmdDrawSplines::undo(bool &enableRecall, const MgMotion* sender)
 {
     enableRecall = true;
-    if (m_step > 1) {                   // 去掉倒数第二个点，倒数第一点是临时动态点
+    if (m_step > 2) {                   // 去掉倒数第二个点，倒数第一点是临时动态点
         ((MgBaseLines*)m_shape->shape())->removePoint(m_step - 1);
         m_shape->shape()->update();
     }
