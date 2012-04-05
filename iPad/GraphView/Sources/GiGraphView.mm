@@ -61,7 +61,6 @@
 
 - (void)afterCreated
 {
-    self.multipleTouchEnabled = YES;
     self.contentMode = UIViewContentModeRedraw;
     
     _drawingDelegate = Nil;

@@ -26,7 +26,6 @@
         _scale = 3;
         _lockRedraw = YES;
         
-        self.multipleTouchEnabled = YES;
         self.contentMode = UIViewContentModeRedraw;
     }
     return self;
@@ -122,20 +121,20 @@
 {
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     
-    if (_scale < 1 && ![_gview isZooming]) {
+    if (_scale < 1 && ![_gview isZooming]) {            // 缩略视图，动态放缩时不regen
         CGSize gsize = [_gview getOwnerView].bounds.size;
         Box2d rectw(Box2d(0, 0, gsize.width, gsize.height) * [_gview getXform]->displayToWorld());
-        Box2d rectd(rectw * _xform->worldToDisplay());
+        Box2d rectd(rectw * _xform->worldToDisplay());  // 实际图形视图在本视图中的位置
         
         if (rectd.width() < self.bounds.size.width && rectd.height() < self.bounds.size.height) {
-            if (!CGRectContainsRect(self.bounds, 
+            if (!CGRectContainsRect(self.bounds,        // 出界则平移显示
                                     CGRectMake(rectd.xmin, rectd.ymin, rectd.width(), rectd.height()))) {
                 _xform->zoomPan(CGRectGetMidX(self.bounds) - rectd.center().x,
                                 CGRectGetMidY(self.bounds) - rectd.center().y);
             }
         }
     }
-    if (![_gview isZooming]) {
+    if (![_gview isZooming]) {                          // 同步显示比例，动态放缩时除外
         _xform->zoom(_xform->getCenterW(), [_gview getXform]->getViewScale() * _scale);
     }
     
@@ -191,7 +190,7 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_drawingDelegate touchesBegan:touches withEvent:event];
+    [_drawingDelegate touchesBegan:touches withEvent:event];    // for GiCommandController
     [super touchesBegan:touches withEvent:event];
 }
 
