@@ -45,7 +45,7 @@
     if (self) {
         for (int iv = 0; iv < 3; iv++)
             _magnifierView[iv] = Nil;
-        _command = [[GiCommandController alloc]init:_magnifierView];
+        _command = [[GiCommandController alloc]initWithViews:_magnifierView];
         _shapesCreated = NULL;
         for (int t = 0; t < 2; t++) {
             for (int i = 0; i < RECOGNIZER_COUNT; i++)

@@ -27,12 +27,12 @@ class MgViewProxy;
 @property (nonatomic)   GiColor         fillColor;      //!< 填充颜色，clearColor 表示不填充
 
 //! 给定辅助视图初始化本对象，auxview是以Nil结束的多个视图
-- (id)init:(UIView**)auxview;
+- (id)initWithViews:(UIView**)auxview;
 
-//!< 开始触摸时调用，避免Pan手势开始时丢失开始触摸位置
+//! 开始触摸时调用，避免Pan手势开始时丢失开始触摸位置
 - (void)touchesBegan:(CGPoint)point view:(UIView*)sender;
 
-//!< 返回当前点，模型坐标
+//! 返回当前点，模型坐标
 - (CGPoint)getPointModel;
 
 @end

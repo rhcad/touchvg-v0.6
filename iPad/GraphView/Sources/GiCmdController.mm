@@ -68,7 +68,7 @@ private:
 @synthesize lineColor;
 @synthesize fillColor;
 
-- (id)init:(UIView**)auxview
+- (id)initWithViews:(UIView**)auxview
 {
     self = [super init];
     if (self) {
