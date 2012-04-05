@@ -11,6 +11,7 @@
 
 //! 图形视图接口
 /*! \ingroup _GEOM_SHAPE_
+    \interface MgView
 */
 struct MgView {
     virtual MgShapes* shapes() = 0;             //!< 得到图形列表
@@ -38,6 +39,7 @@ struct MgMotion {
 
 //! 命令接口
 /*! \ingroup _GEOM_SHAPE_
+    \interface MgCommand
 */
 struct MgCommand {
     virtual const char* getName() const = 0;            //!< 返回命令名称
@@ -56,6 +58,7 @@ struct MgCommand {
 
 //! 命令管理器接口
 /*! \ingroup _GEOM_SHAPE_
+    \interface MgCommandManager
     \see mgGetCommandManager
 */
 struct MgCommandManager {

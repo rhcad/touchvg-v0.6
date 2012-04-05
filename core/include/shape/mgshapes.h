@@ -10,6 +10,7 @@
 
 //! 图形列表接口
 /*! \ingroup _GEOM_SHAPE_
+    \interface MgShapes
 */
 struct MgShapes : public MgObject
 {
@@ -23,6 +24,8 @@ struct MgShapes : public MgObject
 
     virtual MgShape* hitTest(const Box2d& limits, Point2d& ptNear, Int32& segment) const = 0;
     virtual void draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
+    virtual bool save(MgStorage* s) const = 0;
+    virtual bool load(MgStorage* s) = 0;
 
     //! 删除所有图形
     virtual void clear() = 0;

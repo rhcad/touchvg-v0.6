@@ -42,7 +42,7 @@ private:
     bool isIntersectMode(const MgMotion* sender);
     
     std::vector<MgShape*>   m_deleted;
-    bool                    m_down;
+    bool                    m_boxsel;
 };
 
 #endif // __GEOMETRY_MGCOMMAND_ERASE_H_

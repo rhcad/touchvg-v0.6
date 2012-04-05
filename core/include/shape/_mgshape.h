@@ -19,6 +19,7 @@
         { return src.isKindOf(Type()) && _equals((const Cls&)src); } \
     bool Cls::_isKindOf(UInt32 type) const                      \
         { return type == Type() || __super::_isKindOf(type); }  \
+    Box2d Cls::getExtent() const { return _getExtent(); }       \
     void Cls::update() { _update(); }                           \
     void Cls::transform(const Matrix2d& mat) { _transform(mat); } \
     void Cls::clear() { _clear(); }                             \
@@ -32,6 +33,8 @@
         { return _hitTestBox(rect); }                           \
     bool Cls::draw(GiGraphics& gs, const GiContext& ctx) const  \
         { return _draw(gs, ctx); }                              \
+    bool Cls::save(MgStorage* s) const { return _save(s); }     \
+    bool Cls::load(MgStorage* s)       { return _load(s); }     \
     UInt32 Cls::getHandleCount() const { return _getHandleCount(); }    \
     Point2d Cls::getHandlePoint(UInt32 index) const             \
         { return _getHandlePoint(index); }                      \

@@ -8,6 +8,7 @@
 
 #include <gigraph.h>
 #include <mgshape.h>
+#include <mgstorage.h>
 
 //! 矢量图形模板类
 /*! \ingroup _GEOM_SHAPE_
@@ -124,6 +125,18 @@ public:
     {
         _parent = p;
         _id = nID;
+    }
+    
+    bool save(MgStorage* s) const
+    {
+        //TODO:
+        return s != NULL;
+    }
+    
+    bool load(MgStorage* s)
+    {
+        //TODO:
+        return s != NULL;
     }
 
 protected:

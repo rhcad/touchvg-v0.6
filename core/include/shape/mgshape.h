@@ -14,9 +14,11 @@ class GiContext;
 class MgBaseShape;
 struct MgShape;
 struct MgShapes;
+struct MgStorage;
 
 //! 图形对象基类
 /*! \ingroup _GEOM_SHAPE_
+    \interface MgObject
 */
 struct MgObject
 {
@@ -41,6 +43,7 @@ struct MgObject
 
 //! 矢量图形接口
 /*! \ingroup _GEOM_SHAPE_
+    \interface MgShape
 */
 struct MgShape : public MgObject
 {
@@ -51,6 +54,8 @@ struct MgShape : public MgObject
     virtual MgBaseShape* shape() = 0;
     virtual const MgBaseShape* shape() const = 0;
     virtual bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
+    virtual bool save(MgStorage* s) const = 0;
+    virtual bool load(MgStorage* s) = 0;
 
     virtual UInt32 getID() const = 0;
     virtual MgShapes* getParent() const = 0;
@@ -70,10 +75,9 @@ public:
     //! 返回本对象的类型
     static UInt32 Type() { return 3; }
 
-    //! 返回图形模型坐标范围
-    virtual Box2d getExtent() const;
-
 public:
+    //! 返回图形模型坐标范围
+    virtual Box2d getExtent() const = 0;
 
     //! 参数改变后重新计算坐标
     virtual void update() = 0;
@@ -113,6 +117,12 @@ public:
     //! 显示图形
     virtual bool draw(GiGraphics& gs, const GiContext& ctx) const = 0;
     
+    //! 保存图形
+    virtual bool save(MgStorage* s) const = 0;
+    
+    //! 恢复图形
+    virtual bool load(MgStorage* s) = 0;
+    
     //! 返回控制点个数
     virtual UInt32 getHandleCount() const = 0;
     
@@ -132,10 +142,13 @@ protected:
     void _copy(const MgBaseShape& src);
     bool _equals(const MgBaseShape& src) const;
     bool _isKindOf(UInt32 type) const;
+    Box2d _getExtent() const;
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
     bool _draw(GiGraphics& gs, const GiContext& ctx) const;
+    bool _save(MgStorage* s) const;
+    bool _load(MgStorage* s);
     bool _hitTestBox(const Box2d& rect) const;
     UInt32 _getHandleCount() const;
     Point2d _getHandlePoint(UInt32 index) const;
@@ -168,6 +181,7 @@ private:                                                        \
     virtual bool equals(const MgObject& src) const;             \
     virtual UInt32 getType() const { return Type(); }           \
     virtual bool isKindOf(UInt32 type) const { return _isKindOf(type); } \
+    virtual Box2d getExtent() const;                            \
     virtual void update();                                      \
     virtual void transform(const Matrix2d& mat);                \
     virtual void clear();                                       \
@@ -179,6 +193,8 @@ private:                                                        \
         Point2d& ptNear, Int32& segment) const;                 \
     virtual bool hitTestBox(const Box2d& rect) const;  \
     virtual bool draw(GiGraphics& gs, const GiContext& ctx) const;  \
+    virtual bool save(MgStorage* s) const;                      \
+    virtual bool load(MgStorage* s);                            \
     virtual UInt32 getHandleCount() const;                      \
     virtual Point2d getHandlePoint(UInt32 index) const;         \
     virtual bool setHandlePoint(UInt32 index, const Point2d& pt, double tol);   \

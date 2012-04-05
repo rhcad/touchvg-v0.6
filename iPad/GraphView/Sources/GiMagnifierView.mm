@@ -19,8 +19,8 @@
     if (self) {
         _xform = new GiTransform();
         _graph = new GiGraphIos(*_xform);
-        _xform->setViewScaleRange(1e-4, 50);
-        _graph->setMaxPenWidth(10);
+        _xform->setViewScaleRange(1e-5, 50);
+        _graph->setMaxPenWidth(4);
         _gview = gview;
         _drawingDelegate = Nil;
         _scale = 3;
@@ -51,20 +51,20 @@
             && self == [_drawingDelegate performSelector:@selector(activeView)]);
 }
 
-- (void)setPointW:(CGPoint)pt {
-    _pointW = pt;
+- (void)setPointW:(CGPoint)ptw {
+    _pointW = ptw;
     if (!_lockRedraw || [self isActiveView])
-        [self setPointWandRedraw:pt];
+        [self setPointWandRedraw:ptw];
 }
 
-- (void)setPointWandRedraw:(CGPoint)pt
+- (void)setPointWandRedraw:(CGPoint)ptw
 {
-    _pointW = pt;
-    Point2d ptd = Point2d(pt.x, pt.y) * _xform->worldToDisplay();
-    BOOL inside = CGRectContainsPoint(CGRectInset(self.bounds, 20, 20), CGPointMake(ptd.x, ptd.y));
+    _pointW = ptw;
+    Point2d ptd = Point2d(ptw.x, ptw.y) * _xform->worldToDisplay();
+    BOOL inside = CGRectContainsPoint(CGRectInset(self.bounds, 10, 10), CGPointMake(ptd.x, ptd.y));
     
     if (!inside) {
-        _xform->zoom(Point2d(pt.x, pt.y), _xform->getViewScale());
+        _xform->zoom(Point2d(ptw.x, ptw.y), _xform->getViewScale());
     }
     [self setNeedsDisplay];
 }
@@ -89,6 +89,10 @@
     return _graph;
 }
 
+- (UIView*)getOwnerView {
+    return self;
+}
+
 - (void)setShapes:(MgShapes*)data {
 }
 
@@ -100,7 +104,6 @@
 }
 
 - (void)regen {
-    _xform->zoom(Point2d(_pointW.x, _pointW.y), [_gview getXform]->getViewScale() * _scale);
     _graph->clearCachedBitmap();
     [self setNeedsDisplay];
     [_gview regen];
@@ -111,16 +114,36 @@
     [_gview redraw];
 }
 
+- (BOOL)isZooming {
+    return [_gview isZooming];
+}
+
 - (void)drawRect:(CGRect)rect
 {
+    _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    
+    if (_scale < 1 && ![_gview isZooming]) {
+        CGSize gsize = [_gview getOwnerView].bounds.size;
+        Box2d rectw(Box2d(0, 0, gsize.width, gsize.height) * [_gview getXform]->displayToWorld());
+        Box2d rectd(rectw * _xform->worldToDisplay());
+        
+        if (rectd.width() < self.bounds.size.width && rectd.height() < self.bounds.size.height) {
+            if (!CGRectContainsRect(self.bounds, 
+                                    CGRectMake(rectd.xmin, rectd.ymin, rectd.width(), rectd.height()))) {
+                _xform->zoomPan(CGRectGetMidX(self.bounds) - rectd.center().x,
+                                CGRectGetMidY(self.bounds) - rectd.center().y);
+            }
+        }
+    }
+    if (![_gview isZooming]) {
+        _xform->zoom(_xform->getCenterW(), [_gview getXform]->getViewScale() * _scale);
+    }
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
     GiGraphIos* gs = (GiGraphIos*)_graph;
     
-    _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    _xform->zoom(_xform->getCenterW(), [_gview getXform]->getViewScale() * _scale);
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
-    
-    if (gs->beginPaint(context))
+    if (gs->beginPaint(context, true, [self isZooming]))
     {
         if (!gs->drawCachedBitmap(0, 0)) {
             [self draw:gs];
@@ -147,12 +170,23 @@
         [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
     }
     
-    if (inactive) {
+    bool antiAlias = gs->isAntiAliasMode();
+    gs->setAntiAliasMode(false);
+    
+    if (_scale < 1) {
+        GiContext ctx(0, GiColor(64, 64, 64, 172), kLineDot);
+        UIView *v = [_gview getOwnerView];
+        Box2d rect(Box2d(0, 0, v.bounds.size.width, v.bounds.size.height) * [_gview getXform]->displayToWorld());
+        gs->drawRect(&ctx, rect, false);
+    }
+    else if (inactive) {
         GiContext ctx(0, GiColor(64, 64, 64, 172));
         Point2d ptd(Point2d(_pointW.x, _pointW.y) * _xform->worldToDisplay());
         gs->rawLine(&ctx, ptd.x - 20, ptd.y, ptd.x + 20, ptd.y);
         gs->rawLine(&ctx, ptd.x, ptd.y - 20, ptd.x, ptd.y + 20);
     }
+    
+    gs->setAntiAliasMode(antiAlias);
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -161,28 +195,40 @@
     [super touchesBegan:touches withEvent:event];
 }
 
+- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender
+{
+    if (sender.view == self) {
+        if (sender.state == UIGestureRecognizerStateChanged) {
+            [self zoomPan:[sender translationInView:sender.view]];
+            [sender setTranslation:CGPointZero inView:sender.view];
+        }
+    }
+    
+    return sender.view == self;
+}
+
 - (BOOL)automoveSuperview:(CGPoint)point fromView:(UIView*)view
 {
-    CGPoint ptzoom = [self convertPoint:point fromView:view];
-    CGRect selfbounds = [view convertRect:view.bounds toView:self.superview.superview];
+    CGPoint ptzoom = [self.superview convertPoint:point fromView:view];
+    CGRect mainBounds = [view convertRect:view.bounds toView:self.superview.superview];
     BOOL moved = NO;
     
-    if (CGRectContainsRect(selfbounds, self.superview.frame)
-        && CGRectContainsPoint(CGRectInset(self.bounds, -20, -20), ptzoom))
+    if (CGRectContainsRect(mainBounds, self.superview.frame)    // 放大镜视图在实际绘图视图内
+        && CGRectContainsPoint(CGRectInset(self.superview.bounds, -20, -20), ptzoom)) // 进入放大镜视图
     {
-        CGPoint cen;
+        CGPoint cen;        // 本视图的上级视图的中心点，为view的视图坐标系
         
-        if (point.x < view.bounds.size.width / 2) {
+        if (point.x < view.bounds.size.width / 2) {             // 移到view的右侧
             cen.x = view.bounds.size.width - self.superview.frame.size.width / 2 - 10;
         }
         else {
-            cen.x = self.superview.frame.size.width / 2 + 10;
+            cen.x = self.superview.frame.size.width / 2 + 10;   // 移到view的左侧
         }
-        if (point.y < view.bounds.size.height / 2) {
+        if (point.y < view.bounds.size.height / 2) {            // 移到view的下侧
             cen.y = view.bounds.size.height - self.superview.frame.size.height / 2 - 10;
         }
         else {
-            cen.y = self.superview.frame.size.height / 2 + 10;
+            cen.y = self.superview.frame.size.height / 2 + 10;  // 移到view的上侧
         }
         
         moved = YES;

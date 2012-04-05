@@ -26,12 +26,16 @@ private:
     GiGraphics* graph() { return [view getGraph]; }
     void regen() {
         [view regen];
-        if ([*_auxview respondsToSelector:@selector(regen)])
-            [*_auxview performSelector:@selector(regen)];
+        for (int i = 0; _auxview[i]; i++) {
+            if ([_auxview[i] respondsToSelector:@selector(regen)])
+                [_auxview[i] performSelector:@selector(regen)];
+        }
     }
     void redraw() {
         [view redraw];
-        [*_auxview setNeedsDisplay];
+        for (int i = 0; _auxview[i]; i++) {
+            [_auxview[i] setNeedsDisplay];
+        }
     }
     const GiContext* context() { return _context; }
     bool shapeWillAdded(MgShape* shape) { return true; }
@@ -78,6 +82,7 @@ private:
 
 - (void)dealloc
 {
+    mgGetCommandManager()->unloadCommands();
     delete _motion;
     delete _mgview;
     delete _context;

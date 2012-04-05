@@ -43,6 +43,7 @@ private:
     MgShape* getSelectedShape(const MgMotion* sender);
     bool canSelect(MgShape* shape, const MgMotion* sender);
     Int32 hitTestHandles(MgShape* shape, const Point2d& pointM);
+    bool isIntersectMode(const MgMotion* sender);
     
     typedef std::vector<MgShape*>::iterator sel_iterator;
     sel_iterator getSelectedPostion(MgShape* shape);
@@ -57,6 +58,7 @@ private:
     UInt32                  m_handleIndex;      // 点中的是哪个控制点
     bool                    m_insertPoint;      // 是否可插入新点
     bool                    m_showSel;          // 是否亮显选中的图形
+    bool                    m_boxsel;           // 是否开始框选
 };
 
 #endif // __GEOMETRY_MGCOMMAND_SELECT_H_

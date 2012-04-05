@@ -14,7 +14,7 @@
     void*   _shapesCreated;             //!< 创建的图形列表
     BOOL    _gestureRecognizerUsed;     //!< 是否使用手势识别器处理触摸消息
     int     _touchCount;                //!< 开始触摸时的手指数
-    UIView  *_magnifierView;            //!< 放大镜视图
+    UIView  *_magnifierView[3];         //!< 放大镜视图
     UIView  *_activeView;               //!< 当前图形视图
     
     enum { RECOGNIZER_COUNT = 6 };
@@ -53,6 +53,7 @@
 - (void)clearCachedData;                //!< 清除缓冲数据，下次重新构建显示
 - (void)undoMotion;                     //!< 触发晃动或撤销操作
 - (void)dynDraw:(id)sender;             //!< 供图形视图动态显示时调用
+- (void)afterZoomed:(id)sender;         //!< 供图形视图在动态放缩后通知
 
 //! 创建图形视图(GiGraphView)和图形列表，不需要图形视图的派生类时使用
 /*!

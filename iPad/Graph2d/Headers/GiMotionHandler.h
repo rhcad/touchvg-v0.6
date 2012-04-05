@@ -17,6 +17,7 @@ class GiGraphics;
 - (MgShapes*)getShapes;                 //!< 得到图形列表
 - (GiTransform*)getXform;               //!< 得到坐标系对象
 - (GiGraphics*)getGraph;                //!< 得到图形显示对象
+- (UIView*)getOwnerView;                //!< 得到视图对象
 
 - (void)setShapes:(MgShapes*)data;      //!< 设置图形列表
 - (void)setAnimating:(BOOL)animated;    //!< 翻转或动画显示时通知视图
@@ -24,6 +25,7 @@ class GiGraphics;
 
 - (void)regen;                          //!< 标记视图待重新构建显示
 - (void)redraw;                         //!< 标记视图待更新显示
+- (BOOL)isZooming;                      //!< 是否正在动态放缩或平移
 
 @end
 

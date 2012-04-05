@@ -216,6 +216,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\include\shape\mgstorage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\include\shape\mgbasicsp.h"
 				>
 			</File>

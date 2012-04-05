@@ -111,11 +111,6 @@
         _shapes->draw(*gs);
 }
 
-- (UIView*)getOwnerView
-{
-    return self;
-}
-
 - (MgShapes*)getShapes
 {
     return _shapes;
@@ -129,6 +124,10 @@
 - (GiGraphics*)getGraph
 {
     return _graph;
+}
+
+- (UIView*)getOwnerView {
+    return self;
 }
 
 - (void)setShapes:(MgShapes*)data
@@ -159,6 +158,10 @@
 - (void)redraw
 {
     [self setNeedsDisplay];
+}
+
+- (BOOL)isZooming {
+    return !!_zooming;
 }
 
 - (void)dynDraw:(GiGraphics*)gs
@@ -214,7 +217,10 @@
     _xform->zoomPan(point.x - _firstPoint.x, point.y - _firstPoint.y);
     _lastPoint = point;
     
-    [self setNeedsDisplay];
+    if ([_drawingDelegate respondsToSelector:@selector(afterZoomed:)]) {
+        [_drawingDelegate performSelector:@selector(afterZoomed:) withObject:self];
+    }
+
     return YES;
 }
 
@@ -235,7 +241,10 @@
     _xform->zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);
     _xform->zoomPan(translation.x, translation.y);
     
-    [self setNeedsDisplay];
+    if ([_drawingDelegate respondsToSelector:@selector(afterZoomed:)]) {
+        [_drawingDelegate performSelector:@selector(afterZoomed:) withObject:self];
+    }
+    
     return YES;
 }
 
@@ -248,7 +257,6 @@
     {
         _doubleZoomed = NO;
         _xform->zoom(Point2d(_centerBeforeDbl.x, _centerBeforeDbl.y), _scaleBeforeDbl);
-        [self setNeedsDisplay];
     }
     else                // zoomin at the point
     {
@@ -259,8 +267,11 @@
         if (_xform->zoomByFactor(2, &at)) {
             _xform->zoomTo(Point2d(point.x, point.y) * _xform->displayToWorld());
             _doubleZoomed = YES;
-            [self setNeedsDisplay];
         }
+    }
+    
+    if ([_drawingDelegate respondsToSelector:@selector(afterZoomed:)]) {
+        [_drawingDelegate performSelector:@selector(afterZoomed:) withObject:self];
     }
     
     return YES;

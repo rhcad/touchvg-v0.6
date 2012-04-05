@@ -13,7 +13,7 @@
 #else
 
 @interface GraphViewController : UIViewController {
-    GiViewController    *_graph;        // 图形视图控制器
+    GiViewController    *_graphc;       // 图形视图控制器
     UIButton            *_downview;     // 底部按钮栏
     UIButton            *redBtn;
 	UIButton            *blueBtn;

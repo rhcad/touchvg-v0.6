@@ -7,6 +7,7 @@
 #define __GEOMETRY_MGSHAPES_TEMPL_H_
 
 #include <mgshapes.h>
+#include <mgstorage.h>
 #include <gigraph.h>
 
 //! 图形列表模板类
@@ -182,6 +183,18 @@ public:
             if ((*it)->shape()->getExtent().isIntersect(clip))
                 (*it)->draw(gs, ctx);
         }
+    }
+    
+    bool save(MgStorage* s) const
+    {
+        //TODO:
+        return s != NULL;
+    }
+    
+    bool load(MgStorage* s)
+    {
+        //TODO:
+        return s != NULL;
     }
 
 private:

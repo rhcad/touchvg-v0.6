@@ -28,26 +28,26 @@
 
 @interface SCCalloutGraphView : SCCalloutView
 {
-    GiViewController    *_graph;
+    GiViewController    *_graphc;
 }
-@property (nonatomic,readonly)  GiViewController *graph;
+@property (nonatomic,readonly)  GiViewController *graphc;
 @end
 
 @implementation SCCalloutGraphView
-@synthesize graph = _graph;
+@synthesize graphc = _graphc;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _graph = [[GiViewController alloc]init];
+        _graphc = [[GiViewController alloc]init];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [_graph release];
+    [_graphc release];
     [super dealloc];
 }
 
@@ -65,7 +65,7 @@ static const NSUInteger kDashLineTag    = 4;
 
 - (void)dealloc
 {
-    [_graph release];
+    [_graphc release];
     [super dealloc];
 }
 
@@ -76,8 +76,10 @@ static const NSUInteger kDashLineTag    = 4;
 
 - (void)clearCachedData
 {
-    [_graph clearCachedData];
+    [_graphc clearCachedData];
 }
+
+#define MAG_AT_BOTTOM
 
 - (void)loadView
 {
@@ -92,13 +94,21 @@ static const NSUInteger kDashLineTag    = 4;
     rect.origin.y = 0;
     
     CGRect viewFrame = rect;
+    CGRect magFrame = CGRectMake(10, 10, 200, 200);
+    CGRect barFrame = rect;
+    
     viewFrame.size.height -= BAR_HEIGHT;
+#ifdef MAG_AT_BOTTOM
+    viewFrame.size.height -= magFrame.size.height;
+    barFrame.origin.y += magFrame.size.height;
+    magFrame = CGRectMake(0, viewFrame.size.height, rect.size.width, magFrame.size.height);
+#endif
     
-    _graph = [[GiViewController alloc]init];
-    [_graph createGraphView:viewFrame backgroundColor:[UIColor grayColor] shapes:NULL];
-    [self.view addSubview:_graph.view];
+    _graphc = [[GiViewController alloc]init];
+    [_graphc createGraphView:viewFrame backgroundColor:[UIColor grayColor] shapes:NULL];
+    [self.view addSubview:_graphc.view];
     
-    UIView *magnifierView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, 200, 200)];
+    UIView *magnifierView = [[UIView alloc]initWithFrame:magFrame];
     magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.9f];
     [self.view addSubview:magnifierView];
     [magnifierView release];
@@ -115,19 +125,31 @@ static const NSUInteger kDashLineTag    = 4;
     CGRect maggraphRect = magnifierView.bounds;
     maggraphRect.origin.y = magbtnw;
     maggraphRect.size.height -= magbtnw;
-    UIView *magView = [_graph createMagnifierView:magnifierView frame:maggraphRect scale:4];
+    
+    CGRect mag1rect = maggraphRect;
+    mag1rect.size.width = mag1rect.size.height < mag1rect.size.width / 2 ? mag1rect.size.height : mag1rect.size.width / 2;
+    CGRect mag2rect = maggraphRect;
+    mag2rect.origin.x = mag1rect.size.width;
+    mag2rect.size.width -= mag2rect.origin.x;
+    
+    UIView *magView = [_graphc createMagnifierView:magnifierView frame:mag2rect scale:4];
     magView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
-                                | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin
+                                | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin);
+    
+    magView = [_graphc createMagnifierView:magnifierView frame:mag1rect scale:0.1];
+    magView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin
                                 | UIViewAutoresizingFlexibleBottomMargin);
+    magView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.1f];
     
     CGFloat magbtnx = 4;
     [self addButton:@"back.png" action:@selector(lockMagnifier:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+#ifndef MAG_AT_BOTTOM
     [self addButton:@"clearview.png" action:@selector(resizeMagnifier:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+#endif
     [self addButton:@"erase.png" action:@selector(fireUndo:) bar:magbarView x:&magbtnx size:magbtnw diffx:4];
     
-    CGRect barFrame = rect;
     barFrame.size.height = BAR_HEIGHT;
-    barFrame.origin.y = viewFrame.size.height;
+    barFrame.origin.y += viewFrame.size.height;
     
     _downview = [[UIButton alloc]initWithFrame:barFrame];
     [_downview setImage:[UIImage imageNamed:@"downview.png"] forState: UIControlStateNormal];
@@ -184,26 +206,26 @@ static const NSUInteger kDashLineTag    = 4;
 
 - (IBAction)lockMagnifier:(id)sender
 {
-    GiMagnifierView *magnifierView = (GiMagnifierView*)_graph.magnifierView;
+    GiMagnifierView *magnifierView = (GiMagnifierView*)_graphc.magnifierView;
     magnifierView.lockRedraw = !magnifierView.lockRedraw;
 }
 
 - (IBAction)resizeMagnifier:(id)sender
 {
-    UIView *mview = _graph.magnifierView.superview;
-    CGSize totalsize = _graph.view.bounds.size;
+    UIView *mview = _graphc.magnifierView.superview;
+    CGSize totalsize = _graphc.view.bounds.size;
     CGSize size = mview.frame.size;
     
     if (size.width > totalsize.width - 20 || size.height > totalsize.height - 20) {
-        mview.frame = CGRectMake(10, 10, 100, 100);
+        mview.frame = CGRectMake(10, 10, 100, 130);
     }
     else if (size.width > totalsize.width * 0.75f || size.height > totalsize.height * 0.75f) {
-        mview.frame = _graph.view.bounds;
+        mview.frame = _graphc.view.bounds;
     }
     else {
         size = CGSizeMake(size.width * 2, size.height * 2);
         if (size.width > totalsize.width - 20 || size.height > totalsize.height - 20)
-            mview.frame = _graph.view.bounds;
+            mview.frame = _graphc.view.bounds;
         else
             mview.frame = CGRectMake(10, 10, size.width, size.height);
     }
@@ -211,7 +233,7 @@ static const NSUInteger kDashLineTag    = 4;
 
 - (IBAction)fireUndo:(id)sender
 {
-    [_graph undoMotion];
+    [_graphc undoMotion];
 }
 
 - (IBAction)showPenView:(id)sender
@@ -233,13 +255,13 @@ static const NSUInteger kDashLineTag    = 4;
     
     UISlider *sliderWidth = [[UISlider alloc] initWithFrame:CGRectMake(14,20,211, 40)];
 	[sliderWidth addTarget:self action:@selector(lineWidthChange:) forControlEvents:UIControlEventValueChanged];
-    sliderWidth.value = _graph.lineWidth / 500.0f;    
+    sliderWidth.value = _graphc.lineWidth / 500.0f;    
 	[calloutView addSubview:sliderWidth];
 	[sliderWidth release];
 	
 	UISlider *sliderAlpha = [[UISlider alloc]initWithFrame:CGRectMake(14, 60, 211, 40)];
 	[sliderAlpha addTarget:self action:@selector(alphaChange:) forControlEvents:UIControlEventValueChanged];
-    sliderAlpha.value = _graph.lineAlpha;
+    sliderAlpha.value = _graphc.lineAlpha;
 	[calloutView addSubview:sliderAlpha];
 	[sliderAlpha release];
 	
@@ -273,26 +295,26 @@ static const NSUInteger kDashLineTag    = 4;
 		case kRedTag:
 			[self showUnlightButtons];
             [redBtn setImage:[UIImage imageNamed:@"redbrush1.png"] forState: UIControlStateNormal]; // 切换至红色画笔
-            _graph.lineColor = [UIColor redColor];
-            _graph.commandName = "splines";
+            _graphc.lineColor = [UIColor redColor];
+            _graphc.commandName = "splines";
 			break;
 		case kBlueTag:
 		    [self showUnlightButtons];
             [blueBtn setImage:[UIImage imageNamed:@"bluebrush1.png"] forState: UIControlStateNormal]; // 切换至蓝色画笔
-            _graph.lineColor = [UIColor blueColor];
-            _graph.commandName = "splines";
+            _graphc.lineColor = [UIColor blueColor];
+            _graphc.commandName = "splines";
 			break;
         case kYellowTag:
 		    [self showUnlightButtons];
             [yellowbtn setImage:[UIImage imageNamed:@"yellowbrush1.png"] forState: UIControlStateNormal]; // 切换至黄色画笔
-            _graph.lineColor = [UIColor yellowColor];
-            _graph.commandName = "splines";
+            _graphc.lineColor = [UIColor yellowColor];
+            _graphc.commandName = "splines";
 			break;
 		case kLineTag:              // 画直线
-            _graph.lineStyle = 0;
+            _graphc.lineStyle = 0;
 			break;
 		case kDashLineTag:          // 画虚线
-            _graph.lineStyle = 1;
+            _graphc.lineStyle = 1;
 			break;
 		default:
 			break;
@@ -302,13 +324,13 @@ static const NSUInteger kDashLineTag    = 4;
 - (IBAction)lineWidthChange:(id)sender // 线条宽度调整
 {
     UISlider *slider = (UISlider *)sender;
-    _graph.lineWidth = 500.0f * slider.value;
+    _graphc.lineWidth = 500.0f * slider.value;
 }
 
 - (IBAction)alphaChange:(id)sender  // 透明度调整
 {
     UISlider *slider = (UISlider *)sender;
-    _graph.lineAlpha = slider.value;
+    _graphc.lineAlpha = slider.value;
 }
 
 - (IBAction)showPaletee:(id)sender  // 显示调色板
@@ -335,8 +357,8 @@ static const NSUInteger kDashLineTag    = 4;
 	[wrapview addSubview:mapbtn];
 	[mapbtn release];
     
-    [calloutView.graph createSubGraphView:mapbtn frame:mapbtn.bounds shapes:_graph.shapes];
-    calloutView.graph.commandName = "splines";
+    [calloutView.graphc createSubGraphView:mapbtn frame:mapbtn.bounds shapes:_graphc.shapes];
+    calloutView.graphc.commandName = "splines";
 }
 
 - (IBAction)colorMapPress:(id)sender
@@ -355,19 +377,19 @@ static const NSUInteger kDashLineTag    = 4;
 	[self showUnlightButtons];
 	[erasebtn setImage:[UIImage imageNamed:@"erase1.png"] forState:UIControlStateNormal];
     
-    _graph.commandName = "erase";
+    _graphc.commandName = "erase";
 }
 
 - (IBAction)clearView:(id)sender    // 清屏
 {
-    _graph.commandName = "lines";
+    _graphc.commandName = "lines";
 }
 
 - (IBAction)backToView:(id)sender   // 退出自由绘图
 {
     [self showUnlightButtons];
     [backbtn setImage:[UIImage imageNamed:@"back1.png"] forState:UIControlStateNormal];
-    _graph.commandName = "select";
+    _graphc.commandName = "select";
 }
 
 - (void)showUnlightButtons          // 显示全部非高亮钮

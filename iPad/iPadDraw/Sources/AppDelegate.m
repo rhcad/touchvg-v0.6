@@ -53,12 +53,16 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
     [_controller clearCachedData];
+    //[_controller.view removeFromSuperview];
+    //[_controller release];
+    //_controller = Nil;
 }
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     
-    // TODO:
+    //_controller = [[GraphViewController alloc] init];
+    //[_window addSubview:_controller.view];
 }
 
 

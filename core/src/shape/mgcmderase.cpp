@@ -17,7 +17,7 @@ MgCommandErase::~MgCommandErase()
 bool MgCommandErase::cancel(const MgMotion* sender)
 {
     bool recall;
-    m_down = false;
+    m_boxsel = false;
     bool ret = undo(recall, sender);
     ret = undo(recall, sender) || ret;
     return undo(recall, sender) || ret;
@@ -25,7 +25,7 @@ bool MgCommandErase::cancel(const MgMotion* sender)
 
 bool MgCommandErase::initialize(const MgMotion* /*sender*/)
 {
-    m_down = false;
+    m_boxsel = false;
     return true;
 }
 
@@ -37,8 +37,8 @@ bool MgCommandErase::undo(bool &enableRecall, const MgMotion* sender)
         sender->view->redraw();
         return true;
     }
-    if (m_down) {
-        m_down = false;
+    if (m_boxsel) {
+        m_boxsel = false;
         return true;
     }
     return false;
@@ -48,7 +48,7 @@ bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
 {
     GiContext ctx(-4, GiColor(64, 64, 64, 128));
     
-    if (m_down) {
+    if (m_boxsel) {
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
                           isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 10));
         bool antiAlias = gs->isAntiAliasMode();
@@ -100,7 +100,7 @@ bool MgCommandErase::longPress(const MgMotion* /*sender*/)
 
 bool MgCommandErase::touchBegan(const MgMotion* sender)
 {
-    m_down = true;
+    m_boxsel = true;
     sender->view->redraw();
     return true;
 }
@@ -115,7 +115,7 @@ bool MgCommandErase::touchMoved(const MgMotion* sender)
 {
     Box2d snap(sender->startPointM, sender->pointM);
     void *it;
-    MgShape* shape = m_down ? sender->view->shapes()->getFirstShape(it) : NULL;
+    MgShape* shape = m_boxsel ? sender->view->shapes()->getFirstShape(it) : NULL;
     
     m_deleted.clear();
     for (; shape; shape = sender->view->shapes()->getNextShape(it)) {
@@ -141,7 +141,7 @@ bool MgCommandErase::touchEnded(const MgMotion* sender)
         sender->view->regen();
         m_deleted.clear();
     }
-    m_down = false;
+    m_boxsel = false;
     sender->view->redraw();
     
     return true;

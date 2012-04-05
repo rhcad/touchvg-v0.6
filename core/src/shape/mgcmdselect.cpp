@@ -48,6 +48,7 @@ bool MgCommandSelect::cancel(const MgMotion* sender)
 
 bool MgCommandSelect::initialize(const MgMotion* /*sender*/)
 {
+    m_boxsel = false;
     m_id = 0;
     m_segment = -1;
     m_handleIndex = 0;
@@ -59,6 +60,7 @@ bool MgCommandSelect::initialize(const MgMotion* /*sender*/)
 
 bool MgCommandSelect::undo(bool &, const MgMotion* sender)
 {
+    m_boxsel = false;
     if (!m_cloneShapes.empty()) {                   // 正在拖改
         for (sel_iterator it = m_cloneShapes.begin(); it != m_cloneShapes.end(); ++it)
             (*it)->release();
@@ -91,10 +93,20 @@ int getLineHalfWidth(const MgShape* shape, GiGraphics* gs)
     return mgMax(1, - width / 2);
 }
 
-bool MgCommandSelect::draw(const MgMotion* /*sender*/, GiGraphics* gs)
+bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
 {
     const std::vector<MgShape*>& shapes = m_cloneShapes.empty() ? m_selection : m_cloneShapes;
     std::vector<MgShape*>::const_iterator it;
+    
+    if (m_boxsel) {
+        GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
+                          isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 10));
+        bool antiAlias = gs->isAntiAliasMode();
+        
+        gs->setAntiAliasMode(false);
+        gs->drawRect(&ctxshap, Box2d(sender->startPointM, sender->pointM));
+        gs->setAntiAliasMode(antiAlias);
+    }
     
     if (m_showSel) {        // 选中时比原图形宽4像素，控制点修改时仅亮显控制点
         GiContext ctxshape(m_handleIndex > 0 ? 0 : -4, GiColor(0, 0, 255, m_handleIndex > 0 ? 50 : 128));
@@ -293,9 +305,19 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
         m_handleIndex = hitTestHandles(shape, m_ptNear);
     }
     
+    if (m_cloneShapes.empty()) {
+        m_boxsel = true;
+    }
+    
     sender->view->redraw();
     
     return true;
+}
+
+bool MgCommandSelect::isIntersectMode(const MgMotion* sender)
+{
+    return (sender->startPoint.x < sender->point.x
+            && sender->startPoint.y < sender->point.y);
 }
 
 bool MgCommandSelect::touchMoved(const MgMotion* sender)
@@ -324,12 +346,19 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
         sender->view->redraw();
     }
     
-    if (m_cloneShapes.empty()) {            // 没有选中图形时就滑动多选
-        MgShape* shape = hitTestAll(sender, m_ptNear, m_segment);
-        if (shape && !isSelected(shape)) {
-            m_selection.push_back(shape);
-            sender->view->redraw();
+    if (m_cloneShapes.empty() && m_boxsel) {    // 没有选中图形时就滑动多选
+        Box2d snap(sender->startPointM, sender->pointM);
+        void *it;
+        MgShape* shape = sender->view->shapes()->getFirstShape(it);
+        
+        m_selection.clear();
+        for (; shape; shape = sender->view->shapes()->getNextShape(it)) {
+            if (isIntersectMode(sender) ? shape->shape()->hitTestBox(snap)
+                : snap.contains(shape->shape()->getExtent())) {
+                m_selection.push_back(shape);
+            }
         }
+        sender->view->redraw();
     }
     
     return true;
@@ -355,6 +384,10 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
     }
     m_cloneShapes.clear();
     
+    if (m_boxsel) {
+        m_boxsel = false;
+        sender->view->redraw();
+    }
     m_insertPoint = false;
     if (m_handleIndex > 0) {
         m_handleIndex = hitTestHandles(m_selection[0], sender->pointM);

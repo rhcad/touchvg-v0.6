@@ -28,7 +28,7 @@
 @implementation GiViewController
 
 @synthesize gestureRecognizerUsed = _gestureRecognizerUsed;
-@synthesize magnifierView = _magnifierView;
+@synthesize magnifierView;
 @synthesize activeView = _activeView;
 @synthesize lineWidth;
 @synthesize lineColor;
@@ -43,9 +43,9 @@
 {
     self = [super init];
     if (self) {
-        _magnifierView = Nil;
-        _activeView = Nil;
-        _command = [[GiCommandController alloc]init:&_magnifierView];
+        for (int iv = 0; iv < 3; iv++)
+            _magnifierView[iv] = Nil;
+        _command = [[GiCommandController alloc]init:_magnifierView];
         _shapesCreated = NULL;
         for (int t = 0; t < 2; t++) {
             for (int i = 0; i < RECOGNIZER_COUNT; i++)
@@ -132,7 +132,7 @@
 - (UIView*)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale
 {
     GiMagnifierView *aview = [[GiMagnifierView alloc] initWithFrame:frame graphView:[self gview]];
-    _magnifierView = aview;
+    _magnifierView[_magnifierView[0] ? 1 : 0] = aview;
     aview.backgroundColor = [UIColor clearColor];
     aview.scale = scale;
     
@@ -141,7 +141,7 @@
     [self addGestureRecognizers:1 view:aview];
     
     [aview release];
-    return _magnifierView;
+    return aview;
 }
 
 - (void)didReceiveMemoryWarning
@@ -156,6 +156,12 @@
 - (void)clearCachedData
 {
     [[self gview] getGraph]->clearCachedBitmap();
+}
+
+- (UIView*)magnifierView {
+    if (_magnifierView[1] && [_magnifierView[1].gestureRecognizers count] > 0)
+        return _magnifierView[1];
+    return _magnifierView[0];
 }
 
 - (void*)shapes {
@@ -298,14 +304,25 @@
         id<GiView> aview = (id<GiView>)sender;
         gs = [aview getGraph];
     }
-    else if (sender == _magnifierView) {
-        GiMagnifierView *aview = (GiMagnifierView *)_magnifierView;
+    else if (sender == _magnifierView[0]) {
+        GiMagnifierView *aview = (GiMagnifierView *)_magnifierView[0];
+        gs = aview.graph;
+    }
+    else if (sender == _magnifierView[1]) {
+        GiMagnifierView *aview = (GiMagnifierView *)_magnifierView[1];
         gs = aview.graph;
     }
     
     if (gs && gs->isDrawing()) {
         [[self getCommand:@selector(dynDraw:)] dynDraw: gs];
     }
+}
+
+- (void)afterZoomed:(id)sender
+{
+    [self.view setNeedsDisplay];
+    [_magnifierView[0] setNeedsDisplay];
+    [_magnifierView[1] setNeedsDisplay];
 }
 
 @end
@@ -393,14 +410,14 @@
     if (_gestureRecognizerUsed) {
         for (int i = 0; i < RECOGNIZER_COUNT; i++) {
             [self.view removeGestureRecognizer:_recognizers[0][i]];
-            [_magnifierView removeGestureRecognizer:_recognizers[1][i]];
+            [_magnifierView[0] removeGestureRecognizer:_recognizers[1][i]];
         }
     }
     _gestureRecognizerUsed = used;
     if (_gestureRecognizerUsed) {
         for (int i = 0; i < RECOGNIZER_COUNT; i++) {
             [self.view addGestureRecognizer:_recognizers[0][i]];
-            [_magnifierView addGestureRecognizer:_recognizers[1][i]];
+            [_magnifierView[0] addGestureRecognizer:_recognizers[1][i]];
         }
     }
 }
@@ -436,12 +453,13 @@
     if (1 == _touchCount) {
         [self oneFingerPan:sender];
     }
-    else if (sender.view == _magnifierView) {
-        if (sender.state == UIGestureRecognizerStateChanged) {
-            GiMagnifierView *zview = (GiMagnifierView *)_magnifierView;
-            [zview zoomPan:[sender translationInView:sender.view]];
-            [sender setTranslation:CGPointZero inView:sender.view];
-        }
+    else if (sender.view == _magnifierView[0]) {
+        GiMagnifierView *zview = (GiMagnifierView *)_magnifierView[0];
+        [zview twoFingersPan:sender];
+    }
+    else if (sender.view == _magnifierView[1]) {
+        GiMagnifierView *zview = (GiMagnifierView *)_magnifierView[1];
+        [zview twoFingersPan:sender];
     }
     else if (_touchCount > 1) {
         if (![[self getCommand:@selector(twoFingersPan:)] twoFingersPan:sender]) {
@@ -465,7 +483,6 @@
             [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
         }
         [self updateMagnifierCenter:sender];
-        [_magnifierView setNeedsDisplay];
     }
 }
 
@@ -498,11 +515,11 @@
 
 - (void)updateMagnifierCenter:(UIGestureRecognizer *)sender
 {
-    if (!_magnifierView || sender.view != self.view)
+    if (!_magnifierView[0] || sender.view != self.view)
         return;
     
     GiCommandController* cmd = (GiCommandController*)_command;
-    GiMagnifierView *zview = (GiMagnifierView *)_magnifierView;
+    GiMagnifierView *zview = (GiMagnifierView *)_magnifierView[0];
     
     if ([sender numberOfTouches] > 0) {
         [zview automoveSuperview:[sender locationInView:sender.view] fromView:self.view];

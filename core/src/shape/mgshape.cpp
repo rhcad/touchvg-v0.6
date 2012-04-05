@@ -3,6 +3,7 @@
 // License: LGPL, https://github.com/rhcad/graph2d
 
 #include "mgshape.h"
+#include <mgstorage.h>
 
 MgBaseShape::MgBaseShape()
 {
@@ -27,7 +28,7 @@ bool MgBaseShape::_isKindOf(UInt32 type) const
     return type == Type();
 }
 
-Box2d MgBaseShape::getExtent() const
+Box2d MgBaseShape::_getExtent() const
 {
     return _extent;
 }
@@ -80,4 +81,16 @@ bool MgBaseShape::_offset(const Vector2d& vec, Int32)
 bool MgBaseShape::_hitTestBox(const Box2d& rect) const
 {
     return getExtent().isIntersect(rect);
+}
+
+bool MgBaseShape::_save(MgStorage* s) const
+{
+    //TODO:
+    return s != NULL;
+}
+
+bool MgBaseShape::_load(MgStorage* s)
+{
+    //TODO:
+    return s != NULL;
 }
