@@ -28,6 +28,7 @@ protected:
     UInt32 _getHandleCount() const;
     Point2d _getHandlePoint(UInt32 index) const;
     bool _setHandlePoint(UInt32 index, const Point2d& pt, double tol);
+    bool _hitTestBox(const Box2d& rect) const;
 
 private:
     Point2d     _points[2];

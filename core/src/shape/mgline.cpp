@@ -5,6 +5,7 @@
 #include "mgbasicsp.h"
 #include <_mgshape.h>
 #include <mgnear.h>
+#include <mglnrel.h>
 
 MG_IMPLEMENT_CREATE(MgLine)
 
@@ -73,6 +74,14 @@ double MgLine::_hitTest(const Point2d& pt, double tol,
                         Point2d& ptNear, Int32& segment) const
 {
     return mgLinesHit(2, _points, false, pt, tol, ptNear, segment);
+}
+
+bool MgLine::_hitTestBox(const Box2d& rect) const
+{
+    if (!__super::_hitTestBox(rect))
+        return false;
+    Point2d pts[2] = { _points[0], _points[1] };
+    return mgClipLine(pts[0], pts[1], rect);
 }
 
 bool MgLine::_draw(GiGraphics& gs, const GiContext& ctx) const

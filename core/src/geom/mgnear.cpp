@@ -9,7 +9,7 @@
 GEOMAPI void mgBeziersBox(
     Box2d& box, Int32 count, const Point2d* points, bool closed)
 {
-    const int SPLITN = 4;
+    const int SPLITN = 8;
     Point2d fits[SPLITN + 1];
 
     box.empty();
@@ -39,7 +39,7 @@ GEOMAPI void mgBeziersBox(
 GEOMAPI bool mgBeziersIntersectBox(
     const Box2d& box, Int32 count, const Point2d* points, bool closed)
 {
-    const int SPLITN = 8;
+    const int SPLITN = 32;
     Point2d fits[SPLITN + 1];
     
     for (Int32 i = 0; i + 3 < count; i += 3)
