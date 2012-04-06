@@ -21,7 +21,7 @@ GiColor giFromCGColor(CGColorRef color);
 class GiGraphIos : public GiGraphics
 {
 public:
-    GiGraphIos(GiTransform& xform);
+    GiGraphIos(GiTransform* xform);
     GiGraphIos(const GiGraphIos& src);
     virtual ~GiGraphIos();
     GiGraphIos& operator=(const GiGraphIos& src);

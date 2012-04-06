@@ -24,9 +24,9 @@ CBaseView::CBaseView()
 	m_crBkColor = GetSysColor(COLOR_WINDOW);
 
 	if (m_bGdip)
-		m_gs = new GiGraphGdip(m_xf);
+		m_gs = new GiGraphGdip(&m_xf);
 	else
-		m_gs = new GiGraphGdi(m_xf);
+		m_gs = new GiGraphGdi(&m_xf);
 }
 
 CBaseView::~CBaseView()
@@ -157,9 +157,9 @@ void CBaseView::OnViewGdip()
 	GiGraphics* gs = m_gs;
 
 	if (m_bGdip)
-		m_gs = new GiGraphGdip(m_xf);
+		m_gs = new GiGraphGdip(&m_xf);
 	else
-		m_gs = new GiGraphGdi(m_xf);
+		m_gs = new GiGraphGdi(&m_xf);
 
 	*(GiGraphics*)m_gs = *gs;
 	delete gs;

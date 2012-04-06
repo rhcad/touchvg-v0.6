@@ -1,7 +1,7 @@
 #include "graphwin.h"
 #include <_gigraph.h>
 
-GiGraphWin::GiGraphWin(GiTransform& xform)
+GiGraphWin::GiGraphWin(GiTransform* xform)
     : GiGraphics(xform), m_attribDC(NULL)
 {
 }
@@ -110,12 +110,12 @@ bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
 
     m_attribDC = attribDC;
     m_impl->drawColors = GetDeviceCaps(prtDC, NUMCOLORS);
-    m_impl->xform.setResolution(GetDeviceCaps(prtDC, LOGPIXELSX), 
+    m_impl->xform->setResolution(GetDeviceCaps(prtDC, LOGPIXELSX), 
         GetDeviceCaps(prtDC, LOGPIXELSY));
     m_impl->isPrint = (DT_RASDISPLAY != GetDeviceCaps(prtDC, TECHNOLOGY));
     if (m_impl->isPrint)
     {
-        m_impl->xform.setWndSize(GetDeviceCaps(prtDC, HORZRES),
+        m_impl->xform->setWndSize(GetDeviceCaps(prtDC, HORZRES),
             GetDeviceCaps(prtDC, VERTRES));
     }
     else

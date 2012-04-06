@@ -27,8 +27,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         _shapes = NULL; // need to set by the subclass
-        _xform = new GiTransform();
-        _graph = new GiGraphIos(*_xform);
+        _xform = NULL;
+        _graph = NULL;
         [self afterCreated];
     }
     return self;
@@ -39,8 +39,8 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         _shapes = NULL; // need to set by the subclass
-        _xform = new GiTransform();
-        _graph = new GiGraphIos(*_xform);
+        _xform = NULL;
+        _graph = NULL;
         [self afterCreated];
     }
     return self;
@@ -61,19 +61,23 @@
 
 - (void)afterCreated
 {
-    self.contentMode = UIViewContentModeRedraw;
-    
-    _drawingDelegate = Nil;
-    _zooming = NO;
-    _doubleZoomed = NO;
-    _enableZoom = YES;
-    
-    CGFloat scrscale = [[UIScreen mainScreen] scale];
+	CGFloat scrscale = [[UIScreen mainScreen] scale];
     GiGraphIos::setScreenDpi(mgRound(160 * scrscale));
+    
+    if (!_xform) {
+		_xform = new GiTransform();
+        _graph = new GiGraphIos(_xform);
+    }
 
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _xform->setViewScaleRange(0.01, 20.0);
     _xform->zoomTo(Point2d(0,0));
+    
+    self.contentMode = UIViewContentModeRedraw;
+    _drawingDelegate = Nil;
+    _zooming = NO;
+    _doubleZoomed = NO;
+    _enableZoom = YES;
 }
 
 - (void)drawRect:(CGRect)rect

@@ -183,7 +183,7 @@ public:
     }
 };
 
-GiGraphGdi::GiGraphGdi(GiTransform& xform) : GiGraphWin(xform)
+GiGraphGdi::GiGraphGdi(GiTransform* xform) : GiGraphWin(xform)
 {
     m_draw = new DrawImpl(this);
 }

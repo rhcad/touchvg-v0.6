@@ -18,7 +18,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         _xform = new GiTransform();
-        _graph = new GiGraphIos(*_xform);
+        _graph = new GiGraphIos(_xform);
         _xform->setViewScaleRange(1e-5, 50);
         _graph->setMaxPenWidth(4);
         _gview = gview;

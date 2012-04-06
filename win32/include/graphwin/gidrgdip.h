@@ -15,7 +15,7 @@
 class GiGraphGdip : public GiGraphWin
 {
 public:
-    GiGraphGdip(GiTransform& xform);
+    GiGraphGdip(GiTransform* xform);
     GiGraphGdip(const GiGraphGdip& src);
     virtual ~GiGraphGdip();
     GiGraphGdip& operator=(const GiGraphGdip& src);

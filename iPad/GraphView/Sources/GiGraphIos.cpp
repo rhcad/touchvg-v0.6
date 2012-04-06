@@ -122,11 +122,11 @@ GiColor giFromCGColor(CGColorRef color)
                               (UInt8)mgRound(CGColorGetAlpha(color) * 255)) : GiColor::Invalid();
 }
 
-GiGraphIos::GiGraphIos(GiTransform& xform)
+GiGraphIos::GiGraphIos(GiTransform* xform)
     : GiGraphics(xform)
 {
     m_draw = new GiGraphIosImpl(this);
-    xform.setResolution(GiGraphIos::getScreenDpi());
+    xform->setResolution(GiGraphIos::getScreenDpi());
 }
 
 GiGraphIos::GiGraphIos(const GiGraphIos& src)

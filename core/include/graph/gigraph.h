@@ -19,7 +19,7 @@ class GiGraphicsImpl;
 class GiGraphics
 {
 public:
-    GiGraphics(GiTransform& xform);
+    GiGraphics(GiTransform* xform);
     GiGraphics(const GiGraphics& src);
     virtual ~GiGraphics();
     GiGraphics& operator=(const GiGraphics& src);

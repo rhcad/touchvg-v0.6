@@ -196,7 +196,7 @@ public:
 long        GiGraphGdip::DrawImpl::c_graphCount = 0;
 ULONG_PTR   GiGraphGdip::DrawImpl::c_gdipToken = 0;
 
-GiGraphGdip::GiGraphGdip(GiTransform& xform) : GiGraphWin(xform)
+GiGraphGdip::GiGraphGdip(GiTransform* xform) : GiGraphWin(xform)
 {
     m_draw = new DrawImpl(this);
 }

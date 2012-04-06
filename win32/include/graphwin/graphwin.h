@@ -21,7 +21,7 @@ class GiGraphWin : public GiGraphics
 {
 public:
     //! 默认构造函数
-    GiGraphWin(GiTransform& xform);
+    GiGraphWin(GiTransform* xform);
 
     //! 拷贝构造函数
     GiGraphWin(const GiGraphWin& src);

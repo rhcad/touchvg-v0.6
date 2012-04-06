@@ -8,7 +8,7 @@
 #include <mgcurv.h>
 #include "giplclip.h"
 
-GiGraphics::GiGraphics(GiTransform& xform)
+GiGraphics::GiGraphics(GiTransform* xform)
 {
     m_impl = new GiGraphicsImpl(this, xform);
 }
@@ -37,7 +37,7 @@ GiGraphics& GiGraphics::operator=(const GiGraphics& src)
 
 const GiTransform& GiGraphics::xf() const
 {
-    return m_impl->xform;
+    return *m_impl->xform;
 }
 
 void GiGraphics::beginPaint(const RECT* clipBox)
