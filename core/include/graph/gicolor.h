@@ -9,12 +9,16 @@
 #include <mgtype.h>
 
 //! RGB颜色
+/*!
+    \ingroup GRAPH_INTERFACE
+    \see GiContext
+*/
 struct GiColor
 {
-    UInt8   r;
-    UInt8   g;
-    UInt8   b;
-    UInt8   a;  //!< 0: transparent, 255: opaque
+    UInt8   r;  //!< Red component, 0 to 255.
+    UInt8   g;  //!< Green component, 0 to 255.
+    UInt8   b;  //!< Blue component, 0 to 255.
+    UInt8   a;  //!< Alpha component, 0 to 255. 0: transparent, 255: opaque.
 
     GiColor() : r(0), g(0), b(0), a(255)
     {

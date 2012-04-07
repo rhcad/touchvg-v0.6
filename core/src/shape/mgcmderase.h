@@ -10,7 +10,7 @@
 #include <vector>
 
 //! 橡皮擦命令类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgCommandErase : public MgCommand
 {

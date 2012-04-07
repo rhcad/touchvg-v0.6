@@ -1,11 +1,11 @@
 /*!
-	\defgroup _GEOM_CLASS_ 几何对象类
-	\defgroup _GEOMAPI_BASIC_ 基本计算函数
-	\defgroup _GEOMAPI_LNREL_ 图形位置函数
-	\defgroup _GEOMAPI_CURVE_ 曲线计算函数
-	\defgroup _GRAPH_INTERFACE_ 图形接口类
-	\defgroup _GEOM_SHAPE_ 图形实体类
-	\defgroup _GRAPH_IOS_ iOS图形接口类
+	\defgroup GEOM_CLASS 几何对象类
+	\defgroup GEOMAPI_BASIC 基本计算函数
+	\defgroup GEOMAPI_LNREL 图形位置函数
+	\defgroup GEOMAPI_CURVE 曲线计算函数
+	\defgroup GRAPH_INTERFACE 图形接口类
+	\defgroup GEOM_SHAPE 图形实体类
+	\defgroup GRAPH_IOS iOS图形接口类
 */
 
 /*! \mainpage 通用矢量图形框架 编程文档
@@ -24,24 +24,24 @@
 
 	通用图形平台库的接口说明分为以下部分：
 	
-	- \ref _GEOM_CLASS_ "几何对象类" \n
+	- \ref GEOM_CLASS "几何对象类" \n
 		数学几何库的几何对象类，包含矢量、坐标、变换矩阵、矩形框等类。\n\n
 
-	- \ref _GEOMAPI_BASIC_ "基本计算函数" \n
+	- \ref GEOMAPI_BASIC "基本计算函数" \n
 		数学几何库的基本计算功能函数。\n\n
 
-	- \ref _GEOMAPI_LNREL_ "图形位置函数" \n
+	- \ref GEOMAPI_LNREL "图形位置函数" \n
 		数学几何库的点、直线、曲线、多边形的位置关系函数。\n\n
 
-	- \ref _GEOMAPI_CURVE_ "曲线计算函数" \n
+	- \ref GEOMAPI_CURVE "曲线计算函数" \n
 		数学几何库的曲线拟合、转换、绑定框等计算函数。\n\n
 
-	- \ref _GRAPH_INTERFACE_ "图形接口类" \n
+	- \ref GRAPH_INTERFACE "图形接口类" \n
 		图形接口库的各种显示类、符号类，用于屏幕显示、打印。\n\n
 
-	- \ref _GEOM_SHAPE_ "图形实体类" \n
+	- \ref GEOM_SHAPE "图形实体类" \n
 		图形实体库包含跨平台矢量图形类和交互命令类。\n\n
 		
-	- \ref _GRAPH_IOS_ "iOS图形接口类" \n
+	- \ref GRAPH_IOS "iOS图形接口类" \n
 		iOS图形接口库（iPad/GraphView）采用CoreGraphics实现，还包含了iOS视图和交互控制器。\n\n
 */

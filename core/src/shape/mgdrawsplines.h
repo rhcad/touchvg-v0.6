@@ -9,7 +9,8 @@
 #include "mgcmddraw.h"
 
 //! 样条曲线绘图命令类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
+    \see MgSplines
 */
 class MgCmdDrawSplines : public MgCommandDraw
 {

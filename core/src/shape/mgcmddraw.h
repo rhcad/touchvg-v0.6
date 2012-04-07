@@ -8,10 +8,11 @@
 
 #include <mgcmd.h>
 
+//! 返回线条像素宽度的一半，正数
 int getLineHalfWidth(const MgShape* shape, GiGraphics* gs);
 
 //! 绘图命令基类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgCommandDraw : public MgCommand
 {

@@ -10,17 +10,18 @@
 
 //! 线型
 enum kLineStyle {
-    kLineSolid = 0,
-    kLineDash,          //!< -------
-    kLineDot,           //!< .......
-    kLineDashDot,       //!< _._._._
-    kLineDashDotdot,    //!< _.._.._
-    kLineNull
+    kLineSolid = 0,     //!< ----------
+    kLineDash,          //!< － － － －
+    kLineDot,           //!< ..........
+    kLineDashDot,       //!< _._._._._
+    kLineDashDotdot,    //!< _.._.._.._
+    kLineNull           //!< Not draw.
 };
 
 //! 绘图参数上下文类
 /*! 用于在图形系统的绘图函数中传入绘图参数
-    \ingroup _GRAPH_INTERFACE_
+    \ingroup GRAPH_INTERFACE
+    \see kLineStyle, GiColor
 */
 class GiContext
 {

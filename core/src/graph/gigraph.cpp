@@ -267,6 +267,7 @@ bool GiGraphics::drawLine(const GiContext* ctx,
         mgRound(pts[1].x), mgRound(pts[1].y));
 }
 
+//! 折线绘制辅助类，用于将显示与环境设置分离
 class PolylineAux
 {
     GiGraphics* m_gs;

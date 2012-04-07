@@ -14,7 +14,7 @@ class GiGraphicsImpl;
 //! 图形系统类
 /*! 本类用于显示各种图形，图元显示原语由派生类实现，例如采用GDI/GDI+/SVG/PDF等实现；
     显示图形所用的坐标计算和坐标系转换是在 GiTransform 中定义的。
-    \ingroup _GRAPH_INTERFACE_
+    \ingroup GRAPH_INTERFACE
 */
 class GiGraphics
 {
@@ -450,7 +450,7 @@ protected:
 //! 保存和恢复图形系统的剪裁框的辅助类
 /*! 利用该类在堆栈上定义局部变量，该变量出作用区后自动析构从而恢复剪裁框。
     利用该类可以避免因中途退出或异常时没有执行恢复剪裁框的语句。
-    \ingroup _GRAPH_INTERFACE_
+    \ingroup GRAPH_INTERFACE
 */
 class GiSaveClipBox
 {

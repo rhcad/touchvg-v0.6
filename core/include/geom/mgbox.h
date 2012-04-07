@@ -12,7 +12,7 @@ class Matrix2d;
 
 //! 矩形框类
 /*!
-    \ingroup _GEOM_CLASS_
+    \ingroup GEOM_CLASS
     本类用于描述二维平面上水平矩形框，或坐标范围
 */
 class Box2d : public BOX2D

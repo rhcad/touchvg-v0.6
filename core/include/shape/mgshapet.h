@@ -11,7 +11,7 @@
 #include <mgstorage.h>
 
 //! 矢量图形模板类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 template <class ShapeT, class ContextT = GiContext>
 class MgShapeT : public MgShape

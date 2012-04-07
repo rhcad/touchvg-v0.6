@@ -13,7 +13,7 @@ class Matrix2d;
 //! 二维矢量类
 /*!
     本类用于描述二维平面上具有方向和长度的矢量，具有x和y两个坐标分量
-    \ingroup _GEOM_CLASS_
+    \ingroup GEOM_CLASS
 */
 class Vector2d : public VECTOR2D
 {

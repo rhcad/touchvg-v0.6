@@ -11,7 +11,7 @@
 #include <gigraph.h>
 
 //! 图形列表模板类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
     \param Container 包含(MgShape*)的vector、list等容器类型
 */
 template <typename Container /*=std::vector<MgShape*>*/ >

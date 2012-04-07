@@ -9,7 +9,7 @@
 #include "mgshape.h"
 
 //! 线段图形类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgLine : public MgBaseShape
 {
@@ -35,7 +35,7 @@ private:
 };
 
 //! 矩形图形基类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgBaseRect : public MgBaseShape
 {
@@ -97,7 +97,7 @@ protected:
 };
 
 //! 矩形图形类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgRect : public MgBaseRect
 {
@@ -105,7 +105,7 @@ class MgRect : public MgBaseRect
 };
 
 //! 椭圆图形类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgEllipse : public MgBaseRect
 {
@@ -130,7 +130,7 @@ protected:
 };
 
 //! 圆角矩形类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgRoundRect : public MgBaseRect
 {
@@ -157,7 +157,7 @@ protected:
 };
 
 //! 折线基类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgBaseLines : public MgBaseShape
 {
@@ -208,7 +208,7 @@ protected:
 };
 
 //! 折线图形类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgLines : public MgBaseLines
 {
@@ -218,7 +218,7 @@ protected:
 };
 
 //! 三次参数样条曲线类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgSplines : public MgBaseLines
 {

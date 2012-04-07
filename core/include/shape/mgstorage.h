@@ -9,7 +9,7 @@
 #include <mgbox.h>
 
 //! 图形存取接口
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
     \interface MgStorage
 */
 struct MgStorage

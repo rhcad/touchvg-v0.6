@@ -10,7 +10,7 @@
 
 //! 二维齐次变换矩阵类
 /*!
-    \ingroup _GEOM_CLASS_
+    \ingroup GEOM_CLASS
     
     变换矩阵类Matrix用于二维图形的仿射变换。矩阵 M 的形式为: \n
     　　e0x　e0y　0 \n

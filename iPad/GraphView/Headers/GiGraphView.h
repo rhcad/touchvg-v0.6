@@ -6,7 +6,7 @@
 #import <Graph2d/GiMotionHandler.h>
 
 //! 图形视图类
-/*! \ingroup _GRAPH_IOS_
+/*! \ingroup GRAPH_IOS
 */
 @interface GiGraphView : UIView<GiView, GiMotionHandler> {
 @protected
@@ -40,7 +40,7 @@
 @end
 
 //! 放大镜视图类
-/*! \ingroup _GRAPH_IOS_
+/*! \ingroup GRAPH_IOS
  */
 @interface GiMagnifierView : UIView<GiView> {
     GiTransform*    _xform;                 //!< 坐标系对象

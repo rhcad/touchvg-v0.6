@@ -11,7 +11,7 @@
 #include <string>
 
 //! 命令管理器实现类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgCmdManagerImpl : public MgCommandManager
 {

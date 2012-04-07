@@ -10,7 +10,7 @@
 #include <vector>
 
 //! 选择命令类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgCommandSelect : public MgCommand
 {

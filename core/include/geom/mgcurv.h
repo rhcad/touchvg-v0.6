@@ -10,7 +10,7 @@
 
 //! 计算三次贝塞尔曲线段的参数点
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] pts 4个点的数组，为贝塞尔曲线段的控制点
     \param[in] t 要计算的参数点的参数，范围为[0, 1]
     \param[out] ptFit 计算出的参数点
@@ -22,7 +22,7 @@ GEOMAPI void mgFitBezier(const Point2d* pts, double t, Point2d& ptFit);
 /*! 该贝塞尔曲线段的起点和终点为给定点，中间经过另外两个给定点，
     t=1/3过pt2, t=2/3过pt3。
     计算出的贝塞尔曲线段的起点为pt1、终点为pt4，中间两个控制点为ptCtr1、ptCtr2
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] pt1 线的起点
     \param[in] pt2 线上的第一个中间点
     \param[in] pt3 线上的第二个中间点
@@ -38,7 +38,7 @@ GEOMAPI void mgBezier4P(
 //! 用给定的起点和终点构造90度椭圆弧，并转换为一个三次贝塞尔曲线段
 /*! 椭圆弧为从起点到终点逆时针转90度。
     计算出的贝塞尔曲线段的起点为pt1、终点为pt4，中间两个控制点为ptCtr1、ptCtr2
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] ptFrom 起点
     \param[in] ptTo 终点
     \param[out] ptCtr1 中间第一个控制点
@@ -51,7 +51,7 @@ GEOMAPI void mgEllipse90ToBezier(
 //! 将一个椭圆转换为4段三次贝塞尔曲线
 /*! 4段三次贝塞尔曲线是按逆时针方向从第一象限到第四象限连接，
     第一个点和最后一个点重合于+X轴上点(rx, 0)。
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[out] points 贝塞尔曲线的控制点，13个点
     \param[in] center 椭圆心
     \param[in] rx 半长轴的长度
@@ -64,7 +64,7 @@ GEOMAPI void mgEllipseToBezier(
 //! 将一个圆角矩形转换为4段三次贝塞尔曲线
 /*! 这4段贝塞尔曲线按逆时针方向从第一象限到第四象限，每段4个点，
     第一段的点序号为[0,1,2,3]，其余段递增类推。
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[out] points 贝塞尔曲线的控制点，每段4个点，共16个点
     \param[in] rect 矩形外框，规范化矩形
     \param[in] rx X方向的圆角半径，非负数
@@ -77,7 +77,7 @@ GEOMAPI void mgRoundRectToBeziers(
 //! 将一个椭圆弧转换为多段三次贝塞尔曲线
 /*! 4段三次贝塞尔曲线是按逆时针方向从第一象限到第四象限连接，每一段4个点，
     第一个点和最后一个点重合于+X轴上点(rx, 0)。
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[out] points 贝塞尔曲线的控制点，16个点
     \param[in] center 椭圆心
     \param[in] rx 半长轴的长度
@@ -93,7 +93,7 @@ GEOMAPI int mgAngleArcToBezier(
 
 //! 给定起点、弧上一点和终点，计算圆弧参数
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] start 圆弧的起点
     \param[in] point 弧上的一点
     \param[in] end 圆弧的终点
@@ -111,7 +111,7 @@ GEOMAPI bool mgArc3P(
 
 //! 给定起点、终点和起点切向，计算圆弧参数
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] start 圆弧的起点
     \param[in] end 圆弧的终点
     \param[in] vecTan 圆弧的起点处的切向矢量
@@ -129,7 +129,7 @@ GEOMAPI bool mgArcTan(
 
 //! 给定弦和拱高计算圆弧参数
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] start 圆弧的起点
     \param[in] end 圆弧的终点
     \param[in] bulge 拱高，正数为逆时针方向，负数为顺时针方向
@@ -153,7 +153,7 @@ GEOMAPI bool mgArcBulge(
     　　　|　　　a[n-2]　　b[n-1] | \n
     A * (x,y) = (rx,ry)
 
-    \ingroup _GEOMAPI_BASIC_
+    \ingroup GEOMAPI_BASIC
     \param[in] n 方程组阶数，最小为2
     \param[in] a 系数矩阵中的左对角线元素数组，a[0..n-2]
     \param[in,out] b 系数矩阵中的中对角线元素数组，b[0..n-1]，会被修改
@@ -167,7 +167,7 @@ GEOMAPI bool mgTriEquations(
 
 //! Gauss-Jordan法求解线性方程组
 /*!
-    \ingroup _GEOMAPI_BASIC_
+    \ingroup GEOMAPI_BASIC
     \param[in] n 方程组阶数，最小为2
     \param[in,out] mat 系数矩阵，n维方阵，会被修改
     \param[in,out] vs 输入方程组等号右边的已知n个矢量，输出求解出的未知矢量
@@ -194,7 +194,7 @@ enum kCubicSplinesFlags
     　　　+ (2*(knots[i] - knots[i+1]) + knotVectors[i] + knotVectors[i+1]) * t^3 \n
     其中 0 ≤ t ≤ 1
 
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] n 型值点的点数
     \param[in] knots 型值点坐标数组，元素个数为n
     \param[out] knotVectors 型值点的切矢量数组，元素个数为n，由外界分配内存
@@ -212,7 +212,7 @@ GEOMAPI bool mgCubicSplines(
 
 //! 在三次样条曲线的一条弦上插值得到拟和点坐标
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] n 三次样条曲线的型值点的点数
     \param[in] knots 型值点坐标数组，元素个数为n
     \param[in] knotVectors 型值点的切矢量数组，元素个数为n
@@ -227,7 +227,7 @@ GEOMAPI void mgFitCubicSpline(
 
 //! 得到三次样条曲线的分段贝塞尔曲线段控制点
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] n 三次样条曲线的型值点的点数
     \param[in] knots 型值点坐标数组，元素个数为n
     \param[in] knotVectors 型值点的切矢量数组，元素个数为n
@@ -241,7 +241,7 @@ GEOMAPI void mgCubicSplineToBezier(
 
 //! 得到三次B样条曲线的分段贝塞尔曲线段控制点
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[out] points 贝塞尔曲线的控制点，要预先分配(1+n*3)个点的空间
     \param n B样条曲线控制点的点数，至少为4
     \param controlPoints B样条曲线控制点坐标数组，点数为n
@@ -253,7 +253,7 @@ GEOMAPI Int32 mgBSplinesToBeziers(
 
 //! 计算张力样条曲线的型值点参数和弦长
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in,out] n 型值点的点数，如果有重合点则输出实际点数
     \param[in,out] knots 型值点坐标数组，元素个数为n，有重合点则会删除点坐标
     \param[in] sgm 控制参数，>0，一般取1.5
@@ -270,7 +270,7 @@ GEOMAPI bool mgClampedSplines(
 
 //! 在张力样条曲线的一条弦上插值得到拟和点坐标
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] knots 型值点坐标数组
     \param[in] i 分段曲线序号，在0到(型值点的点数-1)之间
     \param[in] t 分段曲线函数参数，在0到hp[i]之间

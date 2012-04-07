@@ -10,7 +10,7 @@
 #include <MgShapes.h>
 
 //! 图形视图接口
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
     \interface MgView
 */
 struct MgView {
@@ -25,7 +25,7 @@ struct MgView {
 };
 
 //! 命令参数
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 struct MgMotion {
     MgView*     view;                           //!< 图形视图
@@ -38,7 +38,7 @@ struct MgMotion {
 };
 
 //! 命令接口
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
     \interface MgCommand
 */
 struct MgCommand {
@@ -57,7 +57,7 @@ struct MgCommand {
 };
 
 //! 命令管理器接口
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
     \interface MgCommandManager
     \see mgGetCommandManager
 */
@@ -71,7 +71,7 @@ struct MgCommandManager {
 };
 
 //! 返回命令管理器
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 MgCommandManager* mgGetCommandManager();
 

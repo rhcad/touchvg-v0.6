@@ -9,7 +9,7 @@
 #include <mgshape.h>
 
 //! 图形列表接口
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
     \interface MgShapes
 */
 struct MgShapes : public MgObject

@@ -6,7 +6,7 @@
 #import <UIKit/UIKit.h>
 
 //! 图形视图控制器类
-/*! \ingroup _GRAPH_IOS_
+/*! \ingroup GRAPH_IOS
 */
 @interface GiViewController : UIViewController {
 @private

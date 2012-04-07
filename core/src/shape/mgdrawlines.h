@@ -9,7 +9,8 @@
 #include "mgcmddraw.h"
 
 //! 折线绘图命令类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
+    \see MgLines
 */
 class MgCmdDrawLines : public MgCommandDraw
 {

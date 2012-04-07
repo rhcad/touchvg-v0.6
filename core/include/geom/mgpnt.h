@@ -11,7 +11,7 @@
 //! 二维点类
 /*!
     本类用于描述二维平面上任意位置的点，具有x和y两个坐标分量
-    \ingroup _GEOM_CLASS_
+    \ingroup GEOM_CLASS
 */
 class Point2d : public POINT2D
 {

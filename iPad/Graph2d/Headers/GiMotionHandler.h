@@ -10,7 +10,7 @@ class GiTransform;
 class GiGraphics;
 
 //! 图形视图协议
-/*! \ingroup _GRAPH_IOS_
+/*! \ingroup GRAPH_IOS
 */
 @protocol GiView
 
@@ -30,7 +30,7 @@ class GiGraphics;
 @end
 
 //! 图形视图动作命令协议
-/*! \ingroup _GRAPH_IOS_
+/*! \ingroup GRAPH_IOS
 */
 @protocol GiMotionHandler
 @optional

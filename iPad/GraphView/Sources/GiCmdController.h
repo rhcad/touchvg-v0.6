@@ -10,7 +10,7 @@ struct MgMotion;
 class MgViewProxy;
 
 //! 命令控制器类，代理调用内部命令(MgCommand)
-/*! \ingroup _GRAPH_IOS_
+/*! \ingroup GRAPH_IOS
 */
 @interface GiCommandController : NSObject<GiMotionHandler> {
 @private

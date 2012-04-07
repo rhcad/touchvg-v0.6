@@ -17,7 +17,7 @@ struct MgShapes;
 struct MgStorage;
 
 //! 图形对象基类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
     \interface MgObject
 */
 struct MgObject
@@ -42,7 +42,7 @@ struct MgObject
 };
 
 //! 矢量图形接口
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
     \interface MgShape
 */
 struct MgShape : public MgObject
@@ -63,7 +63,7 @@ struct MgShape : public MgObject
 };
 
 //! 矢量图形基类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
 */
 class MgBaseShape : public MgObject
 {

@@ -15,7 +15,7 @@ GiColor giFromCGColor(CGColorRef color);
 
 //! The graphics class for iOS.
 /*! getGraphType() of this class returns 10.
-    \ingroup _GRAPH_IOS_
+    \ingroup GRAPH_IOS
     \see giFromCGColor
 */
 class GiGraphIos : public GiGraphics

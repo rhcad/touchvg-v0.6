@@ -15,7 +15,7 @@
 
 //! Windows平台的图形系统类
 /*! 本类用于在Windows平台显示各种图形，图元显示原语由派生类实现
-    \ingroup _GRAPH_INTERFACE_
+    \ingroup GRAPH_INTERFACE
 */
 class GiGraphWin : public GiGraphics
 {

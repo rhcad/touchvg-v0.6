@@ -12,7 +12,7 @@
 
 //! 坐标系管理类
 /*!
-    \ingroup _GRAPH_INTERFACE_
+    \ingroup GRAPH_INTERFACE
     坐标系管理类的功能是管理图形系统用到的各种坐标系及其转换。
     用到以下三种坐标系：\n
     1. 世界坐标系：固定不变的笛卡尔坐标系，用作定义所有对象和其他坐标系的基础，
@@ -255,7 +255,7 @@ private:
 //! 保存和恢复模型坐标系的变换矩阵的辅助类
 /*! 利用该类在堆栈上定义局部变量，该变量出作用区后自动析构从而恢复模型坐标系。
     利用该类可以避免因中途退出或异常时没有执行恢复模型坐标系的语句。
-    \ingroup _GRAPH_INTERFACE_
+    \ingroup GRAPH_INTERFACE
 */
 class GiSaveModelTransform
 {

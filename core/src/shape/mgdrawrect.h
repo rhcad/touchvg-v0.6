@@ -9,7 +9,8 @@
 #include "mgcmddraw.h"
 
 //! 矩形绘图命令类
-/*! \ingroup _GEOM_SHAPE_
+/*! \ingroup GEOM_SHAPE
+    \see MgRect
 */
 class MgCmdDrawRect : public MgCommandDraw
 {

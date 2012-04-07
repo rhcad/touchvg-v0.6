@@ -10,7 +10,7 @@
 
 //! 绑定框类，平行四边形
 /*!
-    \ingroup _GEOM_CLASS_
+    \ingroup GEOM_CLASS
 */
 class BoundBox
 {

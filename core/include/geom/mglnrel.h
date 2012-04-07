@@ -10,7 +10,7 @@
 
 //! 判断点pt是否在有向直线a->b的左边 (开区间)
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 直线的起点
     \param[in] b 直线的终点
     \param[in] pt 给定的测试点
@@ -20,7 +20,7 @@ GEOMAPI bool mgIsLeft(const Point2d& a, const Point2d& b, const Point2d& pt);
 
 //! 判断点pt是否在有向直线a->b的左边
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 直线的起点
     \param[in] b 直线的终点
     \param[in] pt 给定的测试点
@@ -32,7 +32,7 @@ GEOMAPI bool mgIsLeft2(
 
 //! 判断点pt是否在有向直线a->b的左边或线上 (闭区间)
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 直线的起点
     \param[in] b 直线的终点
     \param[in] pt 给定的测试点
@@ -42,7 +42,7 @@ GEOMAPI bool mgIsLeftOn(const Point2d& a, const Point2d& b, const Point2d& pt);
 
 //! 判断点pt是否在有向直线a->b的左边或线上
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 直线的起点
     \param[in] b 直线的终点
     \param[in] pt 给定的测试点
@@ -54,7 +54,7 @@ GEOMAPI bool mgIsLeftOn2(
 
 //! 判断点pt是否在直线a->b的线上
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 直线的起点
     \param[in] b 直线的终点
     \param[in] pt 给定的测试点
@@ -64,7 +64,7 @@ GEOMAPI bool mgIsColinear(const Point2d& a, const Point2d& b, const Point2d& pt)
 
 //! 判断点pt是否在直线a->b的线上
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 直线的起点
     \param[in] b 直线的终点
     \param[in] pt 给定的测试点
@@ -76,7 +76,7 @@ GEOMAPI bool mgIsColinear2(
 
 //! 判断两个线段ab和cd是否相交于线段内部
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 第一条线段的起点
     \param[in] b 第一条线段的终点
     \param[in] c 第二条线段的起点
@@ -88,7 +88,7 @@ GEOMAPI bool mgIsIntersectProp(
 
 //! 判断点pt是否在线段ab上(闭区间)
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 线段的起点
     \param[in] b 线段的终点
     \param[in] pt 给定的测试点
@@ -98,7 +98,7 @@ GEOMAPI bool mgIsBetweenLine(const Point2d& a, const Point2d& b, const Point2d& 
 
 //! 判断点pt是否在线段ab上
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 线段的起点
     \param[in] b 线段的终点
     \param[in] pt 给定的测试点
@@ -110,7 +110,7 @@ GEOMAPI bool mgIsBetweenLine2(
 
 //! 已知点pt在直线ab上, 判断点pt是否在线段ab上(闭区间)
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 线段的起点
     \param[in] b 线段的终点
     \param[in] pt 给定的测试点
@@ -122,7 +122,7 @@ GEOMAPI bool mgIsBetweenLine3(
 
 //! 判断两个线段ab和cd是否相交(交点在线段闭区间内)
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 第一条线段的起点
     \param[in] b 第一条线段的终点
     \param[in] c 第二条线段的起点
@@ -134,7 +134,7 @@ GEOMAPI bool mgIsIntersect(
 
 //! 计算点pt到无穷直线ab的距离
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 无穷直线的起点
     \param[in] b 无穷直线的终点
     \param[in] pt 给定的测试点
@@ -144,7 +144,7 @@ GEOMAPI double mgPtToBeeline(const Point2d& a, const Point2d& b, const Point2d& 
 
 //! 计算点pt到无穷直线ab的距离
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 无穷直线的起点
     \param[in] b 无穷直线的终点
     \param[in] pt 给定的测试点
@@ -156,7 +156,7 @@ GEOMAPI double mgPtToBeeline2(
 
 //! 计算点pt到线段ab的最近距离
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 线段的起点
     \param[in] b 线段的终点
     \param[in] pt 给定的测试点
@@ -168,7 +168,7 @@ GEOMAPI double mgPtToLine(
 
 //! 求两条直线(ax+by+c=0)的交点
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a1 第一条直线的标准方程参数A
     \param[in] b1 第一条直线的标准方程参数B
     \param[in] c1 第一条直线的标准方程参数C
@@ -185,7 +185,7 @@ GEOMAPI bool mgCrossLineAbc(
 
 //! 求两条无穷直线的交点
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 第一条直线的起点
     \param[in] b 第一条直线的终点
     \param[in] c 第二条直线的起点
@@ -203,7 +203,7 @@ GEOMAPI bool mgCross2Beeline(
 
 //! 求两条线段的交点
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 第一条线段的起点
     \param[in] b 第一条线段的终点
     \param[in] c 第二条线段的起点
@@ -218,7 +218,7 @@ GEOMAPI bool mgCross2Line(
 
 //! 求线段和直线的交点
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] a 线段的起点
     \param[in] b 线段的终点
     \param[in] c 直线的起点
@@ -235,7 +235,7 @@ GEOMAPI bool mgCrossLineBeeline(
 
 //! 用矩形剪裁线段，Sutherland-Cohen算法
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] pt1 线段的起点
     \param[in] pt2 线段的终点
     \param[in] box 剪裁矩形，必须为非空规范化矩形
@@ -255,7 +255,7 @@ enum PtInAreaRet
 
 //! 判断一点是否在一多边形范围内
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] pt 给定的测试点
     \param[in] count 多边形的顶点数
     \param[in] vertexs 多边形的顶点数组
@@ -271,7 +271,7 @@ GEOMAPI int mgPtInArea(
 
 //! 判断多边形是否为凸多边形
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] count 顶点个数
     \param[in] vertexs 顶点数组
     \param[out] pACW 多边形是否为逆时针方向，为NULL则忽略该参数

@@ -10,7 +10,7 @@
 
 //! 矢量路径类
 /*!
-    \ingroup _GRAPH_INTERFACE_
+    \ingroup GRAPH_INTERFACE
     \see GiGraphics::drawPath
 */
 class GiPath

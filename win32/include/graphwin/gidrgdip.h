@@ -10,7 +10,7 @@
 
 //! 用GDI+实现的图形系统类
 /*! 本类的 getGraphType() 值为 2
-    \ingroup _GRAPH_INTERFACE_
+    \ingroup GRAPH_INTERFACE
 */
 class GiGraphGdip : public GiGraphWin
 {

@@ -10,7 +10,7 @@
 
 //! 计算一点到三次贝塞尔曲线段上的最近点
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] pt 曲线段外给定的点
     \param[in] pts 三次贝塞尔曲线段的控制点，4个点
     \param[out] ptNear 曲线段上的最近点
@@ -20,7 +20,7 @@ GEOMAPI void mgNearestOnBezier(
 
 //! 计算贝塞尔曲线的绑定框
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[out] box 绑定框
     \param[in] count 点的个数，至少为4，必须为3的倍数加1
     \param[in] points 控制点和端点的数组，点数为count
@@ -32,7 +32,7 @@ GEOMAPI void mgBeziersBox(
 
 //! 判断贝塞尔曲线是否与矩形相交
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] box 指定的矩形
     \param[in] count 点的个数，至少为4，必须为3的倍数加1
     \param[in] points 控制点和端点的数组，点数为count
@@ -45,7 +45,7 @@ GEOMAPI bool mgBeziersIntersectBox(
 
 //! 计算三次样条曲线的绑定框
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[out] box 绑定框
     \param[in] n 三次样条曲线的型值点的点数
     \param[in] knots 型值点坐标数组，元素个数为n
@@ -59,7 +59,7 @@ GEOMAPI void mgCubicSplinesBox(
 
 //! 判断三次样条曲线是否与矩形相交
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] box 指定的矩形
     \param[in] n 三次样条曲线的型值点的点数
     \param[in] knots 型值点坐标数组，元素个数为n
@@ -74,7 +74,7 @@ GEOMAPI bool mgCubicSplinesIntersectBox(
 
 //! 计算点到三次样条曲线的最近距离
 /*!
-    \ingroup _GEOMAPI_CURVE_
+    \ingroup GEOMAPI_CURVE
     \param[in] n 三次样条曲线的型值点的点数
     \param[in] knots 型值点坐标数组，元素个数为n
     \param[in] knotVectors 型值点的切矢量数组，元素个数为n
@@ -92,7 +92,7 @@ GEOMAPI double mgCubicSplinesHit(
 
 //! 计算点到折线或多边形的最近距离
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] n 顶点数
     \param[in] points 顶点坐标数组，元素个数为n
     \param[in] closed 是否为多边形
@@ -108,7 +108,7 @@ GEOMAPI double mgLinesHit(
 
 //! 计算点到圆角矩形的最近距离
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] rect 外接矩形，必须为规范化矩形
     \param[in] rx 水平方向的圆角半径，非负数
     \param[in] ry 垂直方向的圆角半径，为0则取为rx
@@ -125,7 +125,7 @@ GEOMAPI double mgRoundRectHit(
 
 //! 得到矩形的8个控制手柄坐标
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in] rect 矩形，必须为规范化矩形
     \param[in] nHandle 控制手柄的序号，0到7，
         0到3为从左上角起顺时针的四个角点；4到7为顶右底左的中点；其余为中心点
@@ -135,7 +135,7 @@ GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 nHandle, Point2d& pt);
 
 //! 移动矩形的一个控制手柄
 /*!
-    \ingroup _GEOMAPI_LNREL_
+    \ingroup GEOMAPI_LNREL
     \param[in,out] rect 矩形，必须为规范化矩形
     \param[in] nHandle 控制手柄的序号，0到7，
         0到3为从左上角起顺时针的四个角点；4到7为顶右底左的中点；其余为中心点
