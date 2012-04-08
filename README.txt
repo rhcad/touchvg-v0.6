@@ -1,7 +1,7 @@
-TouchDraw - A lightweight vector drawing framework using C++ for the iPad and Windows.
-https://github.com/rhcad/touchdraw
+TouchDraw: https://github.com/rhcad/touchdraw
+A lightweight vector drawing framework using C++ for the iPad and Windows.
 
-Open-source license: Lesser GPL
+Open-source license: Lesser GPL.
 
 FAQ and other hints may be found on the Wiki:
         https://github.com/rhcad/touchdraw/wiki
