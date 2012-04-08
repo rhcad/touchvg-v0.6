@@ -1,7 +1,7 @@
 //! \file mgshapet.h
 //! \brief 定义矢量图形模板类 MgShapeT
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_MGSHAPE_TEMPL_H_
 #define __GEOMETRY_MGSHAPE_TEMPL_H_

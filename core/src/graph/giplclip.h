@@ -1,7 +1,7 @@
 //! \file giplclip.h
 //! \brief 定义多边形剪裁类 PolygonClip
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_POLYGONCLIP_H_
 #define __GEOMETRY_POLYGONCLIP_H_

@@ -1,7 +1,7 @@
 //! \file mgbase.h
 //! \brief 定义基本计算功能函数
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_BASIC_H_
 #define __GEOMETRY_BASIC_H_

@@ -1,6 +1,6 @@
 // gigraph.cpp: 实现图形系统类GiGraphics
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #include "gigraph.h"
 #include "_gigraph.h"

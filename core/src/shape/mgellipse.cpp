@@ -1,6 +1,6 @@
 // mgellipse.cpp: 实现椭圆图形类 MgEllipse
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #include "mgbasicsp.h"
 #include <_mgshape.h>

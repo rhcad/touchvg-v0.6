@@ -1,6 +1,6 @@
 // mgvec.cpp: 实现二维矢量类Vector2d
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #include "mgpnt.h"
 

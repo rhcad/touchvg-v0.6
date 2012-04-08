@@ -1,6 +1,6 @@
 // gixform.cpp: 实现坐标系管理类GiTransform
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #include "gixform.h"
 

@@ -1,7 +1,7 @@
 //! \file GiCmdController.h
 //! \brief 定义命令控制器类 GiCommandController
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #import <Graph2d/GiMotionHandler.h>
 #include <Graph2d/gicontxt.h>

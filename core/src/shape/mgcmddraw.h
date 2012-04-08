@@ -1,7 +1,7 @@
 //! \file mgcmddraw.h
 //! \brief 定义绘图命令基类 MgCommandDraw 和 MgCmdBaseLines
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_MGCOMMAND_DRAW_H_
 #define __GEOMETRY_MGCOMMAND_DRAW_H_

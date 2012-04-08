@@ -1,7 +1,7 @@
 //! \file mgshape.h
 //! \brief 定义矢量图形基类 MgBaseShape 和 MgShape
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_MGSHAPE_H_
 #define __GEOMETRY_MGSHAPE_H_

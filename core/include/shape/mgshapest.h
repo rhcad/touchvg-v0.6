@@ -1,7 +1,7 @@
 //! \file mgshapest.h
 //! \brief 定义图形列表模板类 MgShapesT
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_MGSHAPES_TEMPL_H_
 #define __GEOMETRY_MGSHAPES_TEMPL_H_

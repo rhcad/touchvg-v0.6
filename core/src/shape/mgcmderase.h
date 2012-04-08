@@ -1,7 +1,7 @@
 //! \file mgcmderase.h
 //! \brief 定义橡皮擦命令类 MgCommandErase
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_MGCOMMAND_ERASE_H_
 #define __GEOMETRY_MGCOMMAND_ERASE_H_

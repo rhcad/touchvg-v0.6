@@ -1,7 +1,7 @@
 //! \file mgcmdmgr.h
 //! \brief 定义命令管理器实现类 MgCmdManagerImpl
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_MGCOMMAND_MANAGER_H_
 #define __GEOMETRY_MGCOMMAND_MANAGER_H_

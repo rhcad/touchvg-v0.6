@@ -1,7 +1,7 @@
 //! \file gidrgdip.h
 //! \brief 定义用GDI+实现的图形系统类 GiGraphGdip
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_DRAWGDIP_H_
 #define __GEOMETRY_DRAWGDIP_H_

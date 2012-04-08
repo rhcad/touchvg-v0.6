@@ -1,7 +1,7 @@
 //! \file mgcmd.h
 //! \brief 定义绘图命令接口
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_MGCOMMAND_H_
 #define __GEOMETRY_MGCOMMAND_H_

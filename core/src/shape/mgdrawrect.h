@@ -1,7 +1,7 @@
 //! \file mgdrawrect.h
 //! \brief 定义矩形绘图命令类 MgCmdDrawRect
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_MGCOMMAND_DRAW_RECT_H_
 #define __GEOMETRY_MGCOMMAND_DRAW_RECT_H_

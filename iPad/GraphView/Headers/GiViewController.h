@@ -1,7 +1,7 @@
 //! \file GiViewController.h
 //! \brief 定义图形视图控制器类 GiViewController
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #import <UIKit/UIKit.h>
 

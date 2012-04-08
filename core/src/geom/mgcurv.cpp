@@ -1,6 +1,6 @@
 // mgcurv.cpp: 实现曲线拟和函数
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #include "mgcurv.h"
 #include "mgbase.h"

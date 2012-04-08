@@ -1,7 +1,7 @@
 //! \file mgcmdselect.h
 //! \brief 定义选择命令类 MgCommandSelect
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/graph2d
+// License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_MGCOMMAND_SELECT_H_
 #define __GEOMETRY_MGCOMMAND_SELECT_H_
