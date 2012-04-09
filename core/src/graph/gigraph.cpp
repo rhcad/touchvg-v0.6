@@ -7,6 +7,7 @@
 #include <mglnrel.h>
 #include <mgcurv.h>
 #include "giplclip.h"
+#include <string.h>
 
 GiGraphics::GiGraphics(GiTransform* xform)
 {
