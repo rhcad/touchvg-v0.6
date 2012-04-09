@@ -7,7 +7,7 @@
 #define __GEOMETRY_MGCOMMAND_H_
 
 #include <gigraph.h>
-#include <MgShapes.h>
+#include <mgshapes.h>
 
 //! 图形视图接口
 /*! \ingroup GEOM_SHAPE
