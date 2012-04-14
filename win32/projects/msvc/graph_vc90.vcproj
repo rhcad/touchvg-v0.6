@@ -180,6 +180,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\include\graph\gidraw.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\include\graph\gigraph.h"
 				>
 			</File>

@@ -154,14 +154,14 @@ void CBaseView::OnViewGdip()
 {
 	m_bGdip = !m_bGdip;
 
-	GiGraphics* gs = m_gs;
+	GiGraphWin* gs = m_gs;
 
 	if (m_bGdip)
 		m_gs = new GiGraphGdip(&m_xf);
 	else
 		m_gs = new GiGraphGdi(&m_xf);
 
-	*(GiGraphics*)m_gs = *gs;
+    m_gs->copy(*gs);
 	delete gs;
 
 	Invalidate();

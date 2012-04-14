@@ -1,0 +1,169 @@
+//! \file gidraw.h
+//! \brief 定义图形显示适配接口类 GiDrawAdapter
+// Copyright (c) 2004-2012, Zhang Yungui
+// License: LGPL, https://github.com/rhcad/touchdraw
+
+#ifndef __GEOMETRY_DRAWADAPTER_H_
+#define __GEOMETRY_DRAWADAPTER_H_
+
+#include "gixform.h"
+#include "gicontxt.h"
+
+class GiGraphics;
+
+//! 图形显示适配接口类，定义图元显示原语
+/*! 图元显示原语由派生类实现，例如采用GDI/GDI+/SVG/PDF等实现；
+    显示图形所用的坐标计算和坐标系转换是在 GiTransform 中定义的。
+    \ingroup GRAPH_INTERFACE
+*/
+class GiDrawAdapter
+{
+public:
+    GiDrawAdapter() {}
+    virtual ~GiDrawAdapter() {}
+
+public:
+    //! 用当前背景色清除背景
+    /*! 用背景色填充全部显示区域。打印或打印预览时调用无效。
+        \see getBkColor
+    */
+    virtual void clearWnd() = 0;
+
+    //! 显示后备缓冲位图
+    /*! 后备缓冲位图是由函数 saveCachedBitmap 保存创建的
+        \param x 显示偏移X，像素
+        \param y 显示偏移Y，像素
+        \param secondBmp 使用是否为第二个后备缓冲位图
+        \return 是否绘制成功
+        \see saveCachedBitmap
+    */
+    virtual bool drawCachedBitmap(int x = 0, int y = 0, bool secondBmp = false) = 0;
+
+    //! 显示后备缓冲位图
+    /*! 将另一个图形系统的后备缓冲位图显示到本对象的显示设备上，
+        后备缓冲位图是由函数 saveCachedBitmap 保存创建的。\n
+        另一个图形系统的作用是后台显示，其本身并不显示图形到设备上，即调用了 endPaint(false)
+        \param p 另一个图形系统，该对象有后备缓冲位图
+        \param x 显示偏移X，像素
+        \param y 显示偏移Y，像素
+        \param secondBmp 使用是否为第二个后备缓冲位图
+        \return 是否绘制成功
+        \see saveCachedBitmap
+    */
+    virtual bool drawCachedBitmap2(const GiGraphics* p, int x = 0, int y = 0, bool secondBmp = false) = 0;
+
+    //! 保存显示内容到后备缓冲位图
+    /*! 将当前绘图目标(可能是绘图缓冲)的内容保存为一个位图对象，
+        该位图的大小为显示窗口大小。\n
+        当显示窗口大小改变或显示放缩后，将自动清除后备缓冲位图。
+        \param secondBmp 是否存到第二个后备缓冲位图
+    */
+    virtual void saveCachedBitmap(bool secondBmp = false) = 0;
+
+    //! 返回是否有后备缓冲位图
+    /*!
+        \param secondBmp 检查的是否为第二个后备缓冲位图
+        \return 是否有该缓冲位图
+    */
+    virtual bool hasCachedBitmap(bool secondBmp = false) const = 0;
+
+    //! 清除后备缓冲位图
+    /*! 当显示窗口大小改变或显示放缩后，调用 beginPaint() 时将自动清除后备缓冲位图。
+    */
+    virtual void clearCachedBitmap() = 0;
+
+    //! 返回是否正在绘图缓冲上绘图
+    /*! 在派生类的 beginPaint 函数中指定是否使用绘图缓冲
+        \return 是否正在绘图缓冲上绘图
+        \see beginPaint
+    */
+    virtual bool isBufferedDrawing() const = 0;
+
+    //! 返回图形系统类型
+    virtual int getGraphType() const = 0;
+
+    //! 返回屏幕分辨率DPI, 常量
+    virtual int getScreenDpi() const = 0;
+
+    //! 返回背景色
+    /*!
+        \return 背景色，RGB色，如果是打印或打印预览，则为白色
+    */
+    virtual GiColor getBkColor() const = 0;
+
+    //! 设置背景色
+    /*! 如果正处于绘图状态中，该函数将同时设置绘图设备的背景色
+        \param color 背景色，RGB色
+        \return 原来的背景色
+    */
+    virtual GiColor setBkColor(const GiColor& color) = 0;
+
+    //! 返回和模拟设备的调色板相近的颜色
+    /*! 打印或打印预览时本函数才有效果，此时模拟设备为打印机，否则为当前显示设备。
+        \param color 普通的RGB颜色
+        \return 符合模拟设备的RGB颜色
+    */
+    virtual GiColor getNearestColor(const GiColor& color) const = 0;
+    
+    //! 返回当前绘图参数
+    virtual const GiContext* getCurrentContext() const = 0;
+
+    //! 剪裁框改变后的通知，仅由 GiGraphics 调用
+    /*! 调用 GiGraphics::setClipBox() 或 setClipWorld() 后会调用本函数。
+        \param[in] clipBox 新剪裁框的逻辑坐标矩形
+    */
+    virtual void _clipBoxChanged(const RECT& clipBox) = 0;
+
+    //! 反走样模式已设置的通知，仅由 GiGraphics 调用
+    virtual void _antiAliasModeChanged(bool antiAlias) = 0;
+
+
+    //! 绘制直线段的原语函数，像素坐标，不剪裁
+    virtual bool rawLine(const GiContext* ctx, 
+        int x1, int y1, int x2, int y2) = 0;
+
+    //! 绘制折线的原语函数，像素坐标，不剪裁
+    virtual bool rawPolyline(const GiContext* ctx, 
+        const POINT* lppt, int count) = 0;
+
+    //! 绘制多条贝塞尔曲线的原语函数，像素坐标，不剪裁
+    virtual bool rawPolyBezier(const GiContext* ctx, 
+        const POINT* lppt, int count) = 0;
+
+    //! 绘制多边形的原语函数，像素坐标，不剪裁
+    virtual bool rawPolygon(const GiContext* ctx, 
+        const POINT* lppt, int count) = 0;
+
+    //! 绘制矩形的原语函数，像素坐标，不剪裁
+    virtual bool rawRect(const GiContext* ctx, 
+        int x, int y, int w, int h) = 0;
+
+    //! 绘制椭圆的原语函数，像素坐标，不剪裁
+    virtual bool rawEllipse(const GiContext* ctx, 
+        int x, int y, int w, int h) = 0;
+
+    //! 绘制多样线的原语函数，像素坐标，不剪裁
+    virtual bool rawPolyDraw(const GiContext* ctx, 
+        int count, const POINT* lppt, const UInt8* types) = 0;
+
+
+    //! 开始一个路径的原语函数
+    virtual bool rawBeginPath() = 0;
+
+    //! 结束并显示一个路径的原语函数
+    virtual bool rawEndPath(const GiContext* ctx, bool fill) = 0;
+
+    //! 在当前路径中移动到新的位置的原语函数
+    virtual bool rawMoveTo(int x, int y) = 0;
+
+    //! 在当前路径中添加画线指令到新的位置的原语函数
+    virtual bool rawLineTo(int x, int y) = 0;
+
+    //! 在当前路径中添加画贝塞尔曲线指令的原语函数
+    virtual bool rawPolyBezierTo(const POINT* lppt, int count) = 0;
+
+    //! 在当前路径中添加闭合指令的原语函数
+    virtual bool rawCloseFigure() = 0;
+};
+
+#endif // __GEOMETRY_DRAWADAPTER_H_

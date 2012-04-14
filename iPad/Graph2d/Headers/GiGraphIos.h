@@ -22,9 +22,7 @@ class GiGraphIos : public GiGraphics
 {
 public:
     GiGraphIos(GiTransform* xform);
-    GiGraphIos(const GiGraphIos& src);
     virtual ~GiGraphIos();
-    GiGraphIos& operator=(const GiGraphIos& src);
 
 public:
     bool beginPaint(CGContextRef context, bool buffered = true, bool fast = false);
@@ -33,7 +31,7 @@ public:
 
     virtual void clearWnd();
     virtual bool drawCachedBitmap(int x = 0, int y = 0, bool secondBmp = false);
-    virtual bool drawCachedBitmap2(const GiGraphics* p, bool secondBmp = false);
+    virtual bool drawCachedBitmap2(const GiGraphics* p, int x = 0, int y = 0, bool secondBmp = false);
     virtual void saveCachedBitmap(bool secondBmp = false);
     virtual bool hasCachedBitmap(bool secondBmp = false) const;
     virtual void clearCachedBitmap();
@@ -41,14 +39,12 @@ public:
     virtual int getGraphType() const { return 10; }
     virtual int getScreenDpi() const;
     
-    virtual bool setClipBox(const RECT* prc);
-    virtual bool setClipWorld(const Box2d& rectWorld);
-    
     virtual GiColor getBkColor() const;
     virtual GiColor setBkColor(const GiColor& color);
     virtual GiColor getNearestColor(const GiColor& color) const;
-    virtual void setAntiAliasMode(bool antiAlias);
     virtual const GiContext* getCurrentContext() const;
+    virtual void _clipBoxChanged(const RECT& clipBox);
+    virtual void _antiAliasModeChanged(bool antiAlias);
 
     virtual bool rawLine(const GiContext* ctx, 
         int x1, int y1, int x2, int y2);

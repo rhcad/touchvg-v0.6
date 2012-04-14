@@ -188,25 +188,9 @@ GiGraphGdi::GiGraphGdi(GiTransform* xform) : GiGraphWin(xform)
     m_draw = new DrawImpl(this);
 }
 
-GiGraphGdi::GiGraphGdi(const GiGraphGdi& src) : GiGraphWin(src)
-{
-    m_draw = new DrawImpl(this);
-    operator=(src);
-}
-
 GiGraphGdi::~GiGraphGdi()
 {
     delete m_draw;
-}
-
-GiGraphGdi& GiGraphGdi::operator=(const GiGraphGdi& src)
-{
-    GiGraphWin::operator=(src);
-    if (this != &src)
-    {
-    }
-
-    return *this;
 }
 
 bool GiGraphGdi::isBufferedDrawing() const
@@ -230,7 +214,7 @@ bool GiGraphGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     if (!ret)
         return false;
 
-    buffered = buffered && !m_impl->isPrint;
+    buffered = buffered && !isPrint();
     m_draw->m_hdc = hdc;
 
     CachedBmp oldDrawing;
@@ -279,7 +263,7 @@ bool GiGraphGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
 
 void GiGraphGdi::clearWnd()
 {
-    if (!m_impl->isPrint && isDrawing())
+    if (!isPrint() && isDrawing())
     {
         ::ExtTextOut(m_draw->getDrawDC(), 0, 0, ETO_OPAQUE, 
             &m_impl->clipBox0, NULL, 0, NULL);
@@ -300,13 +284,13 @@ bool GiGraphGdi::drawCachedBitmap(int x, int y, bool secondBmp)
     return CachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC(), x, y);
 }
 
-bool GiGraphGdi::drawCachedBitmap2(const GiGraphics* p, bool secondBmp)
+bool GiGraphGdi::drawCachedBitmap2(const GiGraphics* p, int x, int y, bool secondBmp)
 {
     const GiGraphGdi* gs = static_cast<const GiGraphGdi*>(p);
     return p != NULL
         && p->xf().getWidth() == xf().getWidth()
         && p->xf().getHeight() == xf().getHeight()
-        && gs->CachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC());
+        && gs->CachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC(), x, y);
 }
 
 bool CachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) const
@@ -413,40 +397,15 @@ void GiGraphGdi::endPaint(bool draw)
     }
 }
 
-bool GiGraphGdi::setClipBox(const RECT* prc)
+void GiGraphGdi::_clipBoxChanged(const RECT& clipBox)
 {
-    bool ret = GiGraphWin::setClipBox(prc);
-    if (ret)
+    HRGN hRgn = ::CreateRectRgn(
+        clipBox.left, clipBox.top, clipBox.right, clipBox.bottom);
+    if (hRgn != NULL)
     {
-        HRGN hRgn = ::CreateRectRgn(
-            m_impl->clipBox.left, m_impl->clipBox.top, 
-            m_impl->clipBox.right, m_impl->clipBox.bottom);
-        if (hRgn != NULL)
-        {
-            ::SelectClipRgn(m_draw->getDrawDC(), hRgn);
-            ::DeleteObject(hRgn);
-        }
+        ::SelectClipRgn(m_draw->getDrawDC(), hRgn);
+        ::DeleteObject(hRgn);
     }
-
-    return ret;
-}
-
-bool GiGraphGdi::setClipWorld(const Box2d& rectWorld)
-{
-    bool ret = GiGraphWin::setClipWorld(rectWorld);
-    if (ret)
-    {
-        HRGN hRgn = ::CreateRectRgn(
-            m_impl->clipBox.left, m_impl->clipBox.top, 
-            m_impl->clipBox.right, m_impl->clipBox.bottom);
-        if (hRgn != NULL)
-        {
-            ::SelectClipRgn(m_draw->getDrawDC(), hRgn);
-            ::DeleteObject(hRgn);
-        }
-    }
-
-    return ret;
 }
 
 GiColor GiGraphGdi::getBkColor() const
@@ -676,7 +635,7 @@ bool GiGraphGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
     HDC hdc = m_draw->getDrawDC();
 
     if (hdc != NULL && hmWidth > 0 && hmHeight > 0 && hbitmap != NULL
-        && m_impl->rectDrawW.isIntersect(Box2d(rectW, true)))
+        && getClipWorld().isIntersect(Box2d(rectW, true)))
     {
         RECT rc, rcDraw, rcFrom;
 
@@ -709,7 +668,7 @@ bool GiGraphGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
         KGDIObject bmp (memDC, hbitmap, false);
         KGDIObject brush (hdc, ::GetStockObject(NULL_BRUSH), false);
 
-        int nBltMode = (!fast || m_impl->isPrint) ? HALFTONE : COLORONCOLOR;
+        int nBltMode = (!fast || isPrint()) ? HALFTONE : COLORONCOLOR;
         int nOldMode = ::SetStretchBltMode(hdc, nBltMode);
         ::SetBrushOrgEx(hdc, rcDraw.left % 8, rcDraw.top % 8, NULL);
         ret = ::StretchBlt(hdc, 

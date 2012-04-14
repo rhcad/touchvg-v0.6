@@ -16,9 +16,7 @@ class GiGraphGdi : public GiGraphWin
 {
 public:
     GiGraphGdi(GiTransform* xform);
-    GiGraphGdi(const GiGraphGdi& src);
     virtual ~GiGraphGdi();
-    GiGraphGdi& operator=(const GiGraphGdi& src);
 
 public:
     virtual bool beginPaint(HDC hdc, HDC attribDC = NULL, 
@@ -26,7 +24,7 @@ public:
     virtual void endPaint(bool draw = true);
     virtual void clearWnd();
     virtual bool drawCachedBitmap(int x = 0, int y = 0, bool secondBmp = false);
-    virtual bool drawCachedBitmap2(const GiGraphics* p, bool secondBmp = false);
+    virtual bool drawCachedBitmap2(const GiGraphics* p, int x = 0, int y = 0, bool secondBmp = false);
     virtual void saveCachedBitmap(bool secondBmp = false);
     virtual bool hasCachedBitmap(bool secondBmp = false) const;
     virtual void clearCachedBitmap();
@@ -35,13 +33,12 @@ public:
     virtual HDC acquireDC();
     virtual void releaseDC(HDC hdc);
     
-    virtual bool setClipBox(const RECT* prc);
-    virtual bool setClipWorld(const Box2d& rectWorld);
-    
     virtual GiColor getBkColor() const;
     virtual GiColor setBkColor(const GiColor& color);
     virtual GiColor getNearestColor(const GiColor& color) const;
     virtual const GiContext* getCurrentContext() const;
+    virtual void _clipBoxChanged(const RECT& clipBox);
+    virtual void _antiAliasModeChanged(bool) {}
 
     virtual bool rawLine(const GiContext* ctx, 
         int x1, int y1, int x2, int y2);

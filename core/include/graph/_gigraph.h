@@ -31,12 +31,6 @@ public:
     Box2d       rectDrawMaxM;       //!< 最大剪裁矩形，模型坐标
     Box2d       rectDrawMaxW;       //!< 最大剪裁矩形，世界坐标
 
-    static long& screenDPI()
-    {
-        static long dpi = 0;
-        return dpi;
-    }
-
     GiGraphicsImpl(GiGraphics* gs, GiTransform* x) : pThis(gs), xform(x)
     {
         drawRefcnt = 0;

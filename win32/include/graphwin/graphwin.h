@@ -20,14 +20,11 @@
 class GiGraphWin : public GiGraphics
 {
 public:
-    //! 默认构造函数
+    //! 构造函数
     GiGraphWin(GiTransform* xform);
 
-    //! 拷贝构造函数
-    GiGraphWin(const GiGraphWin& src);
-
-    //! 赋值操作符函数
-    GiGraphWin& operator=(const GiGraphWin& src);
+    //! 复制指定对象到本对象
+    void copy(const GiGraphWin& src);
 
 public:
     //! 准备开始绘图

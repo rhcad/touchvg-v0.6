@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4ACBCB381425D73E00212514 /* Graph2dTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* Graph2dTests.m */; };
 		4AE2C1E71424998500C67987 /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE2C1D21424998500C67987 /* libGraph2d.a */; };
+		7E9777B2147161BF00EA5AF7 /* gidraw.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9777B1147161BF00EA5AF7 /* gidraw.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE7FB1500B8F100487BEF /* mgbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F21500B8F100487BEF /* mgbase.cpp */; };
 		7E9CE7FC1500B8F100487BEF /* mgbnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F31500B8F100487BEF /* mgbnd.cpp */; };
 		7E9CE7FD1500B8F100487BEF /* mgcurv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F41500B8F100487BEF /* mgcurv.cpp */; };
@@ -95,6 +96,7 @@
 		4AE2C2951424AA6E00C67987 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Project.xcconfig; path = Configurations/Project.xcconfig; sourceTree = "<group>"; };
 		4AE2C2961424AA6E00C67987 /* UnitTests.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = UnitTests.xcconfig; path = Configurations/UnitTests.xcconfig; sourceTree = "<group>"; };
 		4AE2C29F1424ACE700C67987 /* Graph2d_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graph2d_Prefix.pch; path = Headers/Graph2d_Prefix.pch; sourceTree = "<group>"; };
+		7E9777B1147161BF00EA5AF7 /* gidraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gidraw.h; path = ../../core/include/graph/gidraw.h; sourceTree = "<group>"; };
 		7E9CE7F21500B8F100487BEF /* mgbase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgbase.cpp; path = ../../core/src/geom/mgbase.cpp; sourceTree = "<group>"; };
 		7E9CE7F31500B8F100487BEF /* mgbnd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgbnd.cpp; path = ../../core/src/geom/mgbnd.cpp; sourceTree = "<group>"; };
 		7E9CE7F41500B8F100487BEF /* mgcurv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgcurv.cpp; path = ../../core/src/geom/mgcurv.cpp; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 		C9D6323F1450CA2400A3CC75 /* graph */ = {
 			isa = PBXGroup;
 			children = (
+				7E9777B1147161BF00EA5AF7 /* gidraw.h */,
 				7E9CE82A1500BA2100487BEF /* gidef.h */,
 				7E9CE8281500BA2100487BEF /* gicolor.h */,
 				7E9CE8291500BA2100487BEF /* gicontxt.h */,
@@ -379,6 +382,7 @@
 				7E9CE8301500BA2100487BEF /* gicontxt.h in Headers */,
 				7E9CE8311500BA2100487BEF /* gidef.h in Headers */,
 				7E9CE8321500BA2100487BEF /* gigraph.h in Headers */,
+				7E9777B2147161BF00EA5AF7 /* gidraw.h in Headers */,
 				7E9CE8331500BA2100487BEF /* gipath.h in Headers */,
 				7E9CE8341500BA2100487BEF /* gixform.h in Headers */,
 				C9D6324A1450CB2400A3CC75 /* _mgshape.h in Headers */,

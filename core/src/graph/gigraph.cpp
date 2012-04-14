@@ -14,18 +14,12 @@ GiGraphics::GiGraphics(GiTransform* xform)
     m_impl = new GiGraphicsImpl(this, xform);
 }
 
-GiGraphics::GiGraphics(const GiGraphics& src)
-{
-    m_impl = new GiGraphicsImpl(this, src.m_impl->xform);
-    operator=(src);
-}
-
 GiGraphics::~GiGraphics()
 {
     delete m_impl;
 }
 
-GiGraphics& GiGraphics::operator=(const GiGraphics& src)
+void GiGraphics::copy(const GiGraphics& src)
 {
     if (this != &src)
     {
@@ -33,7 +27,6 @@ GiGraphics& GiGraphics::operator=(const GiGraphics& src)
         m_impl->antiAlias = src.m_impl->antiAlias;
         m_impl->colorMode = src.m_impl->colorMode;
     }
-    return *this;
 }
 
 const GiTransform& GiGraphics::xf() const
@@ -41,7 +34,7 @@ const GiTransform& GiGraphics::xf() const
     return *m_impl->xform;
 }
 
-void GiGraphics::beginPaint(const RECT* clipBox)
+void GiGraphics::_beginPaint(const RECT* clipBox)
 {
     if (m_impl->lastZoomTimes != xf().getZoomTimes())
     {
@@ -64,7 +57,7 @@ void GiGraphics::beginPaint(const RECT* clipBox)
     }
 }
 
-void GiGraphics::endPaint()
+void GiGraphics::_endPaint()
 {
     giInterlockedDecrement(&m_impl->drawRefcnt);
 }
@@ -74,9 +67,19 @@ bool GiGraphics::isDrawing() const
     return m_impl->drawRefcnt > 0;
 }
 
+bool GiGraphics::isPrint() const
+{
+    return m_impl->isPrint;
+}
+
 Box2d GiGraphics::getClipModel() const
 {
     return m_impl->rectDrawM;
+}
+
+Box2d GiGraphics::getClipWorld() const
+{
+    return m_impl->rectDrawW;
 }
 
 void GiGraphics::getClipBox(RECT* prc) const
@@ -115,6 +118,7 @@ bool GiGraphics::setClipBox(const RECT* prc)
             m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
             m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
             m_impl->rectDrawW = m_impl->rectDrawM * xf().modelToWorld();
+            _clipBoxChanged(rc);
         }
         ret = true;
     }
@@ -143,6 +147,7 @@ bool GiGraphics::setClipWorld(const Box2d& rectWorld)
                 m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
                 m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
                 m_impl->rectDrawW = m_impl->rectDrawM * xf().modelToWorld();
+                _clipBoxChanged(rc);
             }
 
             ret = true;
@@ -160,6 +165,7 @@ bool GiGraphics::isAntiAliasMode() const
 void GiGraphics::setAntiAliasMode(bool antiAlias)
 {
     m_impl->antiAlias = antiAlias;
+    _antiAliasModeChanged(antiAlias);
 }
 
 int GiGraphics::getColorMode() const

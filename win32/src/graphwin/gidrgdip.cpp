@@ -201,25 +201,9 @@ GiGraphGdip::GiGraphGdip(GiTransform* xform) : GiGraphWin(xform)
     m_draw = new DrawImpl(this);
 }
 
-GiGraphGdip::GiGraphGdip(const GiGraphGdip& src) : GiGraphWin(src)
-{
-    m_draw = new DrawImpl(this);
-    operator=(src);
-}
-
 GiGraphGdip::~GiGraphGdip()
 {
     delete m_draw;
-}
-
-GiGraphGdip& GiGraphGdip::operator=(const GiGraphGdip& src)
-{
-    GiGraphWin::operator=(src);
-    if (this != &src)
-    {
-    }
-
-    return *this;
 }
 
 bool GiGraphGdip::isBufferedDrawing() const
@@ -250,10 +234,8 @@ void* GiGraphGdip::GetGraphics()
     return m_draw->getDrawGs();
 }
 
-void GiGraphGdip::setAntiAliasMode(bool antiAlias)
+void GiGraphGdip::_antiAliasModeChanged(bool antiAlias)
 {
-    GiGraphWin::setAntiAliasMode(antiAlias);
-
     if (m_draw->getDrawGs() != NULL)
     {
         if (antiAlias)
@@ -337,7 +319,7 @@ bool GiGraphGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     if (!ret)
         return false;
 
-    buffered = buffered && !m_impl->isPrint;
+    buffered = buffered && !isPrint();
     COLORREF cr = ::GetBkColor(hdc);
     m_draw->m_bkColor.set(GetRValue(cr), GetGValue(cr), GetBValue(cr));
 
@@ -366,7 +348,7 @@ bool GiGraphGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
 
 void GiGraphGdip::clearWnd()
 {
-    if (!m_impl->isPrint && isDrawing())
+    if (!isPrint() && isDrawing())
     {
         G::Color color(m_draw->m_bkColor.r, m_draw->m_bkColor.g, m_draw->m_bkColor.b);
         m_draw->getDrawGs()->Clear(color);
@@ -401,7 +383,7 @@ bool GiGraphGdip::drawCachedBitmap(int x, int y, bool secondBmp)
     return ret;
 }
 
-bool GiGraphGdip::drawCachedBitmap2(const GiGraphics* p, bool secondBmp)
+bool GiGraphGdip::drawCachedBitmap2(const GiGraphics* p, int x, int y, bool secondBmp)
 {
     bool ret = false;
 
@@ -413,7 +395,7 @@ bool GiGraphGdip::drawCachedBitmap2(const GiGraphics* p, bool secondBmp)
         G::CachedBitmap* pBmp = gs->CachedBmp(secondBmp);
         if (pBmp != NULL)
         {
-            ret = (G::Ok == m_draw->getDrawGs()->DrawCachedBitmap(pBmp, 0, 0));
+            ret = (G::Ok == m_draw->getDrawGs()->DrawCachedBitmap(pBmp, x, y));
         }
     }
 
@@ -486,34 +468,10 @@ void GiGraphGdip::endPaint(bool draw)
     }
 }
 
-bool GiGraphGdip::setClipBox(const RECT* prc)
+void GiGraphGdip::_clipBoxChanged(const RECT& clipBox)
 {
-    bool ret = GiGraphWin::setClipBox(prc);
-    if (ret)
-    {
-        m_draw->getDrawGs()->SetClip(
-            G::Rect(m_impl->clipBox.left, 
-            m_impl->clipBox.top, 
-            m_impl->clipBox.right - m_impl->clipBox.left, 
-            m_impl->clipBox.bottom - m_impl->clipBox.top));
-    }
-
-    return ret;
-}
-
-bool GiGraphGdip::setClipWorld(const Box2d& rectWorld)
-{
-    bool ret = GiGraphWin::setClipWorld(rectWorld);
-    if (ret)
-    {
-        m_draw->getDrawGs()->SetClip(
-            G::Rect(m_impl->clipBox.left, 
-            m_impl->clipBox.top, 
-            m_impl->clipBox.right - m_impl->clipBox.left, 
-            m_impl->clipBox.bottom - m_impl->clipBox.top));
-    }
-
-    return ret;
+    m_draw->getDrawGs()->SetClip(G::Rect(clipBox.left, clipBox.top, 
+        clipBox.right - clipBox.left, clipBox.bottom - clipBox.top));
 }
 
 GiColor GiGraphGdip::getBkColor() const
@@ -962,7 +920,7 @@ bool GiGraphGdip::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
 
     if (m_draw->getDrawGs() != NULL
         && hmWidth > 0 && hmHeight > 0 && hbitmap != NULL
-        && m_impl->rectDrawW.isIntersect(Box2d(rectW, true)))
+        && getClipWorld().isIntersect(Box2d(rectW, true)))
     {
         G::Bitmap bmp (hbitmap, NULL);
         ret = m_draw->drawImage(m_impl, &bmp, 
@@ -979,7 +937,7 @@ bool GiGraphGdip::drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp,
 
     if (m_draw->getDrawGs() != NULL
         && hmWidth > 0 && hmHeight > 0 && pBmp != NULL
-        && m_impl->rectDrawW.isIntersect(Box2d(rectW, true)))
+        && getClipWorld().isIntersect(Box2d(rectW, true)))
     {
         ret = m_draw->drawImage(m_impl, (G::Bitmap*)pBmp, 
             hmWidth, hmHeight, rectW, fast);

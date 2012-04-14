@@ -129,23 +129,10 @@ GiGraphIos::GiGraphIos(GiTransform* xform)
     xform->setResolution(GiGraphIos::getScreenDpi());
 }
 
-GiGraphIos::GiGraphIos(const GiGraphIos& src)
-    : GiGraphics(src)
-{
-    m_draw = new GiGraphIosImpl(this);
-    operator=(src);
-}
-
 GiGraphIos::~GiGraphIos()
 {
     clearCachedBitmap();
     delete m_draw;
-}
-
-GiGraphIos& GiGraphIos::operator=(const GiGraphIos& src)
-{
-    GiGraphics::operator=(src);
-    return *this;
 }
 
 bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
@@ -155,7 +142,7 @@ bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
 
     CGRect rc = CGContextGetClipBoundingBox(context);
     RECT clipBox = { rc.origin.x, rc.origin.y, rc.size.width, rc.size.height };
-    GiGraphics::beginPaint(&clipBox);
+    GiGraphics::_beginPaint(&clipBox);
 
     m_draw->_context = context;
     m_draw->_fast = fast;
@@ -188,7 +175,7 @@ void GiGraphIos::endPaint(bool draw)
             m_draw->_buffctx = NULL;
         }
         m_draw->_context = NULL;
-        GiGraphics::endPaint();
+        GiGraphics::_endPaint();
     }
 }
 
@@ -220,7 +207,7 @@ bool GiGraphIos::drawCachedBitmap(int x, int y, bool secondBmp)
     return ret;
 }
 
-bool GiGraphIos::drawCachedBitmap2(const GiGraphics* p, bool secondBmp)
+bool GiGraphIos::drawCachedBitmap2(const GiGraphics* p, int x, int y, bool secondBmp)
 {
     bool ret = false;
     
@@ -230,7 +217,7 @@ bool GiGraphIos::drawCachedBitmap2(const GiGraphics* p, bool secondBmp)
         
         if (m_draw->_context && img) {
             CGContextDrawImage(m_draw->getContext(), 
-                               CGRectMake(0, 0, CGImageGetWidth(img), CGImageGetHeight(img)), 
+                               CGRectMake(x, y, CGImageGetWidth(img), CGImageGetHeight(img)), 
                                img);
             ret = true;
         }
@@ -279,38 +266,15 @@ int GiGraphIos::getScreenDpi() const
     return GiGraphIosImpl::_dpi;
 }
 
-bool GiGraphIos::setClipBox(const RECT* prc)
+void GiGraphIos::_clipBoxChanged(const RECT& clipBox)
 {
-    bool ret = GiGraphics::setClipBox(prc);
-
-    if (ret && m_draw->_context)
+    if (m_draw->_context)
     {
-        RECT clipBox;
-        getClipBox(&clipBox);
-        
         CGRect rect = CGRectMake(clipBox.left, clipBox.top, 
-                                 clipBox.right - clipBox.left, clipBox.bottom - clipBox.top);
+                                 clipBox.right - clipBox.left, 
+                                 clipBox.bottom - clipBox.top);
         CGContextClipToRect(m_draw->getContext(), rect);
     }
-
-    return ret;
-}
-
-bool GiGraphIos::setClipWorld(const Box2d& rectWorld)
-{
-    bool ret = GiGraphics::setClipWorld(rectWorld);
-
-    if (ret && m_draw->_context)
-    {
-        RECT clipBox;
-        getClipBox(&clipBox);
-        
-        CGRect rect = CGRectMake(clipBox.left, clipBox.top, 
-                                 clipBox.right - clipBox.left, clipBox.bottom - clipBox.top);
-        CGContextClipToRect(m_draw->getContext(), rect);
-    }
-
-    return ret;
 }
 
 GiColor GiGraphIos::getBkColor() const
@@ -330,13 +294,12 @@ GiColor GiGraphIos::getNearestColor(const GiColor& color) const
     return color;
 }
 
-void GiGraphIos::setAntiAliasMode(bool antiAlias)
+void GiGraphIos::_antiAliasModeChanged(bool antiAlias)
 {
     if (m_draw->_context) {
         CGContextSetAllowsAntialiasing(m_draw->getContext(), !m_draw->_fast && antiAlias);
         CGContextSetShouldAntialias(m_draw->getContext(), !m_draw->_fast && antiAlias);
     }
-    GiGraphics::setAntiAliasMode(antiAlias);
 }
 
 const GiContext* GiGraphIos::getCurrentContext() const

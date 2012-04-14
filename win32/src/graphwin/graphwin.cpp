@@ -6,19 +6,13 @@ GiGraphWin::GiGraphWin(GiTransform* xform)
 {
 }
 
-GiGraphWin::GiGraphWin(const GiGraphWin& src)
-    : GiGraphics(src), m_attribDC(src.m_attribDC)
-{
-}
-
-GiGraphWin& GiGraphWin::operator=(const GiGraphWin& src)
+void GiGraphWin::copy(const GiGraphWin& src)
 {
     if (this != &src)
     {
-        GiGraphics::operator=(src);
+        GiGraphics::copy(src);
         m_attribDC = src.m_attribDC;
     }
-    return *this;
 }
 
 bool giPrintSetup(GiTransform& xf, HDC hdc, const Box2d& rectShow, bool bWorldRect,
@@ -85,16 +79,19 @@ bool giPrintSetup(GiTransform& xf, HDC hdc, const Box2d& rectShow, bool bWorldRe
 
 int GiGraphWin::getScreenDpi() const
 {
-    if (0 == m_impl->screenDPI())
+    static long s_dpi = 0;
+
+    if (0 == s_dpi)
     {
         HDC hdc = ::GetDC(NULL);
         if (hdc != NULL)
         {
-            InterlockedExchange(&m_impl->screenDPI(), GetDeviceCaps(hdc, LOGPIXELSY));
+            InterlockedExchange(&s_dpi, GetDeviceCaps(hdc, LOGPIXELSY));
             ::ReleaseDC(NULL, hdc);
         }
     }
-    return m_impl->screenDPI();
+
+    return s_dpi;
 }
 
 bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
@@ -125,7 +122,7 @@ bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
 
     RECT clipBox;
 
-    if (m_impl->isPrint
+    if (isPrint()
         || (buffered && !hasCachedBitmap())
         || ERROR == ::GetClipBox(hdc, &clipBox)
         || ::IsRectEmpty(&clipBox))
@@ -133,7 +130,7 @@ bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
         ::SetRect(&clipBox, 0, 0, xf().getWidth(), xf().getHeight());
     }
 
-    GiGraphics::beginPaint(&clipBox);
+    GiGraphics::_beginPaint(&clipBox);
 
     return true;
 }
@@ -143,7 +140,7 @@ void GiGraphWin::endPaint(bool /*draw*/)
     if (isDrawing())
     {
         m_attribDC = NULL;
-        GiGraphics::endPaint();
+        GiGraphics::_endPaint();
     }
 }
 
