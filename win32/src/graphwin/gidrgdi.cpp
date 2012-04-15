@@ -35,11 +35,11 @@ static bool giIsNT()
 //! DrawImpl类的基本数据
 struct GdiDrawImplBase
 {
-    GiGraphGdi*     m_gs;             //!< 拥有者
+    GiGraphGdi*     m_this;             //!< 拥有者
     HDC             m_hdc;              //!< 显示DC
 
     GdiDrawImplBase(GiGraphGdi* gs)
-        : m_gs(gs), m_hdc(NULL)
+        : m_this(gs), m_hdc(NULL)
     {
     }
 };
@@ -133,8 +133,8 @@ public:
                 m_pen = ::GetStockObject(NULL_PEN);
             else
             {
-                UInt16 width = m_gs->owner()->calcPenWidth(ctx->getLineWidth());
-                GiColor color = m_gs->owner()->calcPenColor(ctx->getLineColor());
+                UInt16 width = m_this->owner()->calcPenWidth(ctx->getLineWidth());
+                GiColor color = m_this->owner()->calcPenColor(ctx->getLineColor());
                 COLORREF cr = RGB(color.r, color.g, color.b);
                 int lineStyle = ctx->getLineStyle();
 
@@ -174,7 +174,7 @@ public:
                 m_brush = ::GetStockObject(NULL_BRUSH);
             else
             {
-                GiColor color = m_gs->owner()->calcPenColor(ctx->getFillColor());
+                GiColor color = m_this->owner()->calcPenColor(ctx->getFillColor());
                 m_brush = ::CreateSolidBrush(RGB(color.r, color.g, color.b));
             }
         }
@@ -307,8 +307,8 @@ bool GdiCachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) 
         {
             HGDIOBJ oldBmp = ::SelectObject(memDC, m_cachedBmp);
             ret = ::BitBlt(destDC, x, y, 
-                pdraw->m_gs->xf().getWidth(), 
-                pdraw->m_gs->xf().getHeight(),
+                pdraw->m_this->xf().getWidth(), 
+                pdraw->m_this->xf().getHeight(),
                 memDC, 0, 0, SRCCOPY) != FALSE;
             ::SelectObject(memDC, oldBmp);
         }
@@ -320,8 +320,8 @@ bool GdiCachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) 
 bool GdiCachedBmp::saveCachedBitmap(const GdiDrawImplBase* pdraw, HDC hSrcDC)
 {
     bool ret = false;
-    int width = pdraw->m_gs->xf().getWidth();
-    int height = pdraw->m_gs->xf().getHeight();
+    int width = pdraw->m_this->xf().getWidth();
+    int height = pdraw->m_this->xf().getHeight();
 
     clear();
 

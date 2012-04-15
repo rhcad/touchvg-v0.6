@@ -11,7 +11,6 @@ class GiGraphicsImpl
 public:
     enum { CLIP_INFLATE = 10 };
 
-    GiGraphics*     pThis;          //!< 图形系统
     GiTransform*    xform;          //!< 坐标系管理对象
     GiDrawAdapter*  draw;           //!< 显示适配器
 
@@ -32,7 +31,7 @@ public:
     Box2d       rectDrawMaxM;       //!< 最大剪裁矩形，模型坐标
     Box2d       rectDrawMaxW;       //!< 最大剪裁矩形，世界坐标
 
-    GiGraphicsImpl(GiGraphics* gs, GiTransform* x) : pThis(gs), xform(x), draw(NULL)
+    GiGraphicsImpl(GiTransform* x) : xform(x), draw(NULL)
     {
         drawRefcnt = 0;
         drawColors = 0;

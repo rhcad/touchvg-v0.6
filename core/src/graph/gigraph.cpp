@@ -15,7 +15,7 @@
 
 GiGraphics::GiGraphics(GiTransform* xform)
 {
-    m_impl = new GiGraphicsImpl(this, xform);
+    m_impl = new GiGraphicsImpl(xform);
 }
 
 GiGraphics::~GiGraphics()

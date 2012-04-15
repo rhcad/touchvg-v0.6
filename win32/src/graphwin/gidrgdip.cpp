@@ -17,8 +17,8 @@
 //! DrawImpl类的基本数据
 struct GdipDrawImplBase
 {
-    GiGraphics*         m_owner;            //!< 拥有者
-    G::Graphics*        m_outgs;            //!< 绘图输出对象
+    GiGraphGdip*        m_this;             //!< 拥有者
+    G::Graphics*        m_gs;               //!< 绘图输出对象
     G::Graphics*        m_memGs;            //!< 缓冲绘图用的输出对象
 
     GiContext           m_context;          //!< 当前绘图参数
@@ -27,14 +27,19 @@ struct GdipDrawImplBase
     bool                m_penNull;          //!< 当前是否是空画笔
     bool                m_brushNull;        //!< 当前是否是空画刷
 
-    GdipDrawImplBase(GiGraphics* owner)
-        : m_owner(owner), m_outgs(NULL), m_memGs(NULL)
+    GdipDrawImplBase(GiGraphGdip* owner)
+        : m_this(owner), m_gs(NULL), m_memGs(NULL)
     {
+    }
+
+    const GiGraphics* owner() const
+    {
+        return m_this->owner();
     }
 
     G::Graphics* getDrawGs() const
     {
-        return m_memGs != NULL ? m_memGs : m_outgs;
+        return m_memGs != NULL ? m_memGs : m_gs;
     }
 
     G::Pen* createPen(const GiContext* ctx, bool* pNotSmoothing = NULL)
@@ -64,8 +69,8 @@ struct GdipDrawImplBase
                     m_pen = NULL;
                 }
 
-                UInt16 width = m_owner->calcPenWidth(ctx->getLineWidth());
-                GiColor color = m_owner->calcPenColor(ctx->getLineColor());
+                UInt16 width = owner()->calcPenWidth(ctx->getLineWidth());
+                GiColor color = owner()->calcPenColor(ctx->getLineColor());
                 m_pen = new G::Pen(
                     G::Color(ctx->getLineAlpha(), 
                     color.r, color.g, color.b), 
@@ -111,7 +116,7 @@ struct GdipDrawImplBase
                     m_brush = NULL;
                 }
 
-                GiColor color = m_owner->calcPenColor(ctx->getFillColor());
+                GiColor color = owner()->calcPenColor(ctx->getFillColor());
                 m_brush = new G::SolidBrush(
                     G::Color(ctx->getFillAlpha(), 
                     color.r, color.g, color.b));
@@ -138,7 +143,7 @@ private:
     static ULONG_PTR    c_gdipToken;        //!< GDI+ token
 
 public:
-    GiGraphGdipImpl(GiGraphics* owner) : GdipDrawImplBase(owner)
+    GiGraphGdipImpl(GiGraphGdip* owner) : GdipDrawImplBase(owner)
     {
         m_path = NULL;
         m_pen = NULL;
@@ -197,7 +202,7 @@ ULONG_PTR   GiGraphGdipImpl::c_gdipToken = 0;
 
 GiGraphGdip::GiGraphGdip(GiGraphics* gs) : GiGraphWin(gs)
 {
-    m_draw = new GiGraphGdipImpl(m_owner);
+    m_draw = new GiGraphGdipImpl(this);
 }
 
 GiGraphGdip::~GiGraphGdip()
@@ -207,7 +212,7 @@ GiGraphGdip::~GiGraphGdip()
 
 bool GiGraphGdip::isBufferedDrawing() const
 {
-    return m_draw->m_outgs != m_draw->getDrawGs();
+    return m_draw->m_gs != m_draw->getDrawGs();
 }
 
 HDC GiGraphGdip::acquireDC()
@@ -313,12 +318,12 @@ private:
 
 bool GiGraphGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
 {
-    bool ret = (NULL == m_draw->m_outgs)
+    bool ret = (NULL == m_draw->m_gs)
         && GiGraphWin::beginPaint(hdc, attribDC, buffered, overlay);
     if (!ret)
         return false;
 
-    buffered = buffered && !m_owner->isPrint();
+    buffered = buffered && !owner()->isPrint();
     COLORREF cr = ::GetBkColor(hdc);
     m_draw->m_bkColor.set(GetRValue(cr), GetGValue(cr), GetBValue(cr));
 
@@ -326,8 +331,8 @@ bool GiGraphGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     if (buffered && overlay)
         oldDrawing.save(m_owner, hdc);
 
-    m_draw->m_outgs = new G::Graphics(hdc);
-    if (m_draw->m_outgs == NULL)
+    m_draw->m_gs = new G::Graphics(hdc);
+    if (m_draw->m_gs == NULL)
     {
         GiGraphWin::endPaint(false);
         return false;
@@ -340,14 +345,14 @@ bool GiGraphGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
         oldDrawing.draw(m_draw->m_memGs);
     }
 
-    m_owner->setAntiAliasMode(m_owner->isAntiAliasMode());
+    _antiAliasModeChanged(owner()->isAntiAliasMode());
 
     return ret;
 }
 
 void GiGraphGdip::clearWnd()
 {
-    if (!m_owner->isPrint() && m_owner->isDrawing())
+    if (!owner()->isPrint() && owner()->isDrawing())
     {
         G::Color color(m_draw->m_bkColor.r, m_draw->m_bkColor.g, m_draw->m_bkColor.b);
         m_draw->getDrawGs()->Clear(color);
@@ -426,12 +431,12 @@ bool GiGraphGdip::hasCachedBitmap(bool secondBmp) const
 
 void GiGraphGdip::endPaint(bool draw)
 {
-    if (m_owner->isDrawing())
+    if (owner()->isDrawing())
     {
         if (m_draw->m_memGs != NULL && draw)
         {
-            m_draw->m_outgs->SetInterpolationMode(G::InterpolationModeDefault);
-            m_draw->m_outgs->DrawImage(m_draw->m_memBitmap, 0, 0);
+            m_draw->m_gs->SetInterpolationMode(G::InterpolationModeDefault);
+            m_draw->m_gs->DrawImage(m_draw->m_memBitmap, 0, 0);
         }
 
         if (m_draw->m_pen != NULL)
@@ -460,10 +465,10 @@ void GiGraphGdip::endPaint(bool draw)
             delete m_draw->m_path;
             m_draw->m_path = NULL;
         }
-        if (m_draw->m_outgs != NULL)
+        if (m_draw->m_gs != NULL)
         {
-            delete m_draw->m_outgs;
-            m_draw->m_outgs = NULL;
+            delete m_draw->m_gs;
+            m_draw->m_gs = NULL;
         }
 
         GiGraphWin::endPaint(draw);
@@ -876,15 +881,15 @@ bool GiGraphGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp,
     RECT rc, rcDraw, rcFrom;
 
     // rc: 整个图像对应的显示坐标区域
-    (rectW * m_owner->xf().worldToDisplay()).get(rc.left, rc.top, rc.right, rc.bottom);
+    (rectW * owner()->xf().worldToDisplay()).get(rc.left, rc.top, rc.right, rc.bottom);
 
     // rcDraw: 图像经剪裁后的可显示部分
     if (!IntersectRect(&rcDraw, &rc, &pImpl->clipBox))
         return false;
 
     long width, height;       // pixel units
-    width = MulDiv(hmWidth, m_owner->xf().getDpiX(), 2540);
-    height = MulDiv(hmHeight, m_owner->xf().getDpiY(), 2540);
+    width = MulDiv(hmWidth, owner()->xf().getDpiX(), 2540);
+    height = MulDiv(hmHeight, owner()->xf().getDpiY(), 2540);
 
     // rcFrom: rcDraw在原始图像上对应的图像范围
     rcFrom.left = MulDiv(rcDraw.left - rc.left, width, rc.right - rc.left);
@@ -922,7 +927,7 @@ bool GiGraphGdip::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
 
     if (m_draw->getDrawGs() != NULL
         && hmWidth > 0 && hmHeight > 0 && hbitmap != NULL
-        && m_owner->getClipWorld().isIntersect(Box2d(rectW, true)))
+        && owner()->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
         G::Bitmap bmp (hbitmap, NULL);
         ret = m_draw->drawImage(m_impl, &bmp, 
@@ -939,7 +944,7 @@ bool GiGraphGdip::drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp,
 
     if (m_draw->getDrawGs() != NULL
         && hmWidth > 0 && hmHeight > 0 && pBmp != NULL
-        && m_owner->getClipWorld().isIntersect(Box2d(rectW, true)))
+        && owner()->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
         ret = m_draw->drawImage(m_impl, (G::Bitmap*)pBmp, 
             hmWidth, hmHeight, rectW, fast);

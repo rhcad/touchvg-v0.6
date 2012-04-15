@@ -17,7 +17,7 @@ static const LPatten lpattens[] = {
 class GiGraphIosImpl
 {
 public:
-    GiGraphics*     _gs;
+    GiGraphIos*     _gs;
     CGContextRef    _context;
     CGContextRef    _buffctx;
     GiColor         _bkcolor;
@@ -26,11 +26,16 @@ public:
     CGImageRef      _caches[2];
     static int      _dpi;
 
-    GiGraphIosImpl(GiGraphics* p) : _gs(p), _context(NULL), _buffctx(NULL)
+    GiGraphIosImpl(GiGraphIos* p) : _gs(p), _context(NULL), _buffctx(NULL)
         , _bkcolor(GiColor::White()), _fast(false)
     {
         _caches[0] = NULL;
         _caches[1] = NULL;
+    }
+
+    const GiGraphics* owner() const
+    {
+        return _gs->owner();
     }
     
     CGContextRef getContext() const
@@ -61,10 +66,10 @@ public:
         if (!ctx) ctx = &_gictx;
         if (!ctx->isNullLine())
         {
-            GiColor color = _gs->calcPenColor(ctx->getLineColor());
+            GiColor color = owner()->calcPenColor(ctx->getLineColor());
             CGContextSetRGBStrokeColor(getContext(), toFloat(color.r), toFloat(color.g),
                                        toFloat(color.b), toFloat(color.a));
-            int w = _gs->calcPenWidth(ctx->getLineWidth());
+            int w = owner()->calcPenWidth(ctx->getLineWidth());
             CGContextSetLineWidth(getContext(), _fast && w > 1 ? w - 1 : w);
             
             int style = ctx->getLineStyle();
@@ -93,7 +98,7 @@ public:
         if (!ctx) ctx = &_gictx;
         if (ctx->hasFillColor())
         {
-            GiColor color = _gs->calcPenColor(ctx->getFillColor());
+            GiColor color = owner()->calcPenColor(ctx->getFillColor());
             CGContextSetRGBFillColor(getContext(), toFloat(color.r), toFloat(color.g),
                                      toFloat(color.b), toFloat(color.a));
         }
@@ -124,14 +129,14 @@ GiColor giFromCGColor(CGColorRef color)
 
 const GiTransform& GiGraphIos::xf() const
 {
-    return m_draw->_gs->xf();
+    return m_owner->xf();
 }
 
 GiGraphIos::GiGraphIos(GiGraphics* gs)
 {
     gs->_setDrawAdapter(this);
     gs->_xf().setResolution(GiGraphIos::getScreenDpi());
-    m_draw = new GiGraphIosImpl(gs);
+    m_draw = new GiGraphIosImpl(this);
 }
 
 GiGraphIos::~GiGraphIos()
@@ -147,7 +152,7 @@ bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
 
     CGRect rc = CGContextGetClipBoundingBox(context);
     RECT clipBox = { rc.origin.x, rc.origin.y, rc.size.width, rc.size.height };
-    m_draw->_gs->_beginPaint(&clipBox);
+    m_owner->_beginPaint(&clipBox);
 
     m_draw->_context = context;
     m_draw->_fast = fast;
@@ -156,8 +161,8 @@ bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
         context = m_draw->getContext();
     }
 
-    CGContextSetAllowsAntialiasing(context, !fast && m_draw->_gs->isAntiAliasMode());
-    CGContextSetShouldAntialias(context, !fast && m_draw->_gs->isAntiAliasMode());
+    CGContextSetAllowsAntialiasing(context, !fast && m_owner->isAntiAliasMode());
+    CGContextSetShouldAntialias(context, !fast && m_owner->isAntiAliasMode());
     CGContextSetFlatness(context, fast ? 20 : 1);
 
     CGContextSetLineCap(context, kCGLineCapRound);
@@ -168,7 +173,7 @@ bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
 
 void GiGraphIos::endPaint(bool draw)
 {
-    if (m_draw->_gs->isDrawing())
+    if (m_owner->isDrawing())
     {
         if (draw && m_draw->_buffctx) {
             CGImageRef image = CGBitmapContextCreateImage(m_draw->_buffctx);
@@ -180,7 +185,7 @@ void GiGraphIos::endPaint(bool draw)
             m_draw->_buffctx = NULL;
         }
         m_draw->_context = NULL;
-        m_draw->_gs->_endPaint();
+        m_owner->_endPaint();
     }
 }
 
