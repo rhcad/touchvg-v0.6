@@ -35,11 +35,11 @@ static bool giIsNT()
 //! DrawImpl类的基本数据
 struct GdiDrawImplBase
 {
-    GiGraphGdi*     m_this;             //!< 拥有者
+    GiGraphGdi*     m_gs;             //!< 拥有者
     HDC             m_hdc;              //!< 显示DC
 
-    GdiDrawImplBase(GiGraphGdi* pThis)
-        : m_this(pThis), m_hdc(NULL)
+    GdiDrawImplBase(GiGraphGdi* gs)
+        : m_gs(gs), m_hdc(NULL)
     {
     }
 };
@@ -92,7 +92,7 @@ public:
     HGDIOBJ         m_buffOldBmp;       //!< 缓冲DC中原来的位图
     CachedBmp       m_cachedBmp[2];     //!< 后备缓冲位图
 
-    DrawImpl(GiGraphGdi* pThis) : GdiDrawImplBase(pThis)
+    DrawImpl(GiGraphGdi* gs) : GdiDrawImplBase(gs)
     {
         m_pen = NULL;
         m_brush = NULL;
@@ -133,8 +133,8 @@ public:
                 m_pen = ::GetStockObject(NULL_PEN);
             else
             {
-                UInt16 width = m_this->calcPenWidth(ctx->getLineWidth());
-                GiColor color = m_this->calcPenColor(ctx->getLineColor());
+                UInt16 width = m_gs->owner()->calcPenWidth(ctx->getLineWidth());
+                GiColor color = m_gs->owner()->calcPenColor(ctx->getLineColor());
                 COLORREF cr = RGB(color.r, color.g, color.b);
                 int lineStyle = ctx->getLineStyle();
 
@@ -174,7 +174,7 @@ public:
                 m_brush = ::GetStockObject(NULL_BRUSH);
             else
             {
-                GiColor color = m_this->calcPenColor(ctx->getFillColor());
+                GiColor color = m_gs->owner()->calcPenColor(ctx->getFillColor());
                 m_brush = ::CreateSolidBrush(RGB(color.r, color.g, color.b));
             }
         }
@@ -183,7 +183,7 @@ public:
     }
 };
 
-GiGraphGdi::GiGraphGdi(GiTransform* xform) : GiGraphWin(xform)
+GiGraphGdi::GiGraphGdi(GiGraphics* gs) : GiGraphWin(gs)
 {
     m_draw = new DrawImpl(this);
 }
@@ -214,7 +214,7 @@ bool GiGraphGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     if (!ret)
         return false;
 
-    buffered = buffered && !isPrint();
+    buffered = buffered && !m_owner->isPrint();
     m_draw->m_hdc = hdc;
 
     CachedBmp oldDrawing;
@@ -263,7 +263,7 @@ bool GiGraphGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
 
 void GiGraphGdi::clearWnd()
 {
-    if (!isPrint() && isDrawing())
+    if (!m_owner->isPrint() && m_owner->isDrawing())
     {
         ::ExtTextOut(m_draw->getDrawDC(), 0, 0, ETO_OPAQUE, 
             &m_impl->clipBox0, NULL, 0, NULL);
@@ -284,13 +284,16 @@ bool GiGraphGdi::drawCachedBitmap(int x, int y, bool secondBmp)
     return CachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC(), x, y);
 }
 
-bool GiGraphGdi::drawCachedBitmap2(const GiGraphics* p, int x, int y, bool secondBmp)
+bool GiGraphGdi::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool secondBmp)
 {
-    const GiGraphGdi* gs = static_cast<const GiGraphGdi*>(p);
-    return p != NULL
-        && p->xf().getWidth() == xf().getWidth()
-        && p->xf().getHeight() == xf().getHeight()
-        && gs->CachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC(), x, y);
+    if (p && p->getGraphType() == getGraphType())
+    {
+        const GiGraphGdi* gs = static_cast<const GiGraphGdi*>(p);
+        return gs->xf().getWidth() == xf().getWidth()
+            && gs->xf().getHeight() == xf().getHeight()
+            && gs->CachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC(), x, y);
+    }
+    return false;
 }
 
 bool CachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) const
@@ -304,8 +307,8 @@ bool CachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) con
         {
             HGDIOBJ oldBmp = ::SelectObject(memDC, m_cachedBmp);
             ret = ::BitBlt(destDC, x, y, 
-                pdraw->m_this->xf().getWidth(), 
-                pdraw->m_this->xf().getHeight(),
+                pdraw->m_gs->xf().getWidth(), 
+                pdraw->m_gs->xf().getHeight(),
                 memDC, 0, 0, SRCCOPY) != FALSE;
             ::SelectObject(memDC, oldBmp);
         }
@@ -317,8 +320,8 @@ bool CachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) con
 bool CachedBmp::saveCachedBitmap(const GdiDrawImplBase* pdraw, HDC hSrcDC)
 {
     bool ret = false;
-    int width = pdraw->m_this->xf().getWidth();
-    int height = pdraw->m_this->xf().getHeight();
+    int width = pdraw->m_gs->xf().getWidth();
+    int height = pdraw->m_gs->xf().getHeight();
 
     clear();
 
@@ -356,7 +359,7 @@ bool GiGraphGdi::hasCachedBitmap(bool secondBmp) const
 
 void GiGraphGdi::endPaint(bool draw)
 {
-    if (isDrawing())
+    if (m_owner->isDrawing())
     {
         if (m_draw->m_buffBmp != NULL && draw)
         {
@@ -635,7 +638,7 @@ bool GiGraphGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
     HDC hdc = m_draw->getDrawDC();
 
     if (hdc != NULL && hmWidth > 0 && hmHeight > 0 && hbitmap != NULL
-        && getClipWorld().isIntersect(Box2d(rectW, true)))
+        && m_owner->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
         RECT rc, rcDraw, rcFrom;
 
@@ -668,7 +671,7 @@ bool GiGraphGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
         KGDIObject bmp (memDC, hbitmap, false);
         KGDIObject brush (hdc, ::GetStockObject(NULL_BRUSH), false);
 
-        int nBltMode = (!fast || isPrint()) ? HALFTONE : COLORONCOLOR;
+        int nBltMode = (!fast || m_owner->isPrint()) ? HALFTONE : COLORONCOLOR;
         int nOldMode = ::SetStretchBltMode(hdc, nBltMode);
         ::SetBrushOrgEx(hdc, rcDraw.left % 8, rcDraw.top % 8, NULL);
         ret = ::StretchBlt(hdc, 

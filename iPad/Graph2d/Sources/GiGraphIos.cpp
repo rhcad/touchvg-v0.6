@@ -17,7 +17,7 @@ static const LPatten lpattens[] = {
 class GiGraphIosImpl
 {
 public:
-    GiGraphIos*     _this;
+    GiGraphics*     _gs;
     CGContextRef    _context;
     CGContextRef    _buffctx;
     GiColor         _bkcolor;
@@ -26,7 +26,7 @@ public:
     CGImageRef      _caches[2];
     static int      _dpi;
 
-    GiGraphIosImpl(GiGraphIos* p) : _this(p), _context(NULL), _buffctx(NULL)
+    GiGraphIosImpl(GiGraphics* p) : _gs(p), _context(NULL), _buffctx(NULL)
         , _bkcolor(GiColor::White()), _fast(false)
     {
         _caches[0] = NULL;
@@ -61,10 +61,10 @@ public:
         if (!ctx) ctx = &_gictx;
         if (!ctx->isNullLine())
         {
-            GiColor color = _this->calcPenColor(ctx->getLineColor());
+            GiColor color = _gs->calcPenColor(ctx->getLineColor());
             CGContextSetRGBStrokeColor(getContext(), toFloat(color.r), toFloat(color.g),
                                        toFloat(color.b), toFloat(color.a));
-            int w = _this->calcPenWidth(ctx->getLineWidth());
+            int w = _gs->calcPenWidth(ctx->getLineWidth());
             CGContextSetLineWidth(getContext(), _fast && w > 1 ? w - 1 : w);
             
             int style = ctx->getLineStyle();
@@ -93,7 +93,7 @@ public:
         if (!ctx) ctx = &_gictx;
         if (ctx->hasFillColor())
         {
-            GiColor color = _this->calcPenColor(ctx->getFillColor());
+            GiColor color = _gs->calcPenColor(ctx->getFillColor());
             CGContextSetRGBFillColor(getContext(), toFloat(color.r), toFloat(color.g),
                                      toFloat(color.b), toFloat(color.a));
         }
@@ -122,11 +122,16 @@ GiColor giFromCGColor(CGColorRef color)
                               (UInt8)mgRound(CGColorGetAlpha(color) * 255)) : GiColor::Invalid();
 }
 
-GiGraphIos::GiGraphIos(GiTransform* xform)
-    : GiGraphics(xform)
+const GiTransform& GiGraphIos::xf() const
 {
-    m_draw = new GiGraphIosImpl(this);
-    xform->setResolution(GiGraphIos::getScreenDpi());
+    return m_draw->_gs->xf();
+}
+
+GiGraphIos::GiGraphIos(GiGraphics* gs)
+{
+    gs->_setDrawAdapter(this);
+    gs->_xf().setResolution(GiGraphIos::getScreenDpi());
+    m_draw = new GiGraphIosImpl(gs);
 }
 
 GiGraphIos::~GiGraphIos()
@@ -137,12 +142,12 @@ GiGraphIos::~GiGraphIos()
 
 bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
 {
-    if (isDrawing() || context == NULL)
+    if (m_draw->_context || context == NULL)
         return false;
 
     CGRect rc = CGContextGetClipBoundingBox(context);
     RECT clipBox = { rc.origin.x, rc.origin.y, rc.size.width, rc.size.height };
-    GiGraphics::_beginPaint(&clipBox);
+    m_draw->_gs->_beginPaint(&clipBox);
 
     m_draw->_context = context;
     m_draw->_fast = fast;
@@ -151,8 +156,8 @@ bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
         context = m_draw->getContext();
     }
 
-    CGContextSetAllowsAntialiasing(context, !fast && isAntiAliasMode());
-    CGContextSetShouldAntialias(context, !fast && isAntiAliasMode());
+    CGContextSetAllowsAntialiasing(context, !fast && m_draw->_gs->isAntiAliasMode());
+    CGContextSetShouldAntialias(context, !fast && m_draw->_gs->isAntiAliasMode());
     CGContextSetFlatness(context, fast ? 20 : 1);
 
     CGContextSetLineCap(context, kCGLineCapRound);
@@ -163,7 +168,7 @@ bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
 
 void GiGraphIos::endPaint(bool draw)
 {
-    if (isDrawing())
+    if (m_draw->_gs->isDrawing())
     {
         if (draw && m_draw->_buffctx) {
             CGImageRef image = CGBitmapContextCreateImage(m_draw->_buffctx);
@@ -175,7 +180,7 @@ void GiGraphIos::endPaint(bool draw)
             m_draw->_buffctx = NULL;
         }
         m_draw->_context = NULL;
-        GiGraphics::_endPaint();
+        m_draw->_gs->_endPaint();
     }
 }
 
@@ -207,7 +212,7 @@ bool GiGraphIos::drawCachedBitmap(int x, int y, bool secondBmp)
     return ret;
 }
 
-bool GiGraphIos::drawCachedBitmap2(const GiGraphics* p, int x, int y, bool secondBmp)
+bool GiGraphIos::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool secondBmp)
 {
     bool ret = false;
     
@@ -307,8 +312,7 @@ const GiContext* GiGraphIos::getCurrentContext() const
     return &m_draw->_gictx;
 }
 
-bool GiGraphIos::rawLine(const GiContext* ctx, 
-                         int x1, int y1, int x2, int y2)
+bool GiGraphIos::rawLine(const GiContext* ctx, int x1, int y1, int x2, int y2)
 {
     bool ret = m_draw->setPen(ctx);
 
@@ -322,8 +326,7 @@ bool GiGraphIos::rawLine(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphIos::rawPolyline(const GiContext* ctx, 
-                             const POINT* lppt, int count)
+bool GiGraphIos::rawPolyline(const GiContext* ctx, const POINT* lppt, int count)
 {
     bool ret = m_draw->setPen(ctx) && count > 1;
 
@@ -339,8 +342,7 @@ bool GiGraphIos::rawPolyline(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphIos::rawPolyBezier(const GiContext* ctx, 
-                               const POINT* lppt, int count)
+bool GiGraphIos::rawPolyBezier(const GiContext* ctx, const POINT* lppt, int count)
 {
     bool ret = m_draw->setPen(ctx) && count > 1;
 
@@ -360,8 +362,7 @@ bool GiGraphIos::rawPolyBezier(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphIos::rawPolygon(const GiContext* ctx, 
-                            const POINT* lppt, int count)
+bool GiGraphIos::rawPolygon(const GiContext* ctx, const POINT* lppt, int count)
 {
     bool usepen = m_draw->setPen(ctx);
     bool usebrush = m_draw->setBrush(ctx);
@@ -390,8 +391,7 @@ bool GiGraphIos::rawPolygon(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphIos::rawRect(const GiContext* ctx, 
-                         int x, int y, int w, int h)
+bool GiGraphIos::rawRect(const GiContext* ctx, int x, int y, int w, int h)
 {
     bool ret = false;
 
@@ -409,8 +409,7 @@ bool GiGraphIos::rawRect(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphIos::rawEllipse(const GiContext* ctx, 
-                            int x, int y, int w, int h)
+bool GiGraphIos::rawEllipse(const GiContext* ctx, int x, int y, int w, int h)
 {
     bool ret = false;
 

@@ -13,7 +13,8 @@ public:
 
     MgShapes*       m_shapes;
     GiTransform     m_xf;               // 坐标系管理对象
-	GiGraphWin*		m_gs;			    // 本窗口的图形系统对象
+    GiGraphics      m_gs;               // 本窗口的图形系统对象
+	GiGraphWin*		m_adapter;	        // 图形系统对象适配器
 
 // Overrides
 	// ClassWizard generated virtual function overrides

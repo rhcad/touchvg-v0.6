@@ -18,7 +18,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         _xform = new GiTransform();
-        _graph = new GiGraphIos(_xform);
+        _graph = new GiGraphics(_xform);
+        _adapter = new GiGraphIos(_graph);
         _xform->setViewScaleRange(1e-5, 50);
         _graph->setMaxPenWidth(4);
         _gview = gview;
@@ -33,6 +34,10 @@
 
 - (void)dealloc
 {
+    if (_adapter) {
+        delete _adapter;
+        _adapter = NULL;
+    }
     if (_graph) {
         delete _graph;
         _graph = NULL;
@@ -139,17 +144,16 @@
     }
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    GiGraphIos* gs = (GiGraphIos*)_graph;
     
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
-    if (gs->beginPaint(context, true, [self isZooming]))
+    if (_adapter->beginPaint(context, true, [self isZooming]))
     {
-        if (!gs->drawCachedBitmap(0, 0)) {
-            [self draw:gs];
-            gs->saveCachedBitmap();
+        if (!_graph->drawCachedBitmap(0, 0)) {
+            [self draw:_graph];
+            _graph->saveCachedBitmap();
         }
-        [self dynDraw:gs];
-        gs->endPaint();
+        [self dynDraw:_graph];
+        _adapter->endPaint();
     }
 }
 

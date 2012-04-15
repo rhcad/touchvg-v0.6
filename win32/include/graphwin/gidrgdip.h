@@ -15,7 +15,7 @@
 class GiGraphGdip : public GiGraphWin
 {
 public:
-    GiGraphGdip(GiTransform* xform);
+    GiGraphGdip(GiGraphics* gs);
     virtual ~GiGraphGdip();
 
 public:
@@ -28,7 +28,7 @@ public:
     virtual void endPaint(bool draw = true);
     virtual void clearWnd();
     virtual bool drawCachedBitmap(int x = 0, int y = 0, bool secondBmp = false);
-    virtual bool drawCachedBitmap2(const GiGraphics* p, int x = 0, int y = 0, bool secondBmp = false);
+    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, int x = 0, int y = 0, bool secondBmp = false);
     virtual void saveCachedBitmap(bool secondBmp = false);
     virtual bool hasCachedBitmap(bool secondBmp = false) const;
     virtual void clearCachedBitmap();
@@ -44,18 +44,12 @@ public:
     virtual void _clipBoxChanged(const RECT& clipBox);
     virtual void _antiAliasModeChanged(bool antiAlias);
 
-    virtual bool rawLine(const GiContext* ctx, 
-        int x1, int y1, int x2, int y2);
-    virtual bool rawPolyline(const GiContext* ctx, 
-        const POINT* lppt, int count);
-    virtual bool rawPolyBezier(const GiContext* ctx, 
-        const POINT* lppt, int count);
-    virtual bool rawPolygon(const GiContext* ctx, 
-        const POINT* lppt, int count);
-    virtual bool rawRect(const GiContext* ctx, 
-        int x, int y, int w, int h);
-    virtual bool rawEllipse(const GiContext* ctx, 
-        int x, int y, int w, int h);
+    virtual bool rawLine(const GiContext* ctx, int x1, int y1, int x2, int y2);
+    virtual bool rawPolyline(const GiContext* ctx, const POINT* lppt, int count);
+    virtual bool rawPolyBezier(const GiContext* ctx, const POINT* lppt, int count);
+    virtual bool rawPolygon(const GiContext* ctx, const POINT* lppt, int count);
+    virtual bool rawRect(const GiContext* ctx, int x, int y, int w, int h);
+    virtual bool rawEllipse(const GiContext* ctx, int x, int y, int w, int h);
     virtual bool rawPolyDraw(const GiContext* ctx, 
         int count, const POINT* lppt, const UInt8* types);
     

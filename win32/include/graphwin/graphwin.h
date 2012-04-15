@@ -17,14 +17,17 @@
 /*! 本类用于在Windows平台显示各种图形，图元显示原语由派生类实现
     \ingroup GRAPH_INTERFACE
 */
-class GiGraphWin : public GiGraphics
+class GiGraphWin : public GiDrawAdapter
 {
 public:
     //! 构造函数
-    GiGraphWin(GiTransform* xform);
+    GiGraphWin(GiGraphics* gs);
 
     //! 复制指定对象到本对象
     void copy(const GiGraphWin& src);
+
+    //! 返回坐标系管理对象
+    const GiTransform& xf() const;
 
 public:
     //! 准备开始绘图
@@ -104,7 +107,7 @@ public:
         const Box2d& rectW, bool fast = false) = 0;
 
 protected:
-    HDC         m_attribDC;          //!< 属性DC，打印预览时为打印机DC
+    HDC         m_attribDC;         //!< 属性DC，打印预览时为打印机DC
 };
 
 //! 打印页面设置

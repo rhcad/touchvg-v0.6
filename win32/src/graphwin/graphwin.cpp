@@ -1,16 +1,21 @@
 #include "graphwin.h"
 #include <_gigraph.h>
 
-GiGraphWin::GiGraphWin(GiTransform* xform)
-    : GiGraphics(xform), m_attribDC(NULL)
+GiGraphWin::GiGraphWin(GiGraphics* gs) : m_attribDC(NULL)
 {
+    gs->_setDrawAdapter(this);
+}
+
+const GiTransform& GiGraphWin::xf() const
+{
+    return m_owner->xf();
 }
 
 void GiGraphWin::copy(const GiGraphWin& src)
 {
     if (this != &src)
     {
-        GiGraphics::copy(src);
+        m_owner->copy(*src.m_owner);
         m_attribDC = src.m_attribDC;
     }
 }
@@ -96,7 +101,7 @@ int GiGraphWin::getScreenDpi() const
 
 bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
 {
-    if (isDrawing() || hdc == NULL)
+    if (m_owner->isDrawing() || hdc == NULL)
         return false;
 
     if (attribDC == hdc)
@@ -122,7 +127,7 @@ bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
 
     RECT clipBox;
 
-    if (isPrint()
+    if (m_owner->isPrint()
         || (buffered && !hasCachedBitmap())
         || ERROR == ::GetClipBox(hdc, &clipBox)
         || ::IsRectEmpty(&clipBox))
@@ -130,17 +135,17 @@ bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
         ::SetRect(&clipBox, 0, 0, xf().getWidth(), xf().getHeight());
     }
 
-    GiGraphics::_beginPaint(&clipBox);
+    m_owner->_beginPaint(&clipBox);
 
     return true;
 }
 
 void GiGraphWin::endPaint(bool /*draw*/)
 {
-    if (isDrawing())
+    if (m_owner->isDrawing())
     {
         m_attribDC = NULL;
-        GiGraphics::_endPaint();
+        m_owner->_endPaint();
     }
 }
 

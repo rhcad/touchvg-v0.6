@@ -29,6 +29,7 @@
         _shapes = NULL; // need to set by the subclass
         _xform = NULL;
         _graph = NULL;
+        _adapter = NULL;
         [self afterCreated];
     }
     return self;
@@ -41,6 +42,7 @@
         _shapes = NULL; // need to set by the subclass
         _xform = NULL;
         _graph = NULL;
+        _adapter = NULL;
         [self afterCreated];
     }
     return self;
@@ -48,6 +50,10 @@
 
 - (void)dealloc
 {
+    if (_adapter) {
+        delete _adapter;
+        _adapter = NULL;
+    }
     if (_graph) {
         delete _graph;
         _graph = NULL;
@@ -66,7 +72,8 @@
     
     if (!_xform) {
 		_xform = new GiTransform();
-        _graph = new GiGraphIos(_xform);
+        _graph = new GiGraphics(_xform);
+        _adapter = new GiGraphIos(_graph);
     }
 
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
@@ -83,28 +90,27 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    GiGraphIos* gs = (GiGraphIos*)_graph;
     
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (gs->beginPaint(context, true, !!_zooming))
+    if (_adapter->beginPaint(context, true, !!_zooming))
     {
         if (_zooming) {
-            [self draw:gs];
+            [self draw:_graph];
         }
         else {
-            if (!gs->drawCachedBitmap(0, 0)) {
-                [self draw:gs];
-                gs->saveCachedBitmap();
+            if (!_graph->drawCachedBitmap(0, 0)) {
+                [self draw:_graph];
+                _graph->saveCachedBitmap();
             }
-            [self dynDraw:gs];
+            [self dynDraw:_graph];
             if ([_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
                 [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
             }
         }
         
-        gs->endPaint();
+        _adapter->endPaint();
     }
 }
 

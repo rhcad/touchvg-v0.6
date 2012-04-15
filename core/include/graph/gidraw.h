@@ -10,6 +10,7 @@
 #include "gicontxt.h"
 
 class GiGraphics;
+class GiGraphicsImpl;
 
 //! 图形显示适配接口类，定义图元显示原语
 /*! 图元显示原语由派生类实现，例如采用GDI/GDI+/SVG/PDF等实现；
@@ -21,6 +22,19 @@ class GiDrawAdapter
 public:
     GiDrawAdapter() {}
     virtual ~GiDrawAdapter() {}
+
+    //! 供GiGraphics调用
+    void _init(GiGraphics* owner, GiGraphicsImpl* impl)
+    {
+        m_owner = owner;
+        m_impl = impl;
+    }
+
+    //! 返回图形系统对象，拥有者
+    const GiGraphics* owner() const
+    {
+        return m_owner;
+    }
 
 public:
     //! 用当前背景色清除背景
@@ -50,7 +64,7 @@ public:
         \return 是否绘制成功
         \see saveCachedBitmap
     */
-    virtual bool drawCachedBitmap2(const GiGraphics* p, int x = 0, int y = 0, bool secondBmp = false) = 0;
+    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, int x = 0, int y = 0, bool secondBmp = false) = 0;
 
     //! 保存显示内容到后备缓冲位图
     /*! 将当前绘图目标(可能是绘图缓冲)的内容保存为一个位图对象，
@@ -119,28 +133,22 @@ public:
 
 
     //! 绘制直线段的原语函数，像素坐标，不剪裁
-    virtual bool rawLine(const GiContext* ctx, 
-        int x1, int y1, int x2, int y2) = 0;
+    virtual bool rawLine(const GiContext* ctx, int x1, int y1, int x2, int y2) = 0;
 
     //! 绘制折线的原语函数，像素坐标，不剪裁
-    virtual bool rawPolyline(const GiContext* ctx, 
-        const POINT* lppt, int count) = 0;
+    virtual bool rawPolyline(const GiContext* ctx, const POINT* lppt, int count) = 0;
 
     //! 绘制多条贝塞尔曲线的原语函数，像素坐标，不剪裁
-    virtual bool rawPolyBezier(const GiContext* ctx, 
-        const POINT* lppt, int count) = 0;
+    virtual bool rawPolyBezier(const GiContext* ctx, const POINT* lppt, int count) = 0;
 
     //! 绘制多边形的原语函数，像素坐标，不剪裁
-    virtual bool rawPolygon(const GiContext* ctx, 
-        const POINT* lppt, int count) = 0;
+    virtual bool rawPolygon(const GiContext* ctx, const POINT* lppt, int count) = 0;
 
     //! 绘制矩形的原语函数，像素坐标，不剪裁
-    virtual bool rawRect(const GiContext* ctx, 
-        int x, int y, int w, int h) = 0;
+    virtual bool rawRect(const GiContext* ctx, int x, int y, int w, int h) = 0;
 
     //! 绘制椭圆的原语函数，像素坐标，不剪裁
-    virtual bool rawEllipse(const GiContext* ctx, 
-        int x, int y, int w, int h) = 0;
+    virtual bool rawEllipse(const GiContext* ctx, int x, int y, int w, int h) = 0;
 
     //! 绘制多样线的原语函数，像素坐标，不剪裁
     virtual bool rawPolyDraw(const GiContext* ctx, 
@@ -164,6 +172,10 @@ public:
 
     //! 在当前路径中添加闭合指令的原语函数
     virtual bool rawCloseFigure() = 0;
+
+protected:
+    GiGraphics*     m_owner;        //!< 图形系统对象，拥有者
+    GiGraphicsImpl* m_impl;         //!< GiGraphics内部实现
 };
 
 #endif // __GEOMETRY_DRAWADAPTER_H_

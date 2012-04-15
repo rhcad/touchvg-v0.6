@@ -49,10 +49,10 @@ private:
     private:
         MgShapes* shapes() { return view->m_shapes; }
         GiTransform* xform() { return &view->m_xf; }
-        GiGraphics* graph() { return view->m_gs; }
+        GiGraphics* graph() { return &view->m_gs; }
         void redraw() { view->Invalidate(); }
         void regen() {
-            view->m_gs->clearCachedBitmap();
+            view->m_gs.clearCachedBitmap();
             view->Invalidate();
         }
         const GiContext* context() {

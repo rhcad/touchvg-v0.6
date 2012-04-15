@@ -314,19 +314,57 @@ public:
     bool drawPath(const GiContext* ctx, int count, 
         const Point2d* points, const UInt8* types, bool modelUnit = true);
 
-protected:
+public:
+    //! 返回坐标系管理对象
+    GiTransform& _xf();
+    
+    //! 在显示适配类的构造函数中调用
+    void _setDrawAdapter(GiDrawAdapter* draw);
+
     //! 在显示适配类的 beginPaint() 中调用
     void _beginPaint(const RECT* clipBox);
 
     //! 在显示适配类的 endPaint() 中调用
     void _endPaint();
 
-    GiGraphicsImpl*  m_impl;
+public:
+    void clearWnd();
+    bool drawCachedBitmap(int x = 0, int y = 0, bool secondBmp = false);
+    bool drawCachedBitmap2(const GiDrawAdapter* p, int x = 0, int y = 0, bool secondBmp = false);
+    void saveCachedBitmap(bool secondBmp = false);
+    bool hasCachedBitmap(bool secondBmp = false) const;
+    void clearCachedBitmap();
+    bool isBufferedDrawing() const;
+    int getGraphType() const;
+    int getScreenDpi() const;
+    GiColor getBkColor() const;
+    GiColor setBkColor(const GiColor& color);
+    GiColor getNearestColor(const GiColor& color) const;
+    const GiContext* getCurrentContext() const;
+    bool rawLine(const GiContext* ctx, int x1, int y1, int x2, int y2);
+    bool rawPolyline(const GiContext* ctx, const POINT* lppt, int count);
+    bool rawPolyBezier(const GiContext* ctx, const POINT* lppt, int count);
+    bool rawPolygon(const GiContext* ctx, const POINT* lppt, int count);
+    bool rawRect(const GiContext* ctx, int x, int y, int w, int h);
+    bool rawEllipse(const GiContext* ctx, int x, int y, int w, int h);
+    bool rawPolyDraw(const GiContext* ctx, 
+        int count, const POINT* lppt, const UInt8* types);
+    bool rawBeginPath();
+    bool rawEndPath(const GiContext* ctx, bool fill);
+    bool rawMoveTo(int x, int y);
+    bool rawLineTo(int x, int y);
+    bool rawPolyBezierTo(const POINT* lppt, int count);
+    bool rawCloseFigure();
 
 private:
+    void _clipBoxChanged(const RECT& clipBox);
+    void _antiAliasModeChanged(bool antiAlias);
+    
     GiGraphics();
     GiGraphics(const GiGraphics&);
     GiGraphics& operator=(const GiGraphics&);
+
+    GiGraphicsImpl* m_impl;     //!< 内部实现
 };
 
 //! 保存和恢复图形系统的剪裁框的辅助类

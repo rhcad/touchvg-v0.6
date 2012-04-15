@@ -9,6 +9,10 @@
 #include "giplclip.h"
 #include <string.h>
 
+#ifndef SafeCall
+#define SafeCall(p, f)      if (p) p->f
+#endif
+
 GiGraphics::GiGraphics(GiTransform* xform)
 {
     m_impl = new GiGraphicsImpl(this, xform);
@@ -17,6 +21,12 @@ GiGraphics::GiGraphics(GiTransform* xform)
 GiGraphics::~GiGraphics()
 {
     delete m_impl;
+}
+
+void GiGraphics::_setDrawAdapter(GiDrawAdapter* draw)
+{
+    m_impl->draw = draw;
+    SafeCall(draw, _init(this, m_impl));
 }
 
 void GiGraphics::copy(const GiGraphics& src)
@@ -30,6 +40,11 @@ void GiGraphics::copy(const GiGraphics& src)
 }
 
 const GiTransform& GiGraphics::xf() const
+{
+    return *m_impl->xform;
+}
+
+GiTransform& GiGraphics::_xf()
 {
     return *m_impl->xform;
 }
@@ -1045,4 +1060,145 @@ bool GiGraphics::drawPath(const GiContext* ctx, int count,
     }
 
     return rawPolyDraw(ctx, count, lppt, types);
+}
+
+void GiGraphics::clearWnd()
+{
+    SafeCall(m_impl->draw, clearWnd());
+}
+
+bool GiGraphics::drawCachedBitmap(int x, int y, bool secondBmp)
+{
+    return m_impl->draw && m_impl->draw->drawCachedBitmap(x, y, secondBmp);
+}
+
+bool GiGraphics::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool secondBmp)
+{
+    return m_impl->draw && m_impl->draw->drawCachedBitmap2(p, x, y, secondBmp);
+}
+
+void GiGraphics::saveCachedBitmap(bool secondBmp)
+{
+    SafeCall(m_impl->draw, saveCachedBitmap(secondBmp));
+}
+
+bool GiGraphics::hasCachedBitmap(bool secondBmp) const
+{
+    return m_impl->draw && m_impl->draw->hasCachedBitmap(secondBmp);
+}
+
+void GiGraphics::clearCachedBitmap()
+{
+    SafeCall(m_impl->draw, clearCachedBitmap());
+}
+
+bool GiGraphics::isBufferedDrawing() const
+{
+    return m_impl->draw && m_impl->draw->isBufferedDrawing();
+}
+
+int GiGraphics::getGraphType() const
+{
+    return m_impl->draw ? m_impl->draw->getGraphType() : 0;
+}
+
+int GiGraphics::getScreenDpi() const
+{
+    return m_impl->draw ? m_impl->draw->getScreenDpi() : 96;
+}
+
+GiColor GiGraphics::getBkColor() const
+{
+    return m_impl->draw ? m_impl->draw->getBkColor() : GiColor::Invalid();
+}
+
+GiColor GiGraphics::setBkColor(const GiColor& color)
+{
+    return m_impl->draw ? m_impl->draw->setBkColor(color) : color;
+}
+
+GiColor GiGraphics::getNearestColor(const GiColor& color) const
+{
+    return m_impl->draw ? m_impl->draw->getNearestColor(color) : color;
+}
+
+const GiContext* GiGraphics::getCurrentContext() const
+{
+    return m_impl->draw ? m_impl->draw->getCurrentContext() : NULL;
+}
+
+void GiGraphics::_clipBoxChanged(const RECT& clipBox)
+{
+    SafeCall(m_impl->draw, _clipBoxChanged(clipBox));
+}
+
+void GiGraphics::_antiAliasModeChanged(bool antiAlias)
+{
+    SafeCall(m_impl->draw, _antiAliasModeChanged(antiAlias));
+}
+
+bool GiGraphics::rawLine(const GiContext* ctx, int x1, int y1, int x2, int y2)
+{
+    return m_impl->draw && m_impl->draw->rawLine(ctx, x1, y1, x2, y2);
+}
+
+bool GiGraphics::rawPolyline(const GiContext* ctx, const POINT* lppt, int count)
+{
+    return m_impl->draw && m_impl->draw->rawPolyline(ctx, lppt, count);
+}
+
+bool GiGraphics::rawPolyBezier(const GiContext* ctx, const POINT* lppt, int count)
+{
+    return m_impl->draw && m_impl->draw->rawPolyBezier(ctx, lppt, count);
+}
+
+bool GiGraphics::rawPolygon(const GiContext* ctx, const POINT* lppt, int count)
+{
+    return m_impl->draw && m_impl->draw->rawPolygon(ctx, lppt, count);
+}
+
+bool GiGraphics::rawRect(const GiContext* ctx, int x, int y, int w, int h)
+{
+    return m_impl->draw && m_impl->draw->rawRect(ctx, x, y, w, h);
+}
+
+bool GiGraphics::rawEllipse(const GiContext* ctx, int x, int y, int w, int h)
+{
+    return m_impl->draw && m_impl->draw->rawEllipse(ctx, x, y, w, h);
+}
+
+bool GiGraphics::rawPolyDraw(const GiContext* ctx, int count, 
+                             const POINT* lppt, const UInt8* types)
+{
+    return m_impl->draw && m_impl->draw->rawPolyDraw(ctx, count, lppt, types);
+}
+
+bool GiGraphics::rawBeginPath()
+{
+    return m_impl->draw && m_impl->draw->rawBeginPath();
+}
+
+bool GiGraphics::rawEndPath(const GiContext* ctx, bool fill)
+{
+    return m_impl->draw && m_impl->draw->rawEndPath(ctx, fill);
+}
+
+bool GiGraphics::rawMoveTo(int x, int y)
+{
+    return m_impl->draw && m_impl->draw->rawMoveTo(x, y);
+}
+
+bool GiGraphics::rawLineTo(int x, int y)
+{
+    return m_impl->draw && m_impl->draw->rawLineTo(x, y);
+}
+
+bool GiGraphics::rawPolyBezierTo(const POINT* lppt, int count)
+{
+    return m_impl->draw && m_impl->draw->rawPolyBezierTo(lppt, count);
+}
+
+bool GiGraphics::rawCloseFigure()
+{
+    return m_impl->draw && m_impl->draw->rawCloseFigure();
 }
