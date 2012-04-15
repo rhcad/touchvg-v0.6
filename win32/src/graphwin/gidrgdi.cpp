@@ -45,14 +45,14 @@ struct GdiDrawImplBase
 };
 
 //! 管理后备缓冲位图的辅助类
-class CachedBmp
+class GdiCachedBmp
 {
 public:
-    CachedBmp() : m_cachedBmp(NULL)
+    GdiCachedBmp() : m_cachedBmp(NULL)
     {
     }
 
-    ~CachedBmp()
+    ~GdiCachedBmp()
     {
         clear();
     }
@@ -80,7 +80,7 @@ private:
 };
 
 //! GiGraphGdi的内部实现类
-class GiGraphGdi::DrawImpl : public GdiDrawImplBase
+class GiGraphGdiImpl : public GdiDrawImplBase
 {
 public:
     GiContext       m_context;          //!< 当前绘图参数
@@ -90,9 +90,9 @@ public:
     HDC             m_buffDC;           //!< 缓冲DC
     HBITMAP         m_buffBmp;          //!< 缓冲位图
     HGDIOBJ         m_buffOldBmp;       //!< 缓冲DC中原来的位图
-    CachedBmp       m_cachedBmp[2];     //!< 后备缓冲位图
+    GdiCachedBmp       m_cachedBmp[2];     //!< 后备缓冲位图
 
-    DrawImpl(GiGraphGdi* gs) : GdiDrawImplBase(gs)
+    GiGraphGdiImpl(GiGraphGdi* gs) : GdiDrawImplBase(gs)
     {
         m_pen = NULL;
         m_brush = NULL;
@@ -101,7 +101,7 @@ public:
         m_buffOldBmp = NULL;
     }
 
-    ~DrawImpl()
+    ~GiGraphGdiImpl()
     {
     }
 
@@ -185,7 +185,7 @@ public:
 
 GiGraphGdi::GiGraphGdi(GiGraphics* gs) : GiGraphWin(gs)
 {
-    m_draw = new DrawImpl(this);
+    m_draw = new GiGraphGdiImpl(this);
 }
 
 GiGraphGdi::~GiGraphGdi()
@@ -217,7 +217,7 @@ bool GiGraphGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     buffered = buffered && !m_owner->isPrint();
     m_draw->m_hdc = hdc;
 
-    CachedBmp oldDrawing;
+    GdiCachedBmp oldDrawing;
     if (buffered && overlay)
         oldDrawing.saveCachedBitmap(m_draw, hdc);
 
@@ -270,7 +270,7 @@ void GiGraphGdi::clearWnd()
     }
 }
 
-#define CachedBmp(secondBmp)   \
+#define GdiCachedBmp(secondBmp)   \
     m_draw->m_cachedBmp[secondBmp ? 1 : 0]
 
 void GiGraphGdi::clearCachedBitmap()
@@ -281,7 +281,7 @@ void GiGraphGdi::clearCachedBitmap()
 
 bool GiGraphGdi::drawCachedBitmap(int x, int y, bool secondBmp)
 {
-    return CachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC(), x, y);
+    return GdiCachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC(), x, y);
 }
 
 bool GiGraphGdi::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool secondBmp)
@@ -291,12 +291,12 @@ bool GiGraphGdi::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool se
         const GiGraphGdi* gs = static_cast<const GiGraphGdi*>(p);
         return gs->xf().getWidth() == xf().getWidth()
             && gs->xf().getHeight() == xf().getHeight()
-            && gs->CachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC(), x, y);
+            && GdiCachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC(), x, y);
     }
     return false;
 }
 
-bool CachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) const
+bool GdiCachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) const
 {
     bool ret = false;
 
@@ -317,7 +317,7 @@ bool CachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) con
     return ret;
 }
 
-bool CachedBmp::saveCachedBitmap(const GdiDrawImplBase* pdraw, HDC hSrcDC)
+bool GdiCachedBmp::saveCachedBitmap(const GdiDrawImplBase* pdraw, HDC hSrcDC)
 {
     bool ret = false;
     int width = pdraw->m_gs->xf().getWidth();
@@ -349,12 +349,12 @@ bool CachedBmp::saveCachedBitmap(const GdiDrawImplBase* pdraw, HDC hSrcDC)
 
 void GiGraphGdi::saveCachedBitmap(bool secondBmp)
 {
-    CachedBmp(secondBmp).saveCachedBitmap(m_draw, m_draw->getDrawDC());
+    GdiCachedBmp(secondBmp).saveCachedBitmap(m_draw, m_draw->getDrawDC());
 }
 
 bool GiGraphGdi::hasCachedBitmap(bool secondBmp) const
 {
-    return CachedBmp(secondBmp) != NULL;
+    return GdiCachedBmp(secondBmp) != NULL;
 }
 
 void GiGraphGdi::endPaint(bool draw)

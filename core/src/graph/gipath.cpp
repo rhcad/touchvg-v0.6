@@ -22,7 +22,7 @@ template<class T> inline static int getSize(T& arr)
 #endif // PT_LINETO
 
 //! GiPath的内部数据类
-class GiPath::Data
+class GiPathImpl
 {
 public:
     std::vector<Point2d>    points;         //!< 每个节点的坐标
@@ -32,13 +32,13 @@ public:
 
 GiPath::GiPath()
 {
-    m_data = new Data();
+    m_data = new GiPathImpl();
     m_data->beginIndex = -1;
 }
 
 GiPath::GiPath(const GiPath& src)
 {
-    m_data = new Data();
+    m_data = new GiPathImpl();
 
     UInt32 count = src.m_data->points.size();
     m_data->points.reserve(count);
@@ -53,7 +53,7 @@ GiPath::GiPath(const GiPath& src)
 
 GiPath::GiPath(int count, const Point2d* points, const UInt8* types)
 {
-    m_data = new Data();
+    m_data = new GiPathImpl();
     m_data->beginIndex = -1;
 
     if (count > 0 && points != NULL && types != NULL)

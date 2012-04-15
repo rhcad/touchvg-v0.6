@@ -8,6 +8,8 @@
 
 #include <mgpnt.h>
 
+class GiPathImpl;
+
 //! 矢量路径类
 /*!
     \ingroup GRAPH_INTERFACE
@@ -121,8 +123,7 @@ public:
     bool closeFigure();
 
 private:
-    class Data;
-    Data*   m_data;
+    GiPathImpl*   m_data;
 };
 
 #endif // __GEOMETRY_PATH_H_

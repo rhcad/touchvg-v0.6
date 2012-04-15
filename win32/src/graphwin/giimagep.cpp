@@ -8,22 +8,22 @@
 
 #define G Gdiplus
 
-struct GiGdipImage::Impl
+struct GiGdipImageImpl
 {
     G::Bitmap*  bmp;
 
-    Impl() : bmp(NULL) {}
+    GiGdipImageImpl() : bmp(NULL) {}
 };
 
 GiGdipImage::GiGdipImage(const wchar_t* filename)
 {
-    m_impl = new Impl();
+    m_impl = new GiGdipImageImpl();
     open(filename);
 }
 
 GiGdipImage::GiGdipImage(HBITMAP hbm)
 {
-    m_impl = new Impl();
+    m_impl = new GiGdipImageImpl();
     m_impl->bmp = new G::Bitmap(hbm, NULL);
 }
 

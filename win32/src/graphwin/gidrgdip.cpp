@@ -124,7 +124,7 @@ struct GdipDrawImplBase
 };
 
 //! GiGraphGdip的内部实现类
-class GiGraphGdip::DrawImpl : public GdipDrawImplBase
+class GiGraphGdipImpl : public GdipDrawImplBase
 {
 public:
     GiColor             m_bkColor;          //!< 当前背景色
@@ -138,7 +138,7 @@ private:
     static ULONG_PTR    c_gdipToken;        //!< GDI+ token
 
 public:
-    DrawImpl(GiGraphics* owner) : GdipDrawImplBase(owner)
+    GiGraphGdipImpl(GiGraphics* owner) : GdipDrawImplBase(owner)
     {
         m_path = NULL;
         m_pen = NULL;
@@ -166,7 +166,7 @@ public:
         }
     }
 
-    ~DrawImpl()
+    ~GiGraphGdipImpl()
     {
         if (m_cachedBmp[0] != NULL)
         {
@@ -192,12 +192,12 @@ public:
         const POINT* lppt, const UInt8* types);
 };
 
-long        GiGraphGdip::DrawImpl::c_graphCount = 0;
-ULONG_PTR   GiGraphGdip::DrawImpl::c_gdipToken = 0;
+long        GiGraphGdipImpl::c_graphCount = 0;
+ULONG_PTR   GiGraphGdipImpl::c_gdipToken = 0;
 
 GiGraphGdip::GiGraphGdip(GiGraphics* gs) : GiGraphWin(gs)
 {
-    m_draw = new DrawImpl(m_owner);
+    m_draw = new GiGraphGdipImpl(m_owner);
 }
 
 GiGraphGdip::~GiGraphGdip()
@@ -244,14 +244,14 @@ void GiGraphGdip::_antiAliasModeChanged(bool antiAlias)
     }
 }
 
-class OverlayBmp
+class GdipOverlayBmp
 {
 public:
-    OverlayBmp() : m_bmp(NULL)
+    GdipOverlayBmp() : m_bmp(NULL)
     {
     }
 
-    ~OverlayBmp()
+    ~GdipOverlayBmp()
     {
         clear();
     }
@@ -322,7 +322,7 @@ bool GiGraphGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     COLORREF cr = ::GetBkColor(hdc);
     m_draw->m_bkColor.set(GetRValue(cr), GetGValue(cr), GetBValue(cr));
 
-    OverlayBmp oldDrawing;
+    GdipOverlayBmp oldDrawing;
     if (buffered && overlay)
         oldDrawing.save(m_owner, hdc);
 
@@ -354,27 +354,27 @@ void GiGraphGdip::clearWnd()
     }
 }
 
-#define CachedBmp(secondBmp)   \
-    m_draw->m_cachedBmp[secondBmp ? 1 : 0]
+#define gdipCachedBmp(secondBmp)   \
+    m_draw->m_cachedBmp[(secondBmp) ? 1 : 0]
 
 void GiGraphGdip::clearCachedBitmap()
 {
-    if (CachedBmp(false) != NULL)
+    if (gdipCachedBmp(false) != NULL)
     {
-        delete CachedBmp(false);
-        CachedBmp(false) = NULL;
+        delete gdipCachedBmp(false);
+        gdipCachedBmp(false) = NULL;
     }
-    if (CachedBmp(true) != NULL)
+    if (gdipCachedBmp(true) != NULL)
     {
-        delete CachedBmp(true);
-        CachedBmp(true) = NULL;
+        delete gdipCachedBmp(true);
+        gdipCachedBmp(true) = NULL;
     }
 }
 
 bool GiGraphGdip::drawCachedBitmap(int x, int y, bool secondBmp)
 {
     bool ret = false;
-    G::CachedBitmap* pBmp = CachedBmp(secondBmp);
+    G::CachedBitmap* pBmp = gdipCachedBmp(secondBmp);
     if (m_draw->getDrawGs() != NULL && pBmp != NULL)
     {
         ret = (G::Ok == m_draw->getDrawGs()->DrawCachedBitmap(pBmp, x, y));
@@ -393,7 +393,7 @@ bool GiGraphGdip::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool s
         if (gs->xf().getWidth() == xf().getWidth()
             && gs->xf().getHeight() == xf().getHeight())
         {
-            G::CachedBitmap* pBmp = gs->CachedBmp(secondBmp);
+            G::CachedBitmap* pBmp = gdipCachedBmp(secondBmp);
             if (pBmp != NULL)
             {
                 ret = (G::Ok == m_draw->getDrawGs()->DrawCachedBitmap(pBmp, x, y));
@@ -406,7 +406,7 @@ bool GiGraphGdip::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool s
 
 void GiGraphGdip::saveCachedBitmap(bool secondBmp)
 {
-    G::CachedBitmap*& pBmp = CachedBmp(secondBmp);
+    G::CachedBitmap*& pBmp = gdipCachedBmp(secondBmp);
     if (pBmp != NULL)
     {
         delete pBmp;
@@ -421,7 +421,7 @@ void GiGraphGdip::saveCachedBitmap(bool secondBmp)
 
 bool GiGraphGdip::hasCachedBitmap(bool secondBmp) const
 {
-    return CachedBmp(secondBmp) != NULL;
+    return gdipCachedBmp(secondBmp) != NULL;
 }
 
 void GiGraphGdip::endPaint(bool draw)
@@ -819,7 +819,7 @@ bool GiGraphGdip::rawPolyDraw(const GiContext* ctx, int count,
     return ret;
 }
 
-bool GiGraphGdip::DrawImpl::addPolyToPath(G::GraphicsPath* pPath, int count, 
+bool GiGraphGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count, 
                                           const POINT* lppt, const UInt8* types)
 {
     POINT pt = { 0, 0 };
@@ -869,7 +869,7 @@ bool GiGraphGdip::DrawImpl::addPolyToPath(G::GraphicsPath* pPath, int count,
     return ret;
 }
 
-bool GiGraphGdip::DrawImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp, 
+bool GiGraphGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp, 
                                       long hmWidth, long hmHeight, 
                                       const Box2d& rectW, bool fast)
 {

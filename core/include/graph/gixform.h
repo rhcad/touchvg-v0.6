@@ -10,6 +10,8 @@
 #include <mgbox.h>
 #include <mgmat.h>
 
+struct GiTransformImpl;
+
 //! 坐标系管理类
 /*!
     \ingroup GRAPH_INTERFACE
@@ -248,8 +250,7 @@ public:
     long getZoomTimes() const;
 
 private:
-    struct Data;
-    Data*   m_data;
+    GiTransformImpl*    m_data;
 };
 
 //! 保存和恢复模型坐标系的变换矩阵的辅助类

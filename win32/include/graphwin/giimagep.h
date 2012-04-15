@@ -9,6 +9,8 @@
 #include "graphwin.h"
 #include <ocidl.h>
 
+struct GiGdipImageImpl;
+
 //! GDI+图像文件的辅助类
 /*!
     支持 BMP/JPEG/GIF/TIFF/PNG/WMF/EMF/ICON 文件
@@ -88,8 +90,7 @@ public:
     static bool getEncoder(const wchar_t* filename, WCHAR format[20], CLSID& clsidEncoder);
 
 private:
-    struct Impl;
-    Impl*   m_impl;
+    GiGdipImageImpl*   m_impl;
 };
 
 #endif // __GEOMETRY_GDIPIMAGE_H_

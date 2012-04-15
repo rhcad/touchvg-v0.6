@@ -20,7 +20,7 @@ struct ZoomLimit
 };
 
 //! GiTransform的内部数据
-struct GiTransform::Data : public ZoomLimit
+struct GiTransformImpl : public ZoomLimit
 {
     GiTransform*    xform;      //!< 拥有者
     long        cxWnd;          //!< 显示窗口宽度，像素
@@ -45,7 +45,7 @@ struct GiTransform::Data : public ZoomLimit
     double      tmpViewScale;   //!< 当前放缩结果，不论是否允许放缩
     long        zoomTimes;      //!< 放缩结果改变的次数
 
-    Data(GiTransform* p, bool dym) : xform(p)
+    GiTransformImpl(GiTransform* p, bool dym) : xform(p)
         , cxWnd(1), cyWnd(1), dpiX(96), dpiY(96), ydown(dym), viewScale(1.0)
         , zoomEnabled(true), tmpViewScale(1.0), zoomTimes(0)
     {
@@ -70,7 +70,7 @@ struct GiTransform::Data : public ZoomLimit
         matM2D = matM2W * matW2D;
     }
 
-    void coptFrom(const Data* src)
+    void coptFrom(const GiTransformImpl* src)
     {
         cxWnd  = src->cxWnd;
         cyWnd  = src->cyWnd;
@@ -127,12 +127,12 @@ struct GiTransform::Data : public ZoomLimit
 
 GiTransform::GiTransform(bool ydown)
 {
-    m_data = new Data(this, ydown);
+    m_data = new GiTransformImpl(this, ydown);
 }
 
 GiTransform::GiTransform(const GiTransform& src)
 {
-    m_data = new Data(this, true);
+    m_data = new GiTransformImpl(this, true);
     m_data->coptFrom(src.m_data);
 }
 
@@ -460,8 +460,7 @@ bool GiTransform::zoomPan(double dxPixel, double dyPixel, bool adjust)
     return m_data->zoomNoAdjust(ptW, m_data->viewScale);
 }
 
-bool GiTransform::Data::zoomPanAdjust(Point2d &ptW, 
-                                      double dxPixel, double dyPixel) const
+bool GiTransformImpl::zoomPanAdjust(Point2d &ptW, double dxPixel, double dyPixel) const
 {
     bool bAdjusted = false;
     double halfw = cxWnd / w2dx * 0.5;

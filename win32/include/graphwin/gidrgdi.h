@@ -8,6 +8,8 @@
 
 #include "graphwin.h"
 
+class GiGraphGdiImpl;
+
 //! 用GDI实现的图形系统类
 /*! 本类的 getGraphType() 值为 1
     \ingroup GRAPH_INTERFACE
@@ -60,8 +62,7 @@ public:
         const Box2d& rectW, bool fast = false);
 
 private:
-    class DrawImpl;
-    DrawImpl*   m_draw;
+    GiGraphGdiImpl*   m_draw;
 };
 
 #endif // __GEOMETRY_DRAWGDI_H_
