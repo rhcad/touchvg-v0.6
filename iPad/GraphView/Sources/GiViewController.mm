@@ -45,7 +45,7 @@
     if (self) {
         for (int iv = 0; iv < 3; iv++)
             _magnifierView[iv] = Nil;
-        _command = [[GiCommandController alloc]initWithViews:_magnifierView];
+        _cmdctl = [[GiCommandController alloc]initWithViews:_magnifierView];
         _shapesCreated = NULL;
         for (int t = 0; t < 2; t++) {
             for (int i = 0; i < RECOGNIZER_COUNT; i++)
@@ -65,7 +65,7 @@
 
 - (void)dealloc
 {
-    [_command release];
+    [_cmdctl release];
     
     if (_shapesCreated) {
         ((MgShapes*)_shapesCreated)->release();
@@ -169,33 +169,33 @@
 }
 
 - (const char*)commandName {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     return cmd.commandName;
 }
 
 - (void)setCommandName:(const char*)name {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     cmd.commandName = name;
 }
 
 - (int)lineWidth {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     return cmd.lineWidth;
 }
 
 - (void)setLineWidth:(int)w {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     [cmd setLineWidth:w];
 }
 
 - (UIColor*)lineColor {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiColor c = cmd.lineColor;
     return [UIColor colorWithRed:c.r green:c.g blue:c.b alpha:1];
 }
 
 - (void)setLineColor:(UIColor*)c {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiColor color(giFromCGColor(c.CGColor));
     if (color.a > 0.01f && cmd.lineColor.a > 0)
         color.a = cmd.lineColor.a;
@@ -203,13 +203,13 @@
 }
 
 - (UIColor*)fillColor {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiColor c = cmd.fillColor;
     return [UIColor colorWithRed:c.r green:c.g blue:c.b alpha:1];
 }
 
 - (void)setFillColor:(UIColor*)c {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiColor color(giFromCGColor(c.CGColor));
     if (color.a > 0.01f && cmd.fillColor.a > 0)
         color.a = cmd.fillColor.a;
@@ -217,36 +217,36 @@
 }
 
 - (float)lineAlpha {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     return cmd.lineColor.a / 255.0f;
 }
 
 - (void)setLineAlpha:(float)a {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiColor color(cmd.lineColor);
     color.a = mgRound(a * 255);
     [cmd setLineColor:color];
 }
 
 - (float)fillAlpha {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     return cmd.fillColor.a / 255.0f;
 }
 
 - (void)setFillAlpha:(float)a {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiColor color(cmd.fillColor);
     color.a = mgRound(a * 255);
     [cmd setFillColor:color];
 }
 
 - (int)lineStyle {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     return cmd.lineStyle;
 }
 
 - (void)setLineStyle:(int)style {
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     [cmd setLineStyle:style];
 }
 
@@ -352,8 +352,8 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
 
 - (id<GiMotionHandler>)getCommand:(SEL)aSelector
 {
-    return [_command respondsToSelector:aSelector] ?
-        (id<GiMotionHandler>)_command : Nil;
+    return [_cmdctl respondsToSelector:aSelector] ?
+        (id<GiMotionHandler>)_cmdctl : Nil;
 }
 
 - (void)addGestureRecognizers:(int)t view:(UIView*)view
@@ -437,7 +437,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
     _ignorepoint = CGPointMake(-1000, -1000);
     _ignoreTouches = CGPointEqualToPoint(point, ignorept);
     
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     [cmd touchesBegan:point view:touch.view];
     
     _activeView = touch.view;
@@ -552,7 +552,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
     if (!_magnifierView[0] || sender.view != self.view)
         return;
     
-    GiCommandController* cmd = (GiCommandController*)_command;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiMagnifierView *zview = (GiMagnifierView *)_magnifierView[0];
     
     if ([sender numberOfTouches] > 0) {

@@ -46,6 +46,7 @@ class GiGraphIos;
 /*! \ingroup GRAPH_IOS
  */
 @interface GiMagnifierView : UIView<GiView> {
+@protected
     GiTransform*    _xform;                 //!< 坐标系对象
     GiGraphics*     _graph;                 //!< 图形显示对象
     GiGraphIos*     _adapter;               //!< 显示适配对象
