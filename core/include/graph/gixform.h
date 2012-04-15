@@ -250,7 +250,7 @@ public:
     long getZoomTimes() const;
 
 private:
-    GiTransformImpl*    m_data;
+    GiTransformImpl*    m_impl;
 };
 
 //! 保存和恢复模型坐标系的变换矩阵的辅助类

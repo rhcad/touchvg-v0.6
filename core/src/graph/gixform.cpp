@@ -4,25 +4,9 @@
 
 #include "gixform.h"
 
-//! 放缩范围
-struct ZoomLimit
-{
-    double      minViewScale;   //!< 最小显示比例
-    double      maxViewScale;   //!< 最大显示比例
-    Box2d       rectLimitsW;    //!< 显示极限的世界坐标范围
-
-    ZoomLimit()
-    {
-        minViewScale = 0.01;   // 最小显示比例为1%
-        maxViewScale = 5.0;    // 最大显示比例为500%
-        rectLimitsW.set(Point2d::kOrigin(), 2e5, 2e5);
-    }
-};
-
 //! GiTransform的内部数据
-struct GiTransformImpl : public ZoomLimit
+struct GiTransformImpl
 {
-    GiTransform*    xform;      //!< 拥有者
     long        cxWnd;          //!< 显示窗口宽度，像素
     long        cyWnd;          //!< 显示窗口高度，像素
     long        dpiX;           //!< 显示设备每英寸的像素数X
@@ -45,10 +29,18 @@ struct GiTransformImpl : public ZoomLimit
     double      tmpViewScale;   //!< 当前放缩结果，不论是否允许放缩
     long        zoomTimes;      //!< 放缩结果改变的次数
 
-    GiTransformImpl(GiTransform* p, bool dym) : xform(p)
-        , cxWnd(1), cyWnd(1), dpiX(96), dpiY(96), ydown(dym), viewScale(1.0)
+    double      minViewScale;   //!< 最小显示比例
+    double      maxViewScale;   //!< 最大显示比例
+    Box2d       rectLimitsW;    //!< 显示极限的世界坐标范围
+
+    GiTransformImpl(bool _ydown)
+        : cxWnd(1), cyWnd(1), dpiX(96), dpiY(96), ydown(_ydown), viewScale(1.0)
         , zoomEnabled(true), tmpViewScale(1.0), zoomTimes(0)
     {
+        minViewScale = 0.01;   // 最小显示比例为1%
+        maxViewScale = 5.0;    // 最大显示比例为500%
+        rectLimitsW.set(Point2d::kOrigin(), 2e5, 2e5);
+
         updateTransforms();
     }
 
@@ -127,82 +119,82 @@ struct GiTransformImpl : public ZoomLimit
 
 GiTransform::GiTransform(bool ydown)
 {
-    m_data = new GiTransformImpl(this, ydown);
+    m_impl = new GiTransformImpl(ydown);
 }
 
 GiTransform::GiTransform(const GiTransform& src)
 {
-    m_data = new GiTransformImpl(this, true);
-    m_data->coptFrom(src.m_data);
+    m_impl = new GiTransformImpl(true);
+    m_impl->coptFrom(src.m_impl);
 }
 
 GiTransform::~GiTransform()
 {
-    delete m_data;
+    delete m_impl;
 }
 
 GiTransform& GiTransform::operator=(const GiTransform& src)
 {
     if (this != &src)
-        m_data->coptFrom(src.m_data);
+        m_impl->coptFrom(src.m_impl);
     return *this;
 }
 
-long GiTransform::getDpiX() const { return m_data->dpiX; }
-long GiTransform::getDpiY() const { return m_data->dpiY; }
-long GiTransform::getWidth() const { return m_data->cxWnd; }
-long GiTransform::getHeight() const { return m_data->cyWnd; }
-Point2d GiTransform::getCenterW() const { return m_data->centerW; }
-double GiTransform::getViewScale() const { return m_data->viewScale; }
-double GiTransform::getWorldToDisplayX() const { return m_data->w2dx; }
-double GiTransform::getWorldToDisplayY() const { return m_data->w2dy; }
+long GiTransform::getDpiX() const { return m_impl->dpiX; }
+long GiTransform::getDpiY() const { return m_impl->dpiY; }
+long GiTransform::getWidth() const { return m_impl->cxWnd; }
+long GiTransform::getHeight() const { return m_impl->cyWnd; }
+Point2d GiTransform::getCenterW() const { return m_impl->centerW; }
+double GiTransform::getViewScale() const { return m_impl->viewScale; }
+double GiTransform::getWorldToDisplayX() const { return m_impl->w2dx; }
+double GiTransform::getWorldToDisplayY() const { return m_impl->w2dy; }
 double GiTransform::displayToModel(double px) const
-    { return (Vector2d(0,px) * m_data->matD2M).length(); }
+    { return (Vector2d(0,px) * m_impl->matD2M).length(); }
 const Matrix2d& GiTransform::modelToWorld() const
-    { return m_data->matM2W; }
+    { return m_impl->matM2W; }
 const Matrix2d& GiTransform::worldToModel() const
-    { return m_data->matW2M; }
+    { return m_impl->matW2M; }
 const Matrix2d& GiTransform::displayToWorld() const
-    { return m_data->matD2W; }
+    { return m_impl->matD2W; }
 const Matrix2d& GiTransform::worldToDisplay() const
-    { return m_data->matW2D; }
+    { return m_impl->matW2D; }
 const Matrix2d& GiTransform::displayToModel() const
-    { return m_data->matD2M; }
+    { return m_impl->matD2M; }
 const Matrix2d& GiTransform::modelToDisplay() const
-    { return m_data->matM2D; }
+    { return m_impl->matM2D; }
 double GiTransform::getMinViewScale() const
-    { return m_data->minViewScale; }
+    { return m_impl->minViewScale; }
 double GiTransform::getMaxViewScale() const
-    { return m_data->maxViewScale; }
+    { return m_impl->maxViewScale; }
 Box2d GiTransform::getWorldLimits() const
-    { return m_data->rectLimitsW; }
+    { return m_impl->rectLimitsW; }
 
 long GiTransform::getZoomTimes() const
 {
-    return m_data->zoomTimes;
+    return m_impl->zoomTimes;
 }
 
 void GiTransform::setWndSize(int width, int height)
 {
-    if ((m_data->cxWnd != width || m_data->cyWnd != height)
+    if ((m_impl->cxWnd != width || m_impl->cyWnd != height)
         && width > 1 && height > 1)
     {
-        m_data->cxWnd = width;
-        m_data->cyWnd = height;
-        m_data->updateTransforms();
-        m_data->zoomChanged();
+        m_impl->cxWnd = width;
+        m_impl->cyWnd = height;
+        m_impl->updateTransforms();
+        m_impl->zoomChanged();
     }
 }
 
 void GiTransform::setModelTransform(const Matrix2d& mat)
 {
-    if (mat.isInvertible() && m_data->matM2W != mat)
+    if (mat.isInvertible() && m_impl->matM2W != mat)
     {
-        m_data->matM2W = mat;
-        m_data->matW2M = m_data->matM2W.inverse();
-        m_data->matD2M = m_data->matD2W * m_data->matW2M;
-        m_data->matM2D = m_data->matM2W * m_data->matW2D;
-        m_data->zoomChanged();
+        m_impl->matM2W = mat;
+        m_impl->matW2M = m_impl->matM2W.inverse();
+        m_impl->matD2M = m_impl->matD2W * m_impl->matW2M;
+        m_impl->matM2D = m_impl->matM2W * m_impl->matW2D;
+        m_impl->zoomChanged();
     }
 }
 
@@ -210,12 +202,12 @@ void GiTransform::setResolution(int dpiX, int dpiY)
 {
     if (dpiY < 1) dpiY = dpiX;
     if (dpiX > 10 && dpiY > 10 
-        && (m_data->dpiX != dpiX || m_data->dpiY != dpiY))
+        && (m_impl->dpiX != dpiX || m_impl->dpiY != dpiY))
     {
-        m_data->dpiX = dpiX;
-        m_data->dpiY = dpiY;
-        m_data->updateTransforms();
-        m_data->zoomChanged();
+        m_impl->dpiX = dpiX;
+        m_impl->dpiY = dpiY;
+        m_impl->updateTransforms();
+        m_impl->zoomChanged();
     }
 }
 
@@ -230,75 +222,75 @@ void GiTransform::setViewScaleRange(double minScale, double maxScale)
     maxScale = mgMax(maxScale, 1.0);
     maxScale = mgMin(maxScale, 50.0);
 
-    m_data->minViewScale = minScale;
-    m_data->maxViewScale = maxScale;
+    m_impl->minViewScale = minScale;
+    m_impl->maxViewScale = maxScale;
 }
 
 Box2d GiTransform::setWorldLimits(const Box2d& rect)
 {
-    Box2d ret = m_data->rectLimitsW;
-    m_data->rectLimitsW = rect;
-    m_data->rectLimitsW.normalize();
+    Box2d ret = m_impl->rectLimitsW;
+    m_impl->rectLimitsW = rect;
+    m_impl->rectLimitsW.normalize();
     return ret;
 }
 
 bool GiTransform::enableZoom(bool enabled)
 {
-    bool bOld = m_data->zoomEnabled;
-    m_data->zoomEnabled = enabled;
+    bool bOld = m_impl->zoomEnabled;
+    m_impl->zoomEnabled = enabled;
     return bOld;
 }
 
 void GiTransform::getZoomValue(Point2d& centerW, double& viewScale) const
 {
-    centerW = m_data->tmpCenterW;
-    viewScale = m_data->tmpViewScale;
+    centerW = m_impl->tmpCenterW;
+    viewScale = m_impl->tmpViewScale;
 }
 
 bool GiTransform::zoom(Point2d centerW, double viewScale, bool* changed)
 {
-    viewScale = mgMax(viewScale, m_data->minViewScale);
-    viewScale = mgMin(viewScale, m_data->maxViewScale);
+    viewScale = mgMax(viewScale, m_impl->minViewScale);
+    viewScale = mgMin(viewScale, m_impl->maxViewScale);
 
-    if (!m_data->rectLimitsW.isEmpty())
+    if (!m_impl->rectLimitsW.isEmpty())
     {
-        double halfw = m_data->cxWnd / m_data->w2dx * 0.5;
-        double halfh = m_data->cyWnd / m_data->w2dy * 0.5;
+        double halfw = m_impl->cxWnd / m_impl->w2dx * 0.5;
+        double halfh = m_impl->cyWnd / m_impl->w2dy * 0.5;
 
-        if (centerW.x - halfw < m_data->rectLimitsW.xmin)
-            centerW.x += m_data->rectLimitsW.xmin - (centerW.x - halfw);
-        if (centerW.x + halfw > m_data->rectLimitsW.xmax)
-            centerW.x += m_data->rectLimitsW.xmax - (centerW.x + halfw);
-        if (2 * halfw >= m_data->rectLimitsW.width())
-            centerW.x = m_data->rectLimitsW.center().x;
+        if (centerW.x - halfw < m_impl->rectLimitsW.xmin)
+            centerW.x += m_impl->rectLimitsW.xmin - (centerW.x - halfw);
+        if (centerW.x + halfw > m_impl->rectLimitsW.xmax)
+            centerW.x += m_impl->rectLimitsW.xmax - (centerW.x + halfw);
+        if (2 * halfw >= m_impl->rectLimitsW.width())
+            centerW.x = m_impl->rectLimitsW.center().x;
 
-        if (centerW.y - halfh < m_data->rectLimitsW.ymin)
-            centerW.y += m_data->rectLimitsW.ymin - (centerW.y - halfh);
-        if (centerW.y + halfh > m_data->rectLimitsW.ymax)
-            centerW.y += m_data->rectLimitsW.ymax - (centerW.y + halfh);
-        if (2 * halfh >= m_data->rectLimitsW.height())
-            centerW.y = m_data->rectLimitsW.center().y;
+        if (centerW.y - halfh < m_impl->rectLimitsW.ymin)
+            centerW.y += m_impl->rectLimitsW.ymin - (centerW.y - halfh);
+        if (centerW.y + halfh > m_impl->rectLimitsW.ymax)
+            centerW.y += m_impl->rectLimitsW.ymax - (centerW.y + halfh);
+        if (2 * halfh >= m_impl->rectLimitsW.height())
+            centerW.y = m_impl->rectLimitsW.center().y;
 
         // 如果显示比例很小使得窗口超界，就放大显示
-        if (2 * halfw > m_data->rectLimitsW.width()
-            && 2 * halfh > m_data->rectLimitsW.height())
+        if (2 * halfw > m_impl->rectLimitsW.width()
+            && 2 * halfh > m_impl->rectLimitsW.height())
         {
-            viewScale *= mgMin(2 * halfw / m_data->rectLimitsW.width(),
-                2 * halfh / m_data->rectLimitsW.height());
-            if (viewScale > m_data->maxViewScale)
-                viewScale = m_data->maxViewScale;
+            viewScale *= mgMin(2 * halfw / m_impl->rectLimitsW.width(),
+                2 * halfh / m_impl->rectLimitsW.height());
+            if (viewScale > m_impl->maxViewScale)
+                viewScale = m_impl->maxViewScale;
         }
     }
 
-    m_data->zoomNoAdjust(centerW, viewScale, changed);
+    m_impl->zoomNoAdjust(centerW, viewScale, changed);
 
     return true;
 }
 
-static inline bool ScaleOutRange(double scale, const ZoomLimit* pData)
+static inline bool ScaleOutRange(double scale, const GiTransformImpl* impl)
 {
-    return scale < pData->minViewScale - 1e-5
-        || scale > pData->maxViewScale + 1e-5;
+    return scale < impl->minViewScale - 1e-5
+        || scale > impl->maxViewScale + 1e-5;
 }
 
 static void AdjustCenterW(Point2d &ptW, double halfw, double halfh, 
@@ -329,37 +321,37 @@ bool GiTransform::zoomWnd(const POINT& pt1, const POINT& pt2, bool adjust)
         return false;
 
     // 中心不变，扩大开窗矩形使得宽高比例和显示窗口相同
-    if (h * m_data->cxWnd > w * m_data->cyWnd)
-        w = h * m_data->cxWnd / m_data->cyWnd;
+    if (h * m_impl->cxWnd > w * m_impl->cyWnd)
+        w = h * m_impl->cxWnd / m_impl->cyWnd;
     else
-        h = w * m_data->cyWnd / m_data->cxWnd;
+        h = w * m_impl->cyWnd / m_impl->cxWnd;
 
     // 计算放缩前矩形中心的世界坐标
-    Point2d ptW (ptCen * m_data->matD2W);
+    Point2d ptW (ptCen * m_impl->matD2W);
 
     // 计算新显示比例
-    double scale = m_data->viewScale * m_data->cyWnd / h;
-    if (!adjust && ScaleOutRange(scale, m_data))
+    double scale = m_impl->viewScale * m_impl->cyWnd / h;
+    if (!adjust && ScaleOutRange(scale, m_impl))
         return false;
-    scale = mgMax(scale, m_data->minViewScale);
-    scale = mgMin(scale, m_data->maxViewScale);
+    scale = mgMax(scale, m_impl->minViewScale);
+    scale = mgMin(scale, m_impl->maxViewScale);
 
     // 计算新显示比例下的显示窗口的世界坐标范围
-    double halfw = m_data->cxWnd / (m_data->w2dx / m_data->viewScale * scale) * 0.5;
-    double halfh = m_data->cyWnd / (m_data->w2dy / m_data->viewScale * scale) * 0.5;
+    double halfw = m_impl->cxWnd / (m_impl->w2dx / m_impl->viewScale * scale) * 0.5;
+    double halfh = m_impl->cyWnd / (m_impl->w2dy / m_impl->viewScale * scale) * 0.5;
     Box2d box (ptW, 2 * halfw, 2 * halfh);
 
     // 检查显示窗口的新坐标范围是否在极限范围内
-    if (!m_data->rectLimitsW.isEmpty() && !m_data->rectLimitsW.contains(box))
+    if (!m_impl->rectLimitsW.isEmpty() && !m_impl->rectLimitsW.contains(box))
     {
         if (adjust)
-            AdjustCenterW(ptW, halfw, halfh, m_data->rectLimitsW);
+            AdjustCenterW(ptW, halfw, halfh, m_impl->rectLimitsW);
         else
             return false;
     }
 
     // 改变显示比例和位置
-    return m_data->zoomNoAdjust(ptW, scale);
+    return m_impl->zoomNoAdjust(ptW, scale);
 }
 
 bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT* rcTo, bool adjust)
@@ -369,8 +361,8 @@ bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT* rcTo, bool adjust)
         return false;
 
     // 计算像素到毫米的比例
-    const double d2mmX = m_data->viewScale / m_data->w2dx;
-    const double d2mmY = m_data->viewScale / m_data->w2dy;
+    const double d2mmX = m_impl->viewScale / m_impl->w2dx;
+    const double d2mmY = m_impl->viewScale / m_impl->w2dy;
 
     // 计算目标窗口区域(毫米)
     double w = 0, h = 0;
@@ -385,9 +377,9 @@ bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT* rcTo, bool adjust)
     }
     if (w < 4 || h < 4)
     {
-        w = m_data->cxWnd;
-        h = m_data->cyWnd;
-        ptCen.set(m_data->cxWnd * 0.5, m_data->cyWnd * 0.5);
+        w = m_impl->cxWnd;
+        h = m_impl->cyWnd;
+        ptCen.set(m_impl->cxWnd * 0.5, m_impl->cyWnd * 0.5);
     }
     if (w < 4 || h < 4)
         return false;
@@ -409,55 +401,55 @@ bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT* rcTo, bool adjust)
     }
 
     // 检查显示比例
-    if (!adjust && ScaleOutRange(scale, m_data))
+    if (!adjust && ScaleOutRange(scale, m_impl))
         return false;
-    scale = mgMax(scale, m_data->minViewScale);
-    scale = mgMin(scale, m_data->maxViewScale);
+    scale = mgMax(scale, m_impl->minViewScale);
+    scale = mgMin(scale, m_impl->maxViewScale);
 
     // 计算在新显示比例下显示窗口中心的世界坐标
     Point2d ptW;
-    ptW.x = rectWorld.center().x + (m_data->cxWnd * d2mmX * 0.5 - ptCen.x) / scale;
-    ptW.y = rectWorld.center().y - (m_data->cyWnd * d2mmY * 0.5 - ptCen.y) / scale;
+    ptW.x = rectWorld.center().x + (m_impl->cxWnd * d2mmX * 0.5 - ptCen.x) / scale;
+    ptW.y = rectWorld.center().y - (m_impl->cyWnd * d2mmY * 0.5 - ptCen.y) / scale;
 
     // 检查新显示比例下显示窗口的世界坐标范围是否在极限范围内
-    double halfw = m_data->cxWnd * d2mmX  / scale * 0.5;
-    double halfh = m_data->cyWnd * d2mmY  / scale * 0.5;
+    double halfw = m_impl->cxWnd * d2mmX  / scale * 0.5;
+    double halfh = m_impl->cyWnd * d2mmY  / scale * 0.5;
     Box2d box (ptW, 2 * halfw, 2 * halfh);
-    if (!m_data->rectLimitsW.isEmpty() && !m_data->rectLimitsW.contains(box))
+    if (!m_impl->rectLimitsW.isEmpty() && !m_impl->rectLimitsW.contains(box))
     {
         if (adjust)
-            AdjustCenterW(ptW, halfw, halfh, m_data->rectLimitsW);
+            AdjustCenterW(ptW, halfw, halfh, m_impl->rectLimitsW);
         else
             return false;
     }
 
-    return m_data->zoomNoAdjust(ptW, scale);
+    return m_impl->zoomNoAdjust(ptW, scale);
 }
 
 bool GiTransform::zoomTo(const Point2d& pntWorld, const POINT* pxAt, bool adjust)
 {
-    Point2d pnt = pntWorld * m_data->matW2D;
+    Point2d pnt = pntWorld * m_impl->matW2D;
     return zoomPan(
-        (pxAt == NULL ? (m_data->cxWnd * 0.5) : pxAt->x) - pnt.x, 
-        (pxAt == NULL ? (m_data->cyWnd * 0.5) : pxAt->y) - pnt.y, adjust);
+        (pxAt == NULL ? (m_impl->cxWnd * 0.5) : pxAt->x) - pnt.x, 
+        (pxAt == NULL ? (m_impl->cyWnd * 0.5) : pxAt->y) - pnt.y, adjust);
 }
 
 bool GiTransform::zoomPan(double dxPixel, double dyPixel, bool adjust)
 {
     // 计算新的显示窗口中心的世界坐标
     Vector2d vec (dxPixel, dyPixel);
-    Point2d ptW (m_data->centerW - vec * m_data->matD2W);
+    Point2d ptW (m_impl->centerW - vec * m_impl->matD2W);
 
     // 检查新显示比例下显示窗口的世界坐标范围是否在极限范围内
-    if (!m_data->rectLimitsW.isEmpty())
+    if (!m_impl->rectLimitsW.isEmpty())
     {
-        if (m_data->zoomPanAdjust(ptW, dxPixel, dyPixel) && !adjust)
+        if (m_impl->zoomPanAdjust(ptW, dxPixel, dyPixel) && !adjust)
             return false;
     }
-    if (ptW == m_data->centerW)
+    if (ptW == m_impl->centerW)
         return false;
 
-    return m_data->zoomNoAdjust(ptW, m_data->viewScale);
+    return m_impl->zoomNoAdjust(ptW, m_impl->viewScale);
 }
 
 bool GiTransformImpl::zoomPanAdjust(Point2d &ptW, double dxPixel, double dyPixel) const
@@ -502,7 +494,7 @@ bool GiTransformImpl::zoomPanAdjust(Point2d &ptW, double dxPixel, double dyPixel
 
 bool GiTransform::zoomByFactor(double factor, const POINT* pxAt, bool adjust)
 {
-    double scale = m_data->viewScale;
+    double scale = m_impl->viewScale;
     if (factor > 0)
         scale *= (1 + fabs(factor));
     else
@@ -510,10 +502,10 @@ bool GiTransform::zoomByFactor(double factor, const POINT* pxAt, bool adjust)
 
     if (adjust)
     {
-        scale = mgMax(scale, m_data->minViewScale);
-        scale = mgMin(scale, m_data->maxViewScale);
+        scale = mgMax(scale, m_impl->minViewScale);
+        scale = mgMin(scale, m_impl->maxViewScale);
     }
-    if (mgIsZero(scale - m_data->viewScale))
+    if (mgIsZero(scale - m_impl->viewScale))
         return false;
     return zoomScale(scale, pxAt, adjust);
 }
@@ -521,37 +513,37 @@ bool GiTransform::zoomByFactor(double factor, const POINT* pxAt, bool adjust)
 bool GiTransform::zoomScale(double viewScale, const POINT* pxAt, bool adjust)
 {
     // 检查显示比例
-    if (!adjust && ScaleOutRange(viewScale, m_data))
+    if (!adjust && ScaleOutRange(viewScale, m_impl))
         return false;
-    viewScale = mgMax(viewScale, m_data->minViewScale);
-    viewScale = mgMin(viewScale, m_data->maxViewScale);
+    viewScale = mgMax(viewScale, m_impl->minViewScale);
+    viewScale = mgMin(viewScale, m_impl->maxViewScale);
 
     // 得到放缩中心点的客户区坐标
-    Point2d ptAt (m_data->cxWnd * 0.5,  m_data->cyWnd * 0.5);
+    Point2d ptAt (m_impl->cxWnd * 0.5,  m_impl->cyWnd * 0.5);
     if (pxAt != NULL)
         ptAt.set(pxAt->x, pxAt->y);
 
     // 得到放缩中心点在放缩前的世界坐标
-    Point2d ptAtW (ptAt * m_data->matD2W);
+    Point2d ptAtW (ptAt * m_impl->matD2W);
 
     // 计算新显示比例下显示窗口中心的世界坐标
     Point2d ptW;
-    double w2dx = m_data->w2dx / m_data->viewScale * viewScale;
-    double w2dy = m_data->w2dy / m_data->viewScale * viewScale;
-    ptW.x = ptAtW.x + (m_data->cxWnd * 0.5 - ptAt.x) / w2dx;
-    ptW.y = ptAtW.y - (m_data->cyWnd * 0.5 - ptAt.y) / w2dy;
+    double w2dx = m_impl->w2dx / m_impl->viewScale * viewScale;
+    double w2dy = m_impl->w2dy / m_impl->viewScale * viewScale;
+    ptW.x = ptAtW.x + (m_impl->cxWnd * 0.5 - ptAt.x) / w2dx;
+    ptW.y = ptAtW.y - (m_impl->cyWnd * 0.5 - ptAt.y) / w2dy;
 
     // 检查新显示比例下显示窗口的世界坐标范围是否在极限范围内
-    double halfw = m_data->cxWnd / w2dx * 0.5;
-    double halfh = m_data->cyWnd / w2dy * 0.5;
+    double halfw = m_impl->cxWnd / w2dx * 0.5;
+    double halfh = m_impl->cyWnd / w2dy * 0.5;
     Box2d box (ptW, 2 * halfw, 2 * halfh);
-    if (!m_data->rectLimitsW.isEmpty() && !m_data->rectLimitsW.contains(box))
+    if (!m_impl->rectLimitsW.isEmpty() && !m_impl->rectLimitsW.contains(box))
     {
         if (adjust)
-            AdjustCenterW(ptW, halfw, halfh, m_data->rectLimitsW);
+            AdjustCenterW(ptW, halfw, halfh, m_impl->rectLimitsW);
         else
             return false;
     }
 
-    return m_data->zoomNoAdjust(ptW, viewScale);
+    return m_impl->zoomNoAdjust(ptW, viewScale);
 }
