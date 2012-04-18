@@ -27,7 +27,7 @@ public:
 protected:
     UInt32 _getHandleCount() const;
     Point2d _getHandlePoint(UInt32 index) const;
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, double tol);
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     bool _hitTestBox(const Box2d& rect) const;
 
 private:
@@ -51,22 +51,22 @@ public:
     Box2d getRect() const;
 
     //! 返回宽度
-    double getWidth() const;
+    float getWidth() const;
 
     //! 返回高度
-    double getHeight() const;
+    float getHeight() const;
 
     //! 返回倾斜角度
-    double getAngle() const;
+    float getAngle() const;
 
     //! 返回是否为空矩形
-    bool isEmpty(double minDist) const;
+    bool isEmpty(float minDist) const;
 
     //! 返回是否为水平矩形
     bool isOrtho() const;
 
     //! 设置矩形
-    void setRect(const Box2d& rect, double angle = 0.0);
+    void setRect(const Box2d& rect, float angle = 0.0);
 
     //! 设置四个角点
     void setRect(const Point2d points[4]);
@@ -86,10 +86,10 @@ protected:
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
-    double _hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const;
     UInt32 _getHandleCount() const;
     Point2d _getHandlePoint(UInt32 index) const;
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, double tol);
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:
@@ -112,17 +112,17 @@ class MgEllipse : public MgBaseRect
     MG_INHERIT_CREATE(MgEllipse, MgBaseRect, 12)
 public:
     //! 返回X半轴长度
-    double getRadiusX() const;
+    float getRadiusX() const;
 
     //! 返回Y半轴长度
-    double getRadiusY() const;
+    float getRadiusY() const;
 
     //! 设置半轴长度
-    void setRadius(double rx, double ry = 0.0);
+    void setRadius(float rx, float ry = 0.0);
 
 protected:
     void _update();
-    double _hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:
@@ -137,23 +137,23 @@ class MgRoundRect : public MgBaseRect
     MG_INHERIT_CREATE(MgRoundRect, MgBaseRect, 13)
 public:
     //! 返回X圆角半径
-    double getRadiusX() const { return _rx; }
+    float getRadiusX() const { return _rx; }
 
     //! 返回Y圆角半径
-    double getRadiusY() const { return _ry; }
+    float getRadiusY() const { return _ry; }
 
     //! 设置圆角半径
-    void setRadius(double rx, double ry = 0.0);
+    void setRadius(float rx, float ry = 0.0);
 
 protected:
     void _copy(const MgRoundRect& src);
     bool _equals(const MgRoundRect& src) const;
     void _clear();
-    double _hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const;
 
 protected:
-    double      _rx;
-    double      _ry;
+    float      _rx;
+    float      _ry;
 };
 
 //! 折线基类
@@ -197,8 +197,8 @@ protected:
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, double tol);
-    double _hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const;
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
+    float _hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const;
 
 protected:
     Point2d*    _points;
@@ -225,11 +225,11 @@ class MgSplines : public MgBaseLines
     MG_INHERIT_CREATE(MgSplines, MgBaseLines, 16)
 public:
     //! 去掉多余点，同时仍然光滑
-    void smooth(double tol);
+    void smooth(float tol);
     
 protected:
     void _update();
-    double _hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:

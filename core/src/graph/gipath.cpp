@@ -189,7 +189,7 @@ bool GiPath::arcTo(const Point2d& point)
         Point2d start = m_data->points[m_data->points.size() - 1];
         Vector2d vecTan = start - m_data->points[m_data->points.size() - 2];
         Point2d center;
-        double radius, startAngle, sweepAngle;
+        float radius, startAngle, sweepAngle;
 
         if (mgArcTan(start, point, vecTan, center, radius, &startAngle, &sweepAngle))
         {
@@ -221,7 +221,7 @@ bool GiPath::arcTo(const Point2d& point, const Point2d& end)
     {
         Point2d start = m_data->points[m_data->points.size() - 1];
         Point2d center;
-        double radius, startAngle, sweepAngle;
+        float radius, startAngle, sweepAngle;
 
         if (mgArc3P(start, point, end, center, radius, &startAngle, &sweepAngle))
         {
@@ -263,29 +263,29 @@ bool GiPath::closeFigure()
     return ret;
 }
 
-static int AngleToBezier(Point2d* pts, double radius)
+static int AngleToBezier(Point2d* pts, float radius)
 {
     const Vector2d vec1 (pts[1] - pts[0]);      // 第一条边
     const Vector2d vec2 (pts[2] - pts[1]);      // 第二条边
 
-    const double dHalfAngle = 0.5 * fabs(vec1.angleTo2(vec2));  // 夹角的一半
-    if (dHalfAngle < 1e-4 || fabs(dHalfAngle - M_PI_2) < 1e-4)  // 两条边平行
+    const float dHalfAngle = 0.5f * fabs(vec1.angleTo2(vec2));  // 夹角的一半
+    if (dHalfAngle < 1e-4f || fabs(dHalfAngle - _M_PI_2) < 1e-4f)  // 两条边平行
         return 0;
 
-    const double dDist1 = 0.5 * vec1.length();
-    const double dDist2 = 0.5 * vec2.length();
-    double dArc = radius / tan(dHalfAngle);    // 圆弧在边上的投影长度
+    const float dDist1 = 0.5f * vec1.length();
+    const float dDist2 = 0.5f * vec2.length();
+    float dArc = radius / tan(dHalfAngle);    // 圆弧在边上的投影长度
     if (dArc > dDist1 || dArc > dDist2)
     {
-        double dArcOld = dArc;
+        float dArcOld = dArc;
         dArc = mgMin(dDist1, dDist2);
-        if (dArc < dArcOld * 0.5)
+        if (dArc < dArcOld * 0.5f)
             return 3;
     }
 
     int count = 0;
     Point2d ptCenter, ptStart, ptEnd;
-    double startAngle, sweepAngle;
+    float startAngle, sweepAngle;
 
     ptStart = pts[1].rulerPoint(pts[0], dArc, 0);
     ptEnd = pts[1].rulerPoint(pts[2], dArc, 0);
@@ -300,7 +300,7 @@ static int AngleToBezier(Point2d* pts, double radius)
 }
 
 bool GiPath::genericRoundLines(int count, const Point2d* points, 
-                               double radius, bool closed)
+                               float radius, bool closed)
 {
     clear();
 

@@ -49,7 +49,7 @@ GiTransform& GiGraphics::_xf()
     return *m_impl->xform;
 }
 
-void GiGraphics::_beginPaint(const RECT* clipBox)
+void GiGraphics::_beginPaint(const RECT2D& clipBox)
 {
     if (m_impl->lastZoomTimes != xf().getZoomTimes())
     {
@@ -58,12 +58,11 @@ void GiGraphics::_beginPaint(const RECT* clipBox)
     }
     giInterlockedIncrement(&m_impl->drawRefcnt);
 
-    if (clipBox)
+    if (!Box2d(clipBox).isEmpty())
     {
-        memcpy(&m_impl->clipBox0, clipBox, sizeof(m_impl->clipBox0));
-        memcpy(&m_impl->clipBox, &m_impl->clipBox0, sizeof(m_impl->clipBox));
-        m_impl->rectDraw.set(m_impl->clipBox.left, m_impl->clipBox.top,
-                             m_impl->clipBox.right, m_impl->clipBox.bottom);
+        m_impl->clipBox0 = clipBox;
+        m_impl->clipBox  = clipBox;
+        m_impl->rectDraw = Box2d(clipBox);
         m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
         m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
         m_impl->rectDrawMaxM = Box2d(0, 0, xf().getWidth(), xf().getHeight()) * xf().displayToModel();
@@ -97,43 +96,29 @@ Box2d GiGraphics::getClipWorld() const
     return m_impl->rectDrawW;
 }
 
-void GiGraphics::getClipBox(RECT* prc) const
+void GiGraphics::getClipBox(RECT2D& rc) const
 {
-    if (prc != NULL)
-        memcpy(prc, &m_impl->clipBox, sizeof(RECT));
+    rc = m_impl->clipBox;
 }
 
-#ifndef _WIN32
-bool IntersectRect(RECT *dst, const RECT *p1, const RECT *p2)
+bool GiGraphics::setClipBox(const RECT2D& rc)
 {
-    Box2d r1(p1->left, p1->top, p1->right, p1->bottom, true);
-    Box2d r2(p2->left, p2->top, p2->right, p2->bottom, true);
-
-    r1.intersectWith(r2);
-    r1.get(dst->left, dst->top, dst->right, dst->bottom);
-
-    return !r1.isEmpty();
-}
-#endif
-
-bool GiGraphics::setClipBox(const RECT* prc)
-{
-    if (!prc || m_impl->drawRefcnt < 1)
+    if (m_impl->drawRefcnt < 1)
         return false;
 
     bool ret = false;
-    RECT rc;
+    Box2d rect;
 
-    if (IntersectRect(&rc, prc, &m_impl->clipBox0))
+    if (!rect.intersectWith(Box2d(rc), Box2d(m_impl->clipBox0)).isEmpty())
     {
-        if (0 != memcmp(&m_impl->clipBox, &rc, sizeof(RECT)))
+        if (rect != Box2d(m_impl->clipBox))
         {
-            memcpy(&m_impl->clipBox, &rc, sizeof(RECT));
-            m_impl->rectDraw.set(rc.left, rc.top, rc.right, rc.bottom);
+            rect.get(m_impl->clipBox);
+            m_impl->rectDraw.set((float)rc.left, (float)rc.top, (float)rc.right, (float)rc.bottom);
             m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
             m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
             m_impl->rectDrawW = m_impl->rectDrawM * xf().modelToWorld();
-            _clipBoxChanged(rc);
+            _clipBoxChanged(m_impl->clipBox);
         }
         ret = true;
     }
@@ -148,21 +133,19 @@ bool GiGraphics::setClipWorld(const Box2d& rectWorld)
     if (isDrawing() && !rectWorld.isEmpty())
     {
         Box2d box (rectWorld * xf().worldToDisplay());
+
         box.intersectWith(Box2d(m_impl->clipBox0.left, m_impl->clipBox0.top, 
             m_impl->clipBox0.right, m_impl->clipBox0.bottom));
         if (!box.isEmpty(Tol(1, 0)))
         {
-            RECT rc = { mgRound(box.xmin), mgRound(box.ymin),
-                mgRound(box.xmax), mgRound(box.ymax) };
-
-            if (0 != memcmp(&m_impl->clipBox, &rc, sizeof(RECT)))
+            if (box != Box2d(m_impl->clipBox))
             {
-                memcpy(&m_impl->clipBox, &rc, sizeof(RECT));
-                m_impl->rectDraw.set(rc.left, rc.top, rc.right, rc.bottom);
+                box.get(m_impl->clipBox);
+                m_impl->rectDraw = box;
                 m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
                 m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
                 m_impl->rectDrawW = m_impl->rectDrawM * xf().modelToWorld();
-                _clipBoxChanged(rc);
+                _clipBoxChanged(m_impl->clipBox);
             }
 
             ret = true;
@@ -216,25 +199,24 @@ GiColor GiGraphics::calcPenColor(const GiColor& color) const
     return ret;
 }
 
-UInt16 GiGraphics::calcPenWidth(Int16 lineWidth, bool useViewScale) const
+float GiGraphics::calcPenWidth(Int16 lineWidth, bool useViewScale) const
 {
-    long w = 1;
-    double px;
+    float w = 1;
+    float px;
 
     if (m_impl->maxPenWidth <= 1)
         lineWidth = 0;
 
     if (lineWidth > 0)      // 单位：0.01mm
     {
-        px = lineWidth / 2540.0 * xf().getDpiY();
+        px = lineWidth / 2540.f * xf().getDpiY();
         if (useViewScale)
             px *= xf().getViewScale();
-        w = mgRound(px);
-        w = mgMin(w, (long)m_impl->maxPenWidth);
+        w = mgMin(px, (float)m_impl->maxPenWidth);
     }
     else if (lineWidth < 0) // 单位：像素
     {
-        w = mgMin(-lineWidth, (int)m_impl->maxPenWidth);
+        w = mgMin((float)(-lineWidth), (float)m_impl->maxPenWidth);
     }
 
     if (w < 1)
@@ -285,8 +267,7 @@ bool GiGraphics::drawLine(const GiContext* ctx,
     if (!mgClipLine(pts[0], pts[1], m_impl->rectDraw))
         return false;
 
-    return rawLine(ctx, mgRound(pts[0].x), mgRound(pts[0].y), 
-        mgRound(pts[1].x), mgRound(pts[1].y));
+    return rawLine(ctx, pts[0].x, pts[0].y, pts[1].x, pts[1].y);
 }
 
 //! 折线绘制辅助类，用于将显示与环境设置分离
@@ -299,9 +280,9 @@ public:
         : m_gs(gs), m_pContext(ctx)
     {
     }
-    bool draw(const POINT* lppt, int n) const
+    bool draw(const Point2d* pxs, int n) const
     {
-        return lppt && n > 1 && m_gs->rawPolyline(m_pContext, lppt, n);
+        return pxs && n > 1 && m_gs->rawPolyline(m_pContext, pxs, n);
     }
 };
 
@@ -347,9 +328,9 @@ static bool DrawEdge(int count, int &i, Point2d* pts, Point2d &ptLast,
     n = ei - si + 1;
     if (n > 1)
     {
-        vector<POINT> pxpoints;
+        vector<Point2d> pxpoints;
         pxpoints.resize(n);
-        POINT* lppt = &pxpoints.front();
+        Point2d* pxs = &pxpoints.front();
         n = 0;
         for (int j = si; j <= ei; j++)
         {
@@ -358,12 +339,11 @@ static bool DrawEdge(int count, int &i, Point2d* pts, Point2d &ptLast,
                 || fabs(pt1.y - pts[j].y) > 2)
             {
                 pt1 = pts[j];
-                pt1.get(lppt[n].x, lppt[n].y);
-                n++;
+                pxs[n++] = pt1;
             }
         }
 
-        return aux.draw(lppt, n);
+        return aux.draw(pxs, n);
     }
 
     return false;
@@ -380,7 +360,7 @@ bool GiGraphics::drawLines(const GiContext* ctx, int count,
 
     int i;
     Point2d pt1, pt2, ptLast;
-    vector<POINT> pxpoints;
+    vector<Point2d> pxpoints;
     vector<Point2d> pointBuf;
     bool ret = false;
     Matrix2d matD(S2D(xf(), modelUnit));
@@ -392,7 +372,7 @@ bool GiGraphics::drawLines(const GiContext* ctx, int count,
     if (DRAW_MAXR(m_impl, modelUnit).contains(extent))  // 全部在显示区域内
     {
         pxpoints.resize(count);
-        POINT* lppt = &pxpoints.front();
+        Point2d* pxs = &pxpoints.front();
         int n = 0;
         for (i = 0; i < count; i++)
         {
@@ -400,11 +380,10 @@ bool GiGraphics::drawLines(const GiContext* ctx, int count,
             if (i == 0 || fabs(pt1.x - pt2.x) > 2 || fabs(pt1.y - pt2.y) > 2)
             {
                 pt1 = pt2;
-                pt2.get(lppt[n].x, lppt[n].y);
-                n++;
+                pxs[n++] = pt2;
             }
         }
-        ret = rawPolyline(ctx, lppt, n);
+        ret = rawPolyline(ctx, pxs, n);
     }
     else                                            // 部分在显示区域内
     {
@@ -435,10 +414,10 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
     count = 1 + (count - 1) / 3 * 3;
 
     bool ret = false;
-    vector<POINT> pxpoints;
+    vector<Point2d> pxpoints;
     vector<Point2d> pointBuf;
     int i, j, n, si, ei;
-    POINT * lppt;
+    Point2d * pxs;
     Matrix2d matD(S2D(xf(), modelUnit));
 
     const Box2d extent (count, points);                 // 模型坐标范围
@@ -448,10 +427,10 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
     if (DRAW_MAXR(m_impl, modelUnit).contains(extent))  // 全部在显示区域内
     {
         pxpoints.resize(count);
-        lppt = &pxpoints.front();
+        pxs = &pxpoints.front();
         for (i = 0; i < count; i++)
-            (points[i] * matD).get(lppt[i].x, lppt[i].y);
-        ret = rawPolyBezier(ctx, lppt, count);
+            pxs[i] = points[i] * matD;
+        ret = rawPolyBezier(ctx, pxs, count);
     }
     else
     {        
@@ -470,10 +449,10 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
             if (n > 1)
             {
                 pxpoints.resize(n);
-                lppt = &pxpoints.front();
+                pxs = &pxpoints.front();
                 for (j=0; j<n; j++)
-                    pts[si + j].get(lppt[j].x, lppt[j].y);
-                ret = rawPolyBezier(ctx, lppt, n);
+                    pxs[j] = pts[si + j];
+                ret = rawPolyBezier(ctx, pxs, n);
             }
             si = ei = i;
         }
@@ -482,11 +461,11 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
 }
 
 bool GiGraphics::drawArc(const GiContext* ctx, 
-                         const Point2d& center, double rx, double ry, 
-                         double startAngle, double sweepAngle, 
+                         const Point2d& center, float rx, float ry, 
+                         float startAngle, float sweepAngle, 
                          bool modelUnit)
 {
-    if (m_impl->drawRefcnt == 0 || rx < _MGZERO || fabs(sweepAngle) < 1e-5)
+    if (m_impl->drawRefcnt == 0 || rx < _MGZERO || fabs(sweepAngle) < 1e-5f)
         return false;
     GiLock lock (&m_impl->drawRefcnt);
 
@@ -499,19 +478,9 @@ bool GiGraphics::drawArc(const GiContext* ctx,
     Point2d points[16];
     int count = mgAngleArcToBezier(points, center,
         rx, ry, startAngle, sweepAngle);
-    if (count < 4)
-        return false;
     S2D(xf(), modelUnit).TransformPoints(count, points);
-    POINT cen;
-    (center * S2D(xf(), modelUnit)).get(cen.x, cen.y);
 
-    vector<POINT> pxpoints;
-    pxpoints.resize(count);
-    POINT *lppt = &pxpoints.front();
-    for (int i = 0; i < count; i++)
-        points[i].get(lppt[i].x, lppt[i].y);
-
-    return rawPolyBezier(ctx, lppt, count);
+    return count > 3 && rawPolyBezier(ctx, points, count);
 }
 
 static inline int findInvisibleEdge(const PolygonClip& clip)
@@ -538,7 +507,7 @@ static bool drawPolygonEdge(const PolylineAux& aux,
                             int ienter)
 {
     bool ret = false;
-    vector<POINT> pxpoints;
+    vector<Point2d> pxpoints;
     Point2d pt1, pt2;
     int si, ei, n, i;
 
@@ -550,7 +519,7 @@ static bool drawPolygonEdge(const PolylineAux& aux,
         if (n > 1)
         {
             pxpoints.resize(n);
-            POINT *lppt = &pxpoints.front();
+            Point2d *pxs = &pxpoints.front();
             n = 0;
             for (i = si; i <= ei; i++)
             {
@@ -559,12 +528,11 @@ static bool drawPolygonEdge(const PolylineAux& aux,
                     || fabs(pt1.y - pt2.y) > 2)
                 {
                     pt1 = pt2;
-                    pt1.get(lppt[n].x, lppt[n].y);
-                    n++;
+                    pxs[n++] = pt1;
                 }
             }
 
-            ret = aux.draw(lppt, n) || ret;
+            ret = aux.draw(pxs, n) || ret;
         }
     }
 
@@ -589,12 +557,12 @@ static bool _DrawPolygon(GiGraphics* gs, const GiContext* ctx,
     if (context.isNullLine() && !context.hasFillColor())
         return false;
 
-    vector<POINT> pxpoints;
+    vector<Point2d> pxpoints;
     Point2d pt1, pt2;
     Matrix2d matD(S2D(gs->xf(), modelUnit));
 
     pxpoints.resize(count);
-    POINT *lppt = &pxpoints.front();
+    Point2d *pxs = &pxpoints.front();
     int n = 0;
     for (int i = 0; i < count; i++)
     {
@@ -605,12 +573,11 @@ static bool _DrawPolygon(GiGraphics* gs, const GiContext* ctx,
             || fabs(pt1.y - pt2.y) > 2)
         {
             pt1 = pt2;
-            pt1.get(lppt[n].x, lppt[n].y);
-            n++;
+            pxs[n++] = pt1;
         }
     }
 
-    return gs->rawPolygon(&context, lppt, n);
+    return gs->rawPolygon(&context, pxs, n);
 }
 
 bool GiGraphics::drawPolygon(const GiContext* ctx, int count, 
@@ -665,7 +632,7 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Box2d& rect, bool model
 }
 
 bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center, 
-                             double rx, double ry, bool modelUnit)
+                             float rx, float ry, bool modelUnit)
 {
     if (m_impl->drawRefcnt == 0 || rx < _MGZERO)
         return false;
@@ -676,7 +643,7 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center,
     if (ry < _MGZERO)
         ry = rx;
 
-    const Box2d extent (center, rx*2.0, ry*2.0);            // 模型坐标范围
+    const Box2d extent (center, rx*2.f, ry*2.f);            // 模型坐标范围
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
@@ -686,8 +653,7 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center,
         rx *= matD.m11;
         ry *= matD.m22;
 
-        ret = rawEllipse(ctx, mgRound(cen.x - rx), mgRound(cen.y - ry),
-            mgRound(2 * rx), mgRound(2 * ry));
+        ret = rawEllipse(ctx, cen.x - rx, cen.y - ry, 2 * rx, 2 * ry);
     }
     else
     {
@@ -695,15 +661,11 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center,
         mgEllipseToBezier(points, center, rx, ry);
         matD.TransformPoints(13, points);
 
-        POINT pts[13];
-        for (int i = 0; i < 13; i++)
-            points[i].get(pts[i].x, pts[i].y);
-
         ret = rawBeginPath();
         if (ret)
         {
-            ret = rawMoveTo(pts[0].x, pts[0].y);
-            ret = rawPolyBezierTo(pts + 1, 12);
+            ret = rawMoveTo(points[0].x, points[0].y);
+            ret = rawPolyBezierTo(points + 1, 12);
             ret = rawCloseFigure();
             ret = rawEndPath(ctx, true);
         }
@@ -713,18 +675,18 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center,
 }
 
 bool GiGraphics::drawPie(const GiContext* ctx, 
-                         const Point2d& center, double rx, double ry, 
-                         double startAngle, double sweepAngle, 
+                         const Point2d& center, float rx, float ry, 
+                         float startAngle, float sweepAngle, 
                          bool modelUnit)
 {
-    if (m_impl->drawRefcnt == 0 || rx < _MGZERO || fabs(sweepAngle) < 1e-5)
+    if (m_impl->drawRefcnt == 0 || rx < _MGZERO || fabs(sweepAngle) < 1e-5f)
         return false;
     GiLock lock (&m_impl->drawRefcnt);
 
     if (ry < _MGZERO)
         ry = rx;
 
-    const Box2d extent (center, rx*2.0, ry*2.0);            // 模型坐标范围
+    const Box2d extent (center, rx*2.f, ry*2.f);            // 模型坐标范围
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
@@ -734,21 +696,14 @@ bool GiGraphics::drawPie(const GiContext* ctx,
     if (count < 4)
         return false;
     S2D(xf(), modelUnit).TransformPoints(count, points);
-    POINT cen;
-    (center * S2D(xf(), modelUnit)).get(cen.x, cen.y);
-
-    vector<POINT> pxpoints;
-    pxpoints.resize(count);
-    POINT *lppt = &pxpoints.front();
-    for (int i = 0; i < count; i++)
-        points[i].get(lppt[i].x, lppt[i].y);
+    Point2d cen(center * S2D(xf(), modelUnit));
 
     bool ret = rawBeginPath();
     if (ret)
     {
         ret = rawMoveTo(cen.x, cen.y);
-        ret = rawLineTo(lppt[0].x, lppt[0].y);
-        ret = rawPolyBezierTo(lppt + 1, count - 1);
+        ret = rawLineTo(points[0].x, points[0].y);
+        ret = rawPolyBezierTo(points + 1, count - 1);
         ret = rawCloseFigure();
         ret = rawEndPath(ctx, true);
     }
@@ -767,7 +722,7 @@ bool GiGraphics::drawRect(const GiContext* ctx, const Box2d& rect,
 }
 
 bool GiGraphics::drawRoundRect(const GiContext* ctx, 
-                               const Box2d& rect, double rx, double ry, 
+                               const Box2d& rect, float rx, float ry, 
                                bool modelUnit)
 {
     if (m_impl->drawRefcnt == 0 || rect.isEmpty())
@@ -792,28 +747,24 @@ bool GiGraphics::drawRoundRect(const GiContext* ctx,
     else
     {
         Point2d points[16];
+
         mgRoundRectToBeziers(points, rect, rx, ry);
-
         S2D(xf(), modelUnit).TransformPoints(16, points);
-
-        POINT pts[16];
-        for (int i = 0; i < 16; i++)
-            points[i].get(pts[i].x, pts[i].y);
 
         ret = rawBeginPath();
         if (ret)
         {
-            ret = rawMoveTo(pts[0].x, pts[0].y);
-            ret = rawPolyBezierTo(&pts[1], 3);
+            ret = rawMoveTo(points[0].x, points[0].y);
+            ret = rawPolyBezierTo(&points[1], 3);
 
-            ret = rawLineTo(pts[4].x, pts[4].y);
-            ret = rawPolyBezierTo(&pts[5], 3);
+            ret = rawLineTo(points[4].x, points[4].y);
+            ret = rawPolyBezierTo(&points[5], 3);
 
-            ret = rawLineTo(pts[8].x, pts[8].y);
-            ret = rawPolyBezierTo(&pts[9], 3);
+            ret = rawLineTo(points[8].x, points[8].y);
+            ret = rawPolyBezierTo(&points[9], 3);
 
-            ret = rawLineTo(pts[12].x, pts[12].y);
-            ret = rawPolyBezierTo(&pts[13], 3);
+            ret = rawLineTo(points[12].x, points[12].y);
+            ret = rawPolyBezierTo(&points[13], 3);
 
             ret = rawCloseFigure();
             ret = rawEndPath(ctx, true);
@@ -836,23 +787,23 @@ bool GiGraphics::drawSplines(const GiContext* ctx, int count,
     int i;
     Point2d pt;
     Vector2d vec;
-    vector<POINT> pxpoints;
+    vector<Point2d> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
     // 开辟整形像素坐标数组
     pxpoints.resize(1 + (count - 1) * 3);
-    POINT *lppt = &pxpoints.front();
+    Point2d *pxs = &pxpoints.front();
 
     pt = knots[0] * matD;                               // 第一个Bezier段的起点
-    vec = knotVectors[0] * matD / 3.0;                  // 第一个Bezier段的起始矢量
-    pt.get(lppt->x, lppt->y); lppt++;                   // 产生Bezier段的起点
+    vec = knotVectors[0] * matD / 3.f;                  // 第一个Bezier段的起始矢量
+    *pxs++ = pt;                                       // 产生Bezier段的起点
     for (i = 1; i < count; i++)                         // 计算每一个Bezier段
     {
-        (pt += vec).get(lppt->x, lppt->y); lppt++;      // 产生Bezier段的第二点
+        *pxs++ = (pt += vec);                          // 产生Bezier段的第二点
         pt = knots[i] * matD;                           // Bezier段的终点
-        vec = knotVectors[i] * matD / 3.0;              // Bezier段的终止矢量
-        (pt - vec).get(lppt->x, lppt->y); lppt++;       // 产生Bezier段的第三点
-        pt.get(lppt->x, lppt->y); lppt++;               // 产生Bezier段的终点
+        vec = knotVectors[i] * matD / 3.f;              // Bezier段的终止矢量
+        *pxs++ = pt - vec;                             // 产生Bezier段的第三点
+        *pxs++ = pt;                                   // 产生Bezier段的终点
     }
 
     // 绘图
@@ -873,35 +824,34 @@ bool GiGraphics::drawClosedSplines(const GiContext* ctx, int count,
     int i, j = 0;
     Point2d pt;
     Vector2d vec;
-    vector<POINT> pxpoints;
+    vector<Point2d> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
     // 开辟整形像素坐标数组
     pxpoints.resize(1 + count * 3);
-    POINT *lppt = &pxpoints.front();
+    Point2d *pxs = &pxpoints.front();
 
     pt = knots[0] * matD;                               // 第一个Bezier段的起点
-    vec = knotVectors[0] * matD / 3.0;                  // 第一个Bezier段的起始矢量
-    pt.get(lppt[j].x, lppt[j].y); j++;                  // 产生Bezier段的起点
+    vec = knotVectors[0] * matD / 3.f;                  // 第一个Bezier段的起始矢量
+    pxs[j++] = pt;                                     // 产生Bezier段的起点
     for (i = 1; i < count; i++)                         // 计算每一个Bezier段
     {
-        (pt += vec).get(lppt[j].x, lppt[j].y); j++;     // 产生Bezier段的第二点
+        pxs[j++] = (pt += vec);                        // 产生Bezier段的第二点
         pt = knots[i] * matD;                           // Bezier段的终点
-        vec = knotVectors[i] * matD / 3.0;              // Bezier段的终止矢量
-        (pt - vec).get(lppt[j].x, lppt[j].y); j++;      // 产生Bezier段的第三点
-        pt.get(lppt[j].x, lppt[j].y); j++;              // 产生Bezier段的终点
+        vec = knotVectors[i] * matD / 3.f;              // Bezier段的终止矢量
+        pxs[j++] = pt - vec;                           // 产生Bezier段的第三点
+        pxs[j++] = pt;                                 // 产生Bezier段的终点
     }
-    (pt += vec).get(lppt[j].x, lppt[j].y); j++;         // 产生Bezier段的第二点
-    lppt[j].x = 2 * lppt[0].x - lppt[1].x;              // 产生Bezier段的第三点
-    lppt[j].y = 2 * lppt[0].y - lppt[1].y;              // K0 - V0 / 3
-    lppt[j+1] = lppt[0];                                // 产生Bezier段的终点
+    pxs[j++] = (pt += vec);                            // 产生Bezier段的第二点
+    pxs[j]   = 2 * pxs[0] - pxs[1].asVector();       // 产生Bezier段的第三点
+    pxs[j+1] = pxs[0];                                // 产生Bezier段的终点
 
     // 绘图
     bool ret = rawBeginPath();
     if (ret)
     {
-        ret = rawMoveTo(lppt[0].x, lppt[0].y);
-        ret = rawPolyBezierTo(lppt + 1, getSize(pxpoints) - 1);
+        ret = rawMoveTo(pxs[0].x, pxs[0].y);
+        ret = rawPolyBezierTo(pxs + 1, getSize(pxpoints) - 1);
         ret = rawCloseFigure();
         ret = rawEndPath(ctx, true);
     }
@@ -922,28 +872,24 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
         return false;
 
     int i;
-    Point2d pt1, pt2, pt3, pt4, pt;
-    double d6 = 1.0 / 6.0;
-    vector<POINT> pxpoints;
+    Point2d pt1, pt2, pt3, pt4;
+    float d6 = 1.f / 6.f;
+    vector<Point2d> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
     // 开辟整形像素坐标数组
     pxpoints.resize(1 + (count - 3) * 3);
-    POINT *lppt = &pxpoints.front();
+    Point2d *pxs = &pxpoints.front();
 
     // 计算第一个曲线段
     pt1 = controlPoints[0] * matD;
     pt2 = controlPoints[1] * matD;
     pt3 = controlPoints[2] * matD;
     pt4 = controlPoints[3 % count] * matD;
-    pt.set((pt1.x + 4 * pt2.x + pt3.x)*d6, (pt1.y + 4 * pt2.y + pt3.y)*d6);
-    pt.get(lppt->x, lppt->y); lppt++;
-    pt.set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
-    pt.get(lppt->x, lppt->y); lppt++;
-    pt.set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
-    pt.get(lppt->x, lppt->y); lppt++;
-    pt.set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
-    pt.get(lppt->x, lppt->y); lppt++;
+    (*pxs++).set((pt1.x + 4 * pt2.x + pt3.x)*d6, (pt1.y + 4 * pt2.y + pt3.y)*d6);
+    (*pxs++).set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
+    (*pxs++).set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
+    (*pxs++).set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
 
     // 计算其余曲线段
     for (i = 4; i < count; i++)
@@ -952,12 +898,9 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
         pt2 = pt3;
         pt3 = pt4;
         pt4 = controlPoints[i % count] * matD;
-        pt.set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
-        pt.get(lppt->x, lppt->y); lppt++;
-        pt.set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
-        pt.get(lppt->x, lppt->y); lppt++;
-        pt.set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
-        pt.get(lppt->x, lppt->y); lppt++;
+        (*pxs++).set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
+        (*pxs++).set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
+        (*pxs++).set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
     }
 
     // 绘图
@@ -979,28 +922,24 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
         return false;
 
     int i;
-    Point2d pt1, pt2, pt3, pt4, pt;
-    double d6 = 1.0 / 6.0;
-    vector<POINT> pxpoints;
+    Point2d pt1, pt2, pt3, pt4;
+    float d6 = 1.f / 6.f;
+    vector<Point2d> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
     // 开辟整形像素坐标数组
     pxpoints.resize(1 + count * 3);
-    POINT *lppt = &pxpoints.front();
+    Point2d *pxs = &pxpoints.front();
 
     // 计算第一个曲线段
     pt1 = controlPoints[0] * matD;
     pt2 = controlPoints[1] * matD;
     pt3 = controlPoints[2] * matD;
     pt4 = controlPoints[3 % count] * matD;
-    pt.set((pt1.x + 4 * pt2.x + pt3.x)*d6, (pt1.y + 4 * pt2.y + pt3.y)*d6);
-    pt.get(lppt->x, lppt->y); lppt++;
-    pt.set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
-    pt.get(lppt->x, lppt->y); lppt++;
-    pt.set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
-    pt.get(lppt->x, lppt->y); lppt++;
-    pt.set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
-    pt.get(lppt->x, lppt->y); lppt++;
+    (*pxs++).set((pt1.x + 4 * pt2.x + pt3.x)*d6, (pt1.y + 4 * pt2.y + pt3.y)*d6);
+    (*pxs++).set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
+    (*pxs++).set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
+    (*pxs++).set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
 
     // 计算其余曲线段
     for (i = 4; i < count + 3; i++)
@@ -1009,20 +948,17 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
         pt2 = pt3;
         pt3 = pt4;
         pt4 = controlPoints[i % count] * matD;
-        pt.set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
-        pt.get(lppt->x, lppt->y); lppt++;
-        pt.set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
-        pt.get(lppt->x, lppt->y); lppt++;
-        pt.set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
-        pt.get(lppt->x, lppt->y); lppt++;
+        (*pxs++).set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
+        (*pxs++).set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
+        (*pxs++).set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
     }
 
     // 绘图
     bool ret = rawBeginPath();
     if (ret)
     {
-        ret = rawMoveTo(lppt[0].x, lppt[0].y);
-        ret = rawPolyBezierTo(lppt + 1, getSize(pxpoints) - 1);
+        ret = rawMoveTo(pxs[0].x, pxs[0].y);
+        ret = rawPolyBezierTo(pxs + 1, getSize(pxpoints) - 1);
         ret = rawCloseFigure();
         ret = rawEndPath(ctx, true);
     }
@@ -1041,25 +977,20 @@ bool GiGraphics::drawPath(const GiContext* ctx, int count,
     if (count > 0x2000)
         count = 0x2000;
 
-    int i;
-    Point2d pt;
     Matrix2d matD(S2D(xf(), modelUnit));
 
     const Box2d extent (count, points);                     // 模型坐标范围
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
-    vector<POINT> pxpoints;
+    vector<Point2d> pxpoints;
     pxpoints.resize(count);
-    POINT *lppt = &pxpoints.front();
+    Point2d *pxs = &pxpoints.front();
 
-    for (i = 0; i < count; i++)
-    {
-        pt = points[i] * matD;
-        pt.get(lppt[i].x, lppt[i].y);
-    }
+    for (int i = 0; i < count; i++)
+        pxs[i] = points[i] * matD;
 
-    return rawPolyDraw(ctx, count, lppt, types);
+    return rawPolyDraw(ctx, count, pxs, types);
 }
 
 void GiGraphics::clearWnd()
@@ -1067,12 +998,12 @@ void GiGraphics::clearWnd()
     SafeCall(m_impl->draw, clearWnd());
 }
 
-bool GiGraphics::drawCachedBitmap(int x, int y, bool secondBmp)
+bool GiGraphics::drawCachedBitmap(float x, float y, bool secondBmp)
 {
     return m_impl->draw && m_impl->draw->drawCachedBitmap(x, y, secondBmp);
 }
 
-bool GiGraphics::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool secondBmp)
+bool GiGraphics::drawCachedBitmap2(const GiDrawAdapter* p, float x, float y, bool secondBmp)
 {
     return m_impl->draw && m_impl->draw->drawCachedBitmap2(p, x, y, secondBmp);
 }
@@ -1102,7 +1033,7 @@ int GiGraphics::getGraphType() const
     return m_impl->draw ? m_impl->draw->getGraphType() : 0;
 }
 
-int GiGraphics::getScreenDpi() const
+float GiGraphics::getScreenDpi() const
 {
     return m_impl->draw ? m_impl->draw->getScreenDpi() : 96;
 }
@@ -1127,7 +1058,7 @@ const GiContext* GiGraphics::getCurrentContext() const
     return m_impl->draw ? m_impl->draw->getCurrentContext() : NULL;
 }
 
-void GiGraphics::_clipBoxChanged(const RECT& clipBox)
+void GiGraphics::_clipBoxChanged(const RECT2D& clipBox)
 {
     SafeCall(m_impl->draw, _clipBoxChanged(clipBox));
 }
@@ -1137,40 +1068,40 @@ void GiGraphics::_antiAliasModeChanged(bool antiAlias)
     SafeCall(m_impl->draw, _antiAliasModeChanged(antiAlias));
 }
 
-bool GiGraphics::rawLine(const GiContext* ctx, int x1, int y1, int x2, int y2)
+bool GiGraphics::rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2)
 {
     return m_impl->draw && m_impl->draw->rawLine(ctx, x1, y1, x2, y2);
 }
 
-bool GiGraphics::rawPolyline(const GiContext* ctx, const POINT* lppt, int count)
+bool GiGraphics::rawPolyline(const GiContext* ctx, const Point2d* pxs, int count)
 {
-    return m_impl->draw && m_impl->draw->rawPolyline(ctx, lppt, count);
+    return m_impl->draw && m_impl->draw->rawPolyline(ctx, pxs, count);
 }
 
-bool GiGraphics::rawPolyBezier(const GiContext* ctx, const POINT* lppt, int count)
+bool GiGraphics::rawPolyBezier(const GiContext* ctx, const Point2d* pxs, int count)
 {
-    return m_impl->draw && m_impl->draw->rawPolyBezier(ctx, lppt, count);
+    return m_impl->draw && m_impl->draw->rawPolyBezier(ctx, pxs, count);
 }
 
-bool GiGraphics::rawPolygon(const GiContext* ctx, const POINT* lppt, int count)
+bool GiGraphics::rawPolygon(const GiContext* ctx, const Point2d* pxs, int count)
 {
-    return m_impl->draw && m_impl->draw->rawPolygon(ctx, lppt, count);
+    return m_impl->draw && m_impl->draw->rawPolygon(ctx, pxs, count);
 }
 
-bool GiGraphics::rawRect(const GiContext* ctx, int x, int y, int w, int h)
+bool GiGraphics::rawRect(const GiContext* ctx, float x, float y, float w, float h)
 {
     return m_impl->draw && m_impl->draw->rawRect(ctx, x, y, w, h);
 }
 
-bool GiGraphics::rawEllipse(const GiContext* ctx, int x, int y, int w, int h)
+bool GiGraphics::rawEllipse(const GiContext* ctx, float x, float y, float w, float h)
 {
     return m_impl->draw && m_impl->draw->rawEllipse(ctx, x, y, w, h);
 }
 
 bool GiGraphics::rawPolyDraw(const GiContext* ctx, int count, 
-                             const POINT* lppt, const UInt8* types)
+                             const Point2d* pxs, const UInt8* types)
 {
-    return m_impl->draw && m_impl->draw->rawPolyDraw(ctx, count, lppt, types);
+    return m_impl->draw && m_impl->draw->rawPolyDraw(ctx, count, pxs, types);
 }
 
 bool GiGraphics::rawBeginPath()
@@ -1183,19 +1114,19 @@ bool GiGraphics::rawEndPath(const GiContext* ctx, bool fill)
     return m_impl->draw && m_impl->draw->rawEndPath(ctx, fill);
 }
 
-bool GiGraphics::rawMoveTo(int x, int y)
+bool GiGraphics::rawMoveTo(float x, float y)
 {
     return m_impl->draw && m_impl->draw->rawMoveTo(x, y);
 }
 
-bool GiGraphics::rawLineTo(int x, int y)
+bool GiGraphics::rawLineTo(float x, float y)
 {
     return m_impl->draw && m_impl->draw->rawLineTo(x, y);
 }
 
-bool GiGraphics::rawPolyBezierTo(const POINT* lppt, int count)
+bool GiGraphics::rawPolyBezierTo(const Point2d* pxs, int count)
 {
-    return m_impl->draw && m_impl->draw->rawPolyBezierTo(lppt, count);
+    return m_impl->draw && m_impl->draw->rawPolyBezierTo(pxs, count);
 }
 
 bool GiGraphics::rawCloseFigure()

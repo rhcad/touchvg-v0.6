@@ -108,8 +108,8 @@ public:
         \param[out] segment 最近点所在部分的序号，其含义由派生图形类决定
         \return 给定的外部点到最近点的距离，失败时为极大数
     */
-    virtual double hitTest(const Point2d& pt, double tol, 
-        Point2d& ptNear, Int32& segment) const = 0;
+    virtual float hitTest(const Point2d& pt, float tol, 
+       Point2d& ptNear, Int32& segment) const = 0;
     
     //! 框选检查
     virtual bool hitTestBox(const Box2d& rect) const = 0;
@@ -130,7 +130,7 @@ public:
     virtual Point2d getHandlePoint(UInt32 index) const = 0;
     
     //! 设置指定序号的控制点坐标，指定的容差用于比较重合点
-    virtual bool setHandlePoint(UInt32 index, const Point2d& pt, double tol) = 0;
+    virtual bool setHandlePoint(UInt32 index, const Point2d& pt, float tol) = 0;
     
     //! 移动图形, segment 由 hitTest() 得到
     virtual bool offset(const Vector2d& vec, Int32 segment) = 0;
@@ -152,7 +152,7 @@ protected:
     bool _hitTestBox(const Box2d& rect) const;
     UInt32 _getHandleCount() const;
     Point2d _getHandlePoint(UInt32 index) const;
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, double tol);
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     bool _offset(const Vector2d& vec, Int32 segment);
 };
 
@@ -189,15 +189,15 @@ private:                                                        \
     virtual Point2d getPoint(UInt32 index) const;               \
     virtual void setPoint(UInt32 index, const Point2d& pt);     \
     virtual bool isClosed() const;                              \
-    virtual double hitTest(const Point2d& pt, double tol,       \
-        Point2d& ptNear, Int32& segment) const;                 \
+    virtual float hitTest(const Point2d& pt, float tol,       \
+       Point2d& ptNear, Int32& segment) const;                 \
     virtual bool hitTestBox(const Box2d& rect) const;  \
     virtual bool draw(GiGraphics& gs, const GiContext& ctx) const;  \
     virtual bool save(MgStorage* s) const;                      \
     virtual bool load(MgStorage* s);                            \
     virtual UInt32 getHandleCount() const;                      \
     virtual Point2d getHandlePoint(UInt32 index) const;         \
-    virtual bool setHandlePoint(UInt32 index, const Point2d& pt, double tol);   \
+    virtual bool setHandlePoint(UInt32 index, const Point2d& pt, float tol);   \
     virtual bool offset(const Vector2d& vec, Int32 segment);
 
 #define MG_DECLARE_CREATE(Cls, Base, TypeNum)                   \
@@ -209,8 +209,8 @@ protected:                                                      \
     void _update();                                             \
     void _transform(const Matrix2d& mat);                       \
     void _clear();                                              \
-    double _hitTest(const Point2d& pt, double tol,              \
-        Point2d& ptNear, Int32& segment) const;                 \
+    float _hitTest(const Point2d& pt, float tol,              \
+       Point2d& ptNear, Int32& segment) const;                 \
     UInt32 _getPointCount() const;                              \
     Point2d _getPoint(UInt32 index) const;                      \
     void _setPoint(UInt32 index, const Point2d& pt);            \

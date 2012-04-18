@@ -149,7 +149,7 @@ public:
     MgShape* hitTest(const Box2d& limits, Point2d& ptNear, Int32& segment) const
     {
         MgShape* retshape = NULL;
-        double distMin = limits.width();
+        float distMin = limits.width();
 
         for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
         {
@@ -159,7 +159,7 @@ public:
             {
                 Point2d tmpNear;
                 Int32   tmpSegment;
-                double  dist = shape->hitTest(limits.center(), 
+                float  dist = shape->hitTest(limits.center(), 
                     limits.width() / 2, tmpNear, tmpSegment);
 
                 if (distMin > dist) {

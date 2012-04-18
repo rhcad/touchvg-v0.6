@@ -51,7 +51,7 @@ public:
         \return 是否绘制成功
         \see saveCachedBitmap
     */
-    virtual bool drawCachedBitmap(int x = 0, int y = 0, bool secondBmp = false) = 0;
+    virtual bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false) = 0;
 
     //! 显示后备缓冲位图
     /*! 将另一个图形系统的后备缓冲位图显示到本对象的显示设备上，
@@ -64,7 +64,7 @@ public:
         \return 是否绘制成功
         \see saveCachedBitmap
     */
-    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, int x = 0, int y = 0, bool secondBmp = false) = 0;
+    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, float x = 0, float y = 0, bool secondBmp = false) = 0;
 
     //! 保存显示内容到后备缓冲位图
     /*! 将当前绘图目标(可能是绘图缓冲)的内容保存为一个位图对象，
@@ -97,7 +97,7 @@ public:
     virtual int getGraphType() const = 0;
 
     //! 返回屏幕分辨率DPI, 常量
-    virtual int getScreenDpi() const = 0;
+    virtual float getScreenDpi() const = 0;
 
     //! 返回背景色
     /*!
@@ -126,33 +126,33 @@ public:
     /*! 调用 GiGraphics::setClipBox() 或 setClipWorld() 后会调用本函数。
         \param[in] clipBox 新剪裁框的逻辑坐标矩形
     */
-    virtual void _clipBoxChanged(const RECT& clipBox) = 0;
+    virtual void _clipBoxChanged(const RECT2D& clipBox) = 0;
 
     //! 反走样模式已设置的通知，仅由 GiGraphics 调用
     virtual void _antiAliasModeChanged(bool antiAlias) = 0;
 
 
     //! 绘制直线段的原语函数，像素坐标，不剪裁
-    virtual bool rawLine(const GiContext* ctx, int x1, int y1, int x2, int y2) = 0;
+    virtual bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2) = 0;
 
     //! 绘制折线的原语函数，像素坐标，不剪裁
-    virtual bool rawPolyline(const GiContext* ctx, const POINT* lppt, int count) = 0;
+    virtual bool rawPolyline(const GiContext* ctx, const Point2d* pxs, int count) = 0;
 
     //! 绘制多条贝塞尔曲线的原语函数，像素坐标，不剪裁
-    virtual bool rawPolyBezier(const GiContext* ctx, const POINT* lppt, int count) = 0;
+    virtual bool rawPolyBezier(const GiContext* ctx, const Point2d* pxs, int count) = 0;
 
     //! 绘制多边形的原语函数，像素坐标，不剪裁
-    virtual bool rawPolygon(const GiContext* ctx, const POINT* lppt, int count) = 0;
+    virtual bool rawPolygon(const GiContext* ctx, const Point2d* pxs, int count) = 0;
 
     //! 绘制矩形的原语函数，像素坐标，不剪裁
-    virtual bool rawRect(const GiContext* ctx, int x, int y, int w, int h) = 0;
+    virtual bool rawRect(const GiContext* ctx, float x, float y, float w, float h) = 0;
 
     //! 绘制椭圆的原语函数，像素坐标，不剪裁
-    virtual bool rawEllipse(const GiContext* ctx, int x, int y, int w, int h) = 0;
+    virtual bool rawEllipse(const GiContext* ctx, float x, float y, float w, float h) = 0;
 
     //! 绘制多样线的原语函数，像素坐标，不剪裁
     virtual bool rawPolyDraw(const GiContext* ctx, 
-        int count, const POINT* lppt, const UInt8* types) = 0;
+        int count, const Point2d* pxs, const UInt8* types) = 0;
 
 
     //! 开始一个路径的原语函数
@@ -162,13 +162,13 @@ public:
     virtual bool rawEndPath(const GiContext* ctx, bool fill) = 0;
 
     //! 在当前路径中移动到新的位置的原语函数
-    virtual bool rawMoveTo(int x, int y) = 0;
+    virtual bool rawMoveTo(float x, float y) = 0;
 
     //! 在当前路径中添加画线指令到新的位置的原语函数
-    virtual bool rawLineTo(int x, int y) = 0;
+    virtual bool rawLineTo(float x, float y) = 0;
 
     //! 在当前路径中添加画贝塞尔曲线指令的原语函数
-    virtual bool rawPolyBezierTo(const POINT* lppt, int count) = 0;
+    virtual bool rawPolyBezierTo(const Point2d* pxs, int count) = 0;
 
     //! 在当前路径中添加闭合指令的原语函数
     virtual bool rawCloseFigure() = 0;

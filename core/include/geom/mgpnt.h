@@ -19,18 +19,18 @@ public:
     //! 原点(0,0)
     static const Point2d& kOrigin()
     {
-        static const Point2d pnt (0.0, 0.0);
+        static const Point2d pnt (0.f, 0.f);
         return pnt;
     }
     
     //! 构造为原点
     Point2d()
     {
-        x = y = 0.0;
+        x = y = 0.f;
     }
     
     //! 构造为点(x, y)
-    Point2d(double xx, double yy)
+    Point2d(float xx, float yy)
     {
         x = xx; y = yy;
     }
@@ -54,39 +54,39 @@ public:
     }
     
     //! 数 * 点
-    friend Point2d operator*(double s, const Point2d& pnt)
+    friend Point2d operator*(float s, const Point2d& pnt)
     {
         return Point2d(pnt.x * s, pnt.y * s);
     }
     
     //! 点 * 数
-    Point2d operator*(double s) const
+    Point2d operator*(float s) const
     {
         return Point2d(x * s, y * s);
     }
     
     //! 点 *= 数
-    Point2d& operator*=(double s)
+    Point2d& operator*=(float s)
     {
         x *= s; y *= s; return *this;
     }
     
     //! 点 / 数
-    Point2d operator/(double s) const
+    Point2d operator/(float s) const
     {
-        s = 1.0 / s;
+        s = 1.f / s;
         return Point2d(x * s, y * s);
     }
     
     //! 点 /= 数
-    Point2d& operator/=(double s)
+    Point2d& operator/=(float s)
     {
-        s = 1.0 / s;
+        s = 1.f / s;
         x *= s; y *= s; return *this;
     }
 
     //! 比例放缩
-    Point2d& scaleBy(double sx, double sy)
+    Point2d& scaleBy(float sx, float sy)
     {
         x *= sx; y *= sy; return *this;
     }
@@ -134,7 +134,7 @@ public:
     }
     
     //! 平移
-    void offset(double dx, double dy)
+    void offset(float dx, float dy)
     {
         x += dx; y += dy;
     }
@@ -158,13 +158,13 @@ public:
     }
 
     //! 到原点的距离
-    double length() const
+    float length() const
     {
         return mgHypot(x, y);
     }
     
     //! 两点距离
-    double distanceTo(const Point2d& pnt) const
+    float distanceTo(const Point2d& pnt) const
     {
         return mgHypot(x - pnt.x, y - pnt.y);
     }
@@ -193,7 +193,7 @@ public:
     }
     
     //! 设置为点(xx, yy)
-    Point2d& set(double xx, double yy)
+    Point2d& set(float xx, float yy)
     {
         x = xx; y = yy; return *this;
     }
@@ -214,7 +214,7 @@ public:
         \param dist 极径长度
         \return 计算出的坐标
     */
-    Point2d polarPoint(double angle, double dist) const
+    Point2d polarPoint(float angle, float dist) const
     {
         return Point2d(x + dist * cos(angle), y + dist * sin(angle));
     }
@@ -225,7 +225,7 @@ public:
         \param yoff 垂直沿线方向偏移，方向点↑偏移
         \return 计算出的坐标
     */
-    Point2d rulerPoint(const Point2d& dir, double yoff) const;
+    Point2d rulerPoint(const Point2d& dir, float yoff) const;
 
     //! 移动直尺法
     /*! 相对于起始点(本点)和方向点，在沿线方向和垂直沿线方向分别偏移计算坐标
@@ -234,7 +234,7 @@ public:
         \param yoff 垂直沿线方向(↑)偏移
         \return 计算出的坐标
     */
-    Point2d rulerPoint(const Point2d& dir, double xoff, double yoff) const;
+    Point2d rulerPoint(const Point2d& dir, float xoff, float yoff) const;
 };
 
 #endif // __GEOMETRY_POINT_H_

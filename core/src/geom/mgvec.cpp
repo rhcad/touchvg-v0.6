@@ -5,9 +5,9 @@
 #include "mgpnt.h"
 
 // 移动直尺法，以本点向dir方向点沿线为直尺边，在垂直沿线方向偏移yoff
-Point2d Point2d::rulerPoint(const Point2d& dir, double yoff) const
+Point2d Point2d::rulerPoint(const Point2d& dir, float yoff) const
 {
-    double len = distanceTo(dir);
+    float len = distanceTo(dir);
     if (len < _MGZERO)
         return Point2d(x, y + yoff);
     else
@@ -18,15 +18,15 @@ Point2d Point2d::rulerPoint(const Point2d& dir, double yoff) const
 }
 
 // 移动直尺法，dir方向点，在沿线方向偏移xoff，垂直沿线方向偏移yoff
-Point2d Point2d::rulerPoint(const Point2d& dir, double xoff, double yoff) const
+Point2d Point2d::rulerPoint(const Point2d& dir, float xoff, float yoff) const
 {
-    double len = distanceTo(dir);
+    float len = distanceTo(dir);
     if (len < _MGZERO)
         return Point2d(x + xoff, y + yoff);
     else
     {
-        double dcos = (dir.x - x) / len;
-        double dsin = (dir.y - y) / len;
+        float dcos = (dir.x - x) / len;
+        float dsin = (dir.y - y) / len;
         return Point2d(x + xoff * dcos - yoff * dsin, 
             y + xoff * dsin + yoff * dcos);
     }
@@ -35,8 +35,8 @@ Point2d Point2d::rulerPoint(const Point2d& dir, double xoff, double yoff) const
 // 判断两个矢量是否平行
 bool Vector2d::isParallelTo(const Vector2d& vec, const Tol& tol) const
 {
-    double cosfz = dotProduct(vec);
-    double sinfz = crossProduct(vec);
+    float cosfz = dotProduct(vec);
+    float sinfz = crossProduct(vec);
     return (fabs(sinfz) <= fabs(cosfz) * tol.equalVector());
 }
 
@@ -46,8 +46,8 @@ bool Vector2d::isParallelTo(const Vector2d& vec,
 {
     bool ret = false;
     nonzero = true;
-    double cosfz = dotProduct(vec);
-    double sinfz = crossProduct(vec);
+    float cosfz = dotProduct(vec);
+    float sinfz = crossProduct(vec);
     if (fabs(sinfz) <= fabs(cosfz) * tol.equalVector())
     {
         if (mgIsZero(cosfz))
@@ -60,10 +60,10 @@ bool Vector2d::isParallelTo(const Vector2d& vec,
 // 判断两个矢量是否同向
 bool Vector2d::isCodirectionalTo(const Vector2d& vec, const Tol& tol) const
 {
-    double cosfz = dotProduct(vec);
+    float cosfz = dotProduct(vec);
     if (cosfz < -_MGZERO)          // 同向则cos(夹角)接近1.0
         return false;
-    double sinfz = crossProduct(vec);
+    float sinfz = crossProduct(vec);
     return (fabs(sinfz) <= cosfz * tol.equalVector());
 }
 
@@ -73,8 +73,8 @@ bool Vector2d::isCodirectionalTo(const Vector2d& vec,
 {
     bool ret = false;
     nonzero = true;
-    double cosfz = dotProduct(vec);
-    double sinfz = crossProduct(vec);
+    float cosfz = dotProduct(vec);
+    float sinfz = crossProduct(vec);
     if (fabs(sinfz) <= fabs(cosfz) * tol.equalVector())
     {
         if (fabs(cosfz) < _MGZERO)
@@ -91,10 +91,10 @@ bool Vector2d::isCodirectionalTo(const Vector2d& vec,
 // 判断两个矢量是否反向
 bool Vector2d::isOppositeTo(const Vector2d& vec, const Tol& tol) const
 {
-    double cosfz = dotProduct(vec);
+    float cosfz = dotProduct(vec);
     if (cosfz > -_MGZERO)          // 反向则cos(夹角)接近-1.0
         return false;
-    double sinfz = crossProduct(vec);
+    float sinfz = crossProduct(vec);
     return (fabs(sinfz) <= (-cosfz) * tol.equalVector());
 }
 
@@ -104,8 +104,8 @@ bool Vector2d::isOppositeTo(const Vector2d& vec,
 {
     bool ret = false;
     nonzero = true;
-    double cosfz = dotProduct(vec);
-    double sinfz = crossProduct(vec);
+    float cosfz = dotProduct(vec);
+    float sinfz = crossProduct(vec);
     if (fabs(sinfz) <= fabs(cosfz) * tol.equalVector())
     {
         if (fabs(cosfz) < _MGZERO)
@@ -122,10 +122,10 @@ bool Vector2d::isOppositeTo(const Vector2d& vec,
 // 判断两个矢量是否垂直
 bool Vector2d::isPerpendicularTo(const Vector2d& vec, const Tol& tol) const
 {
-    double sinfz = fabs(crossProduct(vec));
+    float sinfz = fabs(crossProduct(vec));
     if (sinfz < _MGZERO)
         return false;
-    double cosfz = fabs(dotProduct(vec));
+    float cosfz = fabs(dotProduct(vec));
     return (cosfz <= sinfz * tol.equalVector());
 }
 
@@ -135,8 +135,8 @@ bool Vector2d::isPerpendicularTo(const Vector2d& vec,
 {
     bool ret = false;
     nonzero = true;
-    double sinfz = fabs(crossProduct(vec));
-    double cosfz = fabs(dotProduct(vec));
+    float sinfz = fabs(crossProduct(vec));
+    float cosfz = fabs(dotProduct(vec));
     if (cosfz <= sinfz * tol.equalVector())
     {
         ret = (sinfz >= _MGZERO);
@@ -147,28 +147,28 @@ bool Vector2d::isPerpendicularTo(const Vector2d& vec,
 
 // 求本矢量投影到矢量xAxis上的垂直距离
 // 在xAxis的逆时针方向时返回正值，顺时针则返回负值
-double Vector2d::distanceToVector(const Vector2d& xAxis) const
+float Vector2d::distanceToVector(const Vector2d& xAxis) const
 {
-    double len = xAxis.length();
+    float len = xAxis.length();
     if (len < _MGZERO)
         return length();
     return xAxis.crossProduct(*this) / len;
 }
 
 // 求本矢量在矢量xAxis上的投影比例, 投影矢量 = xAxis * 投影比例
-double Vector2d::projectScaleToVector(const Vector2d& xAxis) const
+float Vector2d::projectScaleToVector(const Vector2d& xAxis) const
 {
-    double d2 = xAxis.lengthSqrd();
+    float d2 = xAxis.lengthSqrd();
     if (d2 < _MGZERO)
-        return 0.0;
+        return 0.f;
     return dotProduct(xAxis) / d2;
 }
 
 // 求本矢量在矢量xAxis上的投影矢量和垂直矢量
-double Vector2d::projectResolveVector(const Vector2d& xAxis, 
+float Vector2d::projectResolveVector(const Vector2d& xAxis, 
                                       Vector2d& proj, Vector2d& perp) const
 {
-    double s = projectScaleToVector(xAxis);
+    float s = projectScaleToVector(xAxis);
     proj = xAxis * s;
     perp = *this - proj;
     return s;
@@ -176,12 +176,12 @@ double Vector2d::projectResolveVector(const Vector2d& xAxis,
 
 // 将本矢量在两个不共线的非零矢量上进行矢量分解, vec = u*uAxis+v*vAxis
 bool Vector2d::resolveVector(const Vector2d& uAxis, const Vector2d& vAxis, 
-                             double& u, double& v) const
+                             float& u, float& v) const
 {
-    double denom = uAxis.crossProduct(vAxis);
+    float denom = uAxis.crossProduct(vAxis);
     if (mgIsZero(denom))
     {
-        u = 0.0; v = 0.0;
+        u = 0.f; v = 0.f;
         return false;
     }
     u = crossProduct(vAxis) / denom;

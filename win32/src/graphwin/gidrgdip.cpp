@@ -69,12 +69,10 @@ struct GdipDrawImplBase
                     m_pen = NULL;
                 }
 
-                UInt16 width = owner()->calcPenWidth(ctx->getLineWidth());
+                float width = owner()->calcPenWidth(ctx->getLineWidth());
                 GiColor color = owner()->calcPenColor(ctx->getLineColor());
-                m_pen = new G::Pen(
-                    G::Color(ctx->getLineAlpha(), 
-                    color.r, color.g, color.b), 
-                    (float)width);
+                m_pen = new G::Pen(G::Color(ctx->getLineAlpha(), 
+                    color.r, color.g, color.b), width);
 
                 if (m_pen != NULL)
                 {
@@ -194,7 +192,7 @@ public:
     bool drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp, 
         long hmWidth, long hmHeight, const Box2d& rectW, bool fast);
     bool addPolyToPath(G::GraphicsPath* pPath, int count, 
-        const POINT* lppt, const UInt8* types);
+        const Point2d* pxs, const UInt8* types);
 };
 
 long        GiGraphGdipImpl::c_graphCount = 0;
@@ -376,18 +374,20 @@ void GiGraphGdip::clearCachedBitmap()
     }
 }
 
-bool GiGraphGdip::drawCachedBitmap(int x, int y, bool secondBmp)
+bool GiGraphGdip::drawCachedBitmap(float x, float y, bool secondBmp)
 {
     bool ret = false;
     G::CachedBitmap* pBmp = gdipCachedBmp(secondBmp);
     if (m_draw->getDrawGs() != NULL && pBmp != NULL)
     {
-        ret = (G::Ok == m_draw->getDrawGs()->DrawCachedBitmap(pBmp, x, y));
+        ret = (G::Ok == m_draw->getDrawGs()->DrawCachedBitmap(
+            pBmp, mgRound(x), mgRound(y)));
     }
     return ret;
 }
 
-bool GiGraphGdip::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool secondBmp)
+bool GiGraphGdip::drawCachedBitmap2(const GiDrawAdapter* p, 
+                                    float x, float y, bool secondBmp)
 {
     bool ret = false;
 
@@ -401,7 +401,8 @@ bool GiGraphGdip::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool s
             G::CachedBitmap* pBmp = gdipCachedBmp(secondBmp);
             if (pBmp != NULL)
             {
-                ret = (G::Ok == m_draw->getDrawGs()->DrawCachedBitmap(pBmp, x, y));
+                ret = (G::Ok == m_draw->getDrawGs()->DrawCachedBitmap(
+                    pBmp, mgRound(x), mgRound(y)));
             }
         }
     }
@@ -475,9 +476,9 @@ void GiGraphGdip::endPaint(bool draw)
     }
 }
 
-void GiGraphGdip::_clipBoxChanged(const RECT& clipBox)
+void GiGraphGdip::_clipBoxChanged(const RECT2D& clipBox)
 {
-    m_draw->getDrawGs()->SetClip(G::Rect(clipBox.left, clipBox.top, 
+    m_draw->getDrawGs()->SetClip(G::RectF(clipBox.left, clipBox.top, 
         clipBox.right - clipBox.left, clipBox.bottom - clipBox.top));
 }
 
@@ -551,22 +552,21 @@ private:
 };
 
 bool GiGraphGdip::rawLine(const GiContext* ctx, 
-                          int x1, int y1, int x2, int y2)
+                          float x1, float y1, float x2, float y2)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
 
     if (pPen != NULL)
     {
-        ret = (G::Ok == 
-            m_draw->getDrawGs()->DrawLine(pPen, x1, y1, x2, y2));
+        ret = (G::Ok == m_draw->getDrawGs()->DrawLine(pPen, x1, y1, x2, y2));
     }
 
     return ret;
 }
 
 bool GiGraphGdip::rawPolyline(const GiContext* ctx, 
-                              const POINT* lppt, int count)
+                              const Point2d* pxs, int count)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -574,14 +574,14 @@ bool GiGraphGdip::rawPolyline(const GiContext* ctx,
     if (pPen != NULL)
     {
         ret = (G::Ok == m_draw->getDrawGs()->DrawLines(
-            pPen, (G::Point*)lppt, count));
+            pPen, (G::PointF*)pxs, count));
     }
 
     return ret;
 }
 
 bool GiGraphGdip::rawPolyBezier(const GiContext* ctx, 
-                                const POINT* lppt, int count)
+                                const Point2d* pxs, int count)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -589,14 +589,14 @@ bool GiGraphGdip::rawPolyBezier(const GiContext* ctx,
     if (pPen != NULL)
     {
         ret = (G::Ok == m_draw->getDrawGs()->DrawBeziers(
-            pPen, (G::Point*)lppt, count));
+            pPen, (G::PointF*)pxs, count));
     }
 
     return ret;
 }
 
 bool GiGraphGdip::rawPolygon(const GiContext* ctx, 
-                             const POINT* lppt, int count)
+                             const Point2d* pxs, int count)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -605,19 +605,19 @@ bool GiGraphGdip::rawPolygon(const GiContext* ctx,
     if (pBrush != NULL)
     {
         ret = (G::Ok == m_draw->getDrawGs()->FillPolygon(pBrush, 
-            (G::Point*)lppt, count));
+            (G::PointF*)pxs, count));
     }
     if (pPen != NULL)
     {
         ret = (G::Ok == m_draw->getDrawGs()->DrawPolygon(
-            pPen, (G::Point*)lppt, count));
+            pPen, (G::PointF*)pxs, count));
     }
 
     return ret;
 }
 
 bool GiGraphGdip::rawRect(const GiContext* ctx, 
-                          int x, int y, int w, int h)
+                          float x, float y, float w, float h)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -636,20 +636,18 @@ bool GiGraphGdip::rawRect(const GiContext* ctx,
 
     if (pBrush != NULL && w > 0 && h > 0)
     {
-        ret = (G::Ok == 
-            m_draw->getDrawGs()->FillRectangle(pBrush, x, y, w, h));
+        ret = (G::Ok == m_draw->getDrawGs()->FillRectangle(pBrush, x, y, w, h));
     }
     if (pPen != NULL && w > 0 && h > 0)
     {
-        ret = (G::Ok == 
-            m_draw->getDrawGs()->DrawRectangle(pPen, x, y, w, h));
+        ret = (G::Ok == m_draw->getDrawGs()->DrawRectangle(pPen, x, y, w, h));
     }
 
     return ret;
 }
 
 bool GiGraphGdip::rawEllipse(const GiContext* ctx, 
-                             int x, int y, int w, int h)
+                             float x, float y, float w, float h)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -668,13 +666,11 @@ bool GiGraphGdip::rawEllipse(const GiContext* ctx,
 
     if (pBrush != NULL && w > 0 && h > 0)
     {
-        ret = (G::Ok == 
-            m_draw->getDrawGs()->FillEllipse(pBrush, x, y, w, h));
+        ret = (G::Ok == m_draw->getDrawGs()->FillEllipse(pBrush, x, y, w, h));
     }
     if (pPen != NULL && w > 0 && h > 0)
     {
-        ret = (G::Ok == 
-            m_draw->getDrawGs()->DrawEllipse(pPen, x, y, w, h));
+        ret = (G::Ok == m_draw->getDrawGs()->DrawEllipse(pPen, x, y, w, h));
     }
 
     return ret;
@@ -709,8 +705,7 @@ bool GiGraphGdip::rawEndPath(const GiContext* ctx, bool fill)
         TempGdipPen pPen(m_draw, ctx);
         if (pPen != NULL)
         {
-            ret = (G::Ok == m_draw->getDrawGs()->DrawPath(
-                pPen, m_draw->m_path));
+            ret = (G::Ok == m_draw->getDrawGs()->DrawPath(pPen, m_draw->m_path));
         }
 
         delete m_draw->m_path;
@@ -720,7 +715,7 @@ bool GiGraphGdip::rawEndPath(const GiContext* ctx, bool fill)
     return ret;
 }
 
-bool GiGraphGdip::rawMoveTo(int x, int y)
+bool GiGraphGdip::rawMoveTo(float x, float y)
 {
     bool ret = false;
 
@@ -728,13 +723,13 @@ bool GiGraphGdip::rawMoveTo(int x, int y)
     {
         if (m_draw->m_path->GetPointCount() > 0)
             ret = (G::Ok == m_draw->m_path->StartFigure());
-        ret = (G::Ok == m_draw->m_path->AddLine((INT)x, (INT)y, (INT)x, (INT)y));
+        ret = (G::Ok == m_draw->m_path->AddLine(x, y, x, y));
     }
 
     return ret;
 }
 
-bool GiGraphGdip::rawLineTo(int x, int y)
+bool GiGraphGdip::rawLineTo(float x, float y)
 {
     bool ret = false;
 
@@ -742,14 +737,13 @@ bool GiGraphGdip::rawLineTo(int x, int y)
     {
         G::PointF pt;
         ret = (G::Ok == m_draw->m_path->GetLastPoint(&pt));
-        ret = (G::Ok == 
-            m_draw->m_path->AddLine(pt.X, pt.Y, (float)x, (float)y));
+        ret = (G::Ok == m_draw->m_path->AddLine(pt.X, pt.Y, x, y));
     }
 
     return ret;
 }
 
-bool GiGraphGdip::rawPolyBezierTo(const POINT* lppt, int count)
+bool GiGraphGdip::rawPolyBezierTo(const Point2d* pxs, int count)
 {
     bool ret = false;
     G::PointF pts[4];
@@ -759,12 +753,12 @@ bool GiGraphGdip::rawPolyBezierTo(const POINT* lppt, int count)
         ret = (G::Ok == m_draw->m_path->GetLastPoint(&pts[0]));
         for (int i = 0; i + 2 < count; i += 3)
         {
-            pts[1].X = (float)lppt[i].x;
-            pts[1].Y = (float)lppt[i].y;
-            pts[2].X = (float)lppt[i+1].x;
-            pts[2].Y = (float)lppt[i+1].y;
-            pts[3].X = (float)lppt[i+2].x;
-            pts[3].Y = (float)lppt[i+2].y;
+            pts[1].X = pxs[i].x;
+            pts[1].Y = pxs[i].y;
+            pts[2].X = pxs[i+1].x;
+            pts[2].Y = pxs[i+1].y;
+            pts[3].X = pxs[i+2].x;
+            pts[3].Y = pxs[i+2].y;
             ret = (G::Ok == m_draw->m_path->AddBezier(
                 pts[0], pts[1], pts[2], pts[3]));
             pts[0] = pts[3];
@@ -786,18 +780,18 @@ bool GiGraphGdip::rawCloseFigure()
 }
 
 bool GiGraphGdip::rawPolyDraw(const GiContext* ctx, int count, 
-                              const POINT* lppt, const UInt8* types)
+                              const Point2d* pxs, const UInt8* types)
 {
     bool ret = false;
     G::GraphicsPath* pPath = NULL;
 
-    if (lppt != NULL && types != NULL && count > 1
+    if (pxs != NULL && types != NULL && count > 1
         && (pPath = new G::GraphicsPath) != NULL)
     {
         if (NULL == ctx)
             ctx = getCurrentContext();
 
-        ret = m_draw->addPolyToPath(pPath, count, lppt, types);
+        ret = m_draw->addPolyToPath(pPath, count, pxs, types);
         if (ret)
         {
             if (ctx->hasFillColor())
@@ -805,15 +799,13 @@ bool GiGraphGdip::rawPolyDraw(const GiContext* ctx, int count,
                 G::Brush* pBrush = m_draw->createBrush(ctx);
                 if (pBrush != NULL)
                 {
-                    ret = (G::Ok == m_draw->getDrawGs()->FillPath(
-                        pBrush, pPath));
+                    ret = (G::Ok == m_draw->getDrawGs()->FillPath(pBrush, pPath));
                 }
             }
             TempGdipPen pPen(m_draw, ctx);
             if (pPen != NULL)
             {
-                ret = (G::Ok == 
-                    m_draw->getDrawGs()->DrawPath(pPen, pPath));
+                ret = (G::Ok == m_draw->getDrawGs()->DrawPath(pPen, pPath));
             }
         }
     }
@@ -825,9 +817,9 @@ bool GiGraphGdip::rawPolyDraw(const GiContext* ctx, int count,
 }
 
 bool GiGraphGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count, 
-                                          const POINT* lppt, const UInt8* types)
+                                    const Point2d* pxs, const UInt8* types)
 {
-    POINT pt = { 0, 0 };
+    Point2d pt;
     bool ret = true;
 
     for (int i = 0; i < count && ret; i++)
@@ -836,14 +828,13 @@ bool GiGraphGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count,
         {
             if (pPath->GetPointCount() > 0)
                 ret = (G::Ok == pPath->StartFigure());
-            pt = lppt[i];
-            ret = (G::Ok == pPath->AddLine((INT)pt.x, (INT)pt.y, (INT)pt.x, (INT)pt.y));
+            pt = pxs[i];
+            ret = (G::Ok == pPath->AddLine(pt.x, pt.y, pt.x, pt.y));
         }
         else if (PT_LINETO == (types[i] & (PT_LINETO | PT_BEZIERTO)))
         {
-            ret = (G::Ok == 
-                pPath->AddLine((INT)pt.x, (INT)pt.y, (INT)lppt[i].x, (INT)lppt[i].y));
-            pt = lppt[i];
+            ret = (G::Ok == pPath->AddLine(pt.x, pt.y, pxs[i].x, pxs[i].y));
+            pt = pxs[i];
         }
         else if (PT_BEZIERTO == (types[i] & (PT_LINETO | PT_BEZIERTO)))
         {
@@ -856,12 +847,12 @@ bool GiGraphGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count,
             else
             {
                 ret = (G::Ok == pPath->AddBezier(
-                    (INT)pt.x, (INT)pt.y, 
-                    (INT)lppt[i].x, (INT)lppt[i].y, 
-                    (INT)lppt[i+1].x, (INT)lppt[i+1].y, 
-                    (INT)lppt[i+2].x, (INT)lppt[i+2].y));
+                    pt.x, pt.y, 
+                    pxs[i].x, pxs[i].y, 
+                    pxs[i+1].x, pxs[i+1].y, 
+                    pxs[i+2].x, pxs[i+2].y));
                 i += 2;
-                pt = lppt[i];
+                pt = pxs[i];
             }
         }
 
@@ -875,27 +866,28 @@ bool GiGraphGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count,
 }
 
 bool GiGraphGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp, 
-                                      long hmWidth, long hmHeight, 
-                                      const Box2d& rectW, bool fast)
+                                long hmWidth, long hmHeight, 
+                                const Box2d& rectW, bool fast)
 {
-    RECT rc, rcDraw, rcFrom;
+    RECT2D rc, rcDraw, rcFrom;
+    Box2d rect;
 
     // rc: 整个图像对应的显示坐标区域
-    (rectW * owner()->xf().worldToDisplay()).get(rc.left, rc.top, rc.right, rc.bottom);
+    (rectW * owner()->xf().worldToDisplay()).get(rc);
 
     // rcDraw: 图像经剪裁后的可显示部分
-    if (!IntersectRect(&rcDraw, &rc, &pImpl->clipBox))
+    if (rect.intersectWith(Box2d(rc), Box2d(pImpl->clipBox)).isEmpty())
         return false;
+    rect.get(rcDraw);
 
-    long width, height;       // pixel units
-    width = MulDiv(hmWidth, owner()->xf().getDpiX(), 2540);
-    height = MulDiv(hmHeight, owner()->xf().getDpiY(), 2540);
+    float width = (float)hmWidth * owner()->xf().getDpiX() / 2540.f;
+    float height = (float)hmHeight * owner()->xf().getDpiY() / 2540.f;
 
     // rcFrom: rcDraw在原始图像上对应的图像范围
-    rcFrom.left = MulDiv(rcDraw.left - rc.left, width, rc.right - rc.left);
-    rcFrom.top = MulDiv(rcDraw.top - rc.top, height, rc.bottom - rc.top);
-    rcFrom.right = MulDiv(rcDraw.right - rc.left, width, rc.right - rc.left);
-    rcFrom.bottom = MulDiv(rcDraw.bottom - rc.top, height, rc.bottom - rc.top);
+    rcFrom.left = (rcDraw.left - rc.left) * width / (rc.right - rc.left);
+    rcFrom.top  = (rcDraw.top - rc.top) * height / (rc.bottom - rc.top);
+    rcFrom.right = (rcDraw.right - rc.left) * width / (rc.right - rc.left);
+    rcFrom.bottom = (rcDraw.bottom - rc.top) * height / (rc.bottom - rc.top);
 
     // 根据rectW正负决定是否颠倒显示图像
     if (rectW.xmin > rectW.xmax)
@@ -908,7 +900,7 @@ bool GiGraphGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp,
         ? G::InterpolationModeBilinear : G::InterpolationModeLowQuality);
 
     G::Status ret = getDrawGs()->DrawImage(pBmp, 
-        G::Rect(rcDraw.left, rcDraw.top, 
+        G::RectF(rcDraw.left, rcDraw.top, 
         rcDraw.right - rcDraw.left, 
         rcDraw.bottom - rcDraw.top), 
         rcFrom.left, rcFrom.top, 

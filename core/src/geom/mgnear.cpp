@@ -16,7 +16,7 @@ GEOMAPI void mgBeziersBox(
     for (Int32 i = 0; i + 3 < count; i += 3)
     {
         for (int j = 1; j < SPLITN; j++)
-            mgFitBezier(points + i, 1.0 / SPLITN * j, fits[j]);
+            mgFitBezier(points + i, 1.f / SPLITN * j, fits[j]);
         fits[0] = points[i];
         fits[SPLITN] = points[i+3];
         box.unionWith(Box2d(SPLITN + 1, fits));
@@ -29,7 +29,7 @@ GEOMAPI void mgBeziersBox(
             points[0]
         };
         for (int j = 1; j < SPLITN; j++)
-            mgFitBezier(pts, 1.0 / SPLITN * j, fits[j]);
+            mgFitBezier(pts, 1.f / SPLITN * j, fits[j]);
         fits[0] = pts[0];
         fits[SPLITN] = pts[3];
         box.unionWith(Box2d(SPLITN + 1, fits));
@@ -45,7 +45,7 @@ GEOMAPI bool mgBeziersIntersectBox(
     for (Int32 i = 0; i + 3 < count; i += 3)
     {
         for (int j = 1; j < SPLITN; j++)
-            mgFitBezier(points + i, 1.0 / SPLITN * j, fits[j]);
+            mgFitBezier(points + i, 1.f / SPLITN * j, fits[j]);
         fits[0] = points[i];
         fits[SPLITN] = points[i+3];
         if (box.isIntersect(Box2d(SPLITN + 1, fits)))
@@ -59,7 +59,7 @@ GEOMAPI bool mgBeziersIntersectBox(
             points[0]
         };
         for (int j = 1; j < SPLITN; j++)
-            mgFitBezier(pts, 1.0 / SPLITN * j, fits[j]);
+            mgFitBezier(pts, 1.f / SPLITN * j, fits[j]);
         fits[0] = pts[0];
         fits[SPLITN] = pts[3];
         if (box.isIntersect(Box2d(SPLITN + 1, fits)))
@@ -86,8 +86,8 @@ GEOMAPI void mgCubicSplinesBox(
     for (Int32 i = 0; i + 1 < n2; i++)
     {
         Point2d pts[4] = { knots[i], 
-            knots[i] + knotVectors[i] / 3.0, 
-            knots[(i + 1) % n] - knotVectors[(i + 1) % n] / 3.0, 
+            knots[i] + knotVectors[i] / 3.f, 
+            knots[(i + 1) % n] - knotVectors[(i + 1) % n] / 3.f, 
             knots[(i + 1) % n] };
         box.unionWith(mgBeziersBox2(pts));
     }
@@ -102,8 +102,8 @@ GEOMAPI bool mgCubicSplinesIntersectBox(
     for (Int32 i = 0; i + 1 < n2; i++)
     {
         Point2d pts[4] = { knots[i], 
-            knots[i] + knotVectors[i] / 3.0, 
-            knots[(i + 1) % n] - knotVectors[(i + 1) % n] / 3.0, 
+            knots[i] + knotVectors[i] / 3.f, 
+            knots[(i + 1) % n] - knotVectors[(i + 1) % n] / 3.f, 
             knots[(i + 1) % n] };
         if (mgBeziersIntersectBox(box, 4, pts, false))
             return true;
@@ -112,12 +112,12 @@ GEOMAPI bool mgCubicSplinesIntersectBox(
     return false;
 }
 
-GEOMAPI double mgCubicSplinesHit(
+GEOMAPI float mgCubicSplinesHit(
     Int32 n, const Point2d* knots, const Vector2d* knotVectors, bool closed, 
-    const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment)
+    const Point2d& pt, float dTol, Point2d& ptNear, Int32& nSegment)
 {
     Point2d ptTemp;
-    double dDist, dDistMin = _DBL_MAX;
+    float dDist, dDistMin = _FLT_MAX;
     Point2d pts[4];
     const Box2d rect (pt, 2 * dTol, 2 * dTol);
     Int32 n2 = (closed && n > 1) ? n + 1 : n;
@@ -146,7 +146,7 @@ GEOMAPI Int32 mgBSplinesToBeziers(
     Point2d points[/*1+n*3*/], Int32 n, const Point2d* controlPoints, bool closed)
 {
     Point2d pt1, pt2, pt3, pt4;
-    double d6 = 1.0 / 6.0;
+    float d6 = 1.f / 6.f;
     int i = 0;
         
     pt1 = controlPoints[0];
@@ -172,12 +172,12 @@ GEOMAPI Int32 mgBSplinesToBeziers(
     return i;
 }
 
-GEOMAPI double mgLinesHit(
+GEOMAPI float mgLinesHit(
     Int32 n, const Point2d* points, bool closed, 
-    const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment)
+    const Point2d& pt, float dTol, Point2d& ptNear, Int32& nSegment)
 {
     Point2d ptTemp;
-    double dDist, dDistMin = _DBL_MAX;
+    float dDist, dDistMin = _FLT_MAX;
     const Box2d rect (pt, 2 * dTol, 2 * dTol);
     Int32 n2 = (closed && n > 1) ? n + 1 : n;
 
@@ -201,24 +201,24 @@ GEOMAPI double mgLinesHit(
 }
 
 static inline
-Point2d RoundRectTan(Int32 nFrom, Int32 nTo, const Box2d& rect, double r)
+Point2d RoundRectTan(Int32 nFrom, Int32 nTo, const Box2d& rect, float r)
 {
     Point2d pt1, pt2;
     mgGetRectHandle(rect, nFrom, pt1);
     mgGetRectHandle(rect, nTo, pt2);
-    return pt1.rulerPoint(pt2, r, 0.0);
+    return pt1.rulerPoint(pt2, r, 0.f);
 }
 
 static void _RoundRectHit(
-    const Box2d& rect, double rx, double ry, 
-    const Point2d& pt, double dTol, const Box2d &rectTol, 
-    Point2d* pts, double& dDistMin, 
+    const Box2d& rect, float rx, float ry, 
+    const Point2d& pt, float dTol, const Box2d &rectTol, 
+    Point2d* pts, float& dDistMin, 
     Point2d& ptNear, Int32& nSegment)
 {
     Point2d ptsBezier[13], ptTemp;
     Vector2d vec;
-    double dx = rect.width() * 0.5 - rx;
-    double dy = rect.height() * 0.5 - ry;
+    float dx = rect.width() * 0.5f - rx;
+    float dy = rect.height() * 0.5f - ry;
     
     // 按逆时针方向从第一象限到第四象限连接的四段
     mgEllipseToBezier(ptsBezier, rect.center(), rx, ry);
@@ -245,7 +245,7 @@ static void _RoundRectHit(
         if (rectTol.isIntersect(Box2d(4, pts)))
         {
             mgNearestOnBezier(pt, pts, ptTemp);
-            double dDist = pt.distanceTo(ptTemp);
+            float dDist = pt.distanceTo(ptTemp);
             if (dDist <= dTol && dDist < dDistMin)
             {
                 dDistMin = dDist;
@@ -258,19 +258,19 @@ static void _RoundRectHit(
     }
 }
 
-GEOMAPI double mgRoundRectHit(
-    const Box2d& rect, double rx, double ry, 
-    const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment)
+GEOMAPI float mgRoundRectHit(
+    const Box2d& rect, float rx, float ry, 
+    const Point2d& pt, float dTol, Point2d& ptNear, Int32& nSegment)
 {
     rx = fabs(rx);
     if (ry < _MGZERO)
         ry = rx;
-    rx = mgMin(rx, rect.width() * 0.5);
-    ry = mgMin(ry, rect.height() * 0.5);
+    rx = mgMin(rx, rect.width() * 0.5f);
+    ry = mgMin(ry, rect.height() * 0.5f);
     nSegment = -1;
     
     Point2d ptTemp, ptTemp2;
-    double dDist, dDistMin = _DBL_MAX;
+    float dDist, dDistMin = _FLT_MAX;
     Point2d pts[8];
     const Box2d rectTol (pt, 2 * dTol, 2 * dTol);
     

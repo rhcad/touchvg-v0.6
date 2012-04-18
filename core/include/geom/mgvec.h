@@ -21,32 +21,32 @@ public:
     //! 零矢量(0,0)
     static const Vector2d& kIdentity()
     {
-        static const Vector2d vec (0.0, 0.0);
+        static const Vector2d vec (0.f, 0.f);
         return vec;
     }
     
     //! X轴单位矢量(1,0)
     static const Vector2d& kXAxis()
     {
-        static const Vector2d vec (1.0, 0.0);
+        static const Vector2d vec (1.f, 0.f);
         return vec;
     }
     
     //! Y轴单位矢量(0,1)
     static const Vector2d& kYAxis()
     {
-        static const Vector2d vec (0.0, 1.0);
+        static const Vector2d vec (0.f, 1.f);
         return vec;
     }
     
     //! 构造为零矢量
     Vector2d()
     {
-        x = y = 0.0;
+        x = y = 0.f;
     }
     
     //! 构造为矢量(xx, yy)
-    Vector2d(double xx, double yy)
+    Vector2d(float xx, float yy)
     {
         x = xx; y = yy;
     }
@@ -112,63 +112,63 @@ public:
     }
     
     //! 标量积, 数 * 矢量
-    friend Vector2d operator*(double s, const Vector2d& v)
+    friend Vector2d operator*(float s, const Vector2d& v)
     {
         return Vector2d(v.x * s, v.y * s);
     }
     
     //! 标量积, 矢量 * 数
-    Vector2d operator*(double s) const
+    Vector2d operator*(float s) const
     {
         return Vector2d(x * s, y * s);
     }
     
     //! 标量积, 矢量 *= 数
-    Vector2d& operator*=(double s)
+    Vector2d& operator*=(float s)
     {
         x *= s; y *= s; return *this;
     }
     
     //! 标量积, 矢量 / 数
-    Vector2d operator/(double s) const
+    Vector2d operator/(float s) const
     {
-        s = 1.0 / s;
+        s = 1.f / s;
         return Vector2d(x * s, y * s);
     }
     
     //! 标量积, 矢量 /= 数
-    Vector2d& operator/=(double s)
+    Vector2d& operator/=(float s)
     {
-        s = 1.0 / s;
+        s = 1.f / s;
         x *= s; y *= s; return *this;
     }
 
     //! 比例放缩
-    Vector2d& scaleBy(double sx, double sy)
+    Vector2d& scaleBy(float sx, float sy)
     {
         x *= sx; y *= sy; return *this;
     }
     
     //! 矢量点积, A·B
-    double dotProduct(const Vector2d& v) const
+    float dotProduct(const Vector2d& v) const
     {
         return (x * v.x + y * v.y);
     }
     
     //! 矢量点积, A·B
-    double operator/(const Vector2d& v) const
+    float operator/(const Vector2d& v) const
     {
         return dotProduct(v);
     }
     
     //! 矢量叉积(0,0,z)中的z, |A×B|
-    double crossProduct(const Vector2d& v) const
+    float crossProduct(const Vector2d& v) const
     {
         return (x * v.y - y * v.x);
     }
     
     //! 矢量叉积(0,0,z)中的z, |A×B|
-    double operator*(const Vector2d& v) const
+    float operator*(const Vector2d& v) const
     {
         return crossProduct(v);
     }    
@@ -177,44 +177,44 @@ public:
     /*!
         从+X轴方向逆时针旋转到本矢量所在方向时为正，顺时针为负
     */
-    double angle() const
+    float angle() const
     {
-        double len = mgHypot(x, y);
-        return len < _MGZERO ? 0.0 : acos(x / len);
+        float len = mgHypot(x, y);
+        return len < _MGZERO ? 0.f : acos(x / len);
     }
     
     //! 矢量角度, 从X轴逆时针方向为正, [-PI, PI)
-    double angle2() const
+    float angle2() const
     {
-        return (mgIsZero(x) && mgIsZero(y)) ? 0.0 : atan2(y, x);
+        return (mgIsZero(x) && mgIsZero(y)) ? 0.f : atan2(y, x);
     }
     
     //! 矢量夹角, [0, PI)
-    double angleTo(const Vector2d& v) const
+    float angleTo(const Vector2d& v) const
     {
-        double len = mgHypot(x, y) * mgHypot(v.x, v.y);
-        return len < _MGZERO ? 0.0 : acos(dotProduct(v) / len);
+        float len = mgHypot(x, y) * mgHypot(v.x, v.y);
+        return len < _MGZERO ? 0.f : acos(dotProduct(v) / len);
     }
     
     //! 沿逆时针方向到指定矢量的转角, [-PI, PI)
     /*!
         从本矢量方向逆时针旋转到另一个矢量 v 所在方向时为正，顺时针为负
     */
-    double angleTo2(const Vector2d& v) const
+    float angleTo2(const Vector2d& v) const
     {
-        double crossz = crossProduct(v);
-        double dot = dotProduct(v);
-        return (mgIsZero(dot) && mgIsZero(crossz)) ? 0.0 : atan2(crossz, dot);
+        float crossz = crossProduct(v);
+        float dot = dotProduct(v);
+        return (mgIsZero(dot) && mgIsZero(crossz)) ? 0.f : atan2(crossz, dot);
     }
     
     //! 矢量长度
-    double length() const
+    float length() const
     {
         return mgHypot(x, y);
     }
     
     //! 矢量长度的平方
-    double lengthSqrd() const
+    float lengthSqrd() const
     {
         return mgSquare(x, y);
     }
@@ -224,7 +224,7 @@ public:
     */
     Vector2d unitVector() const
     {
-        double len = mgHypot(x, y);
+        float len = mgHypot(x, y);
         if (len >= _MGZERO)
             return Vector2d(x / len, y / len);
         else
@@ -238,7 +238,7 @@ public:
     */
     bool normalize(const Tol& tol = Tol::gTol())
     {
-        double len = mgHypot(x, y);
+        float len = mgHypot(x, y);
         bool ret = (len >= tol.equalPoint());
         if (ret)
             set(x / len, y / len);
@@ -252,7 +252,7 @@ public:
     */
     bool isUnitVector(const Tol& tol = Tol::gTol()) const
     {
-        return fabs(mgHypot(x, y) - 1.0) < tol.equalPoint();
+        return fabs(mgHypot(x, y) - 1.f) < tol.equalPoint();
     }
     
     //! 判断是否是零矢量
@@ -289,7 +289,7 @@ public:
     }
     
     //! 设置为矢量(xx, yy)
-    Vector2d& set(double xx, double yy)
+    Vector2d& set(float xx, float yy)
     {
         x = xx; y = yy; return *this;
     }
@@ -300,7 +300,7 @@ public:
         \param len 矢量的长度
         \return 本矢量的引用
     */
-    Vector2d& setAngleLength(double angle, double len)
+    Vector2d& setAngleLength(float angle, float len)
     {
         return set(len * cos(angle), len * sin(angle));
     }
@@ -318,13 +318,13 @@ public:
     //! 判断是否在指定矢量的右侧，即沿逆时针方向转到指定矢量时最近
     bool isRightOf(const Vector2d& vec) const
     {
-        return crossProduct(vec) > 0.0;
+        return crossProduct(vec) > 0.f;
     }
 
     //! 判断是否在指定矢量的左侧，即沿顺时针方向转到指定矢量时最近
     bool isLeftOf(const Vector2d& vec) const
     {
-        return crossProduct(vec) < 0.0;
+        return crossProduct(vec) < 0.f;
     }
     
     //! 判断两个矢量是否平行
@@ -404,7 +404,7 @@ public:
         \param[in] xAxis 投影到的矢量
         \return 垂直投影距离，有正负
     */
-    double distanceToVector(const Vector2d& xAxis) const;
+    float distanceToVector(const Vector2d& xAxis) const;
     
     //! 求本矢量在矢量xAxis上的投影比例
     /*! 投影矢量 = xAxis * 投影比例 \n
@@ -412,7 +412,7 @@ public:
         \param[in] xAxis 投影到的矢量
         \return 投影比例，有正负
     */
-    double projectScaleToVector(const Vector2d& xAxis) const;
+    float projectScaleToVector(const Vector2d& xAxis) const;
     
     //! 求本矢量在矢量xAxis上的投影矢量和垂直矢量
     /*! 将本矢量投影到xAxis，计算投影比例，
@@ -422,7 +422,7 @@ public:
         \param[out] perp 垂直投影矢量
         \return 投影比例，有正负
     */
-    double projectResolveVector(const Vector2d& xAxis, 
+    float projectResolveVector(const Vector2d& xAxis, 
         Vector2d& proj, Vector2d& perp) const;
     
     //! 矢量分解
@@ -434,7 +434,7 @@ public:
         \return 是否求解成功，uAxis和vAxis共线时失败
     */
     bool resolveVector(const Vector2d& uAxis, const Vector2d& vAxis, 
-        double& u, double& v) const;
+        float& u, float& v) const;
 };
 
 #endif // __GEOMETRY_VECTOR_H_

@@ -83,10 +83,11 @@ void CDrawShapeView::OnMouseMove(UINT nFlags, CPoint point)
     {
         MgCommand* cmd = mgGetCommandManager()->getCommand();
 
-        m_motion.point = point;
-        m_motion.pointM = Point2d(point.x, point.y) * m_xf.displayToModel();
+        m_motion.point = Point2d((float)point.x, (float)point.y);
+        m_motion.pointM = m_motion.point * m_xf.displayToModel();
 
-        if (!m_moved && mgHypot(point.x - m_motion.startPoint.x, point.y - m_motion.startPoint.y) > 5)
+        if (!m_moved && mgHypot(m_motion.point.x - m_motion.startPoint.x, 
+            m_motion.point.y - m_motion.startPoint.y) > 5)
         {
             m_moved = TRUE;
             if (cmd) cmd->touchBegan(&m_motion);
@@ -106,8 +107,8 @@ void CDrawShapeView::OnLButtonDown(UINT nFlags, CPoint point)
     CBaseView::OnLButtonDown(nFlags, point);
     SetCapture();
 
-    m_motion.startPoint = point;
-    m_motion.startPointM = Point2d(point.x, point.y) * m_xf.displayToModel();
+    m_motion.startPoint = Point2d((float)point.x, (float)point.y);
+    m_motion.startPointM = m_motion.startPoint * m_xf.displayToModel();
     m_motion.point = m_motion.startPoint;
     m_motion.pointM = m_motion.startPointM;
     m_moved = FALSE;
@@ -130,7 +131,7 @@ void CDrawShapeView::OnLButtonUp(UINT nFlags, CPoint point)
         MgCommand* cmd = mgGetCommandManager()->getCommand();
         if (cmd) cmd->touchEnded(&m_motion);
     }
-    else if (point == m_motion.startPoint)
+    else if (Point2d((float)point.x, (float)point.y) == m_motion.startPoint)
     {
         PostMessage(WM_DELAY_LBUTTONUP, m_downTime, m_downFlags);
         m_delayUp = TRUE;

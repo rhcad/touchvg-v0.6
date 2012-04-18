@@ -47,7 +47,7 @@ public:
         \return 是否生成了路径
     */
     bool genericRoundLines(int count, const Point2d* points, 
-        double radius, bool closed = false);
+        float radius, bool closed = false);
 
     //! 返回节点个数
     int getCount() const;

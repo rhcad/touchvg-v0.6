@@ -28,7 +28,7 @@ public:
     //! 构造收缩到原点的矩形框
     Box2d()
     {
-        xmin = ymin = xmax = ymax = 0.0;
+        xmin = ymin = xmax = ymax = 0.f;
     }
 
     //! 拷贝构造函数，默认不自动规范化
@@ -41,9 +41,18 @@ public:
     }
     
     //! 给定对角点坐标构造，默认不自动规范化
-    Box2d(double l, double t, double r, double b, bool bNormalize = false)
+    Box2d(float l, float t, float r, float b, bool bNormalize = false)
     {
         xmin = l; ymin = t; xmax = r; ymax = b;
+        if (bNormalize)
+            normalize();
+    }
+
+    //! 给定显示坐标矩形框构造，默认不自动规范化
+    Box2d(const RECT2D& rc, bool bNormalize = false)
+    {
+        xmin = rc.left; ymin = rc.top;
+        xmax = rc.right; ymax = rc.bottom;
         if (bNormalize)
             normalize();
     }
@@ -51,8 +60,8 @@ public:
     //! 给定对角点整数坐标构造，默认不自动规范化
     Box2d(long l, long t, long r, long b, bool bNormalize = false)
     {
-        xmin = (double)l; ymin = (double)t;
-        xmax = (double)r; ymax = (double)b;
+        xmin = (float)l; ymin = (float)t;
+        xmax = (float)r; ymax = (float)b;
         if (bNormalize)
             normalize();
     }
@@ -76,7 +85,7 @@ public:
         \param width 矩形宽度，为负数则不是规范化矩形
         \param height 矩形高度，为负数则不是规范化矩形
     */
-    Box2d(const Point2d& center, double width, double height)
+    Box2d(const Point2d& center, float width, float height)
     {
         set(center, width, height);
     }
@@ -86,6 +95,13 @@ public:
     {
         p1.set(xmin, ymin);
         p2.set(xmax, ymax);
+    }
+
+    //! 转换到显示坐标矩形框，已上下对调
+    void get(RECT2D& rc) const
+    {
+        rc.left = xmin; rc.top = ymin;
+        rc.right = xmax; rc.bottom = ymax;
     }
     
     //! 得到四舍五入后的矩形(RECT)，已上下对调
@@ -109,7 +125,7 @@ public:
     Box2d& set(const Point2d& p1, const Point2d& p2);
     
     //! 设置两个对角点坐标，自动规范化
-    Box2d& set(double x1, double y1, double x2, double y2);
+    Box2d& set(float x1, float y1, float x2, float y2);
     
     //! 设置为四个顶点的包容框
     Box2d& set(const Point2d& p1, const Point2d& p2, 
@@ -125,25 +141,25 @@ public:
         \param height 矩形高度，为负数则不是规范化矩形
         \return 本矩形的引用
     */
-    Box2d& set(const Point2d& center, double width, double height)
+    Box2d& set(const Point2d& center, float width, float height)
     {
         if (mgIsZero(height))
             height = width;
-        xmin = center.x - width * 0.5;
-        ymin = center.y - height * 0.5;
-        xmax = center.x + width * 0.5;
-        ymax = center.y + height * 0.5;
+        xmin = center.x - width * 0.5f;
+        ymin = center.y - height * 0.5f;
+        xmax = center.x + width * 0.5f;
+        ymax = center.y + height * 0.5f;
         return *this;
     }
     
     //! 返回宽度，非负数
-    double width() const
+    float width() const
     {
         return fabs(xmax - xmin);
     }
     
     //! 返回高度，非负数
-    double height() const
+    float height() const
     {
         return fabs(ymax - ymin);
     }
@@ -157,7 +173,7 @@ public:
     //! 返回中心坐标
     Point2d center() const
     {
-        return Point2d((xmin + xmax) * 0.5, (ymin + ymax) * 0.5);
+        return Point2d((xmin + xmax) * 0.5f, (ymin + ymax) * 0.5f);
     }
     
     //! 返回左上坐标
@@ -204,7 +220,7 @@ public:
     //! 设置为空矩形框
     Box2d& empty()
     {
-        xmin = ymin = xmax = ymax = 0.0;
+        xmin = ymin = xmax = ymax = 0.f;
         return *this;
     }
     
@@ -292,7 +308,7 @@ public:
         \param d 向外侧的偏移距离
         \return 本对象的引用
     */
-    Box2d& inflate(double d)
+    Box2d& inflate(float d)
     {
         return inflate(d, d);
     }
@@ -303,7 +319,7 @@ public:
         \param y 向外侧的Y方向的偏移距离
         \return 本对象的引用
     */
-    Box2d& inflate(double x, double y)
+    Box2d& inflate(float x, float y)
     {
         xmin -= x; ymin -= y; xmax += x; ymax += y;
         return *this;
@@ -339,7 +355,7 @@ public:
         \param t 矩形框上侧的偏移距离
         \return 本对象的引用
     */
-    Box2d& inflate(double l, double b, double r, double t)
+    Box2d& inflate(float l, float b, float r, float t)
     {
         xmin -= l; ymin -= b; xmax += r; ymax += t;
         return *this;
@@ -350,7 +366,7 @@ public:
         \param d 向内侧的偏移距离
         \return 本对象的引用
     */
-    Box2d& deflate(double d)
+    Box2d& deflate(float d)
     {
         return deflate(d, d);
     }
@@ -361,7 +377,7 @@ public:
         \param y 向内侧的Y方向的偏移距离
         \return 本对象的引用
     */
-    Box2d& deflate(double x, double y)
+    Box2d& deflate(float x, float y)
     {
         xmin += x; ymin += y; xmax -= x; ymax -= y;
         return *this;
@@ -397,14 +413,14 @@ public:
         \param t 矩形框底侧的偏移距离
         \return 本对象的引用
     */
-    Box2d& deflate(double l, double b, double r, double t)
+    Box2d& deflate(float l, float b, float r, float t)
     {
         xmin += l; ymin += b; xmax -= r; ymax -= t;
         return *this;
     }
     
     //! 平移
-    Box2d& offset(double x, double y)
+    Box2d& offset(float x, float y)
     {
         xmin += x; ymin += y; xmax += x; ymax += y;
         return *this;
@@ -422,7 +438,7 @@ public:
         \param sy Y方向放缩比例，为0则取为sx
         \return 本矩形的引用
     */
-    Box2d& scaleBy(double sx, double sy = 0.0)
+    Box2d& scaleBy(float sx, float sy = 0.f)
     {
         if (mgIsZero(sy)) sy = sx;
         xmin *= sx; xmax *= sx;
@@ -482,7 +498,7 @@ public:
         \param y 要包含的点的Y坐标
         \return 本矩形的引用，规范化矩形
     */
-    Box2d& unionWith(double x, double y)
+    Box2d& unionWith(float x, float y)
     {
         if (xmin > x) xmin = x;
         if (ymin > y) ymin = y;
@@ -598,28 +614,28 @@ public:
     }
     
     //! 得到各坐标分量乘以一个数后的新矩形框
-    Box2d operator*(double s) const
+    Box2d operator*(float s) const
     {
         return Box2d(xmin * s, ymin * s, xmax * s, ymax * s);
     }
     
     //! 各坐标分量乘以一个数
-    Box2d& operator*=(double s)
+    Box2d& operator*=(float s)
     {
         return set(xmin * s, ymin * s, xmax * s, ymax * s);
     }
     
     //! 得到各坐标分量除以一个数后的新矩形框
-    Box2d operator/(double s) const
+    Box2d operator/(float s) const
     {
-        s = 1.0 / s;
+        s = 1.f / s;
         return Box2d(xmin * s, ymin * s, xmax * s, ymax * s);
     }
     
     //! 各坐标分量除以一个数
-    Box2d& operator/=(double s)
+    Box2d& operator/=(float s)
     {
-        s = 1.0 / s;
+        s = 1.f / s;
         return set(xmin * s, ymin * s, xmax * s, ymax * s);
     }
     

@@ -141,7 +141,7 @@ void CScrollShapeView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar*)
 		OnHScrThumbTrack(si, nPos);
 		break;
 	case SB_ENDSCROLL:			// End draging
-		if (m_xf.zoomPan(m_rcScrWnd.left - si.nPos, 0))
+		if (m_xf.zoomPan((float)(m_rcScrWnd.left - si.nPos), 0))
 		{
 			::OffsetRect(&m_rcScrWnd, si.nPos - m_rcScrWnd.left, 0);
 			m_sizePan.cx = 0;
@@ -162,7 +162,7 @@ void CScrollShapeView::OnHScrThumbTrack(SCROLLINFO &si, UINT nPos)
 	Invalidate();
 	if (m_bRealPan || fabs(m_xf.getViewScale() - 1.0) < 0.01)
 	{
-		if (m_xf.zoomPan(m_rcScrWnd.left - si.nPos, 0))
+		if (m_xf.zoomPan((float)(m_rcScrWnd.left - si.nPos), 0))
 		{
 			::OffsetRect(&m_rcScrWnd, si.nPos - m_rcScrWnd.left, 0);
 			m_sizePan.cx = 0;
@@ -208,7 +208,7 @@ void CScrollShapeView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar*)
 		OnVScrThumbTrack(si, nPos);
 		break;
 	case SB_ENDSCROLL:			// End draging
-		if (m_xf.zoomPan(0, m_rcScrWnd.top - si.nPos))
+		if (m_xf.zoomPan(0, (float)(m_rcScrWnd.top - si.nPos)))
 		{
 			::OffsetRect(&m_rcScrWnd, 0, si.nPos - m_rcScrWnd.top);
 			m_sizePan.cy = 0;
@@ -229,7 +229,7 @@ void CScrollShapeView::OnVScrThumbTrack(SCROLLINFO &si, UINT nPos)
 	Invalidate();
 	if (m_bRealPan || fabs(m_xf.getViewScale() - 1.0) < 0.01)
 	{
-		if (m_xf.zoomPan(0, m_rcScrWnd.top - si.nPos))
+		if (m_xf.zoomPan(0, (float)(m_rcScrWnd.top - si.nPos)))
 		{
 			::OffsetRect(&m_rcScrWnd, 0, si.nPos - m_rcScrWnd.top);
 			m_sizePan.cy = 0;

@@ -7,8 +7,8 @@
 // 构造为单位矩阵
 Matrix2d::Matrix2d()
 {
-    m11 = 1.0; m12 = 0.0; m21 = 0.0;
-    m22 = 1.0; dx = 0.0; dy = 0.0;
+    m11 = 1.f; m12 = 0.f; m21 = 0.f;
+    m22 = 1.f; dx = 0.f; dy = 0.f;
 }
 
 // 拷贝构造函数
@@ -20,8 +20,8 @@ Matrix2d::Matrix2d(const MATRIX2D& src)
 }
 
 // 给定元素构造
-Matrix2d::Matrix2d(double _m11, double _m12, double _m21, double _m22, 
-                   double _dx, double _dy)
+Matrix2d::Matrix2d(float _m11, float _m12, float _m21, float _m22, 
+                   float _dx, float _dy)
 {
     m11 = _m11; m12 = _m12;
     m21 = _m21; m22 = _m22;
@@ -112,7 +112,7 @@ Matrix2d& Matrix2d::setToProduct(const Matrix2d& m1, const Matrix2d& m2)
 }
 
 // 行列式值
-double Matrix2d::det() const
+float Matrix2d::det() const
 {
     return m11 * m22 - m12 * m21;
 }
@@ -120,14 +120,14 @@ double Matrix2d::det() const
 // 设置为逆矩阵
 bool Matrix2d::invert()
 {
-    double d = m11 * m22 - m12 * m21;
+    float d = m11 * m22 - m12 * m21;
     if (mgIsZero(d))
     {
         setToIdentity();
         return false;
     }
     
-    d = 1.0 / d;
+    d = 1.f / d;
     set(m22 * d, -m12 * d, 
         -m21 * d, m11 * d,
         (m21 * dy - m22 * dx) * d, 
@@ -150,21 +150,21 @@ bool Matrix2d::isInvertible() const
 }
 
 // 比例大小
-double Matrix2d::scale() const
+float Matrix2d::scale() const
 {
-    double sx = scaleX();
-    double sy = scaleY();
+    float sx = scaleX();
+    float sy = scaleY();
     return fabs(sx - sy) < _MGZERO ? sx : mgHypot(sx, sy);
 }
 
 // X比例大小
-double Matrix2d::scaleX() const
+float Matrix2d::scaleX() const
 {
     return mgIsZero(m12) ? fabs(m11) : mgHypot(m11, m12);
 }
 
 // Y比例大小
-double Matrix2d::scaleY() const
+float Matrix2d::scaleY() const
 {
     return mgIsZero(m21) ? fabs(m22) : mgHypot(m21, m22);
 }
@@ -192,8 +192,8 @@ bool Matrix2d::isEqualTo(const Matrix2d& mat, const Tol& tol) const
 // 判断是否为单位矩阵
 bool Matrix2d::isIdentity() const
 {
-    return mgIsZero(m11 - 1.0) && mgIsZero(m12)
-        && mgIsZero(m22 - 1.0) && mgIsZero(m21)
+    return mgIsZero(m11 - 1.f) && mgIsZero(m12)
+        && mgIsZero(m22 - 1.f) && mgIsZero(m21)
         && mgIsZero(dx) && mgIsZero(dy);
 }
 
@@ -204,7 +204,7 @@ bool Matrix2d::isOrtho() const
 }
 
 // 得到比例、旋转、镜像成分
-bool Matrix2d::isConformal(double& scaleX, double& scaleY, double& angle, 
+bool Matrix2d::isConformal(float& scaleX, float& scaleY, float& angle, 
                            bool& isMirror, Vector2d& reflex) const
 {
     Vector2d e0 (m11, m12);
@@ -225,10 +225,10 @@ bool Matrix2d::isConformal(double& scaleX, double& scaleY, double& angle,
     else
     {
         isMirror = true;
-        angle = e0.angle() / 2.0;
+        angle = e0.angle() / 2.f;
         reflex.x = cos(angle);
         reflex.y = sin(angle);
-        angle = 0.0;
+        angle = 0.f;
     }
     
     return true;
@@ -260,12 +260,12 @@ Matrix2d Matrix2d::coordSystem(const Vector2d& e0, const Vector2d& e1,
 }
 
 // 返回给定原点、比例和旋转角度的坐标系
-Matrix2d Matrix2d::coordSystem(const Point2d& origin, double scaleX, 
-                               double scaleY, double angle)
+Matrix2d Matrix2d::coordSystem(const Point2d& origin, float scaleX, 
+                               float scaleY, float angle)
 {
     if (mgIsZero(scaleY)) scaleY = scaleX;
-    double s = sin(angle);
-    double c = cos(angle);
+    float s = sin(angle);
+    float c = cos(angle);
     return Matrix2d(c*scaleX, s*scaleX, -s*scaleY, c*scaleY, origin.x, origin.y);
 }
 
@@ -276,8 +276,8 @@ Matrix2d& Matrix2d::setToIdentity()
 }
 
 // 设置矩阵元素
-Matrix2d& Matrix2d::set(double _m11, double _m12, double _m21, double _m22,
-                        double _dx, double _dy)
+Matrix2d& Matrix2d::set(float _m11, float _m12, float _m21, float _m22,
+                        float _dx, float _dy)
 {
     m11 = _m11; m12 = _m12;
     m21 = _m21; m22 = _m22;
@@ -288,28 +288,28 @@ Matrix2d& Matrix2d::set(double _m11, double _m12, double _m21, double _m22,
 // 设置为平移变换矩阵
 Matrix2d& Matrix2d::setToTranslation(const Vector2d& vec)
 {
-    return set(1.0, 0.0, 0.0, 1.0, vec.x, vec.y);
+    return set(1.f, 0.f, 0.f, 1.f, vec.x, vec.y);
 }
 
 // 设置为以一点为中心的旋转变换矩阵
-Matrix2d& Matrix2d::setToRotation(double angle, 
+Matrix2d& Matrix2d::setToRotation(float angle, 
                                   const Point2d& center)
 {
-    double c = cos(angle);
-    double s = sin(angle);
+    float c = cos(angle);
+    float s = sin(angle);
     return set(c, s, -s, c, (1 - c) * center.x + s * center.y, 
         (1 - c) * center.y - s * center.x);
 }
 
 // 设置为以一点为中心的放缩变换矩阵
-Matrix2d& Matrix2d::setToScaling(double scale, 
+Matrix2d& Matrix2d::setToScaling(float scale, 
                                  const Point2d& center)
 {
     return setToScaling(scale, scale, center);
 }
 
 // 设置为以一点为中心的放缩变换矩阵
-Matrix2d& Matrix2d::setToScaling(double scaleX, double scaleY, 
+Matrix2d& Matrix2d::setToScaling(float scaleX, float scaleY, 
                                  const Point2d& center)
 {
     if (mgIsZero(scaleY)) scaleY = scaleX;
@@ -320,19 +320,19 @@ Matrix2d& Matrix2d::setToScaling(double scaleX, double scaleY,
 // 设置为关于一点对称的变换矩阵
 Matrix2d& Matrix2d::setToMirroring(const Point2d& pnt)
 {
-    return set(-1.0, 0.0, 0.0, -1.0, 2.0 * pnt.x, 2.0 * pnt.y);
+    return set(-1.f, 0.f, 0.f, -1.f, 2.f * pnt.x, 2.f * pnt.y);
 }
 
 // 设置为以直线{pnt,dir}为中心线的对称变换矩阵
 Matrix2d& Matrix2d::setToMirroring(const Point2d& pnt, const Vector2d& dir)
 {
-    double d2 = dir.lengthSqrd();
+    float d2 = dir.lengthSqrd();
     if (mgIsZero(d2))
         setToIdentity();
     else
     {
-        double s2 = 2.0 * dir.x * dir.y / d2;
-        double c2 = (dir.x * dir.x - dir.y * dir.y) / d2;
+        float s2 = 2.f * dir.x * dir.y / d2;
+        float c2 = (dir.x * dir.x - dir.y * dir.y) / d2;
         set(c2, s2, s2, -c2, (1 - c2) * pnt.x - s2 * pnt.y, 
             (1 + c2) * pnt.y - s2 * pnt.x);
     }
@@ -340,10 +340,10 @@ Matrix2d& Matrix2d::setToMirroring(const Point2d& pnt, const Vector2d& dir)
 }
 
 // 设置为错切变换矩阵
-Matrix2d& Matrix2d::setToShearing(double sx, double sy, const Point2d& pnt)
+Matrix2d& Matrix2d::setToShearing(float sx, float sy, const Point2d& pnt)
 {
     if (mgIsZero(sy)) sy = sx;
-    return set(1.0, sx, sy, 1.0, -sy * pnt.y, -sx * pnt.x);
+    return set(1.f, sx, sy, 1.f, -sy * pnt.y, -sx * pnt.x);
 }
 
 // 得到平移变换矩阵
@@ -355,7 +355,7 @@ Matrix2d Matrix2d::translation(const Vector2d& vec)
 }
 
 // 得到以一点为中心的旋转变换矩阵
-Matrix2d Matrix2d::rotation(double angle, const Point2d& center)
+Matrix2d Matrix2d::rotation(float angle, const Point2d& center)
 {
     Matrix2d mat;
     mat.setToRotation(angle, center);
@@ -363,7 +363,7 @@ Matrix2d Matrix2d::rotation(double angle, const Point2d& center)
 }
 
 // 得到以一点为中心的放缩变换矩阵
-Matrix2d Matrix2d::scaling(double scale, const Point2d& center)
+Matrix2d Matrix2d::scaling(float scale, const Point2d& center)
 {
     Matrix2d mat;
     mat.setToScaling(scale, scale, center);
@@ -371,7 +371,7 @@ Matrix2d Matrix2d::scaling(double scale, const Point2d& center)
 }
 
 // 得到以一点为中心的放缩变换矩阵
-Matrix2d Matrix2d::scaling(double scaleX, double scaleY, const Point2d& center)
+Matrix2d Matrix2d::scaling(float scaleX, float scaleY, const Point2d& center)
 {
     Matrix2d mat;
     mat.setToScaling(scaleX, scaleY, center);
@@ -395,7 +395,7 @@ Matrix2d Matrix2d::mirroring(const Point2d& pnt, const Vector2d& dir)
 }
 
 // 得到错切变换矩阵
-Matrix2d Matrix2d::shearing(double sx, double sy, const Point2d& pnt)
+Matrix2d Matrix2d::shearing(float sx, float sy, const Point2d& pnt)
 {
     Matrix2d mat;
     mat.setToShearing(sx, sy, pnt);

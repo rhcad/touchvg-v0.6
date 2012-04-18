@@ -23,11 +23,11 @@ class GiGraphIos;
     
     BOOL            _enableZoom;            //!< 是否允许放缩或平移
     BOOL            _zooming;               //!< 是否正在动态放缩或平移
-    double          _lastViewScale;         //!< 动态放缩前的显示比例
+    float           _lastViewScale;         //!< 动态放缩前的显示比例
     CGPoint         _lastCenterW;           //!< 动态放缩前的视图中心世界坐标
     
     BOOL            _doubleZoomed;          //!< 是否为局部放大状态
-    double          _scaleBeforeDbl;        //!< 局部放大前的显示比例
+    float           _scaleBeforeDbl;        //!< 局部放大前的显示比例
     CGPoint         _centerBeforeDbl;       //!< 局部放大前的视图中心世界坐标
 }
 

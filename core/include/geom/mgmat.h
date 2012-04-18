@@ -22,7 +22,7 @@
     称为 M 的线性部分，其作用是对图形进行伸缩、旋转、对称和错切等变换。\n
     行向量 T (dx, dy) 称为 M 的平移部分，其作用是对图形进行平移变换。\n
     
-    Point的点pnt的对应变换点为 P x M，行矢量 P = (pnt.x, pnt.y, 1.0) \n
+    Point的点pnt的对应变换点为 P x M，行矢量 P = (pnt.x, pnt.y, 1.f) \n
     Vector的矢量vec的对应变换矢量为 V x M，M 的平移部分不参与计算。\n
     
     每个矩阵 M 对应一个坐标系，其坐标原点为(dx, dy)，坐标轴为矢量(e0x, e0y)和
@@ -45,8 +45,7 @@ public:
     Matrix2d(const MATRIX2D& src);
     
     //! 给定元素构造
-    Matrix2d(double _m11, double _m12, double _m21, double _m22,
-        double _dx, double _dy);
+    Matrix2d(float _m11, float _m12, float _m21, float _m22, float _dx, float _dy);
     
     //! 给定两坐标轴矢量和原点构造
     /*! 相对于绝对坐标系构造出新的坐标系矩阵。
@@ -55,8 +54,7 @@ public:
         \param e1 Y轴一个单位的矢量
         \param origin 新坐标系的原点
     */
-    Matrix2d(const Vector2d& e0, const Vector2d& e1,
-        const Point2d& origin);
+    Matrix2d(const Vector2d& e0, const Vector2d& e1, const Point2d& origin);
     
     //! 矩阵乘法
     Matrix2d operator*(const Matrix2d& mat) const;
@@ -88,7 +86,7 @@ public:
     void TransformVectors(Int32 count, Vector2d* vectors) const;
     
     //! 行列式值
-    double det() const;
+    float det() const;
     
     //! 设置为逆矩阵
     /*!
@@ -103,13 +101,13 @@ public:
     bool isInvertible() const;
     
     //! 比例大小
-    double scale() const;
+    float scale() const;
     
     //! X比例大小
-    double scaleX() const;
+    float scaleX() const;
     
     //! Y比例大小
-    double scaleY() const;
+    float scaleY() const;
     
     //! 判断两个矩阵是否相等
     bool operator==(const Matrix2d& mat) const;
@@ -135,7 +133,7 @@ public:
         \param[out] reflex 矩阵中的对称轴方向矢量(如果有对称成分)
         \return 是否求解成功，矩阵的X轴和Y轴不垂直则失败
     */
-    bool isConformal(double& scaleX, double& scaleY, double& angle,
+    bool isConformal(float& scaleX, float& scaleY, float& angle,
         bool& isMirror, Vector2d& reflex) const;
     
     //! 设置为原点为origin，坐标轴矢量为e0和e1的坐标系
@@ -159,14 +157,14 @@ public:
         \return 新坐标系的矩阵
     */
     static Matrix2d coordSystem(const Point2d& origin, 
-        double scaleX, double scaleY = 0.0, double angle = 0.0);
+        float scaleX, float scaleY = 0.f, float angle = 0.f);
     
     //! 设置为单位矩阵
     Matrix2d& setToIdentity();
     
     //! 设置矩阵元素
-    Matrix2d& set(double _m11, double _m12, double _m21, double _m22,
-        double _dx, double _dy);
+    Matrix2d& set(float _m11, float _m12, float _m21, float _m22,
+        float _dx, float _dy);
     
     //! 设置为平移变换矩阵
     /*!
@@ -181,7 +179,7 @@ public:
         \param center 旋转中心点
         \return 改变后的本对象的引用
     */
-    Matrix2d& setToRotation(double angle, 
+    Matrix2d& setToRotation(float angle, 
         const Point2d& center = Point2d::kOrigin());
     
     //! 设置为以一点为中心的放缩变换矩阵
@@ -190,7 +188,7 @@ public:
         \param center 放缩中心点
         \return 改变后的本对象的引用
     */
-    Matrix2d& setToScaling(double scale, 
+    Matrix2d& setToScaling(float scale, 
         const Point2d& center = Point2d::kOrigin());
     
     //! 设置为以一点为中心的放缩变换矩阵
@@ -200,7 +198,7 @@ public:
         \param center 放缩中心点
         \return 改变后的本对象的引用
     */
-    Matrix2d& setToScaling(double scaleX, double scaleY, 
+    Matrix2d& setToScaling(float scaleX, float scaleY, 
         const Point2d& center = Point2d::kOrigin());
     
     //! 设置为关于一点对称的变换矩阵
@@ -225,7 +223,7 @@ public:
         \param pnt 错切基点，在该点上的点变换后位置不变
         \return 改变后的本对象的引用
     */
-    Matrix2d& setToShearing(double sx, double sy, 
+    Matrix2d& setToShearing(float sx, float sy, 
         const Point2d& pnt = Point2d::kOrigin());
     
     //! 得到平移变换矩阵
@@ -241,7 +239,7 @@ public:
         \param center 旋转中心点
         \return 新的变换矩阵
     */
-    static Matrix2d rotation(double angle, 
+    static Matrix2d rotation(float angle, 
         const Point2d& center = Point2d::kOrigin());
     
     //! 得到以一点为中心的放缩变换矩阵
@@ -250,7 +248,7 @@ public:
         \param center 放缩中心点
         \return 新的变换矩阵
     */
-    static Matrix2d scaling(double scale, 
+    static Matrix2d scaling(float scale, 
         const Point2d& center = Point2d::kOrigin());
     
     //! 得到以一点为中心的放缩变换矩阵
@@ -260,7 +258,7 @@ public:
         \param center 放缩中心点
         \return 新的变换矩阵
     */
-    static Matrix2d scaling(double scaleX, double scaleY, 
+    static Matrix2d scaling(float scaleX, float scaleY, 
         const Point2d& center = Point2d::kOrigin());
     
     //! 得到关于一点对称的变换矩阵
@@ -285,7 +283,7 @@ public:
         \param pnt 错切基点，在该点上的点变换后位置不变
         \return 新的变换矩阵
     */
-    static Matrix2d shearing(double sx, double sy, 
+    static Matrix2d shearing(float sx, float sy, 
         const Point2d& pnt = Point2d::kOrigin());
 };
 

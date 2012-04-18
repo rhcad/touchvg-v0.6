@@ -46,19 +46,19 @@ public:
 
     //! 得到剪裁框，逻辑坐标
     /*!
-        \param[out] prc 填充逻辑坐标矩形
+        \param[out] rc 填充逻辑坐标矩形
     */
-    void getClipBox(RECT* prc) const;
+    void getClipBox(RECT2D& rc) const;
 
     //! 设置剪裁框，逻辑坐标
     /*! 只有正处于绘图状态时，该函数的返回值才有效。
         失败时不改变图形系统内部变量和设备描述表的剪裁框，
         因此在失败时不要进行相应绘图操作，否则处于错误的剪裁框中。
 
-        \param[in] prc 逻辑坐标矩形
+        \param[in] rc 逻辑坐标矩形
         \return 是否成功设置剪裁框，没有处于绘图状态中或计算出的剪裁框为空时失败
     */
-    bool setClipBox(const RECT* prc);
+    bool setClipBox(const RECT2D& rc);
 
     //! 设置剪裁框，世界坐标
     /*! 新剪裁框将会和原始剪裁框相叠加求交，所以函数可能返回失败。\n
@@ -106,7 +106,7 @@ public:
         \param useViewScale 是否使用显示比例来计算
         \return 画笔宽度，非负数，像素
     */
-    UInt16 calcPenWidth(Int16 lineWidth, bool useViewScale = true) const;
+    float calcPenWidth(Int16 lineWidth, bool useViewScale = true) const;
 
     //! 设置最大画笔宽度，像素
     /*! 只需要按屏幕显示来设置，打印时会自动调整
@@ -170,8 +170,8 @@ public:
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
     */
     bool drawArc(const GiContext* ctx, 
-        const Point2d& center, double rx, double ry, 
-        double startAngle, double sweepAngle, bool modelUnit = true);
+        const Point2d& center, float rx, float ry, 
+        float startAngle, float sweepAngle, bool modelUnit = true);
 
 
     //! 绘制并填充多边形，模型坐标或世界坐标
@@ -195,7 +195,7 @@ public:
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
     */
     bool drawEllipse(const GiContext* ctx, 
-        const Point2d& center, double rx, double ry = 0.0, 
+        const Point2d& center, float rx, float ry = 0.f, 
         bool modelUnit = true);
     
     //! 绘制并填充椭圆，模型坐标或世界坐标
@@ -221,8 +221,8 @@ public:
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
     */
     bool drawPie(const GiContext* ctx, 
-        const Point2d& center, double rx, double ry, 
-        double startAngle, double sweepAngle, bool modelUnit = true);
+        const Point2d& center, float rx, float ry, 
+        float startAngle, float sweepAngle, bool modelUnit = true);
 
     //! 绘制并填充直角矩形，模型坐标或世界坐标
     /*! 
@@ -243,7 +243,7 @@ public:
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
     */
     bool drawRoundRect(const GiContext* ctx, 
-        const Box2d& rect, double rx, double ry = 0.0, bool modelUnit = true);
+        const Box2d& rect, float rx, float ry = 0.f, bool modelUnit = true);
 
 
     //! 绘制三次参数样条曲线，模型坐标或世界坐标
@@ -322,42 +322,42 @@ public:
     void _setDrawAdapter(GiDrawAdapter* draw);
 
     //! 在显示适配类的 beginPaint() 中调用
-    void _beginPaint(const RECT* clipBox);
+    void _beginPaint(const RECT2D& clipBox);
 
     //! 在显示适配类的 endPaint() 中调用
     void _endPaint();
 
 public:
     void clearWnd();
-    bool drawCachedBitmap(int x = 0, int y = 0, bool secondBmp = false);
-    bool drawCachedBitmap2(const GiDrawAdapter* p, int x = 0, int y = 0, bool secondBmp = false);
+    bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);
+    bool drawCachedBitmap2(const GiDrawAdapter* p, float x = 0, float y = 0, bool secondBmp = false);
     void saveCachedBitmap(bool secondBmp = false);
     bool hasCachedBitmap(bool secondBmp = false) const;
     void clearCachedBitmap();
     bool isBufferedDrawing() const;
     int getGraphType() const;
-    int getScreenDpi() const;
+    float getScreenDpi() const;
     GiColor getBkColor() const;
     GiColor setBkColor(const GiColor& color);
     GiColor getNearestColor(const GiColor& color) const;
     const GiContext* getCurrentContext() const;
-    bool rawLine(const GiContext* ctx, int x1, int y1, int x2, int y2);
-    bool rawPolyline(const GiContext* ctx, const POINT* lppt, int count);
-    bool rawPolyBezier(const GiContext* ctx, const POINT* lppt, int count);
-    bool rawPolygon(const GiContext* ctx, const POINT* lppt, int count);
-    bool rawRect(const GiContext* ctx, int x, int y, int w, int h);
-    bool rawEllipse(const GiContext* ctx, int x, int y, int w, int h);
+    bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2);
+    bool rawPolyline(const GiContext* ctx, const Point2d* pxs, int count);
+    bool rawPolyBezier(const GiContext* ctx, const Point2d* pxs, int count);
+    bool rawPolygon(const GiContext* ctx, const Point2d* pxs, int count);
+    bool rawRect(const GiContext* ctx, float x, float y, float w, float h);
+    bool rawEllipse(const GiContext* ctx, float x, float y, float w, float h);
     bool rawPolyDraw(const GiContext* ctx, 
-        int count, const POINT* lppt, const UInt8* types);
+        int count, const Point2d* pxs, const UInt8* types);
     bool rawBeginPath();
     bool rawEndPath(const GiContext* ctx, bool fill);
-    bool rawMoveTo(int x, int y);
-    bool rawLineTo(int x, int y);
-    bool rawPolyBezierTo(const POINT* lppt, int count);
+    bool rawMoveTo(float x, float y);
+    bool rawLineTo(float x, float y);
+    bool rawPolyBezierTo(const Point2d* pxs, int count);
     bool rawCloseFigure();
 
 private:
-    void _clipBoxChanged(const RECT& clipBox);
+    void _clipBoxChanged(const RECT2D& clipBox);
     void _antiAliasModeChanged(bool antiAlias);
     
     GiGraphics();
@@ -384,7 +384,7 @@ public:
     GiSaveClipBox(GiGraphics* gs, const Box2d& rectWorld)
     {
         m_gs = gs;
-        gs->getClipBox(&m_clipRect);
+        gs->getClipBox(m_clipRect);
         m_clip = gs->setClipWorld(rectWorld);
     }
 
@@ -392,7 +392,7 @@ public:
     ~GiSaveClipBox()
     {
         if (m_clip)
-            m_gs->setClipBox(&m_clipRect);
+            m_gs->setClipBox(m_clipRect);
     }
 
     //! 返回是否成功设置了新剪裁框
@@ -408,7 +408,7 @@ public:
 
 private:
     GiGraphics* m_gs;
-    RECT        m_clipRect;
+    RECT2D      m_clipRect;
     bool        m_clip;
 };
 

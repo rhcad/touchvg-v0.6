@@ -3,9 +3,9 @@
 #include <mgbasicsp.h>
 #include <stdlib.h>
 
-double RandomParam::RandDbl(double dMin, double dMax)
+float RandomParam::RandF(float dMin, float dMax)
 {
-    return (rand() % mgRound((dMax - dMin) * 10)) * 0.1 + dMin;
+    return (rand() % mgRound((dMax - dMin) * 10)) * 0.1f + dMin;
 }
 
 long RandomParam::RandInt(long nMin, long nMax)
@@ -57,12 +57,12 @@ void RandomParam::initShapes(MgShapes* shapes)
                 if (0 == i)
                 {
                     sp->shape()->setPoint(i, 
-                        Point2d(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0)));
+                        Point2d(RandF(-1000.0, 1000.0), RandF(-1000.0, 1000.0)));
                 }
                 else
                 {
                     sp->shape()->setPoint(i, sp->shape()->getPoint(i-1)
-                        + Vector2d(RandDbl(-200.0, 200.0), RandDbl(-200.0, 200.0)));
+                        + Vector2d(RandF(-200.0, 200.0), RandF(-200.0, 200.0)));
                 }
             }
         }
@@ -76,7 +76,7 @@ void RandomParam::initShapes(MgShapes* shapes)
             shape->rx = RandDbl(1.0, 1000.0);
             shape->ry = RandDbl(1.0, 1000.0);
             shape->startAngle = RandDbl(0.0, _M_2PI);
-            shape->sweepAngle = RandDbl(0.0, M_PI_2 * 6);
+            shape->sweepAngle = RandDbl(0.0, _M_PI_2 * 6);
             */
         }
         else
@@ -90,8 +90,8 @@ void RandomParam::initShapes(MgShapes* shapes)
 
             sp = shapes->addShape(shape);
             setShapeProp(sp->context());
-            sp->shape()->setPoint(0, Point2d(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0)));
-            sp->shape()->setPoint(1, Point2d(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0)));
+            sp->shape()->setPoint(0, Point2d(RandF(-1000.0, 1000.0), RandF(-1000.0, 1000.0)));
+            sp->shape()->setPoint(1, Point2d(RandF(-1000.0, 1000.0), RandF(-1000.0, 1000.0)));
         }
 
         sp->shape()->update();

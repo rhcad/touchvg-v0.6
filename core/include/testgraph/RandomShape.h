@@ -16,7 +16,7 @@ struct RandomParam
     void initShapes(MgShapes* shapes);
     void setShapeProp(GiContext* context);
 
-    static double RandDbl(double dMin, double dMax);
+    static float RandF(float dMin, float dMax);
     static long RandInt(long nMin, long nMax);
     static UInt8 RandUInt8(long nMin, long nMax);
 };

@@ -9,35 +9,44 @@
 //! 二维矢量结构
 typedef struct tagVECTOR2D
 {
-    double   x;     //!< X坐标分量
-    double   y;     //!< Y坐标分量
+    float   x;      //!< X坐标分量
+    float   y;      //!< Y坐标分量
 } VECTOR2D;
 
 //! 二维点结构
 typedef struct tagPOINT2D
 {
-    double   x;     //!< X坐标分量
-    double   y;     //!< Y坐标分量
+    float   x;      //!< X坐标分量
+    float   y;      //!< Y坐标分量
 } POINT2D;
 
-//! 矩形框结构
+//! 迪克尔矩形框结构
 typedef struct tagBOX2D
 {
-    double   xmin;  //!< 矩形左下角X坐标
-    double   ymin;  //!< 矩形左下角Y坐标
-    double   xmax;  //!< 矩形右上角X坐标
-    double   ymax;  //!< 矩形右上角Y坐标
+    float   xmin;   //!< 矩形左下角X坐标
+    float   ymin;   //!< 矩形左下角Y坐标
+    float   xmax;   //!< 矩形右上角X坐标
+    float   ymax;   //!< 矩形右上角Y坐标
 } BOX2D;
+
+//! 显示坐标矩形框结构
+typedef struct tagRECT2D
+{
+    float   left;   //!< 矩形左上角X坐标
+    float   top;    //!< 矩形左上角Y坐标
+    float   right;  //!< 矩形右下角X坐标
+    float   bottom; //!< 矩形右下角Y坐标
+} RECT2D;
 
 //! 二维齐次变换矩阵结构
 typedef struct tagMATRIX2D
 {
-    double   m11;   //!< 矩阵元素，代表X方向线性变换分量
-    double   m12;   //!< 矩阵元素，代表X方向线性变换分量
-    double   m21;   //!< 矩阵元素，代表Y方向线性变换分量
-    double   m22;   //!< 矩阵元素，代表Y方向线性变换分量
-    double   dx;    //!< 矩阵元素，代表X方向平移量
-    double   dy;    //!< 矩阵元素，代表Y方向平移量
+    float   m11;    //!< 矩阵元素，代表X方向线性变换分量
+    float   m12;    //!< 矩阵元素，代表X方向线性变换分量
+    float   m21;    //!< 矩阵元素，代表Y方向线性变换分量
+    float   m22;    //!< 矩阵元素，代表Y方向线性变换分量
+    float   dx;     //!< 矩阵元素，代表X方向平移量
+    float   dy;     //!< 矩阵元素，代表Y方向平移量
 } MATRIX2D;
 
 // 定义准确字节长度的基本数据类型

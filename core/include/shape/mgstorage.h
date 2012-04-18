@@ -22,7 +22,7 @@ struct MgStorage
     virtual UInt32 getUInt32(const wchar_t* name, UInt32 defvalue = 0) = 0;
     virtual bool getBool(const wchar_t* name, bool defvalue) = 0;
     virtual float getFloat(const wchar_t* name, float defvalue = 0) = 0;
-    virtual double getDouble(const wchar_t* name, double defvalue = 0) = 0;
+    virtual double getDouble(const wchar_t* name, float defvalue = 0) = 0;
     virtual UInt32 getString(const wchar_t* name, wchar_t* value, UInt32 count) = 0;
     
     virtual void setInt8(const wchar_t* name, Int8 value) = 0;

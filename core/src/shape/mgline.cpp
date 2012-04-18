@@ -70,8 +70,8 @@ void MgLine::_clear()
     __super::_clear();
 }
 
-double MgLine::_hitTest(const Point2d& pt, double tol, 
-                        Point2d& ptNear, Int32& segment) const
+float MgLine::_hitTest(const Point2d& pt, float tol, 
+                       Point2d& ptNear, Int32& segment) const
 {
     return mgLinesHit(2, _points, false, pt, tol, ptNear, segment);
 }
@@ -100,7 +100,7 @@ Point2d MgLine::_getHandlePoint(UInt32 index) const
     return 1 == index ? center() : _points[index ? 1 : 0];
 }
 
-bool MgLine::_setHandlePoint(UInt32 index, const Point2d& pt, double)
+bool MgLine::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 {
     if (1 == index) {
         Vector2d off(pt - center());

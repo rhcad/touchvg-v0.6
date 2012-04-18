@@ -17,7 +17,7 @@ MgRoundRect::~MgRoundRect()
 {
 }
 
-void MgRoundRect::setRadius(double rx, double ry)
+void MgRoundRect::setRadius(float rx, float ry)
 {
     _rx = fabs(rx);
     _ry = fabs(ry);
@@ -45,10 +45,10 @@ void MgRoundRect::_clear()
     __super::_clear();
 }
 
-double MgRoundRect::_hitTest(const Point2d& pt, double tol, 
-                             Point2d& ptNear, Int32& segment) const
+float MgRoundRect::_hitTest(const Point2d& pt, float tol, 
+                            Point2d& ptNear, Int32& segment) const
 {
-    double dist;
+    float dist;
 
     if (isOrtho())
     {

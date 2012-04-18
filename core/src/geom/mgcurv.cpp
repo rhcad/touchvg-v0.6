@@ -6,14 +6,17 @@
 #include "mgbase.h"
 #include "mglnrel.h"
 
-GEOMAPI void mgFitBezier(const Point2d* pts, double t, Point2d& ptFit)
+GEOMAPI void mgFitBezier(const Point2d* pts, float t, Point2d& ptFit)
 {
-    double v = 1.0 - t;
+    double v = 1.f - t;
     double v2 = v * v;
     double t2 = t * t;
     
-    ptFit = (v2 * v) * pts[0] + 3.0 * t * v2 * pts[1]
-        + 3.0 * t2 * v * pts[2] + t2 * t * pts[3];
+    ptFit.set(
+        (float)( (v2 * v) * pts[0].x + 3.f * t * v2 * pts[1].x
+        + 3.f * t2 * v * pts[2].x + t2 * t * pts[3].x),
+        (float)( (v2 * v) * pts[0].y + 3.f * t * v2 * pts[1].y
+        + 3.f * t2 * v * pts[2].y + t2 * t * pts[3].y));
 }
 
 GEOMAPI void mgBezier4P(
@@ -28,13 +31,13 @@ GEOMAPI void mgBezier4P(
 GEOMAPI void mgEllipse90ToBezier(
     const Point2d& ptFrom, const Point2d& ptTo, Point2d& ptCtr1, Point2d& ptCtr2)
 {
-    double rx = ptFrom.x - ptTo.x;
-    double ry = ptTo.y - ptFrom.y;
+    float rx = ptFrom.x - ptTo.x;
+    float ry = ptTo.y - ptFrom.y;
     const Point2d center (ptTo.x, ptFrom.y);
 
-    const double M = 0.5522847498307933984022516; // 4(sqrt(2)-1)/3
-    double dx = rx * M;
-    double dy = ry * M;
+    const float M = 0.5522847498307933984022516f; // 4(sqrt(2)-1)/3
+    float dx = rx * M;
+    float dy = ry * M;
     
     ptCtr1.x = center.x + rx;
     ptCtr1.y = center.y + dy;
@@ -43,11 +46,11 @@ GEOMAPI void mgEllipse90ToBezier(
 }
 
 GEOMAPI void mgEllipseToBezier(
-    Point2d points[13], const Point2d& center, double rx, double ry)
+    Point2d points[13], const Point2d& center, float rx, float ry)
 {
-    const double M = 0.5522847498307933984022516; // 4(sqrt(2)-1)/3
-    double dx = rx * M;
-    double dy = ry * M;
+    const float M = 0.5522847498307933984022516f; // 4(sqrt(2)-1)/3
+    float dx = rx * M;
+    float dy = ry * M;
     
     points[ 0].x = center.x + rx;  //   .   .   .   .   .
     points[ 0].y = center.y;       //       4   3   2
@@ -81,7 +84,7 @@ GEOMAPI void mgEllipseToBezier(
 }
 
 GEOMAPI void mgRoundRectToBeziers(
-    Point2d points[16], const Box2d& rect, double rx, double ry)
+    Point2d points[16], const Box2d& rect, float rx, float ry)
 {
     if (2 * rx > rect.width())
         rx = rect.width() / 2;
@@ -89,8 +92,8 @@ GEOMAPI void mgRoundRectToBeziers(
         ry = rect.height() / 2;
 
     int i, j;
-    double dx = rect.width() / 2 - rx;
-    double dy = rect.height() / 2 - ry;
+    float dx = rect.width() / 2 - rx;
+    float dy = rect.height() / 2 - ry;
 
     mgEllipseToBezier(points, rect.center(), rx, ry);
 
@@ -101,32 +104,32 @@ GEOMAPI void mgRoundRectToBeziers(
     }
     for (i = 0; i < 4; i++)
     {
-        double dx1 = (0 == i || 3 == i) ? dx : -dx;
-        double dy1 = (0 == i || 1 == i) ? dy : -dy;
+        float dx1 = (0 == i || 3 == i) ? dx : -dx;
+        float dy1 = (0 == i || 1 == i) ? dy : -dy;
         for (j = 0; j < 4; j++)
             points[0 ].offset(dx1, dy1);
     }
 }
 
 static void _mgAngleArcToBezier(
-    Point2d points[4], const Point2d& center, double rx, double ry,
-    double startAngle, double sweepAngle)
+    Point2d points[4], const Point2d& center, float rx, float ry,
+    float startAngle, float sweepAngle)
 {
     // Compute bezier curve for arc centered along y axis
     // Anticlockwise: (0,-B), (x,-y), (x,y), (0,B)
     double sy = ry / rx;
     ry = rx;
-    double B = ry * sin(sweepAngle / 2);
-    double C = rx * cos(sweepAngle / 2);
+    double B = ry * sin(sweepAngle / 2.0);
+    double C = rx * cos(sweepAngle / 2.0);
     double A = rx - C;
     
     double X = A * 4 / 3;
     double Y = B - X * (rx-A)/B;
     
-    points[0].set(C,   -B);
-    points[1].set(C+X, -Y);
-    points[2].set(C+X,  Y);
-    points[3].set(C,    B);
+    points[0].set((float)C,      (float)-B);
+    points[1].set((float)(C+X),  (float)-Y);
+    points[2].set((float)(C+X),  (float)Y);
+    points[3].set((float)C,      (float)B);
     
     // rotate to the original angle
     A = startAngle + sweepAngle / 2;
@@ -135,33 +138,33 @@ static void _mgAngleArcToBezier(
     
     for (int i = 0; i < 4; i++)
     {
-        points[i].set(center.x + points[i].x * c - points[i].y * s,
-            center.y + points[i].x * s * sy + points[i].y * c * sy);
+        points[i].set((float)(center.x + points[i].x * c - points[i].y * s),
+            (float)(center.y + points[i].x * s * sy + points[i].y * c * sy));
     }
 }
 
 static int _mgAngleArcToBezierPlusSweep(
-    Point2d points[16], const Point2d& center, double rx, double ry, 
-    double startAngle, double sweepAngle)
+    Point2d points[16], const Point2d& center, float rx, float ry, 
+    float startAngle, float sweepAngle)
 {
-    const double M = 0.5522847498307933984022516;
-    double dx = rx * M;
-    double dy = ry * M;
+    const float M = 0.5522847498307933984022516f;
+    float dx = rx * M;
+    float dy = ry * M;
 
     int k, n;
-    double endAngle;
+    float endAngle;
 
     // 计算第一段椭圆弧的终止角度
-    if (startAngle < M_PI_2) {              // +Y
-        endAngle = M_PI_2;
+    if (startAngle < _M_PI_2) {              // +Y
+        endAngle = _M_PI_2;
         k = 1;
     }
-    else if (startAngle < M_PI) {           // -X
-        endAngle = M_PI;
+    else if (startAngle < _M_PI) {           // -X
+        endAngle = _M_PI;
         k = 2;
     }
-    else if (startAngle < 3*M_PI_2) {       // -Y
-        endAngle = 3*M_PI_2;
+    else if (startAngle < 3*_M_PI_2) {       // -Y
+        endAngle = 3*_M_PI_2;
         k = 3;
     }
     else {                                  // +X
@@ -178,7 +181,7 @@ static int _mgAngleArcToBezierPlusSweep(
         n = 1;                              // 第一点在下边循环内设置
     sweepAngle -= (endAngle - startAngle);
     startAngle = endAngle;
-    while (sweepAngle >= M_PI_2)            // 增加整90度弧
+    while (sweepAngle >= _M_PI_2)           // 增加整90度弧
     {
         if (k == 0)                         // 第一象限
         {
@@ -210,8 +213,8 @@ static int _mgAngleArcToBezierPlusSweep(
         }
         k = (k + 1) % 4;
         n += 3;
-        sweepAngle -= M_PI_2;
-        startAngle += M_PI_2;
+        sweepAngle -= _M_PI_2;
+        startAngle += _M_PI_2;
     }
     if (sweepAngle > 1e-5)                  // 增加余下的弧
     {
@@ -223,8 +226,8 @@ static int _mgAngleArcToBezierPlusSweep(
 }
 
 GEOMAPI int mgAngleArcToBezier(
-    Point2d points[16], const Point2d& center, double rx, double ry,
-    double startAngle, double sweepAngle)
+    Point2d points[16], const Point2d& center, float rx, float ry,
+    float startAngle, float sweepAngle)
 {
     if (mgIsZero(rx) || fabs(sweepAngle) < 1e-5)
         return 0;
@@ -237,7 +240,7 @@ GEOMAPI int mgAngleArcToBezier(
     
     int n = 0;
     
-    if (fabs(sweepAngle) < M_PI_2 + 1e-5)
+    if (fabs(sweepAngle) < _M_PI_2 + 1e-5)
     {
         _mgAngleArcToBezier(points, center, rx, ry, startAngle, sweepAngle);
         n = 4;
@@ -250,7 +253,7 @@ GEOMAPI int mgAngleArcToBezier(
     }
     else // sweepAngle < 0
     {
-        double endAngle = startAngle + sweepAngle;
+        float endAngle = startAngle + sweepAngle;
         sweepAngle = -sweepAngle;
         startAngle = mgTo0_2PI(endAngle);
         n = _mgAngleArcToBezierPlusSweep(
@@ -265,8 +268,8 @@ GEOMAPI int mgAngleArcToBezier(
 
 GEOMAPI bool mgArc3P(
     const Point2d& start, const Point2d& point, const Point2d& end,
-    Point2d& center, double& radius,
-    double* startAngle, double* sweepAngle)
+    Point2d& center, float& radius,
+    float* startAngle, float* sweepAngle)
 {
     double a1, b1, c1, a2, b2, c2;
     
@@ -283,26 +286,26 @@ GEOMAPI bool mgArc3P(
     if (startAngle != NULL && sweepAngle != NULL)
     {
         // 分别计算圆心到三点的角度
-        a1 = atan2(start.y - center.y, start.x - center.x);
-        b1 = atan2(point.y - center.y, point.x - center.x);
-        c1 = atan2(end.y - center.y, end.x - center.x);
+        float a = atan2(start.y - center.y, start.x - center.x);
+        float b = atan2(point.y - center.y, point.x - center.x);
+        float c = atan2(end.y - center.y, end.x - center.x);
         
-        *startAngle = a1;
+        *startAngle = a;
         
         // 判断圆弧的方向，计算转角
-        if (a1 < c1)
+        if (a < c)
         {
-            if (a1 < b1 && b1 < c1)         // 逆时针
-                *sweepAngle = c1-a1;
+            if (a < b && b < c)         // 逆时针
+                *sweepAngle = c-a;
             else
-                *sweepAngle = c1-a1-_M_2PI;
+                *sweepAngle = c-a-_M_2PI;
         }
         else
         {
-            if (a1 > b1 && b1 > c1)         // 顺时针
-                *sweepAngle = c1-a1;
+            if (a > b && b > c)         // 顺时针
+                *sweepAngle = c-a;
             else
-                *sweepAngle = _M_2PI-(a1-c1);
+                *sweepAngle = _M_2PI-(a-c);
         }
     }
     
@@ -311,8 +314,8 @@ GEOMAPI bool mgArc3P(
 
 GEOMAPI bool mgArcTan(
     const Point2d& start, const Point2d& end, const Vector2d& vecTan,
-    Point2d& center, double& radius,
-    double* startAngle, double* sweepAngle)
+    Point2d& center, float& radius,
+    float* startAngle, float* sweepAngle)
 {
     double a, b, c;
     
@@ -329,24 +332,24 @@ GEOMAPI bool mgArcTan(
     
     if (startAngle != NULL && sweepAngle != NULL)
     {
-        a = atan2(start.y - center.y, start.x - center.x);
-        b = atan2(end.y - center.y, end.x - center.x);
-        *startAngle = a;
-        if (vecTan.crossProduct(start - center) > 0.0)
-            *sweepAngle = -mgTo0_2PI(a - b);
+        float sa = atan2(start.y - center.y, start.x - center.x);
+        float ea = atan2(end.y - center.y, end.x - center.x);
+        *startAngle = sa;
+        if (vecTan.crossProduct(start - center) > 0.f)
+            *sweepAngle = -mgTo0_2PI(sa - ea);
         else
-            *sweepAngle = mgTo0_2PI(b - a);
+            *sweepAngle = mgTo0_2PI(ea - sa);
     }
     
     return true;
 }
 
 GEOMAPI bool mgArcBulge(
-    const Point2d& start, const Point2d& end, double bulge,
-    Point2d& center, double& radius,
-    double* startAngle, double* sweepAngle)
+    const Point2d& start, const Point2d& end, float bulge,
+    Point2d& center, float& radius,
+    float* startAngle, float* sweepAngle)
 {
-    Point2d point ((start.x + end.x)*0.5, (start.y + end.y)*0.5);
+    Point2d point ((start.x + end.x)*0.5f, (start.y + end.y)*0.5f);
     point = point.rulerPoint(end, bulge);
     return mgArc3P(start, point, end, center, radius, startAngle, sweepAngle);
 }
@@ -364,8 +367,8 @@ GEOMAPI bool mgTriEquations(
     if (mgIsZero(w))
         return false;
     w = 1.0 / w;
-    vs[0].x = vs[0].x * w;
-    vs[0].y = vs[0].y * w;
+    vs[0].x = (float)(vs[0].x * w);
+    vs[0].y = (float)(vs[0].y * w);
     
     for (i = 0; i <= n-2; i++)
     {
@@ -374,14 +377,14 @@ GEOMAPI bool mgTriEquations(
         if (mgIsZero(w))
             return false;
         w = 1.0 / w;
-        vs[i+1].x = (vs[i+1].x - a[i] * vs[i].x) * w;
-        vs[i+1].y = (vs[i+1].y - a[i] * vs[i].y) * w;
+        vs[i+1].x = (float)( (vs[i+1].x - a[i] * vs[i].x) * w);
+        vs[i+1].y = (float)( (vs[i+1].y - a[i] * vs[i].y) * w);
     }
     
     for (i = n-2; i >= 0; i--)
     {
-        vs[i].x -= b[i] * vs[i+1].x;
-        vs[i].y -= b[i] * vs[i+1].y;
+        vs[i].x -= (float)(b[i] * vs[i+1].x);
+        vs[i].y -= (float)(b[i] * vs[i+1].y);
     }
     
     return true;
@@ -421,19 +424,19 @@ GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
         c = mat[k*n+k];
         if (mgIsZero(c))
             return false;
-        c = 1.0 / c;
+        c = 1.f / c;
         for (j = k; j < n; j++)
             mat[k*n+j] *= c;
-        vs[k].x *= c;
-        vs[k].y *= c;
+        vs[k].x = (float)(vs[k].x * c);
+        vs[k].y = (float)(vs[k].y * c);
         // 从第k+1行以下每一行, 对该行第k列以后各元素-=
         for (i = k+1; i < n; i++)
         {
             c = mat[i*n+k];
             for (j = k; j < n; j++)
                 mat[i*n+j] -= mat[k*n+j] * c;
-            vs[i].x -= vs[k].x * c;
-            vs[i].y -= vs[k].y * c;
+            vs[i].x -= (float)(vs[k].x * c);
+            vs[i].y -= (float)(vs[k].y * c);
         }
     }
     
@@ -442,8 +445,8 @@ GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
     {
         for (j = i; j < n; j++)
         {
-            vs[i].x -= mat[i*n+j+1] * vs[j+1].x;
-            vs[i].y -= mat[i*n+j+1] * vs[j+1].y;
+            vs[i].x -= (float)(mat[i*n+j+1] * vs[j+1].x);
+            vs[i].y -= (float)(mat[i*n+j+1] * vs[j+1].y);
         }
     }
     
@@ -456,7 +459,7 @@ static bool CalcCubicClosed(
     Int32 i, n1 = n - 1;
 
     for (i = n*n - 1; i >= 0; i--)
-        a[i] = 0.0;
+        a[i] = 0.f;
     
     a[n1] = 1.0;
     a[0]  = 4.0;
@@ -464,18 +467,18 @@ static bool CalcCubicClosed(
     a[n1*n+n1 - 1] = 1.0;
     a[n1*n+n1]   = 4.0;
     a[n1*n+0]    = 1.0;
-    vecs[0].x  = 3.0*(knots[1].x-knots[n1].x);
-    vecs[0].y  = 3.0*(knots[1].y-knots[n1].y);
-    vecs[n1].x = 3.0*(knots[0].x-knots[n1 - 1].x);
-    vecs[n1].y = 3.0*(knots[0].y-knots[n1 - 1].y);
+    vecs[0].x  = 3.f * (knots[1].x-knots[n1].x);
+    vecs[0].y  = 3.f * (knots[1].y-knots[n1].y);
+    vecs[n1].x = 3.f * (knots[0].x-knots[n1 - 1].x);
+    vecs[n1].y = 3.f * (knots[0].y-knots[n1 - 1].y);
     
     for (i = 1; i < n1; i++)
     {
         a[i*n+i-1] = 1.0;
         a[i*n+i]   = 4.0;
         a[i*n+i+1] = 1.0;
-        vecs[i].x = 3.0*(knots[i+1].x-knots[i-1].x);
-        vecs[i].y = 3.0*(knots[i+1].y-knots[i-1].y);
+        vecs[i].x = 3.f * (knots[i+1].x-knots[i-1].x);
+        vecs[i].y = 3.f * (knots[i+1].y-knots[i-1].y);
     }
     
     return mgGaussJordan(n, a, vecs);
@@ -495,15 +498,15 @@ static bool CalcCubicUnclosed(
     {
         b[0] = 1.0;
         c[0] = 1.0;
-        vecs[0].x = 2.0*(knots[1].x-knots[0].x);
-        vecs[0].y = 2.0*(knots[1].y-knots[0].y);
+        vecs[0].x = 2.f * (knots[1].x-knots[0].x);
+        vecs[0].y = 2.f * (knots[1].y-knots[0].y);
     }
     else                            // 起始自由端
     {
         b[0] = 1.0;
         c[0] = 0.5;
-        vecs[0].x = 1.5*(knots[1].x-knots[0].x);
-        vecs[0].y = 1.5*(knots[1].y-knots[0].y);
+        vecs[0].x = 1.5f * (knots[1].x-knots[0].x);
+        vecs[0].y = 1.5f * (knots[1].y-knots[0].y);
     }
     
     if (flag & kCubicTan2)          // 终止夹持端
@@ -516,15 +519,15 @@ static bool CalcCubicUnclosed(
     {
         a[n - 2] = 1.0;
         b[n - 1] = 1.0;
-        vecs[n - 1].x = 2.0*(knots[n - 1].x-knots[n - 2].x);
-        vecs[n - 1].y = 2.0*(knots[n - 1].y-knots[n - 2].y);
+        vecs[n - 1].x = 2.f * (knots[n - 1].x-knots[n - 2].x);
+        vecs[n - 1].y = 2.f * (knots[n - 1].y-knots[n - 2].y);
     }
     else                            // 终止自由端
     {
         a[n - 2] = 0.5;
         b[n - 1] = 1.0;
-        vecs[n - 1].x = 1.5*(knots[n - 1].x-knots[n - 2].x);
-        vecs[n - 1].y = 1.5*(knots[n - 1].y-knots[n - 2].y);
+        vecs[n - 1].x = 1.5f * (knots[n - 1].x-knots[n - 2].x);
+        vecs[n - 1].y = 1.5f * (knots[n - 1].y-knots[n - 2].y);
     }
     
     for (int i = 1; i < n - 1; i++)
@@ -532,8 +535,8 @@ static bool CalcCubicUnclosed(
         a[i-1] = 1.0;
         b[i] = 4.0;
         c[i] = 1.0;
-        vecs[i].x = 3.0*(knots[i+1].x-knots[i-1].x);
-        vecs[i].y = 3.0*(knots[i+1].y-knots[i-1].y);
+        vecs[i].x = 3.f * (knots[i+1].x-knots[i-1].x);
+        vecs[i].y = 3.f * (knots[i+1].y-knots[i-1].y);
     }
     
     return mgTriEquations(n, a, b, c, vecs);
@@ -541,7 +544,7 @@ static bool CalcCubicUnclosed(
 
 GEOMAPI bool mgCubicSplines(
     Int32 n, const Point2d* knots, Vector2d* knotVectors,
-    UInt32 flag, double tension)
+    UInt32 flag, float tension)
 {
     bool ret = false;
     
@@ -562,7 +565,7 @@ GEOMAPI bool mgCubicSplines(
         delete[] a;
     }
     
-    if (!mgIsZero(tension - 1.0))
+    if (!mgIsZero(tension - 1.f))
     {
         for (int i = 0; i < n; i++)
         {
@@ -576,9 +579,9 @@ GEOMAPI bool mgCubicSplines(
 
 GEOMAPI void mgFitCubicSpline(
     Int32 n, const Point2d* knots, const Vector2d* knotVectors,
-    Int32 i, double t, Point2d& fitPt)
+    Int32 i, float t, Point2d& fitPt)
 {
-    double b2, b3;
+    float b2, b3;
     int i1 = i % n;
     int i2 = (i+1) % n;
     
@@ -598,12 +601,12 @@ GEOMAPI void mgCubicSplineToBezier(
     int i1 = i % n;
     int i2 = (i+1) % n;
     points[0] = knots[i1];
-    points[1] = knots[i1] + knotVectors[i1] / 3.0;
-    points[2] = knots[i2] - knotVectors[i2] / 3.0;
+    points[1] = knots[i1] + knotVectors[i1] / 3.f;
+    points[2] = knots[i2] - knotVectors[i2] / 3.f;
     points[3] = knots[i2];
 }
 
-static Int32 RemoveSamePoint(Int32 &n, Point2d* knots, double tol)
+static Int32 RemoveSamePoint(Int32 &n, Point2d* knots, float tol)
 {
     for (int i = 0; i < n - 1; i++)
     {
@@ -619,10 +622,10 @@ static Int32 RemoveSamePoint(Int32 &n, Point2d* knots, double tol)
 }
 
 static void CalcClampedS1n(
-    Int32 n1, const Point2d* knots, bool closed, double &len1, 
-    double &sx1, double &sy1, double &sxn, double &syn)
+    Int32 n1, const Point2d* knots, bool closed, float &len1, 
+    float &sx1, float &sy1, float &sxn, float &syn)
 {
-    double dx, dy, len;
+    float dx, dy, len;
 
     dx = knots[1].x - knots[0].x;
     dy = knots[1].y - knots[0].y;
@@ -644,11 +647,11 @@ static void CalcClampedS1n(
     }
 }
 
-static double CalcClampedHp(
-    Int32 n1, const Point2d* knots, double* hp, Vector2d* vecs, 
-    double len1, double sx1, double sy1, double sxn, double syn)
+static float CalcClampedHp(
+    Int32 n1, const Point2d* knots, float* hp, Vector2d* vecs, 
+    float len1, float sx1, float sy1, float sxn, float syn)
 {
-    double dx, dy, dx1, dy1, dx2, dy2, len, s;
+    float dx, dy, dx1, dy1, dx2, dy2, len, s;
 
     dx1 = sx1;
     dy1 = sy1;
@@ -678,19 +681,19 @@ static double CalcClampedHp(
 }
 
 static bool CalcClampedVecs(
-    double sigma, bool closed, Int32 n1, const double* hp, 
-    double* a, double* b, double* c, Vector2d* vecs)
+    float sigma, bool closed, Int32 n1, const float* hp, 
+    float* a, float* b, float* c, Vector2d* vecs)
 {
     int i;
-    double w, ds, d1, d2;
+    float w, ds, d1, d2;
 
     ds = sigma * hp[0];
-    d1 = sigma * cosh(ds) / sinh(ds) - 1. / hp[0];
+    d1 = sigma * cosh(ds) / sinh(ds) - 1.f / hp[0];
     for (i = 0; i < n1; i++)
     {
         ds = sigma * hp[i];
-        d2 = sigma * cosh(ds) / sinh(ds) - 1. / hp[i];
-        c[i] = 1. / hp[i] - sigma / sinh(ds);
+        d2 = sigma * cosh(ds) / sinh(ds) - 1.f / hp[i];
+        c[i] = 1.f / hp[i] - sigma / sinh(ds);
         a[i] = c[i];
         b[i] = d1 + d2;
         d1 = d2;
@@ -725,10 +728,10 @@ static bool CalcClampedVecs(
 
 GEOMAPI bool mgClampedSplines(
     Int32& n, Point2d* knots, 
-    double sgm, double tol, double& sigma, double* hp, Vector2d* knotVectors)
+    float sgm, float tol, float& sigma, float* hp, Vector2d* knotVectors)
 {
     Int32 n1;
-    double len1, sx1, sy1, sxn, syn, s;
+    float len1, sx1, sy1, sxn, syn, s;
     bool closed;
     
     if (!knots || !knotVectors || !hp || n < 2)
@@ -750,7 +753,7 @@ GEOMAPI bool mgClampedSplines(
     // 规范化张力系数 = 控制参数 / 平均弦长
     sigma = sgm * n1 / s;
     
-    double* a = new double[n * 3];
+    float* a = new float[n * 3];
     bool ret = (a != NULL);
     if (ret)
     {
@@ -781,11 +784,11 @@ GEOMAPI bool mgClampedSplines(
     //       s_0 = 0, s_i = s_(i-1) + h_i, h_i = | P[i+1]P[i] |
 GEOMAPI void mgFitClampedSpline(
     const Point2d* knots, 
-    Int32 i, double t, double sigma,
-    const double* hp, const Vector2d* knotVectors, Point2d& fitPt)
+    Int32 i, float t, float sigma,
+    const float* hp, const Vector2d* knotVectors, Point2d& fitPt)
 {
-    double s1, s2, s3, tx1, ty1, tx2, ty2;
-    double div_hp0 = 1.0 / hp[i];
+    float s1, s2, s3, tx1, ty1, tx2, ty2;
+    float div_hp0 = 1.f / hp[i];
     
     tx1 = (knots[i].x - knotVectors[i].x)  * div_hp0;
     tx2 = (knots[i+1].x - knotVectors[i+1].x) * div_hp0;
@@ -794,7 +797,7 @@ GEOMAPI void mgFitClampedSpline(
     
     s1 = sinh(sigma * (hp[i] - t));
     s2 = sinh(sigma * t);
-    s3 = 1.0 / sinh(sigma * hp[i]);
+    s3 = 1.f / sinh(sigma * hp[i]);
     
     fitPt.x = (knotVectors[i].x * s1 + knotVectors[i+1].x * s2) *s3 + tx1*(hp[i] - t) + tx2*t;
     fitPt.y = (knotVectors[i].y * s1 + knotVectors[i+1].y * s2) *s3 + ty1*(hp[i] - t) + ty2*t;

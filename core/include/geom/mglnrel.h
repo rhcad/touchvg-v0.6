@@ -140,7 +140,7 @@ GEOMAPI bool mgIsIntersect(
     \param[in] pt 给定的测试点
     \return 点到无穷直线的距离
 */
-GEOMAPI double mgPtToBeeline(const Point2d& a, const Point2d& b, const Point2d& pt);
+GEOMAPI float mgPtToBeeline(const Point2d& a, const Point2d& b, const Point2d& pt);
 
 //! 计算点pt到无穷直线ab的距离
 /*!
@@ -151,7 +151,7 @@ GEOMAPI double mgPtToBeeline(const Point2d& a, const Point2d& b, const Point2d& 
     \param[out] ptPerp 直线上的垂足
     \return 独立点到垂足的距离
 */
-GEOMAPI double mgPtToBeeline2(
+GEOMAPI float mgPtToBeeline2(
     const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& ptPerp);
 
 //! 计算点pt到线段ab的最近距离
@@ -163,7 +163,7 @@ GEOMAPI double mgPtToBeeline2(
     \param[out] ptNear 线段上的最近点
     \return 独立点到最近点的距离
 */
-GEOMAPI double mgPtToLine(
+GEOMAPI float mgPtToLine(
     const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& ptNear);
 
 //! 求两条直线(ax+by+c=0)的交点

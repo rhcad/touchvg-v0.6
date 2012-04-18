@@ -24,7 +24,7 @@ MgCommand* mgCreateCommand(const char* name)
         { MgCmdDrawSplines::Name(), MgCmdDrawSplines::Create },
     };
 
-    for (int i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++)
+    for (unsigned i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++)
     {
         if (strcmp(cmds[i].name, name) == 0)
             return (cmds[i].creator)();

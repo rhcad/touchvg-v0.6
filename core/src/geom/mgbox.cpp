@@ -35,7 +35,7 @@ Box2d& Box2d::set(const Point2d& p1, const Point2d& p2)
     return *this;
 }
 
-Box2d& Box2d::set(double x1, double y1, double x2, double y2)
+Box2d& Box2d::set(float x1, float y1, float x2, float y2)
 {
     xmin = mgMin(x1, x2);
     ymin = mgMin(y1, y2);
@@ -104,10 +104,10 @@ Box2d& Box2d::intersectWith(const Box2d& r1, const Box2d& r2)
     if(r2.isEmptyMinus())
         return empty();
 
-    double l = mgMax(r1.xmin, r2.xmin);
-    double b = mgMax(r1.ymin, r2.ymin);
-    double r = mgMin(r1.xmax, r2.xmax);
-    double t = mgMin(r1.ymax, r2.ymax);
+    float l = mgMax(r1.xmin, r2.xmin);
+    float b = mgMax(r1.ymin, r2.ymin);
+    float r = mgMin(r1.xmax, r2.xmax);
+    float t = mgMin(r1.ymax, r2.ymax);
     if (r < l || t < b)
         return empty();
     else

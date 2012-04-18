@@ -16,8 +16,7 @@ class BoundBox
 {
 public:
     //! 构造收缩到原点的绑定框
-    BoundBox()
-        : m_base(Point2d::kOrigin())
+    BoundBox() : m_base(Point2d::kOrigin())
         , m_dir1(Vector2d::kIdentity()), m_dir2(Vector2d::kIdentity())
     {
     }
@@ -81,7 +80,7 @@ public:
     BoundBox& extend(const Point2d& pnt);
     
     //! 向外扩大给定长度
-    BoundBox& swell(double distance);
+    BoundBox& swell(float distance);
     
     //! 判断是否包含一个点
     bool contains(const Point2d& pnt) const;
@@ -101,8 +100,8 @@ public:
         Point2d pt1, pt2;
         getMinMaxPoints(pt1, pt2);
         m_base = pt1;
-        m_dir1.set(pt2.x - pt1.x, 0.0);
-        m_dir2.set(0.0, pt2.y - pt1.y);
+        m_dir1.set(pt2.x - pt1.x, 0.f);
+        m_dir2.set(0.f, pt2.y - pt1.y);
         return *this;
     }
     

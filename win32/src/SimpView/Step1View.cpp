@@ -45,7 +45,7 @@ void CRandomShapeView::OnMouseMove(UINT nFlags, CPoint point)
 {
     CBaseView::OnMouseMove(nFlags, point);
     
-    Box2d rect(Point2d(point.x, point.y), 50, 0);
+    Box2d rect(Point2d((float)point.x, (float)point.y), 50, 0);
     
     rect *= m_xf.displayToModel();
     m_ptSnap = rect.center();

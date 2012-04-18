@@ -31,7 +31,7 @@ public:
     //! 默认构造函数
     /*! 对象属性为：96dpi，显示窗口中心的世界坐标为(0,0)，显示比例为100％，
         模型坐标系的变换矩阵为单位矩阵，显示比例范围为1％到500％，
-        显示极限的世界坐标范围为(-1e5,-1e5)到(1e5,1e5)
+        显示极限的世界坐标范围为(-1e5f,-1e5f)到(1e5f,1e5f)
         \param ydown true表示显示设备的+Y方向为向下，false则向上
     */
     GiTransform(bool ydown = true);
@@ -56,12 +56,12 @@ public:
     //! 返回当前绘图的设备X分辨率
     /*! 屏幕窗口显示时为屏幕分辨率，打印或打印预览时为打印机分辨率
     */
-    long getDpiX() const;
+    float getDpiX() const;
 
     //! 返回当前绘图的设备Y分辨率
     /*! 屏幕窗口显示时为屏幕分辨率，打印或打印预览时为打印机分辨率
     */
-    long getDpiY() const;
+    float getDpiY() const;
 
     //! 返回显示窗口的宽度，像素
     /*! 屏幕显示时为窗口的客户区宽度，打印和打印预览时为纸张可打印区域宽度
@@ -79,22 +79,22 @@ public:
     //! 返回显示比例
     /*! 显示比例为1时表示100％显示，小于1时缩小显示，大于1时放大显示
     */
-    double getViewScale() const;
+    float getViewScale() const;
 
     //! 返回X方向上世界单位对应的像素数
     /*! 该值表示X方向上世界坐标系中1单位长度对应于显示坐标系中的长度(像素)，
         由显示设备分辨率和显示比例决定，即为 getDpiX() * getViewScale()
     */
-    double getWorldToDisplayX() const;
+    float getWorldToDisplayX() const;
 
     //! 返回Y方向上世界单位对应的像素数
     /*! 该值表示Y方向上世界坐标系中1单位长度对应于显示坐标系中的长度(像素)，
         由显示设备分辨率和显示比例决定，即为 getDpiY() * getViewScale()
     */
-    double getWorldToDisplayY() const;
+    float getWorldToDisplayY() const;
     
     //! 返回Y方向上显示长度对应的模型长度
-    double displayToModel(double px) const;
+    float displayToModel(float px) const;
 
     //! 返回模型坐标系到世界坐标系的变换矩阵
     const Matrix2d& modelToWorld() const;
@@ -123,14 +123,14 @@ public:
         \param width 显示窗口的宽度，像素
         \param height 显示窗口的高度，像素
     */
-    void setWndSize(int width, int height);
+    void setWndSize(long width, long height);
 
     //! 设置显示分辨率
     /*! 一般不直接调用本函数，而是调用图形系统的 beginPaint 或 printSetup 函数
         \param dpiX 水平分辨率DPI
         \param dpiY 垂直分辨率DPI，为0则取为dpiX
     */
-    void setResolution(int dpiX, int dpiY = 0);
+    void setResolution(float dpiX, float dpiY = 0);
 
     //! 设置模型坐标系的变换矩阵
     /*! 建议在调用图形系统的 beginPaint 函数前调用本函数。\n
@@ -141,10 +141,10 @@ public:
     void setModelTransform(const Matrix2d& mat);
 
     //! 返回最小显示比例
-    double getMinViewScale() const;
+    float getMinViewScale() const;
 
     //! 返回最大显示比例
-    double getMaxViewScale() const;
+    float getMaxViewScale() const;
 
     //! 返回显示极限的世界坐标范围
     Box2d getWorldLimits() const;
@@ -154,7 +154,7 @@ public:
         \param minScale 最小显示比例，在1e-5到0.5之间
         \param maxScale 最大显示比例，在1.0到20之间
     */
-    void setViewScaleRange(double minScale, double maxScale);
+    void setViewScaleRange(float minScale, float maxScale);
 
     //! 设置显示极限的世界坐标范围
     /*! 如果为空矩形框，则放缩时不限制显示位置，否则将限制在显示极限的世界坐标范围内
@@ -172,7 +172,7 @@ public:
         \param adjust 如果显示比例或位置超出范围，是否调整
         \return 是否放缩成功
     */
-    bool zoomWnd(const POINT& pt1, const POINT& pt2, bool adjust = true);
+    bool zoomWnd(const Point2d& pt1, const Point2d& pt2, bool adjust = true);
 
     //! 放缩图形到窗口区域
     /*! 将指定的图形范围rectWorld放缩显示到显示窗口中的指定区域rcTo，
@@ -182,7 +182,7 @@ public:
         \param adjust 如果显示比例或位置超出范围，是否调整
         \return 是否放缩成功
     */
-    bool zoomTo(const Box2d& rectWorld, const RECT* rcTo = NULL, bool adjust = true);
+    bool zoomTo(const Box2d& rectWorld, const RECT2D* rcTo = NULL, bool adjust = true);
 
     //! 平移显示
     /*! 将一个世界坐标点平移显示到屏幕上指定点
@@ -191,7 +191,7 @@ public:
         \param adjust 如果显示比例或位置超出范围，是否调整
         \return 是否放缩成功
     */
-    bool zoomTo(const Point2d& pntWorld, const POINT* pxAt = NULL, bool adjust = true);
+    bool zoomTo(const Point2d& pntWorld, const Point2d* pxAt = NULL, bool adjust = true);
 
     //! 平移显示
     /*! 
@@ -200,7 +200,7 @@ public:
         \param adjust 如果显示比例或位置超出范围，是否调整
         \return 是否放缩成功
     */
-    bool zoomPan(double dxPixel, double dyPixel, bool adjust = true);
+    bool zoomPan(float dxPixel, float dyPixel, bool adjust = true);
 
     //! 以一点为中心按照倍率放缩
     /*! 当factor大于0时，显示比例将变为原来的(1+factor)倍；\n
@@ -210,7 +210,7 @@ public:
         \param adjust 如果显示比例或位置超出范围，是否调整
         \return 是否放缩成功
     */
-    bool zoomByFactor(double factor, const POINT* pxAt = NULL, bool adjust = true);
+    bool zoomByFactor(float factor, const Point2d* pxAt = NULL, bool adjust = true);
 
     //! 以一点为中心指定比例放缩
     /*! 
@@ -219,7 +219,7 @@ public:
         \param adjust 如果显示比例或位置超出范围，是否调整
         \return 是否放缩成功
     */
-    bool zoomScale(double viewScale, const POINT* pxAt = NULL, bool adjust = true);
+    bool zoomScale(float viewScale, const Point2d* pxAt = NULL, bool adjust = true);
 
     //! 设置显示放缩状态
     /*! 
@@ -228,7 +228,7 @@ public:
         \param[out] changed 填充是否已改变放缩参数的标记，为NULL则忽略
         \return 始终返回true
     */
-    bool zoom(Point2d centerW, double viewScale, bool* changed = NULL);
+    bool zoom(Point2d centerW, float viewScale, bool* changed = NULL);
 
     //! 设置各种放缩函数是否立即生效
     /*! 本函数可用于检查放缩参数的有效性，避免改变图形系统的放缩状态；
@@ -244,7 +244,7 @@ public:
         \param[out] centerW 显示窗口中心的世界坐标
         \param[out] viewScale 显示比例
     */
-    void getZoomValue(Point2d& centerW, double& viewScale) const;
+    void getZoomValue(Point2d& centerW, float& viewScale) const;
 
     //! 返回放缩结果改变的次数，供图形系统等观察者作比较使用
     long getZoomTimes() const;

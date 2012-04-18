@@ -151,7 +151,7 @@ private:
     
     void clipLeft(vector<Point2d>& arr, const Point2d& p1, const Point2d& p2)
     {
-        double y;
+        float y;
         
         // 如果线段与剪裁线相交，则输出交点
         if ((p1.x < m_rect.xmin) != (p2.x < m_rect.xmin))
@@ -169,7 +169,7 @@ private:
     
     void clipTop(vector<Point2d>& arr, const Point2d& p1, const Point2d& p2)
     {
-        double x;
+        float x;
         
         if ((p1.y < m_rect.ymin) != (p2.y < m_rect.ymin))
         {
@@ -184,7 +184,7 @@ private:
     
     void clipRight(vector<Point2d>& arr, const Point2d& p1, const Point2d& p2)
     {
-        double y;
+        float y;
         
         if ((p1.x > m_rect.xmax) != (p2.x > m_rect.xmax))
         {
@@ -199,7 +199,7 @@ private:
     
     void clipBottom(vector<Point2d>& arr, const Point2d& p1, const Point2d& p2)
     {
-        double x;
+        float x;
         
         if ((p1.y > m_rect.ymax) != (p2.y > m_rect.ymax))
         {

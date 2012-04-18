@@ -16,7 +16,7 @@
     \param[out] ptFit 计算出的参数点
     \see mgBezier4P, mgCubicSplines
 */
-GEOMAPI void mgFitBezier(const Point2d* pts, double t, Point2d& ptFit);
+GEOMAPI void mgFitBezier(const Point2d* pts, float t, Point2d& ptFit);
 
 //! 用线上四点构成三次贝塞尔曲线段
 /*! 该贝塞尔曲线段的起点和终点为给定点，中间经过另外两个给定点，
@@ -59,7 +59,7 @@ GEOMAPI void mgEllipse90ToBezier(
     \see mgBezier4P, mgEllipse90ToBezier, mgAngleArcToBezier
 */
 GEOMAPI void mgEllipseToBezier(
-    Point2d points[13], const Point2d& center, double rx, double ry);
+    Point2d points[13], const Point2d& center, float rx, float ry);
 
 //! 将一个圆角矩形转换为4段三次贝塞尔曲线
 /*! 这4段贝塞尔曲线按逆时针方向从第一象限到第四象限，每段4个点，
@@ -72,7 +72,7 @@ GEOMAPI void mgEllipseToBezier(
     \see mgEllipseToBezier
 */
 GEOMAPI void mgRoundRectToBeziers(
-    Point2d points[16], const Box2d& rect, double rx, double ry);
+    Point2d points[16], const Box2d& rect, float rx, float ry);
 
 //! 将一个椭圆弧转换为多段三次贝塞尔曲线
 /*! 4段三次贝塞尔曲线是按逆时针方向从第一象限到第四象限连接，每一段4个点，
@@ -88,8 +88,8 @@ GEOMAPI void mgRoundRectToBeziers(
     \see mgBezier4P, mgEllipse90ToBezier, mgEllipseToBezier, mgArc3P
 */
 GEOMAPI int mgAngleArcToBezier(
-    Point2d points[16], const Point2d& center, double rx, double ry,
-    double startAngle, double sweepAngle);
+    Point2d points[16], const Point2d& center, float rx, float ry,
+    float startAngle, float sweepAngle);
 
 //! 给定起点、弧上一点和终点，计算圆弧参数
 /*!
@@ -106,8 +106,8 @@ GEOMAPI int mgAngleArcToBezier(
 */
 GEOMAPI bool mgArc3P(
     const Point2d& start, const Point2d& point, const Point2d& end,
-    Point2d& center, double& radius,
-    double* startAngle = NULL, double* sweepAngle = NULL);
+    Point2d& center, float& radius,
+    float* startAngle = NULL, float* sweepAngle = NULL);
 
 //! 给定起点、终点和起点切向，计算圆弧参数
 /*!
@@ -124,8 +124,8 @@ GEOMAPI bool mgArc3P(
 */
 GEOMAPI bool mgArcTan(
     const Point2d& start, const Point2d& end, const Vector2d& vecTan,
-    Point2d& center, double& radius,
-    double* startAngle = NULL, double* sweepAngle = NULL);
+    Point2d& center, float& radius,
+    float* startAngle = NULL, float* sweepAngle = NULL);
 
 //! 给定弦和拱高计算圆弧参数
 /*!
@@ -141,9 +141,9 @@ GEOMAPI bool mgArcTan(
     \see mgArc3P, mgArcTan, mgAngleArcToBezier
 */
 GEOMAPI bool mgArcBulge(
-    const Point2d& start, const Point2d& end, double bulge,
-    Point2d& center, double& radius,
-    double* startAngle = NULL, double* sweepAngle = NULL);
+    const Point2d& start, const Point2d& end, float bulge,
+    Point2d& center, float& radius,
+    float* startAngle = NULL, float* sweepAngle = NULL);
 
 //! 求解三对角线方程组
 /*! 三对角线方程组如下所示: \n
@@ -208,7 +208,7 @@ enum kCubicSplinesFlags
 */
 GEOMAPI bool mgCubicSplines(
     Int32 n, const Point2d* knots, Vector2d* knotVectors,
-    UInt32 flag = 0, double tension = 1.0);
+    UInt32 flag = 0, float tension = 1.f);
 
 //! 在三次样条曲线的一条弦上插值得到拟和点坐标
 /*!
@@ -223,7 +223,7 @@ GEOMAPI bool mgCubicSplines(
 */
 GEOMAPI void mgFitCubicSpline(
     Int32 n, const Point2d* knots, const Vector2d* knotVectors,
-    Int32 i, double t, Point2d& fitPt);
+    Int32 i, float t, Point2d& fitPt);
 
 //! 得到三次样条曲线的分段贝塞尔曲线段控制点
 /*!
@@ -265,8 +265,8 @@ GEOMAPI Int32 mgBSplinesToBeziers(
     \see mgFitClampedSpline
 */
 GEOMAPI bool mgClampedSplines(
-    Int32& n, Point2d* knots, double sgm, double tol, double& sigma,
-    double* hp, Vector2d* knotVectors);
+    Int32& n, Point2d* knots, float sgm, float tol, float& sigma,
+    float* hp, Vector2d* knotVectors);
 
 //! 在张力样条曲线的一条弦上插值得到拟和点坐标
 /*!
@@ -281,7 +281,7 @@ GEOMAPI bool mgClampedSplines(
     \see mgClampedSplines
 */
 GEOMAPI void mgFitClampedSpline(
-    const Point2d* knots, Int32 i, double t, double sigma,
-    const double* hp, const Vector2d* knotVectors, Point2d& fitPt);
+    const Point2d* knots, Int32 i, float t, float sigma,
+    const float* hp, const Vector2d* knotVectors, Point2d& fitPt);
 
 #endif // __GEOMETRY_FITCURVE_H_

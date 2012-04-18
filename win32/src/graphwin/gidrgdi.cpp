@@ -5,6 +5,7 @@
 #include "gidrgdi.h"
 #include <_gigraph.h>
 #include <gdiobj.h>
+#include <vector>
 
 // 判断是否是Windows NT4/2000及以后
 static bool giIsNT()
@@ -72,7 +73,7 @@ public:
     }
 
     bool draw(const GdiDrawImplBase* pdraw, 
-        HDC destDC, int x = 0, int y = 0) const;
+        HDC destDC, float x = 0, float y = 0) const;
     bool saveCachedBitmap(const GdiDrawImplBase* pdraw, HDC hSrcDC);
 
 private:
@@ -90,7 +91,7 @@ public:
     HDC             m_buffDC;           //!< 缓冲DC
     HBITMAP         m_buffBmp;          //!< 缓冲位图
     HGDIOBJ         m_buffOldBmp;       //!< 缓冲DC中原来的位图
-    GdiCachedBmp       m_cachedBmp[2];     //!< 后备缓冲位图
+    GdiCachedBmp    m_cachedBmp[2];     //!< 后备缓冲位图
 
     GiGraphGdiImpl(GiGraphGdi* gs) : GdiDrawImplBase(gs)
     {
@@ -133,7 +134,7 @@ public:
                 m_pen = ::GetStockObject(NULL_PEN);
             else
             {
-                UInt16 width = m_this->owner()->calcPenWidth(ctx->getLineWidth());
+                int width = mgRound(m_this->owner()->calcPenWidth(ctx->getLineWidth()));
                 GiColor color = m_this->owner()->calcPenColor(ctx->getLineColor());
                 COLORREF cr = RGB(color.r, color.g, color.b);
                 int lineStyle = ctx->getLineStyle();
@@ -225,9 +226,11 @@ bool GiGraphGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     {
         if ((m_draw->m_buffDC = ::CreateCompatibleDC(hdc)) != NULL)
         {
+            RECT rc = { mgRound(m_impl->clipBox0.left), mgRound(m_impl->clipBox0.top),
+                mgRound(m_impl->clipBox0.right), mgRound(m_impl->clipBox0.bottom)
+            };
             m_draw->m_buffBmp = ::CreateCompatibleBitmap(hdc, 
-                m_impl->clipBox0.right - m_impl->clipBox0.left, 
-                m_impl->clipBox0.bottom - m_impl->clipBox0.top);
+                rc.right - rc.left, rc.bottom - rc.top);
             if (m_draw->m_buffBmp == NULL)
             {
                 ::DeleteDC(m_draw->m_buffDC);
@@ -235,16 +238,12 @@ bool GiGraphGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
             }
             else
             {
-                ::OffsetViewportOrgEx(m_draw->m_buffDC,
-                    -m_impl->clipBox0.left, -m_impl->clipBox0.top, NULL);
+                ::OffsetViewportOrgEx(m_draw->m_buffDC, -rc.left, -rc.top, NULL);
                 m_draw->m_buffOldBmp = ::SelectObject(
                     m_draw->m_buffDC, m_draw->m_buffBmp);
-                ::SetBrushOrgEx(m_draw->m_buffDC, 
-                    m_impl->clipBox0.left % 8,
-                    m_impl->clipBox0.top % 8, NULL);
+                ::SetBrushOrgEx(m_draw->m_buffDC, rc.left % 8, rc.top % 8, NULL);
                 ::IntersectClipRect(m_draw->m_buffDC,
-                    m_impl->clipBox0.left, m_impl->clipBox0.top,
-                    m_impl->clipBox0.right, m_impl->clipBox0.bottom);
+                    rc.left, rc.top, rc.right, rc.bottom);
 
                 ::SetBkColor(m_draw->m_buffDC, ::GetBkColor(hdc));
             }
@@ -265,8 +264,10 @@ void GiGraphGdi::clearWnd()
 {
     if (!m_owner->isPrint() && m_owner->isDrawing())
     {
-        ::ExtTextOut(m_draw->getDrawDC(), 0, 0, ETO_OPAQUE, 
-            &m_impl->clipBox0, NULL, 0, NULL);
+        RECT rc = { mgRound(m_impl->clipBox0.left), mgRound(m_impl->clipBox0.top),
+            mgRound(m_impl->clipBox0.right), mgRound(m_impl->clipBox0.bottom)
+        };
+        ::ExtTextOut(m_draw->getDrawDC(), 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
     }
 }
 
@@ -279,12 +280,12 @@ void GiGraphGdi::clearCachedBitmap()
     m_draw->m_cachedBmp[1].clear();
 }
 
-bool GiGraphGdi::drawCachedBitmap(int x, int y, bool secondBmp)
+bool GiGraphGdi::drawCachedBitmap(float x, float y, bool secondBmp)
 {
     return GdiCachedBmp(secondBmp).draw(m_draw, m_draw->getDrawDC(), x, y);
 }
 
-bool GiGraphGdi::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool secondBmp)
+bool GiGraphGdi::drawCachedBitmap2(const GiDrawAdapter* p, float x, float y, bool secondBmp)
 {
     if (p && p->getGraphType() == getGraphType())
     {
@@ -296,7 +297,7 @@ bool GiGraphGdi::drawCachedBitmap2(const GiDrawAdapter* p, int x, int y, bool se
     return false;
 }
 
-bool GdiCachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) const
+bool GdiCachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, float x, float y) const
 {
     bool ret = false;
 
@@ -306,7 +307,7 @@ bool GdiCachedBmp::draw(const GdiDrawImplBase* pdraw, HDC destDC, int x, int y) 
         if (memDC != NULL)
         {
             HGDIOBJ oldBmp = ::SelectObject(memDC, m_cachedBmp);
-            ret = ::BitBlt(destDC, x, y, 
+            ret = ::BitBlt(destDC, mgRound(x), mgRound(y), 
                 pdraw->m_this->xf().getWidth(), 
                 pdraw->m_this->xf().getHeight(),
                 memDC, 0, 0, SRCCOPY) != FALSE;
@@ -363,12 +364,12 @@ void GiGraphGdi::endPaint(bool draw)
     {
         if (m_draw->m_buffBmp != NULL && draw)
         {
-            ::BitBlt(m_draw->m_hdc, 
-                m_impl->clipBox0.left, m_impl->clipBox0.top,
-                m_impl->clipBox0.right - m_impl->clipBox0.left,
-                m_impl->clipBox0.bottom - m_impl->clipBox0.top,
-                m_draw->m_buffDC, 
-                m_impl->clipBox0.left, m_impl->clipBox0.top, SRCCOPY);
+            RECT rc = { mgRound(m_impl->clipBox0.left), mgRound(m_impl->clipBox0.top),
+                mgRound(m_impl->clipBox0.right), mgRound(m_impl->clipBox0.bottom)
+            };
+            ::BitBlt(m_draw->m_hdc, rc.left, rc.top, 
+                rc.right - rc.left, rc.bottom - rc.top,
+                m_draw->m_buffDC, rc.left, rc.top, SRCCOPY);
         }
 
         if (m_draw->m_pen != NULL)
@@ -400,10 +401,12 @@ void GiGraphGdi::endPaint(bool draw)
     }
 }
 
-void GiGraphGdi::_clipBoxChanged(const RECT& clipBox)
+void GiGraphGdi::_clipBoxChanged(const RECT2D& clipBox)
 {
-    HRGN hRgn = ::CreateRectRgn(
-        clipBox.left, clipBox.top, clipBox.right, clipBox.bottom);
+    RECT rc = { mgRound(clipBox.left), mgRound(clipBox.top),
+        mgRound(clipBox.right), mgRound(clipBox.bottom)
+    };
+    HRGN hRgn = ::CreateRectRgn(rc.left, rc.top, rc.right, rc.bottom);
     if (hRgn != NULL)
     {
         ::SelectClipRgn(m_draw->getDrawDC(), hRgn);
@@ -455,58 +458,93 @@ const GiContext* GiGraphGdi::getCurrentContext() const
 }
 
 bool GiGraphGdi::rawLine(const GiContext* ctx, 
-                         int x1, int y1, int x2, int y2)
+                         float x1, float y1, float x2, float y2)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
 
-    BOOL ret = ::MoveToEx(hdc, x1, y1, NULL);
-    ret = ret && ::LineTo(hdc, x2, y2);
+    BOOL ret = ::MoveToEx(hdc, mgRound(x1), mgRound(y1), NULL);
+    ret = ret && ::LineTo(hdc, mgRound(x2), mgRound(y2));
 
     return ret ? true : false;
 }
 
 bool GiGraphGdi::rawPolyline(const GiContext* ctx, 
-                             const POINT* lppt, int count)
+                             const Point2d* pxs, int count)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
-    return ::Polyline(hdc, lppt, count) ? true : false;
+    bool ret = false;
+
+    if (count > 0)
+    {
+        std::vector<POINT> pts;
+        pts.resize(count);
+        for (int i = 0; i < count; i++)
+            pxs[i].get(pts[i].x, pts[i].y);
+        ret = !!Polyline(hdc, &pts.front(), count);
+    }
+
+    return ret;
 }
 
 bool GiGraphGdi::rawPolyBezier(const GiContext* ctx, 
-                               const POINT* lppt, int count)
+                               const Point2d* pxs, int count)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
-    return ::PolyBezier(hdc, lppt, count) ? true : false;
+    bool ret = false;
+
+    if (count > 0)
+    {
+        std::vector<POINT> pts;
+        pts.resize(count);
+        for (int i = 0; i < count; i++)
+            pxs[i].get(pts[i].x, pts[i].y);
+        ret = !!PolyBezier(hdc, &pts.front(), count);
+    }
+
+    return ret;
 }
 
 bool GiGraphGdi::rawPolygon(const GiContext* ctx, 
-                            const POINT* lppt, int count)
+                            const Point2d* pxs, int count)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
     KGDIObject brush (hdc, m_draw->createBrush(ctx), false);
-    return ::Polygon(hdc, lppt, count) ? true : false;
+    bool ret = false;
+
+    if (count > 0)
+    {
+        std::vector<POINT> pts;
+        pts.resize(count);
+        for (int i = 0; i < count; i++)
+            pxs[i].get(pts[i].x, pts[i].y);
+        ret = !!Polygon(hdc, &pts.front(), count);
+    }
+
+    return ret;
 }
 
 bool GiGraphGdi::rawRect(const GiContext* ctx, 
-                         int x, int y, int w, int h)
+                         float x, float y, float w, float h)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
     KGDIObject brush (hdc, m_draw->createBrush(ctx), false);
-    return ::Rectangle(hdc, x, y, x + w, y + h) ? true : false;
+    return ::Rectangle(hdc, mgRound(x), mgRound(y), 
+        mgRound(x + w), mgRound(y + h)) ? true : false;
 }
 
 bool GiGraphGdi::rawEllipse(const GiContext* ctx, 
-                            int x, int y, int w, int h)
+                            float x, float y, float w, float h)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
     KGDIObject brush (hdc, m_draw->createBrush(ctx), false);
-    return ::Ellipse(hdc, x, y, x + w, y + h) ? true : false;
+    return ::Ellipse(hdc, mgRound(x), mgRound(y), 
+        mgRound(x + w), mgRound(y + h)) ? true : false;
 }
 
 bool GiGraphGdi::rawBeginPath()
@@ -535,19 +573,30 @@ bool GiGraphGdi::rawEndPath(const GiContext* ctx, bool fill)
     return ret ? true : false;
 }
 
-bool GiGraphGdi::rawMoveTo(int x, int y)
+bool GiGraphGdi::rawMoveTo(float x, float y)
 {
-    return ::MoveToEx(m_draw->getDrawDC(), x, y, NULL) ? true : false;
+    return ::MoveToEx(m_draw->getDrawDC(), mgRound(x), mgRound(y), NULL) ? true : false;
 }
 
-bool GiGraphGdi::rawLineTo(int x, int y)
+bool GiGraphGdi::rawLineTo(float x, float y)
 {
-    return ::LineTo(m_draw->getDrawDC(), x, y) ? true : false;
+    return ::LineTo(m_draw->getDrawDC(), mgRound(x), mgRound(y)) ? true : false;
 }
 
-bool GiGraphGdi::rawPolyBezierTo(const POINT* lppt, int count)
+bool GiGraphGdi::rawPolyBezierTo(const Point2d* pxs, int count)
 {
-    return ::PolyBezierTo(m_draw->getDrawDC(), lppt, count) ? true : false;
+    bool ret = false;
+
+    if (count > 0)
+    {
+        std::vector<POINT> pts;
+        pts.resize(count);
+        for (int i = 0; i < count; i++)
+            pxs[i].get(pts[i].x, pts[i].y);
+        ret = !!PolyBezierTo(m_draw->getDrawDC(), &pts.front(), count);
+    }
+
+    return ret;
 }
 
 bool GiGraphGdi::rawCloseFigure()
@@ -555,24 +604,28 @@ bool GiGraphGdi::rawCloseFigure()
     return ::CloseFigure(m_draw->getDrawDC()) ? true : false;
 }
 
-static BOOL PolyDraw98(HDC hdc, const POINT *lppt, const BYTE *types, int n)
+static BOOL PolyDraw98(HDC hdc, const Point2d *pxs, const BYTE *types, int n)
 {
+    POINT pts[3];
+
     for (int i = 0; i < n; i++)
     {
         switch (types[i] & ~PT_CLOSEFIGURE)
         {
         case PT_MOVETO:
-            ::MoveToEx(hdc, lppt[i].x, lppt[i].y, NULL);
+            ::MoveToEx(hdc, mgRound(pxs[i].x), mgRound(pxs[i].y), NULL);
             break;
 
         case PT_LINETO:
-            ::LineTo(hdc, lppt[i].x, lppt[i].y);
+            ::LineTo(hdc, mgRound(pxs[i].x), mgRound(pxs[i].y));
             break;
 
         case PT_BEZIERTO:
             if (i + 2 >= n)
                 return FALSE;
-            ::PolyBezierTo(hdc, &lppt[i], 3);
+            for (int j = 0; j < 3; j++)
+                pxs[i+j].get(pts[j].x, pts[j].y);
+            ::PolyBezierTo(hdc, pts, 3);
             i += 2;
             break;
 
@@ -587,7 +640,7 @@ static BOOL PolyDraw98(HDC hdc, const POINT *lppt, const BYTE *types, int n)
 }
 
 bool GiGraphGdi::rawPolyDraw(const GiContext* ctx, int count, 
-                             const POINT* lppt, const UInt8* types)
+                             const Point2d* pxs, const UInt8* types)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
@@ -599,19 +652,27 @@ bool GiGraphGdi::rawPolyDraw(const GiContext* ctx, int count,
 
     if (giIsNT())
     {
+        std::vector<POINT> pts;
+
         if (ctx->hasFillColor())
         {
             ret = ::BeginPath(hdc);
             if (ret)
             {
-                ret = ::PolyDraw(hdc, lppt, types, count);
+                pts.resize(count);
+                for (int i = 0; i < count; i++)
+                    pxs[i].get(pts[i].x, pts[i].y);
+                ret = ::PolyDraw(hdc, &pts.front(), types, count);
                 ret = ::EndPath(hdc);
                 ret = ::StrokeAndFillPath(hdc);
             }
         }
         else
         {
-            ret = ::PolyDraw(hdc, lppt, types, count);
+            pts.resize(count);
+            for (int i = 0; i < count; i++)
+                pxs[i].get(pts[i].x, pts[i].y);
+            ret = ::PolyDraw(hdc, &pts.front(), types, count);
         }
     }
     else
@@ -619,7 +680,7 @@ bool GiGraphGdi::rawPolyDraw(const GiContext* ctx, int count,
         ret = ::BeginPath(hdc);
         if (ret)
         {
-            ret = PolyDraw98(hdc, lppt, types, count);
+            ret = PolyDraw98(hdc, pxs, types, count);
             ret = ::EndPath(hdc);
             if (ctx->hasFillColor())
                 ret = ::StrokeAndFillPath(hdc);
@@ -646,7 +707,8 @@ bool GiGraphGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
         (rectW * xf().worldToDisplay()).get(rc.left, rc.top, rc.right, rc.bottom);
 
         // rcDraw: 图像经剪裁后的可显示部分
-        if (!IntersectRect(&rcDraw, &rc, &m_impl->clipBox))
+        Box2d(m_impl->clipBox).get(rcFrom.left, rcFrom.top, rcFrom.right, rcFrom.bottom);
+        if (!IntersectRect(&rcDraw, &rc, &rcFrom))
             return false;
 
         long width, height;       // pixel units

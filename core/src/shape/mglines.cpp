@@ -143,13 +143,13 @@ void MgBaseLines::removePoint(UInt32 index)
     }
 }
 
-bool MgBaseLines::_setHandlePoint(UInt32 index, const Point2d& pt, double tol)
+bool MgBaseLines::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
 {
     Int32 preindex = (_closed && 0 == index) ? _count - 1 : index - 1;
     UInt32 postindex = (_closed && index + 1 == _count) ? 0 : index + 1;
     
-    double predist = preindex < 0 ? _DBL_MAX : getPoint(preindex).distanceTo(pt);
-    double postdist = postindex >= _count ? _DBL_MAX : getPoint(postindex).distanceTo(pt);
+    float predist = preindex < 0 ? _FLT_MAX : getPoint(preindex).distanceTo(pt);
+    float postdist = postindex >= _count ? _FLT_MAX : getPoint(postindex).distanceTo(pt);
     
     if (predist < tol || postdist < tol) {
         removePoint(index);
@@ -167,8 +167,8 @@ bool MgBaseLines::_setHandlePoint(UInt32 index, const Point2d& pt, double tol)
     return true;
 }
 
-double MgBaseLines::_hitTest(const Point2d& pt, double tol, 
-                             Point2d& ptNear, Int32& segment) const
+float MgBaseLines::_hitTest(const Point2d& pt, float tol, 
+                            Point2d& ptNear, Int32& segment) const
 {
     return mgLinesHit(_count, _points, _closed, pt, tol, ptNear, segment);
 }

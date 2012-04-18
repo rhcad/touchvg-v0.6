@@ -50,11 +50,11 @@ bool MgCmdDrawSplines::touchMoved(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
     
-    double closelen  = sender->view->xform()->displayToModel(20 + getLineHalfWidth(m_shape, sender->view->graph()));
-    double closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
-    bool   closed    = (m_step > 2 && closedist < closelen
-                        && m_shape->shape()->getExtent().width() > closedist * 1.5
-                        && m_shape->shape()->getExtent().height() > closedist * 1.5);
+    float closelen  = sender->view->xform()->displayToModel(20 + getLineHalfWidth(m_shape, sender->view->graph()));
+    float closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
+    bool  closed    = (m_step > 2 && closedist < closelen
+                        && m_shape->shape()->getExtent().width() > closedist * 1.5f
+                        && m_shape->shape()->getExtent().height() > closedist * 1.5f);
     
     if (m_step > 2 && m_shape->shape()->isClosed() != closed) {
         lines->setClosed(closed);
@@ -82,7 +82,7 @@ bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
     MgSplines* splines = (MgSplines*)m_shape->shape();
     
     if (m_step > 1) {
-        int w = getLineHalfWidth(m_shape, sender->view->graph());
+        float w = getLineHalfWidth(m_shape, sender->view->graph());
         splines->smooth(sender->view->xform()->displayToModel(3 + w));
         _addshape(sender);
     }
@@ -104,7 +104,7 @@ bool MgCmdDrawSplines::canAddPoint(const MgMotion* /*sender*/, bool /*ended*/)
 bool MgCmdDrawSplines::click(const MgMotion* sender)
 {
     MgShapeT<MgLine> line;
-    double pxlen = sender->view->xform()->displayToModel(1);
+    float pxlen = sender->view->xform()->displayToModel(1);
     
     if (sender->view->context()) {
         *line.context() = *sender->view->context();

@@ -35,8 +35,8 @@ void MgSplines::_update()
     mgCubicSplinesBox(_extent, _count, _points, _knotVectors);
 }
 
-double MgSplines::_hitTest(const Point2d& pt, double tol, 
-                           Point2d& ptNear, Int32& segment) const
+float MgSplines::_hitTest(const Point2d& pt, float tol, 
+                          Point2d& ptNear, Int32& segment) const
 {
     return mgCubicSplinesHit(_count, _points, _knotVectors, _closed, 
         pt, tol, ptNear, segment);
@@ -65,7 +65,7 @@ bool MgSplines::_draw(GiGraphics& gs, const GiContext& ctx) const
     return __super::_draw(gs, ctx) || ret;
 }
 
-void MgSplines::smooth(double tol)
+void MgSplines::smooth(float tol)
 {
     if (_bzcount < 3)
         return;
@@ -77,7 +77,7 @@ void MgSplines::smooth(double tol)
     UInt32 i, j;
     Point2d ptNear;
     Int32 segment;
-    double dist;
+    float dist;
     
     points[0] = _points[0];                 // 第一个点不动
     indexMap[0] = 0;
@@ -98,7 +98,7 @@ void MgSplines::smooth(double tol)
         else {
             for (j = 0; j < n + _count - i; j++) {  // 切向变化超过45度时也保留点
                 UInt32 index = j > n ? i + j - n : indexMap[j];
-                if (_knotVectors[index].angleTo(knotVectors[j]) > M_PI_4) {
+                if (_knotVectors[index].angleTo(knotVectors[j]) > _M_PI_4) {
                     points[++n] = _points[i];
                     indexMap[n] = i;
                     break;

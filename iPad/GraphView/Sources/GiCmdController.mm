@@ -53,8 +53,7 @@ private:
 
 - (void)convertPoint:(CGPoint)pt
 {
-    _motion->point.x = mgRound(pt.x);
-    _motion->point.y = mgRound(pt.y);
+    _motion->point = Point2d(pt.x, pt.y);
     _motion->pointM = Point2d(pt.x, pt.y) * _motion->view->xform()->displayToModel();
 }
 
@@ -243,8 +242,8 @@ private:
         else if (sender.state == UIGestureRecognizerStateChanged) {
             if (sender.numberOfTouches > 1) {   // 滑动时有两个手指
                 bool recall = false;
-                double dist = mgHypot(_motion->point.x - _motion->lastPoint.x, 
-                                      _motion->point.y - _motion->lastPoint.y);
+                float dist = mgHypot(_motion->point.x - _motion->lastPoint.x, 
+                                     _motion->point.y - _motion->lastPoint.y);
                 if (!_undoFired && dist > 10) { // 双指滑动超过10像素可再触发Undo操作
                     if (cmd->undo(recall, _motion) && !recall)  // 触发一次Undo操作
                         _undoFired = YES;       // 另一个手指不松开也不再触发Undo操作

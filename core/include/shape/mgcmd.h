@@ -29,11 +29,11 @@ struct MgView {
 */
 struct MgMotion {
     MgView*     view;                           //!< 图形视图
-    POINT       startPoint;                     //!< 开始点，视图坐标
+    Point2d     startPoint;                     //!< 开始点，视图坐标
     Point2d     startPointM;                    //!< 开始点，模型坐标
-    POINT       lastPoint;                      //!< 上次点，视图坐标
+    Point2d     lastPoint;                      //!< 上次点，视图坐标
     Point2d     lastPointM;                     //!< 上次点，模型坐标
-    POINT       point;                          //!< 当前点，视图坐标
+    Point2d     point;                          //!< 当前点，视图坐标
     Point2d     pointM;                         //!< 当前点，模型坐标
 };
 

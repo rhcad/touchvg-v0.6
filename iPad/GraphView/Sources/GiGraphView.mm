@@ -68,7 +68,7 @@
 - (void)afterCreated
 {
 	CGFloat scrscale = [[UIScreen mainScreen] scale];
-    GiGraphIos::setScreenDpi(mgRound(160 * scrscale));
+    GiGraphIos::setScreenDpi(160 * scrscale);
     
     if (!_xform) {
 		_xform = new GiTransform();
@@ -218,7 +218,7 @@
         _zooming = (sender.state == UIGestureRecognizerStateChanged);
     }
     
-    POINT at = { _firstPoint.x, _firstPoint.y };
+    Point2d at (_firstPoint.x, _firstPoint.y );
     _xform->zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);
     _xform->zoomByFactor(sender.scale - 1, &at);
     
@@ -260,7 +260,7 @@
 - (BOOL)switchZoomed:(UIGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
-    POINT at = { point.x, point.y };
+    Point2d at (_firstPoint.x, _firstPoint.y );
     
     if (_doubleZoomed)  // restore zoom scale
     {

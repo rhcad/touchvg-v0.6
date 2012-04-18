@@ -57,7 +57,7 @@ bool MgBaseRect::_isKindOf(UInt32 type) const
 
 void MgBaseRect::_update()
 {
-    double yoff = _points[2].distanceTo(_points[1]);
+    float yoff = _points[2].distanceTo(_points[1]);
     _points[2] = _points[1].rulerPoint(_points[0], yoff);
     _points[3] = _points[0].rulerPoint(_points[1], -yoff);
     _extent.set(4, _points);
@@ -89,22 +89,22 @@ Box2d MgBaseRect::getRect() const
     return Box2d(getCenter(), getWidth(), getHeight());
 }
 
-double MgBaseRect::getWidth() const
+float MgBaseRect::getWidth() const
 {
     return _points[0].distanceTo(_points[1]);
 }
 
-double MgBaseRect::getHeight() const
+float MgBaseRect::getHeight() const
 {
     return _points[1].distanceTo(_points[2]);
 }
 
-double MgBaseRect::getAngle() const
+float MgBaseRect::getAngle() const
 {
     return (_points[1] - _points[0]).angle2();
 }
 
-bool MgBaseRect::isEmpty(double minDist) const
+bool MgBaseRect::isEmpty(float minDist) const
 {
     return _points[2].distanceTo(_points[0]) < mgMax(minDist, _MGZERO);
 }
@@ -114,7 +114,7 @@ bool MgBaseRect::isOrtho() const
     return mgIsZero(_points[1].y - _points[0].y);
 }
 
-void MgBaseRect::setRect(const Box2d& rect, double angle)
+void MgBaseRect::setRect(const Box2d& rect, float angle)
 {
     _points[0] = rect.leftTop();
     _points[1] = rect.rightTop();
@@ -142,8 +142,8 @@ void MgBaseRect::setCenter(const Point2d& pt)
         _points[i].offset(pt.x - old.x, pt.y - old.y);
 }
 
-double MgBaseRect::_hitTest(const Point2d& pt, double tol, 
-                            Point2d& ptNear, Int32& segment) const
+float MgBaseRect::_hitTest(const Point2d& pt, float tol, 
+                           Point2d& ptNear, Int32& segment) const
 {
     return mgLinesHit(4, _points, true, pt, tol, ptNear, segment);
 }
@@ -174,7 +174,7 @@ Point2d MgBaseRect::_getHandlePoint(UInt32 index) const
     return pt;
 }
 
-bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, double)
+bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 {
     Point2d pt2(pt * Matrix2d::rotation(-getAngle(), getCenter()));
     Box2d rect(getRect());

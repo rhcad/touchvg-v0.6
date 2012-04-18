@@ -34,7 +34,7 @@ bool MgCmdDrawLines::draw(const MgMotion* sender, GiGraphics* gs)
 {
     if (m_step > 1) {
         GiContext ctxaux(0, GiColor(64, 64, 64, 128), kLineSolid, GiColor(0, 64, 64, 168));
-        double radius = gs->xf().displayToModel(3);
+        float radius = gs->xf().displayToModel(3);
         
         for (UInt32 i = 0; i < m_shape->shape()->getPointCount(); i++) {
             gs->drawEllipse(&ctxaux, m_shape->shape()->getPoint(i), radius);
@@ -59,11 +59,11 @@ bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
     
-    double closelen  = sender->view->xform()->displayToModel(20 + getLineHalfWidth(m_shape, sender->view->graph()));
-    double closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
-    bool   closed    = (m_step > 2 && closedist < closelen
-                        && m_shape->shape()->getExtent().width() > closedist * 1.5
-                        && m_shape->shape()->getExtent().height() > closedist * 1.5);
+    float closelen  = sender->view->xform()->displayToModel(20 + getLineHalfWidth(m_shape, sender->view->graph()));
+    float closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
+    bool  closed    = (m_step > 2 && closedist < closelen
+        && m_shape->shape()->getExtent().width() > closedist * 1.5f
+        && m_shape->shape()->getExtent().height() > closedist * 1.5f);
     
     if (m_step > 2 && m_shape->shape()->isClosed() != closed) {
         lines->setClosed(closed);
@@ -90,11 +90,11 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
     
-    double closelen  = sender->view->xform()->displayToModel(20 + getLineHalfWidth(m_shape, sender->view->graph()));
-    double closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
-    bool   closed    = (m_step > 2 && closedist < closelen
-                        && m_shape->shape()->getExtent().width() > closedist * 1.5
-                        && m_shape->shape()->getExtent().height() > closedist * 1.5);
+    float closelen  = sender->view->xform()->displayToModel(20 + getLineHalfWidth(m_shape, sender->view->graph()));
+    float closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
+    bool  closed    = (m_step > 2 && closedist < closelen
+        && m_shape->shape()->getExtent().width() > closedist * 1.5f
+        && m_shape->shape()->getExtent().height() > closedist * 1.5f);
     
     if (m_step > 2 && m_shape->shape()->isClosed() != closed) {
         lines->setClosed(closed);
@@ -125,10 +125,10 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
 
 bool MgCmdDrawLines::canAddPoint(const MgMotion* sender, bool ended)
 {
-    double minDist = sender->view->xform()->displayToModel(10);
+    float minDist = sender->view->xform()->displayToModel(10);
     Point2d endPt  = m_shape->shape()->getPoint(m_step - 1);
-    double distToEnd = endPt.distanceTo(sender->pointM);
-    double turnAngle = 90;
+    float distToEnd = endPt.distanceTo(sender->pointM);
+    float turnAngle = 90;
     
     if (m_step > 1)
     {

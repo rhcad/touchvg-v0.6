@@ -78,21 +78,21 @@ public:
     virtual void releaseDC(HDC hdc) = 0;
 
     //! 返回屏幕分辨率DPI, 常量
-    virtual int getScreenDpi() const;
+    virtual float getScreenDpi() const;
 
     //! 显示文字的原语函数(类似于TextOutA)
-    virtual bool rawTextOut(HDC hdc, int x, int y, const char* str, int len);
+    virtual bool rawTextOut(HDC hdc, float x, float y, const char* str, int len);
     
     //! 显示文字的原语函数(类似于TextOutW)
-    virtual bool rawTextOut(HDC hdc, int x, int y, const wchar_t* str, int len);
+    virtual bool rawTextOut(HDC hdc, float x, float y, const wchar_t* str, int len);
 
     //! 显示文字的原语函数(类似于ExtTextOutA)
-    virtual bool rawTextOut(HDC hdc, int x, int y, UInt32 options, 
-        const RECT* prc, const char* str, int len, const Int32* pDx);
+    virtual bool rawTextOut(HDC hdc, float x, float y, UInt32 options, 
+        const RECT2D& rc, const char* str, int len, const Int32* pDx);
 
     //! 显示文字的原语函数(类似于ExtTextOutW)
-    virtual bool rawTextOut(HDC hdc, int x, int y, UInt32 options, 
-        const RECT* prc, const wchar_t* str, int len, const Int32* pDx);
+    virtual bool rawTextOut(HDC hdc, float x, float y, UInt32 options, 
+        const RECT2D& rc, const wchar_t* str, int len, const Int32* pDx);
 
     //! 显示图像（旋转角度为90度的整数倍）
     /*!
@@ -130,7 +130,7 @@ protected:
 */
 bool giPrintSetup(GiTransform& xf, HDC prtDC, const Box2d& rectShow,
     bool bWorldRect = true, const RECT* margin = NULL,
-    double scale = 0, double offsetX = 0, double offsetY = 0);
+    float scale = 0, float offsetX = 0, float offsetY = 0);
 
 //! 自动创建和释放兼容DC的辅助类
 class GiCompatibleDC

@@ -7,28 +7,28 @@
 // 判断点pt是否在有向直线a->b的左边 (开区间)
 GEOMAPI bool mgIsLeft(const Point2d& a, const Point2d& b, const Point2d& pt)
 {
-    return (b-a).crossProduct(pt-a) > 0.0;
+    return (b-a).crossProduct(pt-a) > 0.f;
 }
 
 // 判断点pt是否在有向直线a->b的左边
 GEOMAPI bool mgIsLeft2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol)
 {
-    double dist = (b-a).distanceToVector(pt-a);
+    float dist = (b-a).distanceToVector(pt-a);
     return dist > tol.equalPoint();
 }
 
 // 判断点pt是否在有向直线a->b的左边或线上 (闭区间)
 GEOMAPI bool mgIsLeftOn(const Point2d& a, const Point2d& b, const Point2d& pt)
 {
-    return (b-a).crossProduct(pt-a) >= 0.0;
+    return (b-a).crossProduct(pt-a) >= 0.f;
 }
 
 // 判断点pt是否在有向直线a->b的左边或线上
 GEOMAPI bool mgIsLeftOn2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol)
 {
-    double dist = (b-a).distanceToVector(pt-a);
+    float dist = (b-a).distanceToVector(pt-a);
     return dist > -tol.equalPoint();
 }
 
@@ -42,7 +42,7 @@ GEOMAPI bool mgIsColinear(const Point2d& a, const Point2d& b, const Point2d& pt)
 GEOMAPI bool mgIsColinear2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol)
 {
-    double dist = (b-a).crossProduct(pt-a);
+    float dist = (b-a).crossProduct(pt-a);
     return fabs(dist) < tol.equalPoint();
 }
 
@@ -130,14 +130,14 @@ GEOMAPI bool mgIsIntersect(
 }
 
 // 计算点pt到无穷直线ab的距离
-GEOMAPI double mgPtToBeeline(const Point2d& a, const Point2d& b, const Point2d& pt)
+GEOMAPI float mgPtToBeeline(const Point2d& a, const Point2d& b, const Point2d& pt)
 {
-    double dist = (b-a).crossProduct(pt-a);
+    float dist = (b-a).crossProduct(pt-a);
     return dist;
 }
 
 // 计算点pt到无穷直线ab的距离
-GEOMAPI double mgPtToBeeline2(
+GEOMAPI float mgPtToBeeline2(
     const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& ptPerp)
 {
     // 两点重合
@@ -160,8 +160,8 @@ GEOMAPI double mgPtToBeeline2(
     }
     else
     {
-        double t1 = ( b.y - a.y ) / ( b.x - a.x );
-        double t2 = -1.0 / t1;
+        float t1 = ( b.y - a.y ) / ( b.x - a.x );
+        float t2 = -1.f / t1;
         ptPerp.x = ( pt.y - a.y + a.x * t1 - pt.x * t2 ) / ( t1 - t2 );
         ptPerp.y = a.y + (ptPerp.x - a.x) * t1;
         return pt.distanceTo(ptPerp);
@@ -169,11 +169,11 @@ GEOMAPI double mgPtToBeeline2(
 }
 
 // 计算点pt到线段ab的最近距离
-GEOMAPI double mgPtToLine(
+GEOMAPI float mgPtToLine(
     const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& ptNear)
 {
     Point2d ptTemp;
-    double dist = mgPtToBeeline2(a, b, pt, ptNear);
+    float dist = mgPtToBeeline2(a, b, pt, ptNear);
     if (!mgIsBetweenLine3(a, b, ptNear, &ptTemp))
     {
         ptNear = ptTemp;
@@ -196,8 +196,8 @@ GEOMAPI bool mgCrossLineAbc(
     if (!mgIsZero(cosnum) && fabs(sinnum / cosnum) < tolVec.equalVector())
         return false;
     
-    ptCross.x = (b1*c2 - b2*c1) / sinnum;
-    ptCross.y = (a2*c1 - a1*c2) / sinnum;
+    ptCross.x = (float)( (b1*c2 - b2*c1) / sinnum);
+    ptCross.y = (float)( (a2*c1 - a1*c2) / sinnum);
     
     return true;
 }
@@ -223,8 +223,8 @@ GEOMAPI bool mgCross2Beeline(
     if (pu != NULL) *pu = u;
     if (pv != NULL) *pv = v;
     
-    ptCross.x = (1 - u) * a.x + u * b.x;
-    ptCross.y = (1 - u) * a.y + u * b.y;
+    ptCross.x = (float)( (1 - u) * a.x + u * b.x);
+    ptCross.y = (float)( (1 - u) * a.y + u * b.y);
     
     return true;
 }
@@ -238,7 +238,7 @@ GEOMAPI bool mgCross2Line(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d,
     Point2d& ptCross, const Tol& tolVec)
 {
-    double u, v, denom, cosnum;
+    float u, v, denom, cosnum;
     
     if (mgMin(a.x,b.x) - mgMax(c.x,d.x) > _MGZERO 
         || mgMin(c.x,d.x) - mgMax(a.x,b.x) > _MGZERO
@@ -255,15 +255,15 @@ GEOMAPI bool mgCross2Line(
         return false;
     
     u = ((c.x-a.x)*(d.y-c.y)-(c.y-a.y)*(d.x-c.x)) / denom;
-    if (u < _MGZERO || u > 1.0 - _MGZERO)
+    if (u < _MGZERO || u > 1.f - _MGZERO)
         return false;
     
     v = ((c.x-a.x)*(b.y-a.y)-(c.y-a.y)*(b.x-a.x)) / denom;
-    if (v < _MGZERO || v > 1.0 - _MGZERO)
+    if (v < _MGZERO || v > 1.f - _MGZERO)
         return false;
     
-    ptCross.x = (1 - u) * a.x + u * b.x;
-    ptCross.y = (1 - u) * a.y + u * b.y;
+    ptCross.x = (float)( (1 - u) * a.x + u * b.x);
+    ptCross.y = (float)( (1 - u) * a.y + u * b.y);
     
     return true;
 }
@@ -284,14 +284,14 @@ GEOMAPI bool mgCrossLineBeeline(
         return false;
     
     u = ((c.x-a.x)*(d.y-c.y)-(c.y-a.y)*(d.x-c.x)) / denom;
-    if (u < _MGZERO || u > 1.0 - _MGZERO)
+    if (u < _MGZERO || u > 1.f - _MGZERO)
         return false;
     
     if (pv != NULL)
         *pv = ((c.x-a.x)*(b.y-a.y)-(c.y-a.y)*(b.x-a.x)) / denom;
     
-    ptCross.x = (1 - u) * a.x + u * b.x;
-    ptCross.y = (1 - u) * a.y + u * b.y;
+    ptCross.x = (float)( (1 - u) * a.x + u * b.x);
+    ptCross.y = (float)( (1 - u) * a.y + u * b.y);
     
     return true;
 }
@@ -335,7 +335,7 @@ GEOMAPI bool mgClipLine(Point2d& pt1, Point2d& pt2, const Box2d& _box)
         if (code1 & code2)          // 完全在矩形外
             return false;
         
-        double x = 0.0, y = 0.0;
+        float x = 0.f, y = 0.f;
         unsigned code;
         
         if (code1)                  // 起点不在矩形内
@@ -389,7 +389,7 @@ static bool PtInArea_Edge(int &odd, const Point2d& pt, const Point2d& p1,
     }
     
     // 求从Y负无穷大向上到P的射线和该边的交点(pt.x, yy)
-    double yy = p1.y + (pt.x - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
+    float yy = p1.y + (pt.x - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
     if (pt.y > yy)      // 相交
     {
         if (mgIsZero(pt.x - p1.x))    // 交点是顶点, 则比较P[i+1]和P[i-1]是否在pt.x同侧

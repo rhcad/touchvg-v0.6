@@ -27,7 +27,7 @@
     Point2d Cls::getPoint(UInt32 index) const { return _getPoint(index); }  \
     void Cls::setPoint(UInt32 index, const Point2d& pt) { _setPoint(index, pt); }  \
     bool Cls::isClosed() const { return _isClosed(); }          \
-    double Cls::hitTest(const Point2d& pt, double tol, Point2d& ptNear, Int32& segment) const \
+    float Cls::hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const \
         { return _hitTest(pt, tol, ptNear, segment); }          \
     bool Cls::hitTestBox(const Box2d& rect) const               \
         { return _hitTestBox(rect); }                           \
@@ -38,7 +38,7 @@
     UInt32 Cls::getHandleCount() const { return _getHandleCount(); }    \
     Point2d Cls::getHandlePoint(UInt32 index) const             \
         { return _getHandlePoint(index); }                      \
-    bool Cls::setHandlePoint(UInt32 index, const Point2d& pt, double tol)   \
+    bool Cls::setHandlePoint(UInt32 index, const Point2d& pt, float tol)   \
         { return _setHandlePoint(index, pt, tol); }             \
     bool Cls::offset(const Vector2d& vec, Int32 segment)   \
         { return _offset(vec, segment); }

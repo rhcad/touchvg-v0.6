@@ -41,7 +41,7 @@ static void ConvertToBezierForm(const Point2d& pt, const Point2d* pts, Point2d* 
     // Determine the d's -- these are vectors created by subtracting
     // each control point from the next
     for (i = 0; i <= DEGREE - 1; i++) {
-        d[i] = 3.0 * (pts[i+1] - pts[i]);
+        d[i] = 3.f * (pts[i+1] - pts[i]);
     }
 
     // Create the c,d table -- this is a table of dot products of the
@@ -55,8 +55,8 @@ static void ConvertToBezierForm(const Point2d& pt, const Point2d* pts, Point2d* 
     // Now, apply the z's to the dot products, on the skew diagonal
     // Also, set up the x-values, making these "points"
     for (i = 0; i <= W_DEGREE; i++) {
-        w[i].y = 0.0;
-        w[i].x = static_cast<double>(i) / W_DEGREE;
+        w[i].y = 0.f;
+        w[i].x = static_cast<float>(i) / W_DEGREE;
     }
 
     n = DEGREE;
@@ -66,7 +66,7 @@ static void ConvertToBezierForm(const Point2d& pt, const Point2d* pts, Point2d* 
         ub = mgMin(k, n);
         for (i = lb; i <= ub; i++) {
             j = k - i;
-            w[i+j].y += cdTable[j][i] * z[j][i];
+            w[i+j].y += (float)(cdTable[j][i] * z[j][i]);
         }
     }
 }
@@ -179,7 +179,7 @@ static int ControlPolygonFlatEnough(const Point2d* pts, int degree)
         c2 = c + max_distance_below;
 
         det = a1 * b2 - a2 * b1;
-        dInv = 1.0/det;
+        dInv = 1.0 / det;
 
         intercept_2 = (b1 * c2 - b2 * c1) * dInv;
     }
@@ -188,7 +188,7 @@ static int ControlPolygonFlatEnough(const Point2d* pts, int degree)
     left_intercept = mgMin(intercept_1, intercept_2);
     right_intercept = mgMax(intercept_1, intercept_2);
 
-    error = 0.5 * (right_intercept-left_intercept);
+    error = 0.5f * (right_intercept-left_intercept);
     if (error < _MGZERO) {
         return 1;
     }
@@ -221,7 +221,7 @@ static double ComputeXIntercept(const Point2d* pts, int degree)
     YMK = pts[0].y - 0.0;
 
     det = XNM*YLK - YNM*XLK;
-    detInv = 1.0/det;
+    detInv = 1.0 / det;
 
     S = (XNM*YMK - YNM*XMK) * detInv;
     // T = (XLK*YMK - YLK*XMK) * detInv;
@@ -247,7 +247,7 @@ static Point2d BezierPoint(const Point2d* pts, int degree, double t,
                            Point2d* Left, Point2d* Right)
 {
     int     i, j;       // Index variables
-    Point2d     Vtemp[W_DEGREE+1][W_DEGREE+1];
+    Point2d Vtemp[W_DEGREE+1][W_DEGREE+1];
 
 
     // Copy control points
@@ -258,10 +258,10 @@ static Point2d BezierPoint(const Point2d* pts, int degree, double t,
     // Triangle computation
     for (i = 1; i <= degree; i++) {
         for (j =0 ; j <= degree - i; j++) {
-            Vtemp[i][j].x =
-                (1.0 - t) * Vtemp[i-1][j].x + t * Vtemp[i-1][j+1].x;
-            Vtemp[i][j].y =
-                (1.0 - t) * Vtemp[i-1][j].y + t * Vtemp[i-1][j+1].y;
+            Vtemp[i][j].x = (float)(
+                (1.0 - t) * Vtemp[i-1][j].x + t * Vtemp[i-1][j+1].x);
+            Vtemp[i][j].y = (float)(
+                (1.0 - t) * Vtemp[i-1][j].y + t * Vtemp[i-1][j+1].y);
         }
     }
 
@@ -292,7 +292,7 @@ static Point2d BezierPoint(const Point2d* pts, int degree, double t,
 static int FindRoots(const Point2d* w, int degree, double* t, int depth)
 {
     int i;
-    Point2d     Left[W_DEGREE+1];   // New left and right
+    Point2d Left[W_DEGREE+1];   // New left and right
     Point2d Right[W_DEGREE+1];  // control polygons
     int     left_count;         // Solution count from children
     int     right_count;
@@ -320,7 +320,7 @@ static int FindRoots(const Point2d* w, int degree, double* t, int depth)
     }
 
     // Otherwise, solve recursively after subdividing control polygon
-    BezierPoint(w, degree, 0.5, Left, Right);
+    BezierPoint(w, degree, 0.5f, Left, Right);
     left_count  = FindRoots(Left,  degree, left_t, depth+1);
     right_count = FindRoots(Right, degree, right_t, depth+1);
 
@@ -359,7 +359,7 @@ GEOMAPI void mgNearestOnBezier(
     // Compare distances of pt to all candidates, and to t=0, and t=1
     {
         double  dist, new_dist;
-        Point2d     p;
+        Point2d p;
         int     i;
 
 

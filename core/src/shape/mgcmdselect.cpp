@@ -85,12 +85,11 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
     return false;
 }
 
-int getLineHalfWidth(const MgShape* shape, GiGraphics* gs)
+float getLineHalfWidth(const MgShape* shape, GiGraphics* gs)
 {
-    Int16 width = shape->context()->getLineWidth();
-    if (width > 0)
-        width = - (Int16)gs->calcPenWidth(width);
-    return mgMax(1, - width / 2);
+    Int16 w = shape->context()->getLineWidth();
+    float width = w > 0 ? - gs->calcPenWidth(w) : (float)w;
+    return mgMax(1.f, -0.5f * width);
 }
 
 bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
@@ -125,9 +124,9 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     if (shapes.size() == 1 && m_handleIndex > 0 && m_showSel) {
         GiContext ctxhd(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
         const MgShape* shape = shapes.front();
-        int radiuspx = mgMin(8, 2 + mgMax(4, getLineHalfWidth(shape, gs)));
-        double radius = gs->xf().displayToModel(radiuspx);
-        double r2 = gs->xf().displayToModel(6 + radiuspx);
+        float radiuspx = mgMin(8.f, 2.f + mgMax(4.f, getLineHalfWidth(shape, gs)));
+        float radius = gs->xf().displayToModel(radiuspx);
+        float r2 = gs->xf().displayToModel(6.f + radiuspx);
         
         for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
             gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(i), radius);
@@ -191,11 +190,11 @@ bool MgCommandSelect::canSelect(MgShape* shape, const MgMotion* sender)
 Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const Point2d& pointM)
 {
     UInt32 handleIndex = 0;
-    double minDist = _DBL_MAX;
-    double nearDist = m_ptNear.distanceTo(pointM);
+    float minDist = _FLT_MAX;
+    float nearDist = m_ptNear.distanceTo(pointM);
     
     for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
-        double d = pointM.distanceTo(shape->shape()->getHandlePoint(i));
+        float d = pointM.distanceTo(shape->shape()->getHandlePoint(i));
         if (minDist > d) {
             minDist = d;
             handleIndex = i + 1;
@@ -336,7 +335,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
             lines->insertPoint(m_segment, m_ptNear);
         }
         if (m_handleIndex > 0) {
-            double tol = sender->view->xform()->displayToModel(10);
+            float tol = sender->view->xform()->displayToModel(10);
             shape->setHandlePoint(m_handleIndex - 1, pointM, tol);
         }
         else {

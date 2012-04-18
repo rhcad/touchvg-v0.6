@@ -86,9 +86,9 @@ GEOMAPI bool mgCubicSplinesIntersectBox(
     \return 给定的点到最近点的距离，失败时为极大数
     \see mgCubicSplines
 */
-GEOMAPI double mgCubicSplinesHit(
+GEOMAPI float mgCubicSplinesHit(
     Int32 n, const Point2d* knots, const Vector2d* knotVectors, bool closed, 
-    const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment);
+    const Point2d& pt, float dTol, Point2d& ptNear, Int32& nSegment);
 
 //! 计算点到折线或多边形的最近距离
 /*!
@@ -102,9 +102,9 @@ GEOMAPI double mgCubicSplinesHit(
     \param[out] nSegment 最近点所在线段的序号，[0,n-2]，闭合时为[0,n-1]，负数表示失败
     \return 给定的点到最近点的距离，失败时为极大数
 */
-GEOMAPI double mgLinesHit(
+GEOMAPI float mgLinesHit(
     Int32 n, const Point2d* points, bool closed, 
-    const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment);
+    const Point2d& pt, float dTol, Point2d& ptNear, Int32& nSegment);
 
 //! 计算点到圆角矩形的最近距离
 /*!
@@ -119,9 +119,9 @@ GEOMAPI double mgLinesHit(
         0到3为从左上角起顺时针的四个圆角（有圆角半径时）；4到7为顶右底左边。
     \return 给定的点到最近点的距离，失败时为极大数
 */
-GEOMAPI double mgRoundRectHit(
-    const Box2d& rect, double rx, double ry, 
-    const Point2d& pt, double dTol, Point2d& ptNear, Int32& nSegment);
+GEOMAPI float mgRoundRectHit(
+    const Box2d& rect, float rx, float ry, 
+    const Point2d& pt, float dTol, Point2d& ptNear, Int32& nSegment);
 
 //! 得到矩形的8个控制手柄坐标
 /*!

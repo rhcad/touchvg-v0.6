@@ -89,7 +89,7 @@ void CBaseView::OnPaint()
 		// 显示先前保存的正式图形内容
 		if (m_sizePan.cx != 0 || m_sizePan.cy != 0)
 			m_gs.clearWnd();			// 清除背景
-		if (!m_gs.drawCachedBitmap(m_sizePan.cx, m_sizePan.cy))
+		if (!m_gs.drawCachedBitmap((float)m_sizePan.cx, (float)m_sizePan.cy))
 		{
 			if (0 == m_sizePan.cx && 0 == m_sizePan.cy)
 				m_gs.clearWnd();		// 清除背景
@@ -198,7 +198,7 @@ void CBaseView::OnMouseMove(UINT nFlags, CPoint point)
 		AfxGetMainWnd()->GetDlgItem(AFX_IDW_STATUS_BAR));
 	ASSERT(pStatusBar != NULL);
 
-	Point2d pnt(point.x, point.y);
+	Point2d pnt((float)point.x, (float)point.y);
 	pnt *= m_xf.displayToModel();
 
 	CString str;
@@ -226,7 +226,7 @@ void CBaseView::OnUpdateViewScale(CCmdUI* pCmdUI)
 
 void CBaseView::OnZoomIn() 
 {
-	if (m_xf.zoomByFactor(0.2))
+	if (m_xf.zoomByFactor(0.2f))
 	{
 		OnZoomed();
 	}
@@ -234,7 +234,7 @@ void CBaseView::OnZoomIn()
 
 void CBaseView::OnZoomOut() 
 {
-	if (m_xf.zoomByFactor(-0.2))
+	if (m_xf.zoomByFactor(-0.2f))
 	{
 		OnZoomed();
 	}
