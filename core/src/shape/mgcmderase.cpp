@@ -70,10 +70,10 @@ MgShape* MgCommandErase::hitTest(const MgMotion* sender)
     Box2d limits(Point2d(sender->point.x, sender->point.y), 20, 0);
     limits *= sender->view->xform()->displayToModel();
     
-    Point2d ptNear;
+    Point2d nearpt;
     Int32 segment;
     
-    return sender->view->shapes()->hitTest(limits, ptNear, segment);
+    return sender->view->shapes()->hitTest(limits, nearpt, segment);
 }
 
 bool MgCommandErase::click(const MgMotion* sender)

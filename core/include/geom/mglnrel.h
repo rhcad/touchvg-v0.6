@@ -114,11 +114,11 @@ GEOMAPI bool mgIsBetweenLine2(
     \param[in] a 线段的起点
     \param[in] b 线段的终点
     \param[in] pt 给定的测试点
-    \param[out] ptNear 在线段的两个端点中，到给定的点最近的端点，为NULL则忽略该参数
+    \param[out] nearpt 在线段的两个端点中，到给定的点最近的端点，为NULL则忽略该参数
     \return 在线段上时返回true，否则返回false
 */
 GEOMAPI bool mgIsBetweenLine3(
-    const Point2d& a, const Point2d& b, const Point2d& pt, Point2d* ptNear = NULL);
+    const Point2d& a, const Point2d& b, const Point2d& pt, Point2d* nearpt = NULL);
 
 //! 判断两个线段ab和cd是否相交(交点在线段闭区间内)
 /*!
@@ -160,11 +160,11 @@ GEOMAPI float mgPtToBeeline2(
     \param[in] a 线段的起点
     \param[in] b 线段的终点
     \param[in] pt 给定的测试点
-    \param[out] ptNear 线段上的最近点
+    \param[out] nearpt 线段上的最近点
     \return 独立点到最近点的距离
 */
 GEOMAPI float mgPtToLine(
-    const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& ptNear);
+    const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& nearpt);
 
 //! 求两条直线(ax+by+c=0)的交点
 /*!

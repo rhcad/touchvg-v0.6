@@ -100,8 +100,8 @@ public:
         Point2d pt1, pt2;
         getMinMaxPoints(pt1, pt2);
         m_base = pt1;
-        m_dir1.set(pt2.x - pt1.x, 0.f);
-        m_dir2.set(0.f, pt2.y - pt1.y);
+        m_dir1.set(pt2.x - pt1.x, 0);
+        m_dir2.set(0, pt2.y - pt1.y);
         return *this;
     }
     

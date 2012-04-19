@@ -194,9 +194,8 @@ public:
         \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
     */
-    bool drawEllipse(const GiContext* ctx, 
-        const Point2d& center, float rx, float ry = 0.f, 
-        bool modelUnit = true);
+    bool drawEllipse(const GiContext* ctx, const Point2d& center,
+        float rx, float ry = 0, bool modelUnit = true);
     
     //! 绘制并填充椭圆，模型坐标或世界坐标
     /*!
@@ -243,7 +242,7 @@ public:
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
     */
     bool drawRoundRect(const GiContext* ctx, 
-        const Box2d& rect, float rx, float ry = 0.f, bool modelUnit = true);
+        const Box2d& rect, float rx, float ry = 0, bool modelUnit = true);
 
 
     //! 绘制三次参数样条曲线，模型坐标或世界坐标
@@ -251,15 +250,14 @@ public:
         \param ctx 绘图参数，忽略填充参数，为NULL时取为上一个绘图参数
         \param count 型值点的点数，至少为2
         \param knots 型值点坐标数组，元素个数为count
-        \param knotVectors 型值点的切矢量数组，元素个数为count
+        \param knotvs 型值点的切矢量数组，元素个数为count
         \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
         \see mgCubicSplines
         \see drawClosedSplines
     */
-    bool drawSplines(const GiContext* ctx, 
-        int count, const Point2d* knots, const Vector2d* knotVectors, 
-        bool modelUnit = true);
+    bool drawSplines(const GiContext* ctx, int count,
+        const Point2d* knots, const Vector2d* knotvs, bool modelUnit = true);
 
     //! 绘制并填充三次参数样条曲线，自动闭合
     /*! 首末型值点不必重合，本函数通过绘制从最后一个型值点到第一个型值点的曲线段而自动闭合。\n
@@ -267,39 +265,38 @@ public:
         \param ctx 绘图参数，为NULL时取为上一个绘图参数
         \param count 型值点的点数，至少为2
         \param knots 型值点坐标数组，元素个数为count
-        \param knotVectors 型值点的切矢量数组，元素个数为count
+        \param knotvs 型值点的切矢量数组，元素个数为count
         \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
         \see mgCubicSplines
         \see drawSplines
     */
-    bool drawClosedSplines(const GiContext* ctx, 
-        int count, const Point2d* knots, const Vector2d* knotVectors, 
-        bool modelUnit = true);
+    bool drawClosedSplines(const GiContext* ctx, int count, 
+        const Point2d* knots, const Vector2d* knotvs, bool modelUnit = true);
 
     //! 绘制三次B样条曲线，模型坐标或世界坐标
     /*! 
         \param ctx 绘图参数，忽略填充参数，为NULL时取为上一个绘图参数
         \param count 控制点的点数，至少为4
-        \param controlPoints 控制点坐标数组，点数为count
+        \param ctlpts 控制点坐标数组，点数为count
         \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
         \see drawClosedBSplines
     */
     bool drawBSplines(const GiContext* ctx, 
-        int count, const Point2d* controlPoints, bool modelUnit = true);
+        int count, const Point2d* ctlpts, bool modelUnit = true);
 
     //! 绘制并填充三次B样条曲线，自动闭合
     /*! 首末控制点不必重合，本函数通过补充绘制曲线段而自动闭合
         \param ctx 绘图参数，为NULL时取为上一个绘图参数
         \param count 控制点的点数，至少为3
-        \param controlPoints 控制点坐标数组，点数为count
+        \param ctlpts 控制点坐标数组，点数为count
         \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
         \see drawBSplines
     */
     bool drawClosedBSplines(const GiContext* ctx, 
-        int count, const Point2d* controlPoints, bool modelUnit = true);
+        int count, const Point2d* ctlpts, bool modelUnit = true);
 
     //! 绘制路径，模型坐标或世界坐标
     /*! 
@@ -330,7 +327,8 @@ public:
 public:
     void clearWnd();
     bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);
-    bool drawCachedBitmap2(const GiDrawAdapter* p, float x = 0, float y = 0, bool secondBmp = false);
+    bool drawCachedBitmap2(const GiDrawAdapter* p, 
+        float x = 0, float y = 0, bool secondBmp = false);
     void saveCachedBitmap(bool secondBmp = false);
     bool hasCachedBitmap(bool secondBmp = false) const;
     void clearCachedBitmap();

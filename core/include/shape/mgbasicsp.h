@@ -86,7 +86,7 @@ protected:
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
-    float _hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
     UInt32 _getHandleCount() const;
     Point2d _getHandlePoint(UInt32 index) const;
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
@@ -122,7 +122,7 @@ public:
 
 protected:
     void _update();
-    float _hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:
@@ -149,7 +149,7 @@ protected:
     void _copy(const MgRoundRect& src);
     bool _equals(const MgRoundRect& src) const;
     void _clear();
-    float _hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
 
 protected:
     float      _rx;
@@ -198,7 +198,7 @@ protected:
     void _transform(const Matrix2d& mat);
     void _clear();
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
-    float _hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
 
 protected:
     Point2d*    _points;
@@ -229,11 +229,11 @@ public:
     
 protected:
     void _update();
-    float _hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:
-    Vector2d*   _knotVectors;
+    Vector2d*   _knotvs;
     UInt32      _bzcount;
 };
 

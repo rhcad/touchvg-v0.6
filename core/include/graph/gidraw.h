@@ -64,7 +64,8 @@ public:
         \return 是否绘制成功
         \see saveCachedBitmap
     */
-    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, float x = 0, float y = 0, bool secondBmp = false) = 0;
+    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, 
+        float x = 0, float y = 0, bool secondBmp = false) = 0;
 
     //! 保存显示内容到后备缓冲位图
     /*! 将当前绘图目标(可能是绘图缓冲)的内容保存为一个位图对象，

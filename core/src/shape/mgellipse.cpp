@@ -51,7 +51,7 @@ void MgEllipse::_update()
 }
 
 float MgEllipse::_hitTest(const Point2d& pt, float tol, 
-                          Point2d& ptNear, Int32& segment) const
+                          Point2d& nearpt, Int32& segment) const
 {
     float distMin = _FLT_MAX;
     const Box2d rect (pt, 2 * tol, 2 * tol);
@@ -67,7 +67,7 @@ float MgEllipse::_hitTest(const Point2d& pt, float tol,
             if (dist <= tol && dist < distMin)
             {
                 distMin = dist;
-                ptNear = ptTemp;
+                nearpt = ptTemp;
                 segment = i;
             }
         }

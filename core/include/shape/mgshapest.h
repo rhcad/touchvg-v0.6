@@ -146,7 +146,7 @@ public:
         return extent;
     }
 
-    MgShape* hitTest(const Box2d& limits, Point2d& ptNear, Int32& segment) const
+    MgShape* hitTest(const Box2d& limits, Point2d& nearpt, Int32& segment) const
     {
         MgShape* retshape = NULL;
         float distMin = limits.width();
@@ -165,7 +165,7 @@ public:
                 if (distMin > dist) {
                     distMin = dist;
                     segment = tmpSegment;
-                    ptNear = tmpNear;
+                    nearpt = tmpNear;
                     retshape = *it;
                 }
             }

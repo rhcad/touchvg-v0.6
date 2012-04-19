@@ -22,7 +22,7 @@
     称为 M 的线性部分，其作用是对图形进行伸缩、旋转、对称和错切等变换。\n
     行向量 T (dx, dy) 称为 M 的平移部分，其作用是对图形进行平移变换。\n
     
-    Point的点pnt的对应变换点为 P x M，行矢量 P = (pnt.x, pnt.y, 1.f) \n
+    Point的点pnt的对应变换点为 P x M，行矢量 P = (pnt.x, pnt.y, 1) \n
     Vector的矢量vec的对应变换矢量为 V x M，M 的平移部分不参与计算。\n
     
     每个矩阵 M 对应一个坐标系，其坐标原点为(dx, dy)，坐标轴为矢量(e0x, e0y)和
@@ -157,7 +157,7 @@ public:
         \return 新坐标系的矩阵
     */
     static Matrix2d coordSystem(const Point2d& origin, 
-        float scaleX, float scaleY = 0.f, float angle = 0.f);
+        float scaleX, float scaleY = 0, float angle = 0);
     
     //! 设置为单位矩阵
     Matrix2d& setToIdentity();

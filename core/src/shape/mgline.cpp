@@ -71,9 +71,9 @@ void MgLine::_clear()
 }
 
 float MgLine::_hitTest(const Point2d& pt, float tol, 
-                       Point2d& ptNear, Int32& segment) const
+                       Point2d& nearpt, Int32& segment) const
 {
-    return mgLinesHit(2, _points, false, pt, tol, ptNear, segment);
+    return mgLinesHit(2, _points, false, pt, tol, nearpt, segment);
 }
 
 bool MgLine::_hitTestBox(const Box2d& rect) const

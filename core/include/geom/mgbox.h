@@ -28,7 +28,7 @@ public:
     //! 构造收缩到原点的矩形框
     Box2d()
     {
-        xmin = ymin = xmax = ymax = 0.f;
+        xmin = ymin = xmax = ymax = 0;
     }
 
     //! 拷贝构造函数，默认不自动规范化
@@ -220,7 +220,7 @@ public:
     //! 设置为空矩形框
     Box2d& empty()
     {
-        xmin = ymin = xmax = ymax = 0.f;
+        xmin = ymin = xmax = ymax = 0;
         return *this;
     }
     
@@ -438,7 +438,7 @@ public:
         \param sy Y方向放缩比例，为0则取为sx
         \return 本矩形的引用
     */
-    Box2d& scaleBy(float sx, float sy = 0.f)
+    Box2d& scaleBy(float sx, float sy = 0)
     {
         if (mgIsZero(sy)) sy = sx;
         xmin *= sx; xmax *= sx;
@@ -628,14 +628,14 @@ public:
     //! 得到各坐标分量除以一个数后的新矩形框
     Box2d operator/(float s) const
     {
-        s = 1.f / s;
+        s = 1 / s;
         return Box2d(xmin * s, ymin * s, xmax * s, ymax * s);
     }
     
     //! 各坐标分量除以一个数
     Box2d& operator/=(float s)
     {
-        s = 1.f / s;
+        s = 1 / s;
         return set(xmin * s, ymin * s, xmax * s, ymax * s);
     }
     

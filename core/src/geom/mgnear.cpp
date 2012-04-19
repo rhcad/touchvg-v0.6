@@ -78,7 +78,7 @@ static Box2d mgBeziersBox2(const Point2d* points, Int32 count = 4)
 
 GEOMAPI void mgCubicSplinesBox(
     Box2d& box, Int32 n, const Point2d* knots, 
-    const Vector2d* knotVectors, bool closed)
+    const Vector2d* knotvs, bool closed)
 {
     Int32 n2 = (closed && n > 1) ? n + 1 : n;
 
@@ -86,8 +86,8 @@ GEOMAPI void mgCubicSplinesBox(
     for (Int32 i = 0; i + 1 < n2; i++)
     {
         Point2d pts[4] = { knots[i], 
-            knots[i] + knotVectors[i] / 3.f, 
-            knots[(i + 1) % n] - knotVectors[(i + 1) % n] / 3.f, 
+            knots[i] + knotvs[i] / 3.f, 
+            knots[(i + 1) % n] - knotvs[(i + 1) % n] / 3.f, 
             knots[(i + 1) % n] };
         box.unionWith(mgBeziersBox2(pts));
     }
@@ -95,15 +95,15 @@ GEOMAPI void mgCubicSplinesBox(
 
 GEOMAPI bool mgCubicSplinesIntersectBox(
     const Box2d& box, Int32 n, const Point2d* knots, 
-    const Vector2d* knotVectors, bool closed)
+    const Vector2d* knotvs, bool closed)
 {
     Int32 n2 = (closed && n > 1) ? n + 1 : n;
     
     for (Int32 i = 0; i + 1 < n2; i++)
     {
         Point2d pts[4] = { knots[i], 
-            knots[i] + knotVectors[i] / 3.f, 
-            knots[(i + 1) % n] - knotVectors[(i + 1) % n] / 3.f, 
+            knots[i] + knotvs[i] / 3.f, 
+            knots[(i + 1) % n] - knotvs[(i + 1) % n] / 3.f, 
             knots[(i + 1) % n] };
         if (mgBeziersIntersectBox(box, 4, pts, false))
             return true;
@@ -113,28 +113,28 @@ GEOMAPI bool mgCubicSplinesIntersectBox(
 }
 
 GEOMAPI float mgCubicSplinesHit(
-    Int32 n, const Point2d* knots, const Vector2d* knotVectors, bool closed, 
-    const Point2d& pt, float dTol, Point2d& ptNear, Int32& nSegment)
+    Int32 n, const Point2d* knots, const Vector2d* knotvs, bool closed, 
+    const Point2d& pt, float tol, Point2d& nearpt, Int32& segment)
 {
     Point2d ptTemp;
     float dDist, dDistMin = _FLT_MAX;
     Point2d pts[4];
-    const Box2d rect (pt, 2 * dTol, 2 * dTol);
+    const Box2d rect (pt, 2 * tol, 2 * tol);
     Int32 n2 = (closed && n > 1) ? n + 1 : n;
 
-    nSegment = -1;
+    segment = -1;
     for (Int32 i = 0; i + 1 < n2; i++)
     {
-        mgCubicSplineToBezier(n, knots, knotVectors, i, pts);
+        mgCubicSplineToBezier(n, knots, knotvs, i, pts);
         if (rect.isIntersect(mgBeziersBox2(pts)))
         {
             mgNearestOnBezier(pt, pts, ptTemp);
             dDist = pt.distanceTo(ptTemp);
-            if (dDist <= dTol && dDist < dDistMin)
+            if (dDist <= tol && dDist < dDistMin)
             {
                 dDistMin = dDist;
-                ptNear = ptTemp;
-                nSegment = i;
+                nearpt = ptTemp;
+                segment = i;
             }
         }
     }
@@ -143,16 +143,16 @@ GEOMAPI float mgCubicSplinesHit(
 }
 
 GEOMAPI Int32 mgBSplinesToBeziers(
-    Point2d points[/*1+n*3*/], Int32 n, const Point2d* controlPoints, bool closed)
+    Point2d points[/*1+n*3*/], Int32 n, const Point2d* ctlpts, bool closed)
 {
     Point2d pt1, pt2, pt3, pt4;
     float d6 = 1.f / 6.f;
     int i = 0;
         
-    pt1 = controlPoints[0];
-    pt2 = controlPoints[1];
-    pt3 = controlPoints[2];
-    pt4 = controlPoints[3 % n];
+    pt1 = ctlpts[0];
+    pt2 = ctlpts[1];
+    pt3 = ctlpts[2];
+    pt4 = ctlpts[3 % n];
     points[i++].set((pt1.x + 4 * pt2.x + pt3.x)*d6, (pt1.y + 4 * pt2.y + pt3.y)*d6);
     points[i++].set((4 * pt2.x + 2 * pt3.x)    *d6, (4 * pt2.y + 2 * pt3.y)    *d6);
     points[i++].set((2 * pt2.x + 4 * pt3.x)    *d6, (2 * pt2.y + 4 * pt3.y)    *d6);
@@ -163,7 +163,7 @@ GEOMAPI Int32 mgBSplinesToBeziers(
         pt1 = pt2;
         pt2 = pt3;
         pt3 = pt4;
-        pt4 = controlPoints[ci % n];
+        pt4 = ctlpts[ci % n];
         points[i++].set((4 * pt2.x + 2 * pt3.x)    *d6, (4 * pt2.y + 2 * pt3.y)    *d6);
         points[i++].set((2 * pt2.x + 4 * pt3.x)    *d6, (2 * pt2.y + 4 * pt3.y)    *d6);
         points[i++].set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
@@ -174,25 +174,25 @@ GEOMAPI Int32 mgBSplinesToBeziers(
 
 GEOMAPI float mgLinesHit(
     Int32 n, const Point2d* points, bool closed, 
-    const Point2d& pt, float dTol, Point2d& ptNear, Int32& nSegment)
+    const Point2d& pt, float tol, Point2d& nearpt, Int32& segment)
 {
     Point2d ptTemp;
     float dDist, dDistMin = _FLT_MAX;
-    const Box2d rect (pt, 2 * dTol, 2 * dTol);
+    const Box2d rect (pt, 2 * tol, 2 * tol);
     Int32 n2 = (closed && n > 1) ? n + 1 : n;
 
-    nSegment = -1;
+    segment = -1;
     for (Int32 i = 0; i + 1 < n2; i++)
     {
         const Point2d& pt2 = points[(i + 1) % n];
         if (rect.isIntersect(Box2d(points[i], pt2)))
         {
             dDist = mgPtToLine(points[i], pt2, pt, ptTemp);
-            if (dDist <= dTol && dDist < dDistMin)
+            if (dDist <= tol && dDist < dDistMin)
             {
                 dDistMin = dDist;
-                ptNear = ptTemp;
-                nSegment = i;
+                nearpt = ptTemp;
+                segment = i;
             }
         }
     }
@@ -211,9 +211,9 @@ Point2d RoundRectTan(Int32 nFrom, Int32 nTo, const Box2d& rect, float r)
 
 static void _RoundRectHit(
     const Box2d& rect, float rx, float ry, 
-    const Point2d& pt, float dTol, const Box2d &rectTol, 
+    const Point2d& pt, float tol, const Box2d &rectTol, 
     Point2d* pts, float& dDistMin, 
-    Point2d& ptNear, Int32& nSegment)
+    Point2d& nearpt, Int32& segment)
 {
     Point2d ptsBezier[13], ptTemp;
     Vector2d vec;
@@ -246,11 +246,11 @@ static void _RoundRectHit(
         {
             mgNearestOnBezier(pt, pts, ptTemp);
             float dDist = pt.distanceTo(ptTemp);
-            if (dDist <= dTol && dDist < dDistMin)
+            if (dDist <= tol && dDist < dDistMin)
             {
                 dDistMin = dDist;
-                ptNear = ptTemp;
-                nSegment = (5 - i) % 4;
+                nearpt = ptTemp;
+                segment = (5 - i) % 4;
             }
         }
         
@@ -260,19 +260,19 @@ static void _RoundRectHit(
 
 GEOMAPI float mgRoundRectHit(
     const Box2d& rect, float rx, float ry, 
-    const Point2d& pt, float dTol, Point2d& ptNear, Int32& nSegment)
+    const Point2d& pt, float tol, Point2d& nearpt, Int32& segment)
 {
     rx = fabs(rx);
     if (ry < _MGZERO)
         ry = rx;
     rx = mgMin(rx, rect.width() * 0.5f);
     ry = mgMin(ry, rect.height() * 0.5f);
-    nSegment = -1;
+    segment = -1;
     
     Point2d ptTemp, ptTemp2;
     float dDist, dDistMin = _FLT_MAX;
     Point2d pts[8];
-    const Box2d rectTol (pt, 2 * dTol, 2 * dTol);
+    const Box2d rectTol (pt, 2 * tol, 2 * tol);
     
     // 顶边上的两个圆弧切点，左，右
     pts[0] = RoundRectTan(0, 1, rect, rx);
@@ -296,26 +296,26 @@ GEOMAPI float mgRoundRectHit(
         if (rcLine.isEmpty() || rectTol.isIntersect(rcLine))
         {
             dDist = mgPtToLine(pts[2 * i], pts[2 * i + 1], pt, ptTemp);
-            if (dDist <= dTol && dDist < dDistMin)
+            if (dDist <= tol && dDist < dDistMin)
             {
                 dDistMin = dDist;
-                ptNear = ptTemp;
-                nSegment = 4 + i;
+                nearpt = ptTemp;
+                segment = 4 + i;
             }
         }
     }
     
     if (rx > _MGZERO && ry > _MGZERO)
     {
-        _RoundRectHit(rect, rx, ry, pt, dTol, rectTol, pts, dDistMin, ptNear, nSegment);
+        _RoundRectHit(rect, rx, ry, pt, tol, rectTol, pts, dDistMin, nearpt, segment);
     }
 
     return dDistMin;
 }
 
-GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 nHandle, Point2d& pt)
+GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 index, Point2d& pt)
 {
-    switch (nHandle)
+    switch (index)
     {
     case 0: pt = rect.leftTop(); break;
     case 1: pt = rect.rightTop(); break;
@@ -329,29 +329,29 @@ GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 nHandle, Point2d& pt)
     }
 }
 
-GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 nHandle, const Point2d& pt)
+GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 index, const Point2d& pt)
 {
     Point2d pts[4];
 
     for (int i = 0; i < 4; i++)
-        mgGetRectHandle(rect, nHandle / 4 * 4 + i, pts[i]);
-    pts[nHandle % 4] = pt;
+        mgGetRectHandle(rect, index / 4 * 4 + i, pts[i]);
+    pts[index % 4] = pt;
 
-    if (nHandle >= 0 && nHandle < 4)
+    if (index >= 0 && index < 4)
     {
-        if (nHandle % 2 == 0)
+        if (index % 2 == 0)
         {
-            pts[(nHandle + 1) % 4].y = pt.y;
-            pts[(nHandle + 3) % 4].x = pt.x;
+            pts[(index + 1) % 4].y = pt.y;
+            pts[(index + 3) % 4].x = pt.x;
         }
         else
         {
-            pts[(nHandle + 1) % 4].x = pt.x;
-            pts[(nHandle + 3) % 4].y = pt.y;
+            pts[(index + 1) % 4].x = pt.x;
+            pts[(index + 3) % 4].y = pt.y;
         }
         rect.set(4, pts);
     }
-    else if (nHandle >= 4 && nHandle < 8)
+    else if (index >= 4 && index < 8)
     {
         rect.set(pts[3].x, pts[2].y, pts[1].x, pts[0].y);
     }

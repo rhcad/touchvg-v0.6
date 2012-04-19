@@ -21,28 +21,28 @@ public:
     //! 零矢量(0,0)
     static const Vector2d& kIdentity()
     {
-        static const Vector2d vec (0.f, 0.f);
+        static const Vector2d vec (0, 0);
         return vec;
     }
     
     //! X轴单位矢量(1,0)
     static const Vector2d& kXAxis()
     {
-        static const Vector2d vec (1.f, 0.f);
+        static const Vector2d vec (1, 0);
         return vec;
     }
     
     //! Y轴单位矢量(0,1)
     static const Vector2d& kYAxis()
     {
-        static const Vector2d vec (0.f, 1.f);
+        static const Vector2d vec (0, 1);
         return vec;
     }
     
     //! 构造为零矢量
     Vector2d()
     {
-        x = y = 0.f;
+        x = y = 0;
     }
     
     //! 构造为矢量(xx, yy)
@@ -132,14 +132,14 @@ public:
     //! 标量积, 矢量 / 数
     Vector2d operator/(float s) const
     {
-        s = 1.f / s;
+        s = 1 / s;
         return Vector2d(x * s, y * s);
     }
     
     //! 标量积, 矢量 /= 数
     Vector2d& operator/=(float s)
     {
-        s = 1.f / s;
+        s = 1 / s;
         x *= s; y *= s; return *this;
     }
 
@@ -180,20 +180,20 @@ public:
     float angle() const
     {
         float len = mgHypot(x, y);
-        return len < _MGZERO ? 0.f : acos(x / len);
+        return len < _MGZERO ? 0 : acos(x / len);
     }
     
     //! 矢量角度, 从X轴逆时针方向为正, [-PI, PI)
     float angle2() const
     {
-        return (mgIsZero(x) && mgIsZero(y)) ? 0.f : atan2(y, x);
+        return (mgIsZero(x) && mgIsZero(y)) ? 0 : atan2(y, x);
     }
     
     //! 矢量夹角, [0, PI)
     float angleTo(const Vector2d& v) const
     {
         float len = mgHypot(x, y) * mgHypot(v.x, v.y);
-        return len < _MGZERO ? 0.f : acos(dotProduct(v) / len);
+        return len < _MGZERO ? 0 : acos(dotProduct(v) / len);
     }
     
     //! 沿逆时针方向到指定矢量的转角, [-PI, PI)
@@ -204,7 +204,7 @@ public:
     {
         float crossz = crossProduct(v);
         float dot = dotProduct(v);
-        return (mgIsZero(dot) && mgIsZero(crossz)) ? 0.f : atan2(crossz, dot);
+        return (mgIsZero(dot) && mgIsZero(crossz)) ? 0 : atan2(crossz, dot);
     }
     
     //! 矢量长度
@@ -252,7 +252,7 @@ public:
     */
     bool isUnitVector(const Tol& tol = Tol::gTol()) const
     {
-        return fabs(mgHypot(x, y) - 1.f) < tol.equalPoint();
+        return fabs(mgHypot(x, y) - 1) < tol.equalPoint();
     }
     
     //! 判断是否是零矢量
@@ -318,13 +318,13 @@ public:
     //! 判断是否在指定矢量的右侧，即沿逆时针方向转到指定矢量时最近
     bool isRightOf(const Vector2d& vec) const
     {
-        return crossProduct(vec) > 0.f;
+        return crossProduct(vec) > 0;
     }
 
     //! 判断是否在指定矢量的左侧，即沿顺时针方向转到指定矢量时最近
     bool isLeftOf(const Vector2d& vec) const
     {
-        return crossProduct(vec) < 0.f;
+        return crossProduct(vec) < 0;
     }
     
     //! 判断两个矢量是否平行

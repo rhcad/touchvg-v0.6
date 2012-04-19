@@ -6,13 +6,13 @@
 #include "mgbase.h"
 #include "mglnrel.h"
 
-GEOMAPI void mgFitBezier(const Point2d* pts, float t, Point2d& ptFit)
+GEOMAPI void mgFitBezier(const Point2d* pts, float t, Point2d& fitpt)
 {
     double v = 1.f - t;
     double v2 = v * v;
     double t2 = t * t;
     
-    ptFit.set(
+    fitpt.set(
         (float)( (v2 * v) * pts[0].x + 3.f * t * v2 * pts[1].x
         + 3.f * t2 * v * pts[2].x + t2 * t * pts[3].x),
         (float)( (v2 * v) * pts[0].y + 3.f * t * v2 * pts[1].y
@@ -21,28 +21,28 @@ GEOMAPI void mgFitBezier(const Point2d* pts, float t, Point2d& ptFit)
 
 GEOMAPI void mgBezier4P(
     const Point2d& pt1, const Point2d& pt2, const Point2d& pt3, 
-    const Point2d& pt4, Point2d& ptCtr1, Point2d& ptCtr2)
+    const Point2d& pt4, Point2d& ctrpt1, Point2d& ctrpt2)
 {
     Point2d ptCtr = (-5 * pt1 + 18 * pt2 -  9 * pt3 + 2 * pt4) / 6;
-    ptCtr2      = (-5 * pt4 + 18 * pt3 -  9 * pt2 + 2 * pt1) / 6;
-    ptCtr1 = ptCtr;
+    ctrpt2      = (-5 * pt4 + 18 * pt3 -  9 * pt2 + 2 * pt1) / 6;
+    ctrpt1 = ptCtr;
 }
 
 GEOMAPI void mgEllipse90ToBezier(
-    const Point2d& ptFrom, const Point2d& ptTo, Point2d& ptCtr1, Point2d& ptCtr2)
+    const Point2d& frompt, const Point2d& topt, Point2d& ctrpt1, Point2d& ctrpt2)
 {
-    float rx = ptFrom.x - ptTo.x;
-    float ry = ptTo.y - ptFrom.y;
-    const Point2d center (ptTo.x, ptFrom.y);
+    float rx = frompt.x - topt.x;
+    float ry = topt.y - frompt.y;
+    const Point2d center (topt.x, frompt.y);
 
     const float M = 0.5522847498307933984022516f; // 4(sqrt(2)-1)/3
     float dx = rx * M;
     float dy = ry * M;
     
-    ptCtr1.x = center.x + rx;
-    ptCtr1.y = center.y + dy;
-    ptCtr2.x = center.x + dx;
-    ptCtr2.y = center.y + ry;
+    ctrpt1.x = center.x + rx;
+    ctrpt1.y = center.y + dy;
+    ctrpt2.x = center.x + dx;
+    ctrpt2.y = center.y + ry;
 }
 
 GEOMAPI void mgEllipseToBezier(
@@ -313,7 +313,7 @@ GEOMAPI bool mgArc3P(
 }
 
 GEOMAPI bool mgArcTan(
-    const Point2d& start, const Point2d& end, const Vector2d& vecTan,
+    const Point2d& start, const Point2d& end, const Vector2d& tanv,
     Point2d& center, float& radius,
     float* startAngle, float* sweepAngle)
 {
@@ -325,8 +325,8 @@ GEOMAPI bool mgArcTan(
     c = -0.5 * (a*(end.x + start.x) + b*(end.y + start.y));
     
     // 求中垂线和切线的交点center
-    if (!mgCrossLineAbc(a, b, c, vecTan.x, vecTan.y, 
-        -vecTan.x * start.x - vecTan.y * start.y, center, Tol::gTol()))
+    if (!mgCrossLineAbc(a, b, c, tanv.x, tanv.y, 
+        -tanv.x * start.x - tanv.y * start.y, center, Tol::gTol()))
         return false;
     radius = mgHypot(center.x - start.x, center.y - start.y);
     
@@ -335,7 +335,7 @@ GEOMAPI bool mgArcTan(
         float sa = atan2(start.y - center.y, start.x - center.x);
         float ea = atan2(end.y - center.y, end.x - center.x);
         *startAngle = sa;
-        if (vecTan.crossProduct(start - center) > 0.f)
+        if (tanv.crossProduct(start - center) > 0.f)
             *sweepAngle = -mgTo0_2PI(sa - ea);
         else
             *sweepAngle = mgTo0_2PI(ea - sa);
@@ -543,25 +543,25 @@ static bool CalcCubicUnclosed(
 }
 
 GEOMAPI bool mgCubicSplines(
-    Int32 n, const Point2d* knots, Vector2d* knotVectors,
+    Int32 n, const Point2d* knots, Vector2d* knotvs,
     UInt32 flag, float tension)
 {
     bool ret = false;
     
-    if (!knots || !knotVectors || n < 2)
+    if (!knots || !knotvs || n < 2)
         return false;
     
     if ((flag & kCubicLoop) && n <= 512)    // 闭合
     {
         double* a = new double[n * n];
-        ret = a && CalcCubicClosed(n, a, knotVectors, knots);
+        ret = a && CalcCubicClosed(n, a, knotvs, knots);
         delete[] a;
     }
     else
     {
         double* a = new double[n * 3];
         ret = a && CalcCubicUnclosed(flag, n, knots, 
-            a, a+n, a+2*n, knotVectors);
+            a, a+n, a+2*n, knotvs);
         delete[] a;
     }
     
@@ -569,8 +569,8 @@ GEOMAPI bool mgCubicSplines(
     {
         for (int i = 0; i < n; i++)
         {
-            knotVectors[i].x *= tension;
-            knotVectors[i].y *= tension;
+            knotvs[i].x *= tension;
+            knotvs[i].y *= tension;
         }
     }
 
@@ -578,31 +578,31 @@ GEOMAPI bool mgCubicSplines(
 }
 
 GEOMAPI void mgFitCubicSpline(
-    Int32 n, const Point2d* knots, const Vector2d* knotVectors,
-    Int32 i, float t, Point2d& fitPt)
+    Int32 n, const Point2d* knots, const Vector2d* knotvs,
+    Int32 i, float t, Point2d& fitpt)
 {
     float b2, b3;
     int i1 = i % n;
     int i2 = (i+1) % n;
     
-    b2 = 3*(knots[i2].x - knots[i1].x) - 2*knotVectors[i1].x - knotVectors[i2].x;
-    b3 = 2*(knots[i1].x - knots[i2].x) + knotVectors[i1].x + knotVectors[i2].x;
-    fitPt.x = knots[i1].x + (knotVectors[i1].x + (b2 + b3*t)*t)*t;
+    b2 = 3*(knots[i2].x - knots[i1].x) - 2*knotvs[i1].x - knotvs[i2].x;
+    b3 = 2*(knots[i1].x - knots[i2].x) + knotvs[i1].x + knotvs[i2].x;
+    fitpt.x = knots[i1].x + (knotvs[i1].x + (b2 + b3*t)*t)*t;
     
-    b2 = 3*(knots[i2].y - knots[i1].y) - 2*knotVectors[i1].y - knotVectors[i2].y;
-    b3 = 2*(knots[i1].y - knots[i2].y) + knotVectors[i1].y + knotVectors[i2].y;
-    fitPt.y = knots[i1].y + (knotVectors[i1].y + (b2 + b3*t)*t)*t;
+    b2 = 3*(knots[i2].y - knots[i1].y) - 2*knotvs[i1].y - knotvs[i2].y;
+    b3 = 2*(knots[i1].y - knots[i2].y) + knotvs[i1].y + knotvs[i2].y;
+    fitpt.y = knots[i1].y + (knotvs[i1].y + (b2 + b3*t)*t)*t;
 }
 
 GEOMAPI void mgCubicSplineToBezier(
-    Int32 n, const Point2d* knots, const Vector2d* knotVectors,
+    Int32 n, const Point2d* knots, const Vector2d* knotvs,
     Int32 i, Point2d points[4])
 {
     int i1 = i % n;
     int i2 = (i+1) % n;
     points[0] = knots[i1];
-    points[1] = knots[i1] + knotVectors[i1] / 3.f;
-    points[2] = knots[i2] - knotVectors[i2] / 3.f;
+    points[1] = knots[i1] + knotvs[i1] / 3.f;
+    points[2] = knots[i2] - knotvs[i2] / 3.f;
     points[3] = knots[i2];
 }
 
@@ -728,13 +728,13 @@ static bool CalcClampedVecs(
 
 GEOMAPI bool mgClampedSplines(
     Int32& n, Point2d* knots, 
-    float sgm, float tol, float& sigma, float* hp, Vector2d* knotVectors)
+    float sgm, float tol, float& sigma, float* hp, Vector2d* knotvs)
 {
     Int32 n1;
     float len1, sx1, sy1, sxn, syn, s;
     bool closed;
     
-    if (!knots || !knotVectors || !hp || n < 2)
+    if (!knots || !knotvs || !hp || n < 2)
         return false;
     
     closed = (mgHypot(knots[0].x-knots[n-1].x, knots[0].y-knots[n-1].y) < tol);
@@ -748,7 +748,7 @@ GEOMAPI bool mgClampedSplines(
     CalcClampedS1n(n1, knots, closed, len1, sx1, sy1, sxn, syn);
     
     // 计算累加弦长s、分段弦长hp和方程组右边向量
-    s = CalcClampedHp(n1, knots, hp, knotVectors, len1, sx1, sy1, sxn, syn);
+    s = CalcClampedHp(n1, knots, hp, knotvs, len1, sx1, sy1, sxn, syn);
 
     // 规范化张力系数 = 控制参数 / 平均弦长
     sigma = sgm * n1 / s;
@@ -758,7 +758,7 @@ GEOMAPI bool mgClampedSplines(
     if (ret)
     {
         ret = CalcClampedVecs(sigma, closed, n1, hp, 
-            a, a+n, a+2*n, knotVectors);
+            a, a+n, a+2*n, knotvs);
         delete[] a;
     }
     
@@ -785,20 +785,20 @@ GEOMAPI bool mgClampedSplines(
 GEOMAPI void mgFitClampedSpline(
     const Point2d* knots, 
     Int32 i, float t, float sigma,
-    const float* hp, const Vector2d* knotVectors, Point2d& fitPt)
+    const float* hp, const Vector2d* knotvs, Point2d& fitpt)
 {
     float s1, s2, s3, tx1, ty1, tx2, ty2;
     float div_hp0 = 1.f / hp[i];
     
-    tx1 = (knots[i].x - knotVectors[i].x)  * div_hp0;
-    tx2 = (knots[i+1].x - knotVectors[i+1].x) * div_hp0;
-    ty1 = (knots[i].y - knotVectors[i].y)  * div_hp0;
-    ty2 = (knots[i+1].y - knotVectors[i+1].y) * div_hp0;
+    tx1 = (knots[i].x - knotvs[i].x)  * div_hp0;
+    tx2 = (knots[i+1].x - knotvs[i+1].x) * div_hp0;
+    ty1 = (knots[i].y - knotvs[i].y)  * div_hp0;
+    ty2 = (knots[i+1].y - knotvs[i+1].y) * div_hp0;
     
     s1 = sinh(sigma * (hp[i] - t));
     s2 = sinh(sigma * t);
     s3 = 1.f / sinh(sigma * hp[i]);
     
-    fitPt.x = (knotVectors[i].x * s1 + knotVectors[i+1].x * s2) *s3 + tx1*(hp[i] - t) + tx2*t;
-    fitPt.y = (knotVectors[i].y * s1 + knotVectors[i+1].y * s2) *s3 + ty1*(hp[i] - t) + ty2*t;
+    fitpt.x = (knotvs[i].x * s1 + knotvs[i+1].x * s2) *s3 + tx1*(hp[i] - t) + tx2*t;
+    fitpt.y = (knotvs[i].y * s1 + knotvs[i+1].y * s2) *s3 + ty1*(hp[i] - t) + ty2*t;
 }

@@ -776,10 +776,10 @@ bool GiGraphics::drawRoundRect(const GiContext* ctx,
 
 bool GiGraphics::drawSplines(const GiContext* ctx, int count, 
                              const Point2d* knots, 
-                             const Vector2d* knotVectors, bool modelUnit)
+                             const Vector2d* knotvs, bool modelUnit)
 {
     if (m_impl->drawRefcnt == 0 || count < 2 
-        || knots == NULL || knotVectors == NULL)
+        || knots == NULL || knotvs == NULL)
         return false;
     GiLock lock (&m_impl->drawRefcnt);
     count = mgMin(count, static_cast<int>(1 + (0x2000 - 1) / 3));
@@ -794,16 +794,16 @@ bool GiGraphics::drawSplines(const GiContext* ctx, int count,
     pxpoints.resize(1 + (count - 1) * 3);
     Point2d *pxs = &pxpoints.front();
 
-    pt = knots[0] * matD;                               // 第一个Bezier段的起点
-    vec = knotVectors[0] * matD / 3.f;                  // 第一个Bezier段的起始矢量
-    *pxs++ = pt;                                       // 产生Bezier段的起点
-    for (i = 1; i < count; i++)                         // 计算每一个Bezier段
+    pt = knots[0] * matD;                       // 第一个Bezier段的起点
+    vec = knotvs[0] * matD / 3.f;               // 第一个Bezier段的起始矢量
+    *pxs++ = pt;                                // 产生Bezier段的起点
+    for (i = 1; i < count; i++)                 // 计算每一个Bezier段
     {
-        *pxs++ = (pt += vec);                          // 产生Bezier段的第二点
-        pt = knots[i] * matD;                           // Bezier段的终点
-        vec = knotVectors[i] * matD / 3.f;              // Bezier段的终止矢量
-        *pxs++ = pt - vec;                             // 产生Bezier段的第三点
-        *pxs++ = pt;                                   // 产生Bezier段的终点
+        *pxs++ = (pt += vec);                   // 产生Bezier段的第二点
+        pt = knots[i] * matD;                   // Bezier段的终点
+        vec = knotvs[i] * matD / 3.f;           // Bezier段的终止矢量
+        *pxs++ = pt - vec;                      // 产生Bezier段的第三点
+        *pxs++ = pt;                            // 产生Bezier段的终点
     }
 
     // 绘图
@@ -812,11 +812,11 @@ bool GiGraphics::drawSplines(const GiContext* ctx, int count,
 
 bool GiGraphics::drawClosedSplines(const GiContext* ctx, int count, 
                                    const Point2d* knots, 
-                                   const Vector2d* knotVectors, 
+                                   const Vector2d* knotvs, 
                                    bool modelUnit)
 {
     if (m_impl->drawRefcnt == 0 || count < 2 || 
-        knots == NULL || knotVectors == NULL)
+        knots == NULL || knotvs == NULL)
         return false;
     GiLock lock (&m_impl->drawRefcnt);
     count = mgMin(count, static_cast<int>((0x2000 - 1) / 3));
@@ -831,20 +831,20 @@ bool GiGraphics::drawClosedSplines(const GiContext* ctx, int count,
     pxpoints.resize(1 + count * 3);
     Point2d *pxs = &pxpoints.front();
 
-    pt = knots[0] * matD;                               // 第一个Bezier段的起点
-    vec = knotVectors[0] * matD / 3.f;                  // 第一个Bezier段的起始矢量
-    pxs[j++] = pt;                                     // 产生Bezier段的起点
-    for (i = 1; i < count; i++)                         // 计算每一个Bezier段
+    pt = knots[0] * matD;                       // 第一个Bezier段的起点
+    vec = knotvs[0] * matD / 3.f;               // 第一个Bezier段的起始矢量
+    pxs[j++] = pt;                              // 产生Bezier段的起点
+    for (i = 1; i < count; i++)                 // 计算每一个Bezier段
     {
-        pxs[j++] = (pt += vec);                        // 产生Bezier段的第二点
-        pt = knots[i] * matD;                           // Bezier段的终点
-        vec = knotVectors[i] * matD / 3.f;              // Bezier段的终止矢量
-        pxs[j++] = pt - vec;                           // 产生Bezier段的第三点
-        pxs[j++] = pt;                                 // 产生Bezier段的终点
+        pxs[j++] = (pt += vec);                 // 产生Bezier段的第二点
+        pt = knots[i] * matD;                   // Bezier段的终点
+        vec = knotvs[i] * matD / 3.f;           // Bezier段的终止矢量
+        pxs[j++] = pt - vec;                    // 产生Bezier段的第三点
+        pxs[j++] = pt;                          // 产生Bezier段的终点
     }
-    pxs[j++] = (pt += vec);                            // 产生Bezier段的第二点
-    pxs[j]   = 2 * pxs[0] - pxs[1].asVector();       // 产生Bezier段的第三点
-    pxs[j+1] = pxs[0];                                // 产生Bezier段的终点
+    pxs[j++] = (pt += vec);                     // 产生Bezier段的第二点
+    pxs[j]   = 2 * pxs[0] - pxs[1].asVector();  // 产生Bezier段的第三点
+    pxs[j+1] = pxs[0];                          // 产生Bezier段的终点
 
     // 绘图
     bool ret = rawBeginPath();
@@ -860,14 +860,14 @@ bool GiGraphics::drawClosedSplines(const GiContext* ctx, int count,
 }
 
 bool GiGraphics::drawBSplines(const GiContext* ctx, int count, 
-                              const Point2d* controlPoints, bool modelUnit)
+                              const Point2d* ctlpts, bool modelUnit)
 {
-    if (m_impl->drawRefcnt == 0 || count < 4 || controlPoints == NULL)
+    if (m_impl->drawRefcnt == 0 || count < 4 || ctlpts == NULL)
         return false;
     GiLock lock (&m_impl->drawRefcnt);
     count = mgMin(count, static_cast<int>(3 + (0x2000 - 1) / 3));
 
-    const Box2d extent (count, controlPoints);              // 模型坐标范围
+    const Box2d extent (count, ctlpts);              // 模型坐标范围
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
@@ -882,13 +882,13 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
     Point2d *pxs = &pxpoints.front();
 
     // 计算第一个曲线段
-    pt1 = controlPoints[0] * matD;
-    pt2 = controlPoints[1] * matD;
-    pt3 = controlPoints[2] * matD;
-    pt4 = controlPoints[3 % count] * matD;
+    pt1 = ctlpts[0] * matD;
+    pt2 = ctlpts[1] * matD;
+    pt3 = ctlpts[2] * matD;
+    pt4 = ctlpts[3 % count] * matD;
     (*pxs++).set((pt1.x + 4 * pt2.x + pt3.x)*d6, (pt1.y + 4 * pt2.y + pt3.y)*d6);
-    (*pxs++).set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
-    (*pxs++).set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
+    (*pxs++).set((4 * pt2.x + 2 * pt3.x)    *d6,  (4 * pt2.y + 2 * pt3.y)   *d6);
+    (*pxs++).set((2 * pt2.x + 4 * pt3.x)    *d6,  (2 * pt2.y + 4 * pt3.y)   *d6);
     (*pxs++).set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
 
     // 计算其余曲线段
@@ -897,10 +897,10 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
         pt1 = pt2;
         pt2 = pt3;
         pt3 = pt4;
-        pt4 = controlPoints[i % count] * matD;
-        (*pxs++).set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
-        (*pxs++).set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
-        (*pxs++).set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
+        pt4 = ctlpts[i % count] * matD;
+        (*pxs++).set((4 * pt2.x + 2 * pt3.x)    *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
+        (*pxs++).set((2 * pt2.x + 4 * pt3.x)    *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
+        (*pxs++).set((pt2.x + 4 * pt3.x + pt4.x)*d6,(pt2.y + 4 * pt3.y + pt4.y)*d6);
     }
 
     // 绘图
@@ -909,15 +909,15 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
 
 bool GiGraphics::drawClosedBSplines(const GiContext* ctx, 
                                     int count, 
-                                    const Point2d* controlPoints, 
+                                    const Point2d* ctlpts, 
                                     bool modelUnit)
 {
-    if (m_impl->drawRefcnt == 0 || count < 3 || controlPoints == NULL)
+    if (m_impl->drawRefcnt == 0 || count < 3 || ctlpts == NULL)
         return false;
     GiLock lock (&m_impl->drawRefcnt);
     count = mgMin(count, static_cast<int>((0x2000 - 1) / 3));
 
-    const Box2d extent (count, controlPoints);              // 模型坐标范围
+    const Box2d extent (count, ctlpts);              // 模型坐标范围
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
@@ -932,13 +932,13 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
     Point2d *pxs = &pxpoints.front();
 
     // 计算第一个曲线段
-    pt1 = controlPoints[0] * matD;
-    pt2 = controlPoints[1] * matD;
-    pt3 = controlPoints[2] * matD;
-    pt4 = controlPoints[3 % count] * matD;
+    pt1 = ctlpts[0] * matD;
+    pt2 = ctlpts[1] * matD;
+    pt3 = ctlpts[2] * matD;
+    pt4 = ctlpts[3 % count] * matD;
     (*pxs++).set((pt1.x + 4 * pt2.x + pt3.x)*d6, (pt1.y + 4 * pt2.y + pt3.y)*d6);
-    (*pxs++).set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
-    (*pxs++).set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
+    (*pxs++).set((4 * pt2.x + 2 * pt3.x)    *d6, (4 * pt2.y + 2 * pt3.y)    *d6);
+    (*pxs++).set((2 * pt2.x + 4 * pt3.x)    *d6, (2 * pt2.y + 4 * pt3.y)    *d6);
     (*pxs++).set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
 
     // 计算其余曲线段
@@ -947,9 +947,9 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
         pt1 = pt2;
         pt2 = pt3;
         pt3 = pt4;
-        pt4 = controlPoints[i % count] * matD;
-        (*pxs++).set((4 * pt2.x + 2 * pt3.x)   *d6, (4 * pt2.y + 2 * pt3.y)   *d6);
-        (*pxs++).set((2 * pt2.x + 4 * pt3.x)   *d6, (2 * pt2.y + 4 * pt3.y)   *d6);
+        pt4 = ctlpts[i % count] * matD;
+        (*pxs++).set((4 * pt2.x + 2 * pt3.x)    *d6, (4 * pt2.y + 2 * pt3.y)    *d6);
+        (*pxs++).set((2 * pt2.x + 4 * pt3.x)    *d6, (2 * pt2.y + 4 * pt3.y)    *d6);
         (*pxs++).set((pt2.x + 4 * pt3.x + pt4.x)*d6, (pt2.y + 4 * pt3.y + pt4.y)*d6);
     }
 

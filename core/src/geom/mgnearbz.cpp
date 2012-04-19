@@ -340,10 +340,10 @@ static int FindRoots(const Point2d* w, int degree, double* t, int depth)
 // Parameters :
 //      pt: The user-supplied point
 //      pts: Control points of cubic Bezier
-//      ptNear: output the point on the curve at that parameter value
+//      nearpt: output the point on the curve at that parameter value
 //
 GEOMAPI void mgNearestOnBezier(
-    const Point2d& pt, const Point2d* pts, Point2d& ptNear)
+    const Point2d& pt, const Point2d* pts, Point2d& nearpt)
 {
     Point2d w[W_DEGREE+1];          // Ctl pts for 5th-degree eqn
     double  t_candidate[W_DEGREE];  // Possible roots
@@ -388,5 +388,5 @@ GEOMAPI void mgNearestOnBezier(
 
     // Return the point on the curve at parameter value t
     // printf("t : %4.12f\n", t);
-    ptNear = (BezierPoint(pts, DEGREE, t, (Point2d *)NULL, (Point2d *)NULL));
+    nearpt = (BezierPoint(pts, DEGREE, t, (Point2d *)NULL, (Point2d *)NULL));
 }

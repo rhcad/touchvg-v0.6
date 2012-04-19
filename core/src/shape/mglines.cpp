@@ -168,9 +168,9 @@ bool MgBaseLines::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
 }
 
 float MgBaseLines::_hitTest(const Point2d& pt, float tol, 
-                            Point2d& ptNear, Int32& segment) const
+                            Point2d& nearpt, Int32& segment) const
 {
-    return mgLinesHit(_count, _points, _closed, pt, tol, ptNear, segment);
+    return mgLinesHit(_count, _points, _closed, pt, tol, nearpt, segment);
 }
 
 // MgLines

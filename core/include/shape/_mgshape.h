@@ -27,8 +27,8 @@
     Point2d Cls::getPoint(UInt32 index) const { return _getPoint(index); }  \
     void Cls::setPoint(UInt32 index, const Point2d& pt) { _setPoint(index, pt); }  \
     bool Cls::isClosed() const { return _isClosed(); }          \
-    float Cls::hitTest(const Point2d& pt, float tol, Point2d& ptNear, Int32& segment) const \
-        { return _hitTest(pt, tol, ptNear, segment); }          \
+    float Cls::hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const \
+        { return _hitTest(pt, tol, nearpt, segment); }          \
     bool Cls::hitTestBox(const Box2d& rect) const               \
         { return _hitTestBox(rect); }                           \
     bool Cls::draw(GiGraphics& gs, const GiContext& ctx) const  \

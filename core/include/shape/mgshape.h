@@ -104,12 +104,12 @@ public:
     /*!
         \param[in] pt 外部点的模型坐标，将判断此点能否点中图形
         \param[in] tol 距离公差，正数，超出则不计算最近点
-        \param[out] ptNear 图形上的最近点
+        \param[out] nearpt 图形上的最近点
         \param[out] segment 最近点所在部分的序号，其含义由派生图形类决定
         \return 给定的外部点到最近点的距离，失败时为极大数
     */
     virtual float hitTest(const Point2d& pt, float tol, 
-       Point2d& ptNear, Int32& segment) const = 0;
+       Point2d& nearpt, Int32& segment) const = 0;
     
     //! 框选检查
     virtual bool hitTestBox(const Box2d& rect) const = 0;
@@ -190,7 +190,7 @@ private:                                                        \
     virtual void setPoint(UInt32 index, const Point2d& pt);     \
     virtual bool isClosed() const;                              \
     virtual float hitTest(const Point2d& pt, float tol,       \
-       Point2d& ptNear, Int32& segment) const;                 \
+       Point2d& nearpt, Int32& segment) const;                 \
     virtual bool hitTestBox(const Box2d& rect) const;  \
     virtual bool draw(GiGraphics& gs, const GiContext& ctx) const;  \
     virtual bool save(MgStorage* s) const;                      \
@@ -210,7 +210,7 @@ protected:                                                      \
     void _transform(const Matrix2d& mat);                       \
     void _clear();                                              \
     float _hitTest(const Point2d& pt, float tol,              \
-       Point2d& ptNear, Int32& segment) const;                 \
+       Point2d& nearpt, Int32& segment) const;                 \
     UInt32 _getPointCount() const;                              \
     Point2d _getPoint(UInt32 index) const;                      \
     void _setPoint(UInt32 index, const Point2d& pt);            \

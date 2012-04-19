@@ -39,7 +39,7 @@ private:
 
 private:
     UInt32 getStep() { return 0; }
-    MgShape* hitTestAll(const MgMotion* sender, Point2d &ptNear, Int32 &segment);
+    MgShape* hitTestAll(const MgMotion* sender, Point2d &nearpt, Int32 &segment);
     MgShape* getSelectedShape(const MgMotion* sender);
     bool canSelect(MgShape* shape, const MgMotion* sender);
     Int32 hitTestHandles(MgShape* shape, const Point2d& pointM);

@@ -13,40 +13,40 @@
     \ingroup GEOMAPI_CURVE
     \param[in] pts 4个点的数组，为贝塞尔曲线段的控制点
     \param[in] t 要计算的参数点的参数，范围为[0, 1]
-    \param[out] ptFit 计算出的参数点
+    \param[out] fitpt 计算出的参数点
     \see mgBezier4P, mgCubicSplines
 */
-GEOMAPI void mgFitBezier(const Point2d* pts, float t, Point2d& ptFit);
+GEOMAPI void mgFitBezier(const Point2d* pts, float t, Point2d& fitpt);
 
 //! 用线上四点构成三次贝塞尔曲线段
 /*! 该贝塞尔曲线段的起点和终点为给定点，中间经过另外两个给定点，
     t=1/3过pt2, t=2/3过pt3。
-    计算出的贝塞尔曲线段的起点为pt1、终点为pt4，中间两个控制点为ptCtr1、ptCtr2
+    计算出的贝塞尔曲线段的起点为pt1、终点为pt4，中间两个控制点为ctrpt1、ctrpt2
     \ingroup GEOMAPI_CURVE
     \param[in] pt1 线的起点
     \param[in] pt2 线上的第一个中间点
     \param[in] pt3 线上的第二个中间点
     \param[in] pt4 线的终点
-    \param[out] ptCtr1 中间第一个控制点
-    \param[out] ptCtr2 中间第二个控制点
+    \param[out] ctrpt1 中间第一个控制点
+    \param[out] ctrpt2 中间第二个控制点
     \see mgEllipse90ToBezier, mgEllipseToBezier, mgAngleArcToBezier
 */
 GEOMAPI void mgBezier4P(
     const Point2d& pt1, const Point2d& pt2, const Point2d& pt3, 
-    const Point2d& pt4, Point2d& ptCtr1, Point2d& ptCtr2);
+    const Point2d& pt4, Point2d& ctrpt1, Point2d& ctrpt2);
 
 //! 用给定的起点和终点构造90度椭圆弧，并转换为一个三次贝塞尔曲线段
 /*! 椭圆弧为从起点到终点逆时针转90度。
-    计算出的贝塞尔曲线段的起点为pt1、终点为pt4，中间两个控制点为ptCtr1、ptCtr2
+    计算出的贝塞尔曲线段的起点为pt1、终点为pt4，中间两个控制点为ctrpt1、ctrpt2
     \ingroup GEOMAPI_CURVE
-    \param[in] ptFrom 起点
-    \param[in] ptTo 终点
-    \param[out] ptCtr1 中间第一个控制点
-    \param[out] ptCtr2 中间第二个控制点
+    \param[in] frompt 起点
+    \param[in] topt 终点
+    \param[out] ctrpt1 中间第一个控制点
+    \param[out] ctrpt2 中间第二个控制点
     \see mgBezier4P, mgEllipseToBezier, mgAngleArcToBezier
 */
 GEOMAPI void mgEllipse90ToBezier(
-    const Point2d& ptFrom, const Point2d& ptTo, Point2d& ptCtr1, Point2d& ptCtr2);
+    const Point2d& frompt, const Point2d& topt, Point2d& ctrpt1, Point2d& ctrpt2);
 
 //! 将一个椭圆转换为4段三次贝塞尔曲线
 /*! 4段三次贝塞尔曲线是按逆时针方向从第一象限到第四象限连接，
@@ -114,7 +114,7 @@ GEOMAPI bool mgArc3P(
     \ingroup GEOMAPI_CURVE
     \param[in] start 圆弧的起点
     \param[in] end 圆弧的终点
-    \param[in] vecTan 圆弧的起点处的切向矢量
+    \param[in] tanv 圆弧的起点处的切向矢量
     \param[out] center 圆心
     \param[out] radius 半径
     \param[out] startAngle 填充起始角度，为NULL则忽略该参数
@@ -123,7 +123,7 @@ GEOMAPI bool mgArc3P(
     \see mgArc3P, mgArcBulge, mgAngleArcToBezier
 */
 GEOMAPI bool mgArcTan(
-    const Point2d& start, const Point2d& end, const Vector2d& vecTan,
+    const Point2d& start, const Point2d& end, const Vector2d& tanv,
     Point2d& center, float& radius,
     float* startAngle = NULL, float* sweepAngle = NULL);
 
@@ -189,54 +189,54 @@ enum kCubicSplinesFlags
 
 //! 计算三次参数样条曲线的型值点的切矢量
 /*! 三次参数样条曲线的分段曲线方程为：\n
-    P[i](t) = knots[i] + knotVectors[i] * t \n
-    　　　+ (3*(knots[i+1] - knots[i]) - 2 * knotVectors[i] - knotVectors[i+1]) * t^2 \n
-    　　　+ (2*(knots[i] - knots[i+1]) + knotVectors[i] + knotVectors[i+1]) * t^3 \n
+    P[i](t) = knots[i] + knotvs[i] * t \n
+    　　　+ (3*(knots[i+1] - knots[i]) - 2 * knotvs[i] - knotvs[i+1]) * t^2 \n
+    　　　+ (2*(knots[i] - knots[i+1]) + knotvs[i] + knotvs[i+1]) * t^3 \n
     其中 0 ≤ t ≤ 1
 
     \ingroup GEOMAPI_CURVE
     \param[in] n 型值点的点数
     \param[in] knots 型值点坐标数组，元素个数为n
-    \param[out] knotVectors 型值点的切矢量数组，元素个数为n，由外界分配内存
+    \param[out] knotvs 型值点的切矢量数组，元素个数为n，由外界分配内存
     \param[in] flag 曲线边界条件，由 kCubicSplinesFlags 各种值组合而成。\n
-        指定 kCubicTan1 时, knotVectors[0]必须指定有效的切矢量；\n
-        指定 kCubicTan2 时, knotVectors[n-1]必须指定有效的切矢量。\n
+        指定 kCubicTan1 时, knotvs[0]必须指定有效的切矢量；\n
+        指定 kCubicTan2 时, knotvs[n-1]必须指定有效的切矢量。\n
         指定 kCubicLoop 时，knots的首末型值点不必重合，计算中将首末型值点视为任意两点。
     \param[in] tension 张力系数，0≤coeff≤1, 为1时C2阶连续, 为0时成折线
     \return 是否计算成功
     \see kCubicSplinesFlags, mgFitCubicSpline, mgCubicSplinesBox
 */
 GEOMAPI bool mgCubicSplines(
-    Int32 n, const Point2d* knots, Vector2d* knotVectors,
-    UInt32 flag = 0, float tension = 1.f);
+    Int32 n, const Point2d* knots, Vector2d* knotvs,
+    UInt32 flag = 0, float tension = 1);
 
 //! 在三次样条曲线的一条弦上插值得到拟和点坐标
 /*!
     \ingroup GEOMAPI_CURVE
     \param[in] n 三次样条曲线的型值点的点数
     \param[in] knots 型值点坐标数组，元素个数为n
-    \param[in] knotVectors 型值点的切矢量数组，元素个数为n
+    \param[in] knotvs 型值点的切矢量数组，元素个数为n
     \param[in] i 分段曲线序号，在0到(n-2)之间，如果曲线是闭合条件，则可取到(n-1)
     \param[in] t 分段曲线函数参数，在0到1之间
-    \param[out] fitPt 拟和点坐标，第i段曲线上参数t对应的曲线坐标
+    \param[out] fitpt 拟和点坐标，第i段曲线上参数t对应的曲线坐标
     \see mgCubicSplines, mgCubicSplineToBezier
 */
 GEOMAPI void mgFitCubicSpline(
-    Int32 n, const Point2d* knots, const Vector2d* knotVectors,
-    Int32 i, float t, Point2d& fitPt);
+    Int32 n, const Point2d* knots, const Vector2d* knotvs,
+    Int32 i, float t, Point2d& fitpt);
 
 //! 得到三次样条曲线的分段贝塞尔曲线段控制点
 /*!
     \ingroup GEOMAPI_CURVE
     \param[in] n 三次样条曲线的型值点的点数
     \param[in] knots 型值点坐标数组，元素个数为n
-    \param[in] knotVectors 型值点的切矢量数组，元素个数为n
+    \param[in] knotvs 型值点的切矢量数组，元素个数为n
     \param[in] i 分段曲线序号，在0到(n-2)之间，如果曲线是闭合条件，则可取到(n-1)
     \param[out] points 贝塞尔曲线段的控制点，4个点
     \see mgCubicSplines, mgFitCubicSpline
 */
 GEOMAPI void mgCubicSplineToBezier(
-    Int32 n, const Point2d* knots, const Vector2d* knotVectors,
+    Int32 n, const Point2d* knots, const Vector2d* knotvs,
     Int32 i, Point2d points[4]);
 
 //! 得到三次B样条曲线的分段贝塞尔曲线段控制点
@@ -244,12 +244,12 @@ GEOMAPI void mgCubicSplineToBezier(
     \ingroup GEOMAPI_CURVE
     \param[out] points 贝塞尔曲线的控制点，要预先分配(1+n*3)个点的空间
     \param n B样条曲线控制点的点数，至少为4
-    \param controlPoints B样条曲线控制点坐标数组，点数为n
+    \param ctlpts B样条曲线控制点坐标数组，点数为n
     \param closed 三次B样条曲线是否为闭合曲线
     \return 实际转换的贝塞尔曲线控制点的个数
 */
 GEOMAPI Int32 mgBSplinesToBeziers(
-    Point2d points[/*1+n*3*/], Int32 n, const Point2d* controlPoints, bool closed);
+    Point2d points[/*1+n*3*/], Int32 n, const Point2d* ctlpts, bool closed);
 
 //! 计算张力样条曲线的型值点参数和弦长
 /*!
@@ -260,13 +260,13 @@ GEOMAPI Int32 mgBSplinesToBeziers(
     \param[in] tol 长度容差值，用于判断重合点
     \param[out] sigma 规范化张力系数，= 控制参数 / 平均弦长
     \param[out] hp 弦长数组，元素个数为n-1或n，由外界分配内存
-    \param[out] knotVectors 型值点的f"(x_i)/sigma^2，元素个数为n，由外界分配内存
+    \param[out] knotvs 型值点的f"(x_i)/sigma^2，元素个数为n，由外界分配内存
     \return 是否计算成功
     \see mgFitClampedSpline
 */
 GEOMAPI bool mgClampedSplines(
     Int32& n, Point2d* knots, float sgm, float tol, float& sigma,
-    float* hp, Vector2d* knotVectors);
+    float* hp, Vector2d* knotvs);
 
 //! 在张力样条曲线的一条弦上插值得到拟和点坐标
 /*!
@@ -276,12 +276,12 @@ GEOMAPI bool mgClampedSplines(
     \param[in] t 分段曲线函数参数，在0到hp[i]之间
     \param[in] sigma 规范化张力系数
     \param[in] hp 弦长数组
-    \param[in] knotVectors 型值点的f"(x_i)/sigma^2数组
-    \param[out] fitPt 拟和点坐标，第i段曲线上参数t对应的曲线坐标
+    \param[in] knotvs 型值点的f"(x_i)/sigma^2数组
+    \param[out] fitpt 拟和点坐标，第i段曲线上参数t对应的曲线坐标
     \see mgClampedSplines
 */
 GEOMAPI void mgFitClampedSpline(
     const Point2d* knots, Int32 i, float t, float sigma,
-    const float* hp, const Vector2d* knotVectors, Point2d& fitPt);
+    const float* hp, const Vector2d* knotvs, Point2d& fitpt);
 
 #endif // __GEOMETRY_FITCURVE_H_

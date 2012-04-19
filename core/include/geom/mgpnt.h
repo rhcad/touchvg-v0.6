@@ -19,14 +19,14 @@ public:
     //! 原点(0,0)
     static const Point2d& kOrigin()
     {
-        static const Point2d pnt (0.f, 0.f);
+        static const Point2d pnt (0, 0);
         return pnt;
     }
     
     //! 构造为原点
     Point2d()
     {
-        x = y = 0.f;
+        x = y = 0;
     }
     
     //! 构造为点(x, y)
@@ -74,14 +74,14 @@ public:
     //! 点 / 数
     Point2d operator/(float s) const
     {
-        s = 1.f / s;
+        s = 1 / s;
         return Point2d(x * s, y * s);
     }
     
     //! 点 /= 数
     Point2d& operator/=(float s)
     {
-        s = 1.f / s;
+        s = 1 / s;
         x *= s; y *= s; return *this;
     }
 

@@ -26,7 +26,8 @@ public:
     virtual void endPaint(bool draw = true);
     virtual void clearWnd();
     virtual bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);
-    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, float x = 0, float y = 0, bool secondBmp = false);
+    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, 
+        float x = 0, float y = 0, bool secondBmp = false);
     virtual void saveCachedBitmap(bool secondBmp = false);
     virtual bool hasCachedBitmap(bool secondBmp = false) const;
     virtual void clearCachedBitmap();

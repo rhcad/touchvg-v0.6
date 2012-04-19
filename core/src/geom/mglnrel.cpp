@@ -98,20 +98,20 @@ GEOMAPI bool mgIsBetweenLine2(
 
 // 已知点pt在直线ab上, 判断点pt是否在线段ab上(闭区间)
 GEOMAPI bool mgIsBetweenLine3(
-    const Point2d& a, const Point2d& b, const Point2d& pt, Point2d* ptNear)
+    const Point2d& a, const Point2d& b, const Point2d& pt, Point2d* nearpt)
 {
     bool ret;
     if (a.x != b.x) 
     {
         ret = (a.x <= pt.x && pt.x <= b.x) || (a.x >= pt.x && pt.x >= b.x);
-        if (ptNear != NULL)
-            *ptNear = fabs(pt.x - a.x) < fabs(pt.x - b.x) ? a : b;
+        if (nearpt != NULL)
+            *nearpt = fabs(pt.x - a.x) < fabs(pt.x - b.x) ? a : b;
     }
     else
     {
         ret = (a.y <= pt.y && pt.y <= b.y) || (a.y >= pt.y && pt.y >= b.y);
-        if (ptNear != NULL)
-            *ptNear = fabs(pt.y - a.y) < fabs(pt.y - b.y) ? a : b;
+        if (nearpt != NULL)
+            *nearpt = fabs(pt.y - a.y) < fabs(pt.y - b.y) ? a : b;
     }
     return ret;
 }
@@ -170,14 +170,14 @@ GEOMAPI float mgPtToBeeline2(
 
 // 计算点pt到线段ab的最近距离
 GEOMAPI float mgPtToLine(
-    const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& ptNear)
+    const Point2d& a, const Point2d& b, const Point2d& pt, Point2d& nearpt)
 {
     Point2d ptTemp;
-    float dist = mgPtToBeeline2(a, b, pt, ptNear);
-    if (!mgIsBetweenLine3(a, b, ptNear, &ptTemp))
+    float dist = mgPtToBeeline2(a, b, pt, nearpt);
+    if (!mgIsBetweenLine3(a, b, nearpt, &ptTemp))
     {
-        ptNear = ptTemp;
-        dist = pt.distanceTo(ptNear);
+        nearpt = ptTemp;
+        dist = pt.distanceTo(nearpt);
     }
     return dist;
 }

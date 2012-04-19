@@ -187,11 +187,11 @@ bool GiPath::arcTo(const Point2d& point)
         && m_data->points.size() == m_data->types.size())
     {
         Point2d start = m_data->points[m_data->points.size() - 1];
-        Vector2d vecTan = start - m_data->points[m_data->points.size() - 2];
+        Vector2d tanv = start - m_data->points[m_data->points.size() - 2];
         Point2d center;
         float radius, startAngle, sweepAngle;
 
-        if (mgArcTan(start, point, vecTan, center, radius, &startAngle, &sweepAngle))
+        if (mgArcTan(start, point, tanv, center, radius, &startAngle, &sweepAngle))
         {
             Point2d pts[16];
             int n = mgAngleArcToBezier(pts, center, radius, radius, 

@@ -165,12 +165,12 @@ bool MgCommandSelect::isSelected(MgShape* shape)
     return getSelectedPostion(shape) != m_selection.end();
 }
 
-MgShape* MgCommandSelect::hitTestAll(const MgMotion* sender, Point2d &ptNear, Int32 &segment)
+MgShape* MgCommandSelect::hitTestAll(const MgMotion* sender, Point2d &nearpt, Int32 &segment)
 {
     Box2d limits(Point2d(sender->point.x, sender->point.y), 50, 0);
     limits *= sender->view->xform()->displayToModel();
     
-    return sender->view->shapes()->hitTest(limits, ptNear, segment);
+    return sender->view->shapes()->hitTest(limits, nearpt, segment);
 }
 
 MgShape* MgCommandSelect::getSelectedShape(const MgMotion* sender)
@@ -212,7 +212,7 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const Point2d& pointM)
 
 bool MgCommandSelect::click(const MgMotion* sender)
 {
-    Point2d ptNear;
+    Point2d nearpt;
     Int32   segment = -1;
     UInt32  handleIndex = 0;
     MgShape* shape;
@@ -239,7 +239,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
         m_handleIndex = 0;                  // 恢复到整体选中状态
     }
     else {                                  // 上次是整体选中状态或没有选中
-        shape = hitTestAll(sender, ptNear, segment);
+        shape = hitTestAll(sender, nearpt, segment);
         
         if (shape && isSelected(shape)) {   // 点击已选图形，从选择集中移除
             m_selection.erase(getSelectedPostion(shape));
@@ -254,7 +254,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
             m_id = 0;
         }
         
-        m_ptNear = ptNear;
+        m_ptNear = nearpt;
         m_segment = segment;
         m_handleIndex = 0;
     }
