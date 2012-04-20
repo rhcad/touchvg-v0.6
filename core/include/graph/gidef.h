@@ -18,17 +18,4 @@ inline long giInterlockedIncrement(long *p) { return InterlockedIncrement(p); }
 inline long giInterlockedDecrement(long *p) { return InterlockedDecrement(p); }
 #endif
 
-#ifdef GetRValue
-#include <mgtype.h>
-inline RECT2D giConvertRect(const RECT& rc)
-{
-    RECT2D rect;
-    rect.left = (float)rc.left;
-    rect.top = (float)rc.top;
-    rect.right = (float)rc.right;
-    rect.bottom = (float)rc.bottom;
-    return rect;
-}
-#endif // _WINDOWS_
-
 #endif // __GEOMETRY_GIDEF_H_

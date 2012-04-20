@@ -1,7 +1,7 @@
-// gidrgdip.cpp: 实现用GDI+实现的图形系统类GiGraphGdip
+// gidrgdip.cpp: 实现用GDI+实现的图形显示接口类 GiGraphGdip
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
-#ifdef _WIN32
+
 #include "gidrgdip.h"
 #include <_gigraph.h>
 
@@ -944,5 +944,3 @@ bool GiGraphGdip::drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp,
 
     return ret;
 }
-
-#endif //_WIN32

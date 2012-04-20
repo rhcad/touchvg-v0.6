@@ -1,5 +1,5 @@
 //! \file gidrgdi.h
-//! \brief 定义用GDI实现的图形系统类 GiGraphGdi
+//! \brief 定义用GDI实现的图形显示接口类 GiGraphGdi
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
@@ -10,7 +10,7 @@
 
 class GiGraphGdiImpl;
 
-//! 用GDI实现的图形系统类
+//! 用GDI实现的图形显示接口类
 /*! 本类的 getGraphType() 值为 1
     \ingroup GRAPH_INTERFACE
 */

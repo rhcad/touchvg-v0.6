@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiViewController.h"
-#include <Graph2d/mgshapest.h>
+#include <mgshapest.h>
 #include <list>
 #import "GiCmdController.h"
 #import "GiGraphView.h"

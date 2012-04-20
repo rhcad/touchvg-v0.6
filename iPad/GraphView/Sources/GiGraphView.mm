@@ -3,8 +3,8 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiGraphView.h"
-#include <Graph2d/GiGraphIos.h>
-#include <Graph2d/mgshapes.h>
+#include <GiGraphIos.h>
+#include <mgshapes.h>
 
 @interface GiGraphView(Zooming)
 

@@ -1,7 +1,7 @@
 // giimage.cpp: 实现图像文件打开和显示的辅助类 GiImage
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
-#ifdef _WIN32
+
 #include "giimage.h"
 #include <olectl.h>
 #ifdef _MSC_VER
@@ -187,5 +187,3 @@ bool GiImage::draw(GiGraphWin& graph, const Box2d& rectW, bool fast) const
 {
     return graph.drawImage(getHmWidth(), getHmHeight(), getBitmap(), rectW, fast);
 }
-
-#endif //_WIN32

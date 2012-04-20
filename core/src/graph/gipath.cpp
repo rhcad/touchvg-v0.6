@@ -1,4 +1,4 @@
-// gipath.cpp: 实现路径类GiPath
+// gipath.cpp: 实现路径类 GiPath
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 

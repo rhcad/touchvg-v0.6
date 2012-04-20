@@ -3,6 +3,9 @@
 #pragma once
 
 #include "RandomShape.h"
+#include <gigraph.h>
+
+class GiGraphWin;
 
 class CBaseView : public CWnd
 {

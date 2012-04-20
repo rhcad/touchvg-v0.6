@@ -1,4 +1,7 @@
-#ifdef _WIN32
+// giimagep.cpp: 实现GDI+图像文件的辅助类 GiGdipImage
+// Copyright (c) 2004-2012, Zhang Yungui
+// License: LGPL, https://github.com/rhcad/touchdraw
+
 #include "giimagep.h"
 #include "gidrgdip.h"
 
@@ -298,5 +301,3 @@ bool GiGdipImage::save(const wchar_t* filename, ULONG quality)
     
     return ret;
 }
-
-#endif //_WIN32

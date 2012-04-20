@@ -2,7 +2,7 @@
 // Created by Zhang Yungui on 2012-3-2.
 
 #import "TestGraphView.h"
-#include <Graph2d/mgshapest.h>
+#include <mgshapest.h>
 #include <vector>
 #include "../../../core/include/testgraph/RandomShape.cpp"
 

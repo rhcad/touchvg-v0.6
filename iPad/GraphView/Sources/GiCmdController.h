@@ -4,7 +4,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiMotionHandler.h"
-#include <Graph2d/gicontxt.h>
+#include <gicontxt.h>
 
 struct MgMotion;
 class MgViewProxy;

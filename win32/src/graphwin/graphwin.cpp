@@ -1,3 +1,7 @@
+// graphwin.cpp: 实现图形显示接口类 GiGraphWin
+// Copyright (c) 2004-2012, Zhang Yungui
+// License: LGPL, https://github.com/rhcad/touchdraw
+
 #include "graphwin.h"
 #include <_gigraph.h>
 
@@ -176,4 +180,14 @@ bool GiGraphWin::rawTextOut(HDC hdc, float x, float y,
     RECT rect = { mgRound(rc.left), mgRound(rc.top), mgRound(rc.right), mgRound(rc.bottom) };
     return ::ExtTextOutW(hdc, mgRound(x), mgRound(y), options, &rect, 
         str, len, reinterpret_cast<const INT *>(pDx)) != 0;
+}
+
+RECT2D giConvertRect(const RECT& rc)
+{
+    RECT2D rect;
+    rect.left = (float)rc.left;
+    rect.top = (float)rc.top;
+    rect.right = (float)rc.right;
+    rect.bottom = (float)rc.bottom;
+    return rect;
 }

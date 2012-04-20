@@ -1,19 +1,27 @@
 //! \file graphwin.h
-//! \brief 定义图形系统类 GiGraphWin
+//! \brief 定义图形显示接口类 GiGraphWin
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_GRAPHWINSYS_WIN_H_
 #define __GEOMETRY_GRAPHWINSYS_WIN_H_
 
-#include "gigraph.h"
+#include <gidraw.h>
 
 #ifndef _WINDOWS_
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
 
-//! Windows平台的图形系统类
+class GiTransform;
+
+//! 整数矩形框转为浮点型矩形框
+/*! \ingroup GRAPH_INTERFACE
+    \see Box2d
+*/
+RECT2D giConvertRect(const RECT& rc);
+
+//! Windows平台的图形显示接口类
 /*! 本类用于在Windows平台显示各种图形，图元显示原语由派生类实现
     \ingroup GRAPH_INTERFACE
 */

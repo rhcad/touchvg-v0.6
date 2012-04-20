@@ -2,7 +2,7 @@ SUBDIRS         =$(subst /,,$(dir $(wildcard */)))
 CLEANDIRS       =$(addsuffix .clean, $(SUBDIRS))
 INSTALLDIRS     =$(addsuffix .install, $(SUBDIRS))
 
-.PHONY:     $(SUBDIRS)
+.PHONY:     $(SUBDIRS) clean install touch
 all:        $(SUBDIRS)
 clean:      $(CLEANDIRS)
 install:    $(INSTALLDIRS)

@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiCmdController.h"
-#include <Graph2d/mgcmd.h>
+#include <mgcmd.h>
 #include <vector>
 
 @interface GiCommandController(Internal)

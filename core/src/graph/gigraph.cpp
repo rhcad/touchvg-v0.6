@@ -1,4 +1,4 @@
-// gigraph.cpp: 实现图形系统类GiGraphics
+// gigraph.cpp: 实现图形系统类 GiGraphics
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
@@ -7,7 +7,6 @@
 #include <mglnrel.h>
 #include <mgcurv.h>
 #include "giplclip.h"
-#include <string.h>
 
 #ifndef SafeCall
 #define SafeCall(p, f)      if (p) p->f
