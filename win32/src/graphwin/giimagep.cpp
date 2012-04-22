@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #include "giimagep.h"
-#include "gidrgdip.h"
+#include "canvasgdip.h"
 
 #define ULONG_PTR DWORD
 #include <objbase.h>
@@ -118,7 +118,7 @@ HBITMAP GiGdipImage::createBitmap(GiColor bkColor) const
     return hBmp;
 }
 
-bool GiGdipImage::draw(GiGraphWin& graph, const Box2d& rectW, bool fast) const
+bool GiGdipImage::draw(GiCanvasWin& graph, const Box2d& rectW, bool fast) const
 {
     bool ret = false;
 
@@ -126,7 +126,7 @@ bool GiGdipImage::draw(GiGraphWin& graph, const Box2d& rectW, bool fast) const
     {
         if (graph.getGraphType() == 2)
         {
-            GiGraphGdip* gs = (GiGraphGdip*)(&graph);
+            GiCanvasGdip* gs = (GiCanvasGdip*)(&graph);
             ret = gs->drawGdipImage(
                 getHmWidth(), getHmHeight(), m_impl->bmp, rectW, fast);
         }

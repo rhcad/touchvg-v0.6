@@ -6,16 +6,16 @@
 #ifndef __GEOMETRY_GRAPHSYS_H_
 #define __GEOMETRY_GRAPHSYS_H_
 
-#include "gidraw.h"
+#include "gicanvas.h"
 
 class GiGraphicsImpl;
 
 //! 图形系统类
-/*! 本类用于显示各种图形，图元显示原语由外部的 GiDrawAdapter 实现类来实现。
+/*! 本类用于显示各种图形，图元显示原语由外部的 GiCanvas 实现类来实现。
     显示图形所用的坐标计算和坐标系转换是在 GiTransform 中定义的。
     \ingroup GRAPH_INTERFACE
 */
-class GiGraphics : public GiDrawAdapter
+class GiGraphics : public GiCanvas
 {
 public:
     //! 构造函数，坐标系管理对象必须有效
@@ -316,7 +316,7 @@ public:
     GiTransform& _xf();
     
     //! 在显示适配类的构造函数中调用
-    void _setDrawAdapter(GiDrawAdapter* draw);
+    void _setCanvas(GiCanvas* canvas);
 
     //! 在显示适配类的 beginPaint() 中调用
     void _beginPaint(const RECT2D& clipBox);
@@ -327,7 +327,7 @@ public:
 public:
     void clearWnd();
     bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);
-    bool drawCachedBitmap2(const GiDrawAdapter* p, 
+    bool drawCachedBitmap2(const GiCanvas* p, 
         float x = 0, float y = 0, bool secondBmp = false);
     void saveCachedBitmap(bool secondBmp = false);
     bool hasCachedBitmap(bool secondBmp = false) const;

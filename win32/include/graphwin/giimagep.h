@@ -6,7 +6,7 @@
 #ifndef __GEOMETRY_GDIPIMAGE_H_
 #define __GEOMETRY_GDIPIMAGE_H_
 
-#include "graphwin.h"
+#include "canvaswin.h"
 #include <ocidl.h>
 
 struct GiGdipImageImpl;
@@ -57,12 +57,12 @@ public:
 
     //! 显示图像（旋转角度为90度的整数倍）
     /*!
-        \param graph 图形系统，如果不是 GiGraphGdip 类型则自动取HBITMAP来显示
+        \param graph 图形系统，如果不是 GiCanvasGdip 类型则自动取HBITMAP来显示
         \param rectW 整个图像对应的世界坐标区域
         \param fast 显示方式. true: 快速显示, false: 高精度显示
         \return 是否显示成功
     */
-    bool draw(GiGraphWin& graph, const Box2d& rectW, bool fast = false) const;
+    bool draw(GiCanvasWin& graph, const Box2d& rectW, bool fast = false) const;
 
     //! 创建新的缩略图
     /*!

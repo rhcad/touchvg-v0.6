@@ -180,7 +180,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\graph\gidraw.h"
+				RelativePath="..\..\..\core\include\graph\gicanvas.h"
 				>
 			</File>
 			<File

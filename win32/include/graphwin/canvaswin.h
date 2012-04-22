@@ -1,12 +1,12 @@
-//! \file graphwin.h
-//! \brief 定义图形显示接口类 GiGraphWin
+//! \file canvaswin.h
+//! \brief 定义图形显示接口类 GiCanvasWin
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #ifndef __GEOMETRY_GRAPHWINSYS_WIN_H_
 #define __GEOMETRY_GRAPHWINSYS_WIN_H_
 
-#include <gidraw.h>
+#include <gicanvas.h>
 
 #ifndef _WINDOWS_
 #define WIN32_LEAN_AND_MEAN
@@ -25,14 +25,14 @@ RECT2D giConvertRect(const RECT& rc);
 /*! 本类用于在Windows平台显示各种图形，图元显示原语由派生类实现
     \ingroup GRAPH_INTERFACE
 */
-class GiGraphWin : public GiDrawAdapter
+class GiCanvasWin : public GiCanvas
 {
 public:
     //! 构造函数
-    GiGraphWin(GiGraphics* gs);
+    GiCanvasWin(GiGraphics* gs);
 
     //! 复制指定对象到本对象
-    void copy(const GiGraphWin& src);
+    void copy(const GiCanvasWin& src);
 
     //! 返回坐标系管理对象
     const GiTransform& xf() const;

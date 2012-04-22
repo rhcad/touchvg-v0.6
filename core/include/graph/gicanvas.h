@@ -1,5 +1,5 @@
-//! \file gidraw.h
-//! \brief 定义图形显示适配接口类 GiDrawAdapter
+//! \file gicanvas.h
+//! \brief 定义抽象画布接口类 GiCanvas
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
@@ -12,16 +12,16 @@
 class GiGraphics;
 class GiGraphicsImpl;
 
-//! 图形显示适配接口类，定义图元显示原语
-/*! 图元显示原语由派生类实现，例如采用GDI/GDI+/SVG/PDF等实现；
-    显示图形所用的坐标计算和坐标系转换是在 GiTransform 中定义的。
+//! 抽象画布接口类
+/*! 本类是图形显示适配接口类，定义图元显示原语。
+    图元显示原语由派生类实现，例如采用GDI/GDI+/SVG/PDF等实现。
     \ingroup GRAPH_INTERFACE
 */
-class GiDrawAdapter
+class GiCanvas
 {
 public:
-    GiDrawAdapter() {}
-    virtual ~GiDrawAdapter() {}
+    GiCanvas() {}
+    virtual ~GiCanvas() {}
 
     //! 供GiGraphics调用
     void _init(GiGraphics* owner, GiGraphicsImpl* impl)
@@ -64,7 +64,7 @@ public:
         \return 是否绘制成功
         \see saveCachedBitmap
     */
-    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, 
+    virtual bool drawCachedBitmap2(const GiCanvas* p, 
         float x = 0, float y = 0, bool secondBmp = false) = 0;
 
     //! 保存显示内容到后备缓冲位图

@@ -4,8 +4,8 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "BaseView.h"
-#include <gidrgdip.h>
-#include <gidrgdi.h>
+#include <canvasgdip.h>
+#include <canvasgdi.h>
 #include <mgshapest.h>
 #include <list>
 
@@ -24,16 +24,16 @@ CBaseView::CBaseView() : m_gs(&m_xf)
 	m_crBkColor = GetSysColor(COLOR_WINDOW);
 
 	if (m_bGdip)
-		m_adapter = new GiGraphGdip(&m_gs);
+		m_canvas = new GiCanvasGdip(&m_gs);
 	else
-		m_adapter = new GiGraphGdi(&m_gs);
+		m_canvas = new GiCanvasGdi(&m_gs);
 }
 
 CBaseView::~CBaseView()
 {
     if (m_shapes)
         m_shapes->release();
-	delete m_adapter;
+	delete m_canvas;
 }
 
 BEGIN_MESSAGE_MAP(CBaseView, CWnd)
@@ -84,7 +84,7 @@ void CBaseView::OnPaint()
 
 	dc.SetBkColor(m_crBkColor);				// 为图形系统设置背景色
 
-	if (m_adapter->beginPaint(dc.GetSafeHdc()))	// 准备绘图，使用绘图缓冲
+	if (m_canvas->beginPaint(dc.GetSafeHdc()))	// 准备绘图，使用绘图缓冲
 	{
 		// 显示先前保存的正式图形内容
 		if (m_sizePan.cx != 0 || m_sizePan.cy != 0)
@@ -98,7 +98,7 @@ void CBaseView::OnPaint()
 		}
 		OnDynDraw(&m_gs);				// 显示动态图形
 
-		m_adapter->endPaint();		    // 提交绘图结果到窗口
+		m_canvas->endPaint();		    // 提交绘图结果到窗口
 	}
 }
 
@@ -154,14 +154,14 @@ void CBaseView::OnViewGdip()
 {
 	m_bGdip = !m_bGdip;
 
-	GiGraphWin* adapter = m_adapter;
+	GiCanvasWin* adapter = m_canvas;
 
 	if (m_bGdip)
-		m_adapter = new GiGraphGdip(&m_gs);
+		m_canvas = new GiCanvasGdip(&m_gs);
 	else
-		m_adapter = new GiGraphGdi(&m_gs);
+		m_canvas = new GiCanvasGdi(&m_gs);
 
-    m_adapter->copy(*adapter);
+    m_canvas->copy(*adapter);
 	delete adapter;
 
 	Invalidate();

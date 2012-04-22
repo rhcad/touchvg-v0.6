@@ -1,21 +1,21 @@
-// graphwin.cpp: 实现图形显示接口类 GiGraphWin
+// canvaswin.cpp: 实现图形显示接口类 GiCanvasWin
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
-#include "graphwin.h"
+#include "canvaswin.h"
 #include <_gigraph.h>
 
-GiGraphWin::GiGraphWin(GiGraphics* gs) : m_attribDC(NULL)
+GiCanvasWin::GiCanvasWin(GiGraphics* gs) : m_attribDC(NULL)
 {
-    gs->_setDrawAdapter(this);
+    gs->_setCanvas(this);
 }
 
-const GiTransform& GiGraphWin::xf() const
+const GiTransform& GiCanvasWin::xf() const
 {
     return m_owner->xf();
 }
 
-void GiGraphWin::copy(const GiGraphWin& src)
+void GiCanvasWin::copy(const GiCanvasWin& src)
 {
     if (this != &src)
     {
@@ -87,7 +87,7 @@ bool giPrintSetup(GiTransform& xf, HDC hdc, const Box2d& rectShow, bool bWorldRe
     return ret;
 }
 
-float GiGraphWin::getScreenDpi() const
+float GiCanvasWin::getScreenDpi() const
 {
     static long s_dpi = 0;
 
@@ -104,7 +104,7 @@ float GiGraphWin::getScreenDpi() const
     return (float)s_dpi;
 }
 
-bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
+bool GiCanvasWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
 {
     if (m_owner->isDrawing() || hdc == NULL)
         return false;
@@ -145,7 +145,7 @@ bool GiGraphWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
     return true;
 }
 
-void GiGraphWin::endPaint(bool /*draw*/)
+void GiCanvasWin::endPaint(bool /*draw*/)
 {
     if (m_owner->isDrawing())
     {
@@ -154,17 +154,17 @@ void GiGraphWin::endPaint(bool /*draw*/)
     }
 }
 
-bool GiGraphWin::rawTextOut(HDC hdc, float x, float y, const char* str, int len)
+bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y, const char* str, int len)
 {
     return ::TextOutA(hdc, mgRound(x), mgRound(y), str, len) != 0;
 }
 
-bool GiGraphWin::rawTextOut(HDC hdc, float x, float y, const wchar_t* str, int len)
+bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y, const wchar_t* str, int len)
 {
     return ::TextOutW(hdc, mgRound(x), mgRound(y), str, len) != 0;
 }
 
-bool GiGraphWin::rawTextOut(HDC hdc, float x, float y, 
+bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y, 
                             UInt32 options, const RECT2D& rc, 
                             const char* str, int len, const Int32* pDx)
 {
@@ -173,7 +173,7 @@ bool GiGraphWin::rawTextOut(HDC hdc, float x, float y,
         str, len, reinterpret_cast<const INT *>(pDx)) != 0;
 }
 
-bool GiGraphWin::rawTextOut(HDC hdc, float x, float y, 
+bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y, 
                             UInt32 options, const RECT2D& rc, 
                             const wchar_t* str, int len, const Int32* pDx)
 {

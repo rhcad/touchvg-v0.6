@@ -147,11 +147,11 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\src\graphwin\gidrgdi.cpp"
+				RelativePath="..\..\src\graphwin\canvasgdi.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\graphwin\gidrgdip.cpp"
+				RelativePath="..\..\src\graphwin\canvasgdip.cpp"
 				>
 			</File>
 			<File
@@ -163,7 +163,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\graphwin\graphwin.cpp"
+				RelativePath="..\..\src\graphwin\canvaswin.cpp"
 				>
 			</File>
 		</Filter>
@@ -176,11 +176,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\graphwin\gidrgdi.h"
+				RelativePath="..\..\include\graphwin\canvasgdi.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\graphwin\gidrgdip.h"
+				RelativePath="..\..\include\graphwin\canvasgdip.h"
 				>
 			</File>
 			<File
@@ -192,7 +192,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\graphwin\graphwin.h"
+				RelativePath="..\..\include\graphwin\canvaswin.h"
 				>
 			</File>
 		</Filter>

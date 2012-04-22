@@ -6,7 +6,7 @@
 #ifndef __GEOMETRY_IMAGE_H_
 #define __GEOMETRY_IMAGE_H_
 
-#include "graphwin.h"
+#include "canvaswin.h"
 #include <ocidl.h>
 #include <objidl.h>
 
@@ -26,7 +26,7 @@ enum kOpenImageError
 //! 图像文件打开和显示的辅助类
 /*!
     本类采用 OleLoadPicture 解析图像格式，文件大小不超过16M，
-    如果使用GDI+图形系统 GiGraphGdip ,则建议改用 GiGdipImage 类来打开和显示图形
+    如果使用GDI+图形系统 GiCanvasGdip ,则建议改用 GiGdipImage 类来打开和显示图形
     \ingroup GRAPH_INTERFACE
 */
 class GiImage
@@ -69,7 +69,7 @@ public:
         \param fast 显示方式. true: 快速显示, false: 高精度显示
         \return 是否显示成功
     */
-    bool draw(GiGraphWin& graph, const Box2d& rectW, bool fast = false) const;
+    bool draw(GiCanvasWin& graph, const Box2d& rectW, bool fast = false) const;
 
 private:
     IPicture*   m_picture;

@@ -1,5 +1,5 @@
-//! \file GiGraphIos.h
-//! \brief Define the graphics class for iOS: GiGraphIos
+//! \file GiCanvasIos.h
+//! \brief Define the graphics class for iOS: GiCanvasIos
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
@@ -9,7 +9,7 @@
 #include <gigraph.h>
 #include <CoreGraphics/CGContext.h>
 
-class GiGraphIosImpl;
+class GiCanvasIosImpl;
 
 GiColor giFromCGColor(CGColorRef color);
 
@@ -18,11 +18,11 @@ GiColor giFromCGColor(CGColorRef color);
     \ingroup GRAPH_IOS
     \see giFromCGColor
 */
-class GiGraphIos : public GiDrawAdapter
+class GiCanvasIos : public GiCanvas
 {
 public:
-    GiGraphIos(GiGraphics* gs);
-    virtual ~GiGraphIos();
+    GiCanvasIos(GiGraphics* gs);
+    virtual ~GiCanvasIos();
 
 public:
     const GiTransform& xf() const;
@@ -32,7 +32,7 @@ public:
 
     virtual void clearWnd();
     virtual bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);
-    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, 
+    virtual bool drawCachedBitmap2(const GiCanvas* p, 
         float x = 0, float y = 0, bool secondBmp = false);
     virtual void saveCachedBitmap(bool secondBmp = false);
     virtual bool hasCachedBitmap(bool secondBmp = false) const;
@@ -65,8 +65,8 @@ public:
     virtual bool rawCloseFigure();
 
 private:
-    GiGraphIos();
-    GiGraphIosImpl*   m_draw;
+    GiCanvasIos();
+    GiCanvasIosImpl*   m_draw;
 };
 
 #endif // __GEOMETRY_GRAPHIOS_H_

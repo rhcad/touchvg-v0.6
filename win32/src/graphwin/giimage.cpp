@@ -183,7 +183,7 @@ HBITMAP GiImage::getBitmap() const
     return HBITMAP(h);
 }
 
-bool GiImage::draw(GiGraphWin& graph, const Box2d& rectW, bool fast) const
+bool GiImage::draw(GiCanvasWin& graph, const Box2d& rectW, bool fast) const
 {
     return graph.drawImage(getHmWidth(), getHmHeight(), getBitmap(), rectW, fast);
 }

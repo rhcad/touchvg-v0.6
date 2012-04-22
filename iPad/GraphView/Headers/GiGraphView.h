@@ -5,7 +5,7 @@
 
 #import "GiMotionHandler.h"
 
-class GiGraphIos;
+class GiCanvasIos;
 
 //! 图形视图类
 /*! \ingroup GRAPH_IOS
@@ -15,7 +15,7 @@ class GiGraphIos;
     MgShapes*       _shapes;                //!< 图形列表
     GiTransform*    _xform;                 //!< 坐标系对象
     GiGraphics*     _graph;                 //!< 图形显示对象
-    GiGraphIos*     _adapter;               //!< 显示适配对象
+    GiCanvasIos*    _canvas;                //!< 显示适配对象
     id              _drawingDelegate;       //!< 动态绘图用的委托控制器对象
     
     CGPoint         _firstPoint;            //!< 动态放缩用的开始点
@@ -49,7 +49,7 @@ class GiGraphIos;
 @protected
     GiTransform*    _xform;                 //!< 坐标系对象
     GiGraphics*     _graph;                 //!< 图形显示对象
-    GiGraphIos*     _adapter;               //!< 显示适配对象
+    GiCanvasIos*    _canvas;                //!< 显示适配对象
     id<GiView>      _gview;                 //!< 实际图形视图
     UIResponder*    _drawingDelegate;       //!< 动态绘图用的委托控制器对象
     CGPoint         _pointW;                //!< 实际图形视图的当前点，世界坐标

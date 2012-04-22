@@ -11,8 +11,8 @@ class GiGraphicsImpl
 public:
     enum { CLIP_INFLATE = 10 };
 
-    GiTransform*    xform;          //!< 坐标系管理对象
-    GiDrawAdapter*  draw;           //!< 显示适配器
+    GiTransform*  xform;            //!< 坐标系管理对象
+    GiCanvas*   canvas;             //!< 显示适配器
 
     UInt8       maxPenWidth;        //!< 最大像素线宽
     bool        antiAlias;          //!< 当前是否是反走样模式
@@ -31,7 +31,7 @@ public:
     Box2d       rectDrawMaxM;       //!< 最大剪裁矩形，模型坐标
     Box2d       rectDrawMaxW;       //!< 最大剪裁矩形，世界坐标
 
-    GiGraphicsImpl(GiTransform* x) : xform(x), draw(NULL)
+    GiGraphicsImpl(GiTransform* x) : xform(x), canvas(NULL)
     {
         drawRefcnt = 0;
         drawColors = 0;
@@ -52,8 +52,8 @@ public:
         rectDrawMaxM = rect * xform->displayToModel();
         rectDrawW = rectDrawM * xform->modelToWorld();
         rectDrawMaxW = rectDrawMaxM * xform->modelToWorld();
-        if (draw)
-            draw->clearCachedBitmap();
+        if (canvas)
+            canvas->clearCachedBitmap();
     }
 
 private:

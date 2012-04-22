@@ -5,7 +5,7 @@
 #include "RandomShape.h"
 #include <gigraph.h>
 
-class GiGraphWin;
+class GiCanvasWin;
 
 class CBaseView : public CWnd
 {
@@ -17,7 +17,7 @@ public:
     MgShapes*       m_shapes;
     GiTransform     m_xf;               // 坐标系管理对象
     GiGraphics      m_gs;               // 本窗口的图形系统对象
-	GiGraphWin*		m_adapter;	        // 图形系统对象适配器
+	GiCanvasWin*    m_canvas;	        // 图形系统对象适配器
 
 // Overrides
 	// ClassWizard generated virtual function overrides

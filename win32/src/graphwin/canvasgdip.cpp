@@ -1,8 +1,8 @@
-// gidrgdip.cpp: 实现用GDI+实现的图形显示接口类 GiGraphGdip
+// canvasgdip.cpp: 实现用GDI+实现的图形显示接口类 GiCanvasGdip
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
-#include "gidrgdip.h"
+#include "canvasgdip.h"
 #include <_gigraph.h>
 
 #define ULONG_PTR DWORD
@@ -17,7 +17,7 @@
 //! DrawImpl类的基本数据
 struct GdipDrawImplBase
 {
-    GiGraphGdip*        m_this;             //!< 拥有者
+    GiCanvasGdip*       m_this;             //!< 拥有者
     G::Graphics*        m_gs;               //!< 绘图输出对象
     G::Graphics*        m_memGs;            //!< 缓冲绘图用的输出对象
 
@@ -27,7 +27,7 @@ struct GdipDrawImplBase
     bool                m_penNull;          //!< 当前是否是空画笔
     bool                m_brushNull;        //!< 当前是否是空画刷
 
-    GdipDrawImplBase(GiGraphGdip* owner)
+    GdipDrawImplBase(GiCanvasGdip* owner)
         : m_this(owner), m_gs(NULL), m_memGs(NULL)
     {
     }
@@ -126,8 +126,8 @@ struct GdipDrawImplBase
     }
 };
 
-//! GiGraphGdip的内部实现类
-class GiGraphGdipImpl : public GdipDrawImplBase
+//! GiCanvasGdip的内部实现类
+class GiCanvasGdipImpl : public GdipDrawImplBase
 {
 public:
     GiColor             m_bkColor;          //!< 当前背景色
@@ -137,11 +137,11 @@ public:
     G::CachedBitmap*    m_cachedBmp[2];     //!< 后备缓冲位图
 
 private:
-    static long         c_graphCount;       //!< GiGraphGdip count
+    static long         c_graphCount;       //!< GiCanvasGdip count
     static ULONG_PTR    c_gdipToken;        //!< GDI+ token
 
 public:
-    GiGraphGdipImpl(GiGraphGdip* owner) : GdipDrawImplBase(owner)
+    GiCanvasGdipImpl(GiCanvasGdip* owner) : GdipDrawImplBase(owner)
     {
         m_path = NULL;
         m_pen = NULL;
@@ -169,7 +169,7 @@ public:
         }
     }
 
-    ~GiGraphGdipImpl()
+    ~GiCanvasGdipImpl()
     {
         if (m_cachedBmp[0] != NULL)
         {
@@ -195,25 +195,25 @@ public:
         const Point2d* pxs, const UInt8* types);
 };
 
-long        GiGraphGdipImpl::c_graphCount = 0;
-ULONG_PTR   GiGraphGdipImpl::c_gdipToken = 0;
+long        GiCanvasGdipImpl::c_graphCount = 0;
+ULONG_PTR   GiCanvasGdipImpl::c_gdipToken = 0;
 
-GiGraphGdip::GiGraphGdip(GiGraphics* gs) : GiGraphWin(gs)
+GiCanvasGdip::GiCanvasGdip(GiGraphics* gs) : GiCanvasWin(gs)
 {
-    m_draw = new GiGraphGdipImpl(this);
+    m_draw = new GiCanvasGdipImpl(this);
 }
 
-GiGraphGdip::~GiGraphGdip()
+GiCanvasGdip::~GiCanvasGdip()
 {
     delete m_draw;
 }
 
-bool GiGraphGdip::isBufferedDrawing() const
+bool GiCanvasGdip::isBufferedDrawing() const
 {
     return m_draw->m_gs != m_draw->getDrawGs();
 }
 
-HDC GiGraphGdip::acquireDC()
+HDC GiCanvasGdip::acquireDC()
 {
     HDC hdc = NULL;
     if (m_draw->getDrawGs() != NULL)
@@ -223,7 +223,7 @@ HDC GiGraphGdip::acquireDC()
     return hdc;
 }
 
-void GiGraphGdip::releaseDC(HDC hdc)
+void GiCanvasGdip::releaseDC(HDC hdc)
 {
     if (hdc != NULL && m_draw->getDrawGs() != NULL)
     {
@@ -231,12 +231,12 @@ void GiGraphGdip::releaseDC(HDC hdc)
     }
 }
 
-void* GiGraphGdip::GetGraphics()
+void* GiCanvasGdip::GetGraphics()
 {
     return m_draw->getDrawGs();
 }
 
-void GiGraphGdip::_antiAliasModeChanged(bool antiAlias)
+void GiCanvasGdip::_antiAliasModeChanged(bool antiAlias)
 {
     if (m_draw->getDrawGs() != NULL)
     {
@@ -314,10 +314,10 @@ private:
     HBITMAP m_bmp;
 };
 
-bool GiGraphGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
+bool GiCanvasGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
 {
     bool ret = (NULL == m_draw->m_gs)
-        && GiGraphWin::beginPaint(hdc, attribDC, buffered, overlay);
+        && GiCanvasWin::beginPaint(hdc, attribDC, buffered, overlay);
     if (!ret)
         return false;
 
@@ -332,7 +332,7 @@ bool GiGraphGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     m_draw->m_gs = new G::Graphics(hdc);
     if (m_draw->m_gs == NULL)
     {
-        GiGraphWin::endPaint(false);
+        GiCanvasWin::endPaint(false);
         return false;
     }
 
@@ -348,7 +348,7 @@ bool GiGraphGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     return ret;
 }
 
-void GiGraphGdip::clearWnd()
+void GiCanvasGdip::clearWnd()
 {
     if (!owner()->isPrint() && owner()->isDrawing())
     {
@@ -360,7 +360,7 @@ void GiGraphGdip::clearWnd()
 #define gdipCachedBmp(secondBmp)   \
     m_draw->m_cachedBmp[(secondBmp) ? 1 : 0]
 
-void GiGraphGdip::clearCachedBitmap()
+void GiCanvasGdip::clearCachedBitmap()
 {
     if (gdipCachedBmp(false) != NULL)
     {
@@ -374,7 +374,7 @@ void GiGraphGdip::clearCachedBitmap()
     }
 }
 
-bool GiGraphGdip::drawCachedBitmap(float x, float y, bool secondBmp)
+bool GiCanvasGdip::drawCachedBitmap(float x, float y, bool secondBmp)
 {
     bool ret = false;
     G::CachedBitmap* pBmp = gdipCachedBmp(secondBmp);
@@ -386,14 +386,14 @@ bool GiGraphGdip::drawCachedBitmap(float x, float y, bool secondBmp)
     return ret;
 }
 
-bool GiGraphGdip::drawCachedBitmap2(const GiDrawAdapter* p, 
+bool GiCanvasGdip::drawCachedBitmap2(const GiCanvas* p, 
                                     float x, float y, bool secondBmp)
 {
     bool ret = false;
 
     if (m_draw->getDrawGs() && p && p->getGraphType() == getGraphType())
     {
-        const GiGraphGdip* gs = static_cast<const GiGraphGdip*>(p);
+        const GiCanvasGdip* gs = static_cast<const GiCanvasGdip*>(p);
 
         if (gs->xf().getWidth() == xf().getWidth()
             && gs->xf().getHeight() == xf().getHeight())
@@ -410,7 +410,7 @@ bool GiGraphGdip::drawCachedBitmap2(const GiDrawAdapter* p,
     return ret;
 }
 
-void GiGraphGdip::saveCachedBitmap(bool secondBmp)
+void GiCanvasGdip::saveCachedBitmap(bool secondBmp)
 {
     G::CachedBitmap*& pBmp = gdipCachedBmp(secondBmp);
     if (pBmp != NULL)
@@ -425,12 +425,12 @@ void GiGraphGdip::saveCachedBitmap(bool secondBmp)
     }
 }
 
-bool GiGraphGdip::hasCachedBitmap(bool secondBmp) const
+bool GiCanvasGdip::hasCachedBitmap(bool secondBmp) const
 {
     return gdipCachedBmp(secondBmp) != NULL;
 }
 
-void GiGraphGdip::endPaint(bool draw)
+void GiCanvasGdip::endPaint(bool draw)
 {
     if (owner()->isDrawing())
     {
@@ -472,29 +472,29 @@ void GiGraphGdip::endPaint(bool draw)
             m_draw->m_gs = NULL;
         }
 
-        GiGraphWin::endPaint(draw);
+        GiCanvasWin::endPaint(draw);
     }
 }
 
-void GiGraphGdip::_clipBoxChanged(const RECT2D& clipBox)
+void GiCanvasGdip::_clipBoxChanged(const RECT2D& clipBox)
 {
     m_draw->getDrawGs()->SetClip(G::RectF(clipBox.left, clipBox.top, 
         clipBox.right - clipBox.left, clipBox.bottom - clipBox.top));
 }
 
-GiColor GiGraphGdip::getBkColor() const
+GiColor GiCanvasGdip::getBkColor() const
 {
     return m_draw->m_bkColor;
 }
 
-GiColor GiGraphGdip::setBkColor(const GiColor& color)
+GiColor GiCanvasGdip::setBkColor(const GiColor& color)
 {
     GiColor crOld = m_draw->m_bkColor;
     m_draw->m_bkColor = color;
     return crOld;
 }
 
-GiColor GiGraphGdip::getNearestColor(const GiColor& color) const
+GiColor GiCanvasGdip::getNearestColor(const GiColor& color) const
 {
     GiColor ret = color;
 
@@ -513,7 +513,7 @@ GiColor GiGraphGdip::getNearestColor(const GiColor& color) const
     return ret;
 }
 
-const GiContext* GiGraphGdip::getCurrentContext() const
+const GiContext* GiCanvasGdip::getCurrentContext() const
 {
     return &m_draw->m_context;
 }
@@ -551,7 +551,7 @@ private:
     G::SmoothingMode    m_oldMode;
 };
 
-bool GiGraphGdip::rawLine(const GiContext* ctx, 
+bool GiCanvasGdip::rawLine(const GiContext* ctx, 
                           float x1, float y1, float x2, float y2)
 {
     bool ret = false;
@@ -565,7 +565,7 @@ bool GiGraphGdip::rawLine(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphGdip::rawPolyline(const GiContext* ctx, 
+bool GiCanvasGdip::rawPolyline(const GiContext* ctx, 
                               const Point2d* pxs, int count)
 {
     bool ret = false;
@@ -580,7 +580,7 @@ bool GiGraphGdip::rawPolyline(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphGdip::rawPolyBezier(const GiContext* ctx, 
+bool GiCanvasGdip::rawPolyBezier(const GiContext* ctx, 
                                 const Point2d* pxs, int count)
 {
     bool ret = false;
@@ -595,7 +595,7 @@ bool GiGraphGdip::rawPolyBezier(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphGdip::rawPolygon(const GiContext* ctx, 
+bool GiCanvasGdip::rawPolygon(const GiContext* ctx, 
                              const Point2d* pxs, int count)
 {
     bool ret = false;
@@ -616,7 +616,7 @@ bool GiGraphGdip::rawPolygon(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphGdip::rawRect(const GiContext* ctx, 
+bool GiCanvasGdip::rawRect(const GiContext* ctx, 
                           float x, float y, float w, float h)
 {
     bool ret = false;
@@ -646,7 +646,7 @@ bool GiGraphGdip::rawRect(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphGdip::rawEllipse(const GiContext* ctx, 
+bool GiCanvasGdip::rawEllipse(const GiContext* ctx, 
                              float x, float y, float w, float h)
 {
     bool ret = false;
@@ -676,7 +676,7 @@ bool GiGraphGdip::rawEllipse(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphGdip::rawBeginPath()
+bool GiCanvasGdip::rawBeginPath()
 {
     if (m_draw->m_path != NULL)
     {
@@ -687,7 +687,7 @@ bool GiGraphGdip::rawBeginPath()
     return m_draw->m_path != NULL;
 }
 
-bool GiGraphGdip::rawEndPath(const GiContext* ctx, bool fill)
+bool GiCanvasGdip::rawEndPath(const GiContext* ctx, bool fill)
 {
     bool ret = false;
 
@@ -715,7 +715,7 @@ bool GiGraphGdip::rawEndPath(const GiContext* ctx, bool fill)
     return ret;
 }
 
-bool GiGraphGdip::rawMoveTo(float x, float y)
+bool GiCanvasGdip::rawMoveTo(float x, float y)
 {
     bool ret = false;
 
@@ -729,7 +729,7 @@ bool GiGraphGdip::rawMoveTo(float x, float y)
     return ret;
 }
 
-bool GiGraphGdip::rawLineTo(float x, float y)
+bool GiCanvasGdip::rawLineTo(float x, float y)
 {
     bool ret = false;
 
@@ -743,7 +743,7 @@ bool GiGraphGdip::rawLineTo(float x, float y)
     return ret;
 }
 
-bool GiGraphGdip::rawPolyBezierTo(const Point2d* pxs, int count)
+bool GiCanvasGdip::rawPolyBezierTo(const Point2d* pxs, int count)
 {
     bool ret = false;
     G::PointF pts[4];
@@ -768,7 +768,7 @@ bool GiGraphGdip::rawPolyBezierTo(const Point2d* pxs, int count)
     return ret;
 }
 
-bool GiGraphGdip::rawCloseFigure()
+bool GiCanvasGdip::rawCloseFigure()
 {
     bool ret = false;
     if (m_draw->m_path != NULL)
@@ -779,7 +779,7 @@ bool GiGraphGdip::rawCloseFigure()
     return ret;
 }
 
-bool GiGraphGdip::rawPolyDraw(const GiContext* ctx, int count, 
+bool GiCanvasGdip::rawPolyDraw(const GiContext* ctx, int count, 
                               const Point2d* pxs, const UInt8* types)
 {
     bool ret = false;
@@ -816,7 +816,7 @@ bool GiGraphGdip::rawPolyDraw(const GiContext* ctx, int count,
     return ret;
 }
 
-bool GiGraphGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count, 
+bool GiCanvasGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count, 
                                     const Point2d* pxs, const UInt8* types)
 {
     Point2d pt;
@@ -865,7 +865,7 @@ bool GiGraphGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count,
     return ret;
 }
 
-bool GiGraphGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp, 
+bool GiCanvasGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp, 
                                 long hmWidth, long hmHeight, 
                                 const Box2d& rectW, bool fast)
 {
@@ -912,7 +912,7 @@ bool GiGraphGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp,
     return G::Ok == ret;
 }
 
-bool GiGraphGdip::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap, 
+bool GiCanvasGdip::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap, 
                             const Box2d& rectW, bool fast)
 {
     bool ret = false;
@@ -929,7 +929,7 @@ bool GiGraphGdip::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
     return ret;
 }
 
-bool GiGraphGdip::drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp, 
+bool GiCanvasGdip::drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp, 
                                 const Box2d& rectW, bool fast)
 {
     bool ret = false;

@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiGraphView.h"
-#include <GiGraphIos.h>
+#include <GiCanvasIos.h>
 #include <mgshapes.h>
 
 @implementation GiMagnifierView
@@ -19,7 +19,7 @@
     if (self) {
         _xform = new GiTransform();
         _graph = new GiGraphics(_xform);
-        _adapter = new GiGraphIos(_graph);
+        _canvas = new GiCanvasIos(_graph);
         _xform->setViewScaleRange(1e-5, 50);
         _graph->setMaxPenWidth(4);
         _gview = gview;
@@ -34,9 +34,9 @@
 
 - (void)dealloc
 {
-    if (_adapter) {
-        delete _adapter;
-        _adapter = NULL;
+    if (_canvas) {
+        delete _canvas;
+        _canvas = NULL;
     }
     if (_graph) {
         delete _graph;
@@ -146,14 +146,14 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
-    if (_adapter->beginPaint(context, true, [self isZooming]))
+    if (_canvas->beginPaint(context, true, [self isZooming]))
     {
         if (!_graph->drawCachedBitmap(0, 0)) {
             [self draw:_graph];
             _graph->saveCachedBitmap();
         }
         [self dynDraw:_graph];
-        _adapter->endPaint();
+        _canvas->endPaint();
     }
 }
 

@@ -22,10 +22,10 @@ GiGraphics::~GiGraphics()
     delete m_impl;
 }
 
-void GiGraphics::_setDrawAdapter(GiDrawAdapter* draw)
+void GiGraphics::_setCanvas(GiCanvas* canvas)
 {
-    m_impl->draw = draw;
-    SafeCall(draw, _init(this, m_impl));
+    m_impl->canvas = canvas;
+    SafeCall(m_impl->canvas, _init(this, m_impl));
 }
 
 void GiGraphics::copy(const GiGraphics& src)
@@ -994,141 +994,141 @@ bool GiGraphics::drawPath(const GiContext* ctx, int count,
 
 void GiGraphics::clearWnd()
 {
-    SafeCall(m_impl->draw, clearWnd());
+    SafeCall(m_impl->canvas, clearWnd());
 }
 
 bool GiGraphics::drawCachedBitmap(float x, float y, bool secondBmp)
 {
-    return m_impl->draw && m_impl->draw->drawCachedBitmap(x, y, secondBmp);
+    return m_impl->canvas && m_impl->canvas->drawCachedBitmap(x, y, secondBmp);
 }
 
-bool GiGraphics::drawCachedBitmap2(const GiDrawAdapter* p, float x, float y, bool secondBmp)
+bool GiGraphics::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool secondBmp)
 {
-    return m_impl->draw && m_impl->draw->drawCachedBitmap2(p, x, y, secondBmp);
+    return m_impl->canvas && m_impl->canvas->drawCachedBitmap2(p, x, y, secondBmp);
 }
 
 void GiGraphics::saveCachedBitmap(bool secondBmp)
 {
-    SafeCall(m_impl->draw, saveCachedBitmap(secondBmp));
+    SafeCall(m_impl->canvas, saveCachedBitmap(secondBmp));
 }
 
 bool GiGraphics::hasCachedBitmap(bool secondBmp) const
 {
-    return m_impl->draw && m_impl->draw->hasCachedBitmap(secondBmp);
+    return m_impl->canvas && m_impl->canvas->hasCachedBitmap(secondBmp);
 }
 
 void GiGraphics::clearCachedBitmap()
 {
-    SafeCall(m_impl->draw, clearCachedBitmap());
+    SafeCall(m_impl->canvas, clearCachedBitmap());
 }
 
 bool GiGraphics::isBufferedDrawing() const
 {
-    return m_impl->draw && m_impl->draw->isBufferedDrawing();
+    return m_impl->canvas && m_impl->canvas->isBufferedDrawing();
 }
 
 int GiGraphics::getGraphType() const
 {
-    return m_impl->draw ? m_impl->draw->getGraphType() : 0;
+    return m_impl->canvas ? m_impl->canvas->getGraphType() : 0;
 }
 
 float GiGraphics::getScreenDpi() const
 {
-    return m_impl->draw ? m_impl->draw->getScreenDpi() : 96;
+    return m_impl->canvas ? m_impl->canvas->getScreenDpi() : 96;
 }
 
 GiColor GiGraphics::getBkColor() const
 {
-    return m_impl->draw ? m_impl->draw->getBkColor() : GiColor::Invalid();
+    return m_impl->canvas ? m_impl->canvas->getBkColor() : GiColor::Invalid();
 }
 
 GiColor GiGraphics::setBkColor(const GiColor& color)
 {
-    return m_impl->draw ? m_impl->draw->setBkColor(color) : color;
+    return m_impl->canvas ? m_impl->canvas->setBkColor(color) : color;
 }
 
 GiColor GiGraphics::getNearestColor(const GiColor& color) const
 {
-    return m_impl->draw ? m_impl->draw->getNearestColor(color) : color;
+    return m_impl->canvas ? m_impl->canvas->getNearestColor(color) : color;
 }
 
 const GiContext* GiGraphics::getCurrentContext() const
 {
-    return m_impl->draw ? m_impl->draw->getCurrentContext() : NULL;
+    return m_impl->canvas ? m_impl->canvas->getCurrentContext() : NULL;
 }
 
 void GiGraphics::_clipBoxChanged(const RECT2D& clipBox)
 {
-    SafeCall(m_impl->draw, _clipBoxChanged(clipBox));
+    SafeCall(m_impl->canvas, _clipBoxChanged(clipBox));
 }
 
 void GiGraphics::_antiAliasModeChanged(bool antiAlias)
 {
-    SafeCall(m_impl->draw, _antiAliasModeChanged(antiAlias));
+    SafeCall(m_impl->canvas, _antiAliasModeChanged(antiAlias));
 }
 
 bool GiGraphics::rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2)
 {
-    return m_impl->draw && m_impl->draw->rawLine(ctx, x1, y1, x2, y2);
+    return m_impl->canvas && m_impl->canvas->rawLine(ctx, x1, y1, x2, y2);
 }
 
 bool GiGraphics::rawPolyline(const GiContext* ctx, const Point2d* pxs, int count)
 {
-    return m_impl->draw && m_impl->draw->rawPolyline(ctx, pxs, count);
+    return m_impl->canvas && m_impl->canvas->rawPolyline(ctx, pxs, count);
 }
 
 bool GiGraphics::rawPolyBezier(const GiContext* ctx, const Point2d* pxs, int count)
 {
-    return m_impl->draw && m_impl->draw->rawPolyBezier(ctx, pxs, count);
+    return m_impl->canvas && m_impl->canvas->rawPolyBezier(ctx, pxs, count);
 }
 
 bool GiGraphics::rawPolygon(const GiContext* ctx, const Point2d* pxs, int count)
 {
-    return m_impl->draw && m_impl->draw->rawPolygon(ctx, pxs, count);
+    return m_impl->canvas && m_impl->canvas->rawPolygon(ctx, pxs, count);
 }
 
 bool GiGraphics::rawRect(const GiContext* ctx, float x, float y, float w, float h)
 {
-    return m_impl->draw && m_impl->draw->rawRect(ctx, x, y, w, h);
+    return m_impl->canvas && m_impl->canvas->rawRect(ctx, x, y, w, h);
 }
 
 bool GiGraphics::rawEllipse(const GiContext* ctx, float x, float y, float w, float h)
 {
-    return m_impl->draw && m_impl->draw->rawEllipse(ctx, x, y, w, h);
+    return m_impl->canvas && m_impl->canvas->rawEllipse(ctx, x, y, w, h);
 }
 
 bool GiGraphics::rawPolyDraw(const GiContext* ctx, int count, 
                              const Point2d* pxs, const UInt8* types)
 {
-    return m_impl->draw && m_impl->draw->rawPolyDraw(ctx, count, pxs, types);
+    return m_impl->canvas && m_impl->canvas->rawPolyDraw(ctx, count, pxs, types);
 }
 
 bool GiGraphics::rawBeginPath()
 {
-    return m_impl->draw && m_impl->draw->rawBeginPath();
+    return m_impl->canvas && m_impl->canvas->rawBeginPath();
 }
 
 bool GiGraphics::rawEndPath(const GiContext* ctx, bool fill)
 {
-    return m_impl->draw && m_impl->draw->rawEndPath(ctx, fill);
+    return m_impl->canvas && m_impl->canvas->rawEndPath(ctx, fill);
 }
 
 bool GiGraphics::rawMoveTo(float x, float y)
 {
-    return m_impl->draw && m_impl->draw->rawMoveTo(x, y);
+    return m_impl->canvas && m_impl->canvas->rawMoveTo(x, y);
 }
 
 bool GiGraphics::rawLineTo(float x, float y)
 {
-    return m_impl->draw && m_impl->draw->rawLineTo(x, y);
+    return m_impl->canvas && m_impl->canvas->rawLineTo(x, y);
 }
 
 bool GiGraphics::rawPolyBezierTo(const Point2d* pxs, int count)
 {
-    return m_impl->draw && m_impl->draw->rawPolyBezierTo(pxs, count);
+    return m_impl->canvas && m_impl->canvas->rawPolyBezierTo(pxs, count);
 }
 
 bool GiGraphics::rawCloseFigure()
 {
-    return m_impl->draw && m_impl->draw->rawCloseFigure();
+    return m_impl->canvas && m_impl->canvas->rawCloseFigure();
 }

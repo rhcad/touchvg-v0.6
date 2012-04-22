@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiGraphView.h"
-#include <GiGraphIos.h>
+#include <GiCanvasIos.h>
 #include <mgshapes.h>
 
 @interface GiGraphView(Zooming)
@@ -29,7 +29,7 @@
         _shapes = NULL; // need to set by the subclass
         _xform = NULL;
         _graph = NULL;
-        _adapter = NULL;
+        _canvas = NULL;
         [self afterCreated];
     }
     return self;
@@ -42,7 +42,7 @@
         _shapes = NULL; // need to set by the subclass
         _xform = NULL;
         _graph = NULL;
-        _adapter = NULL;
+        _canvas = NULL;
         [self afterCreated];
     }
     return self;
@@ -50,9 +50,9 @@
 
 - (void)dealloc
 {
-    if (_adapter) {
-        delete _adapter;
-        _adapter = NULL;
+    if (_canvas) {
+        delete _canvas;
+        _canvas = NULL;
     }
     if (_graph) {
         delete _graph;
@@ -68,12 +68,12 @@
 - (void)afterCreated
 {
 	CGFloat scrscale = [[UIScreen mainScreen] scale];
-    GiGraphIos::setScreenDpi(160 * scrscale);
+    GiCanvasIos::setScreenDpi(160 * scrscale);
     
     if (!_xform) {
 		_xform = new GiTransform();
         _graph = new GiGraphics(_xform);
-        _adapter = new GiGraphIos(_graph);
+        _canvas = new GiCanvasIos(_graph);
     }
 
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
@@ -94,7 +94,7 @@
     _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (_adapter->beginPaint(context, true, !!_zooming))
+    if (_canvas->beginPaint(context, true, !!_zooming))
     {
         if (_zooming) {
             [self draw:_graph];
@@ -110,7 +110,7 @@
             }
         }
         
-        _adapter->endPaint();
+        _canvas->endPaint();
     }
 }
 

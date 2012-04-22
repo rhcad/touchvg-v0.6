@@ -1,28 +1,24 @@
-//! \file gidrgdip.h
-//! \brief 定义用GDI+实现的图形显示接口类 GiGraphGdip
+//! \file canvasgdi.h
+//! \brief 定义用GDI实现的图形显示接口类 GiCanvasGdi
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
-#ifndef __GEOMETRY_DRAWGDIP_H_
-#define __GEOMETRY_DRAWGDIP_H_
+#ifndef __GEOMETRY_DRAWGDI_H_
+#define __GEOMETRY_DRAWGDI_H_
 
-#include "graphwin.h"
+#include "canvaswin.h"
 
-class GiGraphGdipImpl;
+class GiCanvasGdiImpl;
 
-//! 用GDI+实现的图形显示接口类
-/*! 本类的 getGraphType() 值为 2
+//! 用GDI实现的图形显示接口类
+/*! 本类的 getGraphType() 值为 1
     \ingroup GRAPH_INTERFACE
 */
-class GiGraphGdip : public GiGraphWin
+class GiCanvasGdi : public GiCanvasWin
 {
 public:
-    GiGraphGdip(GiGraphics* gs);
-    virtual ~GiGraphGdip();
-
-public:
-    //! 返回当前绘图输出对象(Gdiplus::Graphics*)
-    void* GetGraphics();
+    GiCanvasGdi(GiGraphics* gs);
+    virtual ~GiCanvasGdi();
 
 public:
     virtual bool beginPaint(HDC hdc, HDC attribDC = NULL, 
@@ -30,13 +26,13 @@ public:
     virtual void endPaint(bool draw = true);
     virtual void clearWnd();
     virtual bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);
-    virtual bool drawCachedBitmap2(const GiDrawAdapter* p, 
+    virtual bool drawCachedBitmap2(const GiCanvas* p, 
         float x = 0, float y = 0, bool secondBmp = false);
     virtual void saveCachedBitmap(bool secondBmp = false);
     virtual bool hasCachedBitmap(bool secondBmp = false) const;
     virtual void clearCachedBitmap();
     virtual bool isBufferedDrawing() const;
-    virtual int getGraphType() const { return 2; }
+    virtual int getGraphType() const { return 1; }
     virtual HDC acquireDC();
     virtual void releaseDC(HDC hdc);
     
@@ -45,7 +41,7 @@ public:
     virtual GiColor getNearestColor(const GiColor& color) const;
     virtual const GiContext* getCurrentContext() const;
     virtual void _clipBoxChanged(const RECT2D& clipBox);
-    virtual void _antiAliasModeChanged(bool antiAlias);
+    virtual void _antiAliasModeChanged(bool) {}
 
     virtual bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2);
     virtual bool rawPolyline(const GiContext* ctx, const Point2d* pxs, int count);
@@ -65,11 +61,9 @@ public:
     
     virtual bool drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap, 
         const Box2d& rectW, bool fast = false);
-    bool drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp, 
-        const Box2d& rectW, bool fast = false);
 
 private:
-    GiGraphGdipImpl*   m_draw;
+    GiCanvasGdiImpl*   m_draw;
 };
 
-#endif // __GEOMETRY_DRAWGDIP_H_
+#endif // __GEOMETRY_DRAWGDI_H_

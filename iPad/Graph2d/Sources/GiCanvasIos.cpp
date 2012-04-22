@@ -1,8 +1,8 @@
-// GiGraphIos.cpp
+// GiCanvasIos.cpp
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
-#include "GiGraphIos.h"
+#include "GiCanvasIos.h"
 #include <CoreGraphics/CGBitmapContext.h>
 
 static const CGFloat patDash[]      = { 5, 5 };
@@ -16,10 +16,10 @@ static const LPatten lpats[] = {
     { 4, patDashDot }, { 6, dashDotdot }
 };
 
-class GiGraphIosImpl
+class GiCanvasIosImpl
 {
 public:
-    GiGraphIos*     _gs;
+    GiCanvasIos*     _gs;
     CGContextRef    _context;
     CGContextRef    _buffctx;
     GiColor         _bkcolor;
@@ -28,7 +28,7 @@ public:
     CGImageRef      _caches[2];
     static float    _dpi;
 
-    GiGraphIosImpl(GiGraphIos* p) : _gs(p), _context(NULL), _buffctx(NULL)
+    GiCanvasIosImpl(GiCanvasIos* p) : _gs(p), _context(NULL), _buffctx(NULL)
         , _bkcolor(GiColor::White()), _fast(false)
     {
         _caches[0] = NULL;
@@ -113,7 +113,7 @@ public:
     void createBufferBitmap(float width, float height);
 };
 
-float GiGraphIosImpl::_dpi = 160;
+float GiCanvasIosImpl::_dpi = 160;
 
 GiColor giFromCGColor(CGColorRef color)
 {
@@ -135,25 +135,25 @@ GiColor giFromCGColor(CGColorRef color)
                    (UInt8)mgRound(CGColorGetAlpha(color) * 255));
 }
 
-const GiTransform& GiGraphIos::xf() const
+const GiTransform& GiCanvasIos::xf() const
 {
     return m_owner->xf();
 }
 
-GiGraphIos::GiGraphIos(GiGraphics* gs)
+GiCanvasIos::GiCanvasIos(GiGraphics* gs)
 {
-    gs->_setDrawAdapter(this);
-    gs->_xf().setResolution(GiGraphIos::getScreenDpi());
-    m_draw = new GiGraphIosImpl(this);
+    gs->_setCanvas(this);
+    gs->_xf().setResolution(GiCanvasIos::getScreenDpi());
+    m_draw = new GiCanvasIosImpl(this);
 }
 
-GiGraphIos::~GiGraphIos()
+GiCanvasIos::~GiCanvasIos()
 {
     clearCachedBitmap();
     delete m_draw;
 }
 
-bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
+bool GiCanvasIos::beginPaint(CGContextRef context, bool buffered, bool fast)
 {
     if (m_draw->_context || context == NULL)
         return false;
@@ -180,7 +180,7 @@ bool GiGraphIos::beginPaint(CGContextRef context, bool buffered, bool fast)
     return true;
 }
 
-void GiGraphIos::endPaint(bool draw)
+void GiCanvasIos::endPaint(bool draw)
 {
     if (m_owner->isDrawing())
     {
@@ -199,20 +199,20 @@ void GiGraphIos::endPaint(bool draw)
     }
 }
 
-void GiGraphIosImpl::createBufferBitmap(float width, float height)
+void GiCanvasIosImpl::createBufferBitmap(float width, float height)
 {
     _buffctx = CGBitmapContextCreate(NULL, width, height, 8, width * 4,
                                      CGColorSpaceCreateDeviceRGB(), 
                                      kCGImageAlphaPremultipliedLast);
 }
 
-void GiGraphIos::clearWnd()
+void GiCanvasIos::clearWnd()
 {
     CGContextClearRect(m_draw->getContext(), 
         CGRectMake(0, 0, xf().getWidth(), xf().getWidth()));
 }
 
-bool GiGraphIos::drawCachedBitmap(float x, float y, bool secondBmp)
+bool GiCanvasIos::drawCachedBitmap(float x, float y, bool secondBmp)
 {
     CGImageRef img = m_draw->_caches[secondBmp ? 1 : 0];
     bool ret = false;
@@ -226,12 +226,12 @@ bool GiGraphIos::drawCachedBitmap(float x, float y, bool secondBmp)
     return ret;
 }
 
-bool GiGraphIos::drawCachedBitmap2(const GiDrawAdapter* p, float x, float y, bool secondBmp)
+bool GiCanvasIos::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool secondBmp)
 {
     bool ret = false;
     
     if (p && p->getGraphType() == getGraphType()) {
-        GiGraphIos* gs = (GiGraphIos*)p;
+        GiCanvasIos* gs = (GiCanvasIos*)p;
         CGImageRef img = gs->m_draw->_caches[secondBmp ? 1 : 0];
         
         if (m_draw->_context && img) {
@@ -244,7 +244,7 @@ bool GiGraphIos::drawCachedBitmap2(const GiDrawAdapter* p, float x, float y, boo
     return ret;
 }
 
-void GiGraphIos::saveCachedBitmap(bool secondBmp)
+void GiCanvasIos::saveCachedBitmap(bool secondBmp)
 {
     int n = secondBmp ? 1 : 0;
     if (m_draw->_caches[n])
@@ -252,12 +252,12 @@ void GiGraphIos::saveCachedBitmap(bool secondBmp)
     m_draw->_caches[n] = CGBitmapContextCreateImage(m_draw->getContext());
 }
 
-bool GiGraphIos::hasCachedBitmap(bool secondBmp) const
+bool GiCanvasIos::hasCachedBitmap(bool secondBmp) const
 {
     return !!m_draw->_caches[secondBmp ? 1 : 0];
 }
 
-void GiGraphIos::clearCachedBitmap()
+void GiCanvasIos::clearCachedBitmap()
 {
     if (m_draw->_caches[0]) {
         CGImageRelease(m_draw->_caches[0]);
@@ -269,22 +269,22 @@ void GiGraphIos::clearCachedBitmap()
     }
 }
 
-bool GiGraphIos::isBufferedDrawing() const
+bool GiCanvasIos::isBufferedDrawing() const
 {
     return !!m_draw->_buffctx;
 }
 
-void GiGraphIos::setScreenDpi(float dpi)
+void GiCanvasIos::setScreenDpi(float dpi)
 {
-    GiGraphIosImpl::_dpi = dpi;
+    GiCanvasIosImpl::_dpi = dpi;
 }
 
-float GiGraphIos::getScreenDpi() const
+float GiCanvasIos::getScreenDpi() const
 {
-    return GiGraphIosImpl::_dpi;
+    return GiCanvasIosImpl::_dpi;
 }
 
-void GiGraphIos::_clipBoxChanged(const RECT2D& clipBox)
+void GiCanvasIos::_clipBoxChanged(const RECT2D& clipBox)
 {
     if (m_draw->_context)
     {
@@ -295,24 +295,24 @@ void GiGraphIos::_clipBoxChanged(const RECT2D& clipBox)
     }
 }
 
-GiColor GiGraphIos::getBkColor() const
+GiColor GiCanvasIos::getBkColor() const
 {
     return m_draw->_bkcolor;
 }
 
-GiColor GiGraphIos::setBkColor(const GiColor& color)
+GiColor GiCanvasIos::setBkColor(const GiColor& color)
 {
     GiColor old(m_draw->_bkcolor);
     m_draw->_bkcolor = color;
     return old;
 }
 
-GiColor GiGraphIos::getNearestColor(const GiColor& color) const
+GiColor GiCanvasIos::getNearestColor(const GiColor& color) const
 {
     return color;
 }
 
-void GiGraphIos::_antiAliasModeChanged(bool antiAlias)
+void GiCanvasIos::_antiAliasModeChanged(bool antiAlias)
 {
     if (m_draw->_context) {
         antiAlias = !m_draw->_fast && antiAlias;
@@ -321,12 +321,12 @@ void GiGraphIos::_antiAliasModeChanged(bool antiAlias)
     }
 }
 
-const GiContext* GiGraphIos::getCurrentContext() const
+const GiContext* GiCanvasIos::getCurrentContext() const
 {
     return &m_draw->_gictx;
 }
 
-bool GiGraphIos::rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2)
+bool GiCanvasIos::rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2)
 {
     bool ret = m_draw->setPen(ctx);
 
@@ -340,7 +340,7 @@ bool GiGraphIos::rawLine(const GiContext* ctx, float x1, float y1, float x2, flo
     return ret;
 }
 
-bool GiGraphIos::rawPolyline(const GiContext* ctx, const Point2d* pxs, int count)
+bool GiCanvasIos::rawPolyline(const GiContext* ctx, const Point2d* pxs, int count)
 {
     bool ret = m_draw->setPen(ctx) && count > 1;
 
@@ -356,7 +356,7 @@ bool GiGraphIos::rawPolyline(const GiContext* ctx, const Point2d* pxs, int count
     return ret;
 }
 
-bool GiGraphIos::rawPolyBezier(const GiContext* ctx, const Point2d* pxs, int count)
+bool GiCanvasIos::rawPolyBezier(const GiContext* ctx, const Point2d* pxs, int count)
 {
     bool ret = m_draw->setPen(ctx) && count > 1;
 
@@ -376,7 +376,7 @@ bool GiGraphIos::rawPolyBezier(const GiContext* ctx, const Point2d* pxs, int cou
     return ret;
 }
 
-bool GiGraphIos::rawPolygon(const GiContext* ctx, const Point2d* pxs, int count)
+bool GiCanvasIos::rawPolygon(const GiContext* ctx, const Point2d* pxs, int count)
 {
     bool usepen = m_draw->setPen(ctx);
     bool usebrush = m_draw->setBrush(ctx);
@@ -405,7 +405,7 @@ bool GiGraphIos::rawPolygon(const GiContext* ctx, const Point2d* pxs, int count)
     return ret;
 }
 
-bool GiGraphIos::rawRect(const GiContext* ctx, float x, float y, float w, float h)
+bool GiCanvasIos::rawRect(const GiContext* ctx, float x, float y, float w, float h)
 {
     bool ret = false;
 
@@ -423,7 +423,7 @@ bool GiGraphIos::rawRect(const GiContext* ctx, float x, float y, float w, float 
     return ret;
 }
 
-bool GiGraphIos::rawEllipse(const GiContext* ctx, float x, float y, float w, float h)
+bool GiCanvasIos::rawEllipse(const GiContext* ctx, float x, float y, float w, float h)
 {
     bool ret = false;
 
@@ -448,7 +448,7 @@ bool GiGraphIos::rawEllipse(const GiContext* ctx, float x, float y, float w, flo
 #define PT_MOVETO           0x06
 #endif // PT_LINETO
 
-bool GiGraphIos::rawPolyDraw(const GiContext* ctx, 
+bool GiCanvasIos::rawPolyDraw(const GiContext* ctx, 
                              int count, const Point2d* pxs, const UInt8* types)
 {
     CGContextBeginPath(m_draw->getContext());
@@ -498,13 +498,13 @@ bool GiGraphIos::rawPolyDraw(const GiContext* ctx,
     return ret;
 }
 
-bool GiGraphIos::rawBeginPath()
+bool GiCanvasIos::rawBeginPath()
 {
     CGContextBeginPath(m_draw->getContext());
     return true;
 }
 
-bool GiGraphIos::rawEndPath(const GiContext* ctx, bool fill)
+bool GiCanvasIos::rawEndPath(const GiContext* ctx, bool fill)
 {
     bool ret = false;
 
@@ -522,19 +522,19 @@ bool GiGraphIos::rawEndPath(const GiContext* ctx, bool fill)
     return ret;
 }
 
-bool GiGraphIos::rawMoveTo(float x, float y)
+bool GiCanvasIos::rawMoveTo(float x, float y)
 {
     CGContextMoveToPoint(m_draw->getContext(), x, y);
     return true;
 }
 
-bool GiGraphIos::rawLineTo(float x, float y)
+bool GiCanvasIos::rawLineTo(float x, float y)
 {
     CGContextAddLineToPoint(m_draw->getContext(), x, y);
     return true;
 }
 
-bool GiGraphIos::rawPolyBezierTo(const Point2d* pxs, int count)
+bool GiCanvasIos::rawPolyBezierTo(const Point2d* pxs, int count)
 {
     bool ret = pxs && count > 2;
 
@@ -549,7 +549,7 @@ bool GiGraphIos::rawPolyBezierTo(const Point2d* pxs, int count)
     return ret;
 }
 
-bool GiGraphIos::rawCloseFigure()
+bool GiCanvasIos::rawCloseFigure()
 {
     CGContextClosePath(m_draw->getContext());
     return true;
