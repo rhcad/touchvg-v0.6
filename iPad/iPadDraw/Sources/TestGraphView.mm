@@ -24,7 +24,7 @@
         self.backgroundColor = [UIColor colorWithRed:0.9 green:0.95 blue:0.9 alpha:1.0];//clearColor
         _shapes = new MgShapesT<std::vector<MgShape*> >;
         
-        srand((unsigned)time(NULL));
+        RandomParam::init();
         
         RandomParam param;
         param.lineCount = 100;

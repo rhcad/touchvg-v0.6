@@ -2,6 +2,12 @@
 #include <mgshapet.h>
 #include <mgbasicsp.h>
 #include <stdlib.h>
+#include <time.h>
+
+void RandomParam::init()
+{
+    srand((unsigned)time(NULL));
+}
 
 float RandomParam::RandF(float dMin, float dMax)
 {

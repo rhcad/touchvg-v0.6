@@ -10,6 +10,8 @@ struct RandomParam
     long curveCount;
     bool randomLineStyle;
     
+    static void init();
+
     RandomParam() : lineCount(10), arcCount(10), curveCount(10), randomLineStyle(true) {}
 
     long getShapeCount() const { return lineCount + arcCount + curveCount; }

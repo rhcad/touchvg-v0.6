@@ -33,12 +33,7 @@ CSimpViewApp theApp;
 
 BOOL CSimpViewApp::InitInstance()
 {
-	// Standard initialization
-
-	// Change the registry key under which our settings are stored.
-	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
-
-	srand((UINT)time(NULL));
+	RandomParam::init();
 
 	CMDIFrameWnd* pFrame = new CMainFrame;
 	m_pMainWnd = pFrame;
