@@ -9,7 +9,7 @@
 #include <mgcmd.h>
 
 //! 返回线条像素宽度的一半，正数
-float getLineHalfWidth(const MgShape* shape, GiGraphics* gs);
+float mgLineHalfWidth(const MgShape* shape, GiGraphics* gs);
 
 //! 绘图命令基类
 /*! \ingroup GEOM_SHAPE

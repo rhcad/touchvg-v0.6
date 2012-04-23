@@ -4,11 +4,11 @@
 
 #include "mgcurv.h"
 
-#define DEGREE  3           // Cubic Bezier curve
-#define W_DEGREE 5          // Degree of eqn to find roots of
-#define MAXDEPTH 64         // Maximum depth for recursion
+static const int DEGREE     = 3;    // Cubic Bezier curve
+static const int W_DEGREE   = 5;    // Degree of eqn to find roots of
+static const int MAXDEPTH   = 64;   // Maximum depth for recursion
 
-#define SGN(a) (((a)<0) ? -1 : 1)
+static inline int SGN(float a) { return a<0 ? -1 : 1; }
 
 // ConvertToBezierForm :
 //      Given a point and a Bezier curve, generate a 5th-degree

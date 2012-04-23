@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiGraphView.h"
-#include <GiCanvasIos.h>
+#include <canvasios.h>
 #include <gigraph.h>
 #include <mgshapes.h>
 

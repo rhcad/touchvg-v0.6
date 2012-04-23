@@ -198,7 +198,7 @@ static ExtEncoder s_extEncoders[] = {
     { L".emf",  L"image/x-emf" },
     { L".icon", L"image/x-icon" },
 };
-const int s_extCount = sizeof(s_extEncoders)/sizeof(s_extEncoders[0]);
+static const int s_extCount = sizeof(s_extEncoders)/sizeof(s_extEncoders[0]);
 
 struct EncoderItem
 {

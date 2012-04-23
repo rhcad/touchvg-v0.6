@@ -11,7 +11,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-const UINT WM_DELAY_LBUTTONUP = WM_USER + 101;
+static const UINT WM_DELAY_LBUTTONUP = WM_USER + 101;
 
 CDrawShapeView::CDrawShapeView(RandomParam& param)
 	: CScrollShapeView(param), m_cmdID(0)

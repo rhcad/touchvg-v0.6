@@ -1,10 +1,10 @@
-// GiCanvasIos.cpp
+// canvasios.cpp
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
-#include "GiCanvasIos.h"
-#include <CoreGraphics/CGBitmapContext.h>
+#include "canvasios.h"
 #include <gigraph.h>
+#include <CoreGraphics/CGBitmapContext.h>
 
 static const CGFloat patDash[]      = { 5, 5 };
 static const CGFloat patDot[]       = { 1, 3 };

@@ -245,7 +245,7 @@ GEOMAPI bool mgClipLine(Point2d& pt1, Point2d& pt2, const Box2d& box);
 
 //! mgPtInArea 的返回值枚举定义
 //! \see mgPtInArea
-enum PtInAreaRet
+enum kPtInAreaRet
 {
     kPtInArea,          //!< 在多边形内
     kPtOutArea,         //!< 在多边形外
@@ -262,8 +262,8 @@ enum PtInAreaRet
     \param[out] order 返回 kPtAtVertex 时，输出顶点号[0, count-1]；\n
         返回 kPtOnEdge 时，输出边号[0, count-1]；\n为NULL则忽略该参数
     \param[in] tol 容差
-    \return 为枚举定义 PtInAreaRet 的各种值
-    \see PtInAreaRet
+    \return 为枚举定义 kPtInAreaRet 的各种值
+    \see kPtInAreaRet
 */
 GEOMAPI int mgPtInArea(
     const Point2d& pt, Int32 count, const Point2d* vertexs, 

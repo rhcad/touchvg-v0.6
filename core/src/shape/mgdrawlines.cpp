@@ -59,7 +59,7 @@ bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
     
-    float closelen  = sender->view->xform()->displayToModel(20 + getLineHalfWidth(m_shape, sender->view->graph()));
+    float closelen  = sender->view->xform()->displayToModel(20 + mgLineHalfWidth(m_shape, sender->view->graph()));
     float closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
     bool  closed    = (m_step > 2 && closedist < closelen
         && m_shape->shape()->getExtent().width() > closedist * 1.5f
@@ -90,7 +90,7 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
     
-    float closelen  = sender->view->xform()->displayToModel(20 + getLineHalfWidth(m_shape, sender->view->graph()));
+    float closelen  = sender->view->xform()->displayToModel(20 + mgLineHalfWidth(m_shape, sender->view->graph()));
     float closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
     bool  closed    = (m_step > 2 && closedist < closelen
         && m_shape->shape()->getExtent().width() > closedist * 1.5f

@@ -85,7 +85,7 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
     return false;
 }
 
-float getLineHalfWidth(const MgShape* shape, GiGraphics* gs)
+float mgLineHalfWidth(const MgShape* shape, GiGraphics* gs)
 {
     Int16 w = shape->context()->getLineWidth();
     float width = w > 0 ? - gs->calcPenWidth(w) : (float)w;
@@ -124,7 +124,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     if (shapes.size() == 1 && m_handleIndex > 0 && m_showSel) {
         GiContext ctxhd(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
         const MgShape* shape = shapes.front();
-        float radiuspx = mgMin(8.f, 2.f + mgMax(4.f, getLineHalfWidth(shape, gs)));
+        float radiuspx = mgMin(8.f, 2.f + mgMax(4.f, mgLineHalfWidth(shape, gs)));
         float radius = gs->xf().displayToModel(radiuspx);
         float r2 = gs->xf().displayToModel(6.f + radiuspx);
         
