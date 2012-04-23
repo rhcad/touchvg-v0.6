@@ -1,5 +1,5 @@
 #import "SCCalloutView.h"
-#import <GraphView/GiViewController.h>
+#import <GiViewController.h>
 
 extern void giIgnoreTouchesBegan(UIView* sender, CGPoint point);
 

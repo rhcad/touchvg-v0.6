@@ -22,7 +22,7 @@
 #else
 
 #import "SCCalloutView.h"
-#import <GraphView/GiGraphView.h>
+#import <GiGraphView.h>
 
 static const NSUInteger kRedTag         = 0;
 static const NSUInteger kBlueTag        = 1;

@@ -4,6 +4,7 @@
 
 #include "GiCanvasIos.h"
 #include <CoreGraphics/CGBitmapContext.h>
+#include <gigraph.h>
 
 static const CGFloat patDash[]      = { 5, 5 };
 static const CGFloat patDot[]       = { 1, 3 };

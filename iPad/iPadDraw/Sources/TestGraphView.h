@@ -1,7 +1,7 @@
 // TestGraphView.h
 // Created by Zhang Yungui on 2012-3-2.
 
-#import <GraphView/GiGraphView.h>
+#import <GiGraphView.h>
 
 @interface TestGraphView : GiGraphView {
 }

@@ -1,7 +1,7 @@
 // GraphViewController.h
 // Created by Zhang Yungui on 2012-3-2.
 
-#import <GraphView/GiViewController.h>
+#import <GiViewController.h>
 
 #if 0
 #define TEST_SIMPLE_VIEW 1

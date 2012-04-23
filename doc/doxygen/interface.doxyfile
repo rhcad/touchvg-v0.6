@@ -671,11 +671,10 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = ../../core \
-                         ../../win32 \
+INPUT                  = ../../core/include \
+                         ../../win32/include \
                          ../../iPad/Graph2d/Headers \
                          ../../iPad/GraphView/Headers \
-                         ../../iPad/GraphView/Sources \
                          MainPage.txt
 
 # This tag can be used to specify the character encoding of the source files 

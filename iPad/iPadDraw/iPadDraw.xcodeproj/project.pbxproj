@@ -417,6 +417,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				INFOPLIST_FILE = "";
 				PROVISIONING_PROFILE = "";
@@ -441,6 +442,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -463,6 +465,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -484,6 +487,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -510,6 +514,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -531,6 +536,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -557,6 +563,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -578,6 +585,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

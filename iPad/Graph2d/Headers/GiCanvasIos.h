@@ -6,7 +6,7 @@
 #ifndef __GEOMETRY_GRAPHIOS_H_
 #define __GEOMETRY_GRAPHIOS_H_
 
-#include <gigraph.h>
+#include <gicanvas.h>
 #include <CoreGraphics/CGContext.h>
 
 class GiCanvasIosImpl;

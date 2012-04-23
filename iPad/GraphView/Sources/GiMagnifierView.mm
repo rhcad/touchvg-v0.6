@@ -4,6 +4,7 @@
 
 #import "GiGraphView.h"
 #include <GiCanvasIos.h>
+#include <gigraph.h>
 #include <mgshapes.h>
 
 @implementation GiMagnifierView
