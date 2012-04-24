@@ -52,7 +52,7 @@ public:
         \param attribDC 打印预览时为打印机、绘图仪的设备描述表，其余时候为NULL
         \param buffered 是否使用绘图缓冲，打印或打印预览时忽略该参数
         \param overlay 当使用绘图缓冲时, 该参数表示是否在原hdc上的显示内容
-            上进行叠加显示；如果不叠加显示则通常还要调用 clearWnd()
+            上进行叠加显示；如果不叠加显示则通常还要调用 clearWindow()
         \return 是否初始化成功，失败原因可能是先前绘图还未结束，或参数错误
         \see endPaint
     */

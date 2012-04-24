@@ -348,7 +348,7 @@ bool GiCanvasGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay
     return ret;
 }
 
-void GiCanvasGdip::clearWnd()
+void GiCanvasGdip::clearWindow()
 {
     if (!owner()->isPrint() && owner()->isDrawing())
     {
@@ -387,11 +387,11 @@ bool GiCanvasGdip::drawCachedBitmap(float x, float y, bool secondBmp)
 }
 
 bool GiCanvasGdip::drawCachedBitmap2(const GiCanvas* p, 
-                                    float x, float y, bool secondBmp)
+                                     float x, float y, bool secondBmp)
 {
     bool ret = false;
 
-    if (m_draw->getDrawGs() && p && p->getGraphType() == getGraphType())
+    if (m_draw->getDrawGs() && p && p->getCanvasType() == getCanvasType())
     {
         const GiCanvasGdip* gs = static_cast<const GiCanvasGdip*>(p);
 
@@ -552,7 +552,7 @@ private:
 };
 
 bool GiCanvasGdip::rawLine(const GiContext* ctx, 
-                          float x1, float y1, float x2, float y2)
+                           float x1, float y1, float x2, float y2)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -565,8 +565,8 @@ bool GiCanvasGdip::rawLine(const GiContext* ctx,
     return ret;
 }
 
-bool GiCanvasGdip::rawPolyline(const GiContext* ctx, 
-                              const Point2d* pxs, int count)
+bool GiCanvasGdip::rawLines(const GiContext* ctx, 
+                            const Point2d* pxs, int count)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -580,8 +580,8 @@ bool GiCanvasGdip::rawPolyline(const GiContext* ctx,
     return ret;
 }
 
-bool GiCanvasGdip::rawPolyBezier(const GiContext* ctx, 
-                                const Point2d* pxs, int count)
+bool GiCanvasGdip::rawBeziers(const GiContext* ctx, 
+                              const Point2d* pxs, int count)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -596,7 +596,7 @@ bool GiCanvasGdip::rawPolyBezier(const GiContext* ctx,
 }
 
 bool GiCanvasGdip::rawPolygon(const GiContext* ctx, 
-                             const Point2d* pxs, int count)
+                              const Point2d* pxs, int count)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -617,7 +617,7 @@ bool GiCanvasGdip::rawPolygon(const GiContext* ctx,
 }
 
 bool GiCanvasGdip::rawRect(const GiContext* ctx, 
-                          float x, float y, float w, float h)
+                           float x, float y, float w, float h)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -647,7 +647,7 @@ bool GiCanvasGdip::rawRect(const GiContext* ctx,
 }
 
 bool GiCanvasGdip::rawEllipse(const GiContext* ctx, 
-                             float x, float y, float w, float h)
+                              float x, float y, float w, float h)
 {
     bool ret = false;
     TempGdipPen pPen(m_draw, ctx);
@@ -743,7 +743,7 @@ bool GiCanvasGdip::rawLineTo(float x, float y)
     return ret;
 }
 
-bool GiCanvasGdip::rawPolyBezierTo(const Point2d* pxs, int count)
+bool GiCanvasGdip::rawBezierTo(const Point2d* pxs, int count)
 {
     bool ret = false;
     G::PointF pts[4];
@@ -768,7 +768,7 @@ bool GiCanvasGdip::rawPolyBezierTo(const Point2d* pxs, int count)
     return ret;
 }
 
-bool GiCanvasGdip::rawCloseFigure()
+bool GiCanvasGdip::rawClosePath()
 {
     bool ret = false;
     if (m_draw->m_path != NULL)
@@ -779,8 +779,8 @@ bool GiCanvasGdip::rawCloseFigure()
     return ret;
 }
 
-bool GiCanvasGdip::rawPolyDraw(const GiContext* ctx, int count, 
-                              const Point2d* pxs, const UInt8* types)
+bool GiCanvasGdip::rawPath(const GiContext* ctx, int count, 
+                           const Point2d* pxs, const UInt8* types)
 {
     bool ret = false;
     G::GraphicsPath* pPath = NULL;
@@ -817,30 +817,30 @@ bool GiCanvasGdip::rawPolyDraw(const GiContext* ctx, int count,
 }
 
 bool GiCanvasGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count, 
-                                    const Point2d* pxs, const UInt8* types)
+                                     const Point2d* pxs, const UInt8* types)
 {
     Point2d pt;
     bool ret = true;
 
     for (int i = 0; i < count && ret; i++)
     {
-        if (PT_MOVETO == types[i])
+        if (kGiMoveTo == types[i])
         {
             if (pPath->GetPointCount() > 0)
                 ret = (G::Ok == pPath->StartFigure());
             pt = pxs[i];
             ret = (G::Ok == pPath->AddLine(pt.x, pt.y, pt.x, pt.y));
         }
-        else if (PT_LINETO == (types[i] & (PT_LINETO | PT_BEZIERTO)))
+        else if (kGiLineTo == (types[i] & (kGiLineTo | kGiBeziersTo)))
         {
             ret = (G::Ok == pPath->AddLine(pt.x, pt.y, pxs[i].x, pxs[i].y));
             pt = pxs[i];
         }
-        else if (PT_BEZIERTO == (types[i] & (PT_LINETO | PT_BEZIERTO)))
+        else if (kGiBeziersTo == (types[i] & (kGiLineTo | kGiBeziersTo)))
         {
             if (i + 2 >= count
-                || PT_BEZIERTO != (types[i+1] & (PT_LINETO | PT_BEZIERTO))
-                || PT_BEZIERTO != (types[i+2] & (PT_LINETO | PT_BEZIERTO)))
+                || kGiBeziersTo != (types[i+1] & (kGiLineTo | kGiBeziersTo))
+                || kGiBeziersTo != (types[i+2] & (kGiLineTo | kGiBeziersTo)))
             {
                 ret = false;
             }
@@ -856,7 +856,7 @@ bool GiCanvasGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count,
             }
         }
 
-        if (PT_CLOSEFIGURE == (types[i] & PT_CLOSEFIGURE))
+        if (kGiCloseFigure == (types[i] & kGiCloseFigure))
         {
             ret = (G::Ok == pPath->CloseFigure());
         }
@@ -866,8 +866,8 @@ bool GiCanvasGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count,
 }
 
 bool GiCanvasGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp, 
-                                long hmWidth, long hmHeight, 
-                                const Box2d& rectW, bool fast)
+                                 long hmWidth, long hmHeight, 
+                                 const Box2d& rectW, bool fast)
 {
     RECT2D rc, rcDraw, rcFrom;
     Box2d rect;
@@ -913,7 +913,7 @@ bool GiCanvasGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp,
 }
 
 bool GiCanvasGdip::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap, 
-                            const Box2d& rectW, bool fast)
+                             const Box2d& rectW, bool fast)
 {
     bool ret = false;
 
@@ -930,7 +930,7 @@ bool GiCanvasGdip::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
 }
 
 bool GiCanvasGdip::drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp, 
-                                const Box2d& rectW, bool fast)
+                                 const Box2d& rectW, bool fast)
 {
     bool ret = false;
 

@@ -260,7 +260,7 @@ bool GiCanvasGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     return ret;
 }
 
-void GiCanvasGdi::clearWnd()
+void GiCanvasGdi::clearWindow()
 {
     if (!m_owner->isPrint() && m_owner->isDrawing())
     {
@@ -287,7 +287,7 @@ bool GiCanvasGdi::drawCachedBitmap(float x, float y, bool secondBmp)
 
 bool GiCanvasGdi::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool secondBmp)
 {
-    if (p && p->getGraphType() == getGraphType())
+    if (p && p->getCanvasType() == getCanvasType())
     {
         const GiCanvasGdi* gs = static_cast<const GiCanvasGdi*>(p);
         return gs->xf().getWidth() == xf().getWidth()
@@ -458,7 +458,7 @@ const GiContext* GiCanvasGdi::getCurrentContext() const
 }
 
 bool GiCanvasGdi::rawLine(const GiContext* ctx, 
-                         float x1, float y1, float x2, float y2)
+                          float x1, float y1, float x2, float y2)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
@@ -469,8 +469,8 @@ bool GiCanvasGdi::rawLine(const GiContext* ctx,
     return ret ? true : false;
 }
 
-bool GiCanvasGdi::rawPolyline(const GiContext* ctx, 
-                             const Point2d* pxs, int count)
+bool GiCanvasGdi::rawLines(const GiContext* ctx, 
+                           const Point2d* pxs, int count)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
@@ -488,8 +488,8 @@ bool GiCanvasGdi::rawPolyline(const GiContext* ctx,
     return ret;
 }
 
-bool GiCanvasGdi::rawPolyBezier(const GiContext* ctx, 
-                               const Point2d* pxs, int count)
+bool GiCanvasGdi::rawBeziers(const GiContext* ctx, 
+                             const Point2d* pxs, int count)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
@@ -508,7 +508,7 @@ bool GiCanvasGdi::rawPolyBezier(const GiContext* ctx,
 }
 
 bool GiCanvasGdi::rawPolygon(const GiContext* ctx, 
-                            const Point2d* pxs, int count)
+                             const Point2d* pxs, int count)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
@@ -528,7 +528,7 @@ bool GiCanvasGdi::rawPolygon(const GiContext* ctx,
 }
 
 bool GiCanvasGdi::rawRect(const GiContext* ctx, 
-                         float x, float y, float w, float h)
+                          float x, float y, float w, float h)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
@@ -538,7 +538,7 @@ bool GiCanvasGdi::rawRect(const GiContext* ctx,
 }
 
 bool GiCanvasGdi::rawEllipse(const GiContext* ctx, 
-                            float x, float y, float w, float h)
+                             float x, float y, float w, float h)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
@@ -583,7 +583,7 @@ bool GiCanvasGdi::rawLineTo(float x, float y)
     return ::LineTo(m_draw->getDrawDC(), mgRound(x), mgRound(y)) ? true : false;
 }
 
-bool GiCanvasGdi::rawPolyBezierTo(const Point2d* pxs, int count)
+bool GiCanvasGdi::rawBezierTo(const Point2d* pxs, int count)
 {
     bool ret = false;
 
@@ -599,7 +599,7 @@ bool GiCanvasGdi::rawPolyBezierTo(const Point2d* pxs, int count)
     return ret;
 }
 
-bool GiCanvasGdi::rawCloseFigure()
+bool GiCanvasGdi::rawClosePath()
 {
     return ::CloseFigure(m_draw->getDrawDC()) ? true : false;
 }
@@ -610,17 +610,17 @@ static BOOL PolyDraw98(HDC hdc, const Point2d *pxs, const BYTE *types, int n)
 
     for (int i = 0; i < n; i++)
     {
-        switch (types[i] & ~PT_CLOSEFIGURE)
+        switch (types[i] & ~kGiCloseFigure)
         {
-        case PT_MOVETO:
+        case kGiMoveTo:
             ::MoveToEx(hdc, mgRound(pxs[i].x), mgRound(pxs[i].y), NULL);
             break;
 
-        case PT_LINETO:
+        case kGiLineTo:
             ::LineTo(hdc, mgRound(pxs[i].x), mgRound(pxs[i].y));
             break;
 
-        case PT_BEZIERTO:
+        case kGiBeziersTo:
             if (i + 2 >= n)
                 return FALSE;
             for (int j = 0; j < 3; j++)
@@ -632,15 +632,15 @@ static BOOL PolyDraw98(HDC hdc, const Point2d *pxs, const BYTE *types, int n)
         default:
             return FALSE;
         }
-        if (types[i] & PT_CLOSEFIGURE)
+        if (types[i] & kGiCloseFigure)
             ::CloseFigure(hdc);
     }
 
     return TRUE;
 }
 
-bool GiCanvasGdi::rawPolyDraw(const GiContext* ctx, int count, 
-                             const Point2d* pxs, const UInt8* types)
+bool GiCanvasGdi::rawPath(const GiContext* ctx, int count, 
+                          const Point2d* pxs, const UInt8* types)
 {
     HDC hdc = m_draw->getDrawDC();
     KGDIObject pen (hdc, m_draw->createPen(ctx), false);
@@ -693,7 +693,7 @@ bool GiCanvasGdi::rawPolyDraw(const GiContext* ctx, int count,
 }
 
 bool GiCanvasGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap, 
-                           const Box2d& rectW, bool fast)
+                            const Box2d& rectW, bool fast)
 {
     BOOL ret = FALSE;
     HDC hdc = m_draw->getDrawDC();

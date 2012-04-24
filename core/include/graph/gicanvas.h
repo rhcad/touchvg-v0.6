@@ -41,7 +41,7 @@ public:
     /*! 用背景色填充全部显示区域。打印或打印预览时调用无效。
         \see getBkColor
     */
-    virtual void clearWnd() = 0;
+    virtual void clearWindow() = 0;
 
     //! 显示后备缓冲位图
     /*! 后备缓冲位图是由函数 saveCachedBitmap 保存创建的
@@ -54,10 +54,10 @@ public:
     virtual bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false) = 0;
 
     //! 显示后备缓冲位图
-    /*! 将另一个图形系统的后备缓冲位图显示到本对象的显示设备上，
+    /*! 将另一个画布的后备缓冲位图显示到本对象的显示设备上，
         后备缓冲位图是由函数 saveCachedBitmap 保存创建的。\n
-        另一个图形系统的作用是后台显示，其本身并不显示图形到设备上，即调用了 endPaint(false)
-        \param p 另一个图形系统，该对象有后备缓冲位图
+        另一个画布的作用是后台显示，其本身并不显示图形到设备上，即调用了 endPaint(false)
+        \param p 另一个画布，该对象有后备缓冲位图
         \param x 显示偏移X，像素
         \param y 显示偏移Y，像素
         \param secondBmp 使用是否为第二个后备缓冲位图
@@ -94,8 +94,8 @@ public:
     */
     virtual bool isBufferedDrawing() const = 0;
 
-    //! 返回图形系统类型
-    virtual int getGraphType() const = 0;
+    //! 返回画布类型
+    virtual int getCanvasType() const = 0;
 
     //! 返回屏幕分辨率DPI, 常量
     virtual float getScreenDpi() const = 0;
@@ -137,10 +137,10 @@ public:
     virtual bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2) = 0;
 
     //! 绘制折线的原语函数，像素坐标，不剪裁
-    virtual bool rawPolyline(const GiContext* ctx, const Point2d* pxs, int count) = 0;
+    virtual bool rawLines(const GiContext* ctx, const Point2d* pxs, int count) = 0;
 
     //! 绘制多条贝塞尔曲线的原语函数，像素坐标，不剪裁
-    virtual bool rawPolyBezier(const GiContext* ctx, const Point2d* pxs, int count) = 0;
+    virtual bool rawBeziers(const GiContext* ctx, const Point2d* pxs, int count) = 0;
 
     //! 绘制多边形的原语函数，像素坐标，不剪裁
     virtual bool rawPolygon(const GiContext* ctx, const Point2d* pxs, int count) = 0;
@@ -152,7 +152,7 @@ public:
     virtual bool rawEllipse(const GiContext* ctx, float x, float y, float w, float h) = 0;
 
     //! 绘制多样线的原语函数，像素坐标，不剪裁
-    virtual bool rawPolyDraw(const GiContext* ctx, 
+    virtual bool rawPath(const GiContext* ctx, 
         int count, const Point2d* pxs, const UInt8* types) = 0;
 
 
@@ -169,10 +169,10 @@ public:
     virtual bool rawLineTo(float x, float y) = 0;
 
     //! 在当前路径中添加画贝塞尔曲线指令的原语函数
-    virtual bool rawPolyBezierTo(const Point2d* pxs, int count) = 0;
+    virtual bool rawBezierTo(const Point2d* pxs, int count) = 0;
 
     //! 在当前路径中添加闭合指令的原语函数
-    virtual bool rawCloseFigure() = 0;
+    virtual bool rawClosePath() = 0;
 
 protected:
     GiGraphics*     m_owner;        //!< 图形系统对象，拥有者

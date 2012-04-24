@@ -18,4 +18,14 @@ inline long giInterlockedIncrement(long *p) { return InterlockedIncrement(p); }
 inline long giInterlockedDecrement(long *p) { return InterlockedDecrement(p); }
 #endif
 
+//! 矢量路径节点类型
+/*! \see GiPath
+*/
+enum kGiPathNode {
+    kGiCloseFigure = 1,
+    kGiLineTo = 2,
+    kGiBeziersTo = 4,
+    kGiMoveTo = 6,
+};
+
 #endif // __GEOMETRY_GIDEF_H_

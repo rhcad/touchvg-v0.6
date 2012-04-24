@@ -1535,8 +1535,6 @@ PREDEFINED             = _WINDOWS \
                          _WIN32 \
                          _UNICODE \
                          UNICODE \
-                         GetRValue \
-                         PT_LINETO \
                          GEOMAPI \
                          interface=struct \
                          __declspec(dllimport)= \

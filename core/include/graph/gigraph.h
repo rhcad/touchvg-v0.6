@@ -303,7 +303,7 @@ public:
         \param ctx 绘图参数，为NULL时取为上一个绘图参数
         \param count 点数，points和types的元素个数
         \param points 端点和控制点的数组
-        \param types points中每一点的含义，见MSDN中PolyDraw的说明，值为PT_MOVETO等
+        \param types points中每一点的含义，由 kGiPathNode 值组成
         \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
         \see GiPath::getPoints
@@ -325,7 +325,7 @@ public:
     void _endPaint();
 
 public:
-    void clearWnd();
+    void clearWindow();
     bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);
     bool drawCachedBitmap2(const GiCanvas* p, 
         float x = 0, float y = 0, bool secondBmp = false);
@@ -333,26 +333,26 @@ public:
     bool hasCachedBitmap(bool secondBmp = false) const;
     void clearCachedBitmap();
     bool isBufferedDrawing() const;
-    int getGraphType() const;
+    int getCanvasType() const;
     float getScreenDpi() const;
     GiColor getBkColor() const;
     GiColor setBkColor(const GiColor& color);
     GiColor getNearestColor(const GiColor& color) const;
     const GiContext* getCurrentContext() const;
     bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2);
-    bool rawPolyline(const GiContext* ctx, const Point2d* pxs, int count);
-    bool rawPolyBezier(const GiContext* ctx, const Point2d* pxs, int count);
+    bool rawLines(const GiContext* ctx, const Point2d* pxs, int count);
+    bool rawBeziers(const GiContext* ctx, const Point2d* pxs, int count);
     bool rawPolygon(const GiContext* ctx, const Point2d* pxs, int count);
     bool rawRect(const GiContext* ctx, float x, float y, float w, float h);
     bool rawEllipse(const GiContext* ctx, float x, float y, float w, float h);
-    bool rawPolyDraw(const GiContext* ctx, 
+    bool rawPath(const GiContext* ctx, 
         int count, const Point2d* pxs, const UInt8* types);
     bool rawBeginPath();
     bool rawEndPath(const GiContext* ctx, bool fill);
     bool rawMoveTo(float x, float y);
     bool rawLineTo(float x, float y);
-    bool rawPolyBezierTo(const Point2d* pxs, int count);
-    bool rawCloseFigure();
+    bool rawBezierTo(const Point2d* pxs, int count);
+    bool rawClosePath();
 
 private:
     void _clipBoxChanged(const RECT2D& clipBox);

@@ -206,7 +206,7 @@ void GiCanvasIosImpl::createBufferBitmap(float width, float height)
                                      kCGImageAlphaPremultipliedLast);
 }
 
-void GiCanvasIos::clearWnd()
+void GiCanvasIos::clearWindow()
 {
     CGContextClearRect(m_draw->getContext(), 
         CGRectMake(0, 0, xf().getWidth(), xf().getWidth()));
@@ -230,7 +230,7 @@ bool GiCanvasIos::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool se
 {
     bool ret = false;
     
-    if (p && p->getGraphType() == getGraphType()) {
+    if (p && p->getCanvasType() == getCanvasType()) {
         GiCanvasIos* gs = (GiCanvasIos*)p;
         CGImageRef img = gs->m_draw->_caches[secondBmp ? 1 : 0];
         
@@ -340,7 +340,7 @@ bool GiCanvasIos::rawLine(const GiContext* ctx, float x1, float y1, float x2, fl
     return ret;
 }
 
-bool GiCanvasIos::rawPolyline(const GiContext* ctx, const Point2d* pxs, int count)
+bool GiCanvasIos::rawLines(const GiContext* ctx, const Point2d* pxs, int count)
 {
     bool ret = m_draw->setPen(ctx) && count > 1;
 
@@ -356,7 +356,7 @@ bool GiCanvasIos::rawPolyline(const GiContext* ctx, const Point2d* pxs, int coun
     return ret;
 }
 
-bool GiCanvasIos::rawPolyBezier(const GiContext* ctx, const Point2d* pxs, int count)
+bool GiCanvasIos::rawBeziers(const GiContext* ctx, const Point2d* pxs, int count)
 {
     bool ret = m_draw->setPen(ctx) && count > 1;
 
@@ -441,31 +441,24 @@ bool GiCanvasIos::rawEllipse(const GiContext* ctx, float x, float y, float w, fl
     return ret;
 }
 
-#ifndef PT_LINETO
-#define PT_CLOSEFIGURE      0x01
-#define PT_LINETO           0x02
-#define PT_BEZIERTO         0x04
-#define PT_MOVETO           0x06
-#endif // PT_LINETO
-
-bool GiCanvasIos::rawPolyDraw(const GiContext* ctx, 
-                             int count, const Point2d* pxs, const UInt8* types)
+bool GiCanvasIos::rawPath(const GiContext* ctx, 
+                          int count, const Point2d* pxs, const UInt8* types)
 {
     CGContextBeginPath(m_draw->getContext());
     
     for (int i = 0; i < count; i++)
     {
-        switch (types[i] & ~PT_CLOSEFIGURE)
+        switch (types[i] & ~kGiCloseFigure)
         {
-        case PT_MOVETO:
+        case kGiMoveTo:
             CGContextMoveToPoint(m_draw->getContext(), pxs[i].x, pxs[i].y);
             break;
 
-        case PT_LINETO:
+        case kGiLineTo:
             CGContextAddLineToPoint(m_draw->getContext(), pxs[i].x, pxs[i].y);
             break;
 
-        case PT_BEZIERTO:
+        case kGiBeziersTo:
             if (i + 2 >= count)
                 return false;
             CGContextAddCurveToPoint(m_draw->getContext(), 
@@ -478,7 +471,7 @@ bool GiCanvasIos::rawPolyDraw(const GiContext* ctx,
         default:
             return false;
         }
-        if (types[i] & PT_CLOSEFIGURE)
+        if (types[i] & kGiCloseFigure)
             CGContextClosePath(m_draw->getContext());
     }
 
@@ -534,7 +527,7 @@ bool GiCanvasIos::rawLineTo(float x, float y)
     return true;
 }
 
-bool GiCanvasIos::rawPolyBezierTo(const Point2d* pxs, int count)
+bool GiCanvasIos::rawBezierTo(const Point2d* pxs, int count)
 {
     bool ret = pxs && count > 2;
 
@@ -549,7 +542,7 @@ bool GiCanvasIos::rawPolyBezierTo(const Point2d* pxs, int count)
     return ret;
 }
 
-bool GiCanvasIos::rawCloseFigure()
+bool GiCanvasIos::rawClosePath()
 {
     CGContextClosePath(m_draw->getContext());
     return true;

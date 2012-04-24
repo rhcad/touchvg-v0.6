@@ -88,11 +88,11 @@ void CBaseView::OnPaint()
 	{
 		// 显示先前保存的正式图形内容
 		if (m_sizePan.cx != 0 || m_sizePan.cy != 0)
-			m_gs.clearWnd();			// 清除背景
+			m_gs.clearWindow();			// 清除背景
 		if (!m_gs.drawCachedBitmap((float)m_sizePan.cx, (float)m_sizePan.cy))
 		{
 			if (0 == m_sizePan.cx && 0 == m_sizePan.cy)
-				m_gs.clearWnd();		// 清除背景
+				m_gs.clearWindow();		// 清除背景
 			OnDraw(&m_gs);				// 显示正式图形
 			m_gs.saveCachedBitmap();	// 保存正式图形内容
 		}

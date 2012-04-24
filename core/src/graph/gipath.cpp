@@ -14,19 +14,12 @@ template<class T> inline static int getSize(T& arr)
     return static_cast<int>(arr.size());
 }
 
-#ifndef PT_LINETO
-#define PT_CLOSEFIGURE      0x01
-#define PT_LINETO           0x02
-#define PT_BEZIERTO         0x04
-#define PT_MOVETO           0x06
-#endif // PT_LINETO
-
 //! GiPath的内部数据类
 class GiPathImpl
 {
 public:
     std::vector<Point2d>    points;         //!< 每个节点的坐标
-    std::vector<UInt8>      types;          //!< 每个节点的类型, PT_LINETO 等
+    std::vector<UInt8>      types;          //!< 每个节点的类型, kGiLineTo 等
     int                     beginIndex;     //!< 新图形的起始节点(即MOVETO节点)的序号
 };
 
@@ -129,7 +122,7 @@ void GiPath::startFigure()
 bool GiPath::moveTo(const Point2d& point)
 {
     m_data->points.push_back(point);
-    m_data->types.push_back(PT_MOVETO);
+    m_data->types.push_back(kGiMoveTo);
     m_data->beginIndex = getSize(m_data->points) - 1;
 
     return true;
@@ -141,7 +134,7 @@ bool GiPath::lineTo(const Point2d& point)
     if (ret)
     {
         m_data->points.push_back(point);
-        m_data->types.push_back(PT_LINETO);
+        m_data->types.push_back(kGiLineTo);
     }
 
     return ret;
@@ -155,7 +148,7 @@ bool GiPath::linesTo(int count, const Point2d* points)
         for (int i = 0; i < count; i++)
         {
             m_data->points.push_back(points[i]);
-            m_data->types.push_back(PT_LINETO);
+            m_data->types.push_back(kGiLineTo);
         }
     }
 
@@ -171,7 +164,7 @@ bool GiPath::beziersTo(int count, const Point2d* points)
         for (int i = 0; i < count; i++)
         {
             m_data->points.push_back(points[i]);
-            m_data->types.push_back(PT_BEZIERTO);
+            m_data->types.push_back(kGiBeziersTo);
         }
     }
 
@@ -202,7 +195,7 @@ bool GiPath::arcTo(const Point2d& point)
                 for (int i = 0; i < n; i++)
                 {
                     m_data->points.push_back(pts[i]);
-                    m_data->types.push_back(PT_BEZIERTO);
+                    m_data->types.push_back(kGiBeziersTo);
                 }
             }
         }
@@ -234,7 +227,7 @@ bool GiPath::arcTo(const Point2d& point, const Point2d& end)
                 for (int i = 0; i < n; i++)
                 {
                     m_data->points.push_back(pts[i]);
-                    m_data->types.push_back(PT_BEZIERTO);
+                    m_data->types.push_back(kGiBeziersTo);
                 }
             }
         }
@@ -252,9 +245,9 @@ bool GiPath::closeFigure()
         && m_data->points.size() == m_data->types.size())
     {
         UInt8 type = m_data->types[m_data->types.size() - 1];
-        if (type == PT_LINETO || type == PT_BEZIERTO)
+        if (type == kGiLineTo || type == kGiBeziersTo)
         {
-            m_data->types[m_data->types.size() - 1] |= PT_CLOSEFIGURE;
+            m_data->types[m_data->types.size() - 1] |= kGiCloseFigure;
             m_data->beginIndex = -1;
             ret = true;
         }
