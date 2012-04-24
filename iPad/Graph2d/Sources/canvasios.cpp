@@ -3,7 +3,6 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #include "canvasios.h"
-#include <gigraph.h>
 #include <CoreGraphics/CGBitmapContext.h>
 
 static const CGFloat patDash[]      = { 5, 5 };

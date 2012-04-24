@@ -14,10 +14,10 @@ class GiGraphics;
 */
 @protocol GiView
 
-- (MgShapes*)getShapes;                 //!< 得到图形列表
-- (GiTransform*)getXform;               //!< 得到坐标系对象
-- (GiGraphics*)getGraph;                //!< 得到图形显示对象
-- (UIView*)getOwnerView;                //!< 得到视图对象
+- (MgShapes*)shapes;                    //!< 得到图形列表
+- (GiTransform*)xform;                  //!< 得到坐标系对象
+- (GiGraphics*)graph;                   //!< 得到图形显示对象
+- (UIView*)ownerView;                   //!< 得到视图对象
 
 - (void)setShapes:(MgShapes*)data;      //!< 设置图形列表
 - (void)setAnimating:(BOOL)animated;    //!< 翻转或动画显示时通知视图

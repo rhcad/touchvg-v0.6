@@ -3,8 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiGraphView.h"
-#include <canvasios.h>
-#include <gigraph.h>
+#include <graphios.h>
 #include <mgshapes.h>
 
 @interface GiGraphView(Zooming)
@@ -17,9 +16,6 @@
 
 @implementation GiGraphView
 
-@synthesize shapes = _shapes;
-@synthesize xform = _xform;
-@synthesize graph = _graph;
 @synthesize enableZoom = _enableZoom;
 @synthesize zooming = _zooming;
 
@@ -28,9 +24,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         _shapes = NULL; // need to set by the subclass
-        _xform = NULL;
         _graph = NULL;
-        _canvas = NULL;
         [self afterCreated];
     }
     return self;
@@ -41,9 +35,7 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         _shapes = NULL; // need to set by the subclass
-        _xform = NULL;
         _graph = NULL;
-        _canvas = NULL;
         [self afterCreated];
     }
     return self;
@@ -51,17 +43,9 @@
 
 - (void)dealloc
 {
-    if (_canvas) {
-        delete _canvas;
-        _canvas = NULL;
-    }
     if (_graph) {
         delete _graph;
         _graph = NULL;
-    }
-    if (_xform) {
-        delete _xform;
-        _xform = NULL;
     }
     [super dealloc];
 }
@@ -71,15 +55,13 @@
 	CGFloat scrscale = [[UIScreen mainScreen] scale];
     GiCanvasIos::setScreenDpi(160 * scrscale);
     
-    if (!_xform) {
-		_xform = new GiTransform();
-        _graph = new GiGraphics(_xform);
-        _canvas = new GiCanvasIos(_graph);
+    if (!_graph) {
+        _graph = new GiGraphIos();
     }
 
-    _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    _xform->setViewScaleRange(0.01, 20.0);
-    _xform->zoomTo(Point2d(0,0));
+    _graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    _graph->xf.setViewScaleRange(0.01, 20.0);
+    _graph->xf.zoomTo(Point2d(0,0));
     
     self.contentMode = UIViewContentModeRedraw;
     _drawingDelegate = Nil;
@@ -91,27 +73,28 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
+    GiGraphics& gs = _graph->gs;
     
-    _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
+    _graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    gs.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (_canvas->beginPaint(context, true, !!_zooming))
+    if (_graph->canvas.beginPaint(context, true, !!_zooming))
     {
         if (_zooming) {
-            [self draw:_graph];
+            [self draw:&gs];
         }
         else {
-            if (!_graph->drawCachedBitmap(0, 0)) {
-                [self draw:_graph];
-                _graph->saveCachedBitmap();
+            if (!gs.drawCachedBitmap(0, 0)) {
+                [self draw:&gs];
+                gs.saveCachedBitmap();
             }
-            [self dynDraw:_graph];
+            [self dynDraw:&gs];
             if ([_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
                 [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
             }
         }
         
-        _canvas->endPaint();
+        _graph->canvas.endPaint();
     }
 }
 
@@ -121,22 +104,22 @@
         _shapes->draw(*gs);
 }
 
-- (MgShapes*)getShapes
+- (MgShapes*)shapes
 {
     return _shapes;
 }
 
-- (GiTransform*)getXform
+- (GiTransform*)xform
 {
-    return _xform;
+    return &_graph->xf;
 }
 
-- (GiGraphics*)getGraph
+- (GiGraphics*)graph
 {
-    return _graph;
+    return &_graph->gs;
 }
 
-- (UIView*)getOwnerView {
+- (UIView*)ownerView {
     return self;
 }
 
@@ -161,7 +144,7 @@
 
 - (void)regen
 {
-    _graph->clearCachedBitmap();
+    _graph->gs.clearCachedBitmap();
     [self setNeedsDisplay];
 }
 
@@ -206,7 +189,7 @@
 {
     if (sender.state == UIGestureRecognizerStateBegan) {
         Point2d centerW;
-        _xform->getZoomValue(centerW, _lastViewScale);
+        _graph->xf.getZoomValue(centerW, _lastViewScale);
         _lastCenterW = CGPointMake(centerW.x, centerW.y);
         
         _firstPoint = [sender locationInView:self];
@@ -220,11 +203,11 @@
     }
     
     Point2d at (_firstPoint.x, _firstPoint.y );
-    _xform->zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);
-    _xform->zoomByFactor(sender.scale - 1, &at);
+    _graph->xf.zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);
+    _graph->xf.zoomByFactor(sender.scale - 1, &at);
     
     CGPoint point = ([sender numberOfTouches] < 2) ? _lastPoint : [sender locationInView:self];
-    _xform->zoomPan(point.x - _firstPoint.x, point.y - _firstPoint.y);
+    _graph->xf.zoomPan(point.x - _firstPoint.x, point.y - _firstPoint.y);
     _lastPoint = point;
     
     if ([_drawingDelegate respondsToSelector:@selector(afterZoomed:)]) {
@@ -238,7 +221,7 @@
 {
     if (sender.state == UIGestureRecognizerStateBegan) {
         Point2d centerW;
-        _xform->getZoomValue(centerW, _lastViewScale);
+        _graph->xf.getZoomValue(centerW, _lastViewScale);
         _lastCenterW = CGPointMake(centerW.x, centerW.y);
         _zooming = YES;
     }
@@ -248,8 +231,8 @@
     }
     
     CGPoint translation = [sender translationInView:self];
-    _xform->zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);
-    _xform->zoomPan(translation.x, translation.y);
+    _graph->xf.zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);
+    _graph->xf.zoomPan(translation.x, translation.y);
     
     if ([_drawingDelegate respondsToSelector:@selector(afterZoomed:)]) {
         [_drawingDelegate performSelector:@selector(afterZoomed:) withObject:self];
@@ -266,16 +249,16 @@
     if (_doubleZoomed)  // restore zoom scale
     {
         _doubleZoomed = NO;
-        _xform->zoom(Point2d(_centerBeforeDbl.x, _centerBeforeDbl.y), _scaleBeforeDbl);
+        _graph->xf.zoom(Point2d(_centerBeforeDbl.x, _centerBeforeDbl.y), _scaleBeforeDbl);
     }
     else                // zoomin at the point
     {
         Point2d centerW;
-        _xform->getZoomValue(centerW, _scaleBeforeDbl);
+        _graph->xf.getZoomValue(centerW, _scaleBeforeDbl);
         _centerBeforeDbl = CGPointMake(centerW.x, centerW.y);
         
-        if (_xform->zoomByFactor(2, &at)) {
-            _xform->zoomTo(Point2d(point.x, point.y) * _xform->displayToWorld());
+        if (_graph->xf.zoomByFactor(2, &at)) {
+            _graph->xf.zoomTo(Point2d(point.x, point.y) * _graph->xf.displayToWorld());
             _doubleZoomed = YES;
         }
     }

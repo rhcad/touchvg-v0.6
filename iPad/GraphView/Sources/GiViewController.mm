@@ -155,7 +155,7 @@
 
 - (void)clearCachedData
 {
-    [[self gview] getGraph]->clearCachedBitmap();
+    [[self gview] graph]->clearCachedBitmap();
 }
 
 - (UIView*)magnifierView {
@@ -165,7 +165,7 @@
 }
 
 - (void*)shapes {
-    return [[self gview] getShapes];
+    return [[self gview] shapes];
 }
 
 - (const char*)commandName {
@@ -302,15 +302,15 @@
     
     if ([sender conformsToProtocol:@protocol(GiView)]) {
         id<GiView> aview = (id<GiView>)sender;
-        gs = [aview getGraph];
+        gs = [aview graph];
     }
     else if (sender == _magnifierView[0]) {
         GiMagnifierView *aview = (GiMagnifierView *)_magnifierView[0];
-        gs = aview.graph;
+        gs = [aview graph];
     }
     else if (sender == _magnifierView[1]) {
         GiMagnifierView *aview = (GiMagnifierView *)_magnifierView[1];
-        gs = aview.graph;
+        gs = [aview graph];
     }
     
     if (gs && gs->isDrawing()) {

@@ -3,10 +3,10 @@
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
-#ifndef __GEOMETRY_GRAPHIOS_H_
-#define __GEOMETRY_GRAPHIOS_H_
+#ifndef __GEOMETRY_CANVASIOS_H_
+#define __GEOMETRY_CANVASIOS_H_
 
-#include <gicanvas.h>
+#include <gigraph.h>
 #include <CoreGraphics/CGContext.h>
 
 class GiCanvasIosImpl;
@@ -69,4 +69,4 @@ private:
     GiCanvasIosImpl*   m_draw;
 };
 
-#endif // __GEOMETRY_GRAPHIOS_H_
+#endif // __GEOMETRY_CANVASIOS_H_

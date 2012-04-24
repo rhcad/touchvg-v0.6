@@ -21,9 +21,9 @@ public:
     UIView**        _auxview;
     MgViewProxy(GiContext* ctx, UIView** auxview) : _context(ctx), view(Nil), _auxview(auxview) {}
 private:
-    MgShapes* shapes() { return [view getShapes]; }
-    GiTransform* xform() { return [view getXform]; }
-    GiGraphics* graph() { return [view getGraph]; }
+    MgShapes* shapes() { return [view shapes]; }
+    GiTransform* xform() { return [view xform]; }
+    GiGraphics* graph() { return [view graph]; }
     void regen() {
         [view regen];
         for (int i = 0; _auxview[i]; i++) {

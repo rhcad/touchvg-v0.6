@@ -3,13 +3,11 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiGraphView.h"
-#include <canvasios.h>
-#include <gigraph.h>
+#include <graphios.h>
 #include <mgshapes.h>
 
 @implementation GiMagnifierView
 
-@synthesize graph = _graph;
 @synthesize pointW = _pointW;
 @synthesize scale = _scale;
 @synthesize lockRedraw = _lockRedraw;
@@ -18,11 +16,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _xform = new GiTransform();
-        _graph = new GiGraphics(_xform);
-        _canvas = new GiCanvasIos(_graph);
-        _xform->setViewScaleRange(1e-5, 50);
-        _graph->setMaxPenWidth(4);
+        _graph = new GiGraphIos();
+        _graph->xf.setViewScaleRange(1e-5, 50);
+        _graph->gs.setMaxPenWidth(4);
         _gview = gview;
         _drawingDelegate = Nil;
         _scale = 3;
@@ -35,17 +31,9 @@
 
 - (void)dealloc
 {
-    if (_canvas) {
-        delete _canvas;
-        _canvas = NULL;
-    }
     if (_graph) {
         delete _graph;
         _graph = NULL;
-    }
-    if (_xform) {
-        delete _xform;
-        _xform = NULL;
     }
     [super dealloc];
 }
@@ -65,36 +53,36 @@
 - (void)setPointWandRedraw:(CGPoint)ptw
 {
     _pointW = ptw;
-    Point2d ptd = Point2d(ptw.x, ptw.y) * _xform->worldToDisplay();
+    Point2d ptd = Point2d(ptw.x, ptw.y) * _graph->xf.worldToDisplay();
     BOOL inside = CGRectContainsPoint(CGRectInset(self.bounds, 10, 10), CGPointMake(ptd.x, ptd.y));
     
     if (!inside) {
-        _xform->zoom(Point2d(ptw.x, ptw.y), _xform->getViewScale());
+        _graph->xf.zoom(Point2d(ptw.x, ptw.y), _graph->xf.getViewScale());
     }
     [self setNeedsDisplay];
 }
 
 - (void)zoomPan:(CGPoint)translation
 {
-    if (_xform->zoomPan(translation.x, translation.y)) {
-        _pointW = CGPointMake(_xform->getCenterW().x, _xform->getCenterW().y);
+    if (_graph->xf.zoomPan(translation.x, translation.y)) {
+        _pointW = CGPointMake(_graph->xf.getCenterW().x, _graph->xf.getCenterW().y);
         [self setNeedsDisplay];
     }
 }
 
-- (MgShapes*)getShapes {
-    return [_gview getShapes];
+- (MgShapes*)shapes {
+    return [_gview shapes];
 }
 
-- (GiTransform*)getXform {
-    return _xform;
+- (GiTransform*)xform {
+    return &_graph->xf;
 }
 
-- (GiGraphics*)getGraph {
-    return _graph;
+- (GiGraphics*)graph {
+    return &_graph->gs;
 }
 
-- (UIView*)getOwnerView {
+- (UIView*)ownerView {
     return self;
 }
 
@@ -109,7 +97,7 @@
 }
 
 - (void)regen {
-    _graph->clearCachedBitmap();
+    _graph->gs.clearCachedBitmap();
     [self setNeedsDisplay];
     [_gview regen];
 }
@@ -125,43 +113,45 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    _xform->setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    GiTransform& xf = _graph->xf;
+    xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     
-    if (_scale < 1 && ![_gview isZooming]) {            // 缩略视图，动态放缩时不regen
-        CGSize gsize = [_gview getOwnerView].bounds.size;
-        Box2d rectw(Box2d(0, 0, gsize.width, gsize.height) * [_gview getXform]->displayToWorld());
-        Box2d rectd(rectw * _xform->worldToDisplay());  // 实际图形视图在本视图中的位置
+    if (_scale < 1 && ![_gview isZooming]) {        // 缩略视图，动态放缩时不regen
+        CGSize gsize = [_gview ownerView].bounds.size;
+        Box2d rectw(Box2d(0, 0, gsize.width, gsize.height) * [_gview xform]->displayToWorld());
+        Box2d rectd(rectw * xf.worldToDisplay());   // 实际图形视图在本视图中的位置
         
         if (rectd.width() < self.bounds.size.width && rectd.height() < self.bounds.size.height) {
-            if (!CGRectContainsRect(self.bounds,        // 出界则平移显示
+            if (!CGRectContainsRect(self.bounds,    // 出界则平移显示
                                     CGRectMake(rectd.xmin, rectd.ymin, rectd.width(), rectd.height()))) {
-                _xform->zoomPan(CGRectGetMidX(self.bounds) - rectd.center().x,
+                xf.zoomPan(CGRectGetMidX(self.bounds) - rectd.center().x,
                                 CGRectGetMidY(self.bounds) - rectd.center().y);
             }
         }
     }
-    if (![_gview isZooming]) {                          // 同步显示比例，动态放缩时除外
-        _xform->zoom(_xform->getCenterW(), [_gview getXform]->getViewScale() * _scale);
+    if (![_gview isZooming]) {                      // 同步显示比例，动态放缩时除外
+        xf.zoom(xf.getCenterW(), [_gview xform]->getViewScale() * _scale);
     }
     
     CGContextRef context = UIGraphicsGetCurrentContext();
+    GiGraphics& gs = _graph->gs;
     
-    _graph->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
-    if (_canvas->beginPaint(context, true, [self isZooming]))
+    gs.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
+    if (_graph->canvas.beginPaint(context, true, [self isZooming]))
     {
-        if (!_graph->drawCachedBitmap(0, 0)) {
-            [self draw:_graph];
-            _graph->saveCachedBitmap();
+        if (!gs.drawCachedBitmap(0, 0)) {
+            [self draw:&gs];
+            gs.saveCachedBitmap();
         }
-        [self dynDraw:_graph];
-        _canvas->endPaint();
+        [self dynDraw:&gs];
+        _graph->canvas.endPaint();
     }
 }
 
 - (void)draw:(GiGraphics*)gs
 {
-    if ([_gview getShapes]) {
-        [_gview getShapes]->draw(*gs);
+    if ([_gview shapes]) {
+        [_gview shapes]->draw(*gs);
     }
 }
 
@@ -179,13 +169,13 @@
     
     if (_scale < 1) {
         GiContext ctx(0, GiColor(64, 64, 64, 172), kLineDot);
-        UIView *v = [_gview getOwnerView];
-        Box2d rect(Box2d(0, 0, v.bounds.size.width, v.bounds.size.height) * [_gview getXform]->displayToWorld());
+        UIView *v = [_gview ownerView];
+        Box2d rect(Box2d(0, 0, v.bounds.size.width, v.bounds.size.height) * [_gview xform]->displayToWorld());
         gs->drawRect(&ctx, rect, false);
     }
     else if (inactive) {
         GiContext ctx(0, GiColor(64, 64, 64, 172));
-        Point2d ptd(Point2d(_pointW.x, _pointW.y) * _xform->worldToDisplay());
+        Point2d ptd(Point2d(_pointW.x, _pointW.y) * _graph->xf.worldToDisplay());
         gs->rawLine(&ctx, ptd.x - 20, ptd.y, ptd.x + 20, ptd.y);
         gs->rawLine(&ctx, ptd.x, ptd.y - 20, ptd.x, ptd.y + 20);
     }

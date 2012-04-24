@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4ACBCB381425D73E00212514 /* Graph2dTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* Graph2dTests.m */; };
 		4AE2C1E71424998500C67987 /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE2C1D21424998500C67987 /* libGraph2d.a */; };
+		7E8F78E4147DC5C30045A730 /* graphios.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8F78E3147DC5C30045A730 /* graphios.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9777B2147161BF00EA5AF7 /* gicanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9777B1147161BF00EA5AF7 /* gicanvas.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE7FB1500B8F100487BEF /* mgbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F21500B8F100487BEF /* mgbase.cpp */; };
 		7E9CE7FC1500B8F100487BEF /* mgbnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F31500B8F100487BEF /* mgbnd.cpp */; };
@@ -96,6 +97,7 @@
 		4AE2C2951424AA6E00C67987 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Project.xcconfig; path = Configurations/Project.xcconfig; sourceTree = "<group>"; };
 		4AE2C2961424AA6E00C67987 /* UnitTests.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = UnitTests.xcconfig; path = Configurations/UnitTests.xcconfig; sourceTree = "<group>"; };
 		4AE2C29F1424ACE700C67987 /* Graph2d_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graph2d_Prefix.pch; path = Headers/Graph2d_Prefix.pch; sourceTree = "<group>"; };
+		7E8F78E3147DC5C30045A730 /* graphios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = graphios.h; path = Headers/graphios.h; sourceTree = "<group>"; };
 		7E9777B1147161BF00EA5AF7 /* gicanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gicanvas.h; path = ../../core/include/graph/gicanvas.h; sourceTree = "<group>"; };
 		7E9CE7F21500B8F100487BEF /* mgbase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgbase.cpp; path = ../../core/src/geom/mgbase.cpp; sourceTree = "<group>"; };
 		7E9CE7F31500B8F100487BEF /* mgbnd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgbnd.cpp; path = ../../core/src/geom/mgbnd.cpp; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 		7E9CE80C1500B9E400487BEF /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				7E8F78E3147DC5C30045A730 /* graphios.h */,
 				4AE2C29F1424ACE700C67987 /* Graph2d_Prefix.pch */,
 				C9A7F8C4146B30E200597DF0 /* canvasios.h */,
 				C9D632411450CA2900A3CC75 /* geom */,
@@ -394,6 +397,7 @@
 				9D1AAC17151B1D5C00F2392F /* mgcmd.h in Headers */,
 				9DA418ED152D7E7100052476 /* mgstorage.h in Headers */,
 				C9A7F8C5146B30E300597DF0 /* canvasios.h in Headers */,
+				7E8F78E4147DC5C30045A730 /* graphios.h in Headers */,
 				7E9CE80A1500B90700487BEF /* giplclip.h in Headers */,
 				9D1AAC1C151B352200F2392F /* mgcmdmgr.h in Headers */,
 				9DF6A490151C02CC001C1468 /* mgcmddraw.h in Headers */,

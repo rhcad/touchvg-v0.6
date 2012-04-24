@@ -35,8 +35,8 @@
         
         param.initShapes(_shapes);
         
-        _xform->zoomTo(_shapes->getExtent() * _xform->modelToWorld());
-        _xform->zoomByFactor(4.0);
+        [self xform]->zoomTo(_shapes->getExtent() * [self xform]->modelToWorld());
+        [self xform]->zoomByFactor(4.0);
     }
     return self;
 }

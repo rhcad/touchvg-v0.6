@@ -5,7 +5,7 @@
 
 #import "GiMotionHandler.h"
 
-class GiCanvasIos;
+class GiGraphIos;
 
 //! 图形视图类
 /*! \ingroup GRAPH_IOS
@@ -13,9 +13,7 @@ class GiCanvasIos;
 @interface GiGraphView : UIView<GiView, GiMotionHandler> {
 @protected
     MgShapes*       _shapes;                //!< 图形列表
-    GiTransform*    _xform;                 //!< 坐标系对象
-    GiGraphics*     _graph;                 //!< 图形显示对象
-    GiCanvasIos*    _canvas;                //!< 显示适配对象
+    GiGraphIos*     _graph;                 //!< 图形显示对象
     id              _drawingDelegate;       //!< 动态绘图用的委托控制器对象
     
     CGPoint         _firstPoint;            //!< 动态放缩用的开始点
@@ -31,9 +29,6 @@ class GiCanvasIos;
     CGPoint         _centerBeforeDbl;       //!< 局部放大前的视图中心世界坐标
 }
 
-@property (nonatomic)          MgShapes*    shapes;     //!< 图形列表
-@property (nonatomic,readonly) GiTransform* xform;      //!< 坐标系对象
-@property (nonatomic,readonly) GiGraphics*  graph;      //!< 图形显示对象
 @property (nonatomic)          BOOL         enableZoom; //!< 是否允许放缩或平移
 @property (nonatomic,readonly) BOOL         zooming;    //!< 是否正在动态放缩或平移
 
@@ -47,9 +42,7 @@ class GiCanvasIos;
  */
 @interface GiMagnifierView : UIView<GiView> {
 @protected
-    GiTransform*    _xform;                 //!< 坐标系对象
-    GiGraphics*     _graph;                 //!< 图形显示对象
-    GiCanvasIos*    _canvas;                //!< 显示适配对象
+    GiGraphIos*     _graph;                 //!< 图形显示对象
     id<GiView>      _gview;                 //!< 实际图形视图
     UIResponder*    _drawingDelegate;       //!< 动态绘图用的委托控制器对象
     CGPoint         _pointW;                //!< 实际图形视图的当前点，世界坐标
@@ -57,7 +50,6 @@ class GiCanvasIos;
     BOOL            _lockRedraw;            //!< 禁止放大镜动态显示
 }
 
-@property (nonatomic,readonly) GiGraphics*  graph;      //!< 图形显示对象
 @property (nonatomic)          CGPoint      pointW;     //!< 实际图形视图的当前点，世界坐标
 @property (nonatomic)          CGFloat      scale;      //!< 放大倍数
 @property (nonatomic)          BOOL         lockRedraw; //!< 禁止放大镜动态显示
