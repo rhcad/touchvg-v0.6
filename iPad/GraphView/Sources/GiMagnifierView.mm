@@ -133,11 +133,10 @@
         xf.zoom(xf.getCenterW(), [_gview xform]->getViewScale() * _scale);
     }
     
-    CGContextRef context = UIGraphicsGetCurrentContext();
     GiGraphics& gs = _graph->gs;
     
     gs.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
-    if (_graph->canvas.beginPaint(context, true, [self isZooming]))
+    if (_graph->canvas.beginPaint([self isZooming]))
     {
         if (!gs.drawCachedBitmap(0, 0)) {
             [self draw:&gs];
