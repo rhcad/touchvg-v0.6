@@ -77,7 +77,7 @@
     _graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     gs.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (_graph->canvas.beginPaint(!!_zooming))
+    if (_graph->canvas.beginPaint(UIGraphicsGetCurrentContext(), !!_zooming))
     {
         if (_zooming) {
             [self draw:&gs];

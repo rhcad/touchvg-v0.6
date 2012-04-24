@@ -153,9 +153,8 @@ GiCanvasIos::~GiCanvasIos()
     delete m_draw;
 }
 
-bool GiCanvasIos::beginPaint(bool fast, bool buffered)
+bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
 {
-    CGContextRef context = UIGraphicsGetCurrentContext();
     if (m_draw->_context || context == NULL)
         return false;
 

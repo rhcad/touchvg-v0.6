@@ -136,7 +136,7 @@
     GiGraphics& gs = _graph->gs;
     
     gs.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
-    if (_graph->canvas.beginPaint([self isZooming]))
+    if (_graph->canvas.beginPaint(UIGraphicsGetCurrentContext(), [self isZooming]))
     {
         if (!gs.drawCachedBitmap(0, 0)) {
             [self draw:&gs];

@@ -26,7 +26,7 @@ public:
 
 public:
     const GiTransform& xf() const;
-    bool beginPaint(bool fast = false, bool buffered = true);
+    bool beginPaint(CGContextRef context, bool fast = false, bool buffered = true);
     void endPaint(bool draw = true);
     static void setScreenDpi(float dpi);
 
