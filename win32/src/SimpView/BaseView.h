@@ -13,7 +13,7 @@ public:
 	virtual ~CBaseView();
 
     MgShapes*       m_shapes;           // 图形数据
-	GiGraphWin*     m_graph;	        // 图形系统对象
+    GiGraphWin*     m_graph;	        // 图形系统对象
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -21,17 +21,17 @@ public:
 	protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	//}}AFX_VIRTUAL
-	virtual void OnDraw(GiGraphics* gs);
+	virtual void DrawAll(GiGraphics* gs);
 	virtual void OnDynDraw(GiGraphics* gs);
 	virtual void OnZoomed();
 
 // Implementation
 protected:
-	SIZE			m_sizePan;			// 动态平移显示的距离
+    SIZE            m_pan;              // 动态平移显示的偏移
 
 private:
-	COLORREF		m_crBkColor;		// 窗口背景颜色
-	bool			m_bGdip;
+    COLORREF        m_bkColor;	        // 窗口背景颜色
+    bool            m_gdip;             // 是否使用GDI+显示
 
 // Generated message map functions
 protected:

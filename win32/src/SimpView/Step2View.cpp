@@ -137,7 +137,7 @@ void CScrollShapeView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar*)
 		break;
 	case SB_THUMBPOSITION:		// Scroll to absolute position.
 		si.nPos = nPos;
-		m_sizePan.cx = m_sizePan.cy = 0;
+		m_pan.cx = m_pan.cy = 0;
 		break;
 	case SB_THUMBTRACK:			// Drag to absolute position.
 		OnHScrThumbTrack(si, nPos);
@@ -146,7 +146,7 @@ void CScrollShapeView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar*)
 		if (m_graph->xf.zoomPan((float)(m_rcScrWnd.left - si.nPos), 0))
 		{
 			::OffsetRect(&m_rcScrWnd, si.nPos - m_rcScrWnd.left, 0);
-			m_sizePan.cx = 0;
+			m_pan.cx = 0;
 			Invalidate();
 		}
 		else
@@ -160,14 +160,14 @@ void CScrollShapeView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar*)
 void CScrollShapeView::OnHScrThumbTrack(SCROLLINFO &si, UINT nPos)
 {
 	si.nPos = nPos;
-	m_sizePan.cx = m_rcScrWnd.left - si.nPos;
+	m_pan.cx = m_rcScrWnd.left - si.nPos;
 	Invalidate();
 	if (NeedUpdatePan())
 	{
 		if (m_graph->xf.zoomPan((float)(m_rcScrWnd.left - si.nPos), 0))
 		{
 			::OffsetRect(&m_rcScrWnd, si.nPos - m_rcScrWnd.left, 0);
-			m_sizePan.cx = 0;
+			m_pan.cx = 0;
 		}
 		else
 			si.nPos = m_rcScrWnd.left;
@@ -204,7 +204,7 @@ void CScrollShapeView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar*)
 		break;
 	case SB_THUMBPOSITION:		// Scroll to absolute position.
 		si.nPos = nPos;
-		m_sizePan.cx = m_sizePan.cy = 0;
+		m_pan.cx = m_pan.cy = 0;
 		break;
 	case SB_THUMBTRACK:			// Drag to absolute position.
 		OnVScrThumbTrack(si, nPos);
@@ -213,7 +213,7 @@ void CScrollShapeView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar*)
 		if (m_graph->xf.zoomPan(0, (float)(m_rcScrWnd.top - si.nPos)))
 		{
 			::OffsetRect(&m_rcScrWnd, 0, si.nPos - m_rcScrWnd.top);
-			m_sizePan.cy = 0;
+			m_pan.cy = 0;
 			Invalidate();
 		}
 		else
@@ -227,14 +227,14 @@ void CScrollShapeView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar*)
 void CScrollShapeView::OnVScrThumbTrack(SCROLLINFO &si, UINT nPos)
 {
 	si.nPos = nPos;
-	m_sizePan.cy = m_rcScrWnd.top - si.nPos;
+	m_pan.cy = m_rcScrWnd.top - si.nPos;
 	Invalidate();
 	if (NeedUpdatePan())
 	{
 		if (m_graph->xf.zoomPan(0, (float)(m_rcScrWnd.top - si.nPos)))
 		{
 			::OffsetRect(&m_rcScrWnd, 0, si.nPos - m_rcScrWnd.top);
-			m_sizePan.cy = 0;
+			m_pan.cy = 0;
 		}
 		else
 			si.nPos = m_rcScrWnd.top;
@@ -244,8 +244,8 @@ void CScrollShapeView::OnVScrThumbTrack(SCROLLINFO &si, UINT nPos)
 bool CScrollShapeView::NeedUpdatePan()
 {
     return m_bRealPan //|| fabs(m_graph->xf.getViewScale() - 1.0) < 0.01
-        || abs(m_sizePan.cx) > m_graph->xf.getWidth() * 4 / 5
-        || abs(m_sizePan.cy) > m_graph->xf.getHeight() * 4 / 5;
+        || abs(m_pan.cx) > m_graph->xf.getWidth() * 4 / 5
+        || abs(m_pan.cy) > m_graph->xf.getHeight() * 4 / 5;
 }
 
 void CScrollShapeView::OnUpdateRealPan(CCmdUI* pCmdUI)

@@ -79,28 +79,28 @@
     
     if (_graph->canvas.beginPaint(UIGraphicsGetCurrentContext(), !!_zooming))
     {
-        if (_zooming) {
+        if (!gs.drawCachedBitmap()) {
             [self draw:&gs];
-        }
-        else {
-            if (!gs.drawCachedBitmap(0, 0)) {
-                [self draw:&gs];
+            if (!_zooming)
                 gs.saveCachedBitmap();
-            }
-            [self dynDraw:&gs];
-            if ([_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
-                [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
-            }
         }
-        
+        [self dynDraw:&gs];
         _graph->canvas.endPaint();
     }
 }
 
 - (void)draw:(GiGraphics*)gs
 {
-    if (_shapes)
+    if (_shapes) {
         _shapes->draw(*gs);
+    }
+}
+
+- (void)dynDraw:(GiGraphics*)gs
+{
+    if ([_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
+        [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
+    }
 }
 
 - (MgShapes*)shapes
@@ -154,10 +154,6 @@
 
 - (BOOL)isZooming {
     return !!_zooming;
-}
-
-- (void)dynDraw:(GiGraphics*)gs
-{
 }
 
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender

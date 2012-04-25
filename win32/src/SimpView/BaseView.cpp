@@ -18,11 +18,11 @@ static char THIS_FILE[] = __FILE__;
 CBaseView::CBaseView()
 {
     m_shapes = new MgShapesT<std::list<MgShape*> >;
-	m_bGdip = true;
-    m_graph = new GiGraphWin(m_bGdip ? GiCanvasGdip::Create : GiCanvasGdi::Create);
+	m_gdip = true;
+    m_graph = new GiGraphWin(m_gdip ? GiCanvasGdip::Create : GiCanvasGdi::Create);
 
-    m_sizePan.cx = m_sizePan.cy = 0;
-    m_crBkColor = GetSysColor(COLOR_WINDOW);
+    m_pan.cx = m_pan.cy = 0;
+    m_bkColor = GetSysColor(COLOR_WINDOW);
 }
 
 CBaseView::~CBaseView()
@@ -79,24 +79,24 @@ void CBaseView::OnPaint()
 	CPaintDC dc(this);
     GiGraphics &gs = m_graph->gs;
 
-	dc.SetBkColor(m_crBkColor);				// 将在beginPaint()中应用背景色
+	dc.SetBkColor(m_bkColor);				    // 在beginPaint()中应用背景色
 
-	if (m_graph->canvas->beginPaint(dc.GetSafeHdc()))	// 准备绘图，使用绘图缓冲
+	if (m_graph->canvas->beginPaint(dc))        // 准备绘图，使用绘图缓冲
 	{
 		// 显示先前保存的正式图形内容
-		if (m_sizePan.cx != 0 || m_sizePan.cy != 0)
-			gs.clearWindow();			    // 清除背景
-		if (!gs.drawCachedBitmap((float)m_sizePan.cx, (float)m_sizePan.cy))
+		if (m_pan.cx != 0 || m_pan.cy != 0)     // 动态平移
+			gs.clearWindow();			        // 清除缓存图外的背景
+		if (!gs.drawCachedBitmap((float)m_pan.cx, (float)m_pan.cy))
 		{
-			if (0 == m_sizePan.cx && 0 == m_sizePan.cy)
-				gs.clearWindow();		    // 清除背景
-			OnDraw(&gs);				    // 显示正式图形
-			gs.saveCachedBitmap();	        // 保存正式图形内容
+			if (0 == m_pan.cx && 0 == m_pan.cy)
+				gs.clearWindow();		        // 清除背景
+			DrawAll(&gs);                       // 显示正式图形
+			gs.saveCachedBitmap();	            // 保存正式图形内容
 		}
 
-		OnDynDraw(&gs);				        // 显示动态图形
+		OnDynDraw(&gs);                         // 显示动态图形
 
-		m_graph->canvas->endPaint();        // 提交绘图结果到窗口
+		m_graph->canvas->endPaint();            // 提交绘图结果到窗口
 	}
 }
 
@@ -117,7 +117,7 @@ void CBaseView::OnZoomed()
 	Invalidate();
 }
 
-void CBaseView::OnDraw(GiGraphics* gs)
+void CBaseView::DrawAll(GiGraphics* gs)
 {
 	m_shapes->draw(*gs);
 }
@@ -145,13 +145,13 @@ void CBaseView::OnUpdateViewGray(CCmdUI* pCmdUI)
 
 void CBaseView::OnUpdateViewGdip(CCmdUI* pCmdUI) 
 {
-	pCmdUI->SetCheck(m_bGdip ? 1 : 0);
+	pCmdUI->SetCheck(m_gdip ? 1 : 0);
 }
 
 void CBaseView::OnViewGdip() 
 {
-	m_bGdip = !m_bGdip;
-    m_graph->setCanvas(m_bGdip ? GiCanvasGdip::Create : GiCanvasGdi::Create);
+	m_gdip = !m_gdip;
+    m_graph->setCanvas(m_gdip ? GiCanvasGdip::Create : GiCanvasGdi::Create);
 	Invalidate();
 }
 
@@ -169,10 +169,10 @@ void CBaseView::OnViewAntiAlias()
 
 void CBaseView::OnViewBkColor() 
 {
-	CColorDialog dlg (m_crBkColor);
+	CColorDialog dlg (m_bkColor);
 	if (IDOK == dlg.DoModal())
 	{
-		m_crBkColor = dlg.GetColor();
+		m_bkColor = dlg.GetColor();
 		m_graph->gs.clearCachedBitmap();
 		Invalidate();
 	}

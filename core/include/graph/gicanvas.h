@@ -36,6 +36,12 @@ public:
         return m_owner;
     }
 
+    //! 返回图形系统对象，拥有者
+    GiGraphics* owner()
+    {
+        return m_owner;
+    }
+
 public:
     //! 用当前背景色清除背景
     /*! 用背景色填充全部显示区域。打印或打印预览时调用无效。
