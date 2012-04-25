@@ -13,21 +13,23 @@
 //! 图形列表模板类
 /*! \ingroup GEOM_SHAPE
     \param Container 包含(MgShape*)的vector、list等容器类型
+    \param ContextT 图形属性的类，为 GiContext 或其子类
 */
-template <typename Container /*=std::vector<MgShape*>*/ >
+template <typename Container, typename ContextT = GiContext>
 class MgShapesT : public MgShapes
 {
-    typedef MgShapesT<Container> ThisClass;
+    typedef MgShapesT<Container, ContextT> ThisClass;
     typedef typename Container::const_iterator const_iterator;
     typedef typename Container::iterator iterator;
 public:
-    MgShapesT()
+    MgShapesT(bool hasContext = true) : _context(hasContext ? new ContextT() : NULL)
     {
     }
 
     ~MgShapesT()
     {
         clear();
+        delete _context;
     }
 
     static UInt32 Type() { return 8; }
@@ -45,7 +47,8 @@ public:
 
     MgObject* clone() const
     {
-        ThisClass *p = new ThisClass;
+        ThisClass *p = new ThisClass(_context != NULL);
+        *p->_context = *_context;
         return p;
     }
 
@@ -197,6 +200,11 @@ public:
         return s != NULL;
     }
 
+    GiContext* context()
+    {
+        return _context;
+    }
+
 private:
     UInt32 getNewID()
     {
@@ -213,6 +221,7 @@ private:
 protected:
     Container               _shapes;
     mutable const_iterator  _it;
+    ContextT*               _context;
 };
 
 #endif // __GEOMETRY_MGSHAPES_TEMPL_H_

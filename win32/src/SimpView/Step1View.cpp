@@ -47,7 +47,7 @@ void CRandomShapeView::OnMouseMove(UINT nFlags, CPoint point)
     
     Box2d rect(Point2d((float)point.x, (float)point.y), 50, 0);
     
-    rect *= m_xf.displayToModel();
+    rect *= m_graph->xf.displayToModel();
     m_ptSnap = rect.center();
     m_selection = m_shapes->hitTest(rect, m_ptNear, m_segment);
     Invalidate();

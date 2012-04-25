@@ -19,7 +19,7 @@ struct MgView {
     virtual GiGraphics* graph() = 0;            //!< 得到图形显示对象
     virtual void regen() = 0;                   //!< 标记视图待重新构建显示
     virtual void redraw() = 0;                  //!< 标记视图待更新显示
-    virtual const GiContext* context() = 0;     //!< 得到当前绘图属性
+    virtual GiContext* context() = 0;           //!< 得到当前绘图属性
     virtual bool shapeWillAdded(MgShape* shape) = 0;    //!< 通知将添加图形
     virtual bool shapeWillDeleted(MgShape* shape) = 0;  //!< 通知将删除图形
 };

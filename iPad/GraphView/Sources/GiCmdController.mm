@@ -3,41 +3,44 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiCmdController.h"
-#include <mgcmd.h>
 #include <vector>
 
 @interface GiCommandController(Internal)
 
 - (BOOL)setView:(UIView*)view;
 - (void)convertPoint:(CGPoint)pt;
+- (GiContext*)currentContext;
 
 @end
 
 class MgViewProxy : public MgView
 {
 public:
-    GiContext*      _context;
     id<GiView>      view;
-    UIView**        _auxview;
-    MgViewProxy(GiContext* ctx, UIView** auxview) : _context(ctx), view(Nil), _auxview(auxview) {}
+    UIView**        auxviews;
+    
+    MgViewProxy(UIView** views) : view(Nil), auxviews(views) {}
+    GiContext* context() { return [view shapes]->context(); }
+    
 private:
     MgShapes* shapes() { return [view shapes]; }
     GiTransform* xform() { return [view xform]; }
     GiGraphics* graph() { return [view graph]; }
+    
     void regen() {
         [view regen];
-        for (int i = 0; _auxview[i]; i++) {
-            if ([_auxview[i] respondsToSelector:@selector(regen)])
-                [_auxview[i] performSelector:@selector(regen)];
+        for (int i = 0; auxviews[i]; i++) {
+            if ([auxviews[i] respondsToSelector:@selector(regen)])
+                [auxviews[i] performSelector:@selector(regen)];
         }
     }
     void redraw() {
         [view redraw];
-        for (int i = 0; _auxview[i]; i++) {
-            [_auxview[i] setNeedsDisplay];
+        for (int i = 0; auxviews[i]; i++) {
+            [auxviews[i] setNeedsDisplay];
         }
     }
-    const GiContext* context() { return _context; }
+    
     bool shapeWillAdded(MgShape* shape) { return true; }
     bool shapeWillDeleted(MgShape* shape) { return true; }
 };
@@ -57,6 +60,13 @@ private:
     _motion->pointM = Point2d(pt.x, pt.y) * _motion->view->xform()->displayToModel();
 }
 
+- (GiContext*)currentContext
+{
+    MgShape* shape = NULL;
+    mgGetCommandManager()->getSelection(_mgview, 1, &shape);
+    return shape ? shape->context() : _mgview->context();
+}
+
 @end
 
 @implementation GiCommandController
@@ -67,14 +77,14 @@ private:
 @synthesize lineColor;
 @synthesize fillColor;
 
-- (id)initWithViews:(UIView**)auxview
+- (id)initWithViews:(UIView**)auxviews
 {
     self = [super init];
     if (self) {
-        _context = new GiContext(50, GiColor(0, 0, 0, 128));
-        _mgview = new MgViewProxy(_context, auxview);
+        _mgview = new MgViewProxy(auxviews);
         _motion = new MgMotion;
         _motion->view = _mgview;
+        *_mgview->context() = GiContext(50, GiColor(0, 0, 0, 128));
     }
     return self;
 }
@@ -84,7 +94,6 @@ private:
     mgGetCommandManager()->unloadCommands();
     delete _motion;
     delete _mgview;
-    delete _context;
     [super dealloc];
 }
 
@@ -97,11 +106,7 @@ private:
 }
 
 - (int)lineWidth {
-    MgShape* shape = NULL;
-    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
-        return shape->context()->getLineWidth();
-    }
-    return _context->getLineWidth();
+    return [self currentContext]->getLineWidth();
 }
 
 - (void)setLineWidth:(int)w {
@@ -115,16 +120,12 @@ private:
         _motion->view->redraw();
     }
     else {
-        _context->setLineWidth(w);
+        _mgview->context()->setLineWidth(w);
     }
 }
 
 - (GiColor)lineColor {
-    MgShape* shape = NULL;
-    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
-        return shape->context()->getLineColor();
-    }
-    return _context->getLineColor();
+    return [self currentContext]->getLineColor();
 }
 
 - (void)setLineColor:(GiColor)c {
@@ -138,16 +139,12 @@ private:
         _motion->view->redraw();
     }
     else {
-        _context->setLineColor(c);
+        _mgview->context()->setLineColor(c);
     }
 }
 
 - (GiColor)fillColor {
-    MgShape* shape = NULL;
-    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
-        return shape->context()->getFillColor();
-    }
-    return _context->getFillColor();
+    return [self currentContext]->getFillColor();
 }
 
 - (void)setFillColor:(GiColor)c {
@@ -161,16 +158,12 @@ private:
         _motion->view->redraw();
     }
     else {
-        _context->setFillColor(c);
+        _mgview->context()->setFillColor(c);
     }
 }
 
 - (int)lineStyle {
-    MgShape* shape = NULL;
-    if (mgGetCommandManager()->getSelection(_mgview, 1, &shape) > 0) {
-        return shape->context()->getLineStyle();
-    }
-    return _context->getLineStyle();
+    return [self currentContext]->getLineStyle();
 }
 
 - (void)setLineStyle:(int)style {
@@ -184,7 +177,7 @@ private:
         _motion->view->redraw();
     }
     else {
-        _context->setLineStyle((kLineStyle)style);
+        _mgview->context()->setLineStyle((kLineStyle)style);
     }
 }
 

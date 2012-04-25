@@ -20,6 +20,9 @@ public:
     GiCanvasGdip(GiGraphics* gs);
     virtual ~GiCanvasGdip();
 
+    //! 工厂函数
+    static GiCanvasWin* Create(GiGraphics* gs) { return new GiCanvasGdip(gs); }
+
 public:
     //! 返回当前绘图输出对象(Gdiplus::Graphics*)
     void* GetGraphics();

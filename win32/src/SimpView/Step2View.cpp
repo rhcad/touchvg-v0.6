@@ -55,15 +55,15 @@ void CScrollShapeView::OnZoomed()
 	Box2d rect;
 
 	// m_rcLimits: 极限范围对应的坐标范围, 像素
-	rect = m_shapes->getExtent() * m_xf.modelToDisplay();
+	rect = m_shapes->getExtent() * m_graph->xf.modelToDisplay();
 	rect.inflate(1, 1);
 	rect.get(m_rcLimits.left, m_rcLimits.top, m_rcLimits.right, m_rcLimits.bottom);
 
 	// m_rcScrWnd: 当前窗口对应的坐标范围, 像素
-	rect = Box2d(m_xf.getCenterW(),
-		m_xf.getWidth() / m_xf.getWorldToDisplayX(),
-		m_xf.getHeight() / m_xf.getWorldToDisplayY());
-	rect *= m_xf.worldToDisplay();
+	rect = Box2d(m_graph->xf.getCenterW(),
+		m_graph->xf.getWidth() / m_graph->xf.getWorldToDisplayX(),
+		m_graph->xf.getHeight() / m_graph->xf.getWorldToDisplayY());
+	rect *= m_graph->xf.worldToDisplay();
 	rect.get(m_rcScrWnd.left, m_rcScrWnd.top, m_rcScrWnd.right, m_rcScrWnd.bottom);
 
 	// 以m_rcLimits左上角为原点调整m_rcScrWnd和m_rcLimits
@@ -141,7 +141,7 @@ void CScrollShapeView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar*)
 		OnHScrThumbTrack(si, nPos);
 		break;
 	case SB_ENDSCROLL:			// End draging
-		if (m_xf.zoomPan((float)(m_rcScrWnd.left - si.nPos), 0))
+		if (m_graph->xf.zoomPan((float)(m_rcScrWnd.left - si.nPos), 0))
 		{
 			::OffsetRect(&m_rcScrWnd, si.nPos - m_rcScrWnd.left, 0);
 			m_sizePan.cx = 0;
@@ -160,9 +160,9 @@ void CScrollShapeView::OnHScrThumbTrack(SCROLLINFO &si, UINT nPos)
 	si.nPos = nPos;
 	m_sizePan.cx = m_rcScrWnd.left - si.nPos;
 	Invalidate();
-	if (m_bRealPan || fabs(m_xf.getViewScale() - 1.0) < 0.01)
+	if (m_bRealPan || fabs(m_graph->xf.getViewScale() - 1.0) < 0.01)
 	{
-		if (m_xf.zoomPan((float)(m_rcScrWnd.left - si.nPos), 0))
+		if (m_graph->xf.zoomPan((float)(m_rcScrWnd.left - si.nPos), 0))
 		{
 			::OffsetRect(&m_rcScrWnd, si.nPos - m_rcScrWnd.left, 0);
 			m_sizePan.cx = 0;
@@ -208,7 +208,7 @@ void CScrollShapeView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar*)
 		OnVScrThumbTrack(si, nPos);
 		break;
 	case SB_ENDSCROLL:			// End draging
-		if (m_xf.zoomPan(0, (float)(m_rcScrWnd.top - si.nPos)))
+		if (m_graph->xf.zoomPan(0, (float)(m_rcScrWnd.top - si.nPos)))
 		{
 			::OffsetRect(&m_rcScrWnd, 0, si.nPos - m_rcScrWnd.top);
 			m_sizePan.cy = 0;
@@ -227,9 +227,9 @@ void CScrollShapeView::OnVScrThumbTrack(SCROLLINFO &si, UINT nPos)
 	si.nPos = nPos;
 	m_sizePan.cy = m_rcScrWnd.top - si.nPos;
 	Invalidate();
-	if (m_bRealPan || fabs(m_xf.getViewScale() - 1.0) < 0.01)
+	if (m_bRealPan || fabs(m_graph->xf.getViewScale() - 1.0) < 0.01)
 	{
-		if (m_xf.zoomPan(0, (float)(m_rcScrWnd.top - si.nPos)))
+		if (m_graph->xf.zoomPan(0, (float)(m_rcScrWnd.top - si.nPos)))
 		{
 			::OffsetRect(&m_rcScrWnd, 0, si.nPos - m_rcScrWnd.top);
 			m_sizePan.cy = 0;

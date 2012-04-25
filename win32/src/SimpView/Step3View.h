@@ -3,7 +3,8 @@
 #pragma once
 
 #include "Step2View.h"
-#include <mgcmd.h>
+
+class MgViewEx;
 
 class CDrawShapeView : public CScrollShapeView
 {
@@ -14,7 +15,6 @@ public:
 
 // Attributes
 public:
-    GiContext   m_context;
 
 // Operations
 public:
@@ -41,33 +41,10 @@ protected:
 
 // Implementation
 private:
-    class MgViewProxy : public MgView
-    {
-    public:
-        CDrawShapeView* view;
-        MgViewProxy() : view(NULL) {}
-    private:
-        MgShapes* shapes() { return view->m_shapes; }
-        GiTransform* xform() { return &view->m_xf; }
-        GiGraphics* graph() { return &view->m_gs; }
-        void redraw() { view->Invalidate(); }
-        void regen() {
-            view->m_gs.clearCachedBitmap();
-            view->Invalidate();
-        }
-        const GiContext* context() {
-            RandomParam().setShapeProp(&view->m_context);
-            return &view->m_context;
-        }
-        bool shapeWillAdded(MgShape*) { return true; }
-        bool shapeWillDeleted(MgShape*) { return true; }
-    };
-
     const char* getCmdName(UINT nID) const;
 
     UINT        m_cmdID;
-    MgViewProxy m_mgview;
-    MgMotion    m_motion;
+    MgViewEx*   m_proxy;
     BOOL        m_moved;
     BOOL        m_delayUp;
     long        m_downTime;

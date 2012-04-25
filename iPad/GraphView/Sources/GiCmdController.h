@@ -4,7 +4,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #import "GiMotionHandler.h"
-#include <gicontxt.h>
+#include <mgcmd.h>
 
 struct MgMotion;
 class MgViewProxy;
@@ -16,7 +16,6 @@ class MgViewProxy;
 @private
     MgMotion    *_motion;           //!< 当前命令参数
     MgViewProxy *_mgview;           //!< 命令所用视图
-    GiContext   *_context;          //!< 当前绘图属性
     BOOL        _undoFired;         //!< 是否已向命令触发Undo消息(滑动中变为双指)
 }
 
@@ -26,8 +25,8 @@ class MgViewProxy;
 @property (nonatomic)   GiColor         lineColor;      //!< 线条颜色，clearColor 表示不画线条
 @property (nonatomic)   GiColor         fillColor;      //!< 填充颜色，clearColor 表示不填充
 
-//! 给定辅助视图初始化本对象，auxview是以Nil结束的多个视图
-- (id)initWithViews:(UIView**)auxview;
+//! 给定辅助视图初始化本对象，auxviews是以Nil结束的多个视图
+- (id)initWithViews:(UIView**)auxviews;
 
 //! 开始触摸时调用，避免Pan手势开始时丢失开始触摸位置
 - (void)touchesBegan:(CGPoint)point view:(UIView*)sender;

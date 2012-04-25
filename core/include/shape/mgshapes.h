@@ -35,6 +35,9 @@ struct MgShapes : public MgObject
     
     //! 移除一个图形，由调用者删除图形对象
     virtual MgShape* removeShape(UInt32 nID) = 0;
+
+    //! 返回新图形的图形属性
+    virtual GiContext* context() = 0;
 };
 
 #endif // __GEOMETRY_MGSHAPES_H_

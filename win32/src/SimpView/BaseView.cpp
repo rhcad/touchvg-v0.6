@@ -15,25 +15,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-CBaseView::CBaseView() : m_gs(&m_xf)
+CBaseView::CBaseView()
 {
     m_shapes = new MgShapesT<std::list<MgShape*> >;
-
-	m_sizePan.cx = m_sizePan.cy = 0;
 	m_bGdip = true;
-	m_crBkColor = GetSysColor(COLOR_WINDOW);
+    m_graph = new GiGraphWin(m_bGdip ? GiCanvasGdip::Create : GiCanvasGdi::Create);
 
-	if (m_bGdip)
-		m_canvas = new GiCanvasGdip(&m_gs);
-	else
-		m_canvas = new GiCanvasGdi(&m_gs);
+    m_sizePan.cx = m_sizePan.cy = 0;
+    m_crBkColor = GetSysColor(COLOR_WINDOW);
 }
 
 CBaseView::~CBaseView()
 {
     if (m_shapes)
         m_shapes->release();
-	delete m_canvas;
+	delete m_graph;
 }
 
 BEGIN_MESSAGE_MAP(CBaseView, CWnd)
@@ -81,24 +77,25 @@ BOOL CBaseView::OnEraseBkgnd(CDC*)
 void CBaseView::OnPaint() 
 {
 	CPaintDC dc(this);
+    GiGraphics &gs = m_graph->gs;
 
 	dc.SetBkColor(m_crBkColor);				// 为图形系统设置背景色
 
-	if (m_canvas->beginPaint(dc.GetSafeHdc()))	// 准备绘图，使用绘图缓冲
+	if (m_graph->canvas->beginPaint(dc.GetSafeHdc()))	// 准备绘图，使用绘图缓冲
 	{
 		// 显示先前保存的正式图形内容
 		if (m_sizePan.cx != 0 || m_sizePan.cy != 0)
-			m_gs.clearWindow();			// 清除背景
-		if (!m_gs.drawCachedBitmap((float)m_sizePan.cx, (float)m_sizePan.cy))
+			gs.clearWindow();			// 清除背景
+		if (!gs.drawCachedBitmap((float)m_sizePan.cx, (float)m_sizePan.cy))
 		{
 			if (0 == m_sizePan.cx && 0 == m_sizePan.cy)
-				m_gs.clearWindow();		// 清除背景
-			OnDraw(&m_gs);				// 显示正式图形
-			m_gs.saveCachedBitmap();	// 保存正式图形内容
+				gs.clearWindow();		// 清除背景
+			OnDraw(&gs);				// 显示正式图形
+			gs.saveCachedBitmap();	    // 保存正式图形内容
 		}
-		OnDynDraw(&m_gs);				// 显示动态图形
+		OnDynDraw(&gs);				    // 显示动态图形
 
-		m_canvas->endPaint();		    // 提交绘图结果到窗口
+		m_graph->canvas->endPaint();    // 提交绘图结果到窗口
 	}
 }
 
@@ -109,7 +106,7 @@ void CBaseView::OnSize(UINT nType, int cx, int cy)
 	// 设置显示窗口的大小为客户区大小(不包含滚动条)
 	if (nType != SIZE_MINIMIZED && cx > 1 && cy > 1)
 	{
-		m_xf.setWndSize(cx, cy);
+		m_graph->xf.setWndSize(cx, cy);
 		OnZoomed();
 	}
 }
@@ -126,7 +123,7 @@ void CBaseView::OnDraw(GiGraphics* gs)
 
 void CBaseView::OnZoomExtent() 
 {
-	if (m_xf.zoomTo(m_shapes->getExtent() * m_xf.modelToWorld(), NULL))
+	if (m_graph->xf.zoomTo(m_shapes->getExtent() * m_graph->xf.modelToWorld(), NULL))
 	{
 		OnZoomed();
 	}
@@ -134,15 +131,15 @@ void CBaseView::OnZoomExtent()
 
 void CBaseView::OnViewGray() 
 {
-	m_gs.setColorMode(GiGraphics::kColorGray == m_gs.getColorMode()
+	m_graph->gs.setColorMode(GiGraphics::kColorGray == m_graph->gs.getColorMode()
         ? GiGraphics::kColorReal : GiGraphics::kColorGray);
-    m_gs.clearCachedBitmap();
+    m_graph->gs.clearCachedBitmap();
     Invalidate();
 }
 
 void CBaseView::OnUpdateViewGray(CCmdUI* pCmdUI) 
 {
-	pCmdUI->SetCheck(GiGraphics::kColorGray == m_gs.getColorMode() ? 1 : 0);
+	pCmdUI->SetCheck(GiGraphics::kColorGray == m_graph->gs.getColorMode() ? 1 : 0);
 }
 
 void CBaseView::OnUpdateViewGdip(CCmdUI* pCmdUI) 
@@ -153,29 +150,19 @@ void CBaseView::OnUpdateViewGdip(CCmdUI* pCmdUI)
 void CBaseView::OnViewGdip() 
 {
 	m_bGdip = !m_bGdip;
-
-	GiCanvasWin* adapter = m_canvas;
-
-	if (m_bGdip)
-		m_canvas = new GiCanvasGdip(&m_gs);
-	else
-		m_canvas = new GiCanvasGdi(&m_gs);
-
-    m_canvas->copy(*adapter);
-	delete adapter;
-
+    m_graph->setCanvas(m_bGdip ? GiCanvasGdip::Create : GiCanvasGdi::Create);
 	Invalidate();
 }
 
 void CBaseView::OnUpdateAntiAlias(CCmdUI* pCmdUI) 
 {
-	pCmdUI->SetCheck(m_gs.isAntiAliasMode() ? 1 : 0);
+	pCmdUI->SetCheck(m_graph->gs.isAntiAliasMode() ? 1 : 0);
 }
 
 void CBaseView::OnViewAntiAlias() 
 {
-	m_gs.setAntiAliasMode(!m_gs.isAntiAliasMode());
-	m_gs.clearCachedBitmap();
+	m_graph->gs.setAntiAliasMode(!m_graph->gs.isAntiAliasMode());
+	m_graph->gs.clearCachedBitmap();
 	Invalidate();
 }
 
@@ -185,7 +172,7 @@ void CBaseView::OnViewBkColor()
 	if (IDOK == dlg.DoModal())
 	{
 		m_crBkColor = dlg.GetColor();
-		m_gs.clearCachedBitmap();
+		m_graph->gs.clearCachedBitmap();
 		Invalidate();
 	}
 }
@@ -199,7 +186,7 @@ void CBaseView::OnMouseMove(UINT nFlags, CPoint point)
 	ASSERT(pStatusBar != NULL);
 
 	Point2d pnt((float)point.x, (float)point.y);
-	pnt *= m_xf.displayToModel();
+	pnt *= m_graph->xf.displayToModel();
 
 	CString str;
 	int index = pStatusBar->CommandToIndex(ID_INDICATOR_X);
@@ -220,13 +207,13 @@ void CBaseView::OnMouseMove(UINT nFlags, CPoint point)
 void CBaseView::OnUpdateViewScale(CCmdUI* pCmdUI) 
 {
 	CString str;
-	str.Format(_T("%.2lf%%"), m_xf.getViewScale() * 100.0);
+	str.Format(_T("%.2lf%%"), m_graph->xf.getViewScale() * 100.0);
 	pCmdUI->SetText(str);
 }
 
 void CBaseView::OnZoomIn() 
 {
-	if (m_xf.zoomByFactor(0.2f))
+	if (m_graph->xf.zoomByFactor(0.2f))
 	{
 		OnZoomed();
 	}
@@ -234,7 +221,7 @@ void CBaseView::OnZoomIn()
 
 void CBaseView::OnZoomOut() 
 {
-	if (m_xf.zoomByFactor(-0.2f))
+	if (m_graph->xf.zoomByFactor(-0.2f))
 	{
 		OnZoomed();
 	}
@@ -242,7 +229,7 @@ void CBaseView::OnZoomOut()
 
 void CBaseView::OnPanLeft() 
 {
-	if (m_xf.zoomPan(50, 0))
+	if (m_graph->xf.zoomPan(50, 0))
 	{
 		OnZoomed();
 	}
@@ -250,7 +237,7 @@ void CBaseView::OnPanLeft()
 
 void CBaseView::OnPanRight() 
 {
-	if (m_xf.zoomPan(-50, 0))
+	if (m_graph->xf.zoomPan(-50, 0))
 	{
 		OnZoomed();
 	}
@@ -258,7 +245,7 @@ void CBaseView::OnPanRight()
 
 void CBaseView::OnPanUp() 
 {
-	if (m_xf.zoomPan(0, 50))
+	if (m_graph->xf.zoomPan(0, 50))
 	{
 		OnZoomed();
 	}
@@ -266,7 +253,7 @@ void CBaseView::OnPanUp()
 
 void CBaseView::OnPanDown() 
 {
-	if (m_xf.zoomPan(0, -50))
+	if (m_graph->xf.zoomPan(0, -50))
 	{
 		OnZoomed();
 	}

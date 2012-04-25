@@ -20,6 +20,9 @@ public:
     GiCanvasGdi(GiGraphics* gs);
     virtual ~GiCanvasGdi();
 
+    //! 工厂函数
+    static GiCanvasWin* Create(GiGraphics* gs) { return new GiCanvasGdi(gs); }
+
 public:
     virtual bool beginPaint(HDC hdc, HDC attribDC = NULL, 
         bool buffered = true, bool overlay = false);

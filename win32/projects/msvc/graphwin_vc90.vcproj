@@ -155,15 +155,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\graphwin\canvaswin.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\graphwin\giimage.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\graphwin\giimagep.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\graphwin\canvaswin.cpp"
 				>
 			</File>
 		</Filter>
@@ -172,15 +172,19 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\include\graphwin\gdiobj.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\graphwin\canvasgdi.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\graphwin\canvasgdip.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\graphwin\canvaswin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\graphwin\gdiobj.h"
 				>
 			</File>
 			<File
@@ -192,7 +196,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\graphwin\canvaswin.h"
+				RelativePath="..\..\include\graphwin\graphwin.h"
 				>
 			</File>
 		</Filter>
