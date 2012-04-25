@@ -2,6 +2,7 @@
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
+#ifndef __GNUC__
 #include "giimagep.h"
 #include "canvasgdip.h"
 
@@ -301,3 +302,5 @@ bool GiGdipImage::save(const wchar_t* filename, ULONG quality)
     
     return ret;
 }
+
+#endif

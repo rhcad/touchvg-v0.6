@@ -2,6 +2,7 @@
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
+#ifndef __GNUC__
 #include "canvasgdip.h"
 #include <_gigraph.h>
 
@@ -944,3 +945,5 @@ bool GiCanvasGdip::drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp,
 
     return ret;
 }
+
+#endif
