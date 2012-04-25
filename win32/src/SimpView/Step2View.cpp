@@ -14,7 +14,7 @@ static char THIS_FILE[] = __FILE__;
 CScrollShapeView::CScrollShapeView(RandomParam& param)
 	: CRandomShapeView(param)
 {
-	m_bRealPan = true;
+	m_bRealPan = false;
 }
 
 CScrollShapeView::~CScrollShapeView()
@@ -26,6 +26,8 @@ BEGIN_MESSAGE_MAP(CScrollShapeView, CRandomShapeView)
 	ON_WM_CREATE()
 	ON_WM_HSCROLL()
 	ON_WM_VSCROLL()
+    ON_UPDATE_COMMAND_UI(ID_REAL_PAN, OnUpdateRealPan)
+	ON_COMMAND(ID_REAL_PAN, OnViewRealPan)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -160,7 +162,7 @@ void CScrollShapeView::OnHScrThumbTrack(SCROLLINFO &si, UINT nPos)
 	si.nPos = nPos;
 	m_sizePan.cx = m_rcScrWnd.left - si.nPos;
 	Invalidate();
-	if (m_bRealPan || fabs(m_graph->xf.getViewScale() - 1.0) < 0.01)
+	if (NeedUpdatePan())
 	{
 		if (m_graph->xf.zoomPan((float)(m_rcScrWnd.left - si.nPos), 0))
 		{
@@ -227,7 +229,7 @@ void CScrollShapeView::OnVScrThumbTrack(SCROLLINFO &si, UINT nPos)
 	si.nPos = nPos;
 	m_sizePan.cy = m_rcScrWnd.top - si.nPos;
 	Invalidate();
-	if (m_bRealPan || fabs(m_graph->xf.getViewScale() - 1.0) < 0.01)
+	if (NeedUpdatePan())
 	{
 		if (m_graph->xf.zoomPan(0, (float)(m_rcScrWnd.top - si.nPos)))
 		{
@@ -237,4 +239,21 @@ void CScrollShapeView::OnVScrThumbTrack(SCROLLINFO &si, UINT nPos)
 		else
 			si.nPos = m_rcScrWnd.top;
 	}
+}
+
+bool CScrollShapeView::NeedUpdatePan()
+{
+    return m_bRealPan //|| fabs(m_graph->xf.getViewScale() - 1.0) < 0.01
+        || abs(m_sizePan.cx) > m_graph->xf.getWidth() * 4 / 5
+        || abs(m_sizePan.cy) > m_graph->xf.getHeight() * 4 / 5;
+}
+
+void CScrollShapeView::OnUpdateRealPan(CCmdUI* pCmdUI)
+{
+    pCmdUI->SetCheck(m_bRealPan ? 1 : 0);
+}
+
+void CScrollShapeView::OnViewRealPan()
+{
+    m_bRealPan = !m_bRealPan;
 }

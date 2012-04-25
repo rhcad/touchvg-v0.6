@@ -23,6 +23,7 @@
 #define ID_PAN_DOWN                     32778
 #define ID_VIEW_ANTIALIAS               32779
 #define ID_ZOOM_EXTENT                  32780
+#define ID_REAL_PAN                     32781
 #define ID_INDICATOR_X                  32801
 #define ID_INDICATOR_Y                  32802
 #define ID_INDICATOR_VIEWSCALE          32803

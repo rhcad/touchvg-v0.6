@@ -125,6 +125,7 @@ BEGIN
         MENUITEM "右移(&R)\tRight",               ID_PAN_RIGHT
         MENUITEM "上移(&U)\tUp",                  ID_PAN_UP
         MENUITEM "下移(&D)\tDown",                ID_PAN_DOWN
+        MENUITEM "动态滚动(&P)",                  ID_REAL_PAN
     END
     POPUP "窗口(&W)"
     BEGIN
@@ -373,6 +374,7 @@ BEGIN
     ID_PAN_DOWN             "显示下边的图形\n下移"
     ID_VIEW_ANTIALIAS       "设置使用GDI+显示时是否启用反走样\n反走样"
     ID_ZOOM_EXTENT          "在窗口中显示全部图形\n全部显示"
+    ID_REAL_PAN             "拖动滚动条滑块时是否立即平移显示\n动态滚动"
 END
 
 STRINGTABLE 

@@ -29,6 +29,8 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+    afx_msg void OnUpdateRealPan(CCmdUI* pCmdUI);
+	afx_msg void OnViewRealPan();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -36,6 +38,7 @@ protected:
 private:
 	void OnHScrThumbTrack(SCROLLINFO &si, UINT nPos);
 	void OnVScrThumbTrack(SCROLLINFO &si, UINT nPos);
+    bool NeedUpdatePan();
 
 private:
 	RECT			m_rcLimits;			// 滚动条极限范围

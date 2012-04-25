@@ -79,23 +79,24 @@ void CBaseView::OnPaint()
 	CPaintDC dc(this);
     GiGraphics &gs = m_graph->gs;
 
-	dc.SetBkColor(m_crBkColor);				// 为图形系统设置背景色
+	dc.SetBkColor(m_crBkColor);				// 将在beginPaint()中应用背景色
 
 	if (m_graph->canvas->beginPaint(dc.GetSafeHdc()))	// 准备绘图，使用绘图缓冲
 	{
 		// 显示先前保存的正式图形内容
 		if (m_sizePan.cx != 0 || m_sizePan.cy != 0)
-			gs.clearWindow();			// 清除背景
+			gs.clearWindow();			    // 清除背景
 		if (!gs.drawCachedBitmap((float)m_sizePan.cx, (float)m_sizePan.cy))
 		{
 			if (0 == m_sizePan.cx && 0 == m_sizePan.cy)
-				gs.clearWindow();		// 清除背景
-			OnDraw(&gs);				// 显示正式图形
-			gs.saveCachedBitmap();	    // 保存正式图形内容
+				gs.clearWindow();		    // 清除背景
+			OnDraw(&gs);				    // 显示正式图形
+			gs.saveCachedBitmap();	        // 保存正式图形内容
 		}
-		OnDynDraw(&gs);				    // 显示动态图形
 
-		m_graph->canvas->endPaint();    // 提交绘图结果到窗口
+		OnDynDraw(&gs);				        // 显示动态图形
+
+		m_graph->canvas->endPaint();        // 提交绘图结果到窗口
 	}
 }
 
