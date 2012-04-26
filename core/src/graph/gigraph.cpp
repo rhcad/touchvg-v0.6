@@ -114,7 +114,7 @@ bool GiGraphics::setClipBox(const RECT2D& rc)
         if (rect != Box2d(m_impl->clipBox))
         {
             rect.get(m_impl->clipBox);
-            m_impl->rectDraw.set((float)rc.left, (float)rc.top, (float)rc.right, (float)rc.bottom);
+            m_impl->rectDraw.set(Box2d(rc));
             m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
             m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
             m_impl->rectDrawW = m_impl->rectDrawM * xf().modelToWorld();
@@ -134,8 +134,7 @@ bool GiGraphics::setClipWorld(const Box2d& rectWorld)
     {
         Box2d box (rectWorld * xf().worldToDisplay());
 
-        box.intersectWith(Box2d(m_impl->clipBox0.left, m_impl->clipBox0.top, 
-            m_impl->clipBox0.right, m_impl->clipBox0.bottom));
+        box.intersectWith(Box2d(m_impl->clipBox0));
         if (!box.isEmpty(Tol(1, 0)))
         {
             if (box != Box2d(m_impl->clipBox))

@@ -27,7 +27,7 @@ enum kOpenImageError
 /*!
     本类采用 OleLoadPicture 解析图像格式，文件大小不超过16M，
     如果使用GDI+图形系统 GiCanvasGdip ,则建议改用 GiGdipImage 类来打开和显示图形
-    \ingroup GRAPH_INTERFACE
+    \ingroup GRAPH_WIN
 */
 class GiImage
 {

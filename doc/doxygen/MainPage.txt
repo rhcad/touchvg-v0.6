@@ -5,6 +5,7 @@
 	\defgroup GEOMAPI_CURVE 曲线计算函数
 	\defgroup GRAPH_INTERFACE 图形接口类
 	\defgroup GEOM_SHAPE 图形实体类
+	\defgroup GRAPH_WIN Windows图形接口类
 	\defgroup GRAPH_IOS iOS图形接口类
 */
 
@@ -42,6 +43,9 @@
 	- \ref GEOM_SHAPE "图形实体类" \n
 		图形实体库包含跨平台矢量图形类和交互命令类。\n\n
 		
+	- \ref GRAPH_WIN "Windows图形接口类" \n
+		Windows图形接口库采用GDI/GDI+实现。\n\n
+		
 	- \ref GRAPH_IOS "iOS图形接口类" \n
-		iOS图形接口库（iPad/GraphView）采用CoreGraphics实现，还包含了iOS视图和交互控制器。\n\n
+		iOS图形接口库（iPad/Graph2d）采用CoreGraphics实现，还包含了iOS视图和交互控制器（iPad/GraphView）。\n\n
 */

@@ -12,7 +12,7 @@ class GiCanvasGdipImpl;
 
 //! 用GDI+实现的图形显示接口类
 /*! 本类的 getCanvasType() 值为 2
-    \ingroup GRAPH_INTERFACE
+    \ingroup GRAPH_WIN
 */
 class GiCanvasGdip : public GiCanvasWin
 {

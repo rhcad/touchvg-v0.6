@@ -32,7 +32,7 @@ public:
     }
 
     //! 拷贝构造函数，默认不自动规范化
-    Box2d(const BOX2D& src, bool bNormalize = false);
+    Box2d(const BOX2D& src, bool normal = false);
     
     //! 给定两个对角点构造，自动规范化
     Box2d(const Point2d& pnt1, const Point2d& pnt2)
@@ -41,28 +41,28 @@ public:
     }
     
     //! 给定对角点坐标构造，默认不自动规范化
-    Box2d(float l, float t, float r, float b, bool bNormalize = false)
+    Box2d(float l, float t, float r, float b, bool normal = false)
     {
         xmin = l; ymin = t; xmax = r; ymax = b;
-        if (bNormalize)
+        if (normal)
             normalize();
     }
 
     //! 给定显示坐标矩形框构造，默认不自动规范化
-    Box2d(const RECT2D& rc, bool bNormalize = false)
+    Box2d(const RECT2D& rc, bool normal = false)
     {
         xmin = rc.left; ymin = rc.top;
         xmax = rc.right; ymax = rc.bottom;
-        if (bNormalize)
+        if (normal)
             normalize();
     }
 
     //! 给定对角点整数坐标构造，默认不自动规范化
-    Box2d(long l, long t, long r, long b, bool bNormalize = false)
+    Box2d(long l, long t, long r, long b, bool normal = false)
     {
         xmin = (float)l; ymin = (float)t;
         xmax = (float)r; ymax = (float)b;
-        if (bNormalize)
+        if (normal)
             normalize();
     }
     
@@ -106,7 +106,7 @@ public:
     }
 
 #if defined(_WINDEF_) || defined(_WINDEF_H)
-    //! 得到四舍五入后的矩形(RECT)，已上下对调
+    //! 得到四舍五入后的矩形(CRect)，已上下对调
     /*! 如果本矩形为规范化矩形，则取出的RECT也符合Windows规范化矩形要求，
         即 CRect::NormalizeRect() 的结果。
     */
@@ -132,7 +132,7 @@ public:
     }
 
     //! 复制矩形，默认不自动规范化
-    Box2d& set(const BOX2D& src, bool bNormalize = false);
+    Box2d& set(const BOX2D& src, bool normal = false);
     
     //! 设置两个对角点，自动规范化
     Box2d& set(const Point2d& p1, const Point2d& p2);

@@ -10,7 +10,7 @@
 #include <gigraph.h>
 
 //! The graphics class for Windows.
-/*! \ingroup GRAPH_INTERFACE
+/*! \ingroup GRAPH_WIN
 */
 class GiGraphWin
 {

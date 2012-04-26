@@ -14,7 +14,7 @@ struct GiGdipImageImpl;
 //! GDI+图像文件的辅助类
 /*!
     支持 BMP/JPEG/GIF/TIFF/PNG/WMF/EMF/ICON 文件
-    \ingroup GRAPH_INTERFACE
+    \ingroup GRAPH_WIN
 */
 class GiGdipImage
 {

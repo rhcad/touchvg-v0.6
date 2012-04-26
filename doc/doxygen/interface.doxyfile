@@ -1529,6 +1529,7 @@ PREDEFINED             = _WINDOWS \
                          _WINDOWS_ \
                          WIN32 \
                          _WIN32 \
+                         _WINDEF_ \
                          _UNICODE \
                          UNICODE \
                          GEOMAPI \
