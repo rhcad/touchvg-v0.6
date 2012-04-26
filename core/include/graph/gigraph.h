@@ -47,8 +47,9 @@ public:
     //! 得到剪裁框，逻辑坐标
     /*!
         \param[out] rc 填充逻辑坐标矩形
+        \return rc
     */
-    void getClipBox(RECT2D& rc) const;
+    RECT2D& getClipBox(RECT2D& rc) const;
 
     //! 设置剪裁框，逻辑坐标
     /*! 只有正处于绘图状态时，该函数的返回值才有效。

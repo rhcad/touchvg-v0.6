@@ -4,7 +4,7 @@
 
 #ifndef __GNUC__
 #include "canvasgdip.h"
-#include <_gigraph.h>
+#include <gigraph.h>
 
 #define ULONG_PTR DWORD
 #include <objbase.h>
@@ -190,8 +190,8 @@ public:
         }
     }
 
-    bool drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp, 
-        long hmWidth, long hmHeight, const Box2d& rectW, bool fast);
+    bool drawImage(G::Bitmap* pBmp, long hmWidth, long hmHeight, 
+        const Box2d& rectW, bool fast);
     bool addPolyToPath(G::GraphicsPath* pPath, int count, 
         const Point2d* pxs, const UInt8* types);
 };
@@ -866,8 +866,7 @@ bool GiCanvasGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count,
     return ret;
 }
 
-bool GiCanvasGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp, 
-                                 long hmWidth, long hmHeight, 
+bool GiCanvasGdipImpl::drawImage(G::Bitmap* pBmp, long hmWidth, long hmHeight, 
                                  const Box2d& rectW, bool fast)
 {
     RECT2D rc, rcDraw, rcFrom;
@@ -877,7 +876,8 @@ bool GiCanvasGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp,
     (rectW * owner()->xf().worldToDisplay()).get(rc);
 
     // rcDraw: 图像经剪裁后的可显示部分
-    if (rect.intersectWith(Box2d(rc), Box2d(pImpl->clipBox)).isEmpty())
+    owner()->getClipBox(rcDraw);
+    if (rect.intersectWith(Box2d(rc), Box2d(rcDraw)).isEmpty())
         return false;
     rect.get(rcDraw);
 
@@ -897,7 +897,7 @@ bool GiCanvasGdipImpl::drawImage(GiGraphicsImpl* pImpl, G::Bitmap* pBmp,
         mgSwap(rcDraw.top, rcDraw.bottom);
 
     G::InterpolationMode nOldMode = getDrawGs()->GetInterpolationMode();
-    getDrawGs()->SetInterpolationMode( (!fast || pImpl->isPrint)
+    getDrawGs()->SetInterpolationMode( (!fast || owner()->isPrint())
         ? G::InterpolationModeBilinear : G::InterpolationModeLowQuality);
 
     G::Status ret = getDrawGs()->DrawImage(pBmp, 
@@ -923,8 +923,7 @@ bool GiCanvasGdip::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
         && owner()->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
         G::Bitmap bmp (hbitmap, NULL);
-        ret = m_draw->drawImage(m_impl, &bmp, 
-            hmWidth, hmHeight, rectW, fast);
+        ret = m_draw->drawImage(&bmp, hmWidth, hmHeight, rectW, fast);
     }
 
     return ret;
@@ -939,8 +938,7 @@ bool GiCanvasGdip::drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp,
         && hmWidth > 0 && hmHeight > 0 && pBmp != NULL
         && owner()->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
-        ret = m_draw->drawImage(m_impl, (G::Bitmap*)pBmp, 
-            hmWidth, hmHeight, rectW, fast);
+        ret = m_draw->drawImage((G::Bitmap*)pBmp, hmWidth, hmHeight, rectW, fast);
     }
 
     return ret;

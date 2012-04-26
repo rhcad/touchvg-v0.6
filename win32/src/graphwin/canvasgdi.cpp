@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #include "canvasgdi.h"
-#include <_gigraph.h>
+#include <gigraph.h>
 #include <gdiobj.h>
 #include <vector>
 
@@ -226,9 +226,11 @@ bool GiCanvasGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
     {
         if ((m_draw->m_buffDC = ::CreateCompatibleDC(hdc)) != NULL)
         {
-            RECT rc = { mgRound(m_impl->clipBox0.left), mgRound(m_impl->clipBox0.top),
-                mgRound(m_impl->clipBox0.right), mgRound(m_impl->clipBox0.bottom)
-            };
+            RECT rc;
+            RECT2D clipBox;
+
+            Box2d(owner()->getClipBox(clipBox)).get(rc);
+
             m_draw->m_buffBmp = ::CreateCompatibleBitmap(hdc, 
                 rc.right - rc.left, rc.bottom - rc.top);
             if (m_draw->m_buffBmp == NULL)
@@ -264,10 +266,11 @@ void GiCanvasGdi::clearWindow()
 {
     if (!m_owner->isPrint() && m_owner->isDrawing())
     {
-        RECT rc = { mgRound(m_impl->clipBox0.left), mgRound(m_impl->clipBox0.top),
-            mgRound(m_impl->clipBox0.right), mgRound(m_impl->clipBox0.bottom)
-        };
-        ::ExtTextOut(m_draw->getDrawDC(), 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
+        RECT rc;
+        RECT2D clipBox;
+
+        Box2d(owner()->getClipBox(clipBox)).get(rc);
+        ExtTextOut(m_draw->getDrawDC(), 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
     }
 }
 
@@ -364,10 +367,11 @@ void GiCanvasGdi::endPaint(bool draw)
     {
         if (m_draw->m_buffBmp != NULL && draw)
         {
-            RECT rc = { mgRound(m_impl->clipBox0.left), mgRound(m_impl->clipBox0.top),
-                mgRound(m_impl->clipBox0.right), mgRound(m_impl->clipBox0.bottom)
-            };
-            ::BitBlt(m_draw->m_hdc, rc.left, rc.top, 
+            RECT rc;
+            RECT2D clipBox;
+
+            Box2d(owner()->getClipBox(clipBox)).get(rc);
+            BitBlt(m_draw->m_hdc, rc.left, rc.top, 
                 rc.right - rc.left, rc.bottom - rc.top,
                 m_draw->m_buffDC, rc.left, rc.top, SRCCOPY);
         }
@@ -701,13 +705,14 @@ bool GiCanvasGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
     if (hdc != NULL && hmWidth > 0 && hmHeight > 0 && hbitmap != NULL
         && m_owner->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
+        RECT2D clipBox;
         RECT rc, rcDraw, rcFrom;
 
         // rc: 整个图像对应的显示坐标区域
-        (rectW * xf().worldToDisplay()).get(rc.left, rc.top, rc.right, rc.bottom);
+        (rectW * xf().worldToDisplay()).get(rc);
 
         // rcDraw: 图像经剪裁后的可显示部分
-        Box2d(m_impl->clipBox).get(rcFrom.left, rcFrom.top, rcFrom.right, rcFrom.bottom);
+        Box2d(owner()->getClipBox(clipBox)).get(rcFrom);
         if (!IntersectRect(&rcDraw, &rc, &rcFrom))
             return false;
 

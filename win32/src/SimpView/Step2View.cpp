@@ -59,14 +59,14 @@ void CScrollShapeView::OnZoomed()
 	// m_rcLimits: 极限范围对应的坐标范围, 像素
 	rect = m_shapes->getExtent() * m_graph->xf.modelToDisplay();
 	rect.inflate(1, 1);
-	rect.get(m_rcLimits.left, m_rcLimits.top, m_rcLimits.right, m_rcLimits.bottom);
+	rect.get(m_rcLimits);
 
 	// m_rcScrWnd: 当前窗口对应的坐标范围, 像素
 	rect = Box2d(m_graph->xf.getCenterW(),
 		m_graph->xf.getWidth() / m_graph->xf.getWorldToDisplayX(),
 		m_graph->xf.getHeight() / m_graph->xf.getWorldToDisplayY());
 	rect *= m_graph->xf.worldToDisplay();
-	rect.get(m_rcScrWnd.left, m_rcScrWnd.top, m_rcScrWnd.right, m_rcScrWnd.bottom);
+	rect.get(m_rcScrWnd);
 
 	// 以m_rcLimits左上角为原点调整m_rcScrWnd和m_rcLimits
 	::OffsetRect(&m_rcScrWnd, -m_rcLimits.left, -m_rcLimits.top);

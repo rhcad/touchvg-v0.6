@@ -98,11 +98,24 @@ public:
     }
 
     //! 转换到显示坐标矩形框，已上下对调
-    void get(RECT2D& rc) const
+    RECT2D& get(RECT2D& rc) const
     {
         rc.left = xmin; rc.top = ymin;
         rc.right = xmax; rc.bottom = ymax;
+        return rc;
     }
+
+#if defined(_WINDEF_) || defined(_WINDEF_H)
+    //! 得到四舍五入后的矩形(RECT)，已上下对调
+    /*! 如果本矩形为规范化矩形，则取出的RECT也符合Windows规范化矩形要求，
+        即 CRect::NormalizeRect() 的结果。
+    */
+    RECT& get(RECT& rc) const
+    {
+        get(rc.left, rc.top, rc.right, rc.bottom);
+        return rc;
+    }
+#endif
     
     //! 得到四舍五入后的矩形(RECT)，已上下对调
     /*! 如果本矩形为规范化矩形，则取出的RECT也符合Windows规范化矩形要求，

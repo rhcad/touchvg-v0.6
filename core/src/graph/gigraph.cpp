@@ -95,9 +95,10 @@ Box2d GiGraphics::getClipWorld() const
     return m_impl->rectDrawW;
 }
 
-void GiGraphics::getClipBox(RECT2D& rc) const
+RECT2D& GiGraphics::getClipBox(RECT2D& rc) const
 {
     rc = m_impl->clipBox;
+    return rc;
 }
 
 bool GiGraphics::setClipBox(const RECT2D& rc)
