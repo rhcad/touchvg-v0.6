@@ -118,7 +118,7 @@ bool GiGraphics::setClipBox(const RECT2D& rc)
             m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
             m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
             m_impl->rectDrawW = m_impl->rectDrawM * xf().modelToWorld();
-            _clipBoxChanged(m_impl->clipBox);
+            SafeCall(m_impl->canvas, _clipBoxChanged(m_impl->clipBox));
         }
         ret = true;
     }
@@ -144,7 +144,7 @@ bool GiGraphics::setClipWorld(const Box2d& rectWorld)
                 m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
                 m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
                 m_impl->rectDrawW = m_impl->rectDrawM * xf().modelToWorld();
-                _clipBoxChanged(m_impl->clipBox);
+                SafeCall(m_impl->canvas, _clipBoxChanged(m_impl->clipBox));
             }
 
             ret = true;
@@ -162,7 +162,7 @@ bool GiGraphics::isAntiAliasMode() const
 void GiGraphics::setAntiAliasMode(bool antiAlias)
 {
     m_impl->antiAlias = antiAlias;
-    _antiAliasModeChanged(antiAlias);
+    SafeCall(m_impl->canvas, _antiAliasModeChanged(antiAlias));
 }
 
 int GiGraphics::getColorMode() const
@@ -177,12 +177,14 @@ void GiGraphics::setColorMode(int mode)
 
 GiColor GiGraphics::calcPenColor(const GiColor& color) const
 {
-    const GiColor& bk = getBkColor();
     GiColor ret = color;
 
-    if (kColorMono == m_impl->colorMode && color != bk)
-        ret.set(~bk.r, ~bk.g, ~bk.b);
-
+    if (kColorMono == m_impl->colorMode)
+    {
+        const GiColor& bk = getBkColor();
+        if (color != bk)
+            ret.set(~bk.r, ~bk.g, ~bk.b);
+    }
     if (m_impl->drawColors == 2           // 黑白
         || kColorGray == m_impl->colorMode)
     {
@@ -190,9 +192,10 @@ GiColor GiGraphics::calcPenColor(const GiColor& color) const
             (77 * ret.r + 151 * ret.g + 28 * ret.b + 128) / 256);
         ret.set(by, by, by);
     }
-    if (m_impl->drawColors > 0 && m_impl->drawColors < 8)  // 少于256色
+    if (m_impl->drawColors > 0 && m_impl->drawColors < 8
+        && m_impl->canvas)              // 少于256色
     {
-        ret = getNearestColor(ret);
+        ret = m_impl->canvas->getNearestColor(ret);
     }
 
     return ret;
@@ -538,13 +541,13 @@ static bool drawPolygonEdge(const PolylineAux& aux,
     return ret;
 }
 
-static bool _DrawPolygon(GiGraphics* gs, const GiContext* ctx, 
+static bool _DrawPolygon(GiCanvas* cv, const GiContext* ctx, 
                          int count, const Point2d* points, 
                          bool bM2D, bool bFill, bool bEdge, bool modelUnit)
 {
-    if (NULL == ctx)
-        ctx = gs->getCurrentContext();
-    if (NULL == ctx)
+    if (!ctx && cv)
+        ctx = cv->getCurrentContext();
+    if (!ctx || !cv)
         return false;
     
     GiContext context (*ctx);
@@ -558,7 +561,7 @@ static bool _DrawPolygon(GiGraphics* gs, const GiContext* ctx,
 
     vector<Point2d> pxpoints;
     Point2d pt1, pt2;
-    Matrix2d matD(S2D(gs->xf(), modelUnit));
+    Matrix2d matD(S2D(cv->owner()->xf(), modelUnit));
 
     pxpoints.resize(count);
     Point2d *pxs = &pxpoints.front();
@@ -576,7 +579,7 @@ static bool _DrawPolygon(GiGraphics* gs, const GiContext* ctx,
         }
     }
 
-    return gs->rawPolygon(&context, pxs, n);
+    return cv->rawPolygon(&context, pxs, n);
 }
 
 bool GiGraphics::drawPolygon(const GiContext* ctx, int count, 
@@ -596,7 +599,7 @@ bool GiGraphics::drawPolygon(const GiContext* ctx, int count,
 
     if (DRAW_MAXR(m_impl, modelUnit).contains(extent))  // 全部在显示区域内
     {
-        ret = _DrawPolygon(this, ctx, 
+        ret = _DrawPolygon(m_impl->canvas, ctx, 
             count, points, true, true, true, modelUnit);
     }
     else                                                // 部分在显示区域内
@@ -607,13 +610,13 @@ bool GiGraphics::drawPolygon(const GiContext* ctx, int count,
         count = clip.getCount();
         points = clip.getPoints();
 
-        ret = _DrawPolygon(this, ctx, 
+        ret = _DrawPolygon(m_impl->canvas, ctx, 
             count, points, false, true, false, modelUnit);
 
         int ienter = findInvisibleEdge(clip);
         if (ienter == count)
         {
-            ret = _DrawPolygon(this, ctx, count, points, 
+            ret = _DrawPolygon(m_impl->canvas, ctx, count, points, 
                 false, false, true, modelUnit) || ret;
         }
         else
@@ -992,49 +995,9 @@ bool GiGraphics::drawPath(const GiContext* ctx, int count,
     return rawPath(ctx, count, pxs, types);
 }
 
-void GiGraphics::clearWindow()
-{
-    SafeCall(m_impl->canvas, clearWindow());
-}
-
-bool GiGraphics::drawCachedBitmap(float x, float y, bool secondBmp)
-{
-    return m_impl->canvas && m_impl->canvas->drawCachedBitmap(x, y, secondBmp);
-}
-
-bool GiGraphics::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool secondBmp)
-{
-    return m_impl->canvas && m_impl->canvas->drawCachedBitmap2(p, x, y, secondBmp);
-}
-
-void GiGraphics::saveCachedBitmap(bool secondBmp)
-{
-    SafeCall(m_impl->canvas, saveCachedBitmap(secondBmp));
-}
-
-bool GiGraphics::hasCachedBitmap(bool secondBmp) const
-{
-    return m_impl->canvas && m_impl->canvas->hasCachedBitmap(secondBmp);
-}
-
 void GiGraphics::clearCachedBitmap()
 {
     SafeCall(m_impl->canvas, clearCachedBitmap());
-}
-
-bool GiGraphics::isBufferedDrawing() const
-{
-    return m_impl->canvas && m_impl->canvas->isBufferedDrawing();
-}
-
-int GiGraphics::getCanvasType() const
-{
-    return m_impl->canvas ? m_impl->canvas->getCanvasType() : 0;
-}
-
-float GiGraphics::getScreenDpi() const
-{
-    return m_impl->canvas ? m_impl->canvas->getScreenDpi() : 96;
 }
 
 GiColor GiGraphics::getBkColor() const
@@ -1042,29 +1005,9 @@ GiColor GiGraphics::getBkColor() const
     return m_impl->canvas ? m_impl->canvas->getBkColor() : GiColor::Invalid();
 }
 
-GiColor GiGraphics::setBkColor(const GiColor& color)
+float GiGraphics::getScreenDpi() const
 {
-    return m_impl->canvas ? m_impl->canvas->setBkColor(color) : color;
-}
-
-GiColor GiGraphics::getNearestColor(const GiColor& color) const
-{
-    return m_impl->canvas ? m_impl->canvas->getNearestColor(color) : color;
-}
-
-const GiContext* GiGraphics::getCurrentContext() const
-{
-    return m_impl->canvas ? m_impl->canvas->getCurrentContext() : NULL;
-}
-
-void GiGraphics::_clipBoxChanged(const RECT2D& clipBox)
-{
-    SafeCall(m_impl->canvas, _clipBoxChanged(clipBox));
-}
-
-void GiGraphics::_antiAliasModeChanged(bool antiAlias)
-{
-    SafeCall(m_impl->canvas, _antiAliasModeChanged(antiAlias));
+    return m_impl->canvas ? m_impl->canvas->getScreenDpi() : 96;
 }
 
 bool GiGraphics::rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2)

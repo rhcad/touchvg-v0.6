@@ -72,20 +72,20 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    GiGraphics& gs = _graph->gs;
+    GiCanvasIos *cv = &_graph->canvas;
     
     _graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    gs.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
+    cv->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
     if (_graph->canvas.beginPaint(UIGraphicsGetCurrentContext(), !!_zooming))
     {
-        if (!gs.drawCachedBitmap()) {
-            [self draw:&gs];
+        if (!cv->drawCachedBitmap()) {
+            [self draw:cv->owner()];
             if (!_zooming)
-                gs.saveCachedBitmap();
+                cv->saveCachedBitmap();
         }
-        [self dynDraw:&gs];
-        _graph->canvas.endPaint();
+        [self dynDraw:cv->owner()];
+        cv->endPaint();
     }
 }
 

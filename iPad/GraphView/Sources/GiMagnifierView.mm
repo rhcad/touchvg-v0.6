@@ -133,18 +133,18 @@
         xf.zoom(xf.getCenterW(), [_gview xform]->getViewScale() * _scale);
     }
     
-    GiGraphics& gs = _graph->gs;
+    GiCanvasIos *cv = &_graph->canvas;
     
-    gs.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
-    if (_graph->canvas.beginPaint(UIGraphicsGetCurrentContext(), [self isZooming]))
+    cv->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
+    if (cv->beginPaint(UIGraphicsGetCurrentContext(), [self isZooming]))
     {
-        if (!gs.drawCachedBitmap()) {
-            [self draw:&gs];
+        if (!cv->drawCachedBitmap()) {
+            [self draw:cv->owner()];
             if (![self isZooming])
-                gs.saveCachedBitmap();
+                cv->saveCachedBitmap();
         }
-        [self dynDraw:&gs];
-        _graph->canvas.endPaint();
+        [self dynDraw:cv->owner()];
+        cv->endPaint();
     }
 }
 

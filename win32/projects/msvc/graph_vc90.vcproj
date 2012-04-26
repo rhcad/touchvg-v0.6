@@ -168,6 +168,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\include\graph\gicanvas.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\include\graph\gicanvdr.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\include\graph\gicolor.h"
 				>
 			</File>
@@ -177,10 +185,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\graph\gidef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\graph\gicanvas.h"
 				>
 			</File>
 			<File

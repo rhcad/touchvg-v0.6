@@ -77,26 +77,26 @@ BOOL CBaseView::OnEraseBkgnd(CDC*)
 void CBaseView::OnPaint() 
 {
 	CPaintDC dc(this);
-    GiGraphics &gs = m_graph->gs;
+    GiCanvasWin *cv = m_graph->canvas;
 
 	dc.SetBkColor(m_bkColor);				    // 在beginPaint()中应用背景色
 
-	if (m_graph->canvas->beginPaint(dc))        // 准备绘图，使用绘图缓冲
+	if (cv->beginPaint(dc))                     // 准备绘图，使用绘图缓冲
 	{
 		// 显示先前保存的正式图形内容
 		if (m_pan.cx != 0 || m_pan.cy != 0)     // 动态平移
-			gs.clearWindow();			        // 清除缓存图外的背景
-		if (!gs.drawCachedBitmap((float)m_pan.cx, (float)m_pan.cy))
+			cv->clearWindow();			        // 清除缓存图外的背景
+		if (!cv->drawCachedBitmap((float)m_pan.cx, (float)m_pan.cy))
 		{
 			if (0 == m_pan.cx && 0 == m_pan.cy)
-				gs.clearWindow();		        // 清除背景
-			DrawAll(&gs);                       // 显示正式图形
-			gs.saveCachedBitmap();	            // 保存正式图形内容
+				cv->clearWindow();		        // 清除背景
+			DrawAll(cv->owner());               // 显示正式图形
+			cv->saveCachedBitmap();	            // 保存正式图形内容
 		}
 
-		OnDynDraw(&gs);                         // 显示动态图形
+		OnDynDraw(cv->owner());                 // 显示动态图形
 
-		m_graph->canvas->endPaint();            // 提交绘图结果到窗口
+		cv->endPaint();                         // 提交绘图结果到窗口
 	}
 }
 
@@ -134,7 +134,7 @@ void CBaseView::OnViewGray()
 {
 	m_graph->gs.setColorMode(GiGraphics::kColorGray == m_graph->gs.getColorMode()
         ? GiGraphics::kColorReal : GiGraphics::kColorGray);
-    m_graph->gs.clearCachedBitmap();
+    m_graph->canvas->clearCachedBitmap();
     Invalidate();
 }
 
@@ -163,7 +163,7 @@ void CBaseView::OnUpdateAntiAlias(CCmdUI* pCmdUI)
 void CBaseView::OnViewAntiAlias() 
 {
 	m_graph->gs.setAntiAliasMode(!m_graph->gs.isAntiAliasMode());
-	m_graph->gs.clearCachedBitmap();
+	m_graph->canvas->clearCachedBitmap();
 	Invalidate();
 }
 
@@ -173,7 +173,7 @@ void CBaseView::OnViewBkColor()
 	if (IDOK == dlg.DoModal())
 	{
 		m_bkColor = dlg.GetColor();
-		m_graph->gs.clearCachedBitmap();
+		m_graph->canvas->clearCachedBitmap();
 		Invalidate();
 	}
 }

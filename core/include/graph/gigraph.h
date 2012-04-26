@@ -15,7 +15,7 @@ class GiGraphicsImpl;
     显示图形所用的坐标计算和坐标系转换是在 GiTransform 中定义的。
     \ingroup GRAPH_INTERFACE
 */
-class GiGraphics : public GiCanvas
+class GiGraphics : public GiCanvasDrawing
 {
 public:
     //! 构造函数，坐标系管理对象必须有效
@@ -326,20 +326,9 @@ public:
     void _endPaint();
 
 public:
-    void clearWindow();
-    bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);
-    bool drawCachedBitmap2(const GiCanvas* p, 
-        float x = 0, float y = 0, bool secondBmp = false);
-    void saveCachedBitmap(bool secondBmp = false);
-    bool hasCachedBitmap(bool secondBmp = false) const;
     void clearCachedBitmap();
-    bool isBufferedDrawing() const;
-    int getCanvasType() const;
     float getScreenDpi() const;
     GiColor getBkColor() const;
-    GiColor setBkColor(const GiColor& color);
-    GiColor getNearestColor(const GiColor& color) const;
-    const GiContext* getCurrentContext() const;
     bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2);
     bool rawLines(const GiContext* ctx, const Point2d* pxs, int count);
     bool rawBeziers(const GiContext* ctx, const Point2d* pxs, int count);
@@ -356,9 +345,6 @@ public:
     bool rawClosePath();
 
 private:
-    void _clipBoxChanged(const RECT2D& clipBox);
-    void _antiAliasModeChanged(bool antiAlias);
-    
     GiGraphics();
     GiGraphics(const GiGraphics&);
     GiGraphics& operator=(const GiGraphics&);

@@ -3,21 +3,21 @@
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchdraw
 
-#ifndef __GEOMETRY_DRAWADAPTER_H_
-#define __GEOMETRY_DRAWADAPTER_H_
+#ifndef __GEOMETRY_CANVAS_H_
+#define __GEOMETRY_CANVAS_H_
 
-#include "gixform.h"
-#include "gicontxt.h"
+#include "gicanvdr.h"
 
 class GiGraphics;
 class GiGraphicsImpl;
 
 //! 抽象画布接口类
-/*! 本类是图形显示适配接口类，定义图元显示原语。
+/*! 本类是图形显示适配接口类，
     图元显示原语由派生类实现，例如采用GDI/GDI+/SVG/PDF等实现。
     \ingroup GRAPH_INTERFACE
+    \interface GiCanvas
 */
-class GiCanvas
+class GiCanvas : public GiCanvasDrawing
 {
 public:
     GiCanvas() {}
@@ -88,11 +88,6 @@ public:
     */
     virtual bool hasCachedBitmap(bool secondBmp = false) const = 0;
 
-    //! 清除后备缓冲位图
-    /*! 当显示窗口大小改变或显示放缩后，调用 beginPaint() 时将自动清除后备缓冲位图。
-    */
-    virtual void clearCachedBitmap() = 0;
-
     //! 返回是否正在绘图缓冲上绘图
     /*! 在派生类的 beginPaint 函数中指定是否使用绘图缓冲
         \return 是否正在绘图缓冲上绘图
@@ -102,15 +97,6 @@ public:
 
     //! 返回画布类型
     virtual int getCanvasType() const = 0;
-
-    //! 返回屏幕分辨率DPI, 常量
-    virtual float getScreenDpi() const = 0;
-
-    //! 返回背景色
-    /*!
-        \return 背景色，RGB色，如果是打印或打印预览，则为白色
-    */
-    virtual GiColor getBkColor() const = 0;
 
     //! 设置背景色
     /*! 如果正处于绘图状态中，该函数将同时设置绘图设备的背景色
@@ -125,7 +111,7 @@ public:
         \return 符合模拟设备的RGB颜色
     */
     virtual GiColor getNearestColor(const GiColor& color) const = 0;
-    
+
     //! 返回当前绘图参数
     virtual const GiContext* getCurrentContext() const = 0;
 
@@ -138,51 +124,9 @@ public:
     //! 反走样模式已设置的通知，仅由 GiGraphics 调用
     virtual void _antiAliasModeChanged(bool antiAlias) = 0;
 
-
-    //! 绘制直线段的原语函数，像素坐标，不剪裁
-    virtual bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2) = 0;
-
-    //! 绘制折线的原语函数，像素坐标，不剪裁
-    virtual bool rawLines(const GiContext* ctx, const Point2d* pxs, int count) = 0;
-
-    //! 绘制多条贝塞尔曲线的原语函数，像素坐标，不剪裁
-    virtual bool rawBeziers(const GiContext* ctx, const Point2d* pxs, int count) = 0;
-
-    //! 绘制多边形的原语函数，像素坐标，不剪裁
-    virtual bool rawPolygon(const GiContext* ctx, const Point2d* pxs, int count) = 0;
-
-    //! 绘制矩形的原语函数，像素坐标，不剪裁
-    virtual bool rawRect(const GiContext* ctx, float x, float y, float w, float h) = 0;
-
-    //! 绘制椭圆的原语函数，像素坐标，不剪裁
-    virtual bool rawEllipse(const GiContext* ctx, float x, float y, float w, float h) = 0;
-
-    //! 绘制多样线的原语函数，像素坐标，不剪裁
-    virtual bool rawPath(const GiContext* ctx, 
-        int count, const Point2d* pxs, const UInt8* types) = 0;
-
-
-    //! 开始一个路径的原语函数
-    virtual bool rawBeginPath() = 0;
-
-    //! 结束并显示一个路径的原语函数
-    virtual bool rawEndPath(const GiContext* ctx, bool fill) = 0;
-
-    //! 在当前路径中移动到新的位置的原语函数
-    virtual bool rawMoveTo(float x, float y) = 0;
-
-    //! 在当前路径中添加画线指令到新的位置的原语函数
-    virtual bool rawLineTo(float x, float y) = 0;
-
-    //! 在当前路径中添加画贝塞尔曲线指令的原语函数
-    virtual bool rawBezierTo(const Point2d* pxs, int count) = 0;
-
-    //! 在当前路径中添加闭合指令的原语函数
-    virtual bool rawClosePath() = 0;
-
 protected:
     GiGraphics*     m_owner;        //!< 图形系统对象，拥有者
     GiGraphicsImpl* m_impl;         //!< GiGraphics内部实现
 };
 
-#endif // __GEOMETRY_DRAWADAPTER_H_
+#endif // __GEOMETRY_CANVAS_H_
