@@ -111,6 +111,6 @@ GEOMAPI long mgGcd(long x, long y);
     \return 四舍五入后的浮点数
     \see mgRound
 */
-GEOMAPI double mgRoundReal(double value, int decimal);
+GEOMAPI float mgRoundReal(float value, int decimal);
 
 #endif // __GEOMETRY_BASIC_H_

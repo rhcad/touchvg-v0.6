@@ -63,12 +63,12 @@ void RandomParam::initShapes(MgShapes* shapes)
                 if (0 == i)
                 {
                     sp->shape()->setPoint(i, 
-                        Point2d(RandF(-1000.0, 1000.0), RandF(-1000.0, 1000.0)));
+                        Point2d(RandF(-1000, 1000), RandF(-1000, 1000)));
                 }
                 else
                 {
                     sp->shape()->setPoint(i, sp->shape()->getPoint(i-1)
-                        + Vector2d(RandF(-200.0, 200.0), RandF(-200.0, 200.0)));
+                        + Vector2d(RandF(-200, 200), RandF(-200, 200)));
                 }
             }
         }
@@ -78,11 +78,11 @@ void RandomParam::initShapes(MgShapes* shapes)
             /*
             ArcItem* shape = new ArcItem();
             setShapeProp(sp->context());
-            shape->center.set(RandDbl(-1000.0, 1000.0), RandDbl(-1000.0, 1000.0));
-            shape->rx = RandDbl(1.0, 1000.0);
-            shape->ry = RandDbl(1.0, 1000.0);
-            shape->startAngle = RandDbl(0.0, _M_2PI);
-            shape->sweepAngle = RandDbl(0.0, _M_PI_2 * 6);
+            shape->center.set(RandDbl(-1000, 1000), RandDbl(-1000, 1000));
+            shape->rx = RandDbl(1, 1000);
+            shape->ry = RandDbl(1, 1000);
+            shape->startAngle = RandDbl(0, _M_2PI);
+            shape->sweepAngle = RandDbl(0, _M_PI_2 * 6);
             */
         }
         else
@@ -96,8 +96,8 @@ void RandomParam::initShapes(MgShapes* shapes)
 
             sp = shapes->addShape(shape);
             setShapeProp(sp->context());
-            sp->shape()->setPoint(0, Point2d(RandF(-1000.0, 1000.0), RandF(-1000.0, 1000.0)));
-            sp->shape()->setPoint(1, Point2d(RandF(-1000.0, 1000.0), RandF(-1000.0, 1000.0)));
+            sp->shape()->setPoint(0, Point2d(RandF(-1000, 1000), RandF(-1000, 1000)));
+            sp->shape()->setPoint(1, Point2d(RandF(-1000, 1000), RandF(-1000, 1000)));
         }
 
         sp->shape()->update();

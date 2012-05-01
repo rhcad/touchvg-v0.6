@@ -184,10 +184,10 @@ GEOMAPI float mgPtToLine(
 
 // 求两条直线(ax+by+c=0)的交点
 GEOMAPI bool mgCrossLineAbc(
-    double a1, double b1, double c1, double a2, double b2, double c2,
+    float a1, float b1, float c1, float a2, float b2, float c2,
     Point2d& ptCross, const Tol& tolVec)
 {
-    double sinnum, cosnum;
+    float sinnum, cosnum;
     
     sinnum = a1*b2 - a2*b1;
     if (mgIsZero(sinnum))
@@ -196,8 +196,8 @@ GEOMAPI bool mgCrossLineAbc(
     if (!mgIsZero(cosnum) && fabs(sinnum / cosnum) < tolVec.equalVector())
         return false;
     
-    ptCross.x = (float)( (b1*c2 - b2*c1) / sinnum);
-    ptCross.y = (float)( (a2*c1 - a1*c2) / sinnum);
+    ptCross.x = (b1*c2 - b2*c1) / sinnum;
+    ptCross.y = (a2*c1 - a1*c2) / sinnum;
     
     return true;
 }
@@ -205,9 +205,9 @@ GEOMAPI bool mgCrossLineAbc(
 // 求两条无穷直线的交点
 GEOMAPI bool mgCross2Beeline(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d, 
-    Point2d& ptCross, double* pu, double* pv, const Tol& tolVec)
+    Point2d& ptCross, float* pu, float* pv, const Tol& tolVec)
 {
-    double u, v, denom, cosnum;
+    float u, v, denom, cosnum;
     
     denom = (c.x-d.x)*(b.y-a.y)-(c.y-d.y)*(b.x-a.x);
     if (mgIsZero(denom))            // 平行或重合
@@ -223,8 +223,8 @@ GEOMAPI bool mgCross2Beeline(
     if (pu != NULL) *pu = u;
     if (pv != NULL) *pv = v;
     
-    ptCross.x = (float)( (1 - u) * a.x + u * b.x);
-    ptCross.y = (float)( (1 - u) * a.y + u * b.y);
+    ptCross.x = (1 - u) * a.x + u * b.x;
+    ptCross.y = (1 - u) * a.y + u * b.y;
     
     return true;
 }
@@ -262,8 +262,8 @@ GEOMAPI bool mgCross2Line(
     if (v < _MGZERO || v > 1.f - _MGZERO)
         return false;
     
-    ptCross.x = (float)( (1 - u) * a.x + u * b.x);
-    ptCross.y = (float)( (1 - u) * a.y + u * b.y);
+    ptCross.x = (1 - u) * a.x + u * b.x;
+    ptCross.y = (1 - u) * a.y + u * b.y;
     
     return true;
 }
@@ -271,9 +271,9 @@ GEOMAPI bool mgCross2Line(
 // 求线段和直线的交点
 GEOMAPI bool mgCrossLineBeeline(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d,
-    Point2d& ptCross, double* pv, const Tol& tolVec)
+    Point2d& ptCross, float* pv, const Tol& tolVec)
 {
-    double u, denom, cosnum;
+    float u, denom, cosnum;
     
     denom = (c.x-d.x)*(b.y-a.y)-(c.y-d.y)*(b.x-a.x);
     if (mgIsZero(denom))
@@ -290,8 +290,8 @@ GEOMAPI bool mgCrossLineBeeline(
     if (pv != NULL)
         *pv = ((c.x-a.x)*(b.y-a.y)-(c.y-a.y)*(b.x-a.x)) / denom;
     
-    ptCross.x = (float)( (1 - u) * a.x + u * b.x);
-    ptCross.y = (float)( (1 - u) * a.y + u * b.y);
+    ptCross.x = (1 - u) * a.x + u * b.x;
+    ptCross.y = (1 - u) * a.y + u * b.y;
     
     return true;
 }

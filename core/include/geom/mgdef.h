@@ -21,8 +21,7 @@
 #pragma warning(disable: 4251)  // using non-exported as public in exported
 #endif
 
-//! 定义可以视为零的极小数
-const float _MGZERO     = 1e-12f;
+const float _MGZERO    = 1e-8f;     //!< 定义可以视为零的极小数
 
 // 定义常用的数学常数
 const float _M_E       = 2.71828182845904523536028747135266f;      //!< e
@@ -46,8 +45,8 @@ const float _M_D2R     = 0.0174532925199432957692369076848861271344287188854173f
 const float _M_R2D     = 57.2957795130823208767981548141051703324054724665643f;  //!< 弧度到度的转换常数，180/PI
 const float _M_1_SQRPI = 0.564189583547756286948079451560773f;                   //!< 1/sqrt(PI)
 
-const double _DBL_MIN  = 2.2250738585072014e-308;   //!< 双精度浮点数最小绝对值
-const double _DBL_MAX  = 1.7976931348623158e+308;   //!< 双精度浮点数最大绝对值
+//const double _DBL_MIN  = 2.2250738585072014e-308;   //!< 双精度浮点数最小绝对值
+//const double _DBL_MAX  = 1.7976931348623158e+308;   //!< 双精度浮点数最大绝对值
 const float  _FLT_MIN  = 1.175494351e-38F;          //!< 单精度浮点数最小绝对值
 const float  _FLT_MAX  = 3.402823466e+38F;          //!< 单精度浮点数最大绝对值
 
@@ -97,7 +96,7 @@ void mgSwap(_T& t1, _T& t2)
 */
 inline float mgHypot(float x, float y)
 {
-    return (float)sqrt((double)x*x + (double)y*y);
+    return (float)sqrt(x*x + y*y);
 }
 
 //! 求两个数的平方和

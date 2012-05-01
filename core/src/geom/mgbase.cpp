@@ -139,11 +139,11 @@ GEOMAPI long mgGcd(long x, long y)
 }
 
 // 四舍五入. 小数位[-6，7]. eg: mgRoundReal(1.25, 1)=1.3
-GEOMAPI double mgRoundReal(double value, int decimal)
+GEOMAPI float mgRoundReal(float value, int decimal)
 {
     if (decimal < -6) decimal = -6;
     else if (decimal > 7) decimal = 7;
-    double e10n = (double)pow(10.0L, decimal);
-    double l = floor(e10n * value + 0.5);
-    return static_cast<double>(l / e10n);
+    float e10n = (float)pow(10.0, decimal);
+    float l = floor(e10n * value + 0.5f);
+    return static_cast<float>(l / e10n);
 }

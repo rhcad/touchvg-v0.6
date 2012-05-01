@@ -180,7 +180,7 @@ GEOMAPI float mgPtToLine(
     \return 是否有交点
 */
 GEOMAPI bool mgCrossLineAbc(
-    double a1, double b1, double c1, double a2, double b2, double c2,
+    float a1, float b1, float c1, float a2, float b2, float c2,
     Point2d& ptCross, const Tol& tolVec = Tol::gTol());
 
 //! 求两条无穷直线的交点
@@ -198,7 +198,7 @@ GEOMAPI bool mgCrossLineAbc(
 */
 GEOMAPI bool mgCross2Beeline(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d, 
-    Point2d& ptCross, double* pu = NULL, double* pv = NULL, 
+    Point2d& ptCross, float* pu = NULL, float* pv = NULL, 
     const Tol& tolVec = Tol::gTol());
 
 //! 求两条线段的交点
@@ -230,7 +230,7 @@ GEOMAPI bool mgCross2Line(
 */
 GEOMAPI bool mgCrossLineBeeline(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d,
-    Point2d& ptCross, double* pv = NULL, 
+    Point2d& ptCross, float* pv = NULL, 
     const Tol& tolVec = Tol::gTol());
 
 //! 用矩形剪裁线段，Sutherland-Cohen算法

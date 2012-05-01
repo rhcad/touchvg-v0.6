@@ -8,15 +8,14 @@
 
 GEOMAPI void mgFitBezier(const Point2d* pts, float t, Point2d& fitpt)
 {
-    double v = 1.f - t;
-    double v2 = v * v;
-    double t2 = t * t;
-    
-    fitpt.set(
-        (float)( (v2 * v) * pts[0].x + 3.f * t * v2 * pts[1].x
-        + 3.f * t2 * v * pts[2].x + t2 * t * pts[3].x),
-        (float)( (v2 * v) * pts[0].y + 3.f * t * v2 * pts[1].y
-        + 3.f * t2 * v * pts[2].y + t2 * t * pts[3].y));
+    float v = 1.f - t;
+    float v2 = v * v;
+    float t2 = t * t;
+
+    fitpt.x = (v2 * v) * pts[0].x + 3 * t * v2 * pts[1].x
+        + 3 * t2 * v * pts[2].x + t2 * t * pts[3].x;
+    fitpt.y = (v2 * v) * pts[0].y + 3 * t * v2 * pts[1].y
+        + 3 * t2 * v * pts[2].y + t2 * t * pts[3].y;
 }
 
 GEOMAPI void mgBezier4P(
@@ -117,29 +116,29 @@ static void _mgAngleArcToBezier(
 {
     // Compute bezier curve for arc centered along y axis
     // Anticlockwise: (0,-B), (x,-y), (x,y), (0,B)
-    double sy = ry / rx;
+    float sy = ry / rx;
     ry = rx;
-    double B = ry * sin(sweepAngle / 2.0);
-    double C = rx * cos(sweepAngle / 2.0);
-    double A = rx - C;
+    float B = ry * sin(sweepAngle / 2);
+    float C = rx * cos(sweepAngle / 2);
+    float A = rx - C;
     
-    double X = A * 4 / 3;
-    double Y = B - X * (rx-A)/B;
+    float X = A * 4 / 3;
+    float Y = B - X * (rx-A)/B;
     
-    points[0].set((float)C,      (float)-B);
-    points[1].set((float)(C+X),  (float)-Y);
-    points[2].set((float)(C+X),  (float)Y);
-    points[3].set((float)C,      (float)B);
+    points[0].set(C,    -B);
+    points[1].set(C+X,  -Y);
+    points[2].set(C+X,  Y);
+    points[3].set(C,    B);
     
     // rotate to the original angle
     A = startAngle + sweepAngle / 2;
-    double s = sin(A);
-    double c = cos(A);
+    float s = sin(A);
+    float c = cos(A);
     
     for (int i = 0; i < 4; i++)
     {
-        points[i].set((float)(center.x + points[i].x * c - points[i].y * s),
-            (float)(center.y + points[i].x * s * sy + points[i].y * c * sy));
+        points[i].set(center.x + points[i].x * c - points[i].y * s,
+            center.y + points[i].x * s * sy + points[i].y * c * sy);
     }
 }
 
@@ -155,15 +154,15 @@ static int _mgAngleArcToBezierPlusSweep(
     float endAngle;
 
     // 计算第一段椭圆弧的终止角度
-    if (startAngle < _M_PI_2) {              // +Y
+    if (startAngle < _M_PI_2) {             // +Y
         endAngle = _M_PI_2;
         k = 1;
     }
-    else if (startAngle < _M_PI) {           // -X
+    else if (startAngle < _M_PI) {          // -X
         endAngle = _M_PI;
         k = 2;
     }
-    else if (startAngle < 3*_M_PI_2) {       // -Y
+    else if (startAngle < 3*_M_PI_2) {      // -Y
         endAngle = 3*_M_PI_2;
         k = 3;
     }
@@ -271,14 +270,14 @@ GEOMAPI bool mgArc3P(
     Point2d& center, float& radius,
     float* startAngle, float* sweepAngle)
 {
-    double a1, b1, c1, a2, b2, c2;
+    float a1, b1, c1, a2, b2, c2;
     
     a1 = end.x - start.x;
     b1 = end.y - start.y;
-    c1 = -0.5 * (a1 * (end.x + start.x) + b1 * (end.y + start.y));
+    c1 = -0.5f * (a1 * (end.x + start.x) + b1 * (end.y + start.y));
     a2 = end.x - point.x;
     b2 = end.y - point.y;
-    c2 = -0.5 * (a2 * (end.x + point.x) + b2 * (end.y + point.y));
+    c2 = -0.5f * (a2 * (end.x + point.x) + b2 * (end.y + point.y));
     if (!mgCrossLineAbc(a1, b1, c1, a2, b2, c2, center, Tol::gTol()))
         return false;
     radius = mgHypot(center.x - start.x, center.y - start.y);
@@ -296,14 +295,14 @@ GEOMAPI bool mgArc3P(
         if (a < c)
         {
             if (a < b && b < c)         // 逆时针
-                *sweepAngle = c-a;
+                *sweepAngle = c - a;
             else
-                *sweepAngle = c-a-_M_2PI;
+                *sweepAngle = c - a - _M_2PI;
         }
         else
         {
             if (a > b && b > c)         // 顺时针
-                *sweepAngle = c-a;
+                *sweepAngle = c - a;
             else
                 *sweepAngle = _M_2PI-(a-c);
         }
@@ -317,12 +316,12 @@ GEOMAPI bool mgArcTan(
     Point2d& center, float& radius,
     float* startAngle, float* sweepAngle)
 {
-    double a, b, c;
+    float a, b, c;
     
     // 弦的中垂线方程系数
     a = end.x - start.x;
     b = end.y - start.y;
-    c = -0.5 * (a*(end.x + start.x) + b*(end.y + start.y));
+    c = -0.5f * (a*(end.x + start.x) + b*(end.y + start.y));
     
     // 求中垂线和切线的交点center
     if (!mgCrossLineAbc(a, b, c, tanv.x, tanv.y, 
@@ -355,20 +354,20 @@ GEOMAPI bool mgArcBulge(
 }
 
 GEOMAPI bool mgTriEquations(
-    Int32 n, double *a, double *b, double *c, Vector2d *vs)
+    Int32 n, float *a, float *b, float *c, Vector2d *vs)
 {
     if (!a || !b || !c || !vs || n < 2)
         return false;
     
-    double w;
+    float w;
     Int32 i;
     
     w = b[0];
     if (mgIsZero(w))
         return false;
-    w = 1.0 / w;
-    vs[0].x = (float)(vs[0].x * w);
-    vs[0].y = (float)(vs[0].y * w);
+    w = 1 / w;
+    vs[0].x = vs[0].x * w;
+    vs[0].y = vs[0].y * w;
     
     for (i = 0; i <= n-2; i++)
     {
@@ -376,24 +375,24 @@ GEOMAPI bool mgTriEquations(
         w = b[i+1] - a[i] * b[i];
         if (mgIsZero(w))
             return false;
-        w = 1.0 / w;
-        vs[i+1].x = (float)( (vs[i+1].x - a[i] * vs[i].x) * w);
-        vs[i+1].y = (float)( (vs[i+1].y - a[i] * vs[i].y) * w);
+        w = 1 / w;
+        vs[i+1].x = (vs[i+1].x - a[i] * vs[i].x) * w;
+        vs[i+1].y = (vs[i+1].y - a[i] * vs[i].y) * w;
     }
     
     for (i = n-2; i >= 0; i--)
     {
-        vs[i].x -= (float)(b[i] * vs[i+1].x);
-        vs[i].y -= (float)(b[i] * vs[i+1].y);
+        vs[i].x -= b[i] * vs[i+1].x;
+        vs[i].y -= b[i] * vs[i+1].y;
     }
     
     return true;
 }
 
-GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
+GEOMAPI bool mgGaussJordan(Int32 n, float *mat, Vector2d *vs)
 {
     Int32 i, j, k, m;
-    double c, t;
+    float c, t;
     Vector2d tt;
     
     if (!mat || !vs || n < 2)
@@ -427,16 +426,16 @@ GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
         c = 1.f / c;
         for (j = k; j < n; j++)
             mat[k*n+j] *= c;
-        vs[k].x = (float)(vs[k].x * c);
-        vs[k].y = (float)(vs[k].y * c);
+        vs[k].x = vs[k].x * c;
+        vs[k].y = vs[k].y * c;
         // 从第k+1行以下每一行, 对该行第k列以后各元素-=
         for (i = k+1; i < n; i++)
         {
             c = mat[i*n+k];
             for (j = k; j < n; j++)
                 mat[i*n+j] -= mat[k*n+j] * c;
-            vs[i].x -= (float)(vs[k].x * c);
-            vs[i].y -= (float)(vs[k].y * c);
+            vs[i].x -= vs[k].x * c;
+            vs[i].y -= vs[k].y * c;
         }
     }
     
@@ -445,8 +444,8 @@ GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
     {
         for (j = i; j < n; j++)
         {
-            vs[i].x -= (float)(mat[i*n+j+1] * vs[j+1].x);
-            vs[i].y -= (float)(mat[i*n+j+1] * vs[j+1].y);
+            vs[i].x -= mat[i*n+j+1] * vs[j+1].x;
+            vs[i].y -= mat[i*n+j+1] * vs[j+1].y;
         }
     }
     
@@ -454,7 +453,7 @@ GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs)
 }
 
 static bool CalcCubicClosed(
-    Int32 n, double* a, Vector2d* vecs, const Point2d* knots)
+    Int32 n, float* a, Vector2d* vecs, const Point2d* knots)
 {
     Int32 i, n1 = n - 1;
 
@@ -467,18 +466,18 @@ static bool CalcCubicClosed(
     a[n1*n+n1 - 1] = 1.0;
     a[n1*n+n1]   = 4.0;
     a[n1*n+0]    = 1.0;
-    vecs[0].x  = 3.f * (knots[1].x-knots[n1].x);
-    vecs[0].y  = 3.f * (knots[1].y-knots[n1].y);
-    vecs[n1].x = 3.f * (knots[0].x-knots[n1 - 1].x);
-    vecs[n1].y = 3.f * (knots[0].y-knots[n1 - 1].y);
+    vecs[0].x  = 3 * (knots[1].x-knots[n1].x);
+    vecs[0].y  = 3 * (knots[1].y-knots[n1].y);
+    vecs[n1].x = 3 * (knots[0].x-knots[n1 - 1].x);
+    vecs[n1].y = 3 * (knots[0].y-knots[n1 - 1].y);
     
     for (i = 1; i < n1; i++)
     {
         a[i*n+i-1] = 1.0;
         a[i*n+i]   = 4.0;
         a[i*n+i+1] = 1.0;
-        vecs[i].x = 3.f * (knots[i+1].x-knots[i-1].x);
-        vecs[i].y = 3.f * (knots[i+1].y-knots[i-1].y);
+        vecs[i].x = 3 * (knots[i+1].x-knots[i-1].x);
+        vecs[i].y = 3 * (knots[i+1].y-knots[i-1].y);
     }
     
     return mgGaussJordan(n, a, vecs);
@@ -486,7 +485,7 @@ static bool CalcCubicClosed(
 
 static bool CalcCubicUnclosed(
     UInt32 flag, Int32 n, const Point2d* knots, 
-    double* a, double* b, double* c, Vector2d* vecs)
+    float* a, float* b, float* c, Vector2d* vecs)
 {
     if (flag & kCubicTan1)          // 起始夹持端
     {
@@ -498,8 +497,8 @@ static bool CalcCubicUnclosed(
     {
         b[0] = 1.0;
         c[0] = 1.0;
-        vecs[0].x = 2.f * (knots[1].x-knots[0].x);
-        vecs[0].y = 2.f * (knots[1].y-knots[0].y);
+        vecs[0].x = 2 * (knots[1].x-knots[0].x);
+        vecs[0].y = 2 * (knots[1].y-knots[0].y);
     }
     else                            // 起始自由端
     {
@@ -513,14 +512,14 @@ static bool CalcCubicUnclosed(
     {
         a[n - 2] = 0.0;
         b[n - 1] = 1.0;
-        //vecs[n - 1] = xpn;            // vecs[n-1]必须指定切矢量
+        //vecs[n - 1] = xpn;        // vecs[n-1]必须指定切矢量
     }
     else if (flag & kCubicArm2)     // 终止悬臂端
     {
         a[n - 2] = 1.0;
         b[n - 1] = 1.0;
-        vecs[n - 1].x = 2.f * (knots[n - 1].x-knots[n - 2].x);
-        vecs[n - 1].y = 2.f * (knots[n - 1].y-knots[n - 2].y);
+        vecs[n - 1].x = 2 * (knots[n - 1].x-knots[n - 2].x);
+        vecs[n - 1].y = 2 * (knots[n - 1].y-knots[n - 2].y);
     }
     else                            // 终止自由端
     {
@@ -535,8 +534,8 @@ static bool CalcCubicUnclosed(
         a[i-1] = 1.0;
         b[i] = 4.0;
         c[i] = 1.0;
-        vecs[i].x = 3.f * (knots[i+1].x-knots[i-1].x);
-        vecs[i].y = 3.f * (knots[i+1].y-knots[i-1].y);
+        vecs[i].x = 3 * (knots[i+1].x-knots[i-1].x);
+        vecs[i].y = 3 * (knots[i+1].y-knots[i-1].y);
     }
     
     return mgTriEquations(n, a, b, c, vecs);
@@ -553,13 +552,13 @@ GEOMAPI bool mgCubicSplines(
     
     if ((flag & kCubicLoop) && n <= 512)    // 闭合
     {
-        double* a = new double[n * n];
+        float* a = new float[n * n];
         ret = a && CalcCubicClosed(n, a, knotvs, knots);
         delete[] a;
     }
     else
     {
-        double* a = new double[n * 3];
+        float* a = new float[n * 3];
         ret = a && CalcCubicUnclosed(flag, n, knots, 
             a, a+n, a+2*n, knotvs);
         delete[] a;
@@ -780,8 +779,8 @@ GEOMAPI bool mgClampedSplines(
 //               + xp[i+1] * sinh(sigma*t) / sinh(sigma*hp[i])
 //               + (x[i] - xp[i]) * (hp[i]-t) / hp[i]
 //               + (x[i+1] - xp[i+1]) * t / hp[i]
-    //       s_i <= s <= s_(i+1), 0 <= t <= hp[i]
-    //       s_0 = 0, s_i = s_(i-1) + h_i, h_i = | P[i+1]P[i] |
+//       s_i <= s <= s_(i+1), 0 <= t <= hp[i]
+//       s_0 = 0, s_i = s_(i-1) + h_i, h_i = | P[i+1]P[i] |
 GEOMAPI void mgFitClampedSpline(
     const Point2d* knots, 
     Int32 i, float t, float sigma,

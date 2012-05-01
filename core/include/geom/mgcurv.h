@@ -163,7 +163,7 @@ GEOMAPI bool mgArcBulge(
     \see mgGaussJordan
 */
 GEOMAPI bool mgTriEquations(
-    Int32 n, double *a, double *b, double *c, Vector2d *vs);
+    Int32 n, float *a, float *b, float *c, Vector2d *vs);
 
 //! Gauss-Jordan法求解线性方程组
 /*!
@@ -174,7 +174,7 @@ GEOMAPI bool mgTriEquations(
     \return 是否求解成功，失败原因可能是参数错误或因系数矩阵非主角占优而出现除零
     \see mgTriEquations
 */
-GEOMAPI bool mgGaussJordan(Int32 n, double *mat, Vector2d *vs);
+GEOMAPI bool mgGaussJordan(Int32 n, float *mat, Vector2d *vs);
 
 //! 三次参数样条曲线的端点条件
 //! \see mgCubicSplines
