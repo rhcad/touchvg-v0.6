@@ -11,6 +11,9 @@
 
 class GiCanvasIosImpl;
 
+//! Convert color from CGColor.
+/*! \ingroup GRAPH_IOS
+*/
 GiColor giFromCGColor(CGColorRef color);
 
 //! The graphics class for iOS.

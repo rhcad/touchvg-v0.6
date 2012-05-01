@@ -52,8 +52,8 @@
 
 - (void)afterCreated
 {
-	//CGFloat scrscale = [[UIScreen mainScreen] scale];
-    //GiCanvasIos::setScreenDpi(160 * scrscale);
+	CGFloat scrw = CGRectGetWidth([UIScreen mainScreen].bounds);
+    GiCanvasIos::setScreenDpi(scrw > 1000 ? 132 : 163); // iPad or iPhone
     
     if (!_graph) {
         _graph = new GiGraphIos();

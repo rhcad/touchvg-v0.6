@@ -113,7 +113,7 @@ public:
     void createBufferBitmap(float width, float height);
 };
 
-float GiCanvasIosImpl::_dpi = 160;
+float GiCanvasIosImpl::_dpi = 132;
 
 GiColor giFromCGColor(CGColorRef color)
 {
