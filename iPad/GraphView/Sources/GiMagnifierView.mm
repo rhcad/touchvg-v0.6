@@ -24,6 +24,7 @@
         _shapeAdded = NULL;
         _scale = 3;
         _lockRedraw = YES;
+        _zooming = NO;
         
         self.contentMode = UIViewContentModeRedraw;
         self.multipleTouchEnabled = YES;
@@ -92,6 +93,10 @@
 }
 
 - (void)setAnimating:(BOOL)animated {
+    if (animated)
+        _zooming |= 0x2;
+    else
+        _zooming &= ~0x2;
 }
 
 - (void)setDrawingDelegate:(id)d {
@@ -101,7 +106,6 @@
 - (void)regen {
     _graph->gs.clearCachedBitmap();
     [self setNeedsDisplay];
-    [_gview regen];
 }
 
 - (void)redraw {
@@ -110,15 +114,16 @@
 }
 
 - (BOOL)isZooming {
-    return [_gview isZooming];
+    return _zooming || [_gview isZooming];
 }
 
 - (void)drawRect:(CGRect)rect
 {
     GiTransform& xf = _graph->xf;
+    
     xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     
-    if (_scale < 1 && ![_gview isZooming]) {        // 缩略视图，动态放缩时不regen
+    if (_scale < 1 && !self.hidden && ![_gview isZooming]) {    // 缩略视图，动态放缩时不regen
         CGSize gsize = [_gview ownerView].bounds.size;
         Box2d rcw(Box2d(0, 0, gsize.width, gsize.height) * [_gview xform]->displayToWorld());
         Box2d rcd(rcw * xf.worldToDisplay());       // 实际图形视图在本视图中的位置
@@ -205,30 +210,25 @@
     [super touchesBegan:touches withEvent:event];
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [_drawingDelegate touchesMoved:touches withEvent:event];
-    [super touchesMoved:touches withEvent:event];
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [_drawingDelegate touchesEnded:touches withEvent:event];
-    [super touchesEnded:touches withEvent:event];
-}
-
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_drawingDelegate touchesCancelled:touches withEvent:event];
+    [_drawingDelegate touchesBegan:touches withEvent:event];    // for GiCommandController
     [super touchesCancelled:touches withEvent:event];
 }
 
 - (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
     if (sender.view == self) {
-        if (sender.state == UIGestureRecognizerStateChanged) {
+        if (sender.state == UIGestureRecognizerStateBegan) {
+            _zooming = YES;
+        }
+        else if (sender.state == UIGestureRecognizerStateChanged) {
             [self zoomPan:[sender translationInView:sender.view]];
             [sender setTranslation:CGPointZero inView:sender.view];
+        }
+        else {
+            _zooming = NO;
+            [self redraw];
         }
     }
     

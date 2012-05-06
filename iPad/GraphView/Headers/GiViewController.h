@@ -59,15 +59,15 @@
 
 //! 创建图形视图(GiGraphView)和图形列表，不需要图形视图的派生类时使用
 /*!
-    \param frame 视图位置大小
+    \param parentView 已有视图，将创建其子视图
+    \param frame 视图位置大小，可取为 parentView.bounds
     \param bkColor 背景色
-    \param shapes 已有的共享图形列表，如果为NULL则自动创建图形列表
     \return 创建的子图形视图(GiGraphView)
  */
-- (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor shapes:(void*)shapes;
+- (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame backgroundColor:(UIColor*)bkColor;
 
-//! 在已有视图中创建子图形视图(GiGraphView)和图形列表
-/*!
+//! 在已有视图中创建子图形视图(GiGraphView)
+/*! 创建的视图内默认不能放缩显示，背景色为透明色。
     \param parentView 已有视图，将创建其子视图
     \param frame 视图位置大小，可取为 parentView.bounds
     \param shapes 已有的共享图形列表，如果为NULL则自动创建图形列表

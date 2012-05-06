@@ -17,6 +17,8 @@ class MgViewProxy;
     MgMotion    *_motion;           //!< 当前命令参数
     MgViewProxy *_mgview;           //!< 命令所用视图
     BOOL        _undoFired;         //!< 是否已向命令触发Undo消息(滑动中变为双指)
+    BOOL        _moved;             //!< 是否已触发touchBegan命令消息
+    BOOL        _clicked;           //!< 是否已触发oneFingerOneTap
 }
 
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称
@@ -29,7 +31,16 @@ class MgViewProxy;
 - (id)initWithViews:(UIView**)auxviews;
 
 //! 开始触摸时调用，避免Pan手势开始时丢失开始触摸位置
-- (void)touchesBegan:(CGPoint)point view:(UIView*)sender;
+- (void)touchesBegan:(CGPoint)point view:(UIView*)view;
+
+//! 正在触摸移动时调用，视图控制器在手势识别失败时调用
+- (BOOL)touchesMoved:(CGPoint)point view:(UIView*)view count:(int)count;
+
+//! 触摸移动结束时调用，视图控制器在手势识别失败时调用
+- (BOOL)touchesEnded:(CGPoint)point view:(UIView*)view count:(int)count;
+
+//! 延迟检测点击事件
+- (BOOL)delayTap:(CGPoint)point view:(UIView*)view;
 
 //! 返回当前点，模型坐标
 - (CGPoint)getPointModel;

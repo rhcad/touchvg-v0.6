@@ -50,6 +50,7 @@ class GiGraphIos;
     CGPoint         _pointW;                //!< 实际图形视图的当前点，世界坐标
     CGFloat         _scale;                 //!< 放大倍数
     BOOL            _lockRedraw;            //!< 禁止放大镜动态显示
+    BOOL            _zooming;               //!< 是否正在动态放缩或平移
 }
 
 @property (nonatomic)          CGPoint      pointW;     //!< 实际图形视图的当前点，世界坐标

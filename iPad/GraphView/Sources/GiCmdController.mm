@@ -38,8 +38,9 @@ private:
     void regen() {
         [_mainview regen];
         for (int i = 0; _auxviews[i]; i++) {
-            if ([_auxviews[i] respondsToSelector:@selector(regen)])
+            if ([_auxviews[i] respondsToSelector:@selector(regen)] && !_auxviews[i].hidden) {
                 [_auxviews[i] performSelector:@selector(regen)];
+            }
         }
     }
     
@@ -53,7 +54,7 @@ private:
     void shapeAdded(MgShape* shape) {
         [_mainview shapeAdded:shape];
         for (int i = 0; _auxviews[i]; i++) {
-            if ([_auxviews[i] conformsToProtocol:@protocol(GiView)]) {
+            if ([_auxviews[i] conformsToProtocol:@protocol(GiView)] && !_auxviews[i].hidden) {
                 id<GiView> gv = (id<GiView>)_auxviews[i];
                 [gv shapeAdded:shape];
             }
@@ -223,15 +224,70 @@ private:
     return cmd && _mgview->getView() && cmd->undo(recall, _motion);
 }
 
-- (void)touchesBegan:(CGPoint)point view:(UIView*)sender
+- (void)touchesBegan:(CGPoint)point view:(UIView*)view
 {
-    if ([self setView:sender]) {
+    if ([self setView:view]) {
         [self convertPoint:point];
         _motion->startPoint = _motion->point;
         _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
         _motion->lastPointM = _motion->pointM;
     }
+    _moved = NO;
+    _clicked = NO;
+}
+
+- (BOOL)touchesMoved:(CGPoint)point view:(UIView*)view count:(int)count
+{
+    MgCommand* cmd = mgGetCommandManager()->getCommand();
+    BOOL ret = NO;
+    
+    if (!_moved && cmd) {
+        _undoFired = NO;
+        _moved = YES;
+        ret = cmd->touchBegan(_motion);
+    }
+    if (cmd) {
+        [self setView:view];
+        [self convertPoint:point];
+        
+        if (count > 1) {                        // 滑动时有两个手指
+            bool recall = false;
+            float dist = mgHypot(_motion->point.x - _motion->lastPoint.x, 
+                                 _motion->point.y - _motion->lastPoint.y);
+            if (!_undoFired && dist > 10) {     // 双指滑动超过10像素可再触发Undo操作
+                if (cmd->undo(recall, _motion) && !recall)  // 触发一次Undo操作
+                    _undoFired = YES;           // 另一个手指不松开也不再触发Undo操作
+                _motion->lastPoint = _motion->point;    // 用于检测下次双指滑动距离
+                _motion->lastPointM = _motion->pointM;
+            }
+            return YES;                         // 直接返回，不记录lastPoint
+        }
+        else {                                  // 单指滑动
+            _undoFired = NO;                    // 允许再触发Undo操作
+            ret = cmd->touchMoved(_motion);
+        }
+
+        _motion->lastPoint = _motion->point;
+        _motion->lastPointM = _motion->pointM;
+    }
+    
+    return ret;
+}
+
+- (BOOL)touchesEnded:(CGPoint)point view:(UIView*)view count:(int)count
+{
+    MgCommand* cmd = mgGetCommandManager()->getCommand();
+    BOOL ret = NO;
+    
+    if (cmd) {
+        [self setView:view];
+        [self convertPoint:point];
+        
+        ret = cmd->touchEnded(_motion);
+    }
+    
+    return ret;
 }
 
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
@@ -241,32 +297,25 @@ private:
     
     if (cmd)
     {
+        if (sender.state == UIGestureRecognizerStateBegan) {
+            _undoFired = NO;
+            _moved = YES;
+            ret = cmd->touchBegan(_motion);
+        }
+        
         [self setView:sender.view];
-        if (sender.state != UIGestureRecognizerStateBegan && [sender numberOfTouches]) {
+        if ([sender numberOfTouches]) {
             [self convertPoint:[sender locationInView:sender.view]];
         }
         
         if (sender.state == UIGestureRecognizerStateBegan) {
-            _undoFired = NO;
-            ret = cmd->touchBegan(_motion);
+            ret = cmd->touchMoved(_motion);
+            _motion->lastPoint = _motion->point;
+            _motion->lastPointM = _motion->pointM;
         }
         else if (sender.state == UIGestureRecognizerStateChanged) {
-            if (sender.numberOfTouches > 1) {   // 滑动时有两个手指
-                bool recall = false;
-                float dist = mgHypot(_motion->point.x - _motion->lastPoint.x, 
-                                     _motion->point.y - _motion->lastPoint.y);
-                if (!_undoFired && dist > 10) { // 双指滑动超过10像素可再触发Undo操作
-                    if (cmd->undo(recall, _motion) && !recall)  // 触发一次Undo操作
-                        _undoFired = YES;       // 另一个手指不松开也不再触发Undo操作
-                    _motion->lastPoint = _motion->point;    // 用于检测下次双指滑动距离
-                    _motion->lastPointM = _motion->pointM;
-                }
-                return YES;                     // 直接返回，不记录lastPoint
-            }
-            else {                              // 单指滑动
-                _undoFired = NO;                // 允许再触发Undo操作
-                ret = cmd->touchMoved(_motion);
-            }
+            ret = [self touchesMoved:[sender locationInView:sender.view]
+                                view:sender.view count:sender.numberOfTouches];
         }
         else if (sender.state == UIGestureRecognizerStateEnded) {
             ret = cmd->touchEnded(_motion);
@@ -274,9 +323,6 @@ private:
         else {
             ret = cmd->cancel(_motion);
         }
-        
-        _motion->lastPoint = _motion->point;
-        _motion->lastPointM = _motion->pointM;
     }
     
     return ret;
@@ -303,19 +349,28 @@ private:
 
 - (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
+    _clicked = YES;
+    return mgGetCommandManager()->getCommand() != NULL;
+}
+
+- (BOOL)delayTap:(CGPoint)point view:(UIView*)view
+{
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     BOOL ret = NO;
     
-    if (cmd) {
-        [self setView:sender.view];
-        [self convertPoint:[sender locationInView:sender.view]];
-        _motion->startPoint = _motion->point;
-        _motion->startPointM = _motion->pointM;
-        _motion->lastPoint = _motion->point;
-        _motion->lastPointM = _motion->pointM;
+    if (cmd && _clicked) {
+        [self setView:view];
+        [self convertPoint:point];
         
-        ret = cmd->click(_motion);
+        if (_motion->startPointM == _motion->pointM) {
+            ret = cmd->click(_motion);
+        }
+        else {
+            ret = [self touchesMoved:point view:view count:1];
+            ret = [self touchesEnded:point view:view count:1];
+        }
     }
+    _clicked = NO;
     
     return ret;
 }

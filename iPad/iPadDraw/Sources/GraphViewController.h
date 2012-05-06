@@ -14,6 +14,7 @@
 
 @interface GraphViewController : UIViewController {
     GiViewController    *_graphc;       // 图形视图控制器
+    UIView              *_magViews[2];  // 放大镜视图
     UIButton            *_downview;     // 底部按钮栏
     UIButton            *redBtn;
 	UIButton            *blueBtn;
@@ -37,6 +38,7 @@
 - (IBAction)backToView:(id)sender;      // 退出自由绘图
 - (IBAction)clearView:(id)sender;       // 清屏
 - (IBAction)hideMagnifier:(id)sender;   // 切换放大镜视图的可见性
+- (IBAction)hideOverview:(id)sender;    // 切换缩小显示的视图的可见性
 - (IBAction)showPaletee:(id)sender;     // 显示调色板
 
 - (IBAction)lockMagnifier:(id)sender;   // 切换是否禁止放大镜动态显示

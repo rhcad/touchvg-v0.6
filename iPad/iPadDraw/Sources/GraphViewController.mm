@@ -60,7 +60,7 @@ static const NSUInteger kDashLineTag    = 4;
     // 创建占满窗口的总视图
     UIView *mainview = [[UIView alloc]initWithFrame:rect];
     self.view = mainview;
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor grayColor];
     [mainview release];
     rect.origin.y = 0;
     
@@ -78,8 +78,7 @@ static const NSUInteger kDashLineTag    = 4;
     
     // 创建图形视图及其视图控制器
     _graphc = [[GiViewController alloc]init];
-    [_graphc createGraphView:viewFrame backgroundColor:[UIColor grayColor] shapes:NULL];
-    [self.view addSubview:_graphc.view];
+    [_graphc createGraphView:self.view frame:viewFrame backgroundColor:[UIColor grayColor]];
     _graphc.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
                                      | UIViewAutoresizingFlexibleBottomMargin);
     
@@ -91,7 +90,7 @@ static const NSUInteger kDashLineTag    = 4;
                                       | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);
     
     // 创建放大镜视图的按钮栏
-    CGFloat magbtnw = 32;
+    CGFloat magbtnw = 48;
     CGRect magbarRect = CGRectMake(0, 0, magnifierView.bounds.size.width, magbtnw);
     UIButton *magbarView = [[UIButton alloc]initWithFrame:magbarRect];
     [magbarView setImage:[UIImage imageNamed:@"downview.png"] forState: UIControlStateNormal];
@@ -108,47 +107,54 @@ static const NSUInteger kDashLineTag    = 4;
     CGRect mag1rect = maggraphRect;
     mag1rect.size.width = mag1rect.size.height < mag1rect.size.width / 2 ? mag1rect.size.height : mag1rect.size.width / 2;
     CGRect mag2rect = maggraphRect;
-    mag2rect.origin.x = mag1rect.size.width + 4;
+    mag2rect.origin.x = mag1rect.size.width;
     mag2rect.size.width -= mag2rect.origin.x;
     
     // 创建放大显示的放大镜视图
-    UIView *magView = [_graphc createMagnifierView:magnifierView frame:mag2rect scale:4];
-    magView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
-                                | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin);
+    _magViews[0] = [_graphc createMagnifierView:magnifierView frame:mag2rect scale:4];
+    _magViews[0].autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
+                                     | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin);
     
     // 创建缩小显示的放大镜视图
-    magView = [_graphc createMagnifierView:magnifierView frame:mag1rect scale:0.1];
-    magView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin
-                                | UIViewAutoresizingFlexibleBottomMargin);
-    magView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.1f];
+    _magViews[1] = [_graphc createMagnifierView:magnifierView frame:mag1rect scale:0.1];
+    _magViews[1].autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin
+                                     | UIViewAutoresizingFlexibleBottomMargin);
+    _magViews[1].backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.1f];
     
     // 创建放大镜视图的测试用的各个按钮
     CGFloat magbtnx = 4;
-    UIButton *magbtn = [self addButton:Nil action:@selector(lockMagnifier:)
-                                   bar:magbarView x:&magbtnx size:magbtnw diffx:4];
-    [magbtn setTitle:@"L" forState: UIControlStateNormal];
-    [magbtn setTitle:@"l" forState: UIControlStateHighlighted];
+    UIButton *magbtn;
     
 #ifndef MAG_AT_BOTTOM
     magbtn = [self addButton:Nil action:@selector(resizeMagnifier:)
                          bar:magbarView x:&magbtnx size:magbtnw diffx:4];
-    [magbtn setTitle:@"S" forState: UIControlStateNormal];
+    [magbtn setTitle:@"Size" forState: UIControlStateNormal];
     [magbtn setTitle:@"s" forState: UIControlStateHighlighted];
 #endif
     magbtn = [self addButton:Nil action:@selector(fireUndo:)
                          bar:magbarView x:&magbtnx size:magbtnw diffx:4];
-    [magbtn setTitle:@"U" forState: UIControlStateNormal];
+    [magbtn setTitle:@"Undo" forState: UIControlStateNormal];
     [magbtn setTitle:@"u" forState: UIControlStateHighlighted];
     
     magbtn = [self addButton:Nil action:@selector(hideMagnifier:)
                          bar:magbarView x:&magbtnx size:magbtnw diffx:4];
-    [magbtn setTitle:@"H" forState: UIControlStateNormal];
+    [magbtn setTitle:@"Hide" forState: UIControlStateNormal];
     [magbtn setTitle:@"h" forState: UIControlStateHighlighted];
+    
+    magbtn = [self addButton:Nil action:@selector(hideOverview:)
+                         bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    [magbtn setTitle:@"Left" forState: UIControlStateNormal];
+    [magbtn setTitle:@"l" forState: UIControlStateHighlighted];
     
     magbtn = [self addButton:Nil action:@selector(addTestShapes:)
                          bar:magbarView x:&magbtnx size:magbtnw diffx:4];
-    [magbtn setTitle:@"A" forState: UIControlStateNormal];
-    [magbtn setTitle:@"a" forState: UIControlStateHighlighted];
+    [magbtn setTitle:@"Rand" forState: UIControlStateNormal];
+    [magbtn setTitle:@"r" forState: UIControlStateHighlighted];
+    
+    magbtn = [self addButton:Nil action:@selector(lockMagnifier:)
+                         bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    [magbtn setTitle:@"Lock" forState: UIControlStateNormal];
+    [magbtn setTitle:@"l" forState: UIControlStateHighlighted];
     
     barFrame.size.height = BAR_HEIGHT;
     barFrame.origin.y += viewFrame.size.height;
@@ -240,20 +246,6 @@ static const NSUInteger kDashLineTag    = 4;
 - (IBAction)fireUndo:(id)sender
 {
     [_graphc undoMotion];
-}
-
-- (IBAction)addTestShapes:(id)sender
-{
-    RandomParam::init();
-    
-    RandomParam param;
-    param.lineCount = 100;
-    param.arcCount = 50;
-    param.curveCount = 50;
-    param.randomLineStyle = true;
-    
-    param.initShapes((MgShapes*)_graphc.shapes);
-    [_graphc regen];
 }
 
 - (IBAction)showPenView:(id)sender
@@ -406,6 +398,23 @@ static const NSUInteger kDashLineTag    = 4;
 #endif
 }
 
+- (IBAction)hideOverview:(id)sender;    // 切换缩小显示的视图的可见性
+{
+    _magViews[1].hidden = !_magViews[1].hidden;
+    
+    CGRect rect = _magViews[0].frame;
+    if (_magViews[1].hidden) {
+        rect.size.width += rect.origin.x;
+        rect.origin.x = 0;
+        _magViews[0].frame = rect;
+    }
+    else {
+        rect.origin.x = _magViews[1].frame.size.width;
+        rect.size.width -= rect.origin.x;
+        _magViews[0].frame = rect;
+    }
+}
+
 - (IBAction)eraseColor:(id)sender   // 切换至橡皮擦
 {
 	[self showUnlightButtons];
@@ -416,7 +425,8 @@ static const NSUInteger kDashLineTag    = 4;
 
 - (IBAction)clearView:(id)sender    // 清屏
 {
-    _graphc.commandName = "lines";
+    ((MgShapes*)_graphc.shapes)->clear();
+    [_graphc regen];
 }
 
 - (IBAction)backToView:(id)sender   // 退出自由绘图
@@ -424,6 +434,20 @@ static const NSUInteger kDashLineTag    = 4;
     [self showUnlightButtons];
     [backbtn setImage:[UIImage imageNamed:@"back1.png"] forState:UIControlStateNormal];
     _graphc.commandName = "select";
+}
+
+- (IBAction)addTestShapes:(id)sender
+{
+    RandomParam::init();
+    
+    RandomParam param;
+    param.lineCount = 100;
+    param.arcCount = 50;
+    param.curveCount = 50;
+    param.randomLineStyle = true;
+    
+    param.initShapes((MgShapes*)_graphc.shapes);
+    [_graphc regen];
 }
 
 - (void)showUnlightButtons          // 显示全部非高亮钮
@@ -439,7 +463,7 @@ static const NSUInteger kDashLineTag    = 4;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-	return YES;     // supported orientations
+	return YES;
 }
 
 @end

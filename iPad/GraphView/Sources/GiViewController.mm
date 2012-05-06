@@ -87,22 +87,18 @@
     [super dealloc];
 }
 
-- (UIView*)createGraphView:(CGRect)frame backgroundColor:(UIColor*)bkColor shapes:(void*)sp
+- (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame backgroundColor:(UIColor*)bkColor
 {
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
     self.view = aview;
     aview.backgroundColor = bkColor;
-    [aview setDrawingDelegate:self];
     
-    if (sp) {
-        aview.shapes = (MgShapes*)sp;
-    }
-    else
-    {
-        aview.shapes = new MgShapesT<std::list<MgShape*> >;
-        _shapesCreated = aview.shapes;
-    }
+    [aview setDrawingDelegate:self];
+    [parentView addSubview:aview];
+    
+    aview.shapes = new MgShapesT<std::list<MgShape*> >;
+    _shapesCreated = aview.shapes;
     
     [self viewDidLoad];
     
@@ -131,7 +127,6 @@
     }
     
     [self viewDidLoad];
-    [self addGestureRecognizers:0 view:aview];
     
     [aview release];
     return self.view;
@@ -472,27 +467,15 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
     }
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [touches anyObject];
-    
-    if (touch.view == self.view) {
-        [super touchesMoved:touches withEvent:event];
-    }
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [touches anyObject];
-    
-    if (touch.view == self.view) {
-        [super touchesEnded:touches withEvent:event];
-    }
-}
-
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
+    
+    if (touch) {
+        CGPoint point = [touch locationInView:touch.view];
+        GiCommandController* cmd = (GiCommandController*)_cmdctl;
+        [cmd delayTap:point view:touch.view];
+    }
     
     if (!touch || touch.view == self.view) {
         [super touchesCancelled:touches withEvent:event];
