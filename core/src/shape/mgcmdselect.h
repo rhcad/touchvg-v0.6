@@ -45,12 +45,13 @@ private:
     Int32 hitTestHandles(MgShape* shape, const Point2d& pointM);
     bool isIntersectMode(const MgMotion* sender);
     
-    typedef std::vector<MgShape*>::iterator sel_iterator;
+    typedef std::vector<UInt32>::iterator sel_iterator;
     sel_iterator getSelectedPostion(MgShape* shape);
     bool isSelected(MgShape* shape);
+    MgShape* getShape(UInt32 id, const MgMotion* sender) const;
     
 private:
-    std::vector<MgShape*>   m_selection;        // 选中的图形
+    std::vector<UInt32>     m_selIds;           // 选中的图形的ID
     std::vector<MgShape*>   m_cloneShapes;      // 选中图形的复制对象
     UInt32                  m_id;               // 选中图形的ID
     Point2d                 m_ptNear;           // 图形上的最近点

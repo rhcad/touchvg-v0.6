@@ -20,6 +20,7 @@ CBaseView::CBaseView()
     m_shapes = new MgShapesT<std::list<MgShape*> >;
 	m_gdip = true;
     m_graph = new GiGraphWin(m_gdip ? GiCanvasGdip::Create : GiCanvasGdi::Create);
+    m_shapeAdded = NULL;
 
     m_pan.cx = m_pan.cy = 0;
     m_bkColor = GetSysColor(COLOR_WINDOW);
@@ -78,6 +79,7 @@ void CBaseView::OnPaint()
 {
 	CPaintDC dc(this);
     GiCanvasWin *cv = m_graph->canvas;
+    GiGraphics  &gs = m_graph->gs;
 
 	dc.SetBkColor(m_bkColor);				    // 在beginPaint()中应用背景色
 
@@ -90,11 +92,17 @@ void CBaseView::OnPaint()
 		{
 			if (0 == m_pan.cx && 0 == m_pan.cy)
 				cv->clearWindow();		        // 清除背景
-			DrawAll(cv->owner());               // 显示正式图形
+			DrawAll(&gs);                       // 显示正式图形
 			cv->saveCachedBitmap();	            // 保存正式图形内容
 		}
+        else if (m_shapeAdded)                  // 在背景图上添加显示新图形
+        {
+            m_shapeAdded->draw(gs);
+            cv->saveCachedBitmap();	            // 更新正式图形内容
+        }
+        m_shapeAdded = NULL;
 
-		OnDynDraw(cv->owner());                 // 显示动态图形
+		OnDynDraw(&gs);                         // 显示动态图形
 
 		cv->endPaint();                         // 提交绘图结果到窗口
 	}
@@ -115,6 +123,12 @@ void CBaseView::OnSize(UINT nType, int cx, int cy)
 void CBaseView::OnZoomed()
 {
 	Invalidate();
+}
+
+void CBaseView::shapeAdded(MgShape* shape)
+{
+    m_shapeAdded = shape;
+    Invalidate();
 }
 
 void CBaseView::DrawAll(GiGraphics* gs)

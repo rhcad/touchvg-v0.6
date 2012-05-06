@@ -15,7 +15,7 @@
     void Cls::copy(const MgObject& src) {                       \
         if (src.isKindOf(Type())) _copy((const Cls&)src);       \
         else if (src.isKindOf(__super::Type()))                 \
-            __super::_copy((const __super&)src);                \
+            __super::_copy((const Cls&)src);                    \
     }                                                           \
     void Cls::release() { delete this; }                        \
     bool Cls::equals(const MgObject& src) const                 \

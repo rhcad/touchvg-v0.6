@@ -14,6 +14,9 @@ public:
 
     MgShapes*       m_shapes;           // 图形数据
     GiGraphWin*     m_graph;	        // 图形系统对象
+    MgShape*        m_shapeAdded;
+
+    void shapeAdded(MgShape* shape);
 
 // Overrides
 	// ClassWizard generated virtual function overrides
