@@ -16,6 +16,8 @@
 - (void)updateMagnifierCenter:(UIGestureRecognizer *)sender;
 
 - (void)addGestureRecognizers:(int)t view:(UIView*)view;
+- (void)setGestureRecognizerEnabled:(BOOL)enabled;
+
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
@@ -128,6 +130,7 @@
         _shapesCreated = aview.shapes;
     }
     
+    [self viewDidLoad];
     [self addGestureRecognizers:0 view:aview];
     
     [aview release];
@@ -323,6 +326,16 @@
     }
 }
 
+- (void)regen
+{
+    [[self gview] regen];
+    
+    GiMagnifierView *magview = (GiMagnifierView *)_magnifierView[0];
+    [magview regen];
+    magview = (GiMagnifierView *)_magnifierView[1];
+    [magview regen];
+}
+
 - (void)afterZoomed:(id)sender
 {
     [self.view setNeedsDisplay];
@@ -433,6 +446,14 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
     }
 }
 
+- (void)setGestureRecognizerEnabled:(BOOL)enabled
+{
+    for (int i = 0; i < RECOGNIZER_COUNT; i++) {
+        _recognizers[0][i].enabled = enabled;
+        _recognizers[1][i].enabled = enabled;
+    }
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
@@ -448,6 +469,33 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
     _activeView = touch.view;
     if (touch.view == self.view) {
         [super touchesBegan:touches withEvent:event];
+    }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    
+    if (touch.view == self.view) {
+        [super touchesMoved:touches withEvent:event];
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    
+    if (touch.view == self.view) {
+        [super touchesEnded:touches withEvent:event];
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    
+    if (!touch || touch.view == self.view) {
+        [super touchesCancelled:touches withEvent:event];
     }
 }
 
@@ -564,12 +612,8 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
         [zview automoveSuperview:[sender locationInView:sender.view] fromView:self.view];
     }
     
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        [zview setPointWandRedraw:[cmd getPointModel]];
-    }
-    else {
-        [zview setPointW:[cmd getPointModel]];
-    }
+    [zview setPointW:[cmd getPointModel]];
+    //if (sender.state == UIGestureRecognizerStateEnded) [zview setPointWandRedraw
 }
 
 @end

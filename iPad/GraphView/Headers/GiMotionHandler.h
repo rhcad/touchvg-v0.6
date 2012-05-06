@@ -6,6 +6,7 @@
 #import <UIKit/UIKit.h>
 
 struct MgShapes;
+struct MgShape;
 class GiTransform;
 class GiGraphics;
 
@@ -23,6 +24,7 @@ class GiGraphics;
 - (void)setAnimating:(BOOL)animated;    //!< 翻转或动画显示时通知视图
 - (void)setDrawingDelegate:(id)d;       //!< 设置动态绘图用的控制器对象
 
+- (void)shapeAdded:(MgShape*)shape;     //!< 通知已添加图形，由视图重新构建显示
 - (void)regen;                          //!< 标记视图待重新构建显示
 - (void)redraw;                         //!< 标记视图待更新显示
 - (BOOL)isZooming;                      //!< 是否正在动态放缩或平移

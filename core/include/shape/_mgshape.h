@@ -12,8 +12,11 @@
     Cls* Cls::create() { return new Cls(); }                    \
     MgObject* Cls::clone() const                                \
         { Cls* p = create(); p->_copy(*this); return p; }       \
-    void Cls::copy(const MgObject& src)                         \
-        { if (src.isKindOf(Type())) _copy((const Cls&)src); }   \
+    void Cls::copy(const MgObject& src) {                       \
+        if (src.isKindOf(Type())) _copy((const Cls&)src);       \
+        else if (src.isKindOf(__super::Type()))                 \
+            __super::_copy((const __super&)src);                \
+    }                                                           \
     void Cls::release() { delete this; }                        \
     bool Cls::equals(const MgObject& src) const                 \
         { return src.isKindOf(Type()) && _equals((const Cls&)src); } \

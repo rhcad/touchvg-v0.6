@@ -6,7 +6,11 @@
 
 void RandomParam::init()
 {
-    srand((unsigned)time(NULL));
+    static bool inited = false;
+    if (!inited) {
+        inited = true;
+        srand((unsigned)time(NULL));
+    }
 }
 
 float RandomParam::RandF(float dMin, float dMax)
@@ -33,8 +37,6 @@ void RandomParam::setShapeProp(GiContext* context)
 
 void RandomParam::initShapes(MgShapes* shapes)
 {
-    shapes->clear();
-
     for (long n = getShapeCount(); n > 0; n--)
     {
         int type = RandInt(0, 2);

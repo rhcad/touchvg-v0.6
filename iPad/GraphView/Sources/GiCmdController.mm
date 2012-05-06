@@ -15,29 +15,48 @@
 
 class MgViewProxy : public MgView
 {
+private:
+    id<GiView>      _curview;
+    id<GiView>      _mainview;
+    UIView**        _auxviews;
 public:
-    id<GiView>      view;
-    UIView**        auxviews;
-    
-    MgViewProxy(UIView** views) : view(Nil), auxviews(views) {}
+    MgViewProxy(UIView** views) : _curview(Nil), _mainview(Nil), _auxviews(views) {}
     GiContext* context() { return shapes() ? shapes()->context() : NULL; }
+    id<GiView> getView() { return _curview; }
+    
+    void setView(id<GiView> gv) {
+        _curview = gv;
+        if (!_mainview)
+            _mainview = gv;
+    }
     
 private:
-    MgShapes* shapes() { return [view shapes]; }
-    GiTransform* xform() { return [view xform]; }
-    GiGraphics* graph() { return [view graph]; }
+    MgShapes* shapes() { return [_curview shapes]; }
+    GiTransform* xform() { return [_curview xform]; }
+    GiGraphics* graph() { return [_curview graph]; }
     
     void regen() {
-        [view regen];
-        for (int i = 0; auxviews[i]; i++) {
-            if ([auxviews[i] respondsToSelector:@selector(regen)])
-                [auxviews[i] performSelector:@selector(regen)];
+        [_mainview regen];
+        for (int i = 0; _auxviews[i]; i++) {
+            if ([_auxviews[i] respondsToSelector:@selector(regen)])
+                [_auxviews[i] performSelector:@selector(regen)];
         }
     }
+    
     void redraw() {
-        [view redraw];
-        for (int i = 0; auxviews[i]; i++) {
-            [auxviews[i] setNeedsDisplay];
+        [_mainview redraw];
+        for (int i = 0; _auxviews[i]; i++) {
+            [_auxviews[i] setNeedsDisplay];
+        }
+    }
+    
+    void shapeAdded(MgShape* shape) {
+        [_mainview shapeAdded:shape];
+        for (int i = 0; _auxviews[i]; i++) {
+            if ([_auxviews[i] conformsToProtocol:@protocol(GiView)]) {
+                id<GiView> gv = (id<GiView>)_auxviews[i];
+                [gv shapeAdded:shape];
+            }
         }
     }
     
@@ -50,8 +69,8 @@ private:
 - (BOOL)setView:(UIView*)view
 {
     if ([view conformsToProtocol:@protocol(GiView)])
-        _mgview->view = (id<GiView>)view;
-    return !!_mgview->view;
+        _mgview->setView((id<GiView>)view);
+    return !!_mgview->getView();
 }
 
 - (void)convertPoint:(CGPoint)pt
@@ -187,21 +206,21 @@ private:
 - (void)dynDraw:(GiGraphics*)gs
 {
     MgCommand* cmd = mgGetCommandManager()->getCommand();
-    if (cmd && _mgview->view) {
+    if (cmd && _mgview->getView()) {
         cmd->draw(_motion, gs);
     }
 }
 
 - (BOOL)cancel
 {
-    return _mgview->view && mgGetCommandManager()->cancel(_motion);
+    return _mgview->getView() && mgGetCommandManager()->cancel(_motion);
 }
 
 - (BOOL)undoMotion
 {
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     bool recall;
-    return cmd && _mgview->view && cmd->undo(recall, _motion);
+    return cmd && _mgview->getView() && cmd->undo(recall, _motion);
 }
 
 - (void)touchesBegan:(CGPoint)point view:(UIView*)sender

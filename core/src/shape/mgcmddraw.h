@@ -13,7 +13,7 @@ float mgLineHalfWidth(const MgShape* shape, GiGraphics* gs);
 
 //! 绘图命令基类
 /*! \ingroup GEOM_SHAPE
-*/
+ */
 class MgCommandDraw : public MgCommand
 {
 public:
@@ -25,9 +25,9 @@ protected:
     bool _touchBegan(const MgMotion* sender);
     bool _touchMoved(const MgMotion* sender);
     bool _touchEnded(const MgMotion* sender);
-    bool _addshape(const MgMotion* sender);
+    bool _addshape(const MgMotion* sender, MgShape* shape = NULL);
     bool _undo(const MgMotion* sender);
-
+    
     virtual bool cancel(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual bool click(const MgMotion* sender);
@@ -36,7 +36,7 @@ protected:
     
 private:
     UInt32 getStep() { return m_step; }
-
+    
 protected:
     MgShape*    m_shape;
     UInt32      m_step;

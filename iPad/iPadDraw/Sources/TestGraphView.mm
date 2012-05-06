@@ -49,6 +49,7 @@
     param.curveCount = RandomParam::RandInt(0, 50);
     param.randomLineStyle = true;
     
+    _shapes->clear();
     param.initShapes(_shapes);
     [self setShapes:_shapes];
 }

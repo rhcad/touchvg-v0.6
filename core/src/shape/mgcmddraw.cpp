@@ -40,22 +40,23 @@ bool MgCommandDraw::_initialize(MgShape* (*creator)(), const MgMotion* sender)
     if (sender->view->context()) {
         *m_shape->context() = *sender->view->context();
     }
-
+    
     return true;
 }
 
-bool MgCommandDraw::_addshape(const MgMotion* sender)
+bool MgCommandDraw::_addshape(const MgMotion* sender, MgShape* shape)
 {
-    bool ret = sender->view->shapeWillAdded(m_shape);
-
+    shape = shape ? shape : m_shape;
+    bool ret = sender->view->shapeWillAdded(shape);
+    
     if (ret) {
-        sender->view->shapes()->addShape(*m_shape);
-        sender->view->regen();
+        MgShape* newsp = sender->view->shapes()->addShape(*shape);
+        sender->view->shapeAdded(newsp);
     }
     if (sender->view->context()) {
         *m_shape->context() = *sender->view->context();
     }
-
+    
     return ret;
 }
 

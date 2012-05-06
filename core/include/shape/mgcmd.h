@@ -21,6 +21,7 @@ struct MgView {
     virtual void redraw() = 0;                  //!< 标记视图待更新显示
     virtual GiContext* context() = 0;           //!< 得到当前绘图属性
     virtual bool shapeWillAdded(MgShape* shape) = 0;    //!< 通知将添加图形
+    virtual void shapeAdded(MgShape* shape) = 0;        //!< 通知已添加图形，由视图重新构建显示
     virtual bool shapeWillDeleted(MgShape* shape) = 0;  //!< 通知将删除图形
 };
 

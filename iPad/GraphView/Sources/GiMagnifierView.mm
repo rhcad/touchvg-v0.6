@@ -21,10 +21,12 @@
         _graph->gs.setMaxPenWidth(4);
         _gview = gview;
         _drawingDelegate = Nil;
+        _shapeAdded = NULL;
         _scale = 3;
         _lockRedraw = YES;
         
         self.contentMode = UIViewContentModeRedraw;
+        self.multipleTouchEnabled = YES;
     }
     return self;
 }
@@ -118,14 +120,14 @@
     
     if (_scale < 1 && ![_gview isZooming]) {        // 缩略视图，动态放缩时不regen
         CGSize gsize = [_gview ownerView].bounds.size;
-        Box2d rectw(Box2d(0, 0, gsize.width, gsize.height) * [_gview xform]->displayToWorld());
-        Box2d rectd(rectw * xf.worldToDisplay());   // 实际图形视图在本视图中的位置
+        Box2d rcw(Box2d(0, 0, gsize.width, gsize.height) * [_gview xform]->displayToWorld());
+        Box2d rcd(rcw * xf.worldToDisplay());       // 实际图形视图在本视图中的位置
         
-        if (rectd.width() < self.bounds.size.width && rectd.height() < self.bounds.size.height) {
+        if (rcd.width() < self.bounds.size.width && rcd.height() < self.bounds.size.height) {
             if (!CGRectContainsRect(self.bounds,    // 出界则平移显示
-                                    CGRectMake(rectd.xmin, rectd.ymin, rectd.width(), rectd.height()))) {
-                xf.zoomPan(CGRectGetMidX(self.bounds) - rectd.center().x,
-                                CGRectGetMidY(self.bounds) - rectd.center().y);
+                                    CGRectMake(rcd.xmin, rcd.ymin, rcd.width(), rcd.height()))) {
+                xf.zoomPan(CGRectGetMidX(self.bounds) - rcd.center().x,
+                           CGRectGetMidY(self.bounds) - rcd.center().y);
             }
         }
     }
@@ -133,19 +135,33 @@
         xf.zoom(xf.getCenterW(), [_gview xform]->getViewScale() * _scale);
     }
     
-    GiCanvasIos *cv = &_graph->canvas;
+    GiCanvasIos &cv = _graph->canvas;
+    GiGraphics &gs = _graph->gs;
     
-    cv->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
-    if (cv->beginPaint(UIGraphicsGetCurrentContext(), [self isZooming]))
+    cv.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
+    if (cv.beginPaint(UIGraphicsGetCurrentContext(), [self isZooming])) // 在当前画布上准备绘图
     {
-        if (!cv->drawCachedBitmap()) {
-            [self draw:cv->owner()];
-            if (![self isZooming])
-                cv->saveCachedBitmap();
+        if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
+            [self draw:&gs];                        // 不行则重新显示所有图形
+            if (![self isZooming])                  // 动态放缩时不保存显示内容
+                cv.saveCachedBitmap();              // 保存显示缓冲图，下次就不重新显示图形
         }
-        [self dynDraw:cv->owner()];
-        cv->endPaint();
+        else if (_shapeAdded) {                     // 在缓冲图上显示新的图形
+            _shapeAdded->draw(gs);
+            cv.saveCachedBitmap();                  // 更新缓冲图
+        }
+        
+        [self dynDraw:&gs];                         // 显示动态临时图形
+        
+        cv.endPaint();                              // 显示完成后贴到视图画布上
+        _shapeAdded = NULL;
     }
+}
+
+- (void)shapeAdded:(MgShape*)shape
+{
+    _shapeAdded = shape;
+    [self setNeedsDisplay];
 }
 
 - (void)draw:(GiGraphics*)gs
@@ -187,6 +203,24 @@
 {
     [_drawingDelegate touchesBegan:touches withEvent:event];    // for GiCommandController
     [super touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_drawingDelegate touchesMoved:touches withEvent:event];
+    [super touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_drawingDelegate touchesEnded:touches withEvent:event];
+    [super touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [_drawingDelegate touchesCancelled:touches withEvent:event];
+    [super touchesCancelled:touches withEvent:event];
 }
 
 - (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender

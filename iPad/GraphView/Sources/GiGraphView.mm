@@ -64,7 +64,9 @@
     _graph->xf.zoomTo(Point2d(0,0));
     
     self.contentMode = UIViewContentModeRedraw;
+    self.multipleTouchEnabled = YES;
     _drawingDelegate = Nil;
+    _shapeAdded = NULL;
     _zooming = NO;
     _doubleZoomed = NO;
     _enableZoom = YES;
@@ -72,21 +74,35 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    GiCanvasIos *cv = &_graph->canvas;
+    GiCanvasIos &cv = _graph->canvas;
+    GiGraphics &gs = _graph->gs;
     
     _graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    cv->setBkColor(giFromCGColor(self.backgroundColor.CGColor));
+    cv.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (_graph->canvas.beginPaint(UIGraphicsGetCurrentContext(), !!_zooming))
+    if (cv.beginPaint(UIGraphicsGetCurrentContext(), !!_zooming))   // 在当前画布上准备绘图
     {
-        if (!cv->drawCachedBitmap()) {
-            [self draw:cv->owner()];
-            if (!_zooming)
-                cv->saveCachedBitmap();
+        if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
+            [self draw:&gs];                        // 不行则重新显示所有图形
+            if (!_zooming)                          // 动态放缩时不保存显示内容
+                cv.saveCachedBitmap();              // 保存显示缓冲图，下次就不重新显示图形
         }
-        [self dynDraw:cv->owner()];
-        cv->endPaint();
+        else if (_shapeAdded) {                     // 在缓冲图上显示新的图形
+            _shapeAdded->draw(gs);
+            cv.saveCachedBitmap();                  // 更新缓冲图
+        }
+        
+        [self dynDraw:&gs];                         // 显示动态临时图形
+        
+        cv.endPaint();                              // 显示完成后贴到视图画布上
+        _shapeAdded = NULL;
     }
+}
+
+- (void)shapeAdded:(MgShape*)shape
+{
+    _shapeAdded = shape;
+    [self setNeedsDisplay];
 }
 
 - (void)draw:(GiGraphics*)gs

@@ -23,6 +23,7 @@
 
 #import "SCCalloutView.h"
 #import <GiGraphView.h>
+#include "../../../core/include/testgraph/RandomShape.cpp"
 
 static const NSUInteger kRedTag         = 0;
 static const NSUInteger kBlueTag        = 1;
@@ -56,40 +57,50 @@ static const NSUInteger kDashLineTag    = 4;
     CGFloat BAR_HEIGHT = rect.size.height > 1000 ? 50 : 40;
     CGFloat BTN_XDIFF  = rect.size.height > 1000 ? 10 : 0;
     
+    // 创建占满窗口的总视图
     UIView *mainview = [[UIView alloc]initWithFrame:rect];
     self.view = mainview;
     self.view.backgroundColor = [UIColor clearColor];
     [mainview release];
     rect.origin.y = 0;
     
+    // 计算图形视图和放大镜容器视图的位置大小
     CGRect viewFrame = rect;
     CGRect magFrame = CGRectMake(10, 10, 200, 200);
     CGRect barFrame = rect;
     
-    viewFrame.size.height -= BAR_HEIGHT;
+    viewFrame.size.height -= BAR_HEIGHT;            // 减去底部按钮栏高度
 #ifdef MAG_AT_BOTTOM
-    viewFrame.size.height -= magFrame.size.height;
-    barFrame.origin.y += magFrame.size.height;
-    magFrame = CGRectMake(0, viewFrame.size.height, rect.size.width, magFrame.size.height);
+    viewFrame.size.height -= magFrame.size.height;  // 放大镜单独占一横条
+    barFrame.origin.y += magFrame.size.height;      // 底部按钮栏往下移
+    magFrame = CGRectMake(0, viewFrame.size.height, rect.size.width, magFrame.size.height); // 放大镜在图形视图下方
 #endif
     
+    // 创建图形视图及其视图控制器
     _graphc = [[GiViewController alloc]init];
     [_graphc createGraphView:viewFrame backgroundColor:[UIColor grayColor] shapes:NULL];
     [self.view addSubview:_graphc.view];
+    _graphc.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
+                                     | UIViewAutoresizingFlexibleBottomMargin);
     
+    // 创建容纳放大镜视图的容器视图
     UIView *magnifierView = [[UIView alloc]initWithFrame:magFrame];
-    magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.9f];
+    magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.7f];
     [self.view addSubview:magnifierView];
+    magnifierView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight 
+                                      | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);
     
+    // 创建放大镜视图的按钮栏
     CGFloat magbtnw = 32;
     CGRect magbarRect = CGRectMake(0, 0, magnifierView.bounds.size.width, magbtnw);
     UIButton *magbarView = [[UIButton alloc]initWithFrame:magbarRect];
     [magbarView setImage:[UIImage imageNamed:@"downview.png"] forState: UIControlStateNormal];
 	magbarView.alpha = 0.6;
-    magbarView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    magbarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
 	[magnifierView addSubview:magbarView];
     [magbarView release];
     
+    // 计算左右放大镜视图的位置大小
     CGRect maggraphRect = magnifierView.bounds;
     maggraphRect.origin.y = magbtnw;
     maggraphRect.size.height -= magbtnw;
@@ -97,18 +108,21 @@ static const NSUInteger kDashLineTag    = 4;
     CGRect mag1rect = maggraphRect;
     mag1rect.size.width = mag1rect.size.height < mag1rect.size.width / 2 ? mag1rect.size.height : mag1rect.size.width / 2;
     CGRect mag2rect = maggraphRect;
-    mag2rect.origin.x = mag1rect.size.width;
+    mag2rect.origin.x = mag1rect.size.width + 4;
     mag2rect.size.width -= mag2rect.origin.x;
     
+    // 创建放大显示的放大镜视图
     UIView *magView = [_graphc createMagnifierView:magnifierView frame:mag2rect scale:4];
     magView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
                                 | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin);
     
+    // 创建缩小显示的放大镜视图
     magView = [_graphc createMagnifierView:magnifierView frame:mag1rect scale:0.1];
     magView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin
                                 | UIViewAutoresizingFlexibleBottomMargin);
     magView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.1f];
     
+    // 创建放大镜视图的测试用的各个按钮
     CGFloat magbtnx = 4;
     UIButton *magbtn = [self addButton:Nil action:@selector(lockMagnifier:)
                                    bar:magbarView x:&magbtnx size:magbtnw diffx:4];
@@ -131,9 +145,15 @@ static const NSUInteger kDashLineTag    = 4;
     [magbtn setTitle:@"H" forState: UIControlStateNormal];
     [magbtn setTitle:@"h" forState: UIControlStateHighlighted];
     
+    magbtn = [self addButton:Nil action:@selector(addTestShapes:)
+                         bar:magbarView x:&magbtnx size:magbtnw diffx:4];
+    [magbtn setTitle:@"A" forState: UIControlStateNormal];
+    [magbtn setTitle:@"a" forState: UIControlStateHighlighted];
+    
     barFrame.size.height = BAR_HEIGHT;
     barFrame.origin.y += viewFrame.size.height;
     
+    // 创建底部按钮栏视图
     _downview = [[UIButton alloc]initWithFrame:barFrame];
     [_downview setImage:[UIImage imageNamed:@"downview.png"] forState: UIControlStateNormal];
 	_downview.alpha = 0.6;
@@ -220,6 +240,20 @@ static const NSUInteger kDashLineTag    = 4;
 - (IBAction)fireUndo:(id)sender
 {
     [_graphc undoMotion];
+}
+
+- (IBAction)addTestShapes:(id)sender
+{
+    RandomParam::init();
+    
+    RandomParam param;
+    param.lineCount = 100;
+    param.arcCount = 50;
+    param.curveCount = 50;
+    param.randomLineStyle = true;
+    
+    param.initShapes((MgShapes*)_graphc.shapes);
+    [_graphc regen];
 }
 
 - (IBAction)showPenView:(id)sender
@@ -401,6 +435,11 @@ static const NSUInteger kDashLineTag    = 4;
 	[brushbtn  setImage:[UIImage imageNamed:@"brush.png"] forState:UIControlStateNormal];
 	[erasebtn  setImage:[UIImage imageNamed:@"erase.png"] forState:UIControlStateNormal];
     [backbtn   setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+	return YES;     // supported orientations
 }
 
 @end

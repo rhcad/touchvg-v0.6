@@ -52,6 +52,7 @@
 
 
 - (void)clearCachedData;                //!< 清除缓冲数据，下次重新构建显示
+- (void)regen;                          //!< 标记视图待重新构建显示
 - (void)undoMotion;                     //!< 触发晃动或撤销操作
 - (void)dynDraw:(id)sender;             //!< 供图形视图动态显示时调用
 - (void)afterZoomed:(id)sender;         //!< 供图形视图在动态放缩后通知
