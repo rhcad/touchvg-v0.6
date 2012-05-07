@@ -32,6 +32,14 @@ bool MgCmdDrawSplines::undo(bool &enableRecall, const MgMotion* sender)
 
 bool MgCmdDrawSplines::draw(const MgMotion* sender, GiGraphics* gs)
 {
+    /*if (m_step > 1) {
+        GiContext ctx(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
+        float radius = gs->xf().displayToModel(4);
+        
+        for (UInt32 i = 0; i < m_shape->shape()->getPointCount(); i++) {
+            gs->drawEllipse(&ctx, m_shape->shape()->getPoint(i), radius);
+        }
+    }*/
     return MgCommandDraw::draw(sender, gs);
 }
 

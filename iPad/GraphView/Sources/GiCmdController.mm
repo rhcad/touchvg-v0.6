@@ -252,7 +252,10 @@ private:
         [self setView:view];
         [self convertPoint:point];
         
-        if (count > 1) {                        // 滑动时有两个手指
+        if (_motion->lastPoint.distanceTo(_motion->point) <= 2) {
+            ret = YES;
+        }
+        else if (count > 1) {                   // 滑动时有两个手指
             bool recall = false;
             float dist = mgHypot(_motion->point.x - _motion->lastPoint.x, 
                                  _motion->point.y - _motion->lastPoint.y);
@@ -298,32 +301,20 @@ private:
     
     if (cmd)
     {
-        if (sender.state == UIGestureRecognizerStateBegan) {
-            _undoFired = NO;
-            _moved = YES;
-            ret = cmd->touchBegan(_motion);
-        }
-        
-        [self setView:sender.view];
-        if ([sender numberOfTouches]) {
-            [self convertPoint:[sender locationInView:sender.view]];
-        }
-        
-        if (sender.state == UIGestureRecognizerStateBegan) {
-            ret = cmd->touchMoved(_motion);
-            _motion->lastPoint = _motion->point;
-            _motion->lastPointM = _motion->pointM;
-        }
-        else if (sender.state == UIGestureRecognizerStateChanged) {
+        if (sender.state == UIGestureRecognizerStateChanged) {
             ret = [self touchesMoved:[sender locationInView:sender.view]
                                 view:sender.view count:sender.numberOfTouches];
         }
         else if (sender.state == UIGestureRecognizerStateEnded) {
+            if ([sender numberOfTouches]) {
+                [self convertPoint:[sender locationInView:sender.view]];
+            }
             ret = cmd->touchEnded(_motion);
         }
-        else {
+        else if (sender.state != UIGestureRecognizerStateBegan) {
             ret = cmd->cancel(_motion);
         }
+        ret = YES;
     }
     
     return ret;

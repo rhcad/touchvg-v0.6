@@ -65,46 +65,51 @@ bool MgSplines::_draw(GiGraphics& gs, const GiContext& ctx) const
 
 void MgSplines::smooth(float tol)
 {
-    if (_bzcount < 3)
+    if (_count < 3)
         return;
     
-    Point2d* points = new Point2d[_bzcount];
-    Vector2d* knotvs = new Vector2d[_bzcount];
-    UInt32* indexMap = new UInt32[_bzcount];
+    Point2d* points = new Point2d[_count];
+    Vector2d* knotvs = new Vector2d[_count];
+    UInt32* indexMap = new UInt32[_count];
     UInt32 n = 0;
     UInt32 i, j;
     Point2d nearpt;
     Int32 segment;
     float dist;
     
-    points[0] = _points[0];                 // 第一个点不动
+    points[0] = _points[0];                     // 第一个点不动
     indexMap[0] = 0;
     
-    for (i = 1; i + 1 < _count; i++)        // 检查第i点能否去掉，最末点除外
+    for (i = 1; i + 1 < _count; i++)            // 检查第i点能否去掉，最末点除外
     {
-        for (j = 1; i + j < _count; j++)    // 跳过第i点复制后续点到points
+        for (j = 1; i + j < _count; j++)        // 跳过第i点复制后续点到points
             points[n + j] = _points[i + j];
         
         // 新曲线：indexMap[0], indexMap[1], ..., indexMap[n], i+1, i+2, ..., _count-1
         mgCubicSplines(n + _count - i, points, knotvs, _closed ? kCubicLoop : 0);
         dist = mgCubicSplinesHit(n + _count - i, points, knotvs, _closed, _points[i],
                                  tol * 2, nearpt, segment); // 检查第i点到新曲线的距离
-        if (dist >= tol) {                  // 第i点去掉则偏了，应保留
-            points[++n] = _points[i];
-            indexMap[n] = i;                // 新曲线的第j点对应与原indexMap[j]点
+        
+        bool removed = true;
+        if (dist >= tol) {                      // 第i点去掉则偏了，应保留
+            removed = false;
         }
         else {
             for (j = 0; j < n + _count - i; j++) {  // 切向变化超过45度时也保留点
                 UInt32 index = j > n ? i + j - n : indexMap[j];
                 if (_knotvs[index].angleTo(knotvs[j]) > _M_PI_4) {
-                    points[++n] = _points[i];
-                    indexMap[n] = i;
+                    removed = false;
                     break;
                 }
             }
         }
+        if (!removed) {
+            points[++n] = _points[i];
+            indexMap[n] = i;                    // 新曲线的第j点对应与原indexMap[j]点
+        }
     }
-    points[++n] = _points[_count - 1];      // 加上末尾点
+    if (points[n].distanceTo(_points[_count - 1]) > tol)
+        points[++n] = _points[_count - 1];      // 加上末尾点
     
     if (n + 1 < _count) {
         _count = n + 1;
