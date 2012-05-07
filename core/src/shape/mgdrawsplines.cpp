@@ -104,14 +104,13 @@ bool MgCmdDrawSplines::canAddPoint(const MgMotion* /*sender*/, bool /*ended*/)
 bool MgCmdDrawSplines::click(const MgMotion* sender)
 {
     MgShapeT<MgLine> line;
-    float pxlen = sender->view->xform()->displayToModel(1);
     
     if (sender->view->context()) {
         *line.context() = *sender->view->context();
     }
     
-    line.shape()->setPoint(0, sender->pointM);
-    line.shape()->setPoint(1, sender->pointM + Vector2d(pxlen, pxlen));
+    line.shape()->setPoint(0, sender->startPointM);
+    line.shape()->setPoint(1, sender->pointM);
     
     if (sender->view->shapeWillAdded(&line)) {
         sender->view->shapes()->addShape(line);

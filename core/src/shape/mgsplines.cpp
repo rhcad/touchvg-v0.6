@@ -53,14 +53,12 @@ bool MgSplines::_draw(GiGraphics& gs, const GiContext& ctx) const
 {
     bool ret = false;
 
-    if (_closed)
-    {
+    if (_count == 2)
+        ret = gs.drawLine(&ctx, _points[0], _points[1]);
+    else if (_closed)
         ret = gs.drawClosedSplines(&ctx, _count, _points, _knotvs);
-    }
     else
-    {
         ret = gs.drawSplines(&ctx, _count, _points, _knotvs);
-    }
 
     return __super::_draw(gs, ctx) || ret;
 }

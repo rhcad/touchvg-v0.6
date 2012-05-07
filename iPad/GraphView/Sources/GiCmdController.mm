@@ -47,7 +47,8 @@ private:
     void redraw() {
         [_mainview redraw];
         for (int i = 0; _auxviews[i]; i++) {
-            [_auxviews[i] setNeedsDisplay];
+            if (!_auxviews[i].hidden)
+                [_auxviews[i] setNeedsDisplay];
         }
     }
     
@@ -362,13 +363,7 @@ private:
         [self setView:view];
         [self convertPoint:point];
         
-        if (_motion->startPointM == _motion->pointM) {
-            ret = cmd->click(_motion);
-        }
-        else {
-            ret = [self touchesMoved:point view:view count:1];
-            ret = [self touchesEnded:point view:view count:1];
-        }
+        ret = cmd->click(_motion);
     }
     _clicked = NO;
     

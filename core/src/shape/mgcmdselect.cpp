@@ -299,7 +299,6 @@ bool MgCommandSelect::longPress(const MgMotion* /*sender*/)
 
 bool MgCommandSelect::touchBegan(const MgMotion* sender)
 {
-    sel_iterator it;
     MgShape* shape = NULL;
     
     for (std::vector<MgShape*>::iterator it = m_cloneShapes.begin();
@@ -307,8 +306,9 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
         (*it)->release();
     }
     m_cloneShapes.clear();
-    for (it = m_selIds.begin(); it != m_selIds.end(); ++it) {
-        shape = getShape(*it, sender);
+    
+    for (sel_iterator its = m_selIds.begin(); its != m_selIds.end(); ++its) {
+        shape = getShape(*its, sender);
         if (shape) {
             shape = (MgShape*)(shape->clone());
             m_cloneShapes.push_back(shape);

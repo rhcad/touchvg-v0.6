@@ -212,7 +212,7 @@
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_drawingDelegate touchesBegan:touches withEvent:event];    // for GiCommandController
+    [_drawingDelegate touchesCancelled:touches withEvent:event];    // for GiCommandController
     [super touchesCancelled:touches withEvent:event];
 }
 
