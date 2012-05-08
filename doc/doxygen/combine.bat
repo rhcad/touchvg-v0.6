@@ -21,5 +21,8 @@ del  /Q %destpath%\MfcApp\StdAfx.* %destpath%\MfcApp\resource.h
 xcopy ..\..\iPad\GraphView\Headers\*.h %destpath%\GraphView.ios\ /Y
 xcopy ..\..\iPad\GraphView\Sources\*.* %destpath%\GraphView.ios\ /Y
 
+mkdir %destpath%\graphios
+move /Y %destpath%\GraphView.ios\ios*.* %destpath%\graphios\
+
 xcopy ..\..\iPad\iPadDraw\Headers\*.h %destpath%\iPadApp\ /Y
 xcopy ..\..\iPad\iPadDraw\Sources\*.* %destpath%\iPadApp\ /Y
