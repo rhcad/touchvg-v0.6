@@ -6,6 +6,7 @@ build
 *.aps
 *.o
 *.a
+*.tmp
 *~
 *.DS_Store
 xcuserdata

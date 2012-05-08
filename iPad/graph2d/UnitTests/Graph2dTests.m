@@ -1,9 +1,9 @@
-//  GraphViewTests.m
-//  GraphView
+//  Graph2dTests.m
+//  graph2d
 //  Created by Zhang Yungui on 2012-3-2.
 //
 
-#import "GraphViewTests.h"
+#import "Graph2dTests.h"
 
 
 @implementation UnitTests
