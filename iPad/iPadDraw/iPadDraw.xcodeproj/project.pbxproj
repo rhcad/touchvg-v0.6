@@ -116,7 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				4A93E2EA1426EEA30068F29D /* libgraph2d.a */,
-				4A93E2EC1426EEA30068F29D /* GraphViewUnitTests.octest */,
+				4A93E2EC1426EEA30068F29D /* Graph2dUnitTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -276,10 +276,10 @@
 			remoteRef = 4A93E2E91426EEA30068F29D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4A93E2EC1426EEA30068F29D /* GraphViewUnitTests.octest */ = {
+		4A93E2EC1426EEA30068F29D /* Graph2dUnitTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			name = GraphViewUnitTests.octest;
+			name = Graph2dUnitTests.octest;
 			path = Graph2dUnitTests.octest;
 			remoteRef = 4A93E2EB1426EEA30068F29D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;

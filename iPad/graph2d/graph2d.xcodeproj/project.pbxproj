@@ -110,7 +110,7 @@
 		2752EE94155917C700F0CCDD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2752EE96155917E200F0CCDD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4AE2C1D21424998500C67987 /* libgraph2d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgraph2d.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphViewUnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AE2C1DF1424998500C67987 /* Graph2dUnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Graph2dUnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AE2C2691424A47000C67987 /* Graph2dTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graph2dTests.h; path = UnitTests/Graph2dTests.h; sourceTree = SOURCE_ROOT; };
 		4AE2C26A1424A47000C67987 /* Graph2dTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Graph2dTests.m; path = UnitTests/Graph2dTests.m; sourceTree = SOURCE_ROOT; };
 		4AE2C2921424A99700C67987 /* UnitTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "UnitTests-Info.plist"; path = "UnitTests/Resources/UnitTests-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -272,7 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				4AE2C1D21424998500C67987 /* libgraph2d.a */,
-				4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */,
+				4AE2C1DF1424998500C67987 /* Graph2dUnitTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -510,9 +510,9 @@
 			productReference = 4AE2C1D21424998500C67987 /* libgraph2d.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		4AE2C1DE1424998500C67987 /* GraphViewUnitTests */ = {
+		4AE2C1DE1424998500C67987 /* Graph2dUnitTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4AE2C1F81424998500C67987 /* Build configuration list for PBXNativeTarget "GraphViewUnitTests" */;
+			buildConfigurationList = 4AE2C1F81424998500C67987 /* Build configuration list for PBXNativeTarget "Graph2dUnitTests" */;
 			buildPhases = (
 				4AE2C1DA1424998500C67987 /* Sources */,
 				4AE2C1DB1424998500C67987 /* Frameworks */,
@@ -524,9 +524,9 @@
 			dependencies = (
 				4ACBCB3B1425DB6300212514 /* PBXTargetDependency */,
 			);
-			name = GraphViewUnitTests;
+			name = Graph2dUnitTests;
 			productName = UnitTests;
-			productReference = 4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */;
+			productReference = 4AE2C1DF1424998500C67987 /* Graph2dUnitTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -551,7 +551,7 @@
 			projectRoot = "";
 			targets = (
 				4AE2C1D11424998500C67987 /* graph2d */,
-				4AE2C1DE1424998500C67987 /* GraphViewUnitTests */,
+				4AE2C1DE1424998500C67987 /* Graph2dUnitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -737,7 +737,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4AE2C1F81424998500C67987 /* Build configuration list for PBXNativeTarget "GraphViewUnitTests" */ = {
+		4AE2C1F81424998500C67987 /* Build configuration list for PBXNativeTarget "Graph2dUnitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4AE2C1F91424998500C67987 /* Debug */,
