@@ -673,7 +673,6 @@ WARN_LOGFILE           =
 
 INPUT                  = ../../core/include \
                          ../../win32/include \
-                         ../../iPad/Graph2d/Headers \
                          ../../iPad/GraphView/Headers \
                          MainPage.txt
 

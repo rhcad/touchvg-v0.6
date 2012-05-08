@@ -18,9 +18,6 @@ move /Y %destpath%\MfcApp\BaseView.* %destpath%\GraphView.win\
 move /Y %destpath%\MfcApp\Step*View.* %destpath%\GraphView.win\
 del  /Q %destpath%\MfcApp\StdAfx.* %destpath%\MfcApp\resource.h
 
-xcopy ..\..\iPad\Graph2d\Headers\*ios.h %destpath%\graphios\ /Y
-xcopy ..\..\iPad\Graph2d\Sources\*.cpp %destpath%\graphios\ /Y
-
 xcopy ..\..\iPad\GraphView\Headers\*.h %destpath%\GraphView.ios\ /Y
 xcopy ..\..\iPad\GraphView\Sources\*.* %destpath%\GraphView.ios\ /Y
 

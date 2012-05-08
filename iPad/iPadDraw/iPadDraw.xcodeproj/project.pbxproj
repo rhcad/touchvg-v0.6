@@ -40,51 +40,51 @@
 /* Begin PBXContainerItemProxy section */
 		4A93E2DD1426EE920068F29D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4A93E2D51426EE920068F29D /* GraphView.xcodeproj */;
+			containerPortal = 4A93E2D51426EE920068F29D /* GraphOldView.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4AE2C1D21424998500C67987;
-			remoteInfo = GraphView;
+			remoteInfo = GraphOldView;
 		};
 		4A93E2DF1426EE920068F29D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4A93E2D51426EE920068F29D /* GraphView.xcodeproj */;
+			containerPortal = 4A93E2D51426EE920068F29D /* GraphOldView.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4AE2C1DF1424998500C67987;
 			remoteInfo = GraphViewUnitTests;
 		};
 		4A93E2E91426EEA30068F29D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */;
+			containerPortal = 4A93E2E11426EEA30068F29D /* GraphView.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4AE2C1D21424998500C67987;
-			remoteInfo = Graph2d;
+			remoteInfo = GraphView;
 		};
 		4A93E2EB1426EEA30068F29D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */;
+			containerPortal = 4A93E2E11426EEA30068F29D /* GraphView.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4AE2C1DF1424998500C67987;
 			remoteInfo = Graph2dUnitTests;
 		};
 		4A93E2FD1426EED10068F29D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 4A93E2D51426EE920068F29D /* GraphView.xcodeproj */;
+			containerPortal = 4A93E2D51426EE920068F29D /* GraphOldView.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4AE2C1D11424998500C67987;
+			remoteInfo = GraphOldView;
+		};
+		C9340F2E15021BC800C2831C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4A93E2E11426EEA30068F29D /* GraphView.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 4AE2C1D11424998500C67987;
 			remoteInfo = GraphView;
 		};
-		C9340F2E15021BC800C2831C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4AE2C1D11424998500C67987;
-			remoteInfo = Graph2d;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4A93E2D51426EE920068F29D /* GraphView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GraphView.xcodeproj; path = ../GraphView/GraphView.xcodeproj; sourceTree = "<group>"; };
-		4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Graph2d.xcodeproj; path = ../Graph2d/Graph2d.xcodeproj; sourceTree = "<group>"; };
+		4A93E2D51426EE920068F29D /* GraphOldView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GraphOldView.xcodeproj; path = ../GraphOldView/GraphOldView.xcodeproj; sourceTree = "<group>"; };
+		4A93E2E11426EEA30068F29D /* GraphView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GraphView.xcodeproj; path = ../GraphView/GraphView.xcodeproj; sourceTree = "<group>"; };
 		4AC4D32F142455C60055F4CA /* iPadDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPadDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AC4D3B0142479420055F4CA /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Headers/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		4AC4D3B11424794C0055F4CA /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Sources/AppDelegate.m; sourceTree = SOURCE_ROOT; };
@@ -214,8 +214,8 @@
 			children = (
 				C97B07E415021F5200040728 /* libGraph2d.a */,
 				C97B07E515021F5200040728 /* libGraphView.a */,
-				4A93E2D51426EE920068F29D /* GraphView.xcodeproj */,
-				4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */,
+				4A93E2D51426EE920068F29D /* GraphOldView.xcodeproj */,
+				4A93E2E11426EEA30068F29D /* GraphView.xcodeproj */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -293,11 +293,11 @@
 			projectReferences = (
 				{
 					ProductGroup = 4A93E2E21426EEA30068F29D /* Products */;
-					ProjectRef = 4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */;
+					ProjectRef = 4A93E2E11426EEA30068F29D /* GraphView.xcodeproj */;
 				},
 				{
 					ProductGroup = 4A93E2D61426EE920068F29D /* Products */;
-					ProjectRef = 4A93E2D51426EE920068F29D /* GraphView.xcodeproj */;
+					ProjectRef = 4A93E2D51426EE920068F29D /* GraphOldView.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -387,12 +387,12 @@
 /* Begin PBXTargetDependency section */
 		4A93E2FE1426EED10068F29D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = GraphView;
+			name = GraphOldView;
 			targetProxy = 4A93E2FD1426EED10068F29D /* PBXContainerItemProxy */;
 		};
 		C9340F2F15021BC800C2831C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = Graph2d;
+			name = GraphView;
 			targetProxy = C9340F2E15021BC800C2831C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -416,7 +416,6 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				INFOPLIST_FILE = "";
@@ -441,7 +440,6 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				INFOPLIST_FILE = "";
@@ -464,7 +462,6 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -486,7 +483,6 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -513,7 +509,6 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				INFOPLIST_FILE = "";
@@ -535,7 +530,6 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -562,7 +556,6 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				INFOPLIST_FILE = "";
@@ -584,7 +577,6 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				LIBRARY_SEARCH_PATHS = (

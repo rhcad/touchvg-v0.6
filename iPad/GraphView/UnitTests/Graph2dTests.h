@@ -1,5 +1,5 @@
 //  Graph2dTests.h
-//  Graph2d
+//  GraphView
 //  Created by Zhang Yungui on 2012-3-2.
 //
 

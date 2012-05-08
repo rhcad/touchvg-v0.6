@@ -31,24 +31,24 @@
 		};
 		C9340F26150216B500C2831C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = C9340F21150216B500C2831C /* Graph2d.xcodeproj */;
+			containerPortal = C9340F21150216B500C2831C /* GraphView.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4AE2C1D21424998500C67987;
-			remoteInfo = Graph2d;
+			remoteInfo = GraphView;
 		};
 		C9340F28150216B500C2831C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = C9340F21150216B500C2831C /* Graph2d.xcodeproj */;
+			containerPortal = C9340F21150216B500C2831C /* GraphView.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4AE2C1DF1424998500C67987;
 			remoteInfo = Graph2dUnitTests;
 		};
 		C9340F2B150216C300C2831C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = C9340F21150216B500C2831C /* Graph2d.xcodeproj */;
+			containerPortal = C9340F21150216B500C2831C /* GraphView.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 4AE2C1D11424998500C67987;
-			remoteInfo = Graph2d;
+			remoteInfo = GraphView;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -65,7 +65,7 @@
 		9D749EEE1525939000EE879B /* GiMagnifierView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiMagnifierView.mm; path = Sources/GiMagnifierView.mm; sourceTree = "<group>"; };
 		9D98C69C1512DEBE00DA83AE /* GiCmdController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiCmdController.h; path = Sources/GiCmdController.h; sourceTree = "<group>"; };
 		9D98C69D1512DEBE00DA83AE /* GiCmdController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiCmdController.mm; path = Sources/GiCmdController.mm; sourceTree = "<group>"; };
-		C9340F21150216B500C2831C /* Graph2d.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Graph2d.xcodeproj; path = ../Graph2d/Graph2d.xcodeproj; sourceTree = "<group>"; };
+		C9340F21150216B500C2831C /* GraphView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GraphView.xcodeproj; path = ../GraphView/GraphView.xcodeproj; sourceTree = "<group>"; };
 		C99CC9EB1448794E00802345 /* GiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiViewController.h; path = Headers/GiViewController.h; sourceTree = "<group>"; };
 		C99CC9ED1448795600802345 /* GiViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiViewController.mm; path = Sources/GiViewController.mm; sourceTree = "<group>"; };
 		C9A22A1D15020808008AA1EA /* GiGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphView.h; path = Headers/GiGraphView.h; sourceTree = "<group>"; };
@@ -170,7 +170,7 @@
 		C9340F2D1502187000C2831C /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				C9340F21150216B500C2831C /* Graph2d.xcodeproj */,
+				C9340F21150216B500C2831C /* GraphView.xcodeproj */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -213,9 +213,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4AE2C1D11424998500C67987 /* GraphView */ = {
+		4AE2C1D11424998500C67987 /* GraphOldView */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4AE2C1F51424998500C67987 /* Build configuration list for PBXNativeTarget "GraphView" */;
+			buildConfigurationList = 4AE2C1F51424998500C67987 /* Build configuration list for PBXNativeTarget "GraphOldView" */;
 			buildPhases = (
 				4AE2C1CE1424998500C67987 /* Sources */,
 				4AE2C1CF1424998500C67987 /* Frameworks */,
@@ -226,7 +226,7 @@
 			dependencies = (
 				C9340F2C150216C300C2831C /* PBXTargetDependency */,
 			);
-			name = GraphView;
+			name = GraphOldView;
 			productName = LibTemplate;
 			productReference = 4AE2C1D21424998500C67987 /* libGraphView.a */;
 			productType = "com.apple.product-type.library.static";
@@ -259,7 +259,7 @@
 				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = github.com/rhcad;
 			};
-			buildConfigurationList = 4AE2C1CC1424998500C67987 /* Build configuration list for PBXProject "GraphView" */;
+			buildConfigurationList = 4AE2C1CC1424998500C67987 /* Build configuration list for PBXProject "GraphOldView" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -272,12 +272,12 @@
 			projectReferences = (
 				{
 					ProductGroup = C9340F22150216B500C2831C /* Products */;
-					ProjectRef = C9340F21150216B500C2831C /* Graph2d.xcodeproj */;
+					ProjectRef = C9340F21150216B500C2831C /* GraphView.xcodeproj */;
 				},
 			);
 			projectRoot = "";
 			targets = (
-				4AE2C1D11424998500C67987 /* GraphView */,
+				4AE2C1D11424998500C67987 /* GraphOldView */,
 				4AE2C1DE1424998500C67987 /* GraphViewUnitTests */,
 			);
 		};
@@ -351,12 +351,12 @@
 /* Begin PBXTargetDependency section */
 		4ACBCB3B1425DB6300212514 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 4AE2C1D11424998500C67987 /* GraphView */;
+			target = 4AE2C1D11424998500C67987 /* GraphOldView */;
 			targetProxy = 4ACBCB3A1425DB6300212514 /* PBXContainerItemProxy */;
 		};
 		C9340F2C150216C300C2831C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = Graph2d;
+			name = GraphView;
 			targetProxy = C9340F2B150216C300C2831C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -379,7 +379,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				SDKROOT = iphoneos;
@@ -400,7 +400,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				SDKROOT = iphoneos;
@@ -417,7 +417,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 			};
 			name = Debug;
@@ -432,7 +432,7 @@
 					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
 					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
 					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/GraphView\"",
 				);
 			};
 			name = Release;
@@ -456,7 +456,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4AE2C1CC1424998500C67987 /* Build configuration list for PBXProject "GraphView" */ = {
+		4AE2C1CC1424998500C67987 /* Build configuration list for PBXProject "GraphOldView" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4AE2C1F31424998500C67987 /* Debug */,
@@ -465,7 +465,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4AE2C1F51424998500C67987 /* Build configuration list for PBXNativeTarget "GraphView" */ = {
+		4AE2C1F51424998500C67987 /* Build configuration list for PBXNativeTarget "GraphOldView" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4AE2C1F61424998500C67987 /* Debug */,
