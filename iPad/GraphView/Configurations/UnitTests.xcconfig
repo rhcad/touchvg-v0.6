@@ -2,7 +2,7 @@
 #include "../Common/Configurations/UnitTests.xcconfig"
 #include "../Common/Configurations/Libraries.xcconfig"
 
-PRODUCT_NAME            = Graph2dUnitTests
+PRODUCT_NAME            = GraphViewUnitTests
 BASE_PRODUCT_NAME       = $(PRODUCT_NAME)
 BUILD_BUNDLE_VERSION    = 1.0
 

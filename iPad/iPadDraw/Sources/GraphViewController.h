@@ -1,16 +1,17 @@
 // GraphViewController.h
 // Created by Zhang Yungui on 2012-3-2.
 
-#import <GiViewController.h>
+#import "TestConfig.h"
 
-#if 0
-#define TEST_SIMPLE_VIEW 1
+#ifdef TESTMODE_SIMPLEVIEW
+#import <GiViewController.h>
 
 @interface GraphViewController : GiViewController {
 }
 @end
 
-#else
+#else // TESTMODE
+#import <GiViewController.h>
 
 @interface GraphViewController : UIViewController {
     GiViewController    *_graphc;       // 图形视图控制器
@@ -51,4 +52,4 @@
 - (void)showUnlightButtons;             // 显示全部非高亮钮
 
 @end
-#endif
+#endif // TESTMODE

@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2752EE871559171300F0CCDD /* GiGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2752EE841559171300F0CCDD /* GiGraphView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2752EE881559171300F0CCDD /* GiMotionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 2752EE851559171300F0CCDD /* GiMotionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2752EE891559171300F0CCDD /* GiViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2752EE861559171300F0CCDD /* GiViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2752EE8F1559172400F0CCDD /* GiCmdController.h in Headers */ = {isa = PBXBuildFile; fileRef = 2752EE8A1559172400F0CCDD /* GiCmdController.h */; };
+		2752EE901559172400F0CCDD /* GiCmdController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2752EE8B1559172400F0CCDD /* GiCmdController.mm */; };
+		2752EE911559172400F0CCDD /* GiGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2752EE8C1559172400F0CCDD /* GiGraphView.mm */; };
+		2752EE921559172400F0CCDD /* GiMagnifierView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2752EE8D1559172400F0CCDD /* GiMagnifierView.mm */; };
+		2752EE931559172400F0CCDD /* GiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2752EE8E1559172400F0CCDD /* GiViewController.mm */; };
+		2752EE95155917C700F0CCDD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2752EE94155917C700F0CCDD /* CoreGraphics.framework */; };
+		2752EE97155917E200F0CCDD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2752EE96155917E200F0CCDD /* UIKit.framework */; };
 		4ACBCB381425D73E00212514 /* GraphViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* GraphViewTests.m */; };
 		4AE2C1E71424998500C67987 /* libGraphView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE2C1D21424998500C67987 /* libGraphView.a */; };
 		7E8A89DC1480A0450033966F /* gicanvdr.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8A89DB1480A0450033966F /* gicanvdr.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -89,6 +99,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2752EE841559171300F0CCDD /* GiGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphView.h; path = Headers/GiGraphView.h; sourceTree = "<group>"; };
+		2752EE851559171300F0CCDD /* GiMotionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiMotionHandler.h; path = Headers/GiMotionHandler.h; sourceTree = "<group>"; };
+		2752EE861559171300F0CCDD /* GiViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiViewController.h; path = Headers/GiViewController.h; sourceTree = "<group>"; };
+		2752EE8A1559172400F0CCDD /* GiCmdController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiCmdController.h; path = Sources/GiCmdController.h; sourceTree = "<group>"; };
+		2752EE8B1559172400F0CCDD /* GiCmdController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiCmdController.mm; path = Sources/GiCmdController.mm; sourceTree = "<group>"; };
+		2752EE8C1559172400F0CCDD /* GiGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiGraphView.mm; path = Sources/GiGraphView.mm; sourceTree = "<group>"; };
+		2752EE8D1559172400F0CCDD /* GiMagnifierView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiMagnifierView.mm; path = Sources/GiMagnifierView.mm; sourceTree = "<group>"; };
+		2752EE8E1559172400F0CCDD /* GiViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiViewController.mm; path = Sources/GiViewController.mm; sourceTree = "<group>"; };
+		2752EE94155917C700F0CCDD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2752EE96155917E200F0CCDD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4AE2C1D21424998500C67987 /* libGraphView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGraphView.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphViewUnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AE2C2691424A47000C67987 /* GraphViewTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphViewTests.h; path = UnitTests/GraphViewTests.h; sourceTree = SOURCE_ROOT; };
@@ -172,6 +192,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2752EE97155917E200F0CCDD /* UIKit.framework in Frameworks */,
+				2752EE95155917C700F0CCDD /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,12 +208,61 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2752EE7F1559161700F0CCDD /* graphios */ = {
+			isa = PBXGroup;
+			children = (
+				7E8F78E3147DC5C30045A730 /* iosgraph.h */,
+				C9A7F8C4146B30E200597DF0 /* ioscanvas.h */,
+			);
+			name = graphios;
+			sourceTree = "<group>";
+		};
+		2752EE811559169900F0CCDD /* graphios */ = {
+			isa = PBXGroup;
+			children = (
+				C9A7F8C1146B30C300597DF0 /* ioscanvas.cpp */,
+			);
+			name = graphios;
+			sourceTree = "<group>";
+		};
+		2752EE82155916C900F0CCDD /* GraphView */ = {
+			isa = PBXGroup;
+			children = (
+				2752EE841559171300F0CCDD /* GiGraphView.h */,
+				2752EE851559171300F0CCDD /* GiMotionHandler.h */,
+				2752EE861559171300F0CCDD /* GiViewController.h */,
+			);
+			name = GraphView;
+			sourceTree = "<group>";
+		};
+		2752EE83155916D800F0CCDD /* GraphView */ = {
+			isa = PBXGroup;
+			children = (
+				2752EE8A1559172400F0CCDD /* GiCmdController.h */,
+				2752EE8B1559172400F0CCDD /* GiCmdController.mm */,
+				2752EE8C1559172400F0CCDD /* GiGraphView.mm */,
+				2752EE8D1559172400F0CCDD /* GiMagnifierView.mm */,
+				2752EE8E1559172400F0CCDD /* GiViewController.mm */,
+			);
+			name = GraphView;
+			sourceTree = "<group>";
+		};
+		2752EE98155917ED00F0CCDD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2752EE96155917E200F0CCDD /* UIKit.framework */,
+				2752EE94155917C700F0CCDD /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4AE2C1C71424998500C67987 = {
 			isa = PBXGroup;
 			children = (
 				7E9CE80C1500B9E400487BEF /* Headers */,
 				4AE2C21514249CD300C67987 /* Sources */,
 				4AE2C1E81424998500C67987 /* Tests */,
+				2752EE98155917ED00F0CCDD /* Frameworks */,
 				4AE2C21214249C2E00C67987 /* Configurations */,
 				4AE2C1D31424998500C67987 /* Products */,
 			);
@@ -230,10 +301,11 @@
 		4AE2C21514249CD300C67987 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				C9A7F8C1146B30C300597DF0 /* ioscanvas.cpp */,
-				7E9CE7EF1500B8D300487BEF /* geom */,
-				7E9CE7F11500B8DF00487BEF /* graph */,
+				2752EE83155916D800F0CCDD /* GraphView */,
+				2752EE811559169900F0CCDD /* graphios */,
 				C9D632431450CAC300A3CC75 /* shape */,
+				7E9CE7F11500B8DF00487BEF /* graph */,
+				7E9CE7EF1500B8D300487BEF /* geom */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -277,12 +349,12 @@
 		7E9CE80C1500B9E400487BEF /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				7E8F78E3147DC5C30045A730 /* iosgraph.h */,
-				4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */,
-				C9A7F8C4146B30E200597DF0 /* ioscanvas.h */,
-				C9D632411450CA2900A3CC75 /* geom */,
-				C9D6323F1450CA2400A3CC75 /* graph */,
+				2752EE82155916C900F0CCDD /* GraphView */,
+				2752EE7F1559161700F0CCDD /* graphios */,
 				C9D632421450CABC00A3CC75 /* shape */,
+				C9D6323F1450CA2400A3CC75 /* graph */,
+				C9D632411450CA2900A3CC75 /* geom */,
+				4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -402,6 +474,9 @@
 				9DA418ED152D7E7100052476 /* mgstorage.h in Headers */,
 				C9A7F8C5146B30E300597DF0 /* ioscanvas.h in Headers */,
 				7E8F78E4147DC5C30045A730 /* iosgraph.h in Headers */,
+				2752EE871559171300F0CCDD /* GiGraphView.h in Headers */,
+				2752EE881559171300F0CCDD /* GiMotionHandler.h in Headers */,
+				2752EE891559171300F0CCDD /* GiViewController.h in Headers */,
 				7E9CE80A1500B90700487BEF /* giplclip.h in Headers */,
 				9D1AAC1C151B352200F2392F /* mgcmdmgr.h in Headers */,
 				9DF6A490151C02CC001C1468 /* mgcmddraw.h in Headers */,
@@ -411,6 +486,7 @@
 				9DF6A499151C02CC001C1468 /* mgdrawsplines.h in Headers */,
 				9DB0D91315242EE600326A5E /* mgcmderase.h in Headers */,
 				C9A7F8C7146B320E00597DF0 /* _gigraph.h in Headers */,
+				2752EE8F1559172400F0CCDD /* GiCmdController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +615,10 @@
 				9DF6A498151C02CC001C1468 /* mgdrawsplines.cpp in Sources */,
 				9DB0D91215242EE600326A5E /* mgcmderase.cpp in Sources */,
 				C9A7F8C2146B30C300597DF0 /* ioscanvas.cpp in Sources */,
+				2752EE901559172400F0CCDD /* GiCmdController.mm in Sources */,
+				2752EE911559172400F0CCDD /* GiGraphView.mm in Sources */,
+				2752EE921559172400F0CCDD /* GiMagnifierView.mm in Sources */,
+				2752EE931559172400F0CCDD /* GiViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,16 +25,14 @@
 @synthesize controller = _controller;
 
 - (void)dealloc {
-    
     [_controller release];
     [_window release];
     
     [super dealloc];
 }
 
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     _controller = [[GraphViewController alloc] init];
     [_window addSubview:_controller.view];
@@ -43,38 +41,28 @@
     return YES;
 }
 
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-    
-    // TODO:
-}
-
-
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    
     [_controller clearCachedData];
     //[_controller.view removeFromSuperview];
     //[_controller release];
     //_controller = Nil;
 }
 
-
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    
     //_controller = [[GraphViewController alloc] init];
     //[_window addSubview:_controller.view];
 }
 
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    
-    // TODO:
+- (void)applicationWillResignActive:(UIApplication *)application {
+    NSLog(@"applicationWillResignActive");
 }
 
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    NSLog(@"applicationDidBecomeActive");
+}
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    
-    // TODO:
+    NSLog(@"applicationWillTerminate");
 }
 
 @end

@@ -2,7 +2,8 @@
 // Created by Zhang Yungui on 2012-3-2.
 
 #import "TestGraphView.h"
-#ifdef TEST_SIMPLE_VIEW
+
+#ifdef TESTMODE_SIMPLEVIEW
 #include <mgshapest.h>
 #include <vector>
 #include "../../../core/include/testgraph/RandomShape.cpp"
@@ -61,4 +62,4 @@
 }
 
 @end
-#endif // TEST_SIMPLE_VIEW
+#endif // TESTMODE_SIMPLEVIEW

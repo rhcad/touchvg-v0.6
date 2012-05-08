@@ -3,7 +3,7 @@
 
 #import "GraphViewController.h"
 
-#ifdef TEST_SIMPLE_VIEW
+#ifdef TESTMODE_SIMPLEVIEW
 #import "TestGraphView.h"
 
 @implementation GraphViewController
@@ -19,7 +19,7 @@
 
 @end
 
-#else
+#else // TESTMODE
 
 #import "SCCalloutView.h"
 #import <GiGraphView.h>
@@ -49,8 +49,6 @@ static const NSUInteger kDashLineTag    = 4;
     [_graphc clearCachedData];
 }
 
-#define MAG_AT_BOTTOM
-
 - (void)loadView
 {
     CGRect rect = [[UIScreen mainScreen] applicationFrame];
@@ -66,7 +64,7 @@ static const NSUInteger kDashLineTag    = 4;
     
     // 计算图形视图和放大镜容器视图的位置大小
     CGRect viewFrame = rect;
-    CGRect magFrame = CGRectMake(10, 10, 200, 200);
+    CGRect magFrame = CGRectMake(10, 10, 250, 250);
     CGRect barFrame = rect;
     
     viewFrame.size.height -= BAR_HEIGHT;            // 减去底部按钮栏高度
@@ -104,22 +102,26 @@ static const NSUInteger kDashLineTag    = 4;
     maggraphRect.origin.y = magbtnw;
     maggraphRect.size.height -= magbtnw;
     
+    CGRect magrect = maggraphRect;
+#ifdef MAG_AT_BOTTOM
     CGRect mag1rect = maggraphRect;
     mag1rect.size.width = mag1rect.size.height < mag1rect.size.width / 2 ? mag1rect.size.height : mag1rect.size.width / 2;
-    CGRect mag2rect = maggraphRect;
-    mag2rect.origin.x = mag1rect.size.width;
-    mag2rect.size.width -= mag2rect.origin.x;
+    magrect.origin.x = mag1rect.size.width;
+    magrect.size.width -= magrect.origin.x;
+#endif
     
     // 创建放大显示的放大镜视图
-    _magViews[0] = [_graphc createMagnifierView:magnifierView frame:mag2rect scale:4];
+    _magViews[0] = [_graphc createMagnifierView:magnifierView frame:magrect scale:4];
     _magViews[0].autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
                                      | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin);
     
     // 创建缩小显示的放大镜视图
+#ifdef MAG_AT_BOTTOM
     _magViews[1] = [_graphc createMagnifierView:magnifierView frame:mag1rect scale:0.1];
     _magViews[1].autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin
                                      | UIViewAutoresizingFlexibleBottomMargin);
     _magViews[1].backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.1f];
+#endif
     
     // 创建放大镜视图的测试用的各个按钮
     CGFloat magbtnx = 4;
@@ -141,10 +143,12 @@ static const NSUInteger kDashLineTag    = 4;
     [magbtn setTitle:@"Hide" forState: UIControlStateNormal];
     [magbtn setTitle:@"h" forState: UIControlStateHighlighted];
     
+#ifdef MAG_AT_BOTTOM
     magbtn = [self addButton:Nil action:@selector(hideOverview:)
                          bar:magbarView x:&magbtnx size:magbtnw diffx:4];
     [magbtn setTitle:@"Left" forState: UIControlStateNormal];
     [magbtn setTitle:@"l" forState: UIControlStateHighlighted];
+#endif
     
     magbtn = [self addButton:Nil action:@selector(addTestShapes:)
                          bar:magbarView x:&magbtnx size:magbtnw diffx:4];
@@ -468,4 +472,4 @@ static const NSUInteger kDashLineTag    = 4;
 
 @end
 
-#endif // TEST_SIMPLE_VIEW
+#endif // TESTMODE
