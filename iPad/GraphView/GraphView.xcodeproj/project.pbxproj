@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4ACBCB381425D73E00212514 /* Graph2dTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* Graph2dTests.m */; };
-		4AE2C1E71424998500C67987 /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE2C1D21424998500C67987 /* libGraph2d.a */; };
+		4ACBCB381425D73E00212514 /* GraphViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* GraphViewTests.m */; };
+		4AE2C1E71424998500C67987 /* libGraphView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE2C1D21424998500C67987 /* libGraphView.a */; };
 		7E8A89DC1480A0450033966F /* gicanvdr.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8A89DB1480A0450033966F /* gicanvdr.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E8F78E4147DC5C30045A730 /* iosgraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8F78E3147DC5C30045A730 /* iosgraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9777B2147161BF00EA5AF7 /* gicanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9777B1147161BF00EA5AF7 /* gicanvas.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -89,15 +89,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4AE2C1D21424998500C67987 /* libGraph2d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGraph2d.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		4AE2C1DF1424998500C67987 /* Graph2dUnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Graph2dUnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4AE2C2691424A47000C67987 /* Graph2dTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graph2dTests.h; path = UnitTests/Graph2dTests.h; sourceTree = SOURCE_ROOT; };
-		4AE2C26A1424A47000C67987 /* Graph2dTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Graph2dTests.m; path = UnitTests/Graph2dTests.m; sourceTree = SOURCE_ROOT; };
+		4AE2C1D21424998500C67987 /* libGraphView.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGraphView.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GraphViewUnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AE2C2691424A47000C67987 /* GraphViewTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphViewTests.h; path = UnitTests/GraphViewTests.h; sourceTree = SOURCE_ROOT; };
+		4AE2C26A1424A47000C67987 /* GraphViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GraphViewTests.m; path = UnitTests/GraphViewTests.m; sourceTree = SOURCE_ROOT; };
 		4AE2C2921424A99700C67987 /* UnitTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "UnitTests-Info.plist"; path = "UnitTests/Resources/UnitTests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		4AE2C2941424AA6E00C67987 /* Library.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Library.xcconfig; path = Configurations/Library.xcconfig; sourceTree = "<group>"; };
 		4AE2C2951424AA6E00C67987 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Project.xcconfig; path = Configurations/Project.xcconfig; sourceTree = "<group>"; };
 		4AE2C2961424AA6E00C67987 /* UnitTests.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = UnitTests.xcconfig; path = Configurations/UnitTests.xcconfig; sourceTree = "<group>"; };
-		4AE2C29F1424ACE700C67987 /* Graph2d_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graph2d_Prefix.pch; path = Headers/Graph2d_Prefix.pch; sourceTree = "<group>"; };
+		4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphView_Prefix.pch; path = Headers/GraphView_Prefix.pch; sourceTree = "<group>"; };
 		7E8A89DB1480A0450033966F /* gicanvdr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gicanvdr.h; path = ../../core/include/graph/gicanvdr.h; sourceTree = "<group>"; };
 		7E8F78E3147DC5C30045A730 /* iosgraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iosgraph.h; path = Headers/iosgraph.h; sourceTree = "<group>"; };
 		7E9777B1147161BF00EA5AF7 /* gicanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gicanvas.h; path = ../../core/include/graph/gicanvas.h; sourceTree = "<group>"; };
@@ -179,7 +179,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4AE2C1E71424998500C67987 /* libGraph2d.a in Frameworks */,
+				4AE2C1E71424998500C67987 /* libGraphView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,8 +200,8 @@
 		4AE2C1D31424998500C67987 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4AE2C1D21424998500C67987 /* libGraph2d.a */,
-				4AE2C1DF1424998500C67987 /* Graph2dUnitTests.octest */,
+				4AE2C1D21424998500C67987 /* libGraphView.a */,
+				4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -210,8 +210,8 @@
 			isa = PBXGroup;
 			children = (
 				4AE2C2931424AA2B00C67987 /* Resources */,
-				4AE2C2691424A47000C67987 /* Graph2dTests.h */,
-				4AE2C26A1424A47000C67987 /* Graph2dTests.m */,
+				4AE2C2691424A47000C67987 /* GraphViewTests.h */,
+				4AE2C26A1424A47000C67987 /* GraphViewTests.m */,
 			);
 			name = Tests;
 			path = UnitTests;
@@ -278,7 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				7E8F78E3147DC5C30045A730 /* iosgraph.h */,
-				4AE2C29F1424ACE700C67987 /* Graph2d_Prefix.pch */,
+				4AE2C29F1424ACE700C67987 /* GraphView_Prefix.pch */,
 				C9A7F8C4146B30E200597DF0 /* ioscanvas.h */,
 				C9D632411450CA2900A3CC75 /* geom */,
 				C9D6323F1450CA2400A3CC75 /* graph */,
@@ -431,12 +431,12 @@
 			);
 			name = GraphView;
 			productName = LibTemplate;
-			productReference = 4AE2C1D21424998500C67987 /* libGraph2d.a */;
+			productReference = 4AE2C1D21424998500C67987 /* libGraphView.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		4AE2C1DE1424998500C67987 /* Graph2dUnitTests */ = {
+		4AE2C1DE1424998500C67987 /* GraphViewUnitTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4AE2C1F81424998500C67987 /* Build configuration list for PBXNativeTarget "Graph2dUnitTests" */;
+			buildConfigurationList = 4AE2C1F81424998500C67987 /* Build configuration list for PBXNativeTarget "GraphViewUnitTests" */;
 			buildPhases = (
 				4AE2C1DA1424998500C67987 /* Sources */,
 				4AE2C1DB1424998500C67987 /* Frameworks */,
@@ -448,9 +448,9 @@
 			dependencies = (
 				4ACBCB3B1425DB6300212514 /* PBXTargetDependency */,
 			);
-			name = Graph2dUnitTests;
+			name = GraphViewUnitTests;
 			productName = UnitTests;
-			productReference = 4AE2C1DF1424998500C67987 /* Graph2dUnitTests.octest */;
+			productReference = 4AE2C1DF1424998500C67987 /* GraphViewUnitTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -475,7 +475,7 @@
 			projectRoot = "";
 			targets = (
 				4AE2C1D11424998500C67987 /* GraphView */,
-				4AE2C1DE1424998500C67987 /* Graph2dUnitTests */,
+				4AE2C1DE1424998500C67987 /* GraphViewUnitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -546,7 +546,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4ACBCB381425D73E00212514 /* Graph2dTests.m in Sources */,
+				4ACBCB381425D73E00212514 /* GraphViewTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,7 +657,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4AE2C1F81424998500C67987 /* Build configuration list for PBXNativeTarget "Graph2dUnitTests" */ = {
+		4AE2C1F81424998500C67987 /* Build configuration list for PBXNativeTarget "GraphViewUnitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4AE2C1F91424998500C67987 /* Debug */,

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4ACBCB381425D73E00212514 /* GraphViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* GraphViewTests.m */; };
+		4ACBCB381425D73E00212514 /* GraphOldViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* GraphOldViewTests.m */; };
 		4AE2C1E71424998500C67987 /* libGraphView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE2C1D21424998500C67987 /* libGraphView.a */; };
 		9D749EEF1525939000EE879B /* GiMagnifierView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D749EEE1525939000EE879B /* GiMagnifierView.mm */; };
 		9D98C69E1512DEBE00DA83AE /* GiCmdController.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D98C69C1512DEBE00DA83AE /* GiCmdController.h */; };
