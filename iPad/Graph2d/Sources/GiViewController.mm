@@ -7,6 +7,7 @@
 #include <list>
 #import "GiCmdController.h"
 #import "GiGraphView.h"
+#include <string.h>
 
 @interface GiViewController(GestureRecognizer)
 
@@ -32,7 +33,9 @@
 @synthesize gestureRecognizerUsed = _gestureRecognizerUsed;
 @synthesize magnifierView;
 @synthesize activeView = _activeView;
+@synthesize bitmapContext;
 @synthesize lineWidth;
+@synthesize strokeWidth;
 @synthesize lineColor;
 @synthesize fillColor;
 @synthesize lineAlpha;
@@ -89,6 +92,9 @@
 
 - (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame backgroundColor:(UIColor*)bkColor
 {
+    if (self.view)
+        return self.view;
+    
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
     self.view = aview;
@@ -108,6 +114,9 @@
 
 - (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame shapes:(void*)sp
 {
+    if (self.view)
+        return self.view;
+    
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
     self.view = aview;
@@ -161,14 +170,32 @@
     [[self gview] graph]->clearCachedBitmap();
 }
 
+- (CGContextRef)bitmapContext
+{
+    GiGraphView *aview = (GiGraphView *)self.view;
+    return aview.bitmapContext;
+}
+
 - (UIView*)magnifierView {
     if (_magnifierView[1] && [_magnifierView[1].gestureRecognizers count] > 0)
         return _magnifierView[1];
     return _magnifierView[0];
 }
 
+- (void)removeShapes
+{
+    [[self gview] shapes]->clear();
+    [self regen];
+}
+
 - (void*)shapes {
     return [[self gview] shapes];
+}
+
+- (BOOL)isCommand:(const char*)cmdname
+{
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    return strcmp(cmd.commandName, cmdname) == 0;
 }
 
 - (const char*)commandName {
@@ -189,6 +216,21 @@
 - (void)setLineWidth:(int)w {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     [cmd setLineWidth:w];
+}
+
+- (float)strokeWidth {
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    int w = cmd.lineWidth;
+    if (w > 0) {
+        w = -3;
+        cmd.lineWidth = w;
+    }
+    return w < 0 ? -1.f * w : 1;
+}
+
+- (void)setStrokeWidth:(float)w {
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    [cmd setLineWidth:mgRound(-w)];
 }
 
 - (UIColor*)lineColor {

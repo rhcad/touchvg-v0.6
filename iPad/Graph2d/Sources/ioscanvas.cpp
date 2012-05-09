@@ -3,6 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #include "ioscanvas.h"
+#include <gigraph.h>
 #include <CoreGraphics/CGBitmapContext.h>
 
 static const CGFloat patDash[]      = { 5, 5 };
@@ -197,6 +198,11 @@ void GiCanvasIos::endPaint(bool draw)
         m_draw->_context = NULL;
         m_owner->_endPaint();
     }
+}
+
+CGContextRef GiCanvasIos::bitmapContext()
+{
+    return m_draw->_buffctx;
 }
 
 void GiCanvasIosImpl::createBufferBitmap(float width, float height)

@@ -4,6 +4,7 @@
 // License: LGPL, https://github.com/rhcad/touchdraw
 
 #include "gigraph.h"
+#include "gicanvas.h"
 
 //! GiGraphics的内部实现类
 class GiGraphicsImpl

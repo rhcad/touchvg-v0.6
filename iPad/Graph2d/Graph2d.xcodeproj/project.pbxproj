@@ -20,8 +20,8 @@
 		4ACBCB381425D73E00212514 /* Graph2dTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2C26A1424A47000C67987 /* Graph2dTests.m */; };
 		4AE2C1E71424998500C67987 /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE2C1D21424998500C67987 /* libGraph2d.a */; };
 		7E8A89DC1480A0450033966F /* gicanvdr.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8A89DB1480A0450033966F /* gicanvdr.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E8F78E4147DC5C30045A730 /* iosgraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8F78E3147DC5C30045A730 /* iosgraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E9777B2147161BF00EA5AF7 /* gicanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9777B1147161BF00EA5AF7 /* gicanvas.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7E8F78E4147DC5C30045A730 /* iosgraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E8F78E3147DC5C30045A730 /* iosgraph.h */; settings = {ATTRIBUTES = (); }; };
+		7E9777B2147161BF00EA5AF7 /* gicanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9777B1147161BF00EA5AF7 /* gicanvas.h */; settings = {ATTRIBUTES = (); }; };
 		7E9CE7FB1500B8F100487BEF /* mgbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F21500B8F100487BEF /* mgbase.cpp */; };
 		7E9CE7FC1500B8F100487BEF /* mgbnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F31500B8F100487BEF /* mgbnd.cpp */; };
 		7E9CE7FD1500B8F100487BEF /* mgcurv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE7F41500B8F100487BEF /* mgcurv.cpp */; };
@@ -35,13 +35,13 @@
 		7E9CE8091500B90700487BEF /* gipath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE8051500B90700487BEF /* gipath.cpp */; };
 		7E9CE80A1500B90700487BEF /* giplclip.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8061500B90700487BEF /* giplclip.h */; settings = {ATTRIBUTES = (); }; };
 		7E9CE80B1500B90700487BEF /* gixform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9CE8071500B90700487BEF /* gixform.cpp */; };
-		7E9CE81A1500BA0B00487BEF /* mgbase.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE80D1500BA0B00487BEF /* mgbase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E9CE81B1500BA0B00487BEF /* mgbnd.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE80E1500BA0B00487BEF /* mgbnd.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E9CE81C1500BA0B00487BEF /* mgcurv.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE80F1500BA0B00487BEF /* mgcurv.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7E9CE81A1500BA0B00487BEF /* mgbase.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE80D1500BA0B00487BEF /* mgbase.h */; settings = {ATTRIBUTES = (); }; };
+		7E9CE81B1500BA0B00487BEF /* mgbnd.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE80E1500BA0B00487BEF /* mgbnd.h */; settings = {ATTRIBUTES = (); }; };
+		7E9CE81C1500BA0B00487BEF /* mgcurv.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE80F1500BA0B00487BEF /* mgcurv.h */; settings = {ATTRIBUTES = (); }; };
 		7E9CE81D1500BA0B00487BEF /* mgdef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8101500BA0B00487BEF /* mgdef.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E9CE81E1500BA0B00487BEF /* mglnrel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8111500BA0B00487BEF /* mglnrel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7E9CE81E1500BA0B00487BEF /* mglnrel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8111500BA0B00487BEF /* mglnrel.h */; settings = {ATTRIBUTES = (); }; };
 		7E9CE81F1500BA0B00487BEF /* mgmat.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8121500BA0B00487BEF /* mgmat.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E9CE8211500BA0B00487BEF /* mgnear.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8141500BA0B00487BEF /* mgnear.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7E9CE8211500BA0B00487BEF /* mgnear.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8141500BA0B00487BEF /* mgnear.h */; settings = {ATTRIBUTES = (); }; };
 		7E9CE8221500BA0B00487BEF /* mgpnt.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8151500BA0B00487BEF /* mgpnt.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8231500BA0B00487BEF /* mgbox.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8161500BA0B00487BEF /* mgbox.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8241500BA0B00487BEF /* mgtol.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8171500BA0B00487BEF /* mgtol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -51,7 +51,7 @@
 		7E9CE8301500BA2100487BEF /* gicontxt.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE8291500BA2100487BEF /* gicontxt.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8311500BA2100487BEF /* gidef.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE82A1500BA2100487BEF /* gidef.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E9CE8321500BA2100487BEF /* gigraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE82B1500BA2100487BEF /* gigraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E9CE8331500BA2100487BEF /* gipath.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE82C1500BA2100487BEF /* gipath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7E9CE8331500BA2100487BEF /* gipath.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE82C1500BA2100487BEF /* gipath.h */; settings = {ATTRIBUTES = (); }; };
 		7E9CE8341500BA2100487BEF /* gixform.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E9CE82D1500BA2100487BEF /* gixform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D1AAC17151B1D5C00F2392F /* mgcmd.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D1AAC16151B1D5C00F2392F /* mgcmd.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D1AAC1A151B34C300F2392F /* mgcmdmgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D1AAC19151B34C300F2392F /* mgcmdmgr.cpp */; };
@@ -71,9 +71,9 @@
 		9DF6A498151C02CC001C1468 /* mgdrawsplines.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DF6A48D151C02CC001C1468 /* mgdrawsplines.cpp */; };
 		9DF6A499151C02CC001C1468 /* mgdrawsplines.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DF6A48E151C02CC001C1468 /* mgdrawsplines.h */; };
 		C9A7F8C2146B30C300597DF0 /* ioscanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F8C1146B30C300597DF0 /* ioscanvas.cpp */; };
-		C9A7F8C5146B30E300597DF0 /* ioscanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C4146B30E200597DF0 /* ioscanvas.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C9A7F8C5146B30E300597DF0 /* ioscanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C4146B30E200597DF0 /* ioscanvas.h */; settings = {ATTRIBUTES = (); }; };
 		C9A7F8C7146B320E00597DF0 /* _gigraph.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C6146B320E00597DF0 /* _gigraph.h */; };
-		C9D6324A1450CB2400A3CC75 /* _mgshape.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632441450CB2400A3CC75 /* _mgshape.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C9D6324A1450CB2400A3CC75 /* _mgshape.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632441450CB2400A3CC75 /* _mgshape.h */; settings = {ATTRIBUTES = (); }; };
 		C9D6324B1450CB2400A3CC75 /* mgshapet.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632451450CB2400A3CC75 /* mgshapet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9D6324C1450CB2400A3CC75 /* mgbasicsp.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632461450CB2400A3CC75 /* mgbasicsp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9D6324D1450CB2400A3CC75 /* mgshape.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632471450CB2400A3CC75 /* mgshape.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -444,39 +444,37 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E9CE81A1500BA0B00487BEF /* mgbase.h in Headers */,
-				7E9CE81B1500BA0B00487BEF /* mgbnd.h in Headers */,
-				7E9CE81C1500BA0B00487BEF /* mgcurv.h in Headers */,
-				7E9CE81D1500BA0B00487BEF /* mgdef.h in Headers */,
-				7E9CE81E1500BA0B00487BEF /* mglnrel.h in Headers */,
-				7E9CE81F1500BA0B00487BEF /* mgmat.h in Headers */,
-				7E9CE8211500BA0B00487BEF /* mgnear.h in Headers */,
-				7E9CE8221500BA0B00487BEF /* mgpnt.h in Headers */,
-				7E9CE8231500BA0B00487BEF /* mgbox.h in Headers */,
-				7E9CE8241500BA0B00487BEF /* mgtol.h in Headers */,
 				7E9CE8251500BA0B00487BEF /* mgtype.h in Headers */,
+				7E9CE81D1500BA0B00487BEF /* mgdef.h in Headers */,
+				7E9CE8241500BA0B00487BEF /* mgtol.h in Headers */,
 				7E9CE8261500BA0B00487BEF /* mgvec.h in Headers */,
+				7E9CE8221500BA0B00487BEF /* mgpnt.h in Headers */,
+				7E9CE81F1500BA0B00487BEF /* mgmat.h in Headers */,
+				7E9CE8231500BA0B00487BEF /* mgbox.h in Headers */,
 				7E9CE82F1500BA2100487BEF /* gicolor.h in Headers */,
 				7E9CE8301500BA2100487BEF /* gicontxt.h in Headers */,
 				7E9CE8311500BA2100487BEF /* gidef.h in Headers */,
-				7E9CE8321500BA2100487BEF /* gigraph.h in Headers */,
-				7E9777B2147161BF00EA5AF7 /* gicanvas.h in Headers */,
 				7E8A89DC1480A0450033966F /* gicanvdr.h in Headers */,
-				7E9CE8331500BA2100487BEF /* gipath.h in Headers */,
 				7E9CE8341500BA2100487BEF /* gixform.h in Headers */,
-				C9D6324A1450CB2400A3CC75 /* _mgshape.h in Headers */,
-				C9D6324B1450CB2400A3CC75 /* mgshapet.h in Headers */,
-				C9D6324C1450CB2400A3CC75 /* mgbasicsp.h in Headers */,
+				7E9CE8321500BA2100487BEF /* gigraph.h in Headers */,
 				C9D6324D1450CB2400A3CC75 /* mgshape.h in Headers */,
 				C9D6324E1450CB2400A3CC75 /* mgshapes.h in Headers */,
 				C9D6324F1450CB2400A3CC75 /* mgshapest.h in Headers */,
+				C9D6324B1450CB2400A3CC75 /* mgshapet.h in Headers */,
+				C9D6324C1450CB2400A3CC75 /* mgbasicsp.h in Headers */,
 				9D1AAC17151B1D5C00F2392F /* mgcmd.h in Headers */,
 				9DA418ED152D7E7100052476 /* mgstorage.h in Headers */,
-				C9A7F8C5146B30E300597DF0 /* ioscanvas.h in Headers */,
-				7E8F78E4147DC5C30045A730 /* iosgraph.h in Headers */,
 				2752EE871559171300F0CCDD /* GiGraphView.h in Headers */,
 				2752EE881559171300F0CCDD /* GiMotionHandler.h in Headers */,
 				2752EE891559171300F0CCDD /* GiViewController.h in Headers */,
+				7E9CE81A1500BA0B00487BEF /* mgbase.h in Headers */,
+				7E9CE81C1500BA0B00487BEF /* mgcurv.h in Headers */,
+				7E9CE81E1500BA0B00487BEF /* mglnrel.h in Headers */,
+				7E9CE8211500BA0B00487BEF /* mgnear.h in Headers */,
+				7E9CE81B1500BA0B00487BEF /* mgbnd.h in Headers */,
+				7E9777B2147161BF00EA5AF7 /* gicanvas.h in Headers */,
+				7E9CE8331500BA2100487BEF /* gipath.h in Headers */,
+				C9D6324A1450CB2400A3CC75 /* _mgshape.h in Headers */,
 				7E9CE80A1500B90700487BEF /* giplclip.h in Headers */,
 				9D1AAC1C151B352200F2392F /* mgcmdmgr.h in Headers */,
 				9DF6A490151C02CC001C1468 /* mgcmddraw.h in Headers */,
@@ -486,6 +484,8 @@
 				9DF6A499151C02CC001C1468 /* mgdrawsplines.h in Headers */,
 				9DB0D91315242EE600326A5E /* mgcmderase.h in Headers */,
 				C9A7F8C7146B320E00597DF0 /* _gigraph.h in Headers */,
+				C9A7F8C5146B30E300597DF0 /* ioscanvas.h in Headers */,
+				7E8F78E4147DC5C30045A730 /* iosgraph.h in Headers */,
 				2752EE8F1559172400F0CCDD /* GiCmdController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

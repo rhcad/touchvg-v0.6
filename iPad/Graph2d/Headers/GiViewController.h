@@ -25,6 +25,7 @@
 @property (nonatomic,readonly)  void*   shapes;         //!< 图形列表, MgShapes*
 @property (nonatomic,readonly)  UIView* magnifierView;  //!< 放大镜视图
 @property (nonatomic,readonly)  UIView* activeView;     //!< 当前图形视图
+@property (nonatomic,readonly)  CGContextRef    bitmapContext;  //!< 当前缓存位图
 
 //! 当前命令名称
 @property (nonatomic)         const char*   commandName;
@@ -34,6 +35,9 @@
 
 //! 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
 @property (nonatomic)         int       lineWidth;
+
+//! 像素单位的线宽，正数
+@property (nonatomic)         float     strokeWidth;
 
 //! 线条颜色，忽略透明度分量，clearColor 表示不画线条
 @property (nonatomic,assign)  UIColor   *lineColor;
@@ -52,8 +56,11 @@
 
 
 - (void)clearCachedData;                //!< 清除缓冲数据，下次重新构建显示
+- (void)removeShapes;                   //!< 清除所有图形
 - (void)regen;                          //!< 标记视图待重新构建显示
 - (void)undoMotion;                     //!< 触发晃动或撤销操作
+- (BOOL)isCommand:(const char*)cmdname; //!< 检查当前是否为指定的命令
+
 - (void)dynDraw:(id)sender;             //!< 供图形视图动态显示时调用
 - (void)afterZoomed:(id)sender;         //!< 供图形视图在动态放缩后通知
 

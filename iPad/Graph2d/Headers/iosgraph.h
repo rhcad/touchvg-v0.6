@@ -7,6 +7,7 @@
 #define __GEOMETRY_GRAPHIOS_H_
 
 #include "ioscanvas.h"
+#include <gigraph.h>
 
 //! The graphics class for iOS.
 /*! \ingroup GRAPH_IOS

@@ -6,7 +6,7 @@
 #ifndef __GEOMETRY_CANVASIOS_H_
 #define __GEOMETRY_CANVASIOS_H_
 
-#include <gigraph.h>
+#include <gicanvas.h>
 #include <CoreGraphics/CGContext.h>
 
 class GiCanvasIosImpl;
@@ -29,6 +29,8 @@ public:
 
 public:
     const GiTransform& xf() const;
+    CGContextRef bitmapContext();
+    
     bool beginPaint(CGContextRef context, bool fast = false, bool buffered = true);
     void endPaint(bool draw = true);
     static void setScreenDpi(float dpi);

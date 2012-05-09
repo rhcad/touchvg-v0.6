@@ -18,6 +18,7 @@
 
 @synthesize enableZoom = _enableZoom;
 @synthesize zooming = _zooming;
+@synthesize bitmapContext;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -70,6 +71,11 @@
     _zooming = NO;
     _doubleZoomed = NO;
     _enableZoom = YES;
+}
+
+- (CGContextRef)bitmapContext
+{
+    return _graph->canvas.bitmapContext();
 }
 
 - (void)drawRect:(CGRect)rect

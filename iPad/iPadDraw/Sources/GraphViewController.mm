@@ -429,8 +429,7 @@ static const NSUInteger kDashLineTag    = 4;
 
 - (IBAction)clearView:(id)sender    // 清屏
 {
-    ((MgShapes*)_graphc.shapes)->clear();
-    [_graphc regen];
+    [_graphc removeShapes];
 }
 
 - (IBAction)backToView:(id)sender   // 退出自由绘图

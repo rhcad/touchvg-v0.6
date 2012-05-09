@@ -6,9 +6,10 @@
 #ifndef __GEOMETRY_GRAPHSYS_H_
 #define __GEOMETRY_GRAPHSYS_H_
 
-#include "gicanvas.h"
+#include "gicanvdr.h"
 
 class GiGraphicsImpl;
+class GiCanvas;
 
 //! 图形系统类
 /*! 本类用于显示各种图形，图元显示原语由外部的 GiCanvas 实现类来实现。
