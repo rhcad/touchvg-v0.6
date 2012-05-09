@@ -673,8 +673,8 @@ WARN_LOGFILE           =
 
 INPUT                  = ../../core \
                          ../../win32 \
-                         ../../iPad/graph2d/Headers \
-                         ../../iPad/graph2d/Sources \
+                         ../../iPad/Graph2d/Headers \
+                         ../../iPad/Graph2d/Sources \
                          ../../iPad/iPadDraw/Headers \
                          ../../iPad/iPadDraw/Sources \
                          MainPage.txt

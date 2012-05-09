@@ -5,6 +5,6 @@
       location = "group:iPadDraw/iPadDraw.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:graph2d/graph2d.xcodeproj">
+      location = "group:Graph2d/Graph2d.xcodeproj">
    </FileRef>
 </Workspace>

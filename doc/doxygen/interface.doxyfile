@@ -673,7 +673,7 @@ WARN_LOGFILE           =
 
 INPUT                  = ../../core/include \
                          ../../win32/include \
-                         ../../iPad/graph2d/Headers \
+                         ../../iPad/Graph2d/Headers \
                          MainPage.txt
 
 # This tag can be used to specify the character encoding of the source files 

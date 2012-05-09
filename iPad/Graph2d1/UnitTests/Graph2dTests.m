@@ -1,5 +1,5 @@
 //  Graph2dTests.m
-//  graph2d
+//  Graph2d
 //  Created by Zhang Yungui on 2012-3-2.
 //
 
