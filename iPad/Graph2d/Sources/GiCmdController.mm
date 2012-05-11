@@ -45,11 +45,7 @@ private:
     }
     
     void redraw() {
-        [_mainview redraw];
-        for (int i = 0; _auxviews[i]; i++) {
-            if (!_auxviews[i].hidden)
-                [_auxviews[i] setNeedsDisplay];
-        }
+        [_curview redraw];
     }
     
     void shapeAdded(MgShape* shape) {

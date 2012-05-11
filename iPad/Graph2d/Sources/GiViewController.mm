@@ -63,14 +63,17 @@
 
 - (void)viewDidLoad
 {
-    _activeView = self.view;
-    [[self gview] setDrawingDelegate:self];
-    [self addGestureRecognizers:0 view:self.view];
-    
-    GiCommandController* cmd = (GiCommandController*)_cmdctl;
-    [cmd touchesBegan:CGPointZero view:_activeView];
-    cmd.lineWidth = 50;
-    cmd.lineColor = GiColor(0, 0, 0, 128);
+    if ([self gview]) {
+        _activeView = self.view;
+        
+        [[self gview] setDrawingDelegate:self];
+        [self addGestureRecognizers:0 view:self.view];
+        
+        GiCommandController* cmd = (GiCommandController*)_cmdctl;
+        [cmd touchesBegan:CGPointZero view:_activeView];
+        cmd.lineWidth = 50;
+        cmd.lineColor = GiColor(0, 0, 0, 128);
+    }
 }
 
 - (void)dealloc
@@ -92,19 +95,23 @@
 
 - (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame backgroundColor:(UIColor*)bkColor
 {
-    if (self.view)
-        return self.view;
-    
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
+    if (self.view)
+        [self.view removeFromSuperview];
     self.view = aview;
     aview.backgroundColor = bkColor;
     
     [aview setDrawingDelegate:self];
     [parentView addSubview:aview];
     
-    aview.shapes = new MgShapesT<std::list<MgShape*> >;
-    _shapesCreated = aview.shapes;
+    if (_shapesCreated) {
+        aview.shapes = (MgShapes*)_shapesCreated;
+    }
+    else {
+        aview.shapes = new MgShapesT<std::list<MgShape*> >;
+        _shapesCreated = aview.shapes;
+    }
     
     [self viewDidLoad];
     
@@ -114,11 +121,10 @@
 
 - (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame shapes:(void*)sp
 {
-    if (self.view)
-        return self.view;
-    
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
+    if (self.view)
+        [self.view removeFromSuperview];
     self.view = aview;
     aview.backgroundColor = [UIColor clearColor];
     aview.enableZoom = NO;
@@ -126,10 +132,8 @@
     [aview setDrawingDelegate:self];
     [parentView addSubview:aview];
     
-    if (sp) {
-        aview.shapes = (MgShapes*)sp;
-    }
-    else
+    aview.shapes = (MgShapes*)(sp ? sp : _shapesCreated);
+    if (!aview.shapes)
     {
         aview.shapes = new MgShapesT<std::list<MgShape*> >;
         _shapesCreated = aview.shapes;
@@ -143,6 +147,9 @@
 
 - (UIView*)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale
 {
+    if (_magnifierView[_magnifierView[0] ? 1 : 0])
+        return Nil;
+    
     GiMagnifierView *aview = [[GiMagnifierView alloc] initWithFrame:frame graphView:[self gview]];
     _magnifierView[_magnifierView[0] ? 1 : 0] = aview;
     aview.backgroundColor = [UIColor clearColor];
@@ -221,10 +228,8 @@
 - (float)strokeWidth {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     int w = cmd.lineWidth;
-    if (w > 0) {
+    if (w > 0)
         w = -3;
-        cmd.lineWidth = w;
-    }
     return w < 0 ? -1.f * w : 1;
 }
 
@@ -392,8 +397,9 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
 
 - (id<GiView>)gview
 {
-    assert([self.view conformsToProtocol:@protocol(GiView)]);
-    return (id<GiView>)self.view;
+    if ([self.view conformsToProtocol:@protocol(GiView)])
+        return (id<GiView>)self.view;
+    return Nil;
 }
 
 - (id<GiMotionHandler>)motionView:(SEL)aSelector

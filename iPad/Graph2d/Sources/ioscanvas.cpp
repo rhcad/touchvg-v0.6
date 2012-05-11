@@ -221,11 +221,19 @@ void GiCanvasIos::clearWindow()
 bool GiCanvasIos::drawCachedBitmap(float x, float y, bool secondBmp)
 {
     CGImageRef img = m_draw->_caches[secondBmp ? 1 : 0];
+    CGContextRef context = m_draw->getContext();
     bool ret = false;
     
-    if (m_draw->_context && img) {
-        CGRect rect = CGRectMake(x, y, CGImageGetWidth(img), CGImageGetHeight(img));
-        CGContextDrawImage(m_draw->getContext(), rect, img);
+    if (context && img) {
+        float w = CGImageGetWidth(img), h = CGImageGetHeight(img);
+        
+        CGAffineTransform afo = CGContextGetCTM(context);
+        Matrix2d mat(afo.a, afo.b, afo.c, afo.d, afo.tx, afo.ty);
+        
+        mat = mat.inverse();// * Matrix2d(1, 0, 0, 1, 0, h);
+        Box2d rect(x, y, x + w, y + h);
+        rect *= mat;
+        CGContextDrawImage(context, CGRectMake(rect.xmin, rect.ymin, rect.width(), rect.height()), img);
         ret = true;
     }
     
@@ -239,10 +247,16 @@ bool GiCanvasIos::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool se
     if (p && p->getCanvasType() == getCanvasType()) {
         GiCanvasIos* gs = (GiCanvasIos*)p;
         CGImageRef img = gs->m_draw->_caches[secondBmp ? 1 : 0];
+        CGContextRef context = m_draw->getContext();
         
-        if (m_draw->_context && img) {
-            CGRect rect = CGRectMake(x, y, CGImageGetWidth(img), CGImageGetHeight(img));
-            CGContextDrawImage(m_draw->getContext(), rect, img);
+        if (context && img) {
+            float w = CGImageGetWidth(img), h = CGImageGetHeight(img);
+            CGAffineTransform af = CGContextGetCTM(context);
+            
+            CGContextConcatCTM(context, CGAffineTransformMake(1, 0, 0, -1, 0, h));
+            CGContextDrawImage(context, CGRectMake(x, y, w, h), img);
+            
+            CGContextConcatCTM(context, af);
             ret = true;
         }
     }

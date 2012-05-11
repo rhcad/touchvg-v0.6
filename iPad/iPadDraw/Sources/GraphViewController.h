@@ -34,7 +34,6 @@
 - (IBAction)lineWidthChange:(id)sender; // 调节画笔粗细
 - (IBAction)alphaChange:(id)sender;     // 调节画笔透明度
 - (IBAction)eraseColor:(id)sender;      // 橡皮功能
-- (IBAction)colorMapPress:(id)sender;   // 调色板
 
 - (IBAction)backToView:(id)sender;      // 退出自由绘图
 - (IBAction)clearView:(id)sender;       // 清屏

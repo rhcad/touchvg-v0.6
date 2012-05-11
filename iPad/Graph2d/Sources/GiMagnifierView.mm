@@ -110,7 +110,6 @@
 
 - (void)redraw {
     [self setNeedsDisplay];
-    [_gview redraw];
 }
 
 - (BOOL)isZooming {
@@ -144,7 +143,8 @@
     GiGraphics &gs = _graph->gs;
     
     cv.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
-    if (cv.beginPaint(UIGraphicsGetCurrentContext(), [self isZooming])) // 在当前画布上准备绘图
+    
+    if (cv.beginPaint(UIGraphicsGetCurrentContext(), [self isZooming], _scale < 1)) // 在当前画布上准备绘图
     {
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
             [self draw:&gs];                        // 不行则重新显示所有图形

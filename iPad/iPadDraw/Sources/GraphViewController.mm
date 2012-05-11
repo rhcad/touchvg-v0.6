@@ -64,23 +64,26 @@ static const NSUInteger kDashLineTag    = 4;
     
     // 计算图形视图和放大镜容器视图的位置大小
     CGRect viewFrame = rect;
-    CGRect magFrame = CGRectMake(10, 10, 250, 250);
     CGRect barFrame = rect;
-    
     viewFrame.size.height -= BAR_HEIGHT;            // 减去底部按钮栏高度
+    
+#ifdef USE_MAGNIFIER
+    CGRect magFrame = CGRectMake(10, 10, 300, 300);
 #ifdef MAG_AT_BOTTOM
     viewFrame.size.height -= magFrame.size.height;  // 放大镜单独占一横条
     barFrame.origin.y += magFrame.size.height;      // 底部按钮栏往下移
     magFrame = CGRectMake(0, viewFrame.size.height, rect.size.width, magFrame.size.height); // 放大镜在图形视图下方
 #endif
+#endif
     
     // 创建图形视图及其视图控制器
     _graphc = [[GiViewController alloc]init];
-    [_graphc createGraphView:self.view frame:viewFrame backgroundColor:[UIColor grayColor]];
+    [_graphc createGraphView:self.view frame:viewFrame backgroundColor:[UIColor clearColor]];
     _graphc.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
                                      | UIViewAutoresizingFlexibleBottomMargin);
     
     // 创建容纳放大镜视图的容器视图
+#ifdef USE_MAGNIFIER
     UIView *magnifierView = [[UIView alloc]initWithFrame:magFrame];
     magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.7f];
     [self.view addSubview:magnifierView];
@@ -159,6 +162,7 @@ static const NSUInteger kDashLineTag    = 4;
                          bar:magbarView x:&magbtnx size:magbtnw diffx:4];
     [magbtn setTitle:@"Lock" forState: UIControlStateNormal];
     [magbtn setTitle:@"l" forState: UIControlStateHighlighted];
+#endif
     
     barFrame.size.height = BAR_HEIGHT;
     barFrame.origin.y += viewFrame.size.height;
@@ -354,32 +358,17 @@ static const NSUInteger kDashLineTag    = 4;
     [self showUnlightButtons];
 	[colorbtn setImage:[UIImage imageNamed:@"colormix1"] forState:UIControlStateNormal]; // 图标加亮
     
-    CGRect viewrect = CGRectMake(0, 0, 298+40, 257+60);
+    CGRect viewrect = CGRectMake(0, 0, 300, 400);
     viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
     viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _downview.frame.size.height - 20;
     
 	SCCalloutGraphView *calloutView = [[SCCalloutGraphView alloc]initWithFrame:viewrect];
     [self.view addSubview:calloutView];
     [calloutView release];
+    calloutView.backgroundColor = [UIColor darkGrayColor];
     
-    UIButton *wrapview = [[UIButton alloc]initWithFrame:calloutView.bounds];
-    wrapview.backgroundColor = [UIColor darkGrayColor];
-    [wrapview addTarget:self action:@selector(colorMapPress:) forControlEvents:UIControlEventTouchDragInside];
-    [calloutView addSubview:wrapview];
-    [wrapview release];
-    
-    UIButton *mapbtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 20, 298, 257)];
-	[mapbtn setImage:[UIImage imageNamed:@"colormap.png"] forState:UIControlStateNormal];
-	[wrapview addSubview:mapbtn];
-	[mapbtn release];
-    
-    [calloutView.graphc createSubGraphView:mapbtn frame:mapbtn.bounds shapes:_graphc.shapes];
+    [calloutView.graphc createSubGraphView:calloutView frame:calloutView.bounds shapes:_graphc.shapes];
     calloutView.graphc.commandName = "splines";
-}
-
-- (IBAction)colorMapPress:(id)sender
-{
-    //UIControl* btn = (UIControl*)sender;
 }
 
 - (IBAction)hideMagnifier:(id)sender   // 切换放大镜视图的可见性

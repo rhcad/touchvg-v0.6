@@ -5,4 +5,6 @@
 
 //#define TESTMODE_SIMPLEVIEW
 
+#define USE_MAGNIFIER
+
 #define MAG_AT_BOTTOM
