@@ -11,6 +11,8 @@
 		4AC4D3B41424794C0055F4CA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4D3B21424794C0055F4CA /* main.m */; };
 		7E3D20681500BE2F008ACC1B /* GraphViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7E3D20671500BE2F008ACC1B /* GraphViewController.mm */; };
 		7EC8FF911504CB1100F6193D /* TestGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7EC8FF901504CB1100F6193D /* TestGraphView.mm */; };
+		AEEB2512155CFE3500B03D0A /* app57.png in Resources */ = {isa = PBXBuildFile; fileRef = AEEB2510155CFE3500B03D0A /* app57.png */; };
+		AEEB2513155CFE3500B03D0A /* app72.png in Resources */ = {isa = PBXBuildFile; fileRef = AEEB2511155CFE3500B03D0A /* app72.png */; };
 		C97B07E715021F5200040728 /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C97B07E515021F5200040728 /* libGraph2d.a */; };
 		C985F88A14562C4400728C97 /* SCCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = C985F88914562C4400728C97 /* SCCalloutView.m */; };
 		C985F8A214562DBE00728C97 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F88B14562DBE00728C97 /* back.png */; };
@@ -74,6 +76,8 @@
 		7E3D20671500BE2F008ACC1B /* GraphViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GraphViewController.mm; path = Sources/GraphViewController.mm; sourceTree = SOURCE_ROOT; };
 		7EC8FF8F1504CB1100F6193D /* TestGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestGraphView.h; path = Sources/TestGraphView.h; sourceTree = SOURCE_ROOT; };
 		7EC8FF901504CB1100F6193D /* TestGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TestGraphView.mm; path = Sources/TestGraphView.mm; sourceTree = SOURCE_ROOT; };
+		AEEB2510155CFE3500B03D0A /* app57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = app57.png; path = Resources/app57.png; sourceTree = SOURCE_ROOT; };
+		AEEB2511155CFE3500B03D0A /* app72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = app72.png; path = Resources/app72.png; sourceTree = SOURCE_ROOT; };
 		C97B07E515021F5200040728 /* libGraph2d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGraph2d.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C985F88814562C4400728C97 /* SCCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCCalloutView.h; path = Sources/SCCalloutView.h; sourceTree = SOURCE_ROOT; };
 		C985F88914562C4400728C97 /* SCCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCCalloutView.m; path = Sources/SCCalloutView.m; sourceTree = SOURCE_ROOT; };
@@ -143,6 +147,8 @@
 		4AC4D33A142455C60055F4CA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AEEB2510155CFE3500B03D0A /* app57.png */,
+				AEEB2511155CFE3500B03D0A /* app72.png */,
 				C985F85914562BE200728C97 /* images */,
 				4AE2C1A41424920700C67987 /* App-Info.plist */,
 			);
@@ -311,6 +317,8 @@
 				C985F8B714562DBE00728C97 /* yellowbrush.png in Resources */,
 				C985F8B814562DBE00728C97 /* yellowbrush1.png in Resources */,
 				C98AEA5B1456AF6900695359 /* back1.png in Resources */,
+				AEEB2512155CFE3500B03D0A /* app57.png in Resources */,
+				AEEB2513155CFE3500B03D0A /* app72.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -207,15 +207,16 @@ CGContextRef GiCanvasIos::bitmapContext()
 
 void GiCanvasIosImpl::createBufferBitmap(float width, float height)
 {
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     _buffctx = CGBitmapContextCreate(NULL, width, height, 8, width * 4,
-                                     CGColorSpaceCreateDeviceRGB(), 
-                                     kCGImageAlphaPremultipliedLast);
+                                     colorSpace, kCGImageAlphaPremultipliedLast);
+    CGColorSpaceRelease(colorSpace);
 }
 
 void GiCanvasIos::clearWindow()
 {
     CGContextClearRect(m_draw->getContext(), 
-        CGRectMake(0, 0, xf().getWidth(), xf().getWidth()));
+        CGRectMake(0, 0, xf().getWidth(), xf().getHeight()));
 }
 
 bool GiCanvasIos::drawCachedBitmap(float x, float y, bool secondBmp)
@@ -225,15 +226,17 @@ bool GiCanvasIos::drawCachedBitmap(float x, float y, bool secondBmp)
     bool ret = false;
     
     if (context && img) {
-        float w = CGImageGetWidth(img), h = CGImageGetHeight(img);
+        CGRect rect = CGRectMake(x, y, xf().getWidth(), xf().getHeight());
         
-        CGAffineTransform afo = CGContextGetCTM(context);
-        Matrix2d mat(afo.a, afo.b, afo.c, afo.d, afo.tx, afo.ty);
-        
-        mat = mat.inverse();// * Matrix2d(1, 0, 0, 1, 0, h);
-        Box2d rect(x, y, x + w, y + h);
-        rect *= mat;
-        CGContextDrawImage(context, CGRectMake(rect.xmin, rect.ymin, rect.width(), rect.height()), img);
+        if (isBufferedDrawing()) {
+            CGContextDrawImage(context, rect, img);
+        }
+        else {
+            CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, xf().getHeight());
+            CGContextConcatCTM(context, af);
+            CGContextDrawImage(context, rect, img);
+            CGContextConcatCTM(context, CGAffineTransformInvert(af));
+        }
         ret = true;
     }
     
@@ -250,13 +253,17 @@ bool GiCanvasIos::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool se
         CGContextRef context = m_draw->getContext();
         
         if (context && img) {
-            float w = CGImageGetWidth(img), h = CGImageGetHeight(img);
-            CGAffineTransform af = CGContextGetCTM(context);
+            CGRect rect = CGRectMake(x, y, xf().getWidth(), xf().getHeight());
             
-            CGContextConcatCTM(context, CGAffineTransformMake(1, 0, 0, -1, 0, h));
-            CGContextDrawImage(context, CGRectMake(x, y, w, h), img);
-            
-            CGContextConcatCTM(context, af);
+            if (isBufferedDrawing()) {
+                CGContextDrawImage(context, rect, img);
+            }
+            else {
+                CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, xf().getHeight());
+                CGContextConcatCTM(context, af);
+                CGContextDrawImage(context, rect, img);
+                CGContextConcatCTM(context, CGAffineTransformInvert(af));
+            }
             ret = true;
         }
     }
