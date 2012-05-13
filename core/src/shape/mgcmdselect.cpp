@@ -94,9 +94,9 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
 
 float mgLineHalfWidth(const MgShape* shape, GiGraphics* gs)
 {
-    Int16 w = shape->context()->getLineWidth();
-    float width = w > 0 ? - gs->calcPenWidth(w) : (float)w;
-    return mgMax(1.f, -0.5f * width);
+    float w = shape->context()->getLineWidth();
+    w = w > 0 ? - gs->calcPenWidth(w) : w;
+    return mgMax(1.f, -0.5f * w);
 }
 
 bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)

@@ -145,9 +145,9 @@ protected:
         ContextT tmpctx(_context);
 
         if (ctx && !ctx->isNullLine()) {
-            Int16 width = tmpctx.getLineWidth();
+            float width = tmpctx.getLineWidth();
             if (width > 0)
-                width = - (Int16)gs.calcPenWidth(width);
+                width = -gs.calcPenWidth(width);
             tmpctx.setLineWidth(width + ctx->getLineWidth());
         }
 
