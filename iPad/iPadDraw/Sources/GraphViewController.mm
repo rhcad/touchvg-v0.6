@@ -41,6 +41,7 @@ static const NSUInteger kDashLineTag    = 4;
 
 - (void)didReceiveMemoryWarning
 {
+    [_graphc didReceiveMemoryWarning];
     [super didReceiveMemoryWarning];
 }
 

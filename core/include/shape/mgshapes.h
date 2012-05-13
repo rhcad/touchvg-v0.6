@@ -23,7 +23,7 @@ struct MgShapes : public MgObject
     virtual Box2d getExtent() const = 0;
 
     virtual MgShape* hitTest(const Box2d& limits, Point2d& nearpt, Int32& segment) const = 0;
-    virtual bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
+    virtual int draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
     virtual bool save(MgStorage* s) const = 0;
     virtual bool load(MgStorage* s) = 0;
 

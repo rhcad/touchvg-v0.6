@@ -121,8 +121,7 @@ bool MgCmdDrawSplines::click(const MgMotion* sender)
     line.shape()->setPoint(1, sender->pointM);
     
     if (sender->view->shapeWillAdded(&line)) {
-        sender->view->shapes()->addShape(line);
-        sender->view->regen();
+        _addshape(sender, &line);
     }
     
     return true;

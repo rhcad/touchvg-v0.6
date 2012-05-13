@@ -171,7 +171,11 @@
 
 - (BOOL)draw:(GiGraphics*)gs
 {
-    return [_gview shapes] && [_gview shapes]->draw(*gs);
+    int count = 0;
+    if ([_gview shapes]) {
+        count = [_gview shapes]->draw(*gs);
+    }
+    return count > 0;
 }
 
 - (void)dynDraw:(GiGraphics*)gs

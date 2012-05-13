@@ -82,12 +82,11 @@
 {
     GiCanvasIos &cv = _graph->canvas;
     GiGraphics &gs = _graph->gs;
-    bool buffered = _zooming || !cv.hasCachedBitmap();  // iPad3不用缓冲更快
     
     _graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     cv.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (cv.beginPaint(UIGraphicsGetCurrentContext(), !!_zooming, buffered))   // 在当前画布上准备绘图   
+    if (cv.beginPaint(UIGraphicsGetCurrentContext(), !!_zooming))   // 在当前画布上准备绘图   
     {
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
             [self draw:&gs];                        // 不行则重新显示所有图形
@@ -114,7 +113,11 @@
 
 - (BOOL)draw:(GiGraphics*)gs
 {
-    return _shapes && _shapes->draw(*gs);
+    int count = 0;
+    if (_shapes) {
+        count = _shapes->draw(*gs);
+    }
+    return count > 0;
 }
 
 - (void)dynDraw:(GiGraphics*)gs
