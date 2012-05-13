@@ -1,6 +1,6 @@
 // mgrect.cpp: 实现矩形图形类 MgRect
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgbasicsp.h"
 #include <_mgshape.h>

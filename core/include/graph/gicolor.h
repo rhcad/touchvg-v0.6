@@ -1,7 +1,7 @@
 //! \file gicolor.h
 //! \brief 定义RGB颜色类: GiColor
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_GICOLOR_H_
 #define __GEOMETRY_GICOLOR_H_

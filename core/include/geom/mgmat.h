@@ -1,7 +1,7 @@
 //! \file mgmat.h
 //! \brief 定义二维齐次变换矩阵类 Matrix2d
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_MATRIX_H_
 #define __GEOMETRY_MATRIX_H_

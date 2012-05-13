@@ -1,7 +1,7 @@
 //! \file canvasgdi.h
 //! \brief 定义用GDI实现的图形显示接口类 GiCanvasGdi
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_DRAWGDI_H_
 #define __GEOMETRY_DRAWGDI_H_

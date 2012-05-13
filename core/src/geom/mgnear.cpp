@@ -1,6 +1,6 @@
 // mgnear.cpp: 实现曲线最近点计算函数
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgnear.h"
 #include "mgcurv.h"

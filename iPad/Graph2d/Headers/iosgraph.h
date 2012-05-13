@@ -1,7 +1,7 @@
 //! \file iosgraph.h
 //! \brief Define the graphics class for iOS: GiGraphIos
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_GRAPHIOS_H_
 #define __GEOMETRY_GRAPHIOS_H_

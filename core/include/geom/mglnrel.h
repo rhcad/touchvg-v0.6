@@ -1,7 +1,7 @@
 //! \file mglnrel.h
 //! \brief 定义图形位置关系函数
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_LINEREL_H_
 #define __GEOMETRY_LINEREL_H_

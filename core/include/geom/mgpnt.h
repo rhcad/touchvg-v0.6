@@ -1,7 +1,7 @@
 //! \file mgpnt.h
 //! \brief 定义二维点类 Point2d
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_POINT_H_
 #define __GEOMETRY_POINT_H_

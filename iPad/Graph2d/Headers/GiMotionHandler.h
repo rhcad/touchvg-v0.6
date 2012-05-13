@@ -1,7 +1,7 @@
 //! \file GiMotionHandler.h
 //! \brief 定义图形视图协议 GiView 和 GiMotionHandler
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #import <UIKit/UIKit.h>
 

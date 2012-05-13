@@ -1,7 +1,7 @@
 //! \file canvaswin.h
 //! \brief 定义图形显示接口类 GiCanvasWin
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_GRAPHWINSYS_WIN_H_
 #define __GEOMETRY_GRAPHWINSYS_WIN_H_

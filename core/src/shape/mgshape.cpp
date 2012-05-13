@@ -1,6 +1,6 @@
 // mgshape.cpp: 实现矢量图形基类 MgBaseShape
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgshape.h"
 #include <mgstorage.h>

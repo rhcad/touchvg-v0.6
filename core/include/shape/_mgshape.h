@@ -1,7 +1,7 @@
 //! \file _mgshape.h
 //! \brief 定义图形类实现用的辅助宏
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_MGSHAPEIMPL_H_
 #define __GEOMETRY_MGSHAPEIMPL_H_

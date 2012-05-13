@@ -1,7 +1,7 @@
 //! \file mgdrawlines.h
 //! \brief 定义折线绘图命令类 MgCmdDrawLines
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_MGCOMMAND_DRAW_LINES_H_
 #define __GEOMETRY_MGCOMMAND_DRAW_LINES_H_

@@ -1,7 +1,7 @@
 //! \file gicontxt.h
 //! \brief 定义绘图环境类 GiContext
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_DRAWCONTEXT_H_
 #define __GEOMETRY_DRAWCONTEXT_H_

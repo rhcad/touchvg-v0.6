@@ -1,6 +1,6 @@
 // mgcmdmgr.cpp: 实现命令管理器类
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgcmdmgr.h"
 

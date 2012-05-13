@@ -1,7 +1,7 @@
 //! \file graphwin.h
 //! \brief Define the graphics class for Windows: GiGraphWin
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_GRAPHWIN_H_
 #define __GEOMETRY_GRAPHWIN_H_

@@ -1,7 +1,7 @@
 //! \file mgdrawsplines.h
 //! \brief 定义样条曲线绘图命令类 MgCmdDrawSplines
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_MGCOMMAND_DRAW_SPLINES_H_
 #define __GEOMETRY_MGCOMMAND_DRAW_SPLINES_H_

@@ -1,6 +1,6 @@
 // mgcmddraw.cpp: 实现绘图命令基类
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgcmddraw.h"
 #include <assert.h>

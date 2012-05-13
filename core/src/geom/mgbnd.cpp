@@ -1,6 +1,6 @@
 // mgbnd.cpp: 实现绑定框类BoundBox
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgbnd.h"
 

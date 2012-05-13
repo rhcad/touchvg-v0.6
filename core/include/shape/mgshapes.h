@@ -1,7 +1,7 @@
 //! \file mgshapes.h
 //! \brief 定义图形列表接口 MgShapes
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_MGSHAPES_H_
 #define __GEOMETRY_MGSHAPES_H_

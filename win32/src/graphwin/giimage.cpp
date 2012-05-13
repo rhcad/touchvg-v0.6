@@ -1,6 +1,6 @@
 // giimage.cpp: 实现图像文件打开和显示的辅助类 GiImage
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "giimage.h"
 #include <olectl.h>

@@ -1,6 +1,6 @@
 // mgrdrect.cpp: 实现圆角矩形类 MgRoundRect
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgbasicsp.h"
 #include <_mgshape.h>

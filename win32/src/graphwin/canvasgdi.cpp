@@ -1,6 +1,6 @@
 // canvasgdi.cpp: 实现用GDI实现的图形显示接口类 GiCanvasGdi
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "canvasgdi.h"
 #include <gigraph.h>

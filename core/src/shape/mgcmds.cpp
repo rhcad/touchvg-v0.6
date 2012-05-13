@@ -1,6 +1,6 @@
 // mgcmds.cpp
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include <string.h>
 #include "mgcmdselect.h"

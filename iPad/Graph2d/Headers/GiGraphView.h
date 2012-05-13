@@ -1,7 +1,7 @@
 //! \file GiGraphView.h
 //! \brief 定义图形视图类 GiGraphView
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #import "GiMotionHandler.h"
 

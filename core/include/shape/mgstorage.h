@@ -1,7 +1,7 @@
 //! \file mgstorage.h
 //! \brief 定义图形存取接口 MgStorage
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __GEOMETRY_MGSTORAGE_H_
 #define __GEOMETRY_MGSTORAGE_H_

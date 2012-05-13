@@ -13,7 +13,7 @@
 
 	\section sectinoIntro 概述
 
-	欢迎使用通用矢量图形框架(https://github.com/rhcad/touchdraw)的编程文档，欢迎反馈意见。\n
+	欢迎使用通用矢量图形框架(https://github.com/rhcad/touchvg)的编程文档，欢迎反馈意见。\n
 	通用图形平台库包含数学几何库（geom）、图形接口库（graph）、图形实体库（shape），是采用C++实现的静态链接库。\n
 	- 数学几何库（geom）包含了基本的线性代数计算和几何对象类。\n
 	- 图形接口库（graph）包含了各种显示类、符号类，用于屏幕显示、打印。\n

@@ -1,6 +1,6 @@
 // canvaswin.cpp: 实现图形显示接口类 GiCanvasWin
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "canvaswin.h"
 #include <_gigraph.h>

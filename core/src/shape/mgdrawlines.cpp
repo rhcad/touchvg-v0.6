@@ -1,6 +1,6 @@
 // mgdrawlines.cpp: 实现折线绘图命令类
 // Copyright (c) 2004-2012, Zhang Yungui
-// License: LGPL, https://github.com/rhcad/touchdraw
+// License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgdrawlines.h"
 #include <mgshapet.h>
