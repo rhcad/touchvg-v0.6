@@ -121,11 +121,11 @@ private:
     mgGetCommandManager()->setCommand(_motion, name);
 }
 
-- (int)lineWidth {
+- (float)lineWidth {
     return [self currentContext]->getLineWidth();
 }
 
-- (void)setLineWidth:(int)w {
+- (void)setLineWidth:(float)w {
     UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL);
     std::vector<MgShape*> shapes(n, NULL);
     

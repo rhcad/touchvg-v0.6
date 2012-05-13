@@ -8,3 +8,5 @@
 #define USE_MAGNIFIER
 
 #define MAG_AT_BOTTOM
+
+#define USE_STROKEWIDTH

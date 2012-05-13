@@ -201,7 +201,7 @@ GiColor GiGraphics::calcPenColor(const GiColor& color) const
     return ret;
 }
 
-float GiGraphics::calcPenWidth(Int16 lineWidth, bool useViewScale) const
+float GiGraphics::calcPenWidth(float lineWidth, bool useViewScale) const
 {
     float w = 1;
     float px;
@@ -214,28 +214,35 @@ float GiGraphics::calcPenWidth(Int16 lineWidth, bool useViewScale) const
         px = lineWidth / 2540.f * xf().getDpiY();
         if (useViewScale)
             px *= xf().getViewScale();
-        w = mgMin(px, (float)m_impl->maxPenWidth);
+        w = mgMin(px, m_impl->maxPenWidth);
     }
     else if (lineWidth < 0) // 单位：像素
     {
-        w = mgMin((float)(-lineWidth), (float)m_impl->maxPenWidth);
+        w = mgMin(-lineWidth, m_impl->maxPenWidth);
+    }
+    
+    w = mgMax(w, m_impl->minPenWidth);
+    if (lineWidth <= 0 && xf().getDpiY() > getScreenDpi()) {
+        w = w * xf().getDpiY() / getScreenDpi();
     }
 
-    if (w < 1)
-        w = 1;
-    if (lineWidth <= 0 && xf().getDpiY() > getScreenDpi())
-        w = w * xf().getDpiY() / getScreenDpi();
-
-    return static_cast<UInt16>(w);
+    return w;
 }
 
-void GiGraphics::setMaxPenWidth(UInt8 pixels)
+void GiGraphics::setMaxPenWidth(float pixels, float minw)
 {
-    if (pixels < 1)
-        pixels = 1;
-    else if (pixels > 100)
-        pixels = 100;
+    if (minw < 0)
+        minw = m_impl->minPenWidth;
+    
+    if (pixels < 0)
+        pixels = m_impl->maxPenWidth;
+    else if (pixels < minw)
+        pixels = minw;
+    else if (pixels > 200)
+        pixels = 200;
+    
     m_impl->maxPenWidth = pixels;
+    m_impl->minPenWidth = minw;
 }
 
 static inline const Matrix2d& S2D(const GiTransform& xf, bool modelUnit)

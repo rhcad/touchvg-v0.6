@@ -215,27 +215,29 @@
     cmd.commandName = name;
 }
 
-- (int)lineWidth {
+- (float)lineWidth {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     return cmd.lineWidth;
 }
 
-- (void)setLineWidth:(int)w {
+- (void)setLineWidth:(float)w {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     [cmd setLineWidth:w];
 }
 
 - (float)strokeWidth {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
-    int w = cmd.lineWidth;
-    if (w > 0)
-        w = -3;
-    return w < 0 ? -1.f * w : 1;
+    float w = cmd.lineWidth;
+    if (w < 0)
+        w = -w;
+    else if (w > 0)
+        w = [[self gview]graph]->calcPenWidth(w);
+    return w;
 }
 
 - (void)setStrokeWidth:(float)w {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
-    [cmd setLineWidth:mgRound(-w)];
+    [cmd setLineWidth:-w];
 }
 
 - (UIColor*)lineColor {

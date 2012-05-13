@@ -100,7 +100,7 @@ public:
     //! 返回线宽
     /*! 正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
     */
-    Int16 getLineWidth() const
+    float getLineWidth() const
     {
         return m_lineWidth;
     }
@@ -109,7 +109,7 @@ public:
     /*!
         \param width 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
     */
-    void setLineWidth(Int16 width)
+    void setLineWidth(float width)
     {
         m_lineWidth = width;
     }
@@ -200,7 +200,7 @@ protected:
     int         m_type;            //!< 派生类可指定其他值来表示不同类型
 private:
     kLineStyle  m_lineStyle;       //!< 线型
-    Int16       m_lineWidth;       //!< 线宽, >0: 0.01mm, =0: 1px, <0:px
+    float       m_lineWidth;       //!< 线宽, >0: 0.01mm, =0: 1px, <0:px
     GiColor     m_lineColor;
     GiColor     m_fillColor;
 };

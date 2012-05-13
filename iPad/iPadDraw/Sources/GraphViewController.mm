@@ -275,9 +275,14 @@ static const NSUInteger kDashLineTag    = 4;
     
     UISlider *sliderWidth = [[UISlider alloc] initWithFrame:CGRectMake(14,20,211, 40)];
 	[sliderWidth addTarget:self action:@selector(lineWidthChange:) forControlEvents:UIControlEventValueChanged];
-    sliderWidth.value = _graphc.lineWidth / 500.0f;    
 	[calloutView addSubview:sliderWidth];
 	[sliderWidth release];
+#ifdef USE_STROKEWIDTH
+    float w = _graphc.strokeWidth / 20.f;
+#else
+    float w = _graphc.lineWidth / 500.0f;
+#endif
+    sliderWidth.value = w < 0 ? 0 : w > 1 ? 1 : w;
 	
 	UISlider *sliderAlpha = [[UISlider alloc]initWithFrame:CGRectMake(14, 60, 211, 40)];
 	[sliderAlpha addTarget:self action:@selector(alphaChange:) forControlEvents:UIControlEventValueChanged];
@@ -344,7 +349,11 @@ static const NSUInteger kDashLineTag    = 4;
 - (IBAction)lineWidthChange:(id)sender // 线条宽度调整
 {
     UISlider *slider = (UISlider *)sender;
+#ifdef USE_STROKEWIDTH
+    _graphc.strokeWidth = slider.value * 20;
+#else
     _graphc.lineWidth = 500.0f * slider.value;
+#endif 
 }
 
 - (IBAction)alphaChange:(id)sender  // 透明度调整
@@ -433,9 +442,9 @@ static const NSUInteger kDashLineTag    = 4;
     RandomParam::init();
     
     RandomParam param;
-    param.lineCount = 100;
-    param.arcCount = 50;
-    param.curveCount = 50;
+    param.lineCount = 200;
+    param.arcCount = 20;
+    param.curveCount = 20;
     param.randomLineStyle = true;
     
     param.initShapes((MgShapes*)_graphc.shapes);

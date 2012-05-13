@@ -108,13 +108,14 @@ public:
         \param useViewScale 是否使用显示比例来计算
         \return 画笔宽度，非负数，像素
     */
-    float calcPenWidth(Int16 lineWidth, bool useViewScale = true) const;
+    float calcPenWidth(float lineWidth, bool useViewScale = true) const;
 
     //! 设置最大画笔宽度，像素
     /*! 只需要按屏幕显示来设置，打印时会自动调整
-        \param pixels 最大画笔宽度，像素
+        \param pixels 最大画笔宽度，像素，小于0时不改变
+        \param minw 最小画笔宽度，像素，小于0时不改变
     */
-    void setMaxPenWidth(UInt8 pixels);
+    void setMaxPenWidth(float pixels, float minw = 1);
 
     //! 返回是否为反走样模式
     bool isAntiAliasMode() const;

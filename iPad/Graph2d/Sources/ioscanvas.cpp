@@ -73,6 +73,7 @@ public:
             CGContextSetRGBStrokeColor(getContext(), 
                                        toFloat(color.r), toFloat(color.g),
                                        toFloat(color.b), toFloat(color.a));
+            
             float w = owner()->calcPenWidth(ctx->getLineWidth());
             CGContextSetLineWidth(getContext(), _fast && w > 1 ? w - 1 : w);
             
@@ -177,6 +178,7 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
 
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineJoinRound);
+    m_owner->setMaxPenWidth(-1, 0.5f / CGContextGetCTM(context).a);
 
     return true;
 }
@@ -186,9 +188,15 @@ void GiCanvasIos::endPaint(bool draw)
     if (m_owner->isDrawing())
     {
         if (draw && m_draw->_buffctx) {
+            CGContextRef context = m_draw->_context;
             CGImageRef image = CGBitmapContextCreateImage(m_draw->_buffctx);
             CGRect rect = CGRectMake(0, 0, xf().getWidth(), xf().getHeight());
-            CGContextDrawImage(m_draw->_context, rect, image);
+            
+            CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, xf().getHeight());
+            CGContextConcatCTM(context, af);
+            CGContextDrawImage(context, rect, image);
+            CGContextConcatCTM(context, CGAffineTransformInvert(af));
+            
             CGImageRelease(image);
         }
         if (m_draw->_buffctx) {
@@ -207,10 +215,17 @@ CGContextRef GiCanvasIos::bitmapContext()
 
 void GiCanvasIosImpl::createBufferBitmap(float width, float height)
 {
+    CGAffineTransform af = CGContextGetCTM(_context);
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    
+    width *= fabsf(af.a);
+    height *= fabsf(af.d);
     _buffctx = CGBitmapContextCreate(NULL, width, height, 8, width * 4,
                                      colorSpace, kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(colorSpace);
+    
+    CGContextTranslateCTM(_buffctx, 0, height);
+    CGContextScaleCTM(_buffctx, af.a, af.d);
 }
 
 void GiCanvasIos::clearWindow()
@@ -221,22 +236,17 @@ void GiCanvasIos::clearWindow()
 
 bool GiCanvasIos::drawCachedBitmap(float x, float y, bool secondBmp)
 {
-    CGImageRef img = m_draw->_caches[secondBmp ? 1 : 0];
+    CGImageRef image = m_draw->_caches[secondBmp ? 1 : 0];
     CGContextRef context = m_draw->getContext();
     bool ret = false;
     
-    if (context && img) {
+    if (context && image) {
         CGRect rect = CGRectMake(x, y, xf().getWidth(), xf().getHeight());
+        CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, xf().getHeight());
         
-        if (isBufferedDrawing()) {
-            CGContextDrawImage(context, rect, img);
-        }
-        else {
-            CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, xf().getHeight());
-            CGContextConcatCTM(context, af);
-            CGContextDrawImage(context, rect, img);
-            CGContextConcatCTM(context, CGAffineTransformInvert(af));
-        }
+        CGContextConcatCTM(context, af);
+        CGContextDrawImage(context, rect, image);
+        CGContextConcatCTM(context, CGAffineTransformInvert(af));
         ret = true;
     }
     
@@ -249,21 +259,16 @@ bool GiCanvasIos::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool se
     
     if (p && p->getCanvasType() == getCanvasType()) {
         GiCanvasIos* gs = (GiCanvasIos*)p;
-        CGImageRef img = gs->m_draw->_caches[secondBmp ? 1 : 0];
+        CGImageRef image = gs->m_draw->_caches[secondBmp ? 1 : 0];
         CGContextRef context = m_draw->getContext();
         
-        if (context && img) {
+        if (context && image) {
             CGRect rect = CGRectMake(x, y, xf().getWidth(), xf().getHeight());
+            CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, xf().getHeight());
             
-            if (isBufferedDrawing()) {
-                CGContextDrawImage(context, rect, img);
-            }
-            else {
-                CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, xf().getHeight());
-                CGContextConcatCTM(context, af);
-                CGContextDrawImage(context, rect, img);
-                CGContextConcatCTM(context, CGAffineTransformInvert(af));
-            }
+            CGContextConcatCTM(context, af);
+            CGContextDrawImage(context, rect, image);
+            CGContextConcatCTM(context, CGAffineTransformInvert(af));
             ret = true;
         }
     }

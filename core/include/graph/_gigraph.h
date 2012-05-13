@@ -15,7 +15,8 @@ public:
     GiTransform*  xform;            //!< 坐标系管理对象
     GiCanvas*   canvas;             //!< 显示适配器
 
-    UInt8       maxPenWidth;        //!< 最大像素线宽
+    float       maxPenWidth;        //!< 最大像素线宽
+    float       minPenWidth;        //!< 最小像素线宽
     bool        antiAlias;          //!< 当前是否是反走样模式
 
     long        lastZoomTimes;      //!< 记下的放缩结果改变次数
@@ -39,6 +40,7 @@ public:
         colorMode = GiGraphics::kColorReal;
         isPrint = false;
         maxPenWidth = 100;
+        minPenWidth = 1;
         antiAlias = true;
     }
 

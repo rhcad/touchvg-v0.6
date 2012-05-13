@@ -22,7 +22,7 @@ class MgViewProxy;
 }
 
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称
-@property (nonatomic)   int             lineWidth;      //!< 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
+@property (nonatomic)   float           lineWidth;      //!< 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
 @property (nonatomic)   int             lineStyle;      //!< 线型, 0-Solid, 1-Dash, 2-Dot, 3-DashDot, 4-DashDotdot, 5-Null
 @property (nonatomic)   GiColor         lineColor;      //!< 线条颜色，clearColor 表示不画线条
 @property (nonatomic)   GiColor         fillColor;      //!< 填充颜色，clearColor 表示不填充

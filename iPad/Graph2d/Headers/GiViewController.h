@@ -34,7 +34,7 @@
 @property (nonatomic)         BOOL      gestureRecognizerUsed;
 
 //! 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
-@property (nonatomic)         int       lineWidth;
+@property (nonatomic)         float     lineWidth;
 
 //! 像素单位的线宽，正数
 @property (nonatomic)         float     strokeWidth;
