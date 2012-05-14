@@ -208,7 +208,7 @@ bool MgCommandSelect::canSelect(MgShape* shape, const MgMotion* sender)
                                             m_ptNear, m_segment) <= limits.width() / 2;
 }
 
-Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const Point2d& pointM)
+Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const Point2d& pointM, const MgMotion* sender)
 {
     if (!shape)
         return -1;
@@ -226,6 +226,7 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const Point2d& pointM)
     }
     
     if (nearDist < minDist / 3
+        && minDist > sender->view->xform()->displayToModel(20)
         && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
         m_insertPoint = true;
@@ -254,7 +255,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
                    && canSelect(shape, sender));    // 仅检查这个图形能否选中
     
     if (canSelAgain) {                  // 可再次选中同一图形，不论其他图形能否选中
-        handleIndex = hitTestHandles(shape, sender->pointM);    // 检查是否切换热点
+        handleIndex = hitTestHandles(shape, sender->pointM, sender);    // 检查是否切换热点
         if (m_handleIndex != handleIndex || m_insertPoint) {
             m_handleIndex = handleIndex;
         }
@@ -324,13 +325,13 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
     if (m_cloneShapes.size() == 1)
         canSelect(shape, sender);   // calc m_ptNear
     m_handleIndex = (m_cloneShapes.size() == 1 && m_handleIndex > 0)
-        ? hitTestHandles(shape, sender->pointM) : 0;
+        ? hitTestHandles(shape, sender->pointM, sender) : 0;
     
     if (m_insertPoint && shape->shape()->isKindOf(MgBaseLines::Type())) {
         MgBaseLines* lines = (MgBaseLines*)(shape->shape());
         lines->insertPoint(m_segment, m_ptNear);
         shape->shape()->update();
-        m_handleIndex = hitTestHandles(shape, m_ptNear);
+        m_handleIndex = hitTestHandles(shape, m_ptNear, sender);
     }
     
     if (m_cloneShapes.empty()) {
@@ -422,7 +423,7 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
     }
     m_insertPoint = false;
     if (m_handleIndex > 0) {
-        m_handleIndex = hitTestHandles(getShape(m_selIds[0], sender), sender->pointM);
+        m_handleIndex = hitTestHandles(getShape(m_selIds[0], sender), sender->pointM, sender);
         sender->view->redraw(true);
     }
     

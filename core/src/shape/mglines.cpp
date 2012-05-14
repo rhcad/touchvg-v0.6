@@ -125,7 +125,7 @@ void MgBaseLines::addPoint(const Point2d& pt)
 
 void MgBaseLines::insertPoint(Int32 segment, const Point2d& pt)
 {
-    if (segment >= 0 && segment < (Int32)(_count - (_closed ? 1 : 2))) {
+    if (segment >= 0 && segment < (Int32)(_count - (_closed ? 0 : 1))) {
         resize(_count + 1);
         for (Int32 i = (Int32)_count - 1; i > segment + 1; i--)
             _points[i] = _points[i - 1];
