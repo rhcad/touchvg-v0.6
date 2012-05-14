@@ -321,20 +321,20 @@ static const NSUInteger kDashLineTag    = 4;
 		case kRedTag:
 			[self showUnlightButtons];
             [redBtn setImage:[UIImage imageNamed:@"redbrush1.png"] forState: UIControlStateNormal]; // 切换至红色画笔
-            _graphc.lineColor = [UIColor redColor];
             _graphc.commandName = "splines";
+            _graphc.lineColor = [UIColor redColor];
 			break;
 		case kBlueTag:
 		    [self showUnlightButtons];
             [blueBtn setImage:[UIImage imageNamed:@"bluebrush1.png"] forState: UIControlStateNormal]; // 切换至蓝色画笔
-            _graphc.lineColor = [UIColor blueColor];
             _graphc.commandName = "splines";
+            _graphc.lineColor = [UIColor blueColor];
 			break;
         case kYellowTag:
 		    [self showUnlightButtons];
             [yellowbtn setImage:[UIImage imageNamed:@"yellowbrush1.png"] forState: UIControlStateNormal]; // 切换至黄色画笔
-            _graphc.lineColor = [UIColor yellowColor];
             _graphc.commandName = "splines";
+            _graphc.lineColor = [UIColor yellowColor];
 			break;
 		case kLineTag:              // 画直线
             _graphc.lineStyle = 0;

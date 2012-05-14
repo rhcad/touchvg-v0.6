@@ -44,8 +44,8 @@ private:
         }
     }
     
-    void redraw() {
-        [_curview redraw];
+    void redraw(bool fast) {
+        [_curview redraw:fast];
     }
     
     void shapeAdded(MgShape* shape) {
@@ -133,7 +133,7 @@ private:
         for (UInt32 i = 0; i < n; i++) {
             shapes[i]->context()->setLineWidth(w);
         }
-        _motion->view->redraw();
+        _motion->view->redraw(false);
     }
     else {
         _mgview->context()->setLineWidth(w);
@@ -152,7 +152,7 @@ private:
         for (UInt32 i = 0; i < n; i++) {
             shapes[i]->context()->setLineColor(c);
         }
-        _motion->view->redraw();
+        _motion->view->redraw(false);
     }
     else {
         _mgview->context()->setLineColor(c);
@@ -171,7 +171,7 @@ private:
         for (UInt32 i = 0; i < n; i++) {
             shapes[i]->context()->setFillColor(c);
         }
-        _motion->view->redraw();
+        _motion->view->redraw(false);
     }
     else {
         _mgview->context()->setFillColor(c);
@@ -190,7 +190,7 @@ private:
         for (UInt32 i = 0; i < n; i++) {
             shapes[i]->context()->setLineStyle((kLineStyle)style);
         }
-        _motion->view->redraw();
+        _motion->view->redraw(false);
     }
     else {
         _mgview->context()->setLineStyle((kLineStyle)style);

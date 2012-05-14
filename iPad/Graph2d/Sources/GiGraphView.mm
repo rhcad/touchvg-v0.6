@@ -68,6 +68,7 @@
     self.multipleTouchEnabled = YES;
     _drawingDelegate = Nil;
     _shapeAdded = NULL;
+    _cachedDraw = YES;
     _zooming = NO;
     _doubleZoomed = NO;
     _enableZoom = YES;
@@ -82,11 +83,13 @@
 {
     GiCanvasIos &cv = _graph->canvas;
     GiGraphics &gs = _graph->gs;
+    bool cached = _cachedDraw || !cv.hasCachedBitmap();
     
     _graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     cv.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
-    if (cv.beginPaint(UIGraphicsGetCurrentContext(), !!_zooming))   // 在当前画布上准备绘图   
+    if (cv.beginPaint(UIGraphicsGetCurrentContext(), // 在当前画布上准备绘图
+                      !!_zooming, cached))          // iPad3上不用缓冲更快
     {
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
             [self draw:&gs];                        // 不行则重新显示所有图形
@@ -108,6 +111,7 @@
 - (void)shapeAdded:(MgShape*)shape
 {
     _shapeAdded = shape;
+    _cachedDraw = NO;
     [self setNeedsDisplay];
 }
 
@@ -168,11 +172,13 @@
 - (void)regen
 {
     _graph->gs.clearCachedBitmap();
+    _cachedDraw = YES;
     [self setNeedsDisplay];
 }
 
-- (void)redraw
+- (void)redraw:(bool)fast
 {
+    _cachedDraw = !fast;
     [self setNeedsDisplay];
 }
 

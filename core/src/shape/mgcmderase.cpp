@@ -34,7 +34,7 @@ bool MgCommandErase::undo(bool &enableRecall, const MgMotion* sender)
     enableRecall = true;
     if (!m_deleted.empty()) {
         m_deleted.pop_back();
-        sender->view->redraw();
+        sender->view->redraw(false);
         return true;
     }
     if (m_boxsel) {
@@ -101,7 +101,7 @@ bool MgCommandErase::longPress(const MgMotion* /*sender*/)
 bool MgCommandErase::touchBegan(const MgMotion* sender)
 {
     m_boxsel = true;
-    sender->view->redraw();
+    sender->view->redraw(false);
     return true;
 }
 
@@ -124,7 +124,7 @@ bool MgCommandErase::touchMoved(const MgMotion* sender)
             m_deleted.push_back(shape);
         }
     }
-    sender->view->redraw();
+    sender->view->redraw(false);
     
     return true;
 }
@@ -142,7 +142,7 @@ bool MgCommandErase::touchEnded(const MgMotion* sender)
         m_deleted.clear();
     }
     m_boxsel = false;
-    sender->view->redraw();
+    sender->view->redraw(false);
     
     return true;
 }

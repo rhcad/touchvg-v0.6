@@ -73,12 +73,12 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
         }
         m_cloneShapes.clear();
         m_insertPoint = false;
-        sender->view->redraw();
+        sender->view->redraw(false);
         return true;
     }
     if (m_id != 0 && m_handleIndex > 0) {           // 控制点修改状态
         m_handleIndex = 0;                          // 回退到图形整体选中状态
-        sender->view->redraw();
+        sender->view->redraw(false);
         return true;
     }
     if (!m_selIds.empty()) {                        // 图形整体选中状态
@@ -86,7 +86,7 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
         m_segment = -1;
         m_handleIndex = 0;
         m_selIds.clear();
-        sender->view->redraw();
+        sender->view->redraw(false);
         return true;
     }
     return false;
@@ -282,7 +282,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
         m_segment = segment;
         m_handleIndex = 0;
     }
-    sender->view->redraw();
+    sender->view->redraw(false);
     
     return true;
 }
@@ -337,7 +337,7 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
         m_boxsel = true;
     }
     
-    sender->view->redraw();
+    sender->view->redraw(m_cloneShapes.size() < 2);
     
     return true;
 }
@@ -373,7 +373,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
             shape->offset(pointM - sender->startPointM, m_segment);
         }
         shape->update();
-        sender->view->redraw();
+        sender->view->redraw(m_cloneShapes.size() < 2);
     }
     
     if (m_cloneShapes.empty() && m_boxsel) {    // 没有选中图形时就滑动多选
@@ -388,7 +388,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
                 m_selIds.push_back(shape->getID());
             }
         }
-        sender->view->redraw();
+        sender->view->redraw(true);
     }
     
     return true;
@@ -418,12 +418,12 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
     
     if (m_boxsel) {
         m_boxsel = false;
-        sender->view->redraw();
+        sender->view->redraw(true);
     }
     m_insertPoint = false;
     if (m_handleIndex > 0) {
         m_handleIndex = hitTestHandles(getShape(m_selIds[0], sender), sender->pointM);
-        sender->view->redraw();
+        sender->view->redraw(true);
     }
     
     return true;

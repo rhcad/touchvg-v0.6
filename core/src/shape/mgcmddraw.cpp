@@ -22,7 +22,7 @@ bool MgCommandDraw::cancel(const MgMotion* sender)
     if (m_step > 0) {
         m_step = 0;
         m_shape->shape()->clear();
-        sender->view->redraw();
+        sender->view->redraw(false);
         return true;
     }
     return false;
@@ -64,7 +64,7 @@ bool MgCommandDraw::_undo(const MgMotion* sender)
 {
     if (m_step > 1) {
         m_step--;
-        sender->view->redraw();
+        sender->view->redraw(false);
         return true;
     }
     return false;
@@ -95,18 +95,18 @@ bool MgCommandDraw::_touchBegan(const MgMotion* sender)
     if (sender->view->context()) {
         *m_shape->context() = *sender->view->context();
     }
-    sender->view->redraw();
+    sender->view->redraw(true);
     return true;
 }
 
 bool MgCommandDraw::_touchMoved(const MgMotion* sender)
 {
-    sender->view->redraw();
+    sender->view->redraw(true);
     return true;
 }
 
 bool MgCommandDraw::_touchEnded(const MgMotion* sender)
 {
-    sender->view->redraw();
+    sender->view->redraw(true);
     return true;
 }

@@ -22,6 +22,7 @@
         _gview = gview;
         _drawingDelegate = Nil;
         _shapeAdded = NULL;
+        _cachedDraw = YES;
         _scale = 3;
         _lockRedraw = YES;
         _zooming = NO;
@@ -62,6 +63,7 @@
     if (!inside) {
         _graph->xf.zoom(Point2d(ptw.x, ptw.y), _graph->xf.getViewScale());
     }
+    _cachedDraw = YES;
     [self setNeedsDisplay];
 }
 
@@ -69,6 +71,7 @@
 {
     if (_graph->xf.zoomPan(translation.x, translation.y)) {
         _pointW = CGPointMake(_graph->xf.getCenterW().x, _graph->xf.getCenterW().y);
+        _cachedDraw = YES;
         [self setNeedsDisplay];
     }
 }
@@ -105,10 +108,12 @@
 
 - (void)regen {
     _graph->gs.clearCachedBitmap();
+    _cachedDraw = YES;
     [self setNeedsDisplay];
 }
 
-- (void)redraw {
+- (void)redraw:(bool)fast {
+    _cachedDraw = !fast;
     [self setNeedsDisplay];
 }
 
@@ -166,6 +171,7 @@
 - (void)shapeAdded:(MgShape*)shape
 {
     _shapeAdded = shape;
+    _cachedDraw = NO;
     [self setNeedsDisplay];
 }
 
@@ -230,7 +236,7 @@
         }
         else {
             _zooming = NO;
-            [self redraw];
+            [self redraw:NO];
         }
     }
     

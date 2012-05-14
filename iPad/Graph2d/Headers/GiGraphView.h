@@ -16,6 +16,7 @@ class GiGraphIos;
     GiGraphIos*     _graph;                 //!< 图形显示对象
     id              _drawingDelegate;       //!< 动态绘图用的委托控制器对象
     MgShape*        _shapeAdded;            //!< 待添加显示的图形
+    BOOL            _cachedDraw;            //!< 刷新显示时是否使用缓冲图
     
     CGPoint         _firstPoint;            //!< 动态放缩用的开始点
     CGPoint         _lastPoint;             //!< 动态放缩用的上次点
@@ -48,6 +49,7 @@ class GiGraphIos;
     id<GiView>      _gview;                 //!< 实际图形视图
     UIResponder*    _drawingDelegate;       //!< 动态绘图用的委托控制器对象
     MgShape*        _shapeAdded;            //!< 待添加显示的图形
+    BOOL            _cachedDraw;            //!< 刷新显示时是否使用缓冲图
     CGPoint         _pointW;                //!< 实际图形视图的当前点，世界坐标
     CGFloat         _scale;                 //!< 放大倍数
     BOOL            _lockRedraw;            //!< 禁止放大镜动态显示

@@ -18,7 +18,7 @@ struct MgView {
     virtual GiTransform* xform() = 0;           //!< 得到坐标系对象
     virtual GiGraphics* graph() = 0;            //!< 得到图形显示对象
     virtual void regen() = 0;                   //!< 标记视图待重新构建显示
-    virtual void redraw() = 0;                  //!< 标记视图待更新显示
+    virtual void redraw(bool fast) = 0;         //!< 标记视图待更新显示
     virtual GiContext* context() = 0;           //!< 得到当前绘图属性
     virtual bool shapeWillAdded(MgShape* shape) = 0;    //!< 通知将添加图形
     virtual void shapeAdded(MgShape* shape) = 0;        //!< 通知已添加图形，由视图重新构建显示
