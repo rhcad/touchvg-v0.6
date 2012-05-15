@@ -54,7 +54,7 @@ public:
     void makeLinePattern(CGFloat* dest, const CGFloat* src, int n, float w)
     {
         for (int i = 0; i < n; i++) {
-            dest[i] = src[i] * w;
+            dest[i] = src[i] * mgMax(w, 1.f);
         }
     }
 
@@ -77,8 +77,7 @@ public:
                                        toFloat(color.b), toFloat(color.a));
             
             float w = ctx->getLineWidth();
-            if (owner())
-                owner()->calcPenWidth(w);
+            w = owner() ? owner()->calcPenWidth(w) : (w < 0 ? -w : 1);
             CGContextSetLineWidth(getContext(), _fast && w > 1 ? w - 1 : w);
             
             int style = ctx->getLineStyle();
@@ -221,9 +220,9 @@ void GiCanvasIos::endPaint(bool draw)
     }
 }
 
-CGContextRef GiCanvasIos::bitmapContext()
+CGImageRef GiCanvasIos::cachedBitmap()
 {
-    return m_draw->_buffctx;
+    return m_draw->_caches[0];
 }
 
 void GiCanvasIosImpl::createBufferBitmap(float width, float height)

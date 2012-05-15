@@ -115,7 +115,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     
     if (m_boxsel) {
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
-                          isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 10));
+                          isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 32));
         bool antiAlias = gs->isAntiAliasMode();
         
         gs->setAntiAliasMode(false);
@@ -124,7 +124,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     }
     
     if (m_showSel) {        // 选中时比原图形宽4像素，控制点修改时仅亮显控制点
-        GiContext ctxshape(m_handleIndex > 0 ? 0 : -4, GiColor(0, 0, 255, m_handleIndex > 0 ? 50 : 128));
+        GiContext ctxshape(m_handleIndex > 0 ? 0 : -4, GiColor(0, 0, 255, m_handleIndex > 0 ? 64 : 128));
         for (it = shapes.begin(); it != shapes.end(); ++it) {
             (*it)->draw(*gs, &ctxshape);
         }

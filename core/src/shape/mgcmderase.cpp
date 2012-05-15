@@ -50,7 +50,7 @@ bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
     
     if (m_boxsel) {
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
-                          isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 10));
+                          isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 32));
         bool antiAlias = gs->isAntiAliasMode();
         
         gs->setAntiAliasMode(false);

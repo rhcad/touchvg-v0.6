@@ -25,7 +25,7 @@
 @property (nonatomic,readonly)  void*   shapes;         //!< 图形列表, MgShapes*
 @property (nonatomic,readonly)  UIView* magnifierView;  //!< 放大镜视图
 @property (nonatomic,readonly)  UIView* activeView;     //!< 当前图形视图
-@property (nonatomic,readonly)  CGContextRef    bitmapContext;  //!< 当前缓存位图
+@property (nonatomic,readonly)  CGImageRef  cachedBitmap;  //!< 当前缓存位图
 
 //! 当前命令名称
 @property (nonatomic)         const char*   commandName;

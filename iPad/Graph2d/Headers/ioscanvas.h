@@ -29,7 +29,7 @@ public:
 
 public:
     const GiTransform& xf() const;
-    CGContextRef bitmapContext();
+    CGImageRef cachedBitmap();
     
     bool beginPaint(CGContextRef context, bool fast = false, bool buffered = true);
     void endPaint(bool draw = true);

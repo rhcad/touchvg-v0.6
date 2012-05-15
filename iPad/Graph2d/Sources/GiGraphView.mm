@@ -18,7 +18,7 @@
 
 @synthesize enableZoom = _enableZoom;
 @synthesize zooming = _zooming;
-@synthesize bitmapContext;
+@synthesize cachedBitmap;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -74,9 +74,9 @@
     _enableZoom = YES;
 }
 
-- (CGContextRef)bitmapContext
+- (CGImageRef)cachedBitmap
 {
-    return _graph->canvas.bitmapContext();
+    return _graph->canvas.cachedBitmap();
 }
 
 - (void)drawRect:(CGRect)rect
