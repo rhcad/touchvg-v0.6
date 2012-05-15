@@ -258,6 +258,7 @@
 }
 
 - (void)setLineColor:(UIColor*)c {
+    if (!c) return;
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiColor color(giFromCGColor(c.CGColor));
     if (color.a > 0.01f && cmd.lineColor.a > 0)
@@ -272,6 +273,7 @@
 }
 
 - (void)setFillColor:(UIColor*)c {
+    if (!c) return;
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiColor color(giFromCGColor(c.CGColor));
     if (color.a > 0.01f && cmd.fillColor.a > 0)

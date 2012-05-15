@@ -429,6 +429,7 @@ static const NSUInteger kDashLineTag    = 4;
 - (IBAction)clearView:(id)sender    // 清屏
 {
     [_graphc removeShapes];
+    _graphc.commandName = "splines";
 }
 
 - (IBAction)backToView:(id)sender   // 退出自由绘图
