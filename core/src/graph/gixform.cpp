@@ -149,7 +149,9 @@ float GiTransform::getViewScale() const { return m_impl->viewScale; }
 float GiTransform::getWorldToDisplayX() const { return m_impl->w2dx; }
 float GiTransform::getWorldToDisplayY() const { return m_impl->w2dy; }
 float GiTransform::displayToModel(float px) const
-    { return (Vector2d(0,px) * m_impl->matD2M).length(); }
+    { return (Vector2d(px,px) * m_impl->matD2M).length() * _M_SQRT1_2; }
+float GiTransform::worldToModel(float mm) const
+    { return (Vector2d(mm,mm) * m_impl->matW2M).length() * _M_SQRT1_2; }
 const Matrix2d& GiTransform::modelToWorld() const
     { return m_impl->matM2W; }
 const Matrix2d& GiTransform::worldToModel() const

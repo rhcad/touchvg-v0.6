@@ -93,8 +93,11 @@ public:
     */
     float getWorldToDisplayY() const;
     
-    //! 返回Y方向上显示长度对应的模型长度
+    //! 返回显示像素长度对应的模型长度
     float displayToModel(float px) const;
+
+    //! 返回世界坐标毫米长度对应的模型长度
+    float worldToModel(float mm) const;
 
     //! 返回模型坐标系到世界坐标系的变换矩阵
     const Matrix2d& modelToWorld() const;
