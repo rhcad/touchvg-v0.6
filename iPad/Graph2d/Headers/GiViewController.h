@@ -60,6 +60,8 @@
 - (void)regen;                          //!< 标记视图待重新构建显示
 - (void)undoMotion;                     //!< 触发晃动或撤销操作
 - (BOOL)isCommand:(const char*)cmdname; //!< 检查当前是否为指定的命令
+- (BOOL)loadShapes:(void*)mgstorage;    //!< 从 MgStorage 对象加载图形列表
+- (BOOL)saveShapes:(void*)mgstorage;    //!< 保存图形列表到 MgStorage 对象
 
 - (void)dynDraw:(id)sender;             //!< 供图形视图动态显示时调用
 - (void)afterZoomed:(id)sender;         //!< 供图形视图在动态放缩后通知

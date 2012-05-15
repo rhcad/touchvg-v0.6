@@ -195,6 +195,18 @@
     [self regen];
 }
 
+- (BOOL)loadShapes:(void*)mgstorage
+{
+    bool ret = [[self gview] shapes]->load((MgStorage*)mgstorage);
+    [self regen];
+    return ret;
+}
+
+- (BOOL)saveShapes:(void*)mgstorage
+{
+    return [[self gview] shapes]->save((MgStorage*)mgstorage);
+}
+
 - (void*)shapes {
     return [[self gview] shapes];
 }

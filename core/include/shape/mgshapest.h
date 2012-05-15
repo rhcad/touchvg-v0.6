@@ -10,6 +10,8 @@
 #include <mgstorage.h>
 #include <gigraph.h>
 
+MgShape* mgCreateShape(UInt32 type);
+
 //! 图形列表模板类
 /*! \ingroup GEOM_SHAPE
     \param Container 包含(MgShape*)的vector、list等容器类型
@@ -195,14 +197,50 @@ public:
     
     bool save(MgStorage* s) const
     {
-        //TODO:
-        return s != NULL;
+        bool ret = false;
+        
+        if (s->writeNode("shapes")) {
+            ret = true;
+            s->setUInt32("count", _shapes.size());
+            
+            for (const_iterator it = _shapes.begin(); ret && it != _shapes.end(); ++it)
+            {
+                ret = s->writeNode("shape");
+                if (ret) {
+                    s->setUInt32("type", (*it)->getType());
+                    s->setUInt32("id", (*it)->getID());
+                    ret = (*it)->save(s);
+                }
+            }
+        }
+        
+        return ret;
     }
     
     bool load(MgStorage* s)
     {
-        //TODO:
-        return s != NULL;
+        bool ret = false;
+        
+        if (s->readNode("shapes")) {
+            ret = true;
+            s->getUInt32("count");
+            
+            clear();
+            while (ret && s->readNode("shape")) {
+                UInt32 type = s->getUInt32("type");
+                UInt32 id = s->getUInt32("id");
+                MgShape* shape = mgCreateShape(type);
+                
+                if (shape) {
+                    shape->setParent(this, id);
+                    ret = shape->load(s);
+                    if (ret)
+                        _shapes.push_back(shape);
+                }
+            }
+        }
+        
+        return ret;
     }
 
     GiContext* context()

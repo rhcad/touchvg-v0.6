@@ -62,7 +62,7 @@ public:
         return new ThisClass;
     }
 
-    static UInt32 Type() { return 9; }
+    static UInt32 Type() { return 10000 + ShapeT::Type(); }
     UInt32 getType() const { return Type(); }
 
     bool isKindOf(UInt32 type) const

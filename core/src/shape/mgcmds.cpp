@@ -8,6 +8,8 @@
 #include "mgdrawrect.h"
 #include "mgdrawlines.h"
 #include "mgdrawsplines.h"
+#include <mgbasicsp.h>
+#include <mgshapet.h>
 
 MgCommand* mgCreateCommand(const char* name)
 {
@@ -30,5 +32,32 @@ MgCommand* mgCreateCommand(const char* name)
             return (cmds[i].creator)();
     }
 
+    return NULL;
+}
+
+typedef std::pair<UInt32, MgShape* (*)()> TypeToCreator;
+static std::vector<TypeToCreator>   s_shapeCreators;
+
+void mgRegisterShapeCreators()
+{
+    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgLine>::Type(), MgShapeT<MgLine>::create));
+    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgRect>::Type(), MgShapeT<MgRect>::create));
+    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgEllipse>::Type(), MgShapeT<MgEllipse>::create));
+    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgRoundRect>::Type(), MgShapeT<MgRoundRect>::create));
+    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgLines>::Type(), MgShapeT<MgLines>::create));
+    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgSplines>::Type(), MgShapeT<MgSplines>::create));
+}
+
+MgShape* mgCreateShape(UInt32 type)
+{
+    if (s_shapeCreators.empty())
+        mgRegisterShapeCreators();
+    
+    for (std::vector<TypeToCreator>::const_iterator it = s_shapeCreators.begin();
+         it != s_shapeCreators.end(); ++it) {
+        if (it->first == type)
+            return (it->second)();
+    }
+    
     return NULL;
 }
