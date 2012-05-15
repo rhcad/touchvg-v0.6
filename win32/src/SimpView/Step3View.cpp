@@ -27,7 +27,7 @@ private:
     MgShapes* shapes() { return view->m_shapes; }
     GiTransform* xform() { return &view->m_graph->xf; }
     GiGraphics* graph() { return &view->m_graph->gs; }
-    void redraw() { view->Invalidate(); }
+    void redraw(bool) { view->Invalidate(); }
     void regen() {
         view->m_graph->gs.clearCachedBitmap();
         view->Invalidate();
