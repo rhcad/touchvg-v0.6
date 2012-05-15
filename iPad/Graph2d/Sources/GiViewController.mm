@@ -33,7 +33,6 @@
 @synthesize gestureRecognizerUsed = _gestureRecognizerUsed;
 @synthesize magnifierView;
 @synthesize activeView = _activeView;
-@synthesize cachedBitmap;
 @synthesize lineWidth;
 @synthesize strokeWidth;
 @synthesize lineColor;
@@ -177,10 +176,10 @@
     [[self gview] graph]->clearCachedBitmap();
 }
 
-- (CGImageRef)cachedBitmap
+- (CGImageRef)cachedBitmap:(BOOL)invert
 {
     GiGraphView *aview = (GiGraphView *)self.view;
-    return aview.cachedBitmap;
+    return [aview cachedBitmap:invert];
 }
 
 - (UIView*)magnifierView {

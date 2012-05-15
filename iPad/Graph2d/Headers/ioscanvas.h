@@ -29,11 +29,11 @@ public:
 
 public:
     const GiTransform& xf() const;
-    CGImageRef cachedBitmap();
+    static void setScreenDpi(float dpi);
     
     bool beginPaint(CGContextRef context, bool fast = false, bool buffered = true);
     void endPaint(bool draw = true);
-    static void setScreenDpi(float dpi);
+    CGImageRef cachedBitmap(bool invert = true);
 
     virtual void clearWindow();
     virtual bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);

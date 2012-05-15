@@ -25,7 +25,6 @@
 @property (nonatomic,readonly)  void*   shapes;         //!< 图形列表, MgShapes*
 @property (nonatomic,readonly)  UIView* magnifierView;  //!< 放大镜视图
 @property (nonatomic,readonly)  UIView* activeView;     //!< 当前图形视图
-@property (nonatomic,readonly)  CGImageRef  cachedBitmap;  //!< 当前缓存位图
 
 //! 当前命令名称
 @property (nonatomic)         const char*   commandName;
@@ -55,16 +54,17 @@
 @property (nonatomic)         int       lineStyle;
 
 
-- (void)clearCachedData;                //!< 清除缓冲数据，下次重新构建显示
-- (void)removeShapes;                   //!< 清除所有图形
-- (void)regen;                          //!< 标记视图待重新构建显示
-- (void)undoMotion;                     //!< 触发晃动或撤销操作
-- (BOOL)isCommand:(const char*)cmdname; //!< 检查当前是否为指定的命令
-- (BOOL)loadShapes:(void*)mgstorage;    //!< 从 MgStorage 对象加载图形列表
-- (BOOL)saveShapes:(void*)mgstorage;    //!< 保存图形列表到 MgStorage 对象
+- (CGImageRef)cachedBitmap:(BOOL)invert;    //!< 当前缓存位图，上下翻转时由调用者释放
+- (void)clearCachedData;                    //!< 清除缓冲数据，下次重新构建显示
+- (void)removeShapes;                       //!< 清除所有图形
+- (void)regen;                              //!< 标记视图待重新构建显示
+- (void)undoMotion;                         //!< 触发晃动或撤销操作
+- (BOOL)isCommand:(const char*)cmdname;     //!< 检查当前是否为指定的命令
+- (BOOL)loadShapes:(void*)mgstorage;        //!< 从 MgStorage 对象加载图形列表
+- (BOOL)saveShapes:(void*)mgstorage;        //!< 保存图形列表到 MgStorage 对象
 
-- (void)dynDraw:(id)sender;             //!< 供图形视图动态显示时调用
-- (void)afterZoomed:(id)sender;         //!< 供图形视图在动态放缩后通知
+- (void)dynDraw:(id)sender;                 //!< 供图形视图动态显示时调用
+- (void)afterZoomed:(id)sender;             //!< 供图形视图在动态放缩后通知
 
 //! 创建图形视图(GiGraphView)和图形列表，不需要图形视图的派生类时使用
 /*!

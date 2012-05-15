@@ -33,7 +33,8 @@ class GiGraphIos;
 
 @property (nonatomic)          BOOL         enableZoom; //!< 是否允许放缩或平移
 @property (nonatomic,readonly) BOOL         zooming;    //!< 是否正在动态放缩或平移
-@property (nonatomic,readonly) CGImageRef   cachedBitmap;  //!< 当前缓存位图
+
+- (CGImageRef)cachedBitmap:(BOOL)invert;    //!< 当前缓存位图，上下翻转时由调用者释放
 
 - (void)afterCreated;                                   //!< 视图窗口后内部调用
 - (BOOL)draw:(GiGraphics*)gs;                           //!< 显示全部图形内部调用

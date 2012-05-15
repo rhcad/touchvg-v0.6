@@ -220,9 +220,30 @@ void GiCanvasIos::endPaint(bool draw)
     }
 }
 
-CGImageRef GiCanvasIos::cachedBitmap()
+CGImageRef GiCanvasIos::cachedBitmap(bool invert)
 {
-    return m_draw->_caches[0];
+    CGImageRef image = m_draw->_caches[0];
+    if (!image || !invert)
+        return image;
+    
+    size_t w = CGImageGetWidth(image);
+    size_t h = CGImageGetHeight(image);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, w * 4,
+                                                 colorSpace, kCGImageAlphaPremultipliedLast);
+    CGColorSpaceRelease(colorSpace);
+    
+    CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, h);
+    CGContextConcatCTM(context, af);
+    CGContextDrawImage(context, CGRectMake(0, 0, w, h), image);
+    CGContextConcatCTM(context, CGAffineTransformInvert(af));
+    
+    CGImageRef newimg = CGBitmapContextCreateImage(context);
+    
+    CGContextRelease(context);
+    
+    return newimg;
 }
 
 void GiCanvasIosImpl::createBufferBitmap(float width, float height)
