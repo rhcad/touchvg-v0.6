@@ -148,10 +148,6 @@ Point2d GiTransform::getCenterW() const { return m_impl->centerW; }
 float GiTransform::getViewScale() const { return m_impl->viewScale; }
 float GiTransform::getWorldToDisplayX() const { return m_impl->w2dx; }
 float GiTransform::getWorldToDisplayY() const { return m_impl->w2dy; }
-float GiTransform::displayToModel(float px) const
-    { return (Vector2d(px,px) * m_impl->matD2M).length() * _M_SQRT1_2; }
-float GiTransform::worldToModel(float mm) const
-    { return (Vector2d(mm,mm) * m_impl->matW2M).length() * _M_SQRT1_2; }
 const Matrix2d& GiTransform::modelToWorld() const
     { return m_impl->matM2W; }
 const Matrix2d& GiTransform::worldToModel() const
@@ -170,6 +166,12 @@ float GiTransform::getMaxViewScale() const
     { return m_impl->maxViewScale; }
 Box2d GiTransform::getWorldLimits() const
     { return m_impl->rectLimitsW; }
+
+float GiTransform::displayToModel(float px, bool mm) const
+{
+    return mm ? (Vector2d(mm,mm) * m_impl->matW2M).length() * _M_SQRT1_2 / m_impl->viewScale
+        : (Vector2d(px,px) * m_impl->matD2M).length() * _M_SQRT1_2;
+}
 
 long GiTransform::getZoomTimes() const
 {
