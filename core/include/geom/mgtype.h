@@ -20,7 +20,7 @@ typedef struct tagPOINT2D
     float   y;      //!< Y坐标分量
 } POINT2D;
 
-//! 迪克尔矩形框结构
+//! 浮点矩形框结构，用于模型坐标系或世界坐标系
 typedef struct tagBOX2D
 {
     float   xmin;   //!< 矩形左下角X坐标
@@ -29,7 +29,7 @@ typedef struct tagBOX2D
     float   ymax;   //!< 矩形右上角Y坐标
 } BOX2D;
 
-//! 显示坐标矩形框结构
+//! 显示坐标矩形框结构，用于显示坐标系
 typedef struct tagRECT2D
 {
     float   left;   //!< 矩形左上角X坐标
