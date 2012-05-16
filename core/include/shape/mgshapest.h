@@ -199,19 +199,20 @@ public:
     {
         bool ret = false;
         
-        if (s->writeNode("shapes")) {
+        if (s->writeNode("shapes", false)) {
             ret = true;
-            s->setUInt32("count", _shapes.size());
+            s->writeUInt32("count", _shapes.size());
             
             for (const_iterator it = _shapes.begin(); ret && it != _shapes.end(); ++it)
             {
-                ret = s->writeNode("shape");
+                ret = s->writeNode("shape", false);
                 if (ret) {
-                    s->setUInt32("type", (*it)->getType());
-                    s->setUInt32("id", (*it)->getID());
-                    ret = (*it)->save(s);
+                    s->writeUInt32("type", (*it)->getType());
+                    s->writeUInt32("id", (*it)->getID());
+                    ret = (*it)->save(s) && s->writeNode("shape", true);
                 }
             }
+            s->writeNode("shapes", true);
         }
         
         return ret;
@@ -221,23 +222,29 @@ public:
     {
         bool ret = false;
         
-        if (s->readNode("shapes")) {
+        if (s->readNode("shapes", false)) {
             ret = true;
-            s->getUInt32("count");
+            s->readUInt32("count");
             
             clear();
-            while (ret && s->readNode("shape")) {
-                UInt32 type = s->getUInt32("type");
-                UInt32 id = s->getUInt32("id");
+            while (ret && s->readNode("shape", false)) {
+                UInt32 type = s->readUInt32("type");
+                UInt32 id = s->readUInt32("id");
                 MgShape* shape = mgCreateShape(type);
                 
                 if (shape) {
                     shape->setParent(this, id);
                     ret = shape->load(s);
-                    if (ret)
+                    if (ret) {
                         _shapes.push_back(shape);
+                    }
+                    else {
+                        shape->release();
+                    }
                 }
+                s->readNode("shape", true);
             }
+            s->readNode("shapes", true);
         }
         
         return ret;

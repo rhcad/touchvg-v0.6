@@ -14,27 +14,55 @@
 */
 struct MgStorage
 {
-    virtual bool readNode(const char* type) = 0;
-    virtual Int8  getInt8(const char* name, Int8 defvalue = 0) = 0;
-    virtual Int16 getInt16(const char* name, Int16 defvalue = 0) = 0;
-    virtual Int32 getInt32(const char* name, Int32 defvalue = 0) = 0;
-    virtual UInt8  getUInt8(const char* name, UInt8 defvalue = 0) = 0;
-    virtual UInt16 getUInt16(const char* name, UInt16 defvalue = 0) = 0;
-    virtual UInt32 getUInt32(const char* name, UInt32 defvalue = 0) = 0;
-    virtual bool getBool(const char* name, bool defvalue) = 0;
-    virtual float getFloat(const char* name, float defvalue = 0) = 0;
-    virtual UInt32 getString(const char* name, wchar_t* value, UInt32 count) = 0;
+    //! 给定节点名称，取出一个开始节点或结束节点
+    virtual bool readNode(const char* name, bool ended) = 0;
     
-    virtual bool writeNode(const char* type) = 0;
-    virtual void setInt8(const char* name, Int8 value) = 0;
-    virtual void setInt16(const char* name, Int16 value) = 0;
-    virtual void setInt32(const char* name, Int32 value) = 0;
-    virtual void setUInt8(const char* name, UInt8 value) = 0;
-    virtual void setUInt16(const char* name, UInt16 value) = 0;
-    virtual void setUInt32(const char* name, UInt32 value) = 0;
-    virtual void setBool(const char* name, bool value) = 0;
-    virtual void setFloat(const char* name, float value) = 0;
-    virtual void setString(const char* name, const wchar_t* value) = 0;
+    //! 给定字段名称，取出一个单字节整数
+    virtual Int8  readInt8(const char* name, Int8 defvalue = 0) = 0;
+    //! 给定字段名称，取出一个双字节整数
+    virtual Int16 readInt16(const char* name, Int16 defvalue = 0) = 0;
+    //! 给定字段名称，取出一个长整数
+    virtual Int32 readInt32(const char* name, Int32 defvalue = 0) = 0;
+    //! 给定字段名称，取出一个单字节整数
+    virtual UInt8  readUInt8(const char* name, UInt8 defvalue = 0) = 0;
+    //! 给定字段名称，取出一个双字节整数
+    virtual UInt16 readUInt16(const char* name, UInt16 defvalue = 0) = 0;
+    //! 给定字段名称，取出一个长整数
+    virtual UInt32 readUInt32(const char* name, UInt32 defvalue = 0) = 0;
+    //! 给定字段名称，取出一个布尔值
+    virtual bool readBool(const char* name, bool defvalue) = 0;
+    //! 给定字段名称，取出一个浮点数
+    virtual float readFloat(const char* name, float defvalue = 0) = 0;
+    
+    //! 给定字段名称，取出浮点数数组. 传入缓冲为空时返回所需个数
+    virtual UInt32 readFloatArray(const char* name, float* values, UInt32 count) = 0;
+    //! 给定字段名称，取出字符串内容，不含0结束符
+    virtual UInt32 readString(const char* name, wchar_t* value, UInt32 count) = 0;
+    
+    //! 添加一个给定节点名称的开始节点或结束节点. 传入缓冲为空时返回所需个
+    virtual bool writeNode(const char* name, bool ended) = 0;
+    
+    //! 添加一个给定字段名称的单字节整数
+    virtual void writeInt8(const char* name, Int8 value) = 0;
+    //! 添加一个给定字段名称的双字节整数
+    virtual void writeInt16(const char* name, Int16 value) = 0;
+    //! 添加一个给定字段名称的长整数
+    virtual void writeInt32(const char* name, Int32 value) = 0;
+    //! 添加一个给定字段名称的单字节整数
+    virtual void writeUInt8(const char* name, UInt8 value) = 0;
+    //! 添加一个给定字段名称的双字节整数
+    virtual void writeUInt16(const char* name, UInt16 value) = 0;
+    //! 添加一个给定字段名称的长整数
+    virtual void writeUInt32(const char* name, UInt32 value) = 0;
+    //! 添加一个给定字段名称的布尔值
+    virtual void writeBool(const char* name, bool value) = 0;
+    //! 添加一个给定字段名称的浮点数
+    virtual void writeFloat(const char* name, float value) = 0;
+    
+    //! 添加一个给定字段名称的浮点数数组
+    virtual void writeFloatArray(const char* name, const float* values, UInt32 count) = 0;
+    //! 添加一个给定字段名称的字符串内容
+    virtual void writeString(const char* name, const wchar_t* value) = 0;
 };
 
 #endif // __GEOMETRY_MGSTORAGE_H_

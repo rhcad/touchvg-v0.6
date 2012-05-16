@@ -169,7 +169,7 @@ Box2d GiTransform::getWorldLimits() const
 
 float GiTransform::displayToModel(float px, bool mm) const
 {
-    return mm ? (Vector2d(mm,mm) * m_impl->matW2M).length() * _M_SQRT1_2 / m_impl->viewScale
+    return mm ? (Vector2d(px,px) * m_impl->matW2M).length() * _M_SQRT1_2 / m_impl->viewScale
         : (Vector2d(px,px) * m_impl->matD2M).length() * _M_SQRT1_2;
 }
 

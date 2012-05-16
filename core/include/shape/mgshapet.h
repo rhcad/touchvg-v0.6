@@ -129,16 +129,35 @@ public:
     
     bool save(MgStorage* s) const
     {
-        //TODO:
-        return s != NULL;
+        GiColor c;
+        
+        s->writeUInt8("lineStyle", _context.getLineStyle());
+        s->writeFloat("lineWidth", _context.getLineWidth());
+        
+        c = _context.getLineColor();
+        s->writeUInt32("lineColor", c.r | (c.g << 8) | (c.b << 16) | (c.a << 24));
+        c = _context.getFillColor();
+        s->writeUInt32("fillColor", c.r | (c.g << 8) | (c.b << 16) | (c.a << 24));
+        
+        return shape()->save(s);
     }
     
     bool load(MgStorage* s)
     {
-        //TODO:
-        return s != NULL;
+        UInt32 c;
+        
+        _context.setLineStyle((kLineStyle)s->readUInt8("lineStyle"));
+        _context.setLineWidth(s->readFloat("lineWidth"));
+        
+        c = s->readUInt32("lineColor");
+        _context.setLineColor(GiColor(c & 0xFF, (c >> 8) & 0xFF, (c >> 16) & 0xFF, (c >> 24) & 0xFF));
+        
+        c = s->readUInt32("fillColor");
+        _context.setFillColor(GiColor(c & 0xFF, (c >> 8) & 0xFF, (c >> 16) & 0xFF, (c >> 24) & 0xFF));
+        
+        return shape()->load(s);
     }
-
+    
 protected:
     ContextT getContext(GiGraphics& gs, const GiContext *ctx) const
     {
