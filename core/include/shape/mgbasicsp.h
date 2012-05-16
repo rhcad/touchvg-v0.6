@@ -29,6 +29,8 @@ protected:
     Point2d _getHandlePoint(UInt32 index) const;
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     bool _hitTestBox(const Box2d& rect) const;
+    bool _save(MgStorage* s) const;
+    bool _load(MgStorage* s);
 
 private:
     Point2d     _points[2];
@@ -91,6 +93,8 @@ protected:
     Point2d _getHandlePoint(UInt32 index) const;
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     bool _hitTestBox(const Box2d& rect) const;
+    bool _save(MgStorage* s) const;
+    bool _load(MgStorage* s);
 
 protected:
     Point2d     _points[4]; // 从左上角起顺时针的四个角点
@@ -150,6 +154,8 @@ protected:
     bool _equals(const MgRoundRect& src) const;
     void _clear();
     float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
+    bool _save(MgStorage* s) const;
+    bool _load(MgStorage* s);
 
 protected:
     float      _rx;
@@ -199,6 +205,10 @@ protected:
     void _clear();
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
+    bool _hitTestBox(const Box2d& rect) const;
+    bool _draw(GiGraphics& gs, const GiContext& ctx) const;
+    bool _save(MgStorage* s) const;
+    bool _load(MgStorage* s);
 
 protected:
     Point2d*    _points;
@@ -214,7 +224,6 @@ class MgLines : public MgBaseLines
 {
     MG_INHERIT_CREATE(MgLines, MgBaseLines, 15)
 protected:
-    bool _hitTestBox(const Box2d& rect) const;
 };
 
 //! 三次参数样条曲线类

@@ -6,6 +6,7 @@
 #include <_mgshape.h>
 #include <mgnear.h>
 #include <mgcurv.h>
+#include <mgstorage.h>
 
 MG_IMPLEMENT_CREATE(MgRoundRect)
 
@@ -83,4 +84,20 @@ bool MgRoundRect::_draw(GiGraphics& gs, const GiContext& ctx) const
     }
 
     return __super::_draw(gs, ctx) || ret;
+}
+
+bool MgRoundRect::_save(MgStorage* s) const
+{
+    bool ret = __super::_save(s);
+    s->writeFloat("rx", _rx);
+    s->writeFloat("ry", _ry);
+    return ret;
+}
+
+bool MgRoundRect::_load(MgStorage* s)
+{
+    bool ret = __super::_load(s);
+    _rx = s->readFloat("rx");
+    _ry = s->readFloat("ry");
+    return ret;
 }

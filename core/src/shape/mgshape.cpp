@@ -3,7 +3,6 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgshape.h"
-#include <mgstorage.h>
 
 MgBaseShape::MgBaseShape()
 {
@@ -81,16 +80,4 @@ bool MgBaseShape::_offset(const Vector2d& vec, Int32)
 bool MgBaseShape::_hitTestBox(const Box2d& rect) const
 {
     return getExtent().isIntersect(rect);
-}
-
-bool MgBaseShape::_save(MgStorage* s) const
-{
-    //TODO:
-    return s != NULL;
-}
-
-bool MgBaseShape::_load(MgStorage* s)
-{
-    //TODO:
-    return s != NULL;
 }

@@ -5,6 +5,7 @@
 #include "mgbasicsp.h"
 #include <_mgshape.h>
 #include <mgnear.h>
+#include <mgstorage.h>
 
 // MgBaseLines
 //
@@ -173,6 +174,47 @@ float MgBaseLines::_hitTest(const Point2d& pt, float tol,
     return mgLinesHit(_count, _points, _closed, pt, tol, nearpt, segment);
 }
 
+bool MgBaseLines::_hitTestBox(const Box2d& rect) const
+{
+    if (!__super::_hitTestBox(rect))
+        return false;
+    
+    for (UInt32 i = 0; i + 1 < _count; i++) {
+        if (Box2d(_points[i], _points[i + 1]).isIntersect(rect))
+            return true;
+    }
+    
+    return _count < 2;
+}
+
+bool MgBaseLines::_draw(GiGraphics& gs, const GiContext& ctx) const
+{
+    bool ret = false;
+    if (_closed)
+        ret = gs.drawPolygon(&ctx, _count, _points);
+    else
+        ret = gs.drawLines(&ctx, _count, _points);
+    return __super::_draw(gs, ctx) || ret;
+}
+
+bool MgBaseLines::_save(MgStorage* s) const
+{
+    s->writeFloatArray("points", (const float*)_points, _count * 2);
+    return true;
+}
+
+bool MgBaseLines::_load(MgStorage* s)
+{
+    UInt32 n = s->readFloatArray("points", NULL, 0) / 2;
+    if (n < 1 || n > 9999)
+        return false;
+    
+    resize(n);
+    s->readFloatArray("points", (float*)_points, _count * 2);
+    
+    return true;
+}
+
 // MgLines
 //
 
@@ -188,23 +230,5 @@ MgLines::~MgLines()
 
 bool MgLines::_draw(GiGraphics& gs, const GiContext& ctx) const
 {
-    bool ret = false;
-    if (_closed)
-        ret = gs.drawPolygon(&ctx, _count, _points);
-    else
-        ret = gs.drawLines(&ctx, _count, _points);
-    return __super::_draw(gs, ctx) || ret;
-}
-
-bool MgLines::_hitTestBox(const Box2d& rect) const
-{
-    if (!__super::_hitTestBox(rect))
-        return false;
-    
-    for (UInt32 i = 0; i + 1 < _count; i++) {
-        if (Box2d(_points[i], _points[i + 1]).isIntersect(rect))
-            return true;
-    }
-    
-    return _count < 2;
+    return __super::_draw(gs, ctx);
 }

@@ -5,6 +5,7 @@
 #include "mgbasicsp.h"
 #include <_mgshape.h>
 #include <mgnear.h>
+#include <mgstorage.h>
 
 // MgBaseRect
 //
@@ -182,6 +183,17 @@ bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
     setRect(rect, getAngle());
     update();
     return true;
+}
+
+bool MgBaseRect::_save(MgStorage* s) const
+{
+    s->writeFloatArray("points", &(_points[0].x), 8);
+    return true;
+}
+
+bool MgBaseRect::_load(MgStorage* s)
+{
+    return s->readFloatArray("points", &(_points[0].x), 8) == 8;
 }
 
 // MgRect

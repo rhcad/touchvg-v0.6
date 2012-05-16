@@ -147,8 +147,6 @@ protected:
     void _transform(const Matrix2d& mat);
     void _clear();
     bool _draw(GiGraphics& gs, const GiContext& ctx) const;
-    bool _save(MgStorage* s) const;
-    bool _load(MgStorage* s);
     bool _hitTestBox(const Box2d& rect) const;
     UInt32 _getHandleCount() const;
     Point2d _getHandlePoint(UInt32 index) const;
@@ -189,9 +187,9 @@ private:                                                        \
     virtual Point2d getPoint(UInt32 index) const;               \
     virtual void setPoint(UInt32 index, const Point2d& pt);     \
     virtual bool isClosed() const;                              \
-    virtual float hitTest(const Point2d& pt, float tol,       \
-       Point2d& nearpt, Int32& segment) const;                 \
-    virtual bool hitTestBox(const Box2d& rect) const;  \
+    virtual float hitTest(const Point2d& pt, float tol,         \
+       Point2d& nearpt, Int32& segment) const;                  \
+    virtual bool hitTestBox(const Box2d& rect) const;           \
     virtual bool draw(GiGraphics& gs, const GiContext& ctx) const;  \
     virtual bool save(MgStorage* s) const;                      \
     virtual bool load(MgStorage* s);                            \
@@ -209,8 +207,8 @@ protected:                                                      \
     void _update();                                             \
     void _transform(const Matrix2d& mat);                       \
     void _clear();                                              \
-    float _hitTest(const Point2d& pt, float tol,              \
-       Point2d& nearpt, Int32& segment) const;                 \
+    float _hitTest(const Point2d& pt, float tol,                \
+       Point2d& nearpt, Int32& segment) const;                  \
     UInt32 _getPointCount() const;                              \
     Point2d _getPoint(UInt32 index) const;                      \
     void _setPoint(UInt32 index, const Point2d& pt);            \

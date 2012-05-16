@@ -6,6 +6,7 @@
 #include <_mgshape.h>
 #include <mgnear.h>
 #include <mglnrel.h>
+#include <mgstorage.h>
 
 MG_IMPLEMENT_CREATE(MgLine)
 
@@ -112,4 +113,15 @@ bool MgLine::_setHandlePoint(UInt32 index, const Point2d& pt, float)
     }
     update();
     return true;
+}
+
+bool MgLine::_save(MgStorage* s) const
+{
+    s->writeFloatArray("points", &(_points[0].x), 4);
+    return true;
+}
+
+bool MgLine::_load(MgStorage* s)
+{
+    return s->readFloatArray("points", &(_points[0].x), 4) == 4;
 }
