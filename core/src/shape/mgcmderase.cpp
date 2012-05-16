@@ -69,7 +69,7 @@ bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
 
 MgShape* MgCommandErase::hitTest(const MgMotion* sender)
 {
-    Box2d limits(sender->startPointM, mgDisplayMmToModel(3, sender), 0);
+    Box2d limits(sender->startPointM, mgDisplayMmToModel(6, sender), 0);
     Point2d nearpt;
     Int32 segment;
     

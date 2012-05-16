@@ -150,7 +150,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     if (shapes.size() == 1 && m_handleIndex > 0 && m_showSel) {
         GiContext ctxhd(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
         const MgShape* shape = shapes.front();
-        float radius = mgDisplayMmToModel(1.5f, sender);
+        float radius = mgDisplayMmToModel(1, sender);
         float r2 = mgDisplayMmToModel(2, sender);
         
         for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
@@ -197,9 +197,7 @@ bool MgCommandSelect::isSelected(MgShape* shape)
 
 MgShape* MgCommandSelect::hitTestAll(const MgMotion* sender, Point2d &nearpt, Int32 &segment)
 {
-    Box2d limits(Point2d(sender->point.x, sender->point.y), 50, 0);
-    limits *= sender->view->xform()->displayToModel();
-    
+    Box2d limits(sender->pointM, mgDisplayMmToModel(6, sender), 0);
     return sender->view->shapes()->hitTest(limits, nearpt, segment);
 }
 
@@ -211,7 +209,7 @@ MgShape* MgCommandSelect::getSelectedShape(const MgMotion* sender)
 
 bool MgCommandSelect::canSelect(MgShape* shape, const MgMotion* sender)
 {
-    Box2d limits(sender->startPointM, mgDisplayMmToModel(3, sender), 0);
+    Box2d limits(sender->startPointM, mgDisplayMmToModel(10, sender), 0);
     return shape && shape->shape()->hitTest(limits.center(), limits.width() / 2, 
                                             m_ptNear, m_segment) <= limits.width() / 2;
 }
