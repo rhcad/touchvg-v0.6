@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <functional>
 
+float mgDisplayMmToModel(float mm, const MgMotion* sender);
+
 MgCommandErase::MgCommandErase()
 {
 }
@@ -67,9 +69,7 @@ bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
 
 MgShape* MgCommandErase::hitTest(const MgMotion* sender)
 {
-    Box2d limits(Point2d(sender->point.x, sender->point.y), 20, 0);
-    limits *= sender->view->xform()->displayToModel();
-    
+    Box2d limits(sender->startPointM, mgDisplayMmToModel(3, sender), 0);
     Point2d nearpt;
     Int32 segment;
     

@@ -46,7 +46,7 @@ bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
     ((MgBaseRect*)m_shape->shape())->setRect(Box2d(sender->startPointM, sender->pointM));
     m_shape->shape()->update();
 
-    float minDist = sender->view->xform()->displayToModel(10);
+    float minDist = mgDisplayMmToModel(1, sender);
 
     if (! ((MgBaseRect*)m_shape->shape())->isEmpty(minDist)) {
         _addshape(sender);

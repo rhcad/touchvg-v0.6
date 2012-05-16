@@ -206,7 +206,6 @@ protected:
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
-    bool _draw(GiGraphics& gs, const GiContext& ctx) const;
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
 

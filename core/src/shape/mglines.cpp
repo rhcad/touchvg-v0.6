@@ -187,16 +187,6 @@ bool MgBaseLines::_hitTestBox(const Box2d& rect) const
     return _count < 2;
 }
 
-bool MgBaseLines::_draw(GiGraphics& gs, const GiContext& ctx) const
-{
-    bool ret = false;
-    if (_closed)
-        ret = gs.drawPolygon(&ctx, _count, _points);
-    else
-        ret = gs.drawLines(&ctx, _count, _points);
-    return __super::_draw(gs, ctx) || ret;
-}
-
 bool MgBaseLines::_save(MgStorage* s) const
 {
     s->writeFloatArray("points", (const float*)_points, _count * 2);
@@ -230,5 +220,10 @@ MgLines::~MgLines()
 
 bool MgLines::_draw(GiGraphics& gs, const GiContext& ctx) const
 {
-    return __super::_draw(gs, ctx);
+    bool ret = false;
+    if (_closed)
+        ret = gs.drawPolygon(&ctx, _count, _points);
+    else
+        ret = gs.drawLines(&ctx, _count, _points);
+    return __super::_draw(gs, ctx) || ret;
 }

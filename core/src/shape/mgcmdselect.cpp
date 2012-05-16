@@ -92,11 +92,21 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
     return false;
 }
 
-float mgLineHalfWidth(const MgShape* shape, GiGraphics* gs)
+float mgLineHalfWidthModel(const MgShape* shape, const MgMotion* sender)
 {
     float w = shape->context()->getLineWidth();
+    GiGraphics* gs = sender->view->graph();
+    
     w = w > 0 ? - gs->calcPenWidth(w) : w;
-    return mgMax(1.f, -0.5f * w);
+    w = mgMax(1.f, -0.5f * w);
+    w = gs->xf().displayToModel(w);
+    
+    return w;
+}
+
+float mgDisplayMmToModel(float mm, const MgMotion* sender)
+{
+    return sender->view->xform()->displayToModel(mm, true);
 }
 
 bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
@@ -140,9 +150,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     if (shapes.size() == 1 && m_handleIndex > 0 && m_showSel) {
         GiContext ctxhd(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
         const MgShape* shape = shapes.front();
-        float radiuspx = mgMin(8.f, 2.f + mgMax(4.f, mgLineHalfWidth(shape, gs)));
-        float radius = gs->xf().displayToModel(radiuspx);
-        float r2 = gs->xf().displayToModel(6.f + radiuspx);
+        float radius = mgDisplayMmToModel(1.5f, sender);
+        float r2 = mgDisplayMmToModel(2, sender);
         
         for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
             gs->drawEllipse(&ctxhd, shape->shape()->getHandlePoint(i), radius);
@@ -202,8 +211,7 @@ MgShape* MgCommandSelect::getSelectedShape(const MgMotion* sender)
 
 bool MgCommandSelect::canSelect(MgShape* shape, const MgMotion* sender)
 {
-    Box2d limits(Point2d(sender->startPoint.x, sender->startPoint.y), 50, 0);
-    limits *= sender->view->xform()->displayToModel();
+    Box2d limits(sender->startPointM, mgDisplayMmToModel(3, sender), 0);
     return shape && shape->shape()->hitTest(limits.center(), limits.width() / 2, 
                                             m_ptNear, m_segment) <= limits.width() / 2;
 }
@@ -226,7 +234,7 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const Point2d& pointM, con
     }
     
     if (nearDist < minDist / 3
-        && minDist > sender->view->xform()->displayToModel(20)
+        && minDist > mgDisplayMmToModel(5, sender)
         && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
         m_insertPoint = true;
@@ -353,7 +361,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
 {
     Point2d pointM(sender->pointM);
     
-    if (m_insertPoint && pointM.distanceTo(m_ptNear) < sender->view->xform()->displayToModel(10)) {
+    if (m_insertPoint && pointM.distanceTo(m_ptNear) < mgDisplayMmToModel(5, sender)) {
         pointM = m_ptNear;  // 拖动刚新加的点到起始点时取消新增
     }
     for (size_t i = 0; i < m_cloneShapes.size(); i++) {
@@ -367,7 +375,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
             lines->insertPoint(m_segment, m_ptNear);
         }
         if (m_handleIndex > 0) {
-            float tol = sender->view->xform()->displayToModel(10);
+            float tol = mgDisplayMmToModel(5, sender);
             shape->setHandlePoint(m_handleIndex - 1, pointM, tol);
         }
         else {
@@ -398,7 +406,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
 bool MgCommandSelect::touchEnded(const MgMotion* sender)
 {
     if (m_insertPoint && sender->pointM.distanceTo(m_ptNear)
-        < sender->view->xform()->displayToModel(10)) {  // 拖动刚新加的点到起始点时取消新增
+        < mgDisplayMmToModel(5, sender)) {  // 拖动刚新加的点到起始点时取消新增
         m_cloneShapes[0]->release();
         m_cloneShapes.clear();
     }
