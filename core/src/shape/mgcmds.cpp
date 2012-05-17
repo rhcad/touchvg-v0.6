@@ -55,7 +55,7 @@ MgShape* mgCreateShape(UInt32 type)
     
     for (std::vector<TypeToCreator>::const_iterator it = s_shapeCreators.begin();
          it != s_shapeCreators.end(); ++it) {
-        if (it->first == type)
+        if (it->first % 10000 == type)
             return (it->second)();
     }
     

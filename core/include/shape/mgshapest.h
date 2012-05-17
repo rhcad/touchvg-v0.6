@@ -198,17 +198,25 @@ public:
     bool save(MgStorage* s) const
     {
         bool ret = false;
+        Box2d rect;
         
         if (s->writeNode("shapes", false)) {
             ret = true;
             s->writeUInt32("count", _shapes.size());
             
+            rect = getExtent();
+            s->writeFloatArray("extent", &rect.xmin, 4);
+            
             for (const_iterator it = _shapes.begin(); ret && it != _shapes.end(); ++it)
             {
                 ret = s->writeNode("shape", false);
                 if (ret) {
-                    s->writeUInt32("type", (*it)->getType());
+                    s->writeUInt32("type", (*it)->getType() % 10000);
                     s->writeUInt32("id", (*it)->getID());
+                    
+                    rect = (*it)->shape()->getExtent();
+                    s->writeFloatArray("extent", &rect.xmin, 4);
+                    
                     ret = (*it)->save(s) && s->writeNode("shape", true);
                 }
             }
@@ -221,10 +229,12 @@ public:
     bool load(MgStorage* s)
     {
         bool ret = false;
+        Box2d rect;
         
         if (s->readNode("shapes", false)) {
             ret = true;
             s->readUInt32("count");
+            s->readFloatArray("extent", &rect.xmin, 4);
             
             clear();
             while (ret && s->readNode("shape", false)) {
@@ -232,6 +242,7 @@ public:
                 UInt32 id = s->readUInt32("id");
                 MgShape* shape = mgCreateShape(type);
                 
+                s->readFloatArray("extent", &rect.xmin, 4);
                 if (shape) {
                     shape->setParent(this, id);
                     ret = shape->load(s);

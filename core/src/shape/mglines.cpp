@@ -189,20 +189,24 @@ bool MgBaseLines::_hitTestBox(const Box2d& rect) const
 
 bool MgBaseLines::_save(MgStorage* s) const
 {
+    s->writeBool("closed", _closed);
+    s->writeUInt32("count", _count);
     s->writeFloatArray("points", (const float*)_points, _count * 2);
     return true;
 }
 
 bool MgBaseLines::_load(MgStorage* s)
 {
-    UInt32 n = s->readFloatArray("points", NULL, 0) / 2;
+    _closed = s->readBool("closed", _closed);
+    
+    UInt32 n = s->readUInt32("count");
     if (n < 1 || n > 9999)
         return false;
     
     resize(n);
-    s->readFloatArray("points", (float*)_points, _count * 2);
+    n = s->readFloatArray("points", (float*)_points, _count * 2);
     
-    return true;
+    return n == _count * 2;
 }
 
 // MgLines
