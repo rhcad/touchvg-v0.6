@@ -110,7 +110,7 @@ public:
         \param color 普通的RGB颜色
         \return 符合模拟设备的RGB颜色
     */
-    virtual GiColor getNearestColor(const GiColor& color) const = 0;
+    virtual GiColor getNearestColor(const GiColor& color) const { return color; }
 
     //! 返回当前绘图参数
     virtual const GiContext* getCurrentContext() const = 0;

@@ -28,13 +28,14 @@ public:
     virtual ~GiCanvasIos();
 
 public:
-    const GiTransform& xf() const;
-    static void setScreenDpi(float dpi);
+    static void setScreenDpi(float dpi);    //!< iPad:132, iPhone or iTouch: 163
     
     bool beginPaint(CGContextRef context, bool fast = false, bool buffered = true);
     void endPaint(bool draw = true);
+    
     CGImageRef cachedBitmap(bool invert = true);
 
+public:
     virtual void clearWindow();
     virtual bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);
     virtual bool drawCachedBitmap2(const GiCanvas* p, 
@@ -48,7 +49,6 @@ public:
     
     virtual GiColor getBkColor() const;
     virtual GiColor setBkColor(const GiColor& color);
-    virtual GiColor getNearestColor(const GiColor& color) const;
     virtual const GiContext* getCurrentContext() const;
     virtual void _clipBoxChanged(const RECT2D& clipBox);
     virtual void _antiAliasModeChanged(bool antiAlias);

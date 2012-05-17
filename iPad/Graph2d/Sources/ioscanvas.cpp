@@ -17,17 +17,19 @@ static const LPatten lpats[] = {
     { 4, patDashDot }, { 6, dashDotdot }
 };
 
+//! GiCanvasIos 的实现类
 class GiCanvasIosImpl
 {
 public:
-    GiCanvasIos*     _gs;
-    CGContextRef    _context;
-    CGContextRef    _buffctx;
-    GiColor         _bkcolor;
-    GiContext       _gictx;
-    bool            _fast;
-    CGImageRef      _caches[2];
-    static float    _dpi;
+    GiCanvasIos*     _gs;               //!< 拥有者
+    CGContextRef    _context;           //!< 当前绘图上下文
+    CGContextRef    _buffctx;           //!< 缓冲位图上下文
+    GiColor         _bkcolor;           //!< 背景色
+    GiContext       _gictx;             //!< 当前画笔和画刷
+    bool            _ctxused[2];        //!< beginPaint后是否设置过画笔、画刷
+    bool            _fast;              //!< 是否粗略显示
+    CGImageRef      _caches[2];         //!< 后备缓冲图
+    static float    _dpi;               //!< 屏幕每英寸的点数
 
     GiCanvasIosImpl(GiCanvasIos* p) : _gs(p), _context(NULL), _buffctx(NULL)
         , _bkcolor(GiColor::White()), _fast(false)
@@ -41,9 +43,24 @@ public:
         return _gs->owner();
     }
     
+    const GiTransform& xf() const
+    {
+        return owner()->xf();
+    }
+    
     CGContextRef getContext() const
     {
         return _buffctx ? _buffctx : _context;
+    }
+    
+    long width() const
+    {
+        return xf().getWidth();
+    }
+    
+    long height() const
+    {
+        return xf().getHeight();
     }
 
     CGFloat toFloat(UInt8 c) const
@@ -60,15 +77,29 @@ public:
 
     bool setPen(const GiContext* ctx)
     {
+        bool changed = !_ctxused[0];
+        
         if (ctx && !ctx->isNullLine())
         {
-            _gictx.setLineColor(ctx->getLineColor());
-            _gictx.setLineWidth(ctx->getLineWidth());
-            _gictx.setLineStyle(ctx->getLineStyle());
+            if (_gictx.getLineColor() != ctx->getLineColor()) {
+                _gictx.setLineColor(ctx->getLineColor());
+                changed = true;
+            }
+            if (_gictx.getLineWidth() != ctx->getLineWidth()) {
+                _gictx.setLineWidth(ctx->getLineWidth());
+                changed = true;
+            }
+            if (_gictx.getLineStyle() != ctx->getLineStyle()) {
+                _gictx.setLineStyle(ctx->getLineStyle());
+                changed = true;
+            }
         }
+        
         if (!ctx) ctx = &_gictx;
-        if (!ctx->isNullLine())
+        if (!ctx->isNullLine() && changed)
         {
+            _ctxused[0] = true;
+            
             GiColor color = ctx->getLineColor();
             if (owner())
                 color = owner()->calcPenColor(color);
@@ -78,13 +109,13 @@ public:
             
             float w = ctx->getLineWidth();
             w = owner() ? owner()->calcPenWidth(w) : (w < 0 ? -w : 1);
-            CGContextSetLineWidth(getContext(), _fast && w > 1 ? w - 1 : w);
+            CGContextSetLineWidth(getContext(), _fast && w > 1 ? w - 1 : w); // 不是反走样就细一点
             
             int style = ctx->getLineStyle();
             CGFloat pattern[6];
             
             if (style >= 0 && style < sizeof(lpats)/sizeof(lpats[0])) {
-                if (lpats[style].arr && !_fast) {
+                if (lpats[style].arr && !_fast) {                           // 快速画时不要线型
                     makeLinePattern(pattern, lpats[style].arr, lpats[style].n, w);
                     CGContextSetLineDash(getContext(), 0, pattern, lpats[style].n);
                 }
@@ -99,13 +130,20 @@ public:
 
     bool setBrush(const GiContext* ctx)
     {
+        bool changed = !_ctxused[1];
+        
         if (ctx && ctx->hasFillColor())
         {
-            _gictx.setFillColor(ctx->getFillColor());
+            if (_gictx.getFillColor() != ctx->getFillColor()) {
+                _gictx.setFillColor(ctx->getFillColor());
+                changed = true;
+            }
         }
         if (!ctx) ctx = &_gictx;
-        if (ctx->hasFillColor())
+        if (ctx->hasFillColor() && changed)
         {
+            _ctxused[1] = true;
+            
             GiColor color = ctx->getFillColor();
             if (owner())
                 color = owner()->calcPenColor(color);
@@ -142,11 +180,6 @@ GiColor giFromCGColor(CGColorRef color)
                    (UInt8)mgRound(CGColorGetAlpha(color) * 255));
 }
 
-const GiTransform& GiCanvasIos::xf() const
-{
-    return owner()->xf();
-}
-
 GiCanvasIos::GiCanvasIos(GiGraphics* gs)
 {
     if (gs) {
@@ -176,8 +209,11 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
 
     m_draw->_context = context;
     m_draw->_fast = fast;
+    m_draw->_ctxused[0] = false;
+    m_draw->_ctxused[1] = false;
+    
     if (buffered && owner()) {
-        m_draw->createBufferBitmap(xf().getWidth(), xf().getHeight());
+        m_draw->createBufferBitmap(m_draw->width(), m_draw->height());
         context = m_draw->getContext();
     }
 
@@ -188,7 +224,7 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
 
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineJoinRound);
-    if (owner())
+    if (owner())        // 设置最小线宽为0.5像素，使用屏幕放大倍数以便得到实际像素值
         owner()->setMaxPenWidth(-1, 0.5f / CGContextGetCTM(context).a);
 
     return true;
@@ -201,12 +237,12 @@ void GiCanvasIos::endPaint(bool draw)
         if (draw && m_draw->_buffctx) {
             CGContextRef context = m_draw->_context;
             CGImageRef image = CGBitmapContextCreateImage(m_draw->_buffctx);
-            CGRect rect = CGRectMake(0, 0, xf().getWidth(), xf().getHeight());
+            CGRect rect = CGRectMake(0, 0, m_draw->width(), m_draw->height()); // 逻辑宽高点数
             
-            CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, xf().getHeight());
-            CGContextConcatCTM(context, af);
+            CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
+            CGContextConcatCTM(context, af);    // 图像是朝上的，上下文坐标系朝下，上下颠倒显示
             CGContextDrawImage(context, rect, image);
-            CGContextConcatCTM(context, CGAffineTransformInvert(af));
+            CGContextConcatCTM(context, CGAffineTransformInvert(af));   // 恢复成坐标系朝下
             
             CGImageRelease(image);
         }
@@ -224,9 +260,9 @@ CGImageRef GiCanvasIos::cachedBitmap(bool invert)
 {
     CGImageRef image = m_draw->_caches[0];
     if (!image || !invert)
-        return image;
+        return image;                       // 调用者不能释放图像
     
-    size_t w = CGImageGetWidth(image);
+    size_t w = CGImageGetWidth(image);      // 图像宽度，像素单位，不是点单位
     size_t h = CGImageGetHeight(image);
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -235,15 +271,15 @@ CGImageRef GiCanvasIos::cachedBitmap(bool invert)
     CGColorSpaceRelease(colorSpace);
     
     CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, h);
-    CGContextConcatCTM(context, af);
+    CGContextConcatCTM(context, af);        // 图像是朝上的，上下文坐标系朝下，上下颠倒显示
     CGContextDrawImage(context, CGRectMake(0, 0, w, h), image);
     CGContextConcatCTM(context, CGAffineTransformInvert(af));
     
-    CGImageRef newimg = CGBitmapContextCreateImage(context);
+    CGImageRef newimg = CGBitmapContextCreateImage(context);    // 得到上下颠倒的新图像
     
     CGContextRelease(context);
     
-    return newimg;
+    return newimg;                          // 由调用者释放图像, CGImageRelease
 }
 
 void GiCanvasIosImpl::createBufferBitmap(float width, float height)
@@ -251,12 +287,13 @@ void GiCanvasIosImpl::createBufferBitmap(float width, float height)
     CGAffineTransform af = CGContextGetCTM(_context);
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     
-    width *= fabsf(af.a);
+    width *= fabsf(af.a);       // 点数宽度转为像素宽度
     height *= fabsf(af.d);
     _buffctx = CGBitmapContextCreate(NULL, width, height, 8, width * 4,
                                      colorSpace, kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(colorSpace);
     
+    // 坐标系改为Y朝下，原点在左上角，这样除了放大倍数为1外，其余就与 _context 坐标系一致
     CGContextTranslateCTM(_buffctx, 0, height);
     CGContextScaleCTM(_buffctx, af.a, af.d);
 }
@@ -265,7 +302,7 @@ void GiCanvasIos::clearWindow()
 {
     if (owner() && m_draw->getContext()) {
         CGContextClearRect(m_draw->getContext(), 
-                           CGRectMake(0, 0, xf().getWidth(), xf().getHeight()));
+                           CGRectMake(0, 0, m_draw->width(), m_draw->height()));
     }
 }
 
@@ -276,12 +313,12 @@ bool GiCanvasIos::drawCachedBitmap(float x, float y, bool secondBmp)
     bool ret = false;
     
     if (context && image) {
-        CGRect rect = CGRectMake(x, y, xf().getWidth(), xf().getHeight());
-        CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, xf().getHeight());
+        CGRect rect = CGRectMake(x, y, m_draw->width(), m_draw->height());
+        CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
         
-        CGContextConcatCTM(context, af);
+        CGContextConcatCTM(context, af);    // 图像是朝上的，上下文坐标系朝下，上下颠倒显示
         CGContextDrawImage(context, rect, image);
-        CGContextConcatCTM(context, CGAffineTransformInvert(af));
+        CGContextConcatCTM(context, CGAffineTransformInvert(af));   // 恢复成坐标系朝下
         ret = true;
     }
     
@@ -298,8 +335,8 @@ bool GiCanvasIos::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool se
         CGContextRef context = m_draw->getContext();
         
         if (context && image) {
-            CGRect rect = CGRectMake(x, y, xf().getWidth(), xf().getHeight());
-            CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, xf().getHeight());
+            CGRect rect = CGRectMake(x, y, m_draw->width(), m_draw->height());
+            CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
             
             CGContextConcatCTM(context, af);
             CGContextDrawImage(context, rect, image);
@@ -376,11 +413,6 @@ GiColor GiCanvasIos::setBkColor(const GiColor& color)
     return old;
 }
 
-GiColor GiCanvasIos::getNearestColor(const GiColor& color) const
-{
-    return color;
-}
-
 void GiCanvasIos::_antiAliasModeChanged(bool antiAlias)
 {
     if (m_draw->_context) {
@@ -453,22 +485,14 @@ bool GiCanvasIos::rawPolygon(const GiContext* ctx, const Point2d* pxs, int count
 
     if (ret)
     {
-        if (usepen) {
-            CGContextMoveToPoint(m_draw->getContext(), pxs[0].x, pxs[0].y);
-            for (int i = 1; i < count; i++) {
-                CGContextAddLineToPoint(m_draw->getContext(), pxs[i].x, pxs[i].y);
-            }
-            CGContextClosePath(m_draw->getContext());
-            CGContextStrokePath(m_draw->getContext());
+        CGContextMoveToPoint(m_draw->getContext(), pxs[0].x, pxs[0].y);
+        for (int i = 1; i < count; i++) {
+            CGContextAddLineToPoint(m_draw->getContext(), pxs[i].x, pxs[i].y);
         }
-        if (usebrush) {
-            CGContextMoveToPoint(m_draw->getContext(), pxs[0].x, pxs[0].y);
-            for (int i = 1; i < count; i++) {
-                CGContextAddLineToPoint(m_draw->getContext(), pxs[i].x, pxs[i].y);
-            }
-            CGContextClosePath(m_draw->getContext());
-            CGContextFillPath(m_draw->getContext());
-        }
+        CGContextClosePath(m_draw->getContext());
+        
+        CGContextDrawPath(m_draw->getContext(), usepen && usebrush ? kCGPathFillStroke
+                          : usepen ? kCGPathStroke : kCGPathFill);
     }
 
     return ret;
@@ -544,17 +568,13 @@ bool GiCanvasIos::rawPath(const GiContext* ctx,
             CGContextClosePath(m_draw->getContext());
     }
 
-    bool ret = false;
-
-    if (count > 1 && m_draw->setPen(ctx))
-    {
-        CGContextStrokePath(m_draw->getContext());
-        ret = true;
-    }
-    if (count > 1 && m_draw->setBrush(ctx))
-    {
-        CGContextFillPath(m_draw->getContext());
-        ret = true;
+    bool usepen = m_draw->setPen(ctx);
+    bool usebrush = m_draw->setBrush(ctx);
+    bool ret = count > 1 && (usepen || usebrush);
+    
+    if (ret) {
+        CGContextDrawPath(m_draw->getContext(), usepen && usebrush ? kCGPathFillStroke
+                          : usepen ? kCGPathStroke : kCGPathFill);
     }
 
     return ret;
@@ -568,20 +588,15 @@ bool GiCanvasIos::rawBeginPath()
 
 bool GiCanvasIos::rawEndPath(const GiContext* ctx, bool fill)
 {
-    bool ret = false;
-
-    if (m_draw->setPen(ctx))
-    {
-        CGContextStrokePath(m_draw->getContext());
-        ret = true;
-    }
-    if (m_draw->setBrush(ctx))
-    {
-        CGContextFillPath(m_draw->getContext());
-        ret = true;
+    bool usepen = m_draw->setPen(ctx);
+    bool usebrush = fill && m_draw->setBrush(ctx);
+    
+    if (usepen || usebrush) {
+        CGContextDrawPath(m_draw->getContext(), usepen && usebrush ? kCGPathFillStroke
+                          : usepen ? kCGPathStroke : kCGPathFill);
     }
 
-    return ret;
+    return usepen || usebrush;
 }
 
 bool GiCanvasIos::rawMoveTo(float x, float y)
