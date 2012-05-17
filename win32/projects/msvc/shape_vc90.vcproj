@@ -212,7 +212,7 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\..\core\include\shape\_mgshape.h"
+				RelativePath="..\..\..\core\include\shape\mgshape_.h"
 				>
 			</File>
 			<File

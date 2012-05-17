@@ -164,7 +164,7 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\..\core\include\graph\_gigraph.h"
+				RelativePath="..\..\..\core\include\graph\gigraph_.h"
 				>
 			</File>
 			<File

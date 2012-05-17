@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "canvaswin.h"
-#include <_gigraph.h>
+#include <gigraph_.h>
 
 GiCanvasWin::GiCanvasWin(GiGraphics* gs) : m_attribDC(NULL)
 {

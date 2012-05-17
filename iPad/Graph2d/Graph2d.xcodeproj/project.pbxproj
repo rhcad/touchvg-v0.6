@@ -72,8 +72,8 @@
 		9DF6A499151C02CC001C1468 /* mgdrawsplines.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DF6A48E151C02CC001C1468 /* mgdrawsplines.h */; };
 		C9A7F8C2146B30C300597DF0 /* ioscanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F8C1146B30C300597DF0 /* ioscanvas.cpp */; };
 		C9A7F8C5146B30E300597DF0 /* ioscanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C4146B30E200597DF0 /* ioscanvas.h */; settings = {ATTRIBUTES = (); }; };
-		C9A7F8C7146B320E00597DF0 /* _gigraph.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C6146B320E00597DF0 /* _gigraph.h */; };
-		C9D6324A1450CB2400A3CC75 /* _mgshape.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632441450CB2400A3CC75 /* _mgshape.h */; settings = {ATTRIBUTES = (); }; };
+		C9A7F8C7146B320E00597DF0 /* gigraph_.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C6146B320E00597DF0 /* gigraph_.h */; };
+		C9D6324A1450CB2400A3CC75 /* mgshape_.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632441450CB2400A3CC75 /* mgshape_.h */; settings = {ATTRIBUTES = (); }; };
 		C9D6324B1450CB2400A3CC75 /* mgshapet.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632451450CB2400A3CC75 /* mgshapet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9D6324C1450CB2400A3CC75 /* mgbasicsp.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632461450CB2400A3CC75 /* mgbasicsp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9D6324D1450CB2400A3CC75 /* mgshape.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D632471450CB2400A3CC75 /* mgshape.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -171,8 +171,8 @@
 		9DF6A48E151C02CC001C1468 /* mgdrawsplines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgdrawsplines.h; path = ../../core/src/shape/mgdrawsplines.h; sourceTree = "<group>"; };
 		C9A7F8C1146B30C300597DF0 /* ioscanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ioscanvas.cpp; path = Sources/ioscanvas.cpp; sourceTree = "<group>"; };
 		C9A7F8C4146B30E200597DF0 /* ioscanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioscanvas.h; path = Headers/ioscanvas.h; sourceTree = "<group>"; };
-		C9A7F8C6146B320E00597DF0 /* _gigraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _gigraph.h; path = ../../core/include/graph/_gigraph.h; sourceTree = "<group>"; };
-		C9D632441450CB2400A3CC75 /* _mgshape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _mgshape.h; path = ../../core/include/shape/_mgshape.h; sourceTree = "<group>"; };
+		C9A7F8C6146B320E00597DF0 /* gigraph_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gigraph_.h; path = ../../core/include/graph/gigraph_.h; sourceTree = "<group>"; };
+		C9D632441450CB2400A3CC75 /* mgshape_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgshape_.h; path = ../../core/include/shape/mgshape_.h; sourceTree = "<group>"; };
 		C9D632451450CB2400A3CC75 /* mgshapet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgshapet.h; path = ../../core/include/shape/mgshapet.h; sourceTree = "<group>"; };
 		C9D632461450CB2400A3CC75 /* mgbasicsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgbasicsp.h; path = ../../core/include/shape/mgbasicsp.h; sourceTree = "<group>"; };
 		C9D632471450CB2400A3CC75 /* mgshape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgshape.h; path = ../../core/include/shape/mgshape.h; sourceTree = "<group>"; };
@@ -337,7 +337,7 @@
 		7E9CE7F11500B8DF00487BEF /* graph */ = {
 			isa = PBXGroup;
 			children = (
-				C9A7F8C6146B320E00597DF0 /* _gigraph.h */,
+				C9A7F8C6146B320E00597DF0 /* gigraph_.h */,
 				7E9CE8041500B90700487BEF /* gigraph.cpp */,
 				7E9CE8051500B90700487BEF /* gipath.cpp */,
 				7E9CE8061500B90700487BEF /* giplclip.h */,
@@ -398,7 +398,7 @@
 			children = (
 				9DA418EC152D7E7100052476 /* mgstorage.h */,
 				9D1AAC16151B1D5C00F2392F /* mgcmd.h */,
-				C9D632441450CB2400A3CC75 /* _mgshape.h */,
+				C9D632441450CB2400A3CC75 /* mgshape_.h */,
 				C9D632451450CB2400A3CC75 /* mgshapet.h */,
 				C9D632461450CB2400A3CC75 /* mgbasicsp.h */,
 				C9D632471450CB2400A3CC75 /* mgshape.h */,
@@ -474,7 +474,7 @@
 				7E9CE81B1500BA0B00487BEF /* mgbnd.h in Headers */,
 				7E9777B2147161BF00EA5AF7 /* gicanvas.h in Headers */,
 				7E9CE8331500BA2100487BEF /* gipath.h in Headers */,
-				C9D6324A1450CB2400A3CC75 /* _mgshape.h in Headers */,
+				C9D6324A1450CB2400A3CC75 /* mgshape_.h in Headers */,
 				7E9CE80A1500B90700487BEF /* giplclip.h in Headers */,
 				9D1AAC1C151B352200F2392F /* mgcmdmgr.h in Headers */,
 				9DF6A490151C02CC001C1468 /* mgcmddraw.h in Headers */,
@@ -483,7 +483,7 @@
 				9DF6A497151C02CC001C1468 /* mgdrawrect.h in Headers */,
 				9DF6A499151C02CC001C1468 /* mgdrawsplines.h in Headers */,
 				9DB0D91315242EE600326A5E /* mgcmderase.h in Headers */,
-				C9A7F8C7146B320E00597DF0 /* _gigraph.h in Headers */,
+				C9A7F8C7146B320E00597DF0 /* gigraph_.h in Headers */,
 				C9A7F8C5146B30E300597DF0 /* ioscanvas.h in Headers */,
 				7E8F78E4147DC5C30045A730 /* iosgraph.h in Headers */,
 				2752EE8F1559172400F0CCDD /* GiCmdController.h in Headers */,
