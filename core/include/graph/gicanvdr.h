@@ -26,6 +26,9 @@ struct GiCanvasDrawing
 
     //! 返回背景色(打印或打印预览时为白色)
     virtual GiColor getBkColor() const = 0;
+    
+    //! 设置新的背景色，返回原来的背景色
+    virtual GiColor setBkColor(const GiColor& color) = 0;
 
     //! 绘制直线段的原语函数，像素坐标，不剪裁
     virtual bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2) = 0;

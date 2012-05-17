@@ -53,7 +53,7 @@ struct GiColor
         a = _a;
     }
 
-    bool invalid() const
+    bool isInvalid() const
     {
         return !a && !r && !g && !b;
     }

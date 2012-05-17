@@ -146,9 +146,7 @@
     
     GiCanvasIos &cv = _graph->canvas;
     GiGraphics &gs = _graph->gs;
-    
-    cv.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
-    
+
     if (cv.beginPaint(UIGraphicsGetCurrentContext(), [self isZooming])) // 在当前画布上准备绘图
     {
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图

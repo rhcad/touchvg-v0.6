@@ -331,6 +331,7 @@ public:
     void clearCachedBitmap();
     float getScreenDpi() const;
     GiColor getBkColor() const;
+    GiColor setBkColor(const GiColor& color);
     bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2);
     bool rawLines(const GiContext* ctx, const Point2d* pxs, int count);
     bool rawBeziers(const GiContext* ctx, const Point2d* pxs, int count);

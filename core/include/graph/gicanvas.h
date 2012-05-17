@@ -98,13 +98,6 @@ public:
     //! 返回画布类型
     virtual int getCanvasType() const = 0;
 
-    //! 设置背景色
-    /*! 如果正处于绘图状态中，该函数将同时设置绘图设备的背景色
-        \param color 背景色，RGB色
-        \return 原来的背景色
-    */
-    virtual GiColor setBkColor(const GiColor& color) = 0;
-
     //! 返回和模拟设备的调色板相近的颜色
     /*! 打印或打印预览时本函数才有效果，此时模拟设备为打印机，否则为当前显示设备。
         \param color 普通的RGB颜色

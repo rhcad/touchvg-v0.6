@@ -1012,6 +1012,11 @@ GiColor GiGraphics::getBkColor() const
     return m_impl->canvas ? m_impl->canvas->getBkColor() : GiColor::Invalid();
 }
 
+GiColor GiGraphics::setBkColor(const GiColor& color)
+{
+    return m_impl->canvas ? m_impl->canvas->setBkColor(color) : color;
+}
+
 float GiGraphics::getScreenDpi() const
 {
     return m_impl->canvas ? m_impl->canvas->getScreenDpi() : 96;

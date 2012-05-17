@@ -99,7 +99,8 @@
     if (self.view)
         [self.view removeFromSuperview];
     self.view = aview;
-    aview.backgroundColor = bkColor;
+    [aview graph]->setBkColor(giFromUIColor(bkColor));
+    aview.backgroundColor = [UIColor clearColor];
     
     [aview setDrawingDelegate:self];
     [parentView addSubview:aview];
@@ -258,9 +259,8 @@
 }
 
 - (void)setLineColor:(UIColor*)c {
-    if (!c) return;
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
-    GiColor color(giFromCGColor(c.CGColor));
+    GiColor color(giFromUIColor(c));
     if (color.a > 0.01f && cmd.lineColor.a > 0)
         color.a = cmd.lineColor.a;
     [cmd setLineColor:color];
@@ -273,9 +273,8 @@
 }
 
 - (void)setFillColor:(UIColor*)c {
-    if (!c) return;
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
-    GiColor color(giFromCGColor(c.CGColor));
+    GiColor color(giFromUIColor(c));
     if (color.a > 0.01f && cmd.fillColor.a > 0)
         color.a = cmd.fillColor.a;
     [cmd setFillColor:color];

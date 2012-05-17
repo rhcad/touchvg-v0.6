@@ -88,7 +88,7 @@ public:
     //! 返回线型
     kLineStyle getLineStyle() const
     {
-        return m_lineColor.invalid() ? kLineNull : m_lineStyle;
+        return m_lineColor.isInvalid() ? kLineNull : m_lineStyle;
     }
 
     //! 设置线型
@@ -117,7 +117,7 @@ public:
     //! 返回是否为空线，即不画线
     bool isNullLine() const
     {
-        return m_lineStyle == kLineNull || m_lineColor.invalid();
+        return m_lineStyle == kLineNull || m_lineColor.isInvalid();
     }
 
     //! 设置为空线，即不画线
@@ -155,7 +155,7 @@ public:
     //! 返回是否填充
     bool hasFillColor() const
     {
-        return !m_fillColor.invalid();
+        return !m_fillColor.isInvalid();
     }
 
     //! 设置为不填充

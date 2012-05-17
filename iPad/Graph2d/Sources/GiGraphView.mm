@@ -14,6 +14,11 @@
 
 @end
 
+GiColor giFromUIColor(UIColor *color)
+{
+    return color ? giFromCGColor(color.CGColor) : GiColor::Invalid();
+}
+
 @implementation GiGraphView
 
 @synthesize enableZoom = _enableZoom;
@@ -85,7 +90,6 @@
     bool cached = _cachedDraw || !cv.hasCachedBitmap();
     
     _graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    cv.setBkColor(giFromCGColor(self.backgroundColor.CGColor));
     
     if (cv.beginPaint(UIGraphicsGetCurrentContext(), // 在当前画布上准备绘图
                       !!_zooming, cached))          // iPad3上不用缓冲更快

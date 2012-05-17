@@ -9,6 +9,7 @@ struct MgShapes;
 struct MgShape;
 class GiTransform;
 class GiGraphics;
+struct GiColor;
 
 //! 图形视图协议
 /*! \ingroup GRAPH_IOS
@@ -49,6 +50,5 @@ class GiGraphics;
 
 @end
 
-#ifdef __GEOMETRY_GICOLOR_H_
 GiColor giFromCGColor(CGColorRef color);    // CGColor转为RGB颜色
-#endif
+GiColor giFromUIColor(UIColor *color);      //!< UIColor转为RGB颜色
