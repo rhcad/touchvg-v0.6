@@ -180,11 +180,11 @@ GiColor giFromCGColor(CGColorRef color)
                    (UInt8)mgRound(CGColorGetAlpha(color) * 255));
 }
 
-GiCanvasIos::GiCanvasIos(GiGraphics* gs)
+GiCanvasIos::GiCanvasIos(GiGraphics* gs, float dpi)
 {
     if (gs) {
         gs->_setCanvas(this);
-        gs->_xf().setResolution(GiCanvasIos::getScreenDpi());
+        gs->_xf().setResolution(dpi > 0.1f ? dpi : GiCanvasIos::getScreenDpi());
     }
     m_draw = new GiCanvasIosImpl(this);
 }

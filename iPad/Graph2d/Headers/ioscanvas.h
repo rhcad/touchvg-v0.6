@@ -24,7 +24,7 @@ GiColor giFromCGColor(CGColorRef color);
 class GiCanvasIos : public GiCanvas
 {
 public:
-    GiCanvasIos(GiGraphics* gs);
+    GiCanvasIos(GiGraphics* gs, float dpi = 0);
     virtual ~GiCanvasIos();
 
 public:

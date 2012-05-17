@@ -19,7 +19,7 @@ public:
     GiGraphics  gs;
     GiCanvasIos canvas;
 
-    GiGraphIos() : gs(&xf), canvas(&gs) {}
+    GiGraphIos(float dpi = 0) : gs(&xf), canvas(&gs, dpi) {}
 };
 
 #endif // __GEOMETRY_GRAPHIOS_H_

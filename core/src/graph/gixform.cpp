@@ -204,8 +204,8 @@ void GiTransform::setModelTransform(const Matrix2d& mat)
 
 void GiTransform::setResolution(float dpiX, float dpiY)
 {
-    if (dpiY < 1) dpiY = dpiX;
-    if (dpiX > 10 && dpiY > 10 
+    if (dpiY < 0.1f) dpiY = dpiX;
+    if (dpiX > 0.1f && dpiY > 0.1f 
         && (m_impl->dpiX != dpiX || m_impl->dpiY != dpiY))
     {
         m_impl->dpiX = dpiX;
