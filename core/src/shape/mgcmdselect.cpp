@@ -8,31 +8,39 @@
 #include <algorithm>
 #include <functional>
 
-UInt32 mgGetSelection(MgCommand* cmd, MgView* view, UInt32 count, MgShape** shapes)
+extern UInt32 g_newShapeID;
+
+UInt32 MgCommandSelect::getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange)
 {
-    if (cmd && strcmp(cmd->getName(), MgCommandSelect::Name()) == 0) {
-        MgCommandSelect* sel = (MgCommandSelect*)cmd;
-        return sel->getSelection(view, count, shapes);
+    if (forChange && m_cloneShapes.empty()) {
+        cloneShapes(view);
     }
-    return 0;
-}
-
-UInt32 MgCommandSelect::getSelection(MgView* view, UInt32 count, MgShape** shapes)
-{
-    if (count < 1 || !shapes)
-        return m_selIds.size();
     
-    count = mgMin(count, (UInt32)m_selIds.size());
-
     UInt32 ret = 0;
+    UInt32 maxCount = m_cloneShapes.empty() ? m_selIds.size() : m_cloneShapes.size();
+    
+    if (count < 1 || !shapes)
+        return maxCount;
+    
+    count = mgMin(count, maxCount);
     for (UInt32 i = 0; i < count; i++) {
-        MgShape* shape = view->shapes()->findShape(m_selIds[i]);
-        if (shape)
-            shapes[ret++] = shape;
+        if (m_cloneShapes.empty()) {
+            MgShape* shape = view->shapes()->findShape(m_selIds[i]);
+            if (shape)
+                shapes[ret++] = shape;
+        }
+        else {
+            shapes[ret++] = m_cloneShapes[i];
+        }
     }
     m_showSel = false;      // 禁止亮显选中图形，以便外部可动态修改图形属性并原样显示
     
     return ret;
+}
+
+bool MgCommandSelect::dynamicChangeEnded(MgView* view, bool apply)
+{
+    return applyCloneShapes(view, apply);
 }
 
 MgCommandSelect::MgCommandSelect()
@@ -51,7 +59,7 @@ bool MgCommandSelect::cancel(const MgMotion* sender)
     return undo(recall, sender) || ret;
 }
 
-bool MgCommandSelect::initialize(const MgMotion* /*sender*/)
+bool MgCommandSelect::initialize(const MgMotion* sender)
 {
     m_boxsel = false;
     m_id = 0;
@@ -59,6 +67,14 @@ bool MgCommandSelect::initialize(const MgMotion* /*sender*/)
     m_handleIndex = 0;
     m_showSel = true;
     m_selIds.clear();
+    
+    MgShape* shape = getShape(g_newShapeID, sender);
+    if (shape) {
+        m_selIds.push_back(shape->getID());         // 选中最新绘制的图形
+        m_id = shape->getID();
+        sender->view->redraw(false);
+    }
+    g_newShapeID = 0;
 
     return true;
 }
@@ -140,8 +156,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         }
     }
     else {
-        GiContext ctxbk(0, gs->getBkColor());
-        for (it = shapes.begin(); it != shapes.end(); ++it)
+        GiContext ctxbk(-1, gs->getBkColor());
+        for (it = selection.begin(); it != selection.end(); ++it)
             (*it)->draw(*gs, &ctxbk);   // 擦掉原图形
         for (it = shapes.begin(); it != shapes.end(); ++it)
             (*it)->draw(*gs);           // 按实际属性动态显示
@@ -306,25 +322,12 @@ bool MgCommandSelect::longPress(const MgMotion* /*sender*/)
 
 bool MgCommandSelect::touchBegan(const MgMotion* sender)
 {
-    MgShape* shape = NULL;
-    
-    for (std::vector<MgShape*>::iterator it = m_cloneShapes.begin();
-        it != m_cloneShapes.end(); ++it) {
-        (*it)->release();
-    }
-    m_cloneShapes.clear();
-    
-    for (sel_iterator its = m_selIds.begin(); its != m_selIds.end(); ++its) {
-        shape = getShape(*its, sender);
-        if (shape) {
-            shape = (MgShape*)(shape->clone());
-            m_cloneShapes.push_back(shape);
-        }
-    }
+    cloneShapes(sender->view);
+    MgShape* shape = m_cloneShapes.empty() ? NULL : m_cloneShapes.front();
     
     if (!m_showSel) {
         m_showSel = true;
-        sender->view->regen();
+        sender->view->redraw(false);
     }
     
     m_insertPoint = false;                          // setted in hitTestHandles
@@ -409,24 +412,8 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
         m_cloneShapes.clear();
     }
     
-    for (size_t i = 0; i < m_cloneShapes.size(); i++) {
-        MgShape* shape = getShape(m_selIds[i], sender);
-        
-        if (shape) {
-            shape->shape()->copy(*m_cloneShapes[i]->shape());
-            shape->shape()->update();
-            sender->view->regen();
-        }
-        
-        m_cloneShapes[i]->release();
-        m_cloneShapes[i] = NULL;
-    }
-    m_cloneShapes.clear();
+    applyCloneShapes(sender->view, true);
     
-    if (m_boxsel) {
-        m_boxsel = false;
-        sender->view->redraw(true);
-    }
     m_insertPoint = false;
     if (m_handleIndex > 0) {
         m_handleIndex = hitTestHandles(getShape(m_selIds[0], sender), sender->pointM, sender);
@@ -434,4 +421,54 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
     }
     
     return true;
+}
+
+void MgCommandSelect::cloneShapes(MgView* view)
+{
+    for (std::vector<MgShape*>::iterator it = m_cloneShapes.begin();
+         it != m_cloneShapes.end(); ++it) {
+        (*it)->release();
+    }
+    m_cloneShapes.clear();
+    
+    for (sel_iterator its = m_selIds.begin(); its != m_selIds.end(); ++its) {
+        MgShape* shape = view->shapes()->findShape(*its);
+        if (shape) {
+            shape = (MgShape*)(shape->clone());
+            m_cloneShapes.push_back(shape);
+        }
+    }
+}
+
+bool MgCommandSelect::applyCloneShapes(MgView* view, bool apply)
+{
+    bool changed = false;
+    bool cloned = !m_cloneShapes.empty();
+    
+    if (!m_cloneShapes.empty()) {
+        MgShapesLock locker(view->shapes());
+        
+        for (size_t i = 0; i < m_cloneShapes.size(); i++) {
+            MgShape* shape = i < m_selIds.size() ? view->shapes()->findShape(m_selIds[i]) : NULL;
+            
+            if (shape && apply) {
+                shape->shape()->copy(*m_cloneShapes[i]->shape());
+                shape->shape()->update();
+                changed = true;
+            }
+            
+            m_cloneShapes[i]->release();
+            m_cloneShapes[i] = NULL;
+        }
+        m_cloneShapes.clear();
+    }
+    if (changed) {
+        view->regen();
+    }
+    else {
+        view->redraw(true);
+    }
+    m_boxsel = false;
+    
+    return changed || cloned;
 }

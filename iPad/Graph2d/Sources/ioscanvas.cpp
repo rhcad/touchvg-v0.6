@@ -30,6 +30,7 @@ public:
     bool            _fast;              //!< 是否粗略显示
     CGImageRef      _caches[2];         //!< 后备缓冲图
     static float    _dpi;               //!< 屏幕每英寸的点数
+    static float    _scale;             //!< UIKit屏幕放大倍数
 
     GiCanvasIosImpl(GiCanvasIos* p) : _gs(p), _context(NULL), _buffctx(NULL)
         , _bkcolor(GiColor::White()), _fast(false)
@@ -155,10 +156,11 @@ public:
         return ctx->hasFillColor();
     }
     
-    void createBufferBitmap(float width, float height);
+    bool createBufferBitmap(float width, float height);
 };
 
 float GiCanvasIosImpl::_dpi = 132;
+float GiCanvasIosImpl::_scale = 1;
 
 GiColor giFromCGColor(CGColorRef color)
 {
@@ -197,7 +199,7 @@ GiCanvasIos::~GiCanvasIos()
 
 bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
 {
-    if (m_draw->_context || context == NULL)
+    if (m_draw->getContext() || !context)
         return false;
 
     if (owner()) {
@@ -225,26 +227,55 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineJoinRound);
     if (owner())        // 设置最小线宽为0.5像素，使用屏幕放大倍数以便得到实际像素值
-        owner()->setMaxPenWidth(-1, 0.5f / CGContextGetCTM(context).a);
+        owner()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
 
+    return true;
+}
+
+bool GiCanvasIos::beginPaintBuffered(bool fast)
+{
+    if (m_draw->getContext() || !owner()
+        || !m_draw->createBufferBitmap(m_draw->width(), m_draw->height())) {
+        return false;
+    }
+    
+    RECT2D clipBox = { 0, 0, m_draw->width(), m_draw->height() };
+    owner()->_beginPaint(clipBox);
+    
+    m_draw->_fast = fast;
+    m_draw->_ctxused[0] = false;
+    m_draw->_ctxused[1] = false;
+    
+    CGContextRef context = m_draw->getContext();
+    bool antiAlias = !fast && owner()->isAntiAliasMode();
+    
+    CGContextSetAllowsAntialiasing(context, antiAlias);
+    CGContextSetShouldAntialias(context, antiAlias);
+    CGContextSetFlatness(context, fast ? 20 : 1);
+    
+    CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetLineJoin(context, kCGLineJoinRound);
+    owner()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
+    
     return true;
 }
 
 void GiCanvasIos::endPaint(bool draw)
 {
-    if (m_draw->_context)
+    if (m_draw->getContext())
     {
-        if (draw && m_draw->_buffctx) {
+        if (draw && m_draw->_buffctx && m_draw->_context) {
             CGContextRef context = m_draw->_context;
             CGImageRef image = CGBitmapContextCreateImage(m_draw->_buffctx);
             CGRect rect = CGRectMake(0, 0, m_draw->width(), m_draw->height()); // 逻辑宽高点数
             
-            CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
-            CGContextConcatCTM(context, af);    // 图像是朝上的，上下文坐标系朝下，上下颠倒显示
-            CGContextDrawImage(context, rect, image);
-            CGContextConcatCTM(context, CGAffineTransformInvert(af));   // 恢复成坐标系朝下
-            
-            CGImageRelease(image);
+            if (image) {
+                CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
+                CGContextConcatCTM(context, af);    // 图像是朝上的，上下文坐标系朝下，上下颠倒显示
+                CGContextDrawImage(context, rect, image);
+                CGContextConcatCTM(context, CGAffineTransformInvert(af));   // 恢复成坐标系朝下
+                CGImageRelease(image);
+            }
         }
         if (m_draw->_buffctx) {
             CGContextRelease(m_draw->_buffctx);
@@ -264,38 +295,43 @@ CGImageRef GiCanvasIos::cachedBitmap(bool invert)
     
     size_t w = CGImageGetWidth(image);      // 图像宽度，像素单位，不是点单位
     size_t h = CGImageGetHeight(image);
+    CGImageRef newimg = NULL;
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, w * 4,
                                                  colorSpace, kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(colorSpace);
     
-    CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, h);
-    CGContextConcatCTM(context, af);        // 图像是朝上的，上下文坐标系朝下，上下颠倒显示
-    CGContextDrawImage(context, CGRectMake(0, 0, w, h), image);
-    CGContextConcatCTM(context, CGAffineTransformInvert(af));
+    if (context) {
+        CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, h);
+        CGContextConcatCTM(context, af);    // 图像是朝上的，上下文坐标系朝下，上下颠倒显示
+        CGContextDrawImage(context, CGRectMake(0, 0, w, h), image);
+        CGContextConcatCTM(context, CGAffineTransformInvert(af));
     
-    CGImageRef newimg = CGBitmapContextCreateImage(context);    // 得到上下颠倒的新图像
-    
-    CGContextRelease(context);
+        newimg = CGBitmapContextCreateImage(context);   // 得到上下颠倒的新图像
+        CGContextRelease(context);
+    }
     
     return newimg;                          // 由调用者释放图像, CGImageRelease
 }
 
-void GiCanvasIosImpl::createBufferBitmap(float width, float height)
+bool GiCanvasIosImpl::createBufferBitmap(float width, float height)
 {
-    CGAffineTransform af = CGContextGetCTM(_context);
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     
-    width *= fabsf(af.a);       // 点数宽度转为像素宽度
-    height *= fabsf(af.d);
+    width  *= _scale;                       // 点数宽度转为像素宽度
+    height *= _scale;
     _buffctx = CGBitmapContextCreate(NULL, width, height, 8, width * 4,
                                      colorSpace, kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(colorSpace);
     
     // 坐标系改为Y朝下，原点在左上角，这样除了放大倍数为1外，其余就与 _context 坐标系一致
-    CGContextTranslateCTM(_buffctx, 0, height);
-    CGContextScaleCTM(_buffctx, af.a, af.d);
+    if (_buffctx) {
+        CGContextTranslateCTM(_buffctx, 0, height);
+        CGContextScaleCTM(_buffctx, _scale, - _scale);
+    }
+    
+    return !!_buffctx;
 }
 
 void GiCanvasIos::clearWindow()
@@ -380,9 +416,10 @@ bool GiCanvasIos::isBufferedDrawing() const
     return !!m_draw->_buffctx;
 }
 
-void GiCanvasIos::setScreenDpi(float dpi)
+void GiCanvasIos::setScreenDpi(float dpi, float scale)
 {
     GiCanvasIosImpl::_dpi = dpi;
+    GiCanvasIosImpl::_scale = scale;
 }
 
 float GiCanvasIos::getScreenDpi() const
@@ -392,7 +429,7 @@ float GiCanvasIos::getScreenDpi() const
 
 void GiCanvasIos::_clipBoxChanged(const RECT2D& clipBox)
 {
-    if (m_draw->_context)
+    if (m_draw->getContext())
     {
         CGRect rect = CGRectMake(clipBox.left, clipBox.top, 
                                  clipBox.right - clipBox.left, 
@@ -415,7 +452,7 @@ GiColor GiCanvasIos::setBkColor(const GiColor& color)
 
 void GiCanvasIos::_antiAliasModeChanged(bool antiAlias)
 {
-    if (m_draw->_context) {
+    if (m_draw->getContext()) {
         antiAlias = !m_draw->_fast && antiAlias;
         CGContextSetAllowsAntialiasing(m_draw->getContext(), antiAlias);
         CGContextSetShouldAntialias(m_draw->getContext(), antiAlias);

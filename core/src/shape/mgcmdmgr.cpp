@@ -3,10 +3,10 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgcmdmgr.h"
+#include "mgcmdselect.h"
 
 static MgCmdManagerImpl s_cmds;
 MgCommand* mgCreateCommand(const char* name);
-UInt32 mgGetSelection(MgCommand* cmd, MgView* view, UInt32 count, MgShape** shapes);
 
 MgCommandManager* mgGetCommandManager()
 {
@@ -67,7 +67,21 @@ bool MgCmdManagerImpl::cancel(const MgMotion* sender)
     return false;
 }
 
-UInt32 MgCmdManagerImpl::getSelection(MgView* view, UInt32 count, MgShape** shapes)
+UInt32 MgCmdManagerImpl::getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange)
 {
-    return view ? mgGetSelection(getCommand(), view, count, shapes) : 0;
+    if (_cmdname == MgCommandSelect::Name()) {
+        MgCommandSelect* sel = (MgCommandSelect*)getCommand();
+        return sel->getSelection(view, count, shapes, forChange);
+    }
+    return 0;
+}
+
+bool MgCmdManagerImpl::dynamicChangeEnded(MgView* view, bool apply)
+{
+    bool changed = false;
+    if (_cmdname == MgCommandSelect::Name()) {
+        MgCommandSelect* sel = (MgCommandSelect*)getCommand();
+        changed = sel->dynamicChangeEnded(view, apply);
+    }
+    return changed;
 }

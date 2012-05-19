@@ -228,6 +228,7 @@ public:
     
     bool load(MgStorage* s)
     {
+        MgShapesLock locker(this);
         bool ret = false;
         Box2d rect;
         

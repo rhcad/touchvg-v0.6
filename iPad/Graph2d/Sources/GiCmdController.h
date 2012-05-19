@@ -45,4 +45,7 @@ class MgViewProxy;
 //! 返回当前点，模型坐标
 - (CGPoint)getPointModel;
 
+//! 退出动态修改模式，应用修改结果
+- (BOOL)dynamicChangeEnded:(BOOL)apply;
+
 @end

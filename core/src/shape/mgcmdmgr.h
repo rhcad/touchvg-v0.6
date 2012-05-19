@@ -25,7 +25,8 @@ private:
     virtual bool setCommand(const MgMotion* sender, const char* name);
     virtual bool cancel(const MgMotion* sender);
     virtual void unloadCommands();
-    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes);
+    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange);
+    virtual bool dynamicChangeEnded(MgView* view, bool apply);
 
 private:
     typedef std::map<std::string, MgCommand*> CMDS;

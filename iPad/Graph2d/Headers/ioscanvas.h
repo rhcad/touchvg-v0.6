@@ -24,17 +24,42 @@ GiColor giFromCGColor(CGColorRef color);
 class GiCanvasIos : public GiCanvas
 {
 public:
+    //! Constructor with a graphics object.
+    /*!
+        \param gs a graphics object.
+        \param dpi dots per inches. 0: use the result of setScreenDpi(). PDF: 72 dpi.
+     */
     GiCanvasIos(GiGraphics* gs, float dpi = 0);
+    
     virtual ~GiCanvasIos();
 
 public:
-    static void setScreenDpi(float dpi);    //!< iPad:132, iPhone or iTouch: 163
+    //! Set the screen's DPI and scale.
+    /*!
+        \param dpi dots per inches. iPad:132, iPhone or iPod Touch: 163.
+        \param scale 
+     */
+    static void setScreenDpi(float dpi, float scale);
     
+    //! Ready to draw shapes.
+    /*!
+        \param context drawing target.
+        \param fast true if drawing with sketchy details.
+        \param buffered true if drawing on a cached bitmap, otherwise drawing directly on the target context.
+        \return true if successful.
+     */
     bool beginPaint(CGContextRef context, bool fast = false, bool buffered = true);
+    
+    //! Ready to draw shapes on a cached bitmap.
+    bool beginPaintBuffered(bool fast);
+    
+    //! End to draw shapes and output to the view.
     void endPaint(bool draw = true);
     
+    //! Create a bitmap inverted or get the original cached bitmap.
     CGImageRef cachedBitmap(bool invert = true);
 
+// Implement the GiCanvas interface.
 public:
     virtual void clearWindow();
     virtual bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);

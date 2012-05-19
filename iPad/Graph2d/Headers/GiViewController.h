@@ -6,25 +6,29 @@
 #import <UIKit/UIKit.h>
 
 //! 图形视图控制器类
-/*! \ingroup GRAPH_IOS
+/*! 使用此类管理图形视图和触摸手势。
+    \ingroup GRAPH_IOS
 */
 @interface GiViewController : UIViewController {
 @private
-    id      _cmdctl;                    //!< 绘图命令, GiCommandController
+    id      _cmdctl;                    //!< 绘图命令控制器, GiCommandController
     void*   _shapesCreated;             //!< 创建的图形列表, MgShapes*
     BOOL    _gestureRecognizerUsed;     //!< 是否使用手势识别器处理触摸消息
     int     _touchCount;                //!< 开始触摸时的手指数
-    UIView  *_magnifierView[3];         //!< 放大镜视图
-    UIView  *_activeView;               //!< 当前图形视图
-    BOOL    _ignoreTouches;             //!< 忽略当前触摸手势
+    UIView  *_magnifierView[3];         //!< 创建的放大镜视图，最多两个
+    UIView  *_activeView;               //!< 当前的图形视图，主视图或第一个放大镜视图
+    BOOL    _ignoreTouches;             //!< 忽略当前触摸手势，直到触摸结束
     
-    enum { RECOGNIZER_COUNT = 6 };
-    UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT];
+    enum { kPinchGesture = 0, kTwoFingersPan, 
+        kPanGesture, kTapGesture, 
+        TwoTapsGesture, kTwoFingersTwoTaps, 
+        RECOGNIZER_COUNT };
+    UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT]; //!< 手势识别器，主视图和放大镜视图的
 }
 
 @property (nonatomic,readonly)  void*   shapes;         //!< 图形列表, MgShapes*
-@property (nonatomic,readonly)  UIView* magnifierView;  //!< 放大镜视图
-@property (nonatomic,readonly)  UIView* activeView;     //!< 当前图形视图
+@property (nonatomic,readonly)  UIView* magnifierView;  //!< 第一个放大镜视图
+@property (nonatomic,readonly)  UIView* activeView;     //!< 当前的图形视图，主视图或第一个放大镜视图
 
 //! 当前命令名称
 @property (nonatomic)         const char*   commandName;
@@ -54,12 +58,14 @@
 @property (nonatomic)         int       lineStyle;
 
 
-- (CGImageRef)cachedBitmap:(BOOL)invert;    //!< 当前缓存位图，上下翻转时由调用者释放
+- (CGImageRef)cachedBitmap:(BOOL)invert;    //!< 得到当前缓存位图，上下翻转时由调用者释放
 - (void)clearCachedData;                    //!< 清除缓冲数据，下次重新构建显示
 - (void)removeShapes;                       //!< 清除所有图形
 - (void)regen;                              //!< 标记视图待重新构建显示
 - (void)undoMotion;                         //!< 触发晃动或撤销操作
 - (BOOL)isCommand:(const char*)cmdname;     //!< 检查当前是否为指定的命令
+- (UIGestureRecognizer*) getGestureRecognizer:(int)index;   //!< 得到主视图的触摸手势识别器
+
 - (BOOL)loadShapes:(void*)mgstorage;        //!< 从 MgStorage 对象加载图形列表
 - (BOOL)saveShapes:(void*)mgstorage;        //!< 保存图形列表到 MgStorage 对象
 
@@ -70,14 +76,14 @@
 /*!
     \param parentView 已有视图，将创建其子视图
     \param frame 视图位置大小，可取为 parentView.bounds
-    \param bkColor 背景色
+    \param bkColor 绘图背景色, 为空表示取上级视图的背景色，新视图的背景色为透明色
     \return 创建的子图形视图(GiGraphView)
  */
 - (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame backgroundColor:(UIColor*)bkColor;
 
 //! 在已有视图中创建子图形视图(GiGraphView)
 /*! 创建的视图内默认不能放缩显示，背景色为透明色。
-    \param parentView 已有视图，将创建其子视图
+    \param parentView 已有视图，将创建其子视图，可以为滚动视图或特殊内容视图
     \param frame 视图位置大小，可取为 parentView.bounds
     \param shapes 已有的共享图形列表，如果为NULL则自动创建图形列表
     \return 创建的子图形视图(GiGraphView)
@@ -85,15 +91,18 @@
 - (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame shapes:(void*)shapes;
 
 //! 在给定视图内创建放大镜视图
-/*!
+/*! 最多两个放大镜视图，第一个放大镜视图（放大显示）上可以使用手势绘图。
     \param parentView 已有视图，将创建其子视图
-    \param frame 视图位置大小，可取为 parentView.bounds
+    \param frame 视图位置大小，可取为 parentView.bounds 或更小区域
     \param scale 放大镜视图相对于图形视图(GiGraphView)的显示放大倍数，大于1时放大，小于1时缩小
     \return 创建的放大镜视图(GiMagnifierView)
  */
 - (UIView*)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale;
 
-//! 点击导致来源视图消失时忽略本次触摸动作
+//! 点击导致来源视图消失时忽略本次触摸动作，直到触摸结束
 + (void)ignoreTouchesBegan:(CGPoint)point view:(UIView*)sender;
+
+//! 退出动态修改模式（修改线宽和颜色等），应用修改结果或放弃修改
+- (BOOL)dynamicChangeEnded:(BOOL)apply;
 
 @end

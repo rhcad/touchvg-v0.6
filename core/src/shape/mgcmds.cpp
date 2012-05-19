@@ -11,6 +11,49 @@
 #include <mgbasicsp.h>
 #include <mgshapet.h>
 
+typedef std::pair<MgShapesLock::ShapesLocked, void*> ShapeObserver;
+static std::vector<ShapeObserver>  s_shapeObservers;
+static long s_shapesLockCount = 0;
+
+MgShapesLock::MgShapesLock(MgShapes* sp) : m_sp(sp)
+{
+    if (1 == giInterlockedIncrement(&s_shapesLockCount)) {
+        for (std::vector<ShapeObserver>::iterator it = s_shapeObservers.begin();
+             it != s_shapeObservers.end(); ++it) {
+            (it->first)(m_sp, it->second, true);
+        }
+    }
+}
+
+MgShapesLock::~MgShapesLock()
+{
+    if (0 == giInterlockedDecrement(&s_shapesLockCount)) {
+        for (std::vector<ShapeObserver>::iterator it = s_shapeObservers.begin();
+             it != s_shapeObservers.end(); ++it) {
+            (it->first)(m_sp, it->second, false);
+        }
+    }
+}
+
+void MgShapesLock::registerObserver(ShapesLocked func, void* obj)
+{
+    if (func) {
+        unregisterObserver(func, obj);
+        s_shapeObservers.push_back(ShapeObserver(func, obj));
+    }
+}
+
+void MgShapesLock::unregisterObserver(ShapesLocked func, void* obj)
+{
+    for (std::vector<ShapeObserver>::iterator it = s_shapeObservers.begin();
+         it != s_shapeObservers.end(); ++it) {
+        if (it->first == func && it->second == obj) {
+            s_shapeObservers.erase(it);
+            break;
+        }
+    }
+}
+
 MgCommand* mgCreateCommand(const char* name)
 {
     typedef MgCommand* (*FCreate)();

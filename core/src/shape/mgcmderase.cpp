@@ -80,6 +80,7 @@ bool MgCommandErase::click(const MgMotion* sender)
 {
     MgShape* shape = hitTest(sender);
     if (shape) {
+        MgShapesLock locker(sender->view->shapes());
         shape = sender->view->shapes()->removeShape(shape->getID());
         shape->release();
         sender->view->regen();
@@ -131,16 +132,20 @@ bool MgCommandErase::touchMoved(const MgMotion* sender)
 
 bool MgCommandErase::touchEnded(const MgMotion* sender)
 {
-    for (std::vector<MgShape*>::iterator it = m_deleted.begin();
-         it != m_deleted.end(); ++it) {
-        MgShape* shape = *it;
-        shape = sender->view->shapes()->removeShape(shape->getID());
-        shape->release();
-    }
     if (!m_deleted.empty()) {
+        MgShapesLock locker(sender->view->shapes());
+        
+        for (std::vector<MgShape*>::iterator it = m_deleted.begin();
+             it != m_deleted.end(); ++it) {
+            MgShape* shape = *it;
+            shape = sender->view->shapes()->removeShape(shape->getID());
+            shape->release();
+        }
+        
         sender->view->regen();
         m_deleted.clear();
     }
+    
     m_boxsel = false;
     sender->view->redraw(false);
     

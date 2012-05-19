@@ -5,6 +5,8 @@
 #include "mgcmddraw.h"
 #include <assert.h>
 
+UInt32      g_newShapeID = 0;
+
 MgCommandDraw::MgCommandDraw() : m_shape(NULL), m_step(0)
 {
 }
@@ -35,6 +37,7 @@ bool MgCommandDraw::_initialize(MgShape* (*creator)(), const MgMotion* sender)
         m_shape = creator();
         assert(m_shape && m_shape->shape());
     }
+    g_newShapeID = 0;
     m_step = 0;
     m_shape->shape()->clear();
     if (sender->view->context()) {
@@ -46,12 +49,14 @@ bool MgCommandDraw::_initialize(MgShape* (*creator)(), const MgMotion* sender)
 
 bool MgCommandDraw::_addshape(const MgMotion* sender, MgShape* shape)
 {
+    MgShapesLock locker(sender->view->shapes());
     shape = shape ? shape : m_shape;
     bool ret = sender->view->shapeWillAdded(shape);
     
     if (ret) {
         MgShape* newsp = sender->view->shapes()->addShape(*shape);
         sender->view->shapeAdded(newsp);
+        g_newShapeID = newsp->getID();
     }
     if (sender->view->context()) {
         *m_shape->context() = *sender->view->context();

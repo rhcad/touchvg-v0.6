@@ -20,7 +20,8 @@ public:
 
     static const char* Name() { return "select"; }
     static MgCommand* Create() { return new MgCommandSelect; }
-    UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes);
+    UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange);
+    bool dynamicChangeEnded(MgView* view, bool apply);
     
 private:
     virtual const char* getName() const { return Name(); }
@@ -49,6 +50,8 @@ private:
     sel_iterator getSelectedPostion(MgShape* shape);
     bool isSelected(MgShape* shape);
     MgShape* getShape(UInt32 id, const MgMotion* sender) const;
+    void cloneShapes(MgView* view);
+    bool applyCloneShapes(MgView* view, bool apply);
     
 private:
     std::vector<UInt32>     m_selIds;           // 选中的图形的ID

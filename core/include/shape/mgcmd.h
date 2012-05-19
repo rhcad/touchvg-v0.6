@@ -43,9 +43,9 @@ struct MgMotion {
     \interface MgCommand
 */
 struct MgCommand {
-    virtual const char* getName() const = 0;            //!< 返回命令名称
-    virtual void release() = 0;                         //!< 销毁对象
-    virtual bool cancel(const MgMotion* sender) = 0;    //!< 取消命令
+    virtual const char* getName() const = 0;                //!< 返回命令名称
+    virtual void release() = 0;                             //!< 销毁对象
+    virtual bool cancel(const MgMotion* sender) = 0;        //!< 取消命令
     virtual bool initialize(const MgMotion* sender) = 0;    //!< 开始命令
     virtual bool undo(bool &enableRecall, const MgMotion* sender) = 0;  //!< 回退一步
     virtual bool draw(const MgMotion* sender, GiGraphics* gs) = 0;  //!< 显示动态图形
@@ -63,12 +63,24 @@ struct MgCommand {
     \see mgGetCommandManager
 */
 struct MgCommandManager {
-    virtual const char* getCommandName() = 0;
-    virtual MgCommand* getCommand() = 0;
-    virtual bool setCommand(const MgMotion* sender, const char* name) = 0;
-    virtual bool cancel(const MgMotion* sender) = 0;
-    virtual void unloadCommands() = 0;
-    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes) = 0;
+    virtual const char* getCommandName() = 0;               //!< 得到当前命令名称
+    virtual MgCommand* getCommand() = 0;                    //!< 得到当前命令
+    virtual bool setCommand(const MgMotion* sender, const char* name) = 0;  //!< 启动命令
+    virtual bool cancel(const MgMotion* sender) = 0;        //!< 取消当前命令
+    virtual void unloadCommands() = 0;                      //!< 退出时卸载命令
+    
+    //! 得到当前选择的图形
+    /*!
+        \param view 当前操作的视图
+        \param count 最多获取多少个图形，为0时返回实际个数
+        \param shapes 填充当前选择的图形对象
+        \param forChange 是否用于修改，用于修改时将复制临时图形，动态修改完后要调用 dynamicChangeEnded()
+        \return 获取多少个图形，或实际个数
+    */
+    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange) = 0;
+    
+    //! 结束动态修改，提交或放弃所改的临时图形
+    virtual bool dynamicChangeEnded(MgView* view, bool apply) = 0;
 };
 
 //! 返回命令管理器

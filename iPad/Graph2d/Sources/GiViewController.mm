@@ -99,6 +99,9 @@
     if (self.view)
         [self.view removeFromSuperview];
     self.view = aview;
+    
+    if (!bkColor)
+        bkColor = parentView.superview.backgroundColor;
     [aview graph]->setBkColor(giFromUIColor(bkColor));
     aview.backgroundColor = [UIColor clearColor];
     
@@ -126,6 +129,8 @@
     if (self.view)
         [self.view removeFromSuperview];
     self.view = aview;
+    
+    [aview graph]->setBkColor(giFromUIColor(parentView.superview.backgroundColor));
     aview.backgroundColor = [UIColor clearColor];
     aview.enableZoom = NO;
     
@@ -191,6 +196,7 @@
 
 - (void)removeShapes
 {
+    MgShapesLock locker([[self gview] shapes]);
     [[self gview] shapes]->clear();
     [self regen];
 }
@@ -314,6 +320,12 @@
     [cmd setLineStyle:style];
 }
 
+- (BOOL)dynamicChangeEnded:(BOOL)apply
+{
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    return [cmd dynamicChangeEnded:apply];
+}
+
 #pragma mark - View motion
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -397,6 +409,11 @@
     [self.view setNeedsDisplay];
     [_magnifierView[0] setNeedsDisplay];
     [_magnifierView[1] setNeedsDisplay];
+}
+
+- (UIGestureRecognizer*) getGestureRecognizer:(int)index
+{
+    return index >= 0 && index < RECOGNIZER_COUNT ? _recognizers[0][index] : NULL;
 }
 
 static CGPoint _ignorepoint = CGPointMake(-1000, -1000);

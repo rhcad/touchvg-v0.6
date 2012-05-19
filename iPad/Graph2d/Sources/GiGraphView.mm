@@ -11,12 +11,21 @@
 - (BOOL)dynZooming:(UIPinchGestureRecognizer *)sender;
 - (BOOL)dynPanning:(UIPanGestureRecognizer *)sender;
 - (BOOL)switchZoomed:(UIGestureRecognizer *)sender;
+- (void)shapesLocked:(MgShapes*)sp;
 
 @end
 
 GiColor giFromUIColor(UIColor *color)
 {
     return color ? giFromCGColor(color.CGColor) : GiColor::Invalid();
+}
+
+static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
+{
+    if (locked) {
+        GiGraphView* view = (GiGraphView*)obj;
+        [view shapesLocked:sp];
+    }
 }
 
 @implementation GiGraphView
@@ -48,6 +57,8 @@ GiColor giFromUIColor(UIColor *color)
 
 - (void)dealloc
 {
+    MgShapesLock::unregisterObserver(onShapesLocked, self);
+    
     if (_graph) {
         delete _graph;
         _graph = NULL;
@@ -58,7 +69,7 @@ GiColor giFromUIColor(UIColor *color)
 - (void)afterCreated
 {
 	CGFloat scrw = CGRectGetWidth([UIScreen mainScreen].bounds);
-    GiCanvasIos::setScreenDpi(scrw > 1000 ? 132 : 163); // iPad or iPhone
+    GiCanvasIos::setScreenDpi(scrw > 1000 ? 132 : 163, [UIScreen mainScreen].scale);
     
     if (!_graph) {
         _graph = new GiGraphIos();
@@ -76,6 +87,8 @@ GiColor giFromUIColor(UIColor *color)
     _zooming = NO;
     _doubleZoomed = NO;
     _enableZoom = YES;
+    
+    MgShapesLock::registerObserver(onShapesLocked, self);
 }
 
 - (CGImageRef)cachedBitmap:(BOOL)invert
@@ -155,6 +168,7 @@ GiColor giFromUIColor(UIColor *color)
 
 - (void)setShapes:(MgShapes*)data
 {
+    [self shapesLocked:_shapes];
     _shapes = data;
     [self regen];
 }
@@ -296,6 +310,11 @@ GiColor giFromUIColor(UIColor *color)
     }
     
     return YES;
+}
+
+- (void)shapesLocked:(MgShapes*)sp
+{
+    NSLog(@"shapesLocked");
 }
 
 @end

@@ -79,7 +79,7 @@ static const NSUInteger kDashLineTag    = 4;
     
     // 创建图形视图及其视图控制器
     _graphc = [[GiViewController alloc]init];
-    [_graphc createGraphView:self.view frame:viewFrame backgroundColor:[UIColor clearColor]];
+    [_graphc createGraphView:self.view frame:viewFrame backgroundColor:self.view.backgroundColor];
     _graphc.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
                                      | UIViewAutoresizingFlexibleBottomMargin);
     
@@ -308,6 +308,7 @@ static const NSUInteger kDashLineTag    = 4;
 	UIButton *freebrush = [[UIButton alloc]initWithFrame:CGRectMake(154, 92, 63, 44)];
 	[freebrush setImage:[UIImage imageNamed:@"freedraw.png"] forState:UIControlStateNormal];
 	[freebrush addTarget:self action:@selector(hideMagnifier:) forControlEvents:UIControlEventTouchUpInside];
+    freebrush.tag = 1;
 	[calloutView addSubview:freebrush];
 	[freebrush release];
 }
@@ -383,6 +384,12 @@ static const NSUInteger kDashLineTag    = 4;
 
 - (IBAction)hideMagnifier:(id)sender   // 切换放大镜视图的可见性
 {
+    UIView* btn = (UIView*)sender;
+    if (btn.tag == 1) {                 // 取消动态修改结果
+        if ([_graphc dynamicChangeEnded:NO])
+            return;
+    }
+    
     _graphc.magnifierView.superview.hidden = !_graphc.magnifierView.superview.hidden;
     
 #ifdef MAG_AT_BOTTOM

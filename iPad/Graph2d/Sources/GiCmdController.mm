@@ -80,7 +80,7 @@ private:
 - (GiContext*)currentContext
 {
     MgShape* shape = NULL;
-    mgGetCommandManager()->getSelection(_mgview, 1, &shape);
+    mgGetCommandManager()->getSelection(_mgview, 1, &shape, false);
     return shape ? shape->context() : _mgview->context();
 }
 
@@ -126,10 +126,10 @@ private:
 }
 
 - (void)setLineWidth:(float)w {
-    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL);
+    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
     std::vector<MgShape*> shapes(n, NULL);
     
-    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front()) == n) {
+    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
         for (UInt32 i = 0; i < n; i++) {
             shapes[i]->context()->setLineWidth(w);
         }
@@ -145,10 +145,10 @@ private:
 }
 
 - (void)setLineColor:(GiColor)c {
-    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL);
+    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
     std::vector<MgShape*> shapes(n, NULL);
     
-    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front()) == n) {
+    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
         for (UInt32 i = 0; i < n; i++) {
             shapes[i]->context()->setLineColor(c);
         }
@@ -164,10 +164,10 @@ private:
 }
 
 - (void)setFillColor:(GiColor)c {
-    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL);
+    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
     std::vector<MgShape*> shapes(n, NULL);
     
-    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front()) == n) {
+    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
         for (UInt32 i = 0; i < n; i++) {
             shapes[i]->context()->setFillColor(c);
         }
@@ -183,10 +183,10 @@ private:
 }
 
 - (void)setLineStyle:(int)style {
-    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL);
+    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
     std::vector<MgShape*> shapes(n, NULL);
     
-    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front()) == n) {
+    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
         for (UInt32 i = 0; i < n; i++) {
             shapes[i]->context()->setLineStyle((kLineStyle)style);
         }
@@ -195,6 +195,11 @@ private:
     else {
         _mgview->context()->setLineStyle((kLineStyle)style);
     }
+}
+
+- (BOOL)dynamicChangeEnded:(BOOL)apply
+{
+    return mgGetCommandManager()->dynamicChangeEnded(_mgview, apply);
 }
 
 - (CGPoint)getPointModel {

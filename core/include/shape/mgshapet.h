@@ -164,10 +164,14 @@ protected:
         ContextT tmpctx(_context);
 
         if (ctx && !ctx->isNullLine()) {
+            float addw  = ctx->getLineWidth();
             float width = tmpctx.getLineWidth();
-            if (width > 0)
-                width = -gs.calcPenWidth(width);
-            tmpctx.setLineWidth(width + ctx->getLineWidth());
+            
+            width = -gs.calcPenWidth(width);        // 像素宽度，负数
+            if (addw <= 0)
+                tmpctx.setLineWidth(width + addw);  // 像素宽度加宽
+            else
+                tmpctx.setLineWidth(-addw);         // 换成新的像素宽度
         }
 
         if (ctx && !ctx->isNullLine())

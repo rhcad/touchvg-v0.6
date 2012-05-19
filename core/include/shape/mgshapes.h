@@ -40,4 +40,19 @@ struct MgShapes : public MgObject
     virtual GiContext* context() = 0;
 };
 
+//! 图形列表锁定辅助类
+/*! \ingroup GEOM_SHAPE
+ */
+class MgShapesLock
+{
+    MgShapes* m_sp;
+public:
+    MgShapesLock(MgShapes* sp);
+    ~MgShapesLock();
+    
+    typedef void (*ShapesLocked)(MgShapes* sp, void* obj, bool locked);
+    static void registerObserver(ShapesLocked func, void* obj);
+    static void unregisterObserver(ShapesLocked func, void* obj);
+};
+
 #endif // __GEOMETRY_MGSHAPES_H_

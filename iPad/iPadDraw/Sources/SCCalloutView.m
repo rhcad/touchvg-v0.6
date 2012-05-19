@@ -46,6 +46,7 @@ extern void giIgnoreTouchesBegan(UIView* sender, CGPoint point);
 
 - (void)dealloc
 {
+    [_graphc dynamicChangeEnded:YES];
     [_graphc release];
     [super dealloc];
 }
