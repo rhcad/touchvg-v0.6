@@ -9,7 +9,7 @@ def utf8togbk(dir):
         if os.path.isdir(sfile):
             utf8togbk(sfile)
             continue
-        if 'index.hh' in fn or '.htm' in fn:
+        if '.h' in fn or '.c' in fn:
             try:
                 text = open(sfile,'r',-1,'utf-8').read()
             except UnicodeDecodeError:
