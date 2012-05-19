@@ -131,7 +131,7 @@ public:
     {
         GiColor c;
         
-        s->writeUInt8("lineStyle", _context.getLineStyle());
+        s->writeUInt8("lineStyle", (UInt8)_context.getLineStyle());
         s->writeFloat("lineWidth", _context.getLineWidth());
         
         c = _context.getLineColor();
