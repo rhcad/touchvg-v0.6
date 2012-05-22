@@ -155,7 +155,12 @@ public:
         c = s->readUInt32("fillColor");
         _context.setFillColor(GiColor(c & 0xFF, (c >> 8) & 0xFF, (c >> 16) & 0xFF, (c >> 24) & 0xFF));
         
-        return shape()->load(s);
+        bool ret = shape()->load(s);
+        if (ret) {
+            shape()->update();
+        }
+        
+        return ret;
     }
     
 protected:

@@ -62,6 +62,8 @@ private:
     bool shapeWillDeleted(MgShape* shape) { return true; }
 };
 
+static long s_cmdRef = 0;
+
 @implementation GiCommandController(Internal)
 
 - (BOOL)setView:(UIView*)view
@@ -101,13 +103,16 @@ private:
         _mgview = new MgViewProxy(auxviews);
         _motion = new MgMotion;
         _motion->view = _mgview;
+        s_cmdRef++;
     }
     return self;
 }
 
 - (void)dealloc
 {
-    mgGetCommandManager()->unloadCommands();
+    if (--s_cmdRef == 0) {
+        mgGetCommandManager()->unloadCommands();
+    }
     delete _motion;
     delete _mgview;
     [super dealloc];
@@ -234,6 +239,7 @@ private:
         _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
         _motion->lastPointM = _motion->pointM;
+        _motion->velocity = 0;
     }
     _moved = NO;
     _clicked = NO;
@@ -303,6 +309,9 @@ private:
     if (cmd)
     {
         if (sender.state == UIGestureRecognizerStateChanged) {
+            CGPoint velocity = [sender velocityInView:sender.view];
+            _motion->velocity = hypotf(velocity.x, velocity.y);
+            
             ret = [self touchesMoved:[sender locationInView:sender.view]
                                 view:sender.view count:sender.numberOfTouches];
         }

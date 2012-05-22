@@ -30,12 +30,14 @@ struct MgView {
 */
 struct MgMotion {
     MgView*     view;                           //!< 图形视图
+    float       velocity;                       //!< 移动速度，像素每秒
     Point2d     startPoint;                     //!< 开始点，视图坐标
     Point2d     startPointM;                    //!< 开始点，模型坐标
     Point2d     lastPoint;                      //!< 上次点，视图坐标
     Point2d     lastPointM;                     //!< 上次点，模型坐标
     Point2d     point;                          //!< 当前点，视图坐标
     Point2d     pointM;                         //!< 当前点，模型坐标
+    MgMotion() : view(NULL), velocity(0) {}
 };
 
 //! 命令接口

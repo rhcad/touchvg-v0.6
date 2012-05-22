@@ -18,13 +18,13 @@ class GiGraphIos;
     MgShape*        _shapeAdded;            //!< 待添加显示的图形
     BOOL            _cachedDraw;            //!< 刷新显示时是否使用缓冲图
     
-    CGPoint         _firstPoint;            //!< 动态放缩用的开始点
-    CGPoint         _lastPoint;             //!< 动态放缩用的上次点
-    
+    CGPoint         _firstPoint;            //!< 动态放缩用的开始点    
     BOOL            _enableZoom;            //!< 是否允许放缩或平移
     BOOL            _zooming;               //!< 是否正在动态放缩或平移
     float           _lastViewScale;         //!< 动态放缩前的显示比例
     CGPoint         _lastCenterW;           //!< 动态放缩前的视图中心世界坐标
+    float           _lastDistPan;           //!< 上次的平移双指距离，用于放缩
+    float           _lastScalePan;          //!< 上次的平移双指放大倍数
     
     BOOL            _doubleZoomed;          //!< 是否为局部放大状态
     float           _scaleBeforeDbl;        //!< 局部放大前的显示比例

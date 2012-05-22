@@ -8,6 +8,8 @@
 
 @interface GiGraphView(Zooming)
 
+- (void)saveZoomScale:(CGPoint)point;
+- (BOOL)dynZoom:(UIGestureRecognizer *)sender point:(CGPoint)point scale:(float)scale;
 - (BOOL)dynZooming:(UIPinchGestureRecognizer *)sender;
 - (BOOL)dynPanning:(UIPanGestureRecognizer *)sender;
 - (BOOL)switchZoomed:(UIGestureRecognizer *)sender;
@@ -81,6 +83,9 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     
     self.contentMode = UIViewContentModeRedraw;
     self.multipleTouchEnabled = YES;
+    self.opaque = NO;
+    self.clearsContextBeforeDrawing = NO;
+    
     _drawingDelegate = Nil;
     _shapeAdded = NULL;
     _cachedDraw = YES;
@@ -227,60 +232,78 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 @implementation GiGraphView(Zooming)
 
-- (BOOL)dynZooming:(UIPinchGestureRecognizer *)sender
+- (void)saveZoomScale:(CGPoint)point
+{
+    Point2d centerW;
+    _graph->xf.getZoomValue(centerW, _lastViewScale);
+    _lastCenterW = CGPointMake(centerW.x, centerW.y);
+    _firstPoint = point;
+}
+
+- (BOOL)dynZoom:(UIGestureRecognizer *)sender point:(CGPoint)point scale:(float)scale
 {
     if (sender.state == UIGestureRecognizerStateBegan) {
-        Point2d centerW;
-        _graph->xf.getZoomValue(centerW, _lastViewScale);
-        _lastCenterW = CGPointMake(centerW.x, centerW.y);
-        
-        _firstPoint = [sender locationInView:self];
-        _lastPoint = _firstPoint;
+        [self saveZoomScale:point];
         _zooming = YES;
-        _doubleZoomed = NO;
     }
-    else
-    {
+    else {
         _zooming = (sender.state == UIGestureRecognizerStateChanged);
     }
     
-    Point2d at (_firstPoint.x, _firstPoint.y );
-    _graph->xf.zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);
-    _graph->xf.zoomByFactor(sender.scale - 1, &at);
-    
-    CGPoint point = ([sender numberOfTouches] < 2) ? _lastPoint : [sender locationInView:self];
-    _graph->xf.zoomPan(point.x - _firstPoint.x, point.y - _firstPoint.y);
-    _lastPoint = point;
+    if (_zooming) {
+        Point2d at (_firstPoint.x, _firstPoint.y );
+        _graph->xf.zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);   // 先恢复
+        _graph->xf.zoomByFactor(scale - 1, &at);                        // 以起始点为中心放缩显示
+        _graph->xf.zoomPan(point.x - _firstPoint.x, point.y - _firstPoint.y);   // 平移到当前点
+    }
     
     if ([_drawingDelegate respondsToSelector:@selector(afterZoomed:)]) {
         [_drawingDelegate performSelector:@selector(afterZoomed:) withObject:self];
     }
-
+    
     return YES;
+}
+
+- (BOOL)dynZooming:(UIPinchGestureRecognizer *)sender
+{
+    _doubleZoomed = NO;
+    return [self dynZoom:sender point:[sender locationInView:self] scale:sender.scale];
 }
 
 - (BOOL)dynPanning:(UIPanGestureRecognizer *)sender
 {
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        Point2d centerW;
-        _graph->xf.getZoomValue(centerW, _lastViewScale);
-        _lastCenterW = CGPointMake(centerW.x, centerW.y);
-        _zooming = YES;
-    }
-    else
-    {
-        _zooming = (sender.state == UIGestureRecognizerStateChanged);
+    if (sender.state == UIGestureRecognizerStateBegan) {        // 开始时没有放缩
+        _lastDistPan = 0;                                       // 待记录双指距离
+        _lastScalePan = 1;
     }
     
-    CGPoint translation = [sender translationInView:self];
-    _graph->xf.zoom(Point2d(_lastCenterW.x, _lastCenterW.y), _lastViewScale);
-    _graph->xf.zoomPan(translation.x, translation.y);
+    CGPoint point = [sender locationInView:self];               // 默认是单指位置
     
-    if ([_drawingDelegate respondsToSelector:@selector(afterZoomed:)]) {
-        [_drawingDelegate performSelector:@selector(afterZoomed:) withObject:self];
+    if ([sender numberOfTouches] > 1) {
+        CGPoint p1 = [sender locationOfTouch:0 inView:sender.view];
+        CGPoint p2 = [sender locationOfTouch:1 inView:sender.view];
+        float dist = sqrtf((p2.x-p1.x)*(p2.x-p1.x) + (p2.y-p1.y)*(p2.y-p1.y));
+        
+        point = CGPointMake((p2.x + p1.x) / 2, (p2.y + p1.y) / 2);  // 双指中点
+        if (_lastDistPan < 0.01f) {                             // 还没放缩
+            [self saveZoomScale:point];                         // 记下开始时的放缩比例
+            _lastDistPan = dist;                                // 双指起始距离
+            _lastScalePan = 1;
+        }
+        else {
+            _lastScalePan = dist / _lastDistPan;                // 放缩显示
+        }
+    }
+    else if (sender.state == UIGestureRecognizerStateChanged
+             && _lastDistPan > 0.01f) {                         // 由放缩显示转为平移显示
+        [self saveZoomScale:point];                             // 重新记下开始时的位置
+        _lastDistPan = 0;                                       // 没有放缩，待记录
+        _lastScalePan = 1;
+        
+        return YES;                                             // 双指变单指时不放缩平移
     }
     
-    return YES;
+    return [self dynZoom:sender point:point scale:_lastScalePan];
 }
 
 - (BOOL)switchZoomed:(UIGestureRecognizer *)sender
@@ -288,13 +311,11 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     CGPoint point = [sender locationInView:self];
     Point2d at (_firstPoint.x, _firstPoint.y );
     
-    if (_doubleZoomed)  // restore zoom scale
-    {
+    if (_doubleZoomed) {    // restore zoom scale
         _doubleZoomed = NO;
         _graph->xf.zoom(Point2d(_centerBeforeDbl.x, _centerBeforeDbl.y), _scaleBeforeDbl);
     }
-    else                // zoomin at the point
-    {
+    else {                  // zoomin at the point
         Point2d centerW;
         _graph->xf.getZoomValue(centerW, _scaleBeforeDbl);
         _centerBeforeDbl = CGPointMake(centerW.x, centerW.y);
@@ -314,7 +335,6 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (void)shapesLocked:(MgShapes*)sp
 {
-    NSLog(@"shapesLocked");
 }
 
 @end
