@@ -131,9 +131,15 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (void)shapeAdded:(MgShape*)shape
 {
-    _shapeAdded = shape;
-    _cachedDraw = NO;
-    [self setNeedsDisplay];
+    if (_shapeAdded) {
+        _cachedDraw = YES;
+        [self regen];
+    }
+    else {
+        _shapeAdded = shape;
+        _cachedDraw = NO;
+        [self setNeedsDisplay];
+    }
 }
 
 - (BOOL)draw:(GiGraphics*)gs

@@ -347,6 +347,7 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
         m_boxsel = true;
     }
     
+    m_touchCountDrag = 0;
     sender->view->redraw(m_cloneShapes.size() < 2);
     
     return true;
@@ -361,6 +362,16 @@ bool MgCommandSelect::isIntersectMode(const MgMotion* sender)
 bool MgCommandSelect::touchMoved(const MgMotion* sender)
 {
     Point2d pointM(sender->pointM);
+    
+    if (0 == m_touchCountDrag) {
+        m_touchCountDrag = m_cloneShapes.empty() ? 1 : sender->touchCount;
+    }
+    else if (m_touchCountDrag != sender->touchCount) {
+        if (m_touchCountDrag == 2) {
+            applyCloneShapes(sender->view, true, m_touchCountDrag > 1);
+        }
+        return true;
+    }
     
     if (m_insertPoint && pointM.distanceTo(m_ptNear) < mgDisplayMmToModel(5, sender)) {
         pointM = m_ptNear;  // 拖动刚新加的点到起始点时取消新增
@@ -412,7 +423,7 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
         m_cloneShapes.clear();
     }
     
-    applyCloneShapes(sender->view, true);
+    applyCloneShapes(sender->view, true, m_touchCountDrag > 1);
     
     m_insertPoint = false;
     if (m_handleIndex > 0) {
@@ -440,7 +451,7 @@ void MgCommandSelect::cloneShapes(MgView* view)
     }
 }
 
-bool MgCommandSelect::applyCloneShapes(MgView* view, bool apply)
+bool MgCommandSelect::applyCloneShapes(MgView* view, bool apply, bool addNewShapes)
 {
     bool changed = false;
     bool cloned = !m_cloneShapes.empty();
@@ -448,13 +459,25 @@ bool MgCommandSelect::applyCloneShapes(MgView* view, bool apply)
     if (!m_cloneShapes.empty()) {
         MgShapesLock locker(view->shapes());
         
+        if (apply && addNewShapes) {
+            m_selIds.clear();
+        }
         for (size_t i = 0; i < m_cloneShapes.size(); i++) {
-            MgShape* shape = i < m_selIds.size() ? view->shapes()->findShape(m_selIds[i]) : NULL;
-            
-            if (shape && apply) {
-                shape->shape()->copy(*m_cloneShapes[i]->shape());
-                shape->shape()->update();
-                changed = true;
+            if (apply && addNewShapes) {
+                MgShape* newsp = view->shapes()->addShape(*(m_cloneShapes[i]));
+                if (newsp) {
+                    view->shapeAdded(newsp);
+                    m_selIds.push_back(newsp->getID());
+                    changed = true;
+                }
+            }
+            else if (apply) {
+                MgShape* shape = i < m_selIds.size() ? view->shapes()->findShape(m_selIds[i]) : NULL;
+                if (shape) {
+                    shape->shape()->copy(*m_cloneShapes[i]->shape());
+                    shape->shape()->update();
+                    changed = true;
+                }
             }
             
             m_cloneShapes[i]->release();

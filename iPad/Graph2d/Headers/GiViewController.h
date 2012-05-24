@@ -18,10 +18,11 @@
     UIView  *_magnifierView[3];         //!< 创建的放大镜视图，最多两个
     UIView  *_activeView;               //!< 当前的图形视图，主视图或第一个放大镜视图
     BOOL    _ignoreTouches;             //!< 忽略当前触摸手势，直到触摸结束
+    NSTimeInterval  _timeBegan;         //!< 开始触摸时的时刻
     
     enum { kPinchGesture = 0, kTwoFingersPan, 
-        kPanGesture, kTapGesture, 
-        TwoTapsGesture, kTwoFingersTwoTaps, 
+        kPanGesture, kTapGesture, TwoTapsGesture, 
+        kTwoFingersTwoTaps, kLongPress,
         RECOGNIZER_COUNT };
     UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT]; //!< 手势识别器，主视图和放大镜视图的
 }

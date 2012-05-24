@@ -221,6 +221,7 @@ static long s_cmdRef = 0;
 
 - (BOOL)cancel
 {
+    _motion->touchCount = 0;
     return _mgview->getView() && mgGetCommandManager()->cancel(_motion);
 }
 
@@ -251,33 +252,16 @@ static long s_cmdRef = 0;
     BOOL ret = NO;
     
     if (!_moved && cmd) {
-        _undoFired = NO;
         _moved = YES;
         ret = cmd->touchBegan(_motion);
     }
     if (cmd) {
         [self setView:view];
         [self convertPoint:point];
+        _motion->touchCount = count;
         
-        if (_motion->lastPoint.distanceTo(_motion->point) <= 2) {
-            ret = YES;
-        }
-        else if (count > 1) {                   // 滑动时有两个手指
-            bool recall = false;
-            float dist = mgHypot(_motion->point.x - _motion->lastPoint.x, 
-                                 _motion->point.y - _motion->lastPoint.y);
-            if (!_undoFired && dist > 10) {     // 双指滑动超过10像素可再触发Undo操作
-                if (cmd->undo(recall, _motion) && !recall)  // 触发一次Undo操作
-                    _undoFired = YES;           // 另一个手指不松开也不再触发Undo操作
-                _motion->lastPoint = _motion->point;    // 用于检测下次双指滑动距离
-                _motion->lastPointM = _motion->pointM;
-            }
-            return YES;                         // 直接返回，不记录lastPoint
-        }
-        else {                                  // 单指滑动
-            _undoFired = NO;                    // 允许再触发Undo操作
-            ret = cmd->touchMoved(_motion);
-        }
+        float dist = _motion->lastPoint.distanceTo(_motion->point);
+        ret = dist <= 2 || cmd->touchMoved(_motion);
 
         _motion->lastPoint = _motion->point;
         _motion->lastPointM = _motion->pointM;
@@ -296,6 +280,7 @@ static long s_cmdRef = 0;
         [self convertPoint:point];
         
         ret = cmd->touchEnded(_motion);
+        _motion->touchCount = 0;
     }
     
     return ret;
@@ -312,12 +297,13 @@ static long s_cmdRef = 0;
             CGPoint velocity = [sender velocityInView:sender.view];
             _motion->velocity = hypotf(velocity.x, velocity.y);
             
-            ret = [self touchesMoved:[sender locationInView:sender.view]
-                                view:sender.view count:sender.numberOfTouches];
+            CGPoint point = [sender locationOfTouch:[sender numberOfTouches]-1 inView:sender.view];
+            ret = [self touchesMoved:point view:sender.view count:sender.numberOfTouches];
         }
         else if (sender.state == UIGestureRecognizerStateEnded) {
             if ([sender numberOfTouches]) {
-                [self convertPoint:[sender locationInView:sender.view]];
+                CGPoint point = [sender locationOfTouch:[sender numberOfTouches]-1 inView:sender.view];
+                [self convertPoint:point];
             }
             ret = cmd->touchEnded(_motion);
         }
@@ -342,8 +328,29 @@ static long s_cmdRef = 0;
         _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
         _motion->lastPointM = _motion->pointM;
+        _motion->touchCount = [sender numberOfTouches];
         
         ret = cmd->doubleClick(_motion);
+    }
+    
+    return ret;
+}
+
+- (BOOL)longPressGesture:(UILongPressGestureRecognizer *)sender
+{
+    MgCommand* cmd = mgGetCommandManager()->getCommand();
+    BOOL ret = NO;
+    
+    if (cmd) {
+        [self setView:sender.view];
+        [self convertPoint:[sender locationInView:sender.view]];
+        _motion->startPoint = _motion->point;
+        _motion->startPointM = _motion->pointM;
+        _motion->lastPoint = _motion->point;
+        _motion->lastPointM = _motion->pointM;
+        _motion->touchCount = [sender numberOfTouches];
+        
+        ret = cmd->longPress(_motion);
     }
     
     return ret;
@@ -352,6 +359,7 @@ static long s_cmdRef = 0;
 - (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
     _clicked = YES;
+    _motion->touchCount = [sender numberOfTouches];
     return mgGetCommandManager()->getCommand() != NULL;
 }
 

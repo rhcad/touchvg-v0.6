@@ -28,9 +28,11 @@ protected:
     bool _touchBegan(const MgMotion* sender);
     bool _touchMoved(const MgMotion* sender);
     bool _touchEnded(const MgMotion* sender);
+    bool _touchMovedPreCheck(const MgMotion* sender);
     bool _addshape(const MgMotion* sender, MgShape* shape = NULL);
     bool _undo(const MgMotion* sender);
     
+    virtual bool touchMoved_(const MgMotion* sender) = 0;
     virtual bool cancel(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual bool click(const MgMotion* sender);
@@ -39,10 +41,12 @@ protected:
     
 private:
     UInt32 getStep() { return m_step; }
+    virtual bool touchMoved(const MgMotion* sender);
     
 protected:
     MgShape*    m_shape;
     UInt32      m_step;
+    bool        m_undoFired;
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_H_

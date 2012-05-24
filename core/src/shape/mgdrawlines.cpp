@@ -55,7 +55,7 @@ bool MgCmdDrawLines::touchBegan(const MgMotion* sender)
     return _touchBegan(sender);
 }
 
-bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
+bool MgCmdDrawLines::touchMoved_(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
     

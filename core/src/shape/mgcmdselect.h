@@ -51,7 +51,7 @@ private:
     bool isSelected(MgShape* shape);
     MgShape* getShape(UInt32 id, const MgMotion* sender) const;
     void cloneShapes(MgView* view);
-    bool applyCloneShapes(MgView* view, bool apply);
+    bool applyCloneShapes(MgView* view, bool apply, bool addNewShapes = false);
     
 private:
     std::vector<UInt32>     m_selIds;           // 选中的图形的ID
@@ -63,6 +63,7 @@ private:
     bool                    m_insertPoint;      // 是否可插入新点
     bool                    m_showSel;          // 是否亮显选中的图形
     bool                    m_boxsel;           // 是否开始框选
+    int                     m_touchCountDrag;   // 拖动时的手指数
 };
 
 #endif // __GEOMETRY_MGCOMMAND_SELECT_H_

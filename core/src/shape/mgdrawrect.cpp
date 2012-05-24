@@ -33,7 +33,7 @@ bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
     return _touchBegan(sender);
 }
 
-bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
+bool MgCmdDrawRect::touchMoved_(const MgMotion* sender)
 {
     ((MgBaseRect*)m_shape->shape())->setRect(Box2d(sender->startPointM, sender->pointM));
     m_shape->shape()->update();

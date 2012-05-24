@@ -16,7 +16,6 @@ class MgViewProxy;
 @private
     MgMotion    *_motion;           //!< 当前命令参数
     MgViewProxy *_mgview;           //!< 命令所用视图
-    BOOL        _undoFired;         //!< 是否已向命令触发Undo消息(滑动中变为双指)
     BOOL        _moved;             //!< 是否已触发touchBegan命令消息
     BOOL        _clicked;           //!< 是否已触发oneFingerOneTap
 }

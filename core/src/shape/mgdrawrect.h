@@ -28,7 +28,7 @@ private:
     virtual bool initialize(const MgMotion* sender);
     virtual bool undo(bool &enableRecall, const MgMotion* sender);
     virtual bool touchBegan(const MgMotion* sender);
-    virtual bool touchMoved(const MgMotion* sender);
+    virtual bool touchMoved_(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);
 };
 
