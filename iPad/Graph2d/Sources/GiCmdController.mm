@@ -34,6 +34,8 @@ private:
     MgShapes* shapes() { return [_curview shapes]; }
     GiTransform* xform() { return [_curview xform]; }
     GiGraphics* graph() { return [_curview graph]; }
+    bool shapeWillAdded(MgShape* shape) { return true; }
+    bool shapeWillDeleted(MgShape* shape) { return true; }
     
     void regen() {
         [_mainview regen];
@@ -58,8 +60,10 @@ private:
         }
     }
     
-    bool shapeWillAdded(MgShape* shape) { return true; }
-    bool shapeWillDeleted(MgShape* shape) { return true; }
+    bool longPressSelection(kSelState state) {
+        NSLog(@"TODO: longPressSelection, %d", state);
+        return false;
+    }
 };
 
 static long s_cmdRef = 0;
@@ -336,7 +340,7 @@ static long s_cmdRef = 0;
     return ret;
 }
 
-- (BOOL)longPressGesture:(UILongPressGestureRecognizer *)sender
+- (BOOL)longPressGesture:(UIGestureRecognizer *)sender
 {
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     BOOL ret = NO;

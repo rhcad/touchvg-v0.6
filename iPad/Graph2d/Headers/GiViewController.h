@@ -9,7 +9,7 @@
 /*! 使用此类管理图形视图和触摸手势。
     \ingroup GRAPH_IOS
 */
-@interface GiViewController : UIViewController {
+@interface GiViewController : UIViewController<UIGestureRecognizerDelegate> {
 @private
     id      _cmdctl;                    //!< 绘图命令控制器, GiCommandController
     void*   _shapesCreated;             //!< 创建的图形列表, MgShapes*
@@ -20,9 +20,8 @@
     BOOL    _ignoreTouches;             //!< 忽略当前触摸手势，直到触摸结束
     NSTimeInterval  _timeBegan;         //!< 开始触摸时的时刻
     
-    enum { kPinchGesture = 0, kTwoFingersPan, 
-        kPanGesture, kTapGesture, TwoTapsGesture, 
-        kTwoFingersTwoTaps, kLongPress,
+    enum { kPinchGesture = 0, kTwoFingersPan, kPanGesture, 
+        kTapGesture, TwoTapsGesture, kTwoFingersTwoTaps,
         RECOGNIZER_COUNT };
     UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT]; //!< 手势识别器，主视图和放大镜视图的
 }

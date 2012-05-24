@@ -289,8 +289,10 @@ bool MgCommandSelect::click(const MgMotion* sender)
         shape = hitTestAll(sender, nearpt, segment);
         
         if (shape && isSelected(shape)) {   // 点击已选图形，从选择集中移除
-            m_selIds.erase(getSelectedPostion(shape));
-            m_id = 0;
+            if (m_selIds.size() > 1) {
+                m_selIds.erase(getSelectedPostion(shape));
+                m_id = 0;
+            }
         }
         else if (shape && !isSelected(shape)) { // 点击新图形，加入选择集
             m_selIds.push_back(shape->getID());
@@ -310,14 +312,29 @@ bool MgCommandSelect::click(const MgMotion* sender)
     return true;
 }
 
-bool MgCommandSelect::doubleClick(const MgMotion* /*sender*/)
+bool MgCommandSelect::doubleClick(const MgMotion* sender)
 {
     return false;
 }
 
-bool MgCommandSelect::longPress(const MgMotion* /*sender*/)
+bool MgCommandSelect::longPress(const MgMotion* sender)
 {
-    return false;
+    MgView::kSelState state = MgView::kSelNone;
+    bool ret = false;
+    
+    if (m_selIds.empty()) {
+        ret = click(sender);
+    }
+    if (m_handleIndex > 0) {
+        MgShape* shape = getSelectedShape(sender);
+        state = shape && shape->shape()->isKindOf(MgBaseLines::Type()) ?
+            MgView::kSelVertex : MgView::kSelOneShape;
+    }
+    else if (!m_selIds.empty()) {
+        state = m_selIds.size() > 1 ? MgView::kSelMultiShapes : MgView::kSelOneShape;
+    }
+
+    return sender->view->longPressSelection(state) || ret;
 }
 
 bool MgCommandSelect::touchBegan(const MgMotion* sender)

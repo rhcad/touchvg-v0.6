@@ -47,7 +47,7 @@ struct GiColor;
 - (BOOL)twoFingersTwoTaps:(UITapGestureRecognizer *)sender; //!< 双指双击手势
 - (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;  //!< 单指双击手势
 - (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender;   //!< 单指单击手势
-- (BOOL)longPressGesture:(UILongPressGestureRecognizer *)sender;    //!< 长按手势
+- (BOOL)longPressGesture:(UIGestureRecognizer *)sender;     //!< 长按手势
 
 @end
 

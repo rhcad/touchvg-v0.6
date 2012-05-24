@@ -39,6 +39,7 @@ private:
     void shapeAdded(MgShape* shape) { view->shapeAdded(shape); }
     bool shapeWillAdded(MgShape*) { return true; }
     bool shapeWillDeleted(MgShape*) { return true; }
+    bool longPressSelection(kSelState) { return false; }
 };
 
 CDrawShapeView::CDrawShapeView(RandomParam& param)

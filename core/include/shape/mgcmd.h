@@ -23,6 +23,9 @@ struct MgView {
     virtual bool shapeWillAdded(MgShape* shape) = 0;    //!< 通知将添加图形
     virtual void shapeAdded(MgShape* shape) = 0;        //!< 通知已添加图形，由视图重新构建显示
     virtual bool shapeWillDeleted(MgShape* shape) = 0;  //!< 通知将删除图形
+    
+    enum kSelState { kSelNone, kSelOneShape, kSelMultiShapes, kSelVertex };
+    virtual bool longPressSelection(kSelState state) = 0;        //!< 选择状态下长按
 };
 
 //! 命令参数

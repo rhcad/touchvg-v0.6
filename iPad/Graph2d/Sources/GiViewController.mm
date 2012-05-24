@@ -25,7 +25,6 @@
 - (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender;
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender;
-- (void)longPressGesture:(UILongPressGestureRecognizer *)sender;
 
 @end
 
@@ -417,6 +416,18 @@
     return index >= 0 && index < RECOGNIZER_COUNT ? _recognizers[0][index] : NULL;
 }
 
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    BOOL allow = YES;
+    NSTimeInterval seconds = [[NSProcessInfo processInfo]systemUptime] - _timeBegan;
+    
+    if (seconds > 0.8) {
+        allow = ![[self getCommand:@selector(longPressGesture:)] longPressGesture:gestureRecognizer];
+    }
+        
+    return allow;
+}
+
 static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
 
 + (void)ignoreTouchesBegan:(CGPoint)point view:(UIView*)sender {
@@ -475,6 +486,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
     oneFingerPan.maximumNumberOfTouches = 2;
     oneFingerPan.delaysTouchesEnded = NO;
+    oneFingerPan.delegate = self;
     _recognizers[t][n++] = oneFingerPan;
     
     // 单指点击手势
@@ -482,6 +494,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
     oneFingerOneTap.delaysTouchesEnded = NO;
     [oneFingerOneTap requireGestureRecognizerToFail:oneFingerPan];  // 不是滑动才算点击
+    oneFingerOneTap.delegate = self;
     _recognizers[t][n++] = oneFingerOneTap;
     
     // 单指双击手势
@@ -497,16 +510,11 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
     twoFingersTwoTaps.numberOfTouchesRequired = 2;
     _recognizers[t][n++] = twoFingersTwoTaps;
     
-    // 长按手势
-    UILongPressGestureRecognizer *longPressGesture =
-    [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
-    _recognizers[t][n++] = longPressGesture;
-    [longPressGesture requireGestureRecognizerToFail:oneFingerPan];  // 长按会触发多次，故不是滑动且松开才算长按
-    
     _touchCount = 0;
     if (_gestureRecognizerUsed) {
-        for (int i = 0; i < RECOGNIZER_COUNT; i++)
+        for (int i = 0; i < RECOGNIZER_COUNT; i++) {
             [view addGestureRecognizer:_recognizers[t][i]];
+        }
     }
 }
 
@@ -545,7 +553,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
     _ignoreTouches = CGPointEqualToPoint(point, ignorept);
     
     _activeView = touch.view;
-    if (_timeBegan < 1) {
+    if (_timeBegan < 0.1) {
         GiCommandController* cmd = (GiCommandController*)_cmdctl;
         [cmd touchesBegan:point view:touch.view];
         _timeBegan = touch.timestamp;
@@ -672,15 +680,6 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);
         [[self motionView:@selector(twoFingersTwoTaps:)] twoFingersTwoTaps:sender];
     }
     [self updateMagnifierCenter:sender];
-}
-
-- (void)longPressGesture:(UILongPressGestureRecognizer *)sender
-{
-    if (_ignoreTouches) {
-        sender.cancelsTouchesInView = YES;
-        return;
-    }
-    [[self getCommand:@selector(longPressGesture:)] longPressGesture:sender];
 }
 
 - (void)updateMagnifierCenter:(UIGestureRecognizer *)sender
