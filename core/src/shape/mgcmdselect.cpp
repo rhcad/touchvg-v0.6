@@ -333,8 +333,12 @@ bool MgCommandSelect::longPress(const MgMotion* sender)
     else if (!m_selIds.empty()) {
         state = m_selIds.size() > 1 ? MgView::kSelMultiShapes : MgView::kSelOneShape;
     }
+    
+    if (sender->view->longPressSelection(state)) {
+        ret = true;
+    }
 
-    return sender->view->longPressSelection(state) || ret;
+    return ret;
 }
 
 bool MgCommandSelect::touchBegan(const MgMotion* sender)
@@ -364,7 +368,6 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
         m_boxsel = true;
     }
     
-    m_touchCountDrag = 0;
     sender->view->redraw(m_cloneShapes.size() < 2);
     
     return true;
@@ -379,16 +382,6 @@ bool MgCommandSelect::isIntersectMode(const MgMotion* sender)
 bool MgCommandSelect::touchMoved(const MgMotion* sender)
 {
     Point2d pointM(sender->pointM);
-    
-    if (0 == m_touchCountDrag) {
-        m_touchCountDrag = m_cloneShapes.empty() ? 1 : sender->touchCount;
-    }
-    else if (m_touchCountDrag != sender->touchCount) {
-        if (m_touchCountDrag == 2) {
-            applyCloneShapes(sender->view, true, m_touchCountDrag > 1);
-        }
-        return true;
-    }
     
     if (m_insertPoint && pointM.distanceTo(m_ptNear) < mgDisplayMmToModel(5, sender)) {
         pointM = m_ptNear;  // 拖动刚新加的点到起始点时取消新增
@@ -440,7 +433,7 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
         m_cloneShapes.clear();
     }
     
-    applyCloneShapes(sender->view, true, m_touchCountDrag > 1);
+    applyCloneShapes(sender->view, true, sender->tapDrag);
     
     m_insertPoint = false;
     if (m_handleIndex > 0) {

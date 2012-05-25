@@ -9,6 +9,7 @@
 
 - (BOOL)setView:(UIView*)view;
 - (void)convertPoint:(CGPoint)pt;
+- (CGPoint)getPointForTagDrag:(UIGestureRecognizer *)sender;
 - (GiContext*)currentContext;
 
 @end
@@ -81,6 +82,18 @@ static long s_cmdRef = 0;
 {
     _motion->point = Point2d(pt.x, pt.y);
     _motion->pointM = Point2d(pt.x, pt.y) * _motion->view->xform()->displayToModel();
+}
+
+- (CGPoint)getPointForTagDrag:(UIGestureRecognizer *)sender
+{
+    CGPoint point = [sender locationOfTouch:[sender numberOfTouches] - 1 inView:sender.view];
+    float dist = mgHypot(point.x - _motion->startPoint.x, point.y - _motion->startPoint.y);
+    
+    if (dist > 10) {
+        point = [sender locationOfTouch:0 inView:sender.view];
+    }
+    
+    return point;
 }
 
 - (GiContext*)currentContext
@@ -225,7 +238,7 @@ static long s_cmdRef = 0;
 
 - (BOOL)cancel
 {
-    _motion->touchCount = 0;
+    _motion->tapDrag = false;
     return _mgview->getView() && mgGetCommandManager()->cancel(_motion);
 }
 
@@ -234,6 +247,11 @@ static long s_cmdRef = 0;
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     bool recall;
     return cmd && _mgview->getView() && cmd->undo(recall, _motion);
+}
+
+- (void)setTapDragMode:(BOOL)yn
+{
+    _motion->tapDrag = !!yn;
 }
 
 - (void)touchesBegan:(CGPoint)point view:(UIView*)view
@@ -248,6 +266,7 @@ static long s_cmdRef = 0;
     }
     _moved = NO;
     _clicked = NO;
+    _undoFired = NO;
 }
 
 - (BOOL)touchesMoved:(CGPoint)point view:(UIView*)view count:(int)count
@@ -261,17 +280,25 @@ static long s_cmdRef = 0;
     }
     if (cmd) {
         [self setView:view];
-        [self convertPoint:point];
-        _motion->touchCount = count;
         
-        float dist = _motion->lastPoint.distanceTo(_motion->point);
-        ret = dist <= 2 || cmd->touchMoved(_motion);
-
-        _motion->lastPoint = _motion->point;
-        _motion->lastPointM = _motion->pointM;
+        if (!_motion->tapDrag && count > 1) {               // 变为双指滑动
+            bool recall = false;
+            if (!_undoFired) {                              // 双指滑动后可再触发Undo操作
+                if (cmd->undo(recall, _motion) && !recall)  // 触发一次Undo操作
+                    _undoFired = true;                      // 另一个手指不松开也不再触发Undo操作
+            }
+        }
+        else {
+            [self convertPoint:point];
+            
+            ret = cmd->touchMoved(_motion);
+            _undoFired = false;                             // 允许再触发Undo操作
+            _motion->lastPoint = _motion->point;
+            _motion->lastPointM = _motion->pointM;
+        }
     }
     
-    return ret;
+    return !!cmd;
 }
 
 - (BOOL)touchesEnded:(CGPoint)point view:(UIView*)view count:(int)count
@@ -284,7 +311,7 @@ static long s_cmdRef = 0;
         [self convertPoint:point];
         
         ret = cmd->touchEnded(_motion);
-        _motion->touchCount = 0;
+        _motion->tapDrag = false;
     }
     
     return ret;
@@ -301,13 +328,39 @@ static long s_cmdRef = 0;
             CGPoint velocity = [sender velocityInView:sender.view];
             _motion->velocity = hypotf(velocity.x, velocity.y);
             
-            CGPoint point = [sender locationOfTouch:[sender numberOfTouches]-1 inView:sender.view];
-            ret = [self touchesMoved:point view:sender.view count:sender.numberOfTouches];
+            ret = [self touchesMoved:[self getPointForTagDrag:sender]
+                                view:sender.view count:sender.numberOfTouches];
         }
         else if (sender.state == UIGestureRecognizerStateEnded) {
             if ([sender numberOfTouches]) {
-                CGPoint point = [sender locationOfTouch:[sender numberOfTouches]-1 inView:sender.view];
-                [self convertPoint:point];
+                [self convertPoint:[self getPointForTagDrag:sender]];
+            }
+            ret = cmd->touchEnded(_motion);
+        }
+        else if (sender.state != UIGestureRecognizerStateBegan) {
+            ret = cmd->cancel(_motion);
+        }
+        ret = YES;
+    }
+    
+    return ret;
+}
+
+- (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender
+{
+    MgCommand* cmd = mgGetCommandManager()->getCommand();
+    BOOL ret = NO;
+    
+    if (_motion->tapDrag && cmd) {
+        if (sender.state == UIGestureRecognizerStateChanged) {
+            _motion->velocity = 0;
+            
+            ret = [self touchesMoved:[self getPointForTagDrag:sender]
+                                view:sender.view count:sender.numberOfTouches];
+        }
+        else if (sender.state == UIGestureRecognizerStateEnded) {
+            if ([sender numberOfTouches]) {
+                [self convertPoint:[self getPointForTagDrag:sender]];
             }
             ret = cmd->touchEnded(_motion);
         }
@@ -332,7 +385,6 @@ static long s_cmdRef = 0;
         _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
         _motion->lastPointM = _motion->pointM;
-        _motion->touchCount = [sender numberOfTouches];
         
         ret = cmd->doubleClick(_motion);
     }
@@ -352,7 +404,6 @@ static long s_cmdRef = 0;
         _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
         _motion->lastPointM = _motion->pointM;
-        _motion->touchCount = [sender numberOfTouches];
         
         ret = cmd->longPress(_motion);
     }
@@ -363,7 +414,6 @@ static long s_cmdRef = 0;
 - (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
     _clicked = YES;
-    _motion->touchCount = [sender numberOfTouches];
     return mgGetCommandManager()->getCommand() != NULL;
 }
 

@@ -18,6 +18,7 @@ class MgViewProxy;
     MgViewProxy *_mgview;           //!< 命令所用视图
     BOOL        _moved;             //!< 是否已触发touchBegan命令消息
     BOOL        _clicked;           //!< 是否已触发oneFingerOneTap
+    BOOL        _undoFired;         //!< 是否已触发Undo操作
 }
 
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称
@@ -28,6 +29,9 @@ class MgViewProxy;
 
 //! 给定辅助视图初始化本对象，auxviews是以Nil结束的多个视图
 - (id)initWithViews:(UIView**)auxviews;
+
+//! 设置当前滑动触摸是否为Tap+Drag模式
+- (void)setTapDragMode:(BOOL)yn;
 
 //! 开始触摸时调用，避免Pan手势开始时丢失开始触摸位置
 - (void)touchesBegan:(CGPoint)point view:(UIView*)view;

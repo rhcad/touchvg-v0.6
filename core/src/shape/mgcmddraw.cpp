@@ -101,31 +101,8 @@ bool MgCommandDraw::_touchBegan(const MgMotion* sender)
         *m_shape->context() = *sender->view->context();
     }
     sender->view->redraw(true);
-    m_undoFired = false;
     
     return true;
-}
-
-bool MgCommandDraw::touchMoved(const MgMotion* sender)
-{
-    bool ret = false;
-    
-    if (sender->touchCount > 1) {                       // 滑动时有两个手指
-        bool recall = false;
-        float dist = mgHypot(sender->point.x - sender->lastPoint.x, 
-                             sender->point.y - sender->lastPoint.y);
-        if (!m_undoFired && dist > 10) {                // 双指滑动超过10像素可再触发Undo操作
-            ret = true;
-            if (undo(recall, sender) && !recall)        // 触发一次Undo操作
-                m_undoFired = true;                     // 另一个手指不松开也不再触发Undo操作
-        }
-    }
-    if (!ret) {
-        ret = touchMoved_(sender);
-        m_undoFired = false;                            // 允许再触发Undo操作
-    }
-    
-    return ret;
 }
 
 bool MgCommandDraw::_touchMoved(const MgMotion* sender)

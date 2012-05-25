@@ -34,14 +34,14 @@ struct MgView {
 struct MgMotion {
     MgView*     view;                           //!< 图形视图
     float       velocity;                       //!< 移动速度，像素每秒
-    int         touchCount;                     //!< 触摸点数
+    bool        tapDrag;                        //!< 是否为一指按住并另一手指拖动
     Point2d     startPoint;                     //!< 开始点，视图坐标
     Point2d     startPointM;                    //!< 开始点，模型坐标
     Point2d     lastPoint;                      //!< 上次点，视图坐标
     Point2d     lastPointM;                     //!< 上次点，模型坐标
     Point2d     point;                          //!< 当前点，视图坐标
     Point2d     pointM;                         //!< 当前点，模型坐标
-    MgMotion() : view(NULL), velocity(0), touchCount(1) {}
+    MgMotion() : view(NULL), velocity(0), tapDrag(false) {}
 };
 
 //! 命令接口

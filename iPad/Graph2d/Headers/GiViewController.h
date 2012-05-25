@@ -15,7 +15,7 @@
     void*   _shapesCreated;             //!< 创建的图形列表, MgShapes*
     BOOL    _gestureRecognizerUsed;     //!< 是否使用手势识别器处理触摸消息
     int     _touchCount;                //!< 开始触摸时的手指数
-    UIView  *_magnifierView[3];         //!< 创建的放大镜视图，最多两个
+    UIView  *_magViews[3];              //!< 创建的放大镜视图，最多两个
     UIView  *_activeView;               //!< 当前的图形视图，主视图或第一个放大镜视图
     BOOL    _ignoreTouches;             //!< 忽略当前触摸手势，直到触摸结束
     NSTimeInterval  _timeBegan;         //!< 开始触摸时的时刻
@@ -42,13 +42,13 @@
 //! 像素单位的线宽，正数
 @property (nonatomic)         float     strokeWidth;
 
-//! 线条颜色，忽略透明度分量，clearColor 表示不画线条
+//! 线条颜色，忽略透明度分量（即总是1），clearColor 表示不画线条
 @property (nonatomic,assign)  UIColor   *lineColor;
 
 //! 线条透明度, 0-1
 @property (nonatomic)         float     lineAlpha;
 
-//! 填充颜色，忽略透明度分量，clearColor 表示不填充
+//! 填充颜色，忽略透明度分量（即总是1），clearColor 表示不填充
 @property (nonatomic,assign)  UIColor   *fillColor;
 
 //! 填充透明度, 0-1
@@ -73,7 +73,7 @@
 - (void)afterZoomed:(id)sender;             //!< 供图形视图在动态放缩后通知
 
 //! 创建图形视图(GiGraphView)和图形列表，不需要图形视图的派生类时使用
-/*!
+/*! 新视图作为本对象的自身视图（替代原视图），并已加入到parentView中。
     \param parentView 已有视图，将创建其子视图
     \param frame 视图位置大小，可取为 parentView.bounds
     \param bkColor 绘图背景色, 为空表示取上级视图的背景色，新视图的背景色为透明色
@@ -82,7 +82,7 @@
 - (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame backgroundColor:(UIColor*)bkColor;
 
 //! 在已有视图中创建子图形视图(GiGraphView)
-/*! 创建的视图内默认不能放缩显示，背景色为透明色。
+/*! 创建的视图内默认不能放缩显示，背景色为透明色。新视图作为本对象的自身视图（替代原视图），并已加入到parentView中。
     \param parentView 已有视图，将创建其子视图，可以为滚动视图或特殊内容视图
     \param frame 视图位置大小，可取为 parentView.bounds
     \param shapes 已有的共享图形列表，如果为NULL则自动创建图形列表
@@ -91,11 +91,11 @@
 - (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame shapes:(void*)shapes;
 
 //! 在给定视图内创建放大镜视图
-/*! 最多两个放大镜视图，第一个放大镜视图（放大显示）上可以使用手势绘图。
+/*! 最多两个放大镜视图，第一个放大镜视图（放大显示）上可以使用手势绘图。已将新视图加入到parentView中。
     \param parentView 已有视图，将创建其子视图
     \param frame 视图位置大小，可取为 parentView.bounds 或更小区域
-    \param scale 放大镜视图相对于图形视图(GiGraphView)的显示放大倍数，大于1时放大，小于1时缩小
-    \return 创建的放大镜视图(GiMagnifierView)
+    \param scale 放大镜视图相对于图形视图(GiGraphView)的显示放大倍数，大于1时放大，小于1的正数缩小显示
+    \return 创建的放大镜视图(GiMagnifierView)，或Nil表示不能创建更多的视图。
  */
 - (UIView*)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale;
 
