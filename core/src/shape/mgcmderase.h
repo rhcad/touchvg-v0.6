@@ -41,7 +41,7 @@ private:
     MgShape* hitTest(const MgMotion* sender);
     bool isIntersectMode(const MgMotion* sender);
     
-    std::vector<MgShape*>   m_deleted;
+    std::vector<UInt32>     m_delIds;
     bool                    m_boxsel;
 };
 

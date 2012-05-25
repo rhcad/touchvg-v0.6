@@ -378,7 +378,8 @@ static const NSUInteger kDashLineTag    = 4;
     [calloutView release];
     calloutView.backgroundColor = [UIColor darkGrayColor];
     
-    [calloutView.graphc createSubGraphView:calloutView frame:calloutView.bounds shapes:_graphc.shapes];
+    [calloutView.graphc createSubGraphView:calloutView frame:calloutView.bounds
+                                    shapes:_graphc.shapes backgroundColor:nil];
     calloutView.graphc.commandName = "splines";
 }
 

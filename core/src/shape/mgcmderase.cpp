@@ -34,8 +34,8 @@ bool MgCommandErase::initialize(const MgMotion* /*sender*/)
 bool MgCommandErase::undo(bool &enableRecall, const MgMotion* sender)
 {
     enableRecall = true;
-    if (!m_deleted.empty()) {
-        m_deleted.pop_back();
+    if (!m_delIds.empty()) {
+        m_delIds.pop_back();
         sender->view->redraw(false);
         return true;
     }
@@ -59,9 +59,10 @@ bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
         gs->drawRect(&ctxshap, Box2d(sender->startPointM, sender->pointM));
         gs->setAntiAliasMode(antiAlias);
     }
-    for (std::vector<MgShape*>::const_iterator it = m_deleted.begin();
-         it != m_deleted.end(); ++it) {
-        (*it)->draw(*gs, &ctx);
+    for (std::vector<UInt32>::const_iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
+        MgShape* shape = sender->view->shapes()->findShape(*it);
+        if (shape)
+            shape->draw(*gs, &ctx);
     }
     
     return true;
@@ -118,11 +119,11 @@ bool MgCommandErase::touchMoved(const MgMotion* sender)
     void *it;
     MgShape* shape = m_boxsel ? sender->view->shapes()->getFirstShape(it) : NULL;
     
-    m_deleted.clear();
+    m_delIds.clear();
     for (; shape; shape = sender->view->shapes()->getNextShape(it)) {
         if (isIntersectMode(sender) ? shape->shape()->hitTestBox(snap)
             : snap.contains(shape->shape()->getExtent())) {
-            m_deleted.push_back(shape);
+            m_delIds.push_back(shape->getID());
         }
     }
     sender->view->redraw(false);
@@ -132,18 +133,19 @@ bool MgCommandErase::touchMoved(const MgMotion* sender)
 
 bool MgCommandErase::touchEnded(const MgMotion* sender)
 {
-    if (!m_deleted.empty()) {
+    if (!m_delIds.empty()) {
         MgShapesLock locker(sender->view->shapes());
         
-        for (std::vector<MgShape*>::iterator it = m_deleted.begin();
-             it != m_deleted.end(); ++it) {
-            MgShape* shape = *it;
-            shape = sender->view->shapes()->removeShape(shape->getID());
-            shape->release();
+        for (std::vector<UInt32>::iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
+            MgShape* shape = sender->view->shapes()->findShape(*it);
+            if (shape) {
+                shape = sender->view->shapes()->removeShape(shape->getID());
+                shape->release();
+            }
         }
         
         sender->view->regen();
-        m_deleted.clear();
+        m_delIds.clear();
     }
     
     m_boxsel = false;

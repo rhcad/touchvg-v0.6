@@ -102,7 +102,7 @@
     
     if (!bkColor)
         bkColor = parentView.superview.backgroundColor;
-    [aview graph]->setBkColor(giFromUIColor(bkColor));
+    [aview graph]->setBkColor(giFromUIColor(bkColor ? bkColor : [UIColor whiteColor]));
     aview.backgroundColor = [UIColor clearColor];
     
     [aview setDrawingDelegate:self];
@@ -122,7 +122,8 @@
     return self.view;
 }
 
-- (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame shapes:(void*)sp
+- (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame
+                       shapes:(void*)sp backgroundColor:(UIColor*)bkColor
 {
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
@@ -130,7 +131,9 @@
         [self.view removeFromSuperview];
     self.view = aview;
     
-    [aview graph]->setBkColor(giFromUIColor(parentView.superview.backgroundColor));
+    if (!bkColor)
+        bkColor = parentView.superview.backgroundColor;
+    [aview graph]->setBkColor(giFromUIColor(bkColor ? bkColor : [UIColor whiteColor]));
     aview.backgroundColor = [UIColor clearColor];
     aview.enableZoom = NO;
     

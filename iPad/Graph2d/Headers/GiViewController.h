@@ -76,7 +76,7 @@
 /*! 新视图作为本对象的自身视图（替代原视图），并已加入到parentView中。
     \param parentView 已有视图，将创建其子视图
     \param frame 视图位置大小，可取为 parentView.bounds
-    \param bkColor 绘图背景色, 为空表示取上级视图的背景色，新视图的背景色为透明色
+    \param bkColor 绘图背景色, 为空表示取上级视图的背景色或白色，新视图的背景色为透明色
     \return 创建的子图形视图(GiGraphView)
  */
 - (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame backgroundColor:(UIColor*)bkColor;
@@ -86,9 +86,11 @@
     \param parentView 已有视图，将创建其子视图，可以为滚动视图或特殊内容视图
     \param frame 视图位置大小，可取为 parentView.bounds
     \param shapes 已有的共享图形列表，如果为NULL则自动创建图形列表
+    \param bkColor 绘图背景色, 为空表示取上级视图的背景色或白色，新视图的背景色为透明色
     \return 创建的子图形视图(GiGraphView)
  */
-- (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame shapes:(void*)shapes;
+- (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame
+                       shapes:(void*)shapes backgroundColor:(UIColor*)bkColor;
 
 //! 在给定视图内创建放大镜视图
 /*! 最多两个放大镜视图，第一个放大镜视图（放大显示）上可以使用手势绘图。已将新视图加入到parentView中。
