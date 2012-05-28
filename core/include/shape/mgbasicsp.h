@@ -173,22 +173,22 @@ public:
     static UInt32 Type() { return 5; }
 
     //! 设置是否闭合
-    void setClosed(bool closed);
+    bool setClosed(bool closed);
 
     //! 返回终点
     Point2d endPoint() const;
 
     //! 改变顶点数
-    void resize(UInt32 count);
+    bool resize(UInt32 count);
 
     //! 添加一个顶点
-    void addPoint(const Point2d& pt);
+    bool addPoint(const Point2d& pt);
     
     //! 在指定段插入一个顶点
-    void insertPoint(Int32 segment, const Point2d& pt);
+    bool insertPoint(Int32 segment, const Point2d& pt);
 
     //! 删除一个顶点
-    void removePoint(UInt32 index);
+    bool removePoint(UInt32 index);
 
 protected:
     MgBaseLines();

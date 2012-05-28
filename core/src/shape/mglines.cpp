@@ -96,12 +96,13 @@ Point2d MgBaseLines::endPoint() const
     return _count > 0 ? _points[_count - 1] : Point2d();
 }
 
-void MgBaseLines::setClosed(bool closed)
+bool MgBaseLines::setClosed(bool closed)
 {
     _closed = closed;
+    return true;
 }
 
-void MgBaseLines::resize(UInt32 count)
+bool MgBaseLines::resize(UInt32 count)
 {
     if (_maxCount < count)
     {
@@ -116,32 +117,44 @@ void MgBaseLines::resize(UInt32 count)
         _points = pts;
     }
     _count = count;
+    return true;
 }
 
-void MgBaseLines::addPoint(const Point2d& pt)
+bool MgBaseLines::addPoint(const Point2d& pt)
 {
     resize(_count + 1);
     _points[_count - 1] = pt;
+    return true;
 }
 
-void MgBaseLines::insertPoint(Int32 segment, const Point2d& pt)
+bool MgBaseLines::insertPoint(Int32 segment, const Point2d& pt)
 {
+    bool ret = false;
+    
     if (segment >= 0 && segment < (Int32)(_count - (_closed ? 0 : 1))) {
         resize(_count + 1);
         for (Int32 i = (Int32)_count - 1; i > segment + 1; i--)
             _points[i] = _points[i - 1];
         _points[segment + 1] = pt;
+        ret = true;
     }
+    
+    return ret;
 }
 
-void MgBaseLines::removePoint(UInt32 index)
+bool MgBaseLines::removePoint(UInt32 index)
 {
+    bool ret = false;
+    
     if (index < _count && _count > 1)
     {
         for (UInt32 i = index + 1; i < _count; i++)
             _points[i - 1] = _points[i];
         _count--;
+        ret = true;
     }
+    
+    return ret;
 }
 
 bool MgBaseLines::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
