@@ -9,9 +9,11 @@
 #include <mgcmd.h>
 
 //! 返回线条宽度的一半，模型单位
+float mgLineHalfWidthModel(const MgShape* shape, MgView* view);
 float mgLineHalfWidthModel(const MgShape* shape, const MgMotion* sender);
 
 //! 返回屏幕毫米长度对应的模型长度
+float mgDisplayMmToModel(float mm, MgView* view);
 float mgDisplayMmToModel(float mm, const MgMotion* sender);
 
 //! 绘图命令基类

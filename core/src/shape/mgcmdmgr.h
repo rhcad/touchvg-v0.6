@@ -27,6 +27,7 @@ private:
     virtual void unloadCommands();
     virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange);
     virtual bool dynamicChangeEnded(MgView* view, bool apply);
+    virtual MgSelection* getSelection(MgView* view);
 
 private:
     typedef std::map<std::string, MgCommand*> CMDS;

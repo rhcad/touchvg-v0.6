@@ -9,6 +9,8 @@
 #include <gigraph.h>
 #include <mgshapes.h>
 
+struct MgSelection;
+
 //! 图形视图接口
 /*! \ingroup GEOM_SHAPE
     \interface MgView
@@ -23,9 +25,7 @@ struct MgView {
     virtual bool shapeWillAdded(MgShape* shape) = 0;    //!< 通知将添加图形
     virtual void shapeAdded(MgShape* shape) = 0;        //!< 通知已添加图形，由视图重新构建显示
     virtual bool shapeWillDeleted(MgShape* shape) = 0;  //!< 通知将删除图形
-    
-    enum kSelState { kSelNone, kSelOneShape, kSelMultiShapes, kSelVertex };
-    virtual bool longPressSelection(kSelState state) = 0;        //!< 选择状态下长按
+    virtual bool longPressSelection(int selState) = 0;  //!< 选择状态下长按, MgSelection::kSelState
 };
 
 //! 命令参数
@@ -34,14 +34,14 @@ struct MgView {
 struct MgMotion {
     MgView*     view;                           //!< 图形视图
     float       velocity;                       //!< 移动速度，像素每秒
-    bool        tapDrag;                        //!< 是否为一指按住并另一手指拖动
+    bool        pressDrag;                      //!< 是否为一指按住并另一手指拖动
     Point2d     startPoint;                     //!< 开始点，视图坐标
     Point2d     startPointM;                    //!< 开始点，模型坐标
     Point2d     lastPoint;                      //!< 上次点，视图坐标
     Point2d     lastPointM;                     //!< 上次点，模型坐标
     Point2d     point;                          //!< 当前点，视图坐标
     Point2d     pointM;                         //!< 当前点，模型坐标
-    MgMotion() : view(NULL), velocity(0), tapDrag(false) {}
+    MgMotion() : view(NULL), velocity(0), pressDrag(false) {}
 };
 
 //! 命令接口
@@ -87,6 +87,9 @@ struct MgCommandManager {
     
     //! 结束动态修改，提交或放弃所改的临时图形
     virtual bool dynamicChangeEnded(MgView* view, bool apply) = 0;
+    
+    //! 返回选择集对象
+    virtual MgSelection* getSelection(MgView* view) = 0;
 };
 
 //! 返回命令管理器

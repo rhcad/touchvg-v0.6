@@ -4,6 +4,7 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #import "GiMotionHandler.h"
+#import "GiEditAction.h"
 #include <mgcmd.h>
 
 struct MgMotion;
@@ -12,13 +13,14 @@ class MgViewProxy;
 //! 命令控制器类，代理调用内部命令(MgCommand)
 /*! \ingroup GRAPH_IOS
 */
-@interface GiCommandController : NSObject<GiMotionHandler> {
+@interface GiCommandController : NSObject<GiMotionHandler, GiEditAction> {
 @private
     MgMotion    *_motion;           //!< 当前命令参数
     MgViewProxy *_mgview;           //!< 命令所用视图
     BOOL        _moved;             //!< 是否已触发touchBegan命令消息
     BOOL        _clicked;           //!< 是否已触发oneFingerOneTap
     BOOL        _undoFired;         //!< 是否已触发Undo操作
+    int         _touchCount;        //!< 开始触摸时的手指数
 }
 
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称
@@ -30,11 +32,8 @@ class MgViewProxy;
 //! 给定辅助视图初始化本对象，auxviews是以Nil结束的多个视图
 - (id)initWithViews:(UIView**)auxviews;
 
-//! 设置当前滑动触摸是否为Tap+Drag模式
-- (void)setTapDragMode:(BOOL)yn;
-
 //! 开始触摸时调用，避免Pan手势开始时丢失开始触摸位置
-- (void)touchesBegan:(CGPoint)point view:(UIView*)view;
+- (void)touchesBegan:(CGPoint)point view:(UIView*)view count:(int)count;
 
 //! 正在触摸移动时调用，视图控制器在手势识别失败时调用
 - (BOOL)touchesMoved:(CGPoint)point view:(UIView*)view count:(int)count;

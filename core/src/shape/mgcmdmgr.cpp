@@ -85,3 +85,9 @@ bool MgCmdManagerImpl::dynamicChangeEnded(MgView* view, bool apply)
     }
     return changed;
 }
+
+MgSelection* MgCmdManagerImpl::getSelection(MgView* view)
+{
+    return view && _cmdname == MgCommandSelect::Name()
+        ? (MgCommandSelect*)getCommand() : NULL;
+}

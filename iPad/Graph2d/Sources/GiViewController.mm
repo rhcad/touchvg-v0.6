@@ -69,7 +69,7 @@
         [self addGestureRecognizers:0 view:self.view];
         
         GiCommandController* cmd = (GiCommandController*)_cmdctl;
-        [cmd touchesBegan:CGPointZero view:_activeView];    // 传入View
+        [cmd touchesBegan:CGPointZero view:_activeView count:0];    // 传入View
         cmd.lineWidth = 50;                                 // 默认画笔0.5mm
         cmd.lineColor = GiColor(0, 0, 0, 128);              // 默认黑色画笔，50%透明
     }
@@ -328,6 +328,48 @@
     return [cmd dynamicChangeEnded:apply];
 }
 
+#pragma mark - GiEditAction implement
+
+- (IBAction)menuClickDraw:(id)sender
+{
+    [_cmdctl menuClickDraw:sender];
+}
+
+- (IBAction)menuClickSelAll:(id)sender
+{
+    [_cmdctl menuClickSelAll:sender];
+}
+
+- (IBAction)menuClickReset:(id)sender
+{
+    [_cmdctl menuClickReset:sender];
+}
+
+- (IBAction)menuClickDelete:(id)sender
+{
+    [_cmdctl menuClickDelete:sender];
+}
+
+- (IBAction)menuClickClone:(id)sender
+{
+    [_cmdctl menuClickClone:sender];
+}
+
+- (IBAction)menuClickClosed:(id)sender
+{
+    [_cmdctl menuClickClosed:sender];
+}
+
+- (IBAction)menuClickAddNode:(id)sender
+{
+    [_cmdctl menuClickAddNode:sender];
+}
+
+- (IBAction)menuClickDelNode:(id)sender
+{
+    [_cmdctl menuClickDelNode:sender];
+}
+
 #pragma mark - View motion
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -424,11 +466,15 @@
     BOOL allow = YES;
     NSTimeInterval seconds = [[NSProcessInfo processInfo]systemUptime] - _timeBegan;
     
-    if (seconds > 0.8) {    // 从按下到开始移动经过的秒数超过阀值，就向当前命令触发长按动作
+    if (gestureRecognizer == _recognizers[0][kLongPressGesture]
+        || gestureRecognizer == _recognizers[1][kLongPressGesture]) {
+        allow = [[self getCommand:@selector(longPressGesture:)] longPressGesture:gestureRecognizer];
+    }
+    else if (seconds > 0.8) {    // 从按下到开始移动经过的秒数超过阀值，就向当前命令触发长按动作
         allow = ![[self getCommand:@selector(longPressGesture:)] longPressGesture:gestureRecognizer];
     }
     
-    return allow;           // 响应了长按消息时则取消当前手势
+    return allow;
 }
 
 static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐标
@@ -511,6 +557,13 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     twoFingersTwoTaps.numberOfTouchesRequired = 2;
     _recognizers[t][n++] = twoFingersTwoTaps;
     
+    // 单指长按手势
+    UILongPressGestureRecognizer *longPressGesture =
+    [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture)];
+    longPressGesture.minimumPressDuration = 0.8;
+    longPressGesture.delegate = self;                               // 用于检测长按
+    _recognizers[t][n++] = longPressGesture;
+    
     _touchCount = 0;
     if (_gestureRecognizerUsed) {
         for (int i = 0; i < RECOGNIZER_COUNT; i++) {
@@ -555,11 +608,12 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     _ignoreTouches = CGPointEqualToPoint(point, ignorept);
     
     _activeView = touch.view;
+    int count = _timeBegan < 0.1 ? 1 : 2;
     if (_timeBegan < 0.1) {                             // 是第一个触点
-        GiCommandController* cmd = (GiCommandController*)_cmdctl;
-        [cmd touchesBegan:point view:touch.view];
         _timeBegan = touch.timestamp;                   // 第一个触点的时刻
     }
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    [cmd touchesBegan:point view:touch.view count:count];
     
     if (touch.view == self.view) {
         [super touchesBegan:touches withEvent:event];
@@ -581,7 +635,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 {
     UITouch *touch = [touches anyObject];
     
-    if (touch) {
+    if (touch) {            // oneFingerOneTap不直接处理是为了检测是点击还是短划动
         CGPoint point = [touch locationInView:touch.view];
         GiCommandController* cmd = (GiCommandController*)_cmdctl;
         [cmd delayTap:point view:touch.view];           // 看是否有点击待处理
@@ -598,11 +652,6 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     if (_ignoreTouches) {
         sender.cancelsTouchesInView = YES;
         return;
-    }
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        GiCommandController* cmd = (GiCommandController*)_cmdctl;
-        NSTimeInterval seconds = [[NSProcessInfo processInfo]systemUptime] - _timeBegan;
-        [cmd setTapDragMode:seconds > 0.8];
     }
     if (![[self getCommand:@selector(twoFingersPinch:)] twoFingersPinch:sender]
         && sender.view == self.view) {
@@ -646,12 +695,9 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
         return;
     }
     if (sender.state == UIGestureRecognizerStateBegan) {
-        GiCommandController* cmd = (GiCommandController*)_cmdctl;
         NSTimeInterval seconds = [[NSProcessInfo processInfo]systemUptime] - _timeBegan;
-        bool tapdrag = seconds > 0.8 && [sender numberOfTouches] == 2;
-        
-        [cmd setTapDragMode:tapdrag];
-        _touchCount = tapdrag ? 1 : [sender numberOfTouches]; // Tap+Drag 视为单指滑动
+        bool press = seconds > 0.8 && [sender numberOfTouches] == 2;
+        _touchCount = press ? 1 : [sender numberOfTouches]; // Press+Drag 视为单指滑动
     }
     if (2 == _touchCount) {
         [self twoFingersPan:sender];
@@ -702,6 +748,11 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
         [[self motionView:@selector(twoFingersTwoTaps:)] twoFingersTwoTaps:sender];
     }
     [self updateMagnifierCenter:sender];
+}
+
+- (void)longPressGesture
+{
+    // gestureRecognizerShouldBegin 已经处理了
 }
 
 - (void)updateMagnifierCenter:(UIGestureRecognizer *)sender

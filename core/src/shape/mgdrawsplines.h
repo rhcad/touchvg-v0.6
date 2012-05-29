@@ -32,9 +32,12 @@ private:
     virtual bool touchMoved(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);
     virtual bool click(const MgMotion* sender);
+    virtual bool doubleClick(const MgMotion* sender);
     
 private:
     bool canAddPoint(const MgMotion* sender, bool ended);
+    
+    bool    m_freehand;
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_SPLINES_H_

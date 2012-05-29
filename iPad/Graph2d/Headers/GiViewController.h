@@ -3,13 +3,13 @@
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 // License: LGPL, https://github.com/rhcad/touchvg
 
-#import <UIKit/UIKit.h>
+#import "GiEditAction.h"
 
 //! 图形视图控制器类
 /*! 使用此类管理图形视图和触摸手势。
     \ingroup GRAPH_IOS
 */
-@interface GiViewController : UIViewController<UIGestureRecognizerDelegate> {
+@interface GiViewController : UIViewController<GiEditAction, UIGestureRecognizerDelegate> {
 @private
     id      _cmdctl;                    //!< 绘图命令控制器, GiCommandController
     void*   _shapesCreated;             //!< 创建的图形列表, MgShapes*
@@ -22,7 +22,7 @@
     
     enum { kPinchGesture = 0, kTwoFingersPan, kPanGesture, 
         kTapGesture, TwoTapsGesture, kTwoFingersTwoTaps,
-        RECOGNIZER_COUNT };
+        kLongPressGesture, RECOGNIZER_COUNT };
     UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT]; //!< 手势识别器，主视图和放大镜视图的
 }
 

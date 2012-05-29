@@ -108,16 +108,26 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
     return false;
 }
 
-float mgLineHalfWidthModel(const MgShape* shape, const MgMotion* sender)
+float mgLineHalfWidthModel(const MgShape* shape, MgView* view)
 {
     float w = shape->context()->getLineWidth();
-    GiGraphics* gs = sender->view->graph();
+    GiGraphics* gs = view->graph();
     
     w = w > 0 ? - gs->calcPenWidth(w) : w;
     w = mgMax(1.f, -0.5f * w);
     w = gs->xf().displayToModel(w);
     
     return w;
+}
+
+float mgLineHalfWidthModel(const MgShape* shape, const MgMotion* sender)
+{
+    return mgLineHalfWidthModel(shape, sender->view);
+}
+
+float mgDisplayMmToModel(float mm, MgView* view)
+{
+    return view->xform()->displayToModel(mm, true);
 }
 
 float mgDisplayMmToModel(float mm, const MgMotion* sender)
@@ -183,6 +193,9 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
             insertctx.setFillColor(GiColor(255, 0, 0, 240));
             gs->drawEllipse(&insertctx, m_ptNear, r2);
         }
+        else {
+            gs->drawEllipse(&ctxhd, m_ptNear, radius / 2);
+        }
         if (!m_cloneShapes.empty() && !selection.empty()) {
             gs->drawEllipse(&ctxhd, selection.front()->shape()->getHandlePoint(m_handleIndex-1), radius);
         }
@@ -225,7 +238,7 @@ MgShape* MgCommandSelect::getSelectedShape(const MgMotion* sender)
 
 bool MgCommandSelect::canSelect(MgShape* shape, const MgMotion* sender)
 {
-    Box2d limits(sender->startPointM, mgDisplayMmToModel(10, sender), 0);
+    Box2d limits(sender->startPointM, mgDisplayMmToModel(20, sender), 0);
     return shape && shape->shape()->hitTest(limits.center(), limits.width() / 2, 
                                             m_ptNear, m_segment) <= limits.width() / 2;
 }
@@ -259,6 +272,9 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const Point2d& pointM, con
 
 bool MgCommandSelect::click(const MgMotion* sender)
 {
+    if (sender->pressDrag)
+        return false;
+    
     Point2d nearpt;
     Int32   segment = -1;
     UInt32  handleIndex = 0;
@@ -312,29 +328,19 @@ bool MgCommandSelect::click(const MgMotion* sender)
     return true;
 }
 
-bool MgCommandSelect::doubleClick(const MgMotion* sender)
+bool MgCommandSelect::doubleClick(const MgMotion* /*sender*/)
 {
     return false;
 }
 
 bool MgCommandSelect::longPress(const MgMotion* sender)
 {
-    MgView::kSelState state = MgView::kSelNone;
     bool ret = false;
     
     if (m_selIds.empty()) {
         ret = click(sender);
     }
-    if (m_handleIndex > 0) {
-        MgShape* shape = getSelectedShape(sender);
-        state = shape && shape->shape()->isKindOf(MgBaseLines::Type()) ?
-            MgView::kSelVertex : MgView::kSelOneShape;
-    }
-    else if (!m_selIds.empty()) {
-        state = m_selIds.size() > 1 ? MgView::kSelMultiShapes : MgView::kSelOneShape;
-    }
-    
-    if (sender->view->longPressSelection(state)) {
+    if (sender->view->longPressSelection((kSelState)getSelectState(sender->view))) {
         ret = true;
     }
 
@@ -433,7 +439,8 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
         m_cloneShapes.clear();
     }
     
-    applyCloneShapes(sender->view, true, sender->tapDrag);
+    float dist = sender->pointM.distanceTo(sender->startPointM);
+    applyCloneShapes(sender->view, true, sender->pressDrag && dist > mgDisplayMmToModel(5, sender));
     
     m_insertPoint = false;
     if (m_handleIndex > 0) {
@@ -504,4 +511,146 @@ bool MgCommandSelect::applyCloneShapes(MgView* view, bool apply, bool addNewShap
     m_boxsel = false;
     
     return changed || cloned;
+}
+
+MgCommandSelect::kSelState MgCommandSelect::getSelectState(MgView* view)
+{
+    kSelState state = kSelNone;
+    
+    if (m_handleIndex > 0) {
+        MgShape* shape = view->shapes()->findShape(m_id);
+        state = shape && shape->shape()->isKindOf(MgBaseLines::Type()) ?
+        kSelVertex : kSelOneShape;
+    }
+    else if (!m_selIds.empty()) {
+        state = m_selIds.size() > 1 ? kSelMultiShapes : kSelOneShape;
+    }
+    
+    return state;
+}
+
+bool MgCommandSelect::selectAll(MgView* view)
+{
+    size_t oldn = m_selIds.size();
+    void* it;
+    
+    m_selIds.clear();
+    m_handleIndex = 0;
+    m_insertPoint = false;
+    m_boxsel = false;
+    
+    for (MgShape* shape = view->shapes()->getFirstShape(it);
+         shape; shape = view->shapes()->getNextShape(it)) {
+        m_selIds.push_back(shape->getID());
+        m_id = shape->getID();
+    }
+    view->redraw(false);
+    
+    return oldn != m_selIds.size();
+}
+
+bool MgCommandSelect::deleteSelection(MgView* view)
+{
+    MgShapesLock locker(view->shapes());
+    int count = 0;
+    
+    applyCloneShapes(view, false);
+    for (sel_iterator it = m_selIds.begin(); it != m_selIds.end(); ++it) {
+        MgShape* shape = view->shapes()->removeShape(*it);
+        if (shape) {
+            shape->release();
+            count++;
+        }
+    }
+    m_selIds.clear();
+    m_handleIndex = 0;
+    
+    if (count > 0) {
+        view->regen();
+    }
+    
+    return count > 0;
+}
+
+bool MgCommandSelect::cloneSelection(MgView* view)
+{
+    cloneShapes(view);
+    
+    float dist = mgDisplayMmToModel(10, view);
+    for (size_t i = 0; i < m_cloneShapes.size(); i++) {
+        m_cloneShapes[i]->shape()->offset(Vector2d(dist, -dist), -1);
+    }
+    
+    return applyCloneShapes(view, true, true);
+}
+
+void MgCommandSelect::resetSelection(MgView* view)
+{
+    applyCloneShapes(view, false);
+    m_selIds.clear();
+    m_handleIndex = 0;
+}
+
+bool MgCommandSelect::deleteVertext(const MgMotion* sender)
+{
+    MgShape* shape = getSelectedShape(sender);
+    bool ret = false;
+    
+    if (shape && m_handleIndex > 0
+        && shape->shape()->isKindOf(MgBaseLines::Type()))
+    {
+        MgShapesLock locker(sender->view->shapes());
+        MgBaseLines *lines = (MgBaseLines *)shape->shape();
+        
+        ret = lines->removePoint(m_handleIndex - 1);
+        if (ret) {
+            shape->shape()->update();
+            sender->view->regen();
+            m_handleIndex = hitTestHandles(shape, m_ptNear, sender);
+        }
+    }
+    
+    return ret;
+}
+
+bool MgCommandSelect::insertVertext(const MgMotion* sender)
+{
+    MgShape* shape = getSelectedShape(sender);
+    bool ret = false;
+    
+    if (shape && m_handleIndex > 0
+        && shape->shape()->isKindOf(MgBaseLines::Type()))
+    {
+        MgShapesLock locker(sender->view->shapes());
+        MgBaseLines *lines = (MgBaseLines *)shape->shape();
+        
+        ret = lines->insertPoint(m_segment, m_ptNear);
+        if (ret) {
+            shape->shape()->update();
+            sender->view->regen();
+            m_handleIndex = hitTestHandles(shape, m_ptNear, sender);
+        }
+    }
+    
+    return ret;
+}
+
+bool MgCommandSelect::switchClosed(MgView* view)
+{
+    MgShape* shape = view->shapes()->findShape(m_id);
+    bool ret = false;
+    
+    if (shape && shape->shape()->isKindOf(MgBaseLines::Type()))
+    {
+        MgShapesLock locker(view->shapes());
+        MgBaseLines *lines = (MgBaseLines *)shape->shape();
+        
+        ret = lines->setClosed(!lines->isClosed());
+        if (ret) {
+            shape->shape()->update();
+            view->regen();
+        }
+    }
+    
+    return ret;
 }

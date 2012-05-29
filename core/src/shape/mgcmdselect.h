@@ -7,12 +7,13 @@
 #define __GEOMETRY_MGCOMMAND_SELECT_H_
 
 #include <mgcmd.h>
+#include <mgselect.h>
 #include <vector>
 
 //! 选择命令类
 /*! \ingroup GEOM_SHAPE
 */
-class MgCommandSelect : public MgCommand
+class MgCommandSelect : public MgCommand, public MgSelection
 {
 public:
     MgCommandSelect();
@@ -20,8 +21,18 @@ public:
 
     static const char* Name() { return "select"; }
     static MgCommand* Create() { return new MgCommandSelect; }
-    UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange);
     bool dynamicChangeEnded(MgView* view, bool apply);
+    
+public:
+    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange);
+    virtual kSelState getSelectState(MgView* view);
+    virtual bool selectAll(MgView* view);
+    virtual bool deleteSelection(MgView* view);
+    virtual bool cloneSelection(MgView* view);
+    virtual void resetSelection(MgView* view);
+    virtual bool deleteVertext(const MgMotion* sender);
+    virtual bool insertVertext(const MgMotion* sender);
+    virtual bool switchClosed(MgView* view);
     
 private:
     virtual const char* getName() const { return Name(); }
