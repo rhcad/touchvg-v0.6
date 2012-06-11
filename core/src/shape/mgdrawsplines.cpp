@@ -40,7 +40,7 @@ bool MgCmdDrawSplines::draw(const MgMotion* sender, GiGraphics* gs)
         for (UInt32 i = 1, n = m_shape->shape()->getPointCount(); i < 6 && n >= i; i++) {
             gs->drawEllipse(&ctx, m_shape->shape()->getPoint(n - i), radius);
         }
-        gs->drawEllipse(&ctx, m_shape->shape()->getPoint(0), radius * 1.5);
+        gs->drawEllipse(&ctx, m_shape->shape()->getPoint(0), radius * 1.5f);
     }
     return MgCommandDraw::draw(sender, gs);
 }

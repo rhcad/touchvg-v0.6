@@ -167,6 +167,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\src\shape\mgdrawline.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\src\shape\mgdrawlines.cpp"
 				>
 			</File>
@@ -212,14 +216,6 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\..\core\include\shape\mgshape_.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\shape\mgstorage.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\core\include\shape\mgbasicsp.h"
 				>
 			</File>
@@ -244,6 +240,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\src\shape\mgdrawline.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\src\shape\mgdrawlines.h"
 				>
 			</File>
@@ -260,6 +260,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\include\shape\mgshape_.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\include\shape\mgshapes.h"
 				>
 			</File>
@@ -269,6 +273,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\shape\mgshapet.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\include\shape\mgstorage.h"
 				>
 			</File>
 		</Filter>

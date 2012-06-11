@@ -23,6 +23,15 @@ public:
     
     //! 返回终点
     Point2d center() const { return (_points[0] + _points[1]) / 2; }
+
+    //! 返回线段长度
+    float length() const { return _points[0].distanceTo(_points[1]); }
+
+    //! 设置起点，未调 update()
+    void setStartPoint(const Point2d& pt) { _points[0] = pt; }
+    
+    //! 设置终点，未调 update()
+    void setEndPoint(const Point2d& pt)  { _points[1] = pt; }
     
 protected:
     UInt32 _getHandleCount() const;

@@ -6,6 +6,7 @@
 #include "mgcmdselect.h"
 #include "mgcmderase.h"
 #include "mgdrawrect.h"
+#include "mgdrawline.h"
 #include "mgdrawlines.h"
 #include "mgdrawsplines.h"
 #include <mgbasicsp.h>
@@ -65,6 +66,7 @@ MgCommand* mgCreateCommand(const char* name)
         { MgCommandSelect::Name(), MgCommandSelect::Create },
         { MgCommandErase::Name(), MgCommandErase::Create },
         { MgCmdDrawRect::Name(), MgCmdDrawRect::Create },
+        { MgCmdDrawLine::Name(), MgCmdDrawLine::Create },
         { MgCmdDrawLines::Name(), MgCmdDrawLines::Create },
         { MgCmdDrawSplines::Name(), MgCmdDrawSplines::Create },
     };
