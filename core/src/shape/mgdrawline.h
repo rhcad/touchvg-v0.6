@@ -1,5 +1,5 @@
 //! \file mgdrawline.h
-//! \brief ¶¨ÒåÏß¶Î»æÍ¼ÃüÁîÀà MgCmdDrawLine
+//! \brief å®šä¹‰ç›´çº¿æ®µç»˜å›¾å‘½ä»¤
 //! \author pengjun, 2012.6.4
 // License: LGPL, https://github.com/rhcad/touchvg
 
@@ -8,7 +8,7 @@
 
 #include "mgcmddraw.h"
 
-//! Ïß¶Î»æÍ¼ÃüÁîÀà
+//! ç›´çº¿æ®µç»˜å›¾å‘½ä»¤
 /*! \ingroup GEOM_SHAPE
     \see MgLine
 */

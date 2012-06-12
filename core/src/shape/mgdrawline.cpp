@@ -1,4 +1,4 @@
-// mgdrawlines.cpp: ÊµÏÖÏß¶Î»æÍ¼ÃüÁîÀà
+// mgdrawlines.cpp: å®ç°ç›´çº¿æ®µç»˜å›¾å‘½ä»¤
 // Author: pengjun, 2012.6.4
 // License: LGPL, https://github.com/rhcad/touchvg
 
