@@ -3,6 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include <string.h>
+#include <map>
 #include "mgcmdselect.h"
 #include "mgcmderase.h"
 #include "mgdrawrect.h"
@@ -14,25 +15,94 @@
 
 typedef std::pair<MgShapesLock::ShapesLocked, void*> ShapeObserver;
 static std::vector<ShapeObserver>  s_shapeObservers;
-static long s_shapesLockCount = 0;
 
-MgShapesLock::MgShapesLock(MgShapes* sp) : m_sp(sp)
+#ifdef _WIN32
+void giSleep(int ms) { Sleep(ms); }
+#else
+void giSleep(int ms) { usleep(ms * 1000); }
+#endif
+
+// MgLockRW
+//
+
+MgLockRW::MgLockRW()
 {
-    if (1 == giInterlockedIncrement(&s_shapesLockCount)) {
+    _counts[0] = _counts[1] = _counts[2] = 0;
+}
+
+bool MgLockRW::lock(bool forWrite, int timeout)
+{
+    bool ret = false;
+    
+    if (1 == giInterlockedIncrement(_counts)) {     // first locked
+        giInterlockedIncrement(_counts + (forWrite ? 2 : 1));
+        ret = true;
+    }
+    else {
+        ret = !forWrite && 0 == _counts[2];         // for read and not locked for write
+        for (int i = 0; i < timeout && !ret; i += 25) {
+            giSleep(25);
+            ret = forWrite ? (!_counts[1] && !_counts[2]) : !_counts[2];
+        }
+        if (ret) {
+            giInterlockedIncrement(_counts + (forWrite ? 2 : 1));
+        }
+        else {
+            giInterlockedDecrement(_counts);
+        }
+    }
+    
+    return ret;
+}
+
+long MgLockRW::unlock(bool forWrite)
+{
+    giInterlockedDecrement(_counts + (forWrite ? 2 : 1));
+    return giInterlockedDecrement(_counts);
+}
+
+bool MgLockRW::firstLocked()
+{
+    return _counts[0] == 1;
+}
+
+bool MgLockRW::lockedForRead()
+{
+    return _counts[0] > 0;
+}
+
+bool MgLockRW::lockedForWrite()
+{
+    return _counts[2] > 0;
+}
+
+// MgShapesLock
+//
+
+MgShapesLock::MgShapesLock(MgShapes* sp, bool forWrite, int timeout) : shapes(sp)
+{
+    m_mode = shapes && shapes->getLockData()->lock(forWrite, timeout) ? (forWrite ? 2 : 1) : 0;
+    if (m_mode == 2 && shapes->getLockData()->firstLocked()) {
         for (std::vector<ShapeObserver>::iterator it = s_shapeObservers.begin();
              it != s_shapeObservers.end(); ++it) {
-            (it->first)(m_sp, it->second, true);
+            (it->first)(shapes, it->second, true);
         }
     }
 }
 
 MgShapesLock::~MgShapesLock()
 {
-    if (0 == giInterlockedDecrement(&s_shapesLockCount)) {
+    bool ended = false;
+    
+    if (locked() && shapes) {
+        ended = (0 == shapes->getLockData()->unlock(m_mode == 2));
+    }
+    if (m_mode == 2 && ended) {
         for (std::vector<ShapeObserver>::iterator it = s_shapeObservers.begin();
              it != s_shapeObservers.end(); ++it) {
-            (it->first)(m_sp, it->second, false);
+            (it->first)(shapes, it->second, false);
         }
+        shapes->afterChanged();
     }
 }
 
@@ -54,6 +124,24 @@ void MgShapesLock::unregisterObserver(ShapesLocked func, void* obj)
         }
     }
 }
+
+bool MgShapesLock::locked()
+{
+    return m_mode != 0;
+}
+
+bool MgShapesLock::lockedForRead(MgShapes* sp)
+{
+    return sp->getLockData()->lockedForRead();
+}
+
+bool MgShapesLock::lockedForWrite(MgShapes* sp)
+{
+    return sp->getLockData()->lockedForWrite();
+}
+
+// mgCreateCommand, mgRegisterShapeCreator, mgCreateShape
+//
 
 MgCommand* mgCreateCommand(const char* name)
 {
@@ -80,29 +168,39 @@ MgCommand* mgCreateCommand(const char* name)
     return NULL;
 }
 
-typedef std::pair<UInt32, MgShape* (*)()> TypeToCreator;
-static std::vector<TypeToCreator>   s_shapeCreators;
+static std::map<UInt32, MgShape* (*)()>   s_shapeCreators;
 
-void mgRegisterShapeCreators()
+static void registerCoreCreators()
 {
-    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgLine>::Type(), MgShapeT<MgLine>::create));
-    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgRect>::Type(), MgShapeT<MgRect>::create));
-    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgEllipse>::Type(), MgShapeT<MgEllipse>::create));
-    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgRoundRect>::Type(), MgShapeT<MgRoundRect>::create));
-    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgLines>::Type(), MgShapeT<MgLines>::create));
-    s_shapeCreators.push_back(TypeToCreator(MgShapeT<MgSplines>::Type(), MgShapeT<MgSplines>::create));
+    s_shapeCreators[MgShapeT<MgLine>::Type() % 10000] = MgShapeT<MgLine>::create;
+    s_shapeCreators[MgShapeT<MgRect>::Type() % 10000] = MgShapeT<MgRect>::create;
+    s_shapeCreators[MgShapeT<MgEllipse>::Type() % 10000] = MgShapeT<MgEllipse>::create;
+    s_shapeCreators[MgShapeT<MgRoundRect>::Type() % 10000] = MgShapeT<MgRoundRect>::create;
+    s_shapeCreators[MgShapeT<MgLines>::Type() % 10000] = MgShapeT<MgLines>::create;
+    s_shapeCreators[MgShapeT<MgSplines>::Type() % 10000] = MgShapeT<MgSplines>::create;
+}
+
+void mgRegisterShapeCreator(UInt32 type, MgShape* (*factory)())
+{
+    if (s_shapeCreators.empty()) {
+        registerCoreCreators();
+    }
+    type = type % 10000;
+    if (type > 20) {
+        if (factory) {
+            s_shapeCreators[type] = factory;
+        }
+        else {
+            s_shapeCreators.erase(type);
+        }
+    }
 }
 
 MgShape* mgCreateShape(UInt32 type)
 {
     if (s_shapeCreators.empty())
-        mgRegisterShapeCreators();
+        registerCoreCreators();
     
-    for (std::vector<TypeToCreator>::const_iterator it = s_shapeCreators.begin();
-         it != s_shapeCreators.end(); ++it) {
-        if (it->first % 10000 == type)
-            return (it->second)();
-    }
-    
-    return NULL;
+    std::map<UInt32, MgShape* (*)()>::const_iterator it = s_shapeCreators.find(type % 10000);
+    return (it != s_shapeCreators.end()) ? (it->second)() : NULL;
 }

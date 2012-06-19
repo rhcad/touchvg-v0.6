@@ -34,6 +34,14 @@ Box2d MgBaseShape::_getExtent() const
 
 void MgBaseShape::_update()
 {
+    if (!_extent.isNull()) {
+        if (_extent.width() < Tol::gTol().equalPoint()) {
+            _extent.inflate(Tol::gTol().equalPoint(), 0);
+        }
+        if (_extent.height() < Tol::gTol().equalPoint()) {
+            _extent.inflate(0, Tol::gTol().equalPoint());
+        }
+    }
 }
 
 void MgBaseShape::_transform(const Matrix2d& mat)

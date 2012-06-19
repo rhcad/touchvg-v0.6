@@ -37,6 +37,9 @@ public:
 
     //! 返回是否打印或打印预览
     bool isPrint() const;
+    
+    //! 返回当前绘图画布对象
+    GiCanvas* getCanvas();
 
 public:
     //! 返回剪裁框，模型坐标

@@ -58,6 +58,12 @@ public:
     
     //! Create a bitmap inverted or get the original cached bitmap.
     CGImageRef cachedBitmap(bool invert = true);
+    
+    //! Returns the current context which shapes can draw on it.
+    CGContextRef getCGContext();
+    
+    //! Draw a image.
+    bool drawImage(CGImageRef image, const Point2d& centerM);
 
 // Implement the GiCanvas interface.
 public:

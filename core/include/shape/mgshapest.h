@@ -25,6 +25,7 @@ class MgShapesT : public MgShapes
     typedef typename Container::iterator iterator;
 public:
     MgShapesT(bool hasContext = true) : _context(hasContext ? new ContextT() : NULL)
+        , _scale(1), _changeCount(0)
     {
     }
 
@@ -195,21 +196,43 @@ public:
         return count;
     }
     
+    UInt32 getChangeCount()
+    {
+        return (UInt32)_changeCount;
+    }
+    
+    void afterChanged()
+    {
+        giInterlockedIncrement(&_changeCount);
+    }
+    
     bool save(MgStorage* s) const
     {
         bool ret = false;
         Box2d rect;
+        int index = 0;
         
-        if (s->writeNode("shapes", false)) {
-            ret = true;
-            s->writeUInt32("count", _shapes.size());
+        if (_context) {
+            if (!s->writeNode("shapedoc", -1, false))
+                return false;
             
+            s->writeFloatArray("transform", &_xf.m11, 6);
+            s->writeFloat("scale", _scale);
+            s->writeFloatArray("center", &_centerW.x, 2);
+            rect = getExtent();
+            s->writeFloatArray("extent", &rect.xmin, 4);
+            s->writeUInt32("count", 1);
+        }
+        
+        if (s->writeNode("shapes", _context ? 0 : -1, false)) {
+            ret = true;
             rect = getExtent();
             s->writeFloatArray("extent", &rect.xmin, 4);
             
-            for (const_iterator it = _shapes.begin(); ret && it != _shapes.end(); ++it)
+            s->writeUInt32("count", _shapes.size());
+            for (const_iterator it = _shapes.begin(); ret && it != _shapes.end(); ++it, ++index)
             {
-                ret = s->writeNode("shape", false);
+                ret = s->writeNode("shape", index, false);
                 if (ret) {
                     s->writeUInt32("type", (*it)->getType() % 10000);
                     s->writeUInt32("id", (*it)->getID());
@@ -217,10 +240,14 @@ public:
                     rect = (*it)->shape()->getExtent();
                     s->writeFloatArray("extent", &rect.xmin, 4);
                     
-                    ret = (*it)->save(s) && s->writeNode("shape", true);
+                    ret = (*it)->save(s) && s->writeNode("shape", index, true);
                 }
             }
-            s->writeNode("shapes", true);
+            s->writeNode("shapes", _context ? 0 : -1, true);
+        }
+        
+        if (_context) {
+            s->writeNode("shapedoc", -1, true);
         }
         
         return ret;
@@ -228,17 +255,29 @@ public:
     
     bool load(MgStorage* s)
     {
-        MgShapesLock locker(this);
         bool ret = false;
         Box2d rect;
+        int index = 0;
         
-        if (s->readNode("shapes", false)) {
-            ret = true;
-            s->readUInt32("count");
+        if (_context) {
+            if (!s->readNode("shapedoc", -1, false))
+                return false;
+            
+            s->readFloatArray("transform", &_xf.m11, 6);
+            _scale = s->readFloat("scale", _scale);
+            s->readFloatArray("center", &_centerW.x, 2);
             s->readFloatArray("extent", &rect.xmin, 4);
+            s->readUInt32("count");
+        }
+        
+        if (s->readNode("shapes", _context ? 0 : -1, false)) {
+            ret = true;
+            s->readFloatArray("extent", &rect.xmin, 4);
+            s->readUInt32("count");
             
             clear();
-            while (ret && s->readNode("shape", false)) {
+            
+            while (ret && s->readNode("shape", index, false)) {
                 UInt32 type = s->readUInt32("type");
                 UInt32 id = s->readUInt32("id");
                 MgShape* shape = mgCreateShape(type);
@@ -254,9 +293,13 @@ public:
                         shape->release();
                     }
                 }
-                s->readNode("shape", true);
+                s->readNode("shape", index++, true);
             }
-            s->readNode("shapes", true);
+            s->readNode("shapes", _context ? 0 : -1, true);
+        }
+        
+        if (_context) {
+            s->readNode("shapedoc", -1, true);
         }
         
         return ret;
@@ -265,6 +308,32 @@ public:
     GiContext* context()
     {
         return _context;
+    }
+    
+    Matrix2d& modelTransform()
+    {
+        return _xf;
+    }
+    
+    float getViewScale() const
+    {
+        return _scale;
+    }
+    
+    Point2d getViewCenterW() const
+    {
+        return _centerW;
+    }
+    
+    void setZoomState(float scale, const Point2d& centerW)
+    {
+        _scale = scale;
+        _centerW = centerW;
+    }
+    
+    virtual MgLockRW* getLockData()
+    {
+        return &_lock;
     }
 
 private:
@@ -284,6 +353,11 @@ protected:
     Container               _shapes;
     mutable const_iterator  _it;
     ContextT*               _context;
+    Matrix2d                _xf;
+    float                   _scale;
+    Point2d                 _centerW;
+    long                    _changeCount;
+    MgLockRW                _lock;
 };
 
 #endif // __GEOMETRY_MGSHAPES_TEMPL_H_

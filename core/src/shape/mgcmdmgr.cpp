@@ -27,6 +27,12 @@ void MgCmdManagerImpl::unloadCommands()
     for (CMDS::iterator it = _cmds.begin(); it != _cmds.end(); ++it)
         it->second->release();
     _cmds.clear();
+    _cmdname = "";
+}
+
+void MgCmdManagerImpl::registerCommand(const char* name, MgCommand* (*factory)())
+{
+    _factories[name] = factory;
 }
 
 const char* MgCmdManagerImpl::getCommandName()
@@ -47,7 +53,15 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
     CMDS::iterator it = _cmds.find(name);
     if (it == _cmds.end())
     {
-        MgCommand* cmd = mgCreateCommand(name);
+        MgCommand* cmd = NULL;
+        Factories::iterator itf = _factories.find(name);
+        
+        if (itf != _factories.end()) {
+            cmd = itf->second ? (itf->second)() : NULL;
+        }
+        if (!cmd) {
+            cmd = mgCreateCommand(name);
+        }
         if (cmd) {
             _cmds[name] = cmd;
             it = _cmds.find(name);
@@ -69,9 +83,9 @@ bool MgCmdManagerImpl::cancel(const MgMotion* sender)
 
 UInt32 MgCmdManagerImpl::getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange)
 {
-    if (_cmdname == MgCommandSelect::Name()) {
+    if (_cmdname == MgCommandSelect::Name() && shapes) {
         MgCommandSelect* sel = (MgCommandSelect*)getCommand();
-        return sel->getSelection(view, count, shapes, forChange);
+        return sel ? sel->getSelection(view, count, shapes, forChange) : 0;
     }
     return 0;
 }
@@ -81,7 +95,7 @@ bool MgCmdManagerImpl::dynamicChangeEnded(MgView* view, bool apply)
     bool changed = false;
     if (_cmdname == MgCommandSelect::Name()) {
         MgCommandSelect* sel = (MgCommandSelect*)getCommand();
-        changed = sel->dynamicChangeEnded(view, apply);
+        changed = sel && sel->dynamicChangeEnded(view, apply);
     }
     return changed;
 }

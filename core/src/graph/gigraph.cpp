@@ -85,6 +85,11 @@ bool GiGraphics::isPrint() const
     return m_impl->isPrint;
 }
 
+GiCanvas* GiGraphics::getCanvas()
+{
+    return m_impl->canvas;
+}
+
 Box2d GiGraphics::getClipModel() const
 {
     return m_impl->rectDrawM;
@@ -799,7 +804,7 @@ bool GiGraphics::drawSplines(const GiContext* ctx, int count,
     vector<Point2d> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    // 开辟整形像素坐标数组
+    // 开辟像素坐标数组
     pxpoints.resize(1 + (count - 1) * 3);
     Point2d *pxs = &pxpoints.front();
 
@@ -836,7 +841,7 @@ bool GiGraphics::drawClosedSplines(const GiContext* ctx, int count,
     vector<Point2d> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    // 开辟整形像素坐标数组
+    // 开辟像素坐标数组
     pxpoints.resize(1 + count * 3);
     Point2d *pxs = &pxpoints.front();
 
@@ -886,7 +891,7 @@ bool GiGraphics::drawBSplines(const GiContext* ctx, int count,
     vector<Point2d> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    // 开辟整形像素坐标数组
+    // 开辟像素坐标数组
     pxpoints.resize(1 + (count - 3) * 3);
     Point2d *pxs = &pxpoints.front();
 
@@ -936,7 +941,7 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
     vector<Point2d> pxpoints;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    // 开辟整形像素坐标数组
+    // 开辟像素坐标数组
     pxpoints.resize(1 + count * 3);
     Point2d *pxs = &pxpoints.front();
 
@@ -966,6 +971,7 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
     bool ret = rawBeginPath();
     if (ret)
     {
+        pxs = &pxpoints.front();
         ret = rawMoveTo(pxs[0].x, pxs[0].y);
         ret = rawBezierTo(pxs + 1, getSize(pxpoints) - 1);
         ret = rawClosePath();

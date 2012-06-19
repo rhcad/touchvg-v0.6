@@ -48,8 +48,6 @@ bool MgCommandErase::undo(bool &enableRecall, const MgMotion* sender)
 
 bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
 {
-    GiContext ctx(-4, GiColor(64, 64, 64, 128));
-    
     if (m_boxsel) {
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
                           isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 32));
@@ -59,6 +57,9 @@ bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
         gs->drawRect(&ctxshap, Box2d(sender->startPointM, sender->pointM));
         gs->setAntiAliasMode(antiAlias);
     }
+    
+    GiContext ctx(-4, GiColor(64, 64, 64, 128));
+    
     for (std::vector<UInt32>::const_iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
         MgShape* shape = sender->view->shapes()->findShape(*it);
         if (shape)

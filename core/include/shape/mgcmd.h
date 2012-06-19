@@ -74,6 +74,7 @@ struct MgCommandManager {
     virtual bool setCommand(const MgMotion* sender, const char* name) = 0;  //!< 启动命令
     virtual bool cancel(const MgMotion* sender) = 0;        //!< 取消当前命令
     virtual void unloadCommands() = 0;                      //!< 退出时卸载命令
+    virtual void registerCommand(const char* name, MgCommand* (*factory)()) = 0;    //! 注册外部命令
     
     //! 得到当前选择的图形
     /*!
@@ -96,5 +97,12 @@ struct MgCommandManager {
 /*! \ingroup GEOM_SHAPE
 */
 MgCommandManager* mgGetCommandManager();
+
+//! 注册图形实体类型
+/*! \ingroup GEOM_SHAPE
+    \param type MgBaseShape 派生图形类的Type()，或 MgShapeT<图形类>的Type()
+    \param factory 创建函数，例如 MgShapeT<图形类>的create, 为NULL则取消注册
+*/
+void mgRegisterShapeCreator(UInt32 type, MgShape* (*factory)());
 
 #endif // __GEOMETRY_MGCOMMAND_H_

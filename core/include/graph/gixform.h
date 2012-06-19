@@ -85,13 +85,13 @@ public:
     /*! 该值表示X方向上世界坐标系中1单位长度对应于显示坐标系中的长度(像素)，
         由显示设备分辨率和显示比例决定，即为 getDpiX() * getViewScale()
     */
-    float getWorldToDisplayX() const;
+    float getWorldToDisplayX(bool useViewScale = true) const;
 
     //! 返回Y方向上世界单位对应的像素数
     /*! 该值表示Y方向上世界坐标系中1单位长度对应于显示坐标系中的长度(像素)，
         由显示设备分辨率和显示比例决定，即为 getDpiY() * getViewScale()
     */
-    float getWorldToDisplayY() const;
+    float getWorldToDisplayY(bool useViewScale = true) const;
     
     //! 返回显示长度(默认为像素，可为毫米）对应的模型长度
     float displayToModel(float dist, bool mm = false) const;

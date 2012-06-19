@@ -29,6 +29,7 @@ public:
     bool            _ctxused[2];        //!< beginPaint后是否设置过画笔、画刷
     bool            _fast;              //!< 是否粗略显示
     CGImageRef      _caches[2];         //!< 后备缓冲图
+    volatile long   _cacheserr[2];      //!< 后备缓冲图无效标志
     static float    _dpi;               //!< 屏幕每英寸的点数
     static float    _scale;             //!< UIKit屏幕放大倍数
 
@@ -37,6 +38,18 @@ public:
     {
         _caches[0] = NULL;
         _caches[1] = NULL;
+        _cacheserr[0] = 0;
+        _cacheserr[1] = 0;
+    }
+    
+    ~GiCanvasIosImpl()
+    {
+        if (_caches[0]) {
+            CGImageRelease(_caches[0]);
+        }
+        if (_caches[1]) {
+            CGImageRelease(_caches[1]);
+        }
     }
 
     const GiGraphics* owner() const
@@ -287,6 +300,11 @@ void GiCanvasIos::endPaint(bool draw)
     }
 }
 
+CGContextRef GiCanvasIos::getCGContext()
+{
+    return m_draw->getContext();
+}
+
 CGImageRef GiCanvasIos::cachedBitmap(bool invert)
 {
     CGImageRef image = m_draw->_caches[0];
@@ -344,7 +362,8 @@ void GiCanvasIos::clearWindow()
 
 bool GiCanvasIos::drawCachedBitmap(float x, float y, bool secondBmp)
 {
-    CGImageRef image = m_draw->_caches[secondBmp ? 1 : 0];
+    int index = secondBmp ? 1 : 0;
+    CGImageRef image = m_draw->_cacheserr[index] ? NULL : m_draw->_caches[index];
     CGContextRef context = m_draw->getContext();
     bool ret = false;
     
@@ -367,7 +386,8 @@ bool GiCanvasIos::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool se
     
     if (p && p->getCanvasType() == getCanvasType()) {
         GiCanvasIos* gs = (GiCanvasIos*)p;
-        CGImageRef image = gs->m_draw->_caches[secondBmp ? 1 : 0];
+        int index = secondBmp ? 1 : 0;
+        CGImageRef image = gs->m_draw->_cacheserr[index] ? NULL : gs->m_draw->_caches[index];
         CGContextRef context = m_draw->getContext();
         
         if (context && image) {
@@ -389,6 +409,7 @@ void GiCanvasIos::saveCachedBitmap(bool secondBmp)
     int n = secondBmp ? 1 : 0;
     if (m_draw->_caches[n])
         CGImageRelease(m_draw->_caches[n]);
+    m_draw->_cacheserr[n] = 0;
     if (owner() && m_draw->getContext()) {
         m_draw->_caches[n] = CGBitmapContextCreateImage(m_draw->getContext());
     }
@@ -396,19 +417,36 @@ void GiCanvasIos::saveCachedBitmap(bool secondBmp)
 
 bool GiCanvasIos::hasCachedBitmap(bool secondBmp) const
 {
-    return !!m_draw->_caches[secondBmp ? 1 : 0];
+    int n = secondBmp ? 1 : 0;
+    return !m_draw->_cacheserr[n] && m_draw->_caches[n];
 }
 
 void GiCanvasIos::clearCachedBitmap()
 {
-    if (m_draw->_caches[0]) {
-        CGImageRelease(m_draw->_caches[0]);
-        m_draw->_caches[0] = NULL;
+    giInterlockedIncrement(&m_draw->_cacheserr[0]);
+    giInterlockedIncrement(&m_draw->_cacheserr[1]);
+}
+
+bool GiCanvasIos::drawImage(CGImageRef image, const Point2d& centerM)
+{
+    CGContextRef context = m_draw->getContext();
+    bool ret = false;
+    
+    if (context && image) {
+        Point2d ptD = centerM * m_draw->xf().modelToDisplay();
+        int w = CGImageGetWidth(image);
+        int h = CGImageGetHeight(image);
+        
+        CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
+        af = CGAffineTransformTranslate(af, ptD.x - w * 0.5f, m_draw->height() - (ptD.y + h * 0.5f));
+        
+        CGContextConcatCTM(context, af);
+        CGContextDrawImage(context, CGRectMake(0, 0, w, h), image);
+        CGContextConcatCTM(context, CGAffineTransformInvert(af));
+        ret = true;
     }
-    if (m_draw->_caches[1]) {
-        CGImageRelease(m_draw->_caches[1]);
-        m_draw->_caches[1] = NULL;
-    }
+    
+    return ret;
 }
 
 bool GiCanvasIos::isBufferedDrawing() const

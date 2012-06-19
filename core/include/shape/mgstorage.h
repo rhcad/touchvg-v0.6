@@ -15,7 +15,13 @@
 struct MgStorage
 {
     //! 给定节点名称，取出一个开始节点或结束节点
-    virtual bool readNode(const char* name, bool ended) = 0;
+    /*! 一个节点会调用两次本函数。
+        \param name 节点名称
+        \param index 小于0表示只有这一个子节点，否则表示可能有多个同级同名节点并指定子节点序号
+        \param ended true表示本次调用时是结束节点，false表示是开始节点
+        \return 是否有此节点
+    */
+    virtual bool readNode(const char* name, int index, bool ended) = 0;
     
     //! 给定字段名称，取出一个单字节整数
     virtual Int8  readInt8(const char* name, Int8 defvalue = 0) = 0;
@@ -36,11 +42,17 @@ struct MgStorage
     
     //! 给定字段名称，取出浮点数数组. 传入缓冲为空时返回所需个数
     virtual UInt32 readFloatArray(const char* name, float* values, UInt32 count) = 0;
-    //! 给定字段名称，取出字符串内容，不含0结束符
+    //! 给定字段名称，取出字符串内容，不含0结束符. 传入缓冲为空时返回所需个
     virtual UInt32 readString(const char* name, wchar_t* value, UInt32 count) = 0;
     
-    //! 添加一个给定节点名称的开始节点或结束节点. 传入缓冲为空时返回所需个
-    virtual bool writeNode(const char* name, bool ended) = 0;
+    //! 添加一个给定节点名称的开始节点或结束节点
+    /*! 一个节点会调用两次本函数。
+        \param name 节点名称
+        \param index 小于0表示只有这一个子节点，否则表示可能有多个同级同名节点并指定子节点序号
+        \param ended true表示本次调用时是结束节点，false表示是开始节点
+        \return 是否保存成功
+    */
+    virtual bool writeNode(const char* name, int index, bool ended) = 0;
     
     //! 添加一个给定字段名称的单字节整数
     virtual void writeInt8(const char* name, Int8 value) = 0;

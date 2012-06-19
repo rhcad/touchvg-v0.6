@@ -146,8 +146,10 @@ long GiTransform::getWidth() const { return m_impl->cxWnd; }
 long GiTransform::getHeight() const { return m_impl->cyWnd; }
 Point2d GiTransform::getCenterW() const { return m_impl->centerW; }
 float GiTransform::getViewScale() const { return m_impl->viewScale; }
-float GiTransform::getWorldToDisplayX() const { return m_impl->w2dx; }
-float GiTransform::getWorldToDisplayY() const { return m_impl->w2dy; }
+float GiTransform::getWorldToDisplayX(bool useViewScale) const
+    { return useViewScale ? m_impl->w2dx : m_impl->w2dx / m_impl->viewScale; }
+float GiTransform::getWorldToDisplayY(bool useViewScale) const
+    { return useViewScale ? m_impl->w2dy : m_impl->w2dy / m_impl->viewScale; }
 const Matrix2d& GiTransform::modelToWorld() const
     { return m_impl->matM2W; }
 const Matrix2d& GiTransform::worldToModel() const

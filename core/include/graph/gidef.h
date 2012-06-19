@@ -6,16 +6,20 @@
 #ifndef __GEOMETRY_GIDEF_H_
 #define __GEOMETRY_GIDEF_H_
 
-#ifndef _WIN32
-inline long giInterlockedIncrement(long *p) { return ++*p; }
-inline long giInterlockedDecrement(long *p) { return --*p; }
+#ifdef _MACOSX
+#include <libkern/OSAtomic.h>
+inline long giInterlockedIncrement(volatile long *p) { return OSAtomicIncrement32((volatile int32_t *)p); }
+inline long giInterlockedDecrement(volatile long *p) { return OSAtomicDecrement32((volatile int32_t *)p); }
+#elif !defined(_WIN32)
+inline long giInterlockedIncrement(volatile long *p) { return ++*p; }
+inline long giInterlockedDecrement(volatile long *p) { return --*p; }
 #else
 #ifndef _WINDOWS_
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
-inline long giInterlockedIncrement(long *p) { return InterlockedIncrement(p); }
-inline long giInterlockedDecrement(long *p) { return InterlockedDecrement(p); }
+inline long giInterlockedIncrement(volatile long *p) { return InterlockedIncrement(p); }
+inline long giInterlockedDecrement(volatile long *p) { return InterlockedDecrement(p); }
 #endif
 
 //! 矢量路径节点类型
