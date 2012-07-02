@@ -165,21 +165,23 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
             (*it)->draw(*gs, &ctxbk);               // 用背景色擦掉原图形
         
         if (m_showSel && !rorate) {                 // 拖动提示的参考线
-            GiContext ctxshap(0, GiColor(0, 0, 255, 128), kLineDash);
+            GiContext ctxshap(-1.05f, GiColor(0, 0, 255, 128), kLineDash);
             gs->drawLine(&ctxshap, sender->startPointM, m_ptSnap);
         }
     }
     
-    if (m_showSel) {                    // 选中时比原图形宽4像素，控制点修改时仅亮显控制点
-        GiContext ctxshape(m_handleIndex > 0 ? 0.f : -4.f, 
-                           GiColor(0, 0, 255, m_handleIndex > 0 ? 64 : 128));
+    // 外部动态改变图形属性时，或拖动时：原样显示
+    if (!m_showSel || !m_cloneShapes.empty()) {
         for (it = shapes.begin(); it != shapes.end(); ++it) {
-            (*it)->draw(*gs, &ctxshape);
+            (*it)->draw(*gs);
         }
     }
-    else {                              // 外部改变图形属性时，动态显示
-        for (it = shapes.begin(); it != shapes.end(); ++it)
-            (*it)->draw(*gs);
+    else if (m_cloneShapes.empty()) {   // 选中时比原图形宽4像素
+        GiContext ctxshape(-4.f, GiColor(0, 0, 255, 128));
+        for (it = shapes.begin(); it != shapes.end(); ++it) {
+            GiContext ctx(ctxshape);
+            (*it)->draw(*gs, &ctx);
+        }
     }
     
     if (m_boxsel) {                                 // 显示框选半透明蓝色边框

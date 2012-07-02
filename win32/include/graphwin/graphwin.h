@@ -10,7 +10,8 @@
 #include <gigraph.h>
 
 //! The graphics class for Windows.
-/*! \ingroup GRAPH_WIN
+/*! example: new GiGraphWin(GiCanvasGdip::Create);
+    \ingroup GRAPH_WIN
 */
 class GiGraphWin
 {
