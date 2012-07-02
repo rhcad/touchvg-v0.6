@@ -32,9 +32,11 @@ protected:
     bool _touchEnded(const MgMotion* sender);
     bool _addshape(const MgMotion* sender, MgShape* shape = NULL);
     bool _undo(const MgMotion* sender);
+    void _delayClear();
     
     virtual bool cancel(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
+    virtual void gatherShapes(const MgMotion* sender, MgShapes* shapes);
     virtual bool click(const MgMotion* sender);
     virtual bool doubleClick(const MgMotion* sender);
     virtual bool longPress(const MgMotion* sender);
@@ -45,6 +47,7 @@ private:
 protected:
     MgShape*    m_shape;
     UInt32      m_step;
+    bool        m_needClear;
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_H_

@@ -51,9 +51,7 @@ bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
     if (! ((MgBaseRect*)m_shape->shape())->isEmpty(minDist)) {
         _addshape(sender);
     }
-
-    m_shape->shape()->clear();
-    m_step = 0;
+    _delayClear();
 
     return _touchEnded(sender);
 }

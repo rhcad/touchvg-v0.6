@@ -5,6 +5,8 @@
 #include "mgcmderase.h"
 #include <algorithm>
 #include <functional>
+#include <mgshapet.h>
+#include <mgbasicsp.h>
 
 float mgDisplayMmToModel(float mm, const MgMotion* sender);
 
@@ -69,6 +71,19 @@ bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
     return true;
 }
 
+void MgCommandErase::gatherShapes(const MgMotion* sender, MgShapes* shapes)
+{
+    if (m_boxsel) {
+        MgShapeT<MgRect> shape;
+        
+        GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
+                          isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 32));
+        *shape.context() = ctxshap;
+        ((MgRect*)shape.shape())->setRect(Box2d(sender->startPointM, sender->pointM));
+        shapes->addShape(shape);
+    }
+}
+
 MgShape* MgCommandErase::hitTest(const MgMotion* sender)
 {
     Box2d limits(sender->startPointM, mgDisplayMmToModel(6, sender), 0);
@@ -82,7 +97,7 @@ bool MgCommandErase::click(const MgMotion* sender)
 {
     MgShape* shape = hitTest(sender);
     if (shape) {
-        MgShapesLock locker(sender->view->shapes());
+        MgShapesLock locker(sender->view->shapes(), MgShapesLock::Edit);
         shape = sender->view->shapes()->removeShape(shape->getID());
         shape->release();
         sender->view->regen();
@@ -135,7 +150,7 @@ bool MgCommandErase::touchMoved(const MgMotion* sender)
 bool MgCommandErase::touchEnded(const MgMotion* sender)
 {
     if (!m_delIds.empty()) {
-        MgShapesLock locker(sender->view->shapes());
+        MgShapesLock locker(sender->view->shapes(), MgShapesLock::Edit);
         
         for (std::vector<UInt32>::iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
             MgShape* shape = sender->view->shapes()->findShape(*it);

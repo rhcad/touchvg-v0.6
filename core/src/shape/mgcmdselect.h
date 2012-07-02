@@ -42,6 +42,7 @@ private:
     virtual bool initialize(const MgMotion* sender);
     virtual bool undo(bool &enableRecall, const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
+    virtual void gatherShapes(const MgMotion* sender, MgShapes* shapes);
     virtual bool click(const MgMotion* sender);
     virtual bool doubleClick(const MgMotion* sender);
     virtual bool longPress(const MgMotion* sender);

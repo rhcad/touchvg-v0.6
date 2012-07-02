@@ -40,6 +40,7 @@ private:
     bool shapeWillAdded(MgShape*) { return true; }
     bool shapeWillDeleted(MgShape*) { return true; }
     bool longPressSelection(int) { return false; }
+    bool drawHandle(GiGraphics*, const Point2d&, bool) { return false; }
 };
 
 CDrawShapeView::CDrawShapeView(RandomParam& param)

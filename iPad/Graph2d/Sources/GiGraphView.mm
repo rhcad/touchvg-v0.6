@@ -13,7 +13,7 @@
 - (BOOL)dynZooming:(UIPinchGestureRecognizer *)sender;
 - (BOOL)dynPanning:(UIPanGestureRecognizer *)sender;
 - (BOOL)switchZoomed:(UIGestureRecognizer *)sender;
-- (void)shapesLocked:(MgShapes*)sp;
+- (void)shapesLocked:(MgShapes*)sp locked:(BOOL)locked;
 
 @end
 
@@ -24,16 +24,15 @@ GiColor giFromUIColor(UIColor *color)
 
 static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 {
-    if (locked) {
-        GiGraphView* view = (GiGraphView*)obj;
-        [view shapesLocked:sp];
-    }
+    GiGraphView* view = (GiGraphView*)obj;
+    [view shapesLocked:sp locked:locked];
 }
 
 @implementation GiGraphView
 
 @synthesize enableZoom = _enableZoom;
 @synthesize zooming = _zooming;
+@synthesize shapeAdded = _shapeAdded;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -61,6 +60,14 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 {
     MgShapesLock::unregisterObserver(onShapesLocked, self);
     
+    if (_playShapes) {
+        _playShapes->release();
+        _playShapes = NULL;
+    }
+    if (_bkImg) {
+        [_bkImg release];
+        _bkImg = nil;
+    }
     if (_graph) {
         delete _graph;
         _graph = NULL;
@@ -71,7 +78,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 - (void)afterCreated
 {
 	CGFloat scrw = CGRectGetWidth([UIScreen mainScreen].bounds);
-    GiCanvasIos::setScreenDpi(scrw > 1000 ? 132 : 163, [UIScreen mainScreen].scale);
+    GiCanvasIos::setScreenDpi(scrw > 700 ? 132 : 163, [UIScreen mainScreen].scale);
     
     if (!_graph) {
         _graph = new GiGraphIos();
@@ -88,7 +95,9 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     
     _drawingDelegate = Nil;
     _shapeAdded = NULL;
+    _playShapes = NULL;
     _cachedDraw = YES;
+    _scaleReaded = NO;
     _zooming = NO;
     _doubleZoomed = NO;
     _enableZoom = YES;
@@ -106,32 +115,52 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     GiCanvasIos &cv = _graph->canvas;
     GiGraphics &gs = _graph->gs;
     bool cached = _cachedDraw || !cv.hasCachedBitmap();
+    bool nextDraw = false;
+    MgShape* tmpAdded = _shapeAdded;
     
     _graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    if (_shapes && !_scaleReaded) {
+        _scaleReaded = YES;
+        _graph->xf.setModelTransform(_shapes->modelTransform());
+        _graph->xf.zoom(_shapes->getViewCenterW(), _shapes->getViewScale());
+    }
     
     if (cv.beginPaint(UIGraphicsGetCurrentContext(), // 在当前画布上准备绘图
                       !!_zooming, cached))          // iPad3上不用缓冲更快
     {
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
-            [self draw:&gs];                        // 不行则重新显示所有图形
-            if (!_zooming)                          // 动态放缩时不保存显示内容
-                cv.saveCachedBitmap();              // 保存显示缓冲图，下次就不重新显示图形
+            if ([self draw:&gs]) {                  // 不行则重新显示所有图形
+                if (!_zooming)                      // 动态放缩时不保存显示内容
+                    cv.saveCachedBitmap();          // 保存显示缓冲图，下次就不重新显示图形
+                tmpAdded = NULL;
+            }
+            else {
+                nextDraw = true;
+            }
         }
         else if (_shapeAdded) {                     // 在缓冲图上显示新的图形
             _shapeAdded->draw(gs);
             cv.saveCachedBitmap();                  // 更新缓冲图
+            tmpAdded = NULL;
         }
         
-        [self dynDraw:&gs];                         // 显示动态临时图形
+        nextDraw = ![self dynDraw:&gs] || nextDraw; // 显示动态临时图形
         
         cv.endPaint();                              // 显示完成后贴到视图画布上
-        _shapeAdded = NULL;
+    }
+    
+    if (_shapeAdded != tmpAdded) {
+        MgDynShapeLock lockdyn;
+        _shapeAdded = tmpAdded;
+    }
+    if (nextDraw) {
+        [self setNeedsDisplay];
     }
 }
 
 - (void)shapeAdded:(MgShape*)shape
 {
-    if (_shapeAdded) {
+    if (_shapeAdded || !shape) {
         _cachedDraw = YES;
         [self regen];
     }
@@ -144,32 +173,58 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (BOOL)draw:(GiGraphics*)gs
 {
-    int count = 0;
-    if (_shapes) {
-        count = _shapes->draw(*gs);
+    BOOL ret = YES;
+    
+    if (_playShapes) {
+        MgShapesLock locker(_playShapes, MgShapesLock::ReadOnly, 50);
+        ret = locker.locked();
+        if (ret) {
+            _playShapes->draw(*gs);
+        }
     }
-    return count > 0;
+    else if (_shapes) {
+        _shapes->draw(*gs);
+    }
+    
+    return ret;
 }
 
-- (void)dynDraw:(GiGraphics*)gs
+- (BOOL)dynDraw:(GiGraphics*)gs
 {
+    BOOL ret = YES;
     if ([_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
-        [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
+        ret = !![_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
     }
+    return ret;
 }
 
-- (MgShapes*)shapes
+- (MgShapes*)getPlayShapes:(BOOL)clear
 {
+    if (clear) {
+        MgShapesLock locker(_playShapes, MgShapesLock::Edit, 1000);
+        if (locker.shapes) {
+            locker.shapes->release();
+            locker.shapes = NULL;
+        }
+        _playShapes = NULL;
+    }
+    else if (!_playShapes) {
+        MgShapesLock locker(_shapes, MgShapesLock::ReadOnly);
+        _playShapes = (MgShapes*)_shapes->clone();
+    }
+    
+    return _playShapes;
+}
+
+- (MgShapes*)shapes {
     return _shapes;
 }
 
-- (GiTransform*)xform
-{
+- (GiTransform*)xform {
     return &_graph->xf;
 }
 
-- (GiGraphics*)graph
-{
+- (GiGraphics*)graph {
     return &_graph->gs;
 }
 
@@ -179,26 +234,23 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (void)setShapes:(MgShapes*)data
 {
-    [self shapesLocked:_shapes];
+    [self shapesLocked:_shapes locked:YES];
     _shapes = data;
     [self regen];
 }
 
-- (void)setDrawingDelegate:(id)d
-{
+- (void)setDrawingDelegate:(id)d {
     _drawingDelegate = d;
 }
 
-- (void)setAnimating:(BOOL)animated
-{
+- (void)setAnimating:(BOOL)animated {
     if (animated)
         _zooming |= 0x2;
     else
         _zooming &= ~0x2;
 }
 
-- (void)regen
-{
+- (void)regen {
     _graph->gs.clearCachedBitmap();
     _cachedDraw = YES;
     [self setNeedsDisplay];
@@ -214,24 +266,76 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     return !!_zooming;
 }
 
-- (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender
-{
+- (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender {
     return _enableZoom && [self dynZooming:sender];
 }
 
-- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender
-{
+- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender {
     return _enableZoom && [self dynPanning:sender];
 }
 
-- (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
-{
+- (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender {
     return _enableZoom && [self dynPanning:sender];
 }
 
-- (BOOL)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
-{
+- (BOOL)twoFingersTwoTaps:(UITapGestureRecognizer *)sender {
     return _enableZoom && [self switchZoomed:sender];
+}
+
+- (void)setZoomCallback:(id<GiZoomCallback>)obj {
+    _zoomCallback = obj;
+}
+
+- (void)setBackgroundImage:(UIImage*)image {
+    if (image) {
+        [image retain];
+    }
+    if (_bkImg) {
+        [_bkImg release];
+    }
+    _bkImg = image;
+}
+
+- (void)setModelTransform:(CGAffineTransform)xf
+{
+    Matrix2d mat(xf.a, xf.b, xf.c, xf.d, xf.tx, xf.ty);
+    
+    _graph->xf.setModelTransform(mat);
+    if (_shapes) {
+        _shapes->modelTransform() = mat;
+        [self regen];
+    }
+}
+
+- (void)zoomModel:(CGRect)pageRect to:(CGRect)pxRect save:(BOOL)save
+{
+    Box2d fromrc(pageRect.origin.x, pageRect.origin.y, 
+               pageRect.origin.x + pageRect.size.width, pageRect.origin.y + pageRect.size.height);
+    RECT2D torc = { pxRect.origin.x, pxRect.origin.y, 
+        pxRect.origin.x + pxRect.size.width, pxRect.origin.y + pxRect.size.height };
+    
+    fromrc *= _graph->xf.modelToWorld();
+    _graph->xf.zoomTo(fromrc, &torc);
+    if (save) {
+        _shapes->setZoomState(_graph->xf.getViewScale(), _graph->xf.getCenterW());
+        _scaleReaded = YES;
+    }
+}
+
+- (void)zoomPan:(CGPoint)offset
+{
+    _graph->xf.zoomPan(-offset.x, -offset.y);
+    [self regen];
+}
+
+- (float)getViewScale {
+    return _graph->xf.getViewScale();
+}
+
+- (CGRect)getModelRect {
+    Box2d rect(0, 0, _graph->xf.getWidth(), _graph->xf.getHeight());
+    rect *= _graph->xf.displayToModel();
+    return CGRectMake(rect.xmin, rect.ymin, rect.width(), rect.height());
 }
 
 @end
@@ -339,8 +443,13 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     return YES;
 }
 
-- (void)shapesLocked:(MgShapes*)sp
+- (void)shapesLocked:(MgShapes*)sp locked:(BOOL)locked
 {
+    if (!locked && sp == _shapes) {
+        if ([_drawingDelegate respondsToSelector:@selector(afterShapeChanged)]) {
+            [_drawingDelegate performSelector:@selector(afterShapeChanged)];
+        }
+    }
 }
 
 @end

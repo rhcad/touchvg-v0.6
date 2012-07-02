@@ -26,6 +26,7 @@ struct MgView {
     virtual void shapeAdded(MgShape* shape) = 0;        //!< 通知已添加图形，由视图重新构建显示
     virtual bool shapeWillDeleted(MgShape* shape) = 0;  //!< 通知将删除图形
     virtual bool longPressSelection(int selState) = 0;  //!< 选择状态下长按, MgSelection::kSelState
+    virtual bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) = 0;   //!< 显示控制点
 };
 
 //! 命令参数
@@ -55,6 +56,7 @@ struct MgCommand {
     virtual bool initialize(const MgMotion* sender) = 0;    //!< 开始命令
     virtual bool undo(bool &enableRecall, const MgMotion* sender) = 0;  //!< 回退一步
     virtual bool draw(const MgMotion* sender, GiGraphics* gs) = 0;  //!< 显示动态图形
+    virtual void gatherShapes(const MgMotion* sender, MgShapes* shapes) = 0;   //!< 得到动态图形
     virtual bool click(const MgMotion* sender) = 0;         //!< 点击
     virtual bool doubleClick(const MgMotion* sender) = 0;   //!< 双击
     virtual bool longPress(const MgMotion* sender) = 0;     //!< 长按

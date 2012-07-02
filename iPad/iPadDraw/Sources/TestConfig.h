@@ -10,7 +10,10 @@
 #define USE_MAGNIFIER
 
 // 定义MAG_AT_BOTTOM时放大镜视图在底部，注释掉时放大镜浮动显示，定义了USE_MAGNIFIER时有效
-#define MAG_AT_BOTTOM
+//#define MAG_AT_BOTTOM
 
 // 定义USE_STROKEWIDTH时使用像素单位的线宽，注释掉时使用0.01毫米单位线宽，未定义TESTMODE_SIMPLEVIEW时有效
 //#define USE_STROKEWIDTH
+
+// 定义AUTO_HIDE_CMDBAR时在触摸时自动隐藏命令按钮
+#define AUTO_HIDE_CMDBAR

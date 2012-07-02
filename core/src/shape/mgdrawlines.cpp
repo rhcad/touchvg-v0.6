@@ -32,15 +32,14 @@ bool MgCmdDrawLines::undo(bool &enableRecall, const MgMotion* sender)
 
 bool MgCmdDrawLines::draw(const MgMotion* sender, GiGraphics* gs)
 {
-    if (m_step > 1) {
+    /*if (m_step > 1) {
         GiContext ctxaux(0, GiColor(64, 64, 64, 128), kLineSolid, GiColor(0, 64, 64, 168));
         float radius = gs->xf().displayToModel(3);
         
         for (UInt32 i = 0; i < m_shape->shape()->getPointCount(); i++) {
             gs->drawEllipse(&ctxaux, m_shape->shape()->getPoint(i), radius);
         }
-    }
-    
+    }*/
     return MgCommandDraw::draw(sender, gs);
 }
 
@@ -116,16 +115,14 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
     else {
         click(sender);  // add a point
     }
-
-    m_shape->shape()->clear();
-    m_step = 0;
+    _delayClear();
 
     return _touchEnded(sender);
 }
 
-bool MgCmdDrawLines::canAddPoint(const MgMotion* sender, bool ended)
+bool MgCmdDrawLines::canAddPoint(const MgMotion* /*sender*/, bool /*ended*/)
 {
-    float minDist = mgDisplayMmToModel(3, sender);
+    /*float minDist = mgDisplayMmToModel(3, sender);
     Point2d endPt  = m_shape->shape()->getPoint(m_step - 1);
     float distToEnd = endPt.distanceTo(sender->pointM);
     float turnAngle = 90;
@@ -140,7 +137,7 @@ bool MgCmdDrawLines::canAddPoint(const MgMotion* sender, bool ended)
     if (distToEnd < minDist * (ended ? 0.25 : 1))
         return false;
     if (!ended && sin(turnAngle) * distToEnd < 5)
-        return false;
+        return false;*/
     
     return true;
 }

@@ -18,14 +18,18 @@ class MgViewProxy;
     MgMotion    *_motion;           //!< 当前命令参数
     MgViewProxy *_mgview;           //!< 命令所用视图
     BOOL        _moved;             //!< 是否已触发touchBegan命令消息
-    BOOL        _clicked;           //!< 是否已触发oneFingerOneTap
+    int         _clickFingers;      //!< 是否已触发单指点击或双击事件
     BOOL        _undoFired;         //!< 是否已触发Undo操作
     int         _touchCount;        //!< 开始触摸时的手指数
 }
 
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称
-@property (nonatomic)   float           lineWidth;      //!< 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
-@property (nonatomic)   int             lineStyle;      //!< 线型, 0-Solid, 1-Dash, 2-Dot, 3-DashDot, 4-DashDotdot, 5-Null
+
+//! 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
+@property (nonatomic)   float           lineWidth;
+//! 线型, 0-Solid, 1-Dash, 2-Dot, 3-DashDot, 4-DashDotdot, 5-Null
+@property (nonatomic)   int             lineStyle;
+
 @property (nonatomic)   GiColor         lineColor;      //!< 线条颜色，clearColor 表示不画线条
 @property (nonatomic)   GiColor         fillColor;      //!< 填充颜色，clearColor 表示不填充
 
@@ -49,5 +53,11 @@ class MgViewProxy;
 
 //! 退出动态修改模式，应用修改结果
 - (BOOL)dynamicChangeEnded:(BOOL)apply;
+
+//! 得到临时动态图形
+- (void)getDynamicShapes:(MgShapes*)shapes;
+
+//! 判断是否新重绘过，可用于判断是否需要调用 getDynamicShapes
+- (BOOL)isDynamicChanged:(BOOL)reset;
 
 @end

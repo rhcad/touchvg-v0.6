@@ -15,6 +15,7 @@
 
 typedef std::pair<MgShapesLock::ShapesLocked, void*> ShapeObserver;
 static std::vector<ShapeObserver>  s_shapeObservers;
+static MgLockRW s_dynLock;
 
 #ifdef _WIN32
 void giSleep(int ms) { Sleep(ms); }
@@ -25,7 +26,7 @@ void giSleep(int ms) { usleep(ms * 1000); }
 // MgLockRW
 //
 
-MgLockRW::MgLockRW()
+MgLockRW::MgLockRW() : _editFlags(0)
 {
     _counts[0] = _counts[1] = _counts[2] = 0;
 }
@@ -79,10 +80,14 @@ bool MgLockRW::lockedForWrite()
 // MgShapesLock
 //
 
-MgShapesLock::MgShapesLock(MgShapes* sp, bool forWrite, int timeout) : shapes(sp)
+MgShapesLock::MgShapesLock(MgShapes* sp, int flags, int timeout) : shapes(sp)
 {
+    bool forWrite = (flags != 0);
     m_mode = shapes && shapes->getLockData()->lock(forWrite, timeout) ? (forWrite ? 2 : 1) : 0;
+    if (m_mode == 2 && flags == Unknown)
+        m_mode |= 4;
     if (m_mode == 2 && shapes->getLockData()->firstLocked()) {
+        shapes->getLockData()->setEditFlags(flags);
         for (std::vector<ShapeObserver>::iterator it = s_shapeObservers.begin();
              it != s_shapeObservers.end(); ++it) {
             (it->first)(shapes, it->second, true);
@@ -95,14 +100,14 @@ MgShapesLock::~MgShapesLock()
     bool ended = false;
     
     if (locked() && shapes) {
-        ended = (0 == shapes->getLockData()->unlock(m_mode == 2));
+        ended = (0 == shapes->getLockData()->unlock((m_mode & 2) != 0));
     }
     if (m_mode == 2 && ended) {
+        shapes->afterChanged();
         for (std::vector<ShapeObserver>::iterator it = s_shapeObservers.begin();
              it != s_shapeObservers.end(); ++it) {
             (it->first)(shapes, it->second, false);
         }
-        shapes->afterChanged();
     }
 }
 
@@ -138,6 +143,36 @@ bool MgShapesLock::lockedForRead(MgShapes* sp)
 bool MgShapesLock::lockedForWrite(MgShapes* sp)
 {
     return sp->getLockData()->lockedForWrite();
+}
+
+// MgDynShapeLock
+//
+
+MgDynShapeLock::MgDynShapeLock(bool forWrite, int timeout)
+{
+    m_mode = s_dynLock.lock(forWrite, timeout) ? (forWrite ? 2 : 1) : 0;
+}
+
+MgDynShapeLock::~MgDynShapeLock()
+{
+    if (locked()) {
+        s_dynLock.unlock(m_mode == 2);
+    }
+}
+
+bool MgDynShapeLock::locked()
+{
+    return m_mode != 0;
+}
+
+bool MgDynShapeLock::lockedForRead()
+{
+    return s_dynLock.lockedForRead();
+}
+
+bool MgDynShapeLock::lockedForWrite()
+{
+    return s_dynLock.lockedForWrite();
 }
 
 // mgCreateCommand, mgRegisterShapeCreator, mgCreateShape

@@ -89,7 +89,7 @@ public:
         MgShape* p = (MgShape*)src.clone();
         if (p)
         {
-            p->setParent(this, getNewID());
+            p->setParent(this, getNewID(src.getID()));
             _shapes.push_back(p);
         }
         return p;
@@ -129,6 +129,11 @@ public:
                 return *_it;
         }
         return NULL;
+    }
+    
+    MgShape* getLastShape() const
+    {
+        return _shapes.empty() ? NULL : _shapes.back();
     }
 
     MgShape* findShape(UInt32 nID) const
@@ -206,11 +211,11 @@ public:
         giInterlockedIncrement(&_changeCount);
     }
     
-    bool save(MgStorage* s) const
+    bool save(MgStorage* s, UInt32 startIndex = 0) const
     {
         bool ret = false;
         Box2d rect;
-        int index = 0;
+        UInt32 index = 0;
         
         if (_context) {
             if (!s->writeNode("shapedoc", -1, false))
@@ -229,10 +234,12 @@ public:
             rect = getExtent();
             s->writeFloatArray("extent", &rect.xmin, 4);
             
-            s->writeUInt32("count", _shapes.size());
+            s->writeUInt32("count", _shapes.size() - (UInt32)startIndex);
             for (const_iterator it = _shapes.begin(); ret && it != _shapes.end(); ++it, ++index)
             {
-                ret = s->writeNode("shape", index, false);
+                if (index < startIndex)
+                    continue;
+                ret = s->writeNode("shape", index - startIndex, false);
                 if (ret) {
                     s->writeUInt32("type", (*it)->getType() % 10000);
                     s->writeUInt32("id", (*it)->getID());
@@ -240,7 +247,8 @@ public:
                     rect = (*it)->shape()->getExtent();
                     s->writeFloatArray("extent", &rect.xmin, 4);
                     
-                    ret = (*it)->save(s) && s->writeNode("shape", index, true);
+                    ret = (*it)->save(s);
+                    s->writeNode("shape", index - startIndex, true);
                 }
             }
             s->writeNode("shapes", _context ? 0 : -1, true);
@@ -253,7 +261,7 @@ public:
         return ret;
     }
     
-    bool load(MgStorage* s)
+    bool load(MgStorage* s, bool addOnly = false)
     {
         bool ret = false;
         Box2d rect;
@@ -275,7 +283,8 @@ public:
             s->readFloatArray("extent", &rect.xmin, 4);
             s->readUInt32("count");
             
-            clear();
+            if (!addOnly)
+                clear();
             
             while (ret && s->readNode("shape", index, false)) {
                 UInt32 type = s->readUInt32("type");
@@ -337,15 +346,15 @@ public:
     }
 
 private:
-    UInt32 getNewID()
+    UInt32 getNewID(UInt32 nID)
     {
-        UInt32 nID = 1;
-
-        if (!_shapes.empty())
-            nID = _shapes.back()->getID() + 1;
-        while (findShape(nID))
-            nID++;
-
+        if (0 == nID || findShape(nID)) {
+            nID = 1;
+            if (!_shapes.empty())
+                nID = _shapes.back()->getID() + 1;
+            while (findShape(nID))
+                nID++;
+        }
         return nID;
     }
 

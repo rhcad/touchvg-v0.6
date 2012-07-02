@@ -12,11 +12,11 @@
 
 #else // TESTMODE
 #import <GiViewController.h>
+@class GiViewControllerEx;
 
 @interface GraphViewController : UIViewController {
-    GiViewController    *_graphc;       // 图形视图控制器
+    GiViewControllerEx  *_graphc;       // 图形视图控制器
     UIView              *_magViews[2];  // 放大镜视图
-    UIButton            *_downview;     // 底部按钮栏
     UIButton            *redBtn;
 	UIButton            *blueBtn;
 	UIButton            *yellowbtn;

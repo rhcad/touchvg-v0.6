@@ -58,7 +58,8 @@
 {
     _pointW = ptw;
     Point2d ptd = Point2d(ptw.x, ptw.y) * _graph->xf.worldToDisplay();
-    BOOL inside = CGRectContainsPoint(CGRectInset(self.bounds, 10, 10), CGPointMake(ptd.x, ptd.y));
+    BOOL inside = CGRectContainsPoint(CGRectInset(self.bounds, 10, 10), 
+                                      CGPointMake(ptd.x, ptd.y));
     
     if (!inside) {
         _graph->xf.zoom(Point2d(ptw.x, ptw.y), _graph->xf.getViewScale());
@@ -126,15 +127,22 @@
     GiTransform& xf = _graph->xf;
     
     xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
+    if ([_gview shapes]) {
+        MgShapesLock locker([_gview shapes], MgShapesLock::ReadOnly);
+        if (locker.locked()) {
+            _graph->xf.setModelTransform([_gview shapes]->modelTransform());
+        }
+    }
     
     if (_scale < 1 && !self.hidden && ![_gview isZooming]) {    // 缩略视图，动态放缩时不regen
         CGSize gsize = [_gview ownerView].bounds.size;
         Box2d rcw(Box2d(0, 0, gsize.width, gsize.height) * [_gview xform]->displayToWorld());
         Box2d rcd(rcw * xf.worldToDisplay());       // 实际图形视图在本视图中的位置
         
-        if (rcd.width() < self.bounds.size.width && rcd.height() < self.bounds.size.height) {
-            if (!CGRectContainsRect(self.bounds,    // 出界则平移显示
-                                    CGRectMake(rcd.xmin, rcd.ymin, rcd.width(), rcd.height()))) {
+        if (rcd.width() < self.bounds.size.width
+            && rcd.height() < self.bounds.size.height) {
+            CGRect rcd2 = CGRectMake(rcd.xmin, rcd.ymin, rcd.width(), rcd.height());
+            if (!CGRectContainsRect(self.bounds, rcd2)) {   // 出界则平移显示
                 xf.zoomPan(CGRectGetMidX(self.bounds) - rcd.center().x,
                            CGRectGetMidY(self.bounds) - rcd.center().y);
             }
@@ -146,23 +154,41 @@
     
     GiCanvasIos &cv = _graph->canvas;
     GiGraphics &gs = _graph->gs;
+    bool nextDraw = false;
 
     if (cv.beginPaint(UIGraphicsGetCurrentContext(), [self isZooming])) // 在当前画布上准备绘图
     {
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
-            [self draw:&gs];                        // 不行则重新显示所有图形
-            if (![self isZooming])                  // 动态放缩时不保存显示内容
-                cv.saveCachedBitmap();              // 保存显示缓冲图，下次就不重新显示图形
+            MgShapesLock locker([_gview shapes], MgShapesLock::ReadOnly, 0);    // 锁定读取
+            if (locker.locked()) {
+                [self draw:&gs];                    // 不行则重新显示所有图形
+                if (![self isZooming])              // 动态放缩时不保存显示内容
+                    cv.saveCachedBitmap();          // 保存显示缓冲图，下次就不重新显示图形
+                _shapeAdded = NULL;
+            }
+            else {
+                nextDraw = true;
+            }
         }
         else if (_shapeAdded) {                     // 在缓冲图上显示新的图形
-            _shapeAdded->draw(gs);
-            cv.saveCachedBitmap();                  // 更新缓冲图
+            MgShapesLock locker([_gview shapes], MgShapesLock::ReadOnly, 0);
+            if (locker.locked()) {
+                _shapeAdded->draw(gs);
+                cv.saveCachedBitmap();              // 更新缓冲图
+                _shapeAdded = NULL;
+            }
+            else {
+                nextDraw = true;
+            }
         }
         
-        [self dynDraw:&gs];                         // 显示动态临时图形
+        nextDraw = ![self dynDraw:&gs] || nextDraw; // 显示动态临时图形
         
         cv.endPaint();                              // 显示完成后贴到视图画布上
-        _shapeAdded = NULL;
+    }
+    
+    if (nextDraw) {
+        [self setNeedsDisplay];
     }
 }
 
@@ -188,13 +214,14 @@
     return count > 0;
 }
 
-- (void)dynDraw:(GiGraphics*)gs
+- (BOOL)dynDraw:(GiGraphics*)gs
 {
     BOOL inactive = ![self isActiveView];
     BOOL locked = _lockRedraw && inactive;
+    BOOL ret = YES;
     
     if (!locked && [_drawingDelegate respondsToSelector:@selector(dynDraw:)]) {
-        [_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
+        ret = !![_drawingDelegate performSelector:@selector(dynDraw:) withObject:self];
     }
     
     bool antiAlias = gs->isAntiAliasMode();
@@ -203,7 +230,8 @@
     if (_scale < 1) {
         GiContext ctx(0, GiColor(64, 64, 64, 172), kLineDot);
         UIView *v = [_gview ownerView];
-        Box2d rect(Box2d(0, 0, v.bounds.size.width, v.bounds.size.height) * [_gview xform]->displayToWorld());
+        Box2d rect(Box2d(0, 0, v.bounds.size.width, v.bounds.size.height)
+                   * [_gview xform]->displayToWorld());
         gs->drawRect(&ctx, rect, false);
     }
     else if (inactive) {
@@ -214,6 +242,8 @@
     }
     
     gs->setAntiAliasMode(antiAlias);
+    
+    return ret;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -254,7 +284,7 @@
     BOOL moved = NO;
     
     if (CGRectContainsRect(mainBounds, self.superview.frame)    // 放大镜视图在实际绘图视图内
-        && CGRectContainsPoint(CGRectInset(self.superview.bounds, -20, -20), ptzoom)) // 进入放大镜视图
+        && CGRectContainsPoint(CGRectInset(self.superview.bounds, -30, -30), ptzoom)) // 进入放大镜视图
     {
         CGPoint cen;        // 本视图的上级视图的中心点，为view的视图坐标系
         
@@ -272,7 +302,14 @@
         }
         
         moved = YES;
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveLinear];
+        [UIView setAnimationDuration:0.2];
+        
         self.superview.center = [self.superview.superview convertPoint:cen fromView:view];
+        
+        [UIView commitAnimations];
     }
     
     return moved;

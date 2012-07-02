@@ -72,8 +72,9 @@
 		9DF6A499151C02CC001C1468 /* mgdrawsplines.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DF6A48E151C02CC001C1468 /* mgdrawsplines.h */; };
 		AE6F82C81573568200845336 /* mgselect.h in Headers */ = {isa = PBXBuildFile; fileRef = AE6F82C71573568200845336 /* mgselect.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AE6F82CF1573890800845336 /* GiEditAction.h in Headers */ = {isa = PBXBuildFile; fileRef = AE6F82CE1573890800845336 /* GiEditAction.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AEC08F0F1586CE1300D4CA42 /* mgdrawline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AEC08F0D1586CE1300D4CA42 /* mgdrawline.cpp */; };
-		AEC08F101586CE1300D4CA42 /* mgdrawline.h in Headers */ = {isa = PBXBuildFile; fileRef = AEC08F0E1586CE1300D4CA42 /* mgdrawline.h */; };
+		AE6FDB8C1586D8AD0006DB27 /* mgdrawline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE6FDB8A1586D8AD0006DB27 /* mgdrawline.cpp */; };
+		AE6FDB8D1586D8AD0006DB27 /* mgdrawline.h in Headers */ = {isa = PBXBuildFile; fileRef = AE6FDB8B1586D8AD0006DB27 /* mgdrawline.h */; };
+		AEE676E515772A9600375ABD /* GiZoom.h in Headers */ = {isa = PBXBuildFile; fileRef = AEE676E415772A9600375ABD /* GiZoom.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9A7F8C2146B30C300597DF0 /* ioscanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F8C1146B30C300597DF0 /* ioscanvas.cpp */; };
 		C9A7F8C5146B30E300597DF0 /* ioscanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C4146B30E200597DF0 /* ioscanvas.h */; settings = {ATTRIBUTES = (); }; };
 		C9A7F8C7146B320E00597DF0 /* gigraph_.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C6146B320E00597DF0 /* gigraph_.h */; };
@@ -175,8 +176,9 @@
 		9DF6A48E151C02CC001C1468 /* mgdrawsplines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgdrawsplines.h; path = ../../core/src/shape/mgdrawsplines.h; sourceTree = "<group>"; };
 		AE6F82C71573568200845336 /* mgselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgselect.h; path = ../../core/include/shape/mgselect.h; sourceTree = "<group>"; };
 		AE6F82CE1573890800845336 /* GiEditAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiEditAction.h; path = Headers/GiEditAction.h; sourceTree = "<group>"; };
-		AEC08F0D1586CE1300D4CA42 /* mgdrawline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgdrawline.cpp; path = ../../core/src/shape/mgdrawline.cpp; sourceTree = "<group>"; };
-		AEC08F0E1586CE1300D4CA42 /* mgdrawline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgdrawline.h; path = ../../core/src/shape/mgdrawline.h; sourceTree = "<group>"; };
+		AE6FDB8A1586D8AD0006DB27 /* mgdrawline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgdrawline.cpp; path = ../../core/src/shape/mgdrawline.cpp; sourceTree = "<group>"; };
+		AE6FDB8B1586D8AD0006DB27 /* mgdrawline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgdrawline.h; path = ../../core/src/shape/mgdrawline.h; sourceTree = "<group>"; };
+		AEE676E415772A9600375ABD /* GiZoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiZoom.h; path = Headers/GiZoom.h; sourceTree = "<group>"; };
 		C9A7F8C1146B30C300597DF0 /* ioscanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ioscanvas.cpp; path = Sources/ioscanvas.cpp; sourceTree = "<group>"; };
 		C9A7F8C4146B30E200597DF0 /* ioscanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioscanvas.h; path = Headers/ioscanvas.h; sourceTree = "<group>"; };
 		C9A7F8C6146B320E00597DF0 /* gigraph_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gigraph_.h; path = ../../core/include/graph/gigraph_.h; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 		2752EE82155916C900F0CCDD /* GraphView */ = {
 			isa = PBXGroup;
 			children = (
+				AEE676E415772A9600375ABD /* GiZoom.h */,
 				AE6F82CE1573890800845336 /* GiEditAction.h */,
 				2752EE841559171300F0CCDD /* GiGraphView.h */,
 				2752EE851559171300F0CCDD /* GiMotionHandler.h */,
@@ -428,8 +431,8 @@
 				9DF6A486151C02CC001C1468 /* mgcmds.cpp */,
 				9DF6A487151C02CC001C1468 /* mgcmdselect.cpp */,
 				9DF6A488151C02CC001C1468 /* mgcmdselect.h */,
-				AEC08F0D1586CE1300D4CA42 /* mgdrawline.cpp */,
-				AEC08F0E1586CE1300D4CA42 /* mgdrawline.h */,
+				AE6FDB8A1586D8AD0006DB27 /* mgdrawline.cpp */,
+				AE6FDB8B1586D8AD0006DB27 /* mgdrawline.h */,
 				9DF6A489151C02CC001C1468 /* mgdrawlines.cpp */,
 				9DF6A48A151C02CC001C1468 /* mgdrawlines.h */,
 				9DF6A48B151C02CC001C1468 /* mgdrawrect.cpp */,
@@ -479,6 +482,7 @@
 				9DA418ED152D7E7100052476 /* mgstorage.h in Headers */,
 				2752EE871559171300F0CCDD /* GiGraphView.h in Headers */,
 				2752EE881559171300F0CCDD /* GiMotionHandler.h in Headers */,
+				AEE676E515772A9600375ABD /* GiZoom.h in Headers */,
 				AE6F82CF1573890800845336 /* GiEditAction.h in Headers */,
 				2752EE891559171300F0CCDD /* GiViewController.h in Headers */,
 				7E9CE81A1500BA0B00487BEF /* mgbase.h in Headers */,
@@ -501,7 +505,7 @@
 				C9A7F8C5146B30E300597DF0 /* ioscanvas.h in Headers */,
 				7E8F78E4147DC5C30045A730 /* iosgraph.h in Headers */,
 				2752EE8F1559172400F0CCDD /* GiCmdController.h in Headers */,
-				AEC08F101586CE1300D4CA42 /* mgdrawline.h in Headers */,
+				AE6FDB8D1586D8AD0006DB27 /* mgdrawline.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,7 +638,7 @@
 				2752EE911559172400F0CCDD /* GiGraphView.mm in Sources */,
 				2752EE921559172400F0CCDD /* GiMagnifierView.mm in Sources */,
 				2752EE931559172400F0CCDD /* GiViewController.mm in Sources */,
-				AEC08F0F1586CE1300D4CA42 /* mgdrawline.cpp in Sources */,
+				AE6FDB8C1586D8AD0006DB27 /* mgdrawline.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -664,7 +668,10 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					_MACOSX,
+					DEBUG,
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -686,6 +693,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = _MACOSX;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

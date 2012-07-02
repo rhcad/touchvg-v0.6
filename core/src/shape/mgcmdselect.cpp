@@ -7,6 +7,7 @@
 #include <string.h>
 #include <algorithm>
 #include <functional>
+#include <mgshapet.h>
 #include <mgnear.h>
 #include <mgbase.h>
 
@@ -203,7 +204,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
             
             for (int i = 0; i < 8; i++) {
                 mgGetRectHandle(selbox, i, pnt);
-                gs->drawEllipse(&ctxhd, pnt, radius);
+                if (!sender->view->drawHandle(gs, pnt, false))
+                    gs->drawEllipse(&ctxhd, pnt, radius);
             }
             for (int j = 0; j < 2; j++) {
                 mgGetRectHandle(selbox, j == 0 ? 7 : 5, pnt);
@@ -215,18 +217,23 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
                 GiContext ctxarc(w, GiColor(0, 255, 0, 128), j ? kLineSolid : kLineDot);
                 gs->drawArc(&ctxarc, selbox.center(), r, r,
                             j ? -mgDeg2Rad(sangle) : mgDeg2Rad(180.f - sangle), mgDeg2Rad(2.f * sangle));
-                gs->drawEllipse(&ctxhd, pnt, radius);
+                
+                if (!sender->view->drawHandle(gs, pnt, false))
+                    gs->drawEllipse(&ctxhd, pnt, radius);
             }
         }
         else if (!selbox.isEmpty()) {   // 正在拖动临时图形
             if (rorate) {               // 旋转提示的参考线
-                gs->drawEllipse(&ctxhd, selbox.center(), radius);
+                if (!sender->view->drawHandle(gs, selbox.center(), false))
+                    gs->drawEllipse(&ctxhd, selbox.center(), radius);
                 GiContext ctxshap(0, GiColor(0, 0, 255, 128), kLineDash);
                 gs->drawLine(&ctxshap, selbox.center(), m_ptSnap);
             }
             else {
-                gs->drawEllipse(&ctxhd, sender->startPointM, radius);
-                gs->drawEllipse(&ctxhd, m_ptSnap, radius);
+                if (!sender->view->drawHandle(gs, sender->startPointM, false))
+                    gs->drawEllipse(&ctxhd, sender->startPointM, radius);
+                if (!sender->view->drawHandle(gs, m_ptSnap, false))
+                    gs->drawEllipse(&ctxhd, m_ptSnap, radius);
             }
         }
     }
@@ -237,17 +244,20 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         
         for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
             pnt = shape->shape()->getHandlePoint(i);
-            gs->drawEllipse(&ctxhd, pnt, radius);
+            if (!sender->view->drawHandle(gs, pnt, false))
+                gs->drawEllipse(&ctxhd, pnt, radius);
         }
         
         if (!m_cloneShapes.empty() || !m_insertPoint) {     // 不是(还未拖动但可插新点)，显示当前控制点
             pnt = shape->shape()->getHandlePoint(m_handleIndex - 1);
             gs->drawEllipse(&ctxhd, pnt, r2x);
+            sender->view->drawHandle(gs, pnt, true);
         }
         if (m_insertPoint && !m_cloneShapes.empty()) {      // 在临时图形上显示新插入顶点
             GiContext insertctx(ctxhd);
             insertctx.setFillColor(GiColor(255, 0, 0, 64));
             gs->drawEllipse(&insertctx, m_ptNear, r2x);
+            sender->view->drawHandle(gs, m_ptNear, true);
         }
         else if (m_cloneShapes.empty() && m_ptNear.distanceTo(pnt) > r2x * 2) {
             gs->drawEllipse(&ctxhd, m_ptNear, radius / 2);  // 显示线上的最近点，以便用户插入新点
@@ -255,6 +265,23 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     }
     
     return true;
+}
+
+void MgCommandSelect::gatherShapes(const MgMotion* sender, MgShapes* shapes)
+{
+    if (m_boxsel) {
+        MgShapeT<MgRect> shape;
+        
+        GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
+                          isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 32));
+        *shape.context() = ctxshap;
+        ((MgRect*)shape.shape())->setRect(Box2d(sender->startPointM, sender->pointM));
+        shapes->addShape(shape);
+    }
+    for (std::vector<MgShape*>::const_iterator it = m_cloneShapes.begin();
+         it != m_cloneShapes.end(); ++it) {
+        shapes->addShape(*(*it));
+    }
 }
 
 MgCommandSelect::sel_iterator MgCommandSelect::getSelectedPostion(MgShape* shape)
@@ -629,7 +656,8 @@ bool MgCommandSelect::applyCloneShapes(MgView* view, bool apply, bool addNewShap
     bool cloned = !m_cloneShapes.empty();
     
     if (!m_cloneShapes.empty()) {
-        MgShapesLock locker(view->shapes());
+        MgShapesLock locker(view->shapes(), !apply ? MgShapesLock::ReadOnly
+                            : (addNewShapes ? MgShapesLock::Add : MgShapesLock::Edit));
         
         if (apply && addNewShapes) {
             m_selIds.clear();
@@ -708,7 +736,7 @@ bool MgCommandSelect::selectAll(MgView* view)
 
 bool MgCommandSelect::deleteSelection(MgView* view)
 {
-    MgShapesLock locker(view->shapes());
+    MgShapesLock locker(view->shapes(), MgShapesLock::Edit);
     int count = 0;
     
     applyCloneShapes(view, false);
@@ -758,7 +786,7 @@ bool MgCommandSelect::deleteVertext(const MgMotion* sender)
     if (shape && m_handleIndex > 0
         && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
-        MgShapesLock locker(sender->view->shapes());
+        MgShapesLock locker(sender->view->shapes(), MgShapesLock::Edit);
         MgBaseLines *lines = (MgBaseLines *)shape->shape();
         
         ret = lines->removePoint(m_handleIndex - 1);
@@ -781,7 +809,7 @@ bool MgCommandSelect::insertVertext(const MgMotion* sender)
     if (shape && m_handleIndex > 0
         && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
-        MgShapesLock locker(sender->view->shapes());
+        MgShapesLock locker(sender->view->shapes(), MgShapesLock::Edit);
         MgBaseLines *lines = (MgBaseLines *)shape->shape();
         float dist = m_ptNear.distanceTo(shape->shape()->getPoint(m_segment));
         
@@ -804,7 +832,7 @@ bool MgCommandSelect::switchClosed(MgView* view)
     
     if (shape && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
-        MgShapesLock locker(view->shapes());
+        MgShapesLock locker(view->shapes(), MgShapesLock::Edit);
         MgBaseLines *lines = (MgBaseLines *)shape->shape();
         
         ret = lines->setClosed(!lines->isClosed());

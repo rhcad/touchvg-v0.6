@@ -31,6 +31,31 @@ static const NSUInteger kYellowTag      = 2;
 static const NSUInteger kLineTag        = 3;
 static const NSUInteger kDashLineTag    = 4;
 
+@interface GiViewControllerEx : GiViewController {
+    UIView              *downview;
+}
+@property (nonatomic,assign)  UIView* downview;   // 底部按钮栏
+@end
+
+@implementation GiViewControllerEx
+@synthesize downview;
+
+- (id)init
+{
+    self = [super init];
+    downview = nil;
+    return self;
+}
+
+- (void)gestureStateChanged:(UIGestureRecognizer*)sender
+{
+#ifdef AUTO_HIDE_CMDBAR
+    downview.hidden = (sender.state == UIGestureRecognizerStateBegan);
+#endif
+}
+
+@end
+
 @implementation GraphViewController
 
 - (void)dealloc
@@ -59,7 +84,7 @@ static const NSUInteger kDashLineTag    = 4;
     // 创建占满窗口的总视图
     UIView *mainview = [[UIView alloc]initWithFrame:rect];
     self.view = mainview;
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor blackColor];
     [mainview release];
     rect.origin.y = 0;
     
@@ -69,60 +94,67 @@ static const NSUInteger kDashLineTag    = 4;
     viewFrame.size.height -= BAR_HEIGHT;            // 减去底部按钮栏高度
     
 #ifdef USE_MAGNIFIER
-    CGRect magFrame = CGRectMake(10, 10, 300, 300);
+    CGRect magFrame = CGRectMake(10, 10, 250, 200);
 #ifdef MAG_AT_BOTTOM
     viewFrame.size.height -= magFrame.size.height;  // 放大镜单独占一横条
     barFrame.origin.y += magFrame.size.height;      // 底部按钮栏往下移
-    magFrame = CGRectMake(0, viewFrame.size.height, rect.size.width, magFrame.size.height); // 放大镜在图形视图下方
+    magFrame = CGRectMake(0, viewFrame.size.height, 
+                          rect.size.width, magFrame.size.height); // 放大镜在图形视图下方
 #endif
 #endif
     
     // 创建图形视图及其视图控制器
-    _graphc = [[GiViewController alloc]init];
-    [_graphc createGraphView:self.view frame:viewFrame backgroundColor:self.view.backgroundColor];
+    _graphc = [[GiViewControllerEx alloc]init];
+    [_graphc createGraphView:self.view frame:viewFrame backgroundColor:nil];
     _graphc.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
                                      | UIViewAutoresizingFlexibleBottomMargin);
     
     // 创建容纳放大镜视图的容器视图
 #ifdef USE_MAGNIFIER
-    UIView *magnifierView = [[UIView alloc]initWithFrame:magFrame];
-    magnifierView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.7f];
-    [self.view addSubview:magnifierView];
-    magnifierView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight 
+    UIView *magView = [[UIView alloc]initWithFrame:magFrame];
+    magView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.7f];
+    [self.view addSubview:magView];
+#ifdef MAG_AT_BOTTOM
+    magView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight 
                                       | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);
+#endif
     
     // 创建放大镜视图的按钮栏
     CGFloat magbtnw = 48;
-    CGRect magbarRect = CGRectMake(0, 0, magnifierView.bounds.size.width, magbtnw);
+    CGRect magbarRect = CGRectMake(0, 0, magView.bounds.size.width, 32);
     UIButton *magbarView = [[UIButton alloc]initWithFrame:magbarRect];
     [magbarView setImage:[UIImage imageNamed:@"downview.png"] forState: UIControlStateNormal];
 	magbarView.alpha = 0.6;
     magbarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-	[magnifierView addSubview:magbarView];
+	[magView addSubview:magbarView];
     [magbarView release];
     
     // 计算左右放大镜视图的位置大小
-    CGRect maggraphRect = magnifierView.bounds;
-    maggraphRect.origin.y = magbtnw;
-    maggraphRect.size.height -= magbtnw;
+    CGRect maggraphRect = magView.bounds;
+    maggraphRect.origin.y = magbarRect.size.height;
+    maggraphRect.size.height -= magbarRect.size.height;
     
     CGRect magrect = maggraphRect;
 #ifdef MAG_AT_BOTTOM
     CGRect mag1rect = maggraphRect;
-    mag1rect.size.width = mag1rect.size.height < mag1rect.size.width / 2 ? mag1rect.size.height : mag1rect.size.width / 2;
+    mag1rect.size.width = (mag1rect.size.height < mag1rect.size.width / 2
+                           ? mag1rect.size.height : mag1rect.size.width / 2);
     magrect.origin.x = mag1rect.size.width;
     magrect.size.width -= magrect.origin.x;
 #endif
     
     // 创建放大显示的放大镜视图
-    _magViews[0] = [_graphc createMagnifierView:magnifierView frame:magrect scale:4];
-    _magViews[0].autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
-                                     | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin);
+    _magViews[0] = [_graphc createMagnifierView:magView frame:magrect scale:4];
+    _magViews[0].autoresizingMask = (UIViewAutoresizingFlexibleWidth
+                                     | UIViewAutoresizingFlexibleHeight
+                                     | UIViewAutoresizingFlexibleRightMargin
+                                     | UIViewAutoresizingFlexibleBottomMargin);
     
     // 创建缩小显示的放大镜视图
 #ifdef MAG_AT_BOTTOM
     _magViews[1] = [_graphc createMagnifierView:magnifierView frame:mag1rect scale:0.1];
-    _magViews[1].autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin
+    _magViews[1].autoresizingMask = (UIViewAutoresizingFlexibleHeight
+                                     | UIViewAutoresizingFlexibleRightMargin
                                      | UIViewAutoresizingFlexibleBottomMargin);
     _magViews[1].backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.1f];
 #endif
@@ -169,46 +201,48 @@ static const NSUInteger kDashLineTag    = 4;
     barFrame.origin.y += viewFrame.size.height;
     
     // 创建底部按钮栏视图
-    _downview = [[UIButton alloc]initWithFrame:barFrame];
-    [_downview setImage:[UIImage imageNamed:@"downview.png"] forState: UIControlStateNormal];
-	_downview.alpha = 0.6;
-	[self.view addSubview:_downview];
-    [_downview release];
-    _downview.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin);
+    UIButton* downview = [[UIButton alloc]initWithFrame:barFrame];
+    _graphc.downview = downview;
+    [downview setImage:[UIImage imageNamed:@"downview.png"] forState: UIControlStateNormal];
+	downview.alpha = 0.6;
+	[self.view addSubview:downview];
+    [downview release];
+    downview.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin);
     
     CGFloat btnx = barFrame.size.width / 2 - (BTN_XDIFF + BAR_HEIGHT) * 4;
     redBtn = [self addButton:@"redbrush.png" action:@selector(colorBtnPress:)
-                         bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+                         bar:downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
     redBtn.tag = kRedTag;
     
     blueBtn = [self addButton:@"bluebrush.png" action:@selector(colorBtnPress:)
-                          bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+                          bar:downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
     blueBtn.tag = kBlueTag;
     
     yellowbtn = [self addButton:@"yellowbrush.png" action:@selector(colorBtnPress:)
-                            bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+                            bar:downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
     yellowbtn.tag = kYellowTag;
     
     colorbtn = [self addButton:@"colormix.png" action:@selector(showPaletee:)
-                           bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+                           bar:downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
     
     brushbtn = [self addButton:@"brush.png" action:@selector(showPenView:)
-                           bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];	
+                           bar:downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];	
     
     erasebtn = [self addButton:@"erase.png" action:@selector(eraseColor:)
-                           bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+                           bar:downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
     
     clearbtn = [self addButton:@"clearview.png" action:@selector(clearView:)
-                           bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+                           bar:downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
     
     backbtn  = [self addButton:@"back.png" action:@selector(backToView:)
-                           bar:_downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
+                           bar:downview x:&btnx size:BAR_HEIGHT diffx:BTN_XDIFF];
 }
 
 - (UIButton *)addButton:(NSString *)imgname action:(SEL)action bar:(UIView*)bar
                       x:(CGFloat*)x size:(CGFloat)size diffx:(CGFloat)diffx
 {
-    UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(*x, 0, size, size)];
+    CGFloat h = MIN(size, [bar bounds].size.height);
+    UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(*x, 0, size, h)];
     if (imgname) {
         [btn setImage:[UIImage imageNamed:imgname] forState: UIControlStateNormal];
     }
@@ -322,7 +356,7 @@ static const NSUInteger kDashLineTag    = 4;
 		case kRedTag:
 			[self showUnlightButtons];
             [redBtn setImage:[UIImage imageNamed:@"redbrush1.png"] forState: UIControlStateNormal]; // 切换至红色画笔
-            _graphc.commandName = "splines";
+            _graphc.commandName = "lines";
             _graphc.lineColor = [UIColor redColor];
 			break;
 		case kBlueTag:
@@ -371,7 +405,7 @@ static const NSUInteger kDashLineTag    = 4;
     
     CGRect viewrect = CGRectMake(0, 0, 300, 400);
     viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
-    viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _downview.frame.size.height - 20;
+    viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _graphc.downview.frame.size.height - 20;
     
 	SCCalloutGraphView *calloutView = [[SCCalloutGraphView alloc]initWithFrame:viewrect];
     [self.view addSubview:calloutView];
@@ -383,7 +417,7 @@ static const NSUInteger kDashLineTag    = 4;
     calloutView.graphc.commandName = "splines";
 }
 
-- (IBAction)hideMagnifier:(id)sender   // 切换放大镜视图的可见性
+- (IBAction)hideMagnifier:(id)sender    // 切换放大镜视图的可见性
 {
     UIView* btn = (UIView*)sender;
     if (btn.tag == 1) {                 // 取消动态修改结果

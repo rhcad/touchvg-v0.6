@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# Run "python utf8togbk.py" to convert source code files to the GBK format on Windows.
+#
 
 import os
 
@@ -26,6 +28,6 @@ def utf8togbk(dir):
             print(sfile)
 
 if __name__=="__main__":
-    utf8togbk(os.path.abspath('..'))
-    utf8togbk(os.path.abspath('../../core'))
+    utf8togbk(os.path.abspath('.'))
+    utf8togbk(os.path.abspath('../core'))
     input("Press <ENTER> to end.")

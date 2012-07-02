@@ -5,6 +5,7 @@
 #import "GiCmdController.h"
 #include <mgselect.h>
 #include <vector>
+#include <ioscanvas.h>
 
 @interface GiCommandController(Internal)
 
@@ -23,8 +24,23 @@ private:
     id<GiView>      _curview;
     id<GiView>      _mainview;
     UIView**        _auxviews;
+    UIImage*        _pointImages[2];
+    
 public:
-    MgViewProxy(id owner, UIView** views) : _owner(owner), _curview(Nil), _mainview(Nil), _auxviews(views) {}
+    BOOL            _dynChanged;
+    
+    MgViewProxy(id owner, UIView** views) : _owner(owner)
+        , _curview(Nil), _mainview(Nil), _auxviews(views), _dynChanged(NO)
+    {
+        _pointImages[0] = nil;
+        _pointImages[1] = nil;
+    }
+    
+    ~MgViewProxy() {
+        [_pointImages[0] release];
+        [_pointImages[1] release];
+    }
+    
     GiContext* context() { return shapes() ? shapes()->context() : NULL; }
     id<GiView> getView() { return _curview; }
     
@@ -44,20 +60,29 @@ private:
     void regen() {
         [_mainview regen];
         for (int i = 0; _auxviews[i]; i++) {
-            if ([_auxviews[i] respondsToSelector:@selector(regen)] && !_auxviews[i].hidden) {
+            if ([_auxviews[i] respondsToSelector:@selector(regen)]
+                && !_auxviews[i].hidden) {
                 [_auxviews[i] performSelector:@selector(regen)];
             }
+        }
+        if (MgDynShapeLock::lockedForWrite()) {
+            _dynChanged = YES;
         }
     }
     
     void redraw(bool fast) {
         [_curview redraw:fast];
+        
+        if (MgDynShapeLock::lockedForWrite()) {
+            _dynChanged = YES;
+        }
     }
     
     void shapeAdded(MgShape* shape) {
         [_mainview shapeAdded:shape];
         for (int i = 0; _auxviews[i]; i++) {
-            if ([_auxviews[i] conformsToProtocol:@protocol(GiView)] && !_auxviews[i].hidden) {
+            if ([_auxviews[i] conformsToProtocol:@protocol(GiView)]
+                && !_auxviews[i].hidden) {
                 id<GiView> gv = (id<GiView>)_auxviews[i];
                 [gv shapeAdded:shape];
             }
@@ -66,6 +91,21 @@ private:
     
     bool longPressSelection(int selState) {
         return [_owner longPressSelection:selState];
+    }
+    
+    bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) {
+        int index = hotdot ? 1 : 0;
+        GiCanvasIos* canvas = (GiCanvasIos*)gs->getCanvas();
+        
+        if (!_pointImages[index]) {
+            _pointImages[index] = [UIImage imageNamed:hotdot ? @"vgdot2.png" : @"vgdot1.png"];
+            [_pointImages[index] retain];
+        }
+        if (_pointImages[index]) {
+            canvas->drawImage([_pointImages[index] CGImage], pnt);
+        }
+        
+        return _pointImages[index];
     }
 };
 
@@ -283,12 +323,29 @@ static long s_cmdRef = 0;
     return CGPointMake(_motion->pointM.x, _motion->pointM.y);
 }
 
-- (void)dynDraw:(GiGraphics*)gs
+- (BOOL)dynDraw:(GiGraphics*)gs
 {
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     if (cmd && _mgview->getView()) {
         cmd->draw(_motion, gs);
     }
+    return YES;
+}
+
+- (void)getDynamicShapes:(MgShapes*)shapes
+{
+    MgCommand* cmd = mgGetCommandManager()->getCommand();
+    if (cmd && _mgview->getView()) {
+        cmd->gatherShapes(_motion, shapes);
+    }
+}
+
+- (BOOL)isDynamicChanged:(BOOL)reset
+{
+    BOOL ret = _mgview->_dynChanged;
+    if (reset)
+        _mgview->_dynChanged = NO;
+    return ret;
 }
 
 - (BOOL)cancel
@@ -318,7 +375,7 @@ static long s_cmdRef = 0;
             _motion->velocity = 0;
             _motion->pressDrag = false;
             _moved = NO;
-            _clicked = NO;
+            _clickFingers = 0;
             _undoFired = NO;
         }
     }
@@ -376,18 +433,20 @@ static long s_cmdRef = 0;
 
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
+    MgDynShapeLock locker;
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     BOOL ret = NO;
     CGPoint point;
     
-    if (cmd)
+    if (cmd && locker.locked())
     {
         if (sender.state == UIGestureRecognizerStateChanged) {
             CGPoint velocity = [sender velocityInView:sender.view];
             _motion->velocity = hypotf(velocity.x, velocity.y);
             
             ret = ([self getPointForPressDrag:sender :&point]
-                   && [self touchesMoved:point view:sender.view count:sender.numberOfTouches]);
+                   && [self touchesMoved:point view:sender.view
+                                   count:sender.numberOfTouches]);
         }
         else if (sender.state == UIGestureRecognizerStateEnded) {
             if ([sender numberOfTouches] && [self getPointForPressDrag:sender :&point]) {
@@ -408,19 +467,21 @@ static long s_cmdRef = 0;
 
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
+    MgDynShapeLock locker;
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     BOOL ret = NO;
     CGPoint point;
     
-    if (_motion->pressDrag && cmd) {
+    if (_motion->pressDrag && cmd && locker.locked()) {
         if (sender.state == UIGestureRecognizerStateChanged) {
             _motion->velocity = 0;
-            
             ret = ([self getPointForPressDrag:sender :&point]
-                   && [self touchesMoved:point view:sender.view count:sender.numberOfTouches]);
+                   && [self touchesMoved:point view:sender.view
+                                   count:sender.numberOfTouches]);
         }
         else if (sender.state == UIGestureRecognizerStateEnded) {
-            if ([sender numberOfTouches] && [self getPointForPressDrag:sender :&point]) {
+            if ([sender numberOfTouches]
+                && [self getPointForPressDrag:sender :&point]) {
                 [self convertPoint:point];
             }
             ret = cmd->touchEnded(_motion);
@@ -438,23 +499,8 @@ static long s_cmdRef = 0;
 
 - (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
-    MgCommand* cmd = mgGetCommandManager()->getCommand();
-    BOOL ret = NO;
-    
-    if (cmd) {
-        [self setView:sender.view];
-        [self convertPoint:[sender locationInView:sender.view]];
-        _motion->startPoint = _motion->point;
-        _motion->startPointM = _motion->pointM;
-        _motion->lastPoint = _motion->point;
-        _motion->lastPointM = _motion->pointM;
-        
-        ret = cmd->doubleClick(_motion);
-        _motion->pressDrag = false;
-        _touchCount = 0;
-    }
-    
-    return ret;
+    _clickFingers = 2;
+    return mgGetCommandManager()->getCommand() != NULL;
 }
 
 - (BOOL)longPressGesture:(UIGestureRecognizer *)sender
@@ -479,7 +525,7 @@ static long s_cmdRef = 0;
 
 - (BOOL)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
-    _clicked = YES;
+    _clickFingers = 1;
     return mgGetCommandManager()->getCommand() != NULL;
 }
 
@@ -488,15 +534,20 @@ static long s_cmdRef = 0;
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     BOOL ret = NO;
     
-    if (cmd && _clicked) {
+    if (cmd && _clickFingers > 0) {
         [self setView:view];
         [self convertPoint:point];
         
-        ret = cmd->click(_motion);
+        if (1 == _clickFingers) {
+            ret = cmd->click(_motion);
+        }
+        else if (2 == _clickFingers) {
+            ret = cmd->doubleClick(_motion);
+        }
         _motion->pressDrag = false;
         _touchCount = 0;
     }
-    _clicked = NO;
+    _clickFingers = 0;
     
     return ret;
 }

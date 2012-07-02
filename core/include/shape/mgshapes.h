@@ -17,20 +17,21 @@ class MgLockRW;
 struct MgShapes : public MgObject
 {
     static UInt32 Type() { return 1; }
-
+    
     virtual UInt32 getShapeCount() const = 0;
     virtual MgShape* getFirstShape(void*& it) const = 0;
     virtual MgShape* getNextShape(void*& it) const = 0;
+    virtual MgShape* getLastShape() const = 0;
     virtual MgShape* findShape(UInt32 nID) const = 0;
     virtual Box2d getExtent() const = 0;
-
+    
     virtual MgShape* hitTest(const Box2d& limits, Point2d& nearpt, Int32& segment) const = 0;
     virtual int draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
     virtual UInt32 getChangeCount() = 0;
     virtual void afterChanged() = 0;
-    virtual bool save(MgStorage* s) const = 0;
-    virtual bool load(MgStorage* s) = 0;
-
+    virtual bool save(MgStorage* s, UInt32 startIndex = 0) const = 0;
+    virtual bool load(MgStorage* s, bool addOnly = false) = 0;
+    
     //! 删除所有图形
     virtual void clear() = 0;
     
@@ -39,7 +40,7 @@ struct MgShapes : public MgObject
     
     //! 移除一个图形，由调用者删除图形对象
     virtual MgShape* removeShape(UInt32 nID) = 0;
-
+    
     //! 返回新图形的图形属性
     virtual GiContext* context() = 0;
     
@@ -61,7 +62,7 @@ struct MgShapes : public MgObject
 
 //! 读写锁定数据类
 /*! \ingroup GEOM_SHAPE
- */
+*/
 class MgLockRW
 {
 public:
@@ -73,28 +74,53 @@ public:
     bool lockedForRead();
     bool lockedForWrite();
     
+    int getEditFlags() { return _editFlags; }
+    void setEditFlags(int flags) {
+        _editFlags = flags ? (_editFlags | flags) : 0;
+    }
+    
 private:
     volatile long _counts[3];
+    int     _editFlags;
 };
 
 //! 图形列表锁定辅助类
 /*! \ingroup GEOM_SHAPE
- */
+*/
 class MgShapesLock
 {
     int         m_mode;
 public:
     MgShapes*   shapes;
-    MgShapesLock(MgShapes* sp, bool forWrite = true, int timeout = 200);
+    enum { ReadOnly = 0, Add = 0x1, Edit = 0x3, Unknown = 99 };
+    MgShapesLock(MgShapes* sp, int flags, int timeout = 200);
     ~MgShapesLock();
     
     bool locked();
     static bool lockedForRead(MgShapes* sp);
     static bool lockedForWrite(MgShapes* sp);
     
+    int getEditFlags() { return shapes->getLockData()->getEditFlags(); }
+    void resetEditFlags() { shapes->getLockData()->setEditFlags(0); }
+    
     typedef void (*ShapesLocked)(MgShapes* sp, void* obj, bool locked);
     static void registerObserver(ShapesLocked func, void* obj);
     static void unregisterObserver(ShapesLocked func, void* obj);
+};
+
+//! 动态图形锁定辅助类
+/*! \ingroup GEOM_SHAPE
+*/
+class MgDynShapeLock
+{
+    int         m_mode;
+public:
+    MgDynShapeLock(bool forWrite = true, int timeout = 200);
+    ~MgDynShapeLock();
+    
+    bool locked();
+    static bool lockedForRead();
+    static bool lockedForWrite();
 };
 
 #endif // __GEOMETRY_MGSHAPES_H_

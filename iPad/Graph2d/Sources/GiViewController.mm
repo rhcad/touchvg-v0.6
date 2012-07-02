@@ -18,6 +18,7 @@
 
 - (void)addGestureRecognizers:(int)t view:(UIView*)view;
 - (void)setGestureRecognizerEnabled:(BOOL)enabled;
+- (BOOL)gestureCheck:(UIGestureRecognizer*)sender;
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
@@ -51,6 +52,11 @@
             _magViews[iv] = Nil;
         _cmdctl = [[GiCommandController alloc]initWithViews:_magViews];
         _shapesCreated = NULL;
+        _shapesDynamic = NULL;
+        _dynChangeCount[0] = 0;
+        _dynChangeCount[1] = 0;
+        _recordIndex = 0;
+        
         for (int t = 0; t < 2; t++) {
             for (int i = 0; i < RECOGNIZER_COUNT; i++)
                 _recognizers[t][i] = Nil;
@@ -79,6 +85,10 @@
 {
     [_cmdctl release];
     
+    if (_shapesDynamic) {
+        ((MgShapes*)_shapesDynamic)->release();
+        _shapesDynamic = NULL;
+    }
     if (_shapesCreated) {
         ((MgShapes*)_shapesCreated)->release();
         _shapesCreated = NULL;
@@ -92,7 +102,8 @@
     [super dealloc];
 }
 
-- (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame backgroundColor:(UIColor*)bkColor
+- (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame
+           backgroundColor:(UIColor*)bkColor
 {
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
@@ -100,10 +111,15 @@
         [self.view removeFromSuperview];
     self.view = aview;
     
-    if (!bkColor)
-        bkColor = parentView.superview.backgroundColor;
+    if (!bkColor) {
+        bkColor = parentView.backgroundColor;
+        if (!bkColor)
+            bkColor = parentView.superview.backgroundColor;
+    }
     [aview graph]->setBkColor(giFromUIColor(bkColor ? bkColor : [UIColor whiteColor]));
-    aview.backgroundColor = [UIColor clearColor];
+    
+    BOOL hasColor = parentView.backgroundColor || parentView.superview.backgroundColor;
+    aview.backgroundColor = hasColor ? [UIColor clearColor] : [UIColor whiteColor];
     
     [aview setDrawingDelegate:self];
     [parentView addSubview:aview];
@@ -131,9 +147,13 @@
         [self.view removeFromSuperview];
     self.view = aview;
     
-    if (!bkColor)
-        bkColor = parentView.superview.backgroundColor;
+    if (!bkColor) {
+        bkColor = parentView.backgroundColor;
+        if (!bkColor)
+            bkColor = parentView.superview.backgroundColor;
+    }
     [aview graph]->setBkColor(giFromUIColor(bkColor ? bkColor : [UIColor whiteColor]));
+    
     aview.backgroundColor = [UIColor clearColor];
     aview.enableZoom = NO;
     
@@ -153,12 +173,14 @@
     return self.view;
 }
 
-- (UIView*)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale
+- (UIView*)createMagnifierView:(UIView*)parentView
+                         frame:(CGRect)frame scale:(CGFloat)scale
 {
     if (_magViews[_magViews[0] ? 1 : 0])                        // 最多2个
         return Nil;
     
-    GiMagnifierView *aview = [[GiMagnifierView alloc] initWithFrame:frame graphView:[self gview]];
+    GiMagnifierView *aview = [[GiMagnifierView alloc]
+                              initWithFrame:frame graphView:[self gview]];
     _magViews[_magViews[0] ? 1 : 0] = aview;
     aview.backgroundColor = [UIColor clearColor];
     aview.scale = scale;
@@ -197,21 +219,223 @@
 
 - (void)removeShapes
 {
-    MgShapesLock locker([[self gview] shapes]);
+    MgShapesLock locker([[self gview] shapes], MgShapesLock::Edit);
     [[self gview] shapes]->clear();
     [self regen];
+    
+    // 清除播放图形列表
+    GiGraphView *gview = (GiGraphView *)self.view;
+    [gview getPlayShapes:YES];
+    [self setDynamicShapes:NULL];
 }
 
-- (BOOL)loadShapes:(void*)mgstorage
+- (BOOL)loadShapes:(void*)mgstorage record:(int)times
 {
-    bool ret = [[self gview] shapes]->load((MgStorage*)mgstorage);
-    [self regen];
+    BOOL ret = YES;
+    MgStorage* s = (MgStorage*)mgstorage;
+    
+    if (times > 0) {                                        // 播放录制的图形
+        GiGraphView *gview = (GiGraphView *)self.view;
+        MgShapes* sp = [gview getPlayShapes:!s];            // 播放图形列表，自动创建或删除
+        MgShapesLock locker(sp, MgShapesLock::Edit);        // 锁定改写播放图形列表
+        
+        ret = !sp || locker.locked();                       // 删除或锁定成功
+        if (locker.locked() && s->readNode("record", -1, false))
+        {            
+            int mode = s->readInt32("mode");                // 录制的标记
+            bool addOnly = (MgShapesLock::Add == mode);
+            UInt32 oldCount = sp->getShapeCount();          // 原来的图形数
+            
+            ret = sp->load(s, addOnly);                     // 增量播放
+            s->readNode("record", -1, true);
+            
+            if (!addOnly || oldCount + 1 != sp->getShapeCount()) {
+                [self regen];
+            }
+            else {                                          // 是增量录制最后一个图形
+                [[self gview] shapeAdded:sp->getLastShape()];   // 仅添加显示一个图形
+            }
+        }
+    }
+    else {
+        MgShapes* sp = [[self gview] shapes];
+        MgShapesLock locker(sp, MgShapesLock::Edit);
+        ret = (locker.locked() && mgstorage
+               && sp->load((MgStorage*)mgstorage));
+        [self regen];
+    }
+    
     return ret;
 }
 
-- (BOOL)saveShapes:(void*)mgstorage
+- (BOOL)saveShapes:(void*)mgstorage record:(int)times
 {
-    return [[self gview] shapes]->save((MgStorage*)mgstorage);
+    MgStorage* s = (MgStorage*)mgstorage;
+    MgShapesLock locker([[self gview] shapes], MgShapesLock::ReadOnly);
+    bool ret = locker.locked() && mgstorage;
+    
+    if (ret) {
+        if (times == 0) {
+            ret = locker.shapes->save(s);
+        }
+        else {                                              // 录屏
+            GiGraphView *gview = (GiGraphView *)self.view;
+            [gview getPlayShapes:YES];                      // 清除播放图形列表
+            
+            int mode = locker.getEditFlags();               // 修改标志
+            bool addOnly = (MgShapesLock::Add == mode);
+            
+            s->writeNode("record", -1, false);
+            s->writeInt32("mode", mode);
+            
+            ret = locker.shapes->save(s, addOnly ? _recordIndex : 0);   // 增量保存
+            s->writeNode("record", -1, true);
+            
+            if (!addOnly) {
+                _recordIndex = locker.shapes->getShapeCount();  // 下次新加图形时的序号
+            }
+        }
+        locker.resetEditFlags();                            // 清除修改标志，表示已录屏
+    }
+    
+    return ret;
+}
+
+- (NSUInteger)getChangeCount
+{
+    return _dynChangeCount[0];
+}
+
+- (NSUInteger)getRedrawCount
+{
+    return _dynChangeCount[1];
+}
+
+- (BOOL)getDynamicShapes:(void*)mgstorage
+{
+    MgDynShapeLock locker(false);       // 锁定以便读取, 临界区是动态图形
+    bool ret = locker.locked();
+    
+    if (ret) {
+        GiCommandController* cmd = (GiCommandController*)_cmdctl;
+        GiGraphView *gview = (GiGraphView *)self.view;
+        MgShapesT<std::list<MgShape*> > sp(false);
+        
+        [cmd getDynamicShapes:&sp];         // 从当前命令取动态图形
+        
+        if (sp.getShapeCount() == 0) {
+            MgShapesLock locker2([[self gview] shapes], MgShapesLock::ReadOnly);
+            if (gview.shapeAdded && locker2.locked()
+                && locker2.getEditFlags() == MgShapesLock::Add) {
+                sp.addShape(*gview.shapeAdded);
+            }
+            else {
+                return NO;
+            }
+        }
+        ret = sp.save((MgStorage*)mgstorage);  // 存到mgstorage
+        
+        [self setDynamicShapes:NULL];   // 录时取消动态播放
+    }
+    
+    return ret;
+}
+
+- (BOOL)setDynamicShapes:(void*)mgstorage
+{
+    BOOL ret = YES;
+    
+    if (!mgstorage) {
+        if (_shapesDynamic) {
+            MgShapesLock locker((MgShapes*)_shapesDynamic, MgShapesLock::Edit);
+            if (locker.shapes) {
+                locker.shapes->release();
+                locker.shapes = NULL;
+            }
+            _shapesDynamic = NULL;
+        }
+    }
+    else {
+        if (!_shapesDynamic) {
+            _shapesDynamic = new MgShapesT<std::list<MgShape*> >(false);
+        }
+        
+        // 优先写到最旧的临时图形列表，不能锁定则换另一个临时图形列表
+        MgShapesLock locker((MgShapes*)_shapesDynamic, MgShapesLock::Edit);
+        
+        ret = locker.locked();
+        if (ret) {
+            MgShapes* sp = (MgShapes*)_shapesDynamic;
+            ret = sp->load((MgStorage*)mgstorage);          // 写到临时图形列表
+        }
+    }
+    
+    return ret;
+}
+
+- (void)afterShapeChanged
+{
+    while (_dynChangeCount[0] < [[self gview] shapes]->getChangeCount()) {
+        giInterlockedIncrement(_dynChangeCount);
+    }
+}
+
+- (id)dynDraw:(id)sender
+{
+    GiGraphics* gs = NULL;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    GiGraphView *gview = (GiGraphView *)self.view;
+    
+    if ([sender conformsToProtocol:@protocol(GiView)]) {
+        id<GiView> aview = (id<GiView>)sender;
+        gs = [aview graph];
+    }
+    else if (sender == _magViews[0]) {
+        GiMagnifierView *aview = (GiMagnifierView *)_magViews[0];
+        gs = [aview graph];
+    }
+    else if (sender == _magViews[1]) {
+        GiMagnifierView *aview = (GiMagnifierView *)_magViews[1];
+        gs = [aview graph];
+    }
+    
+    if (gs && gs->isDrawing()) {
+        // 优先取最新的临时图形列表，不能锁定则换另一个临时图形列表
+        MgShapesLock locker((MgShapes*)_shapesDynamic, MgShapesLock::ReadOnly);
+        
+        if (locker.locked()) {
+            if (locker.shapes->getShapeCount() != 1) {
+                locker.shapes->draw(*gs);
+            }
+            else {
+                void *it;
+                MgShape *tmpShape = locker.shapes->getFirstShape(it);
+                MgShape *added = [gview shapeAdded];
+                
+                if (tmpShape && added
+                    && tmpShape->shape()->getExtent() == added->shape()->getExtent()
+                    && tmpShape->shape()->getPointCount() == added->shape()->getPointCount()) {
+                    locker.shapes->clear();
+                }
+                else {
+                    locker.shapes->draw(*gs);
+                }
+            }
+        }
+        else if (_shapesDynamic) {                      // 冲突则下次再显示
+            sender = nil;
+        }
+    }
+    if (gs && gs->isDrawing()) {
+        // 延迟到显示完成才检查动态图形是否已改变，自增一让外界知道已改变
+        if ([cmd isDynamicChanged:YES]) {
+            giInterlockedIncrement(_dynChangeCount + 1);
+        }
+        
+        [cmd dynDraw: gs];
+    }
+    
+    return sender;
 }
 
 - (void*)shapes {
@@ -232,6 +456,11 @@
 - (void)setCommandName:(const char*)name {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     cmd.commandName = name;
+    
+    // 清除播放图形列表
+    GiGraphView *gview = (GiGraphView *)self.view;
+    [gview getPlayShapes:YES];
+    [self setDynamicShapes:NULL];
 }
 
 - (float)lineWidth {
@@ -416,28 +645,6 @@
         [[self motionView:@selector(undoMotion)] undoMotion];
 }
 
-- (void)dynDraw:(id)sender
-{
-    GiGraphics* gs = NULL;
-    
-    if ([sender conformsToProtocol:@protocol(GiView)]) {
-        id<GiView> aview = (id<GiView>)sender;
-        gs = [aview graph];
-    }
-    else if (sender == _magViews[0]) {
-        GiMagnifierView *aview = (GiMagnifierView *)_magViews[0];
-        gs = [aview graph];
-    }
-    else if (sender == _magViews[1]) {
-        GiMagnifierView *aview = (GiMagnifierView *)_magViews[1];
-        gs = [aview graph];
-    }
-    
-    if (gs && gs->isDrawing()) {
-        [[self getCommand:@selector(dynDraw:)] dynDraw: gs];
-    }
-}
-
 - (void)regen
 {
     [[self gview] regen];
@@ -466,12 +673,19 @@
     BOOL allow = YES;
     NSTimeInterval seconds = [[NSProcessInfo processInfo]systemUptime] - _timeBegan;
     
+    // 长按手势: 当前命令响应长按操作时手势才生效
     if (gestureRecognizer == _recognizers[0][kLongPressGesture]
         || gestureRecognizer == _recognizers[1][kLongPressGesture]) {
         allow = [[self getCommand:@selector(longPressGesture:)] longPressGesture:gestureRecognizer];
     }
-    else if (seconds > 0.8) {    // 从按下到开始移动经过的秒数超过阀值，就向当前命令触发长按动作
+    // 从按下到开始移动经过的秒数超过阀值，就向当前命令触发长按动作，当前命令响应长按操作时手势取消
+    else if (seconds > 0.8) {
         allow = ![[self getCommand:@selector(longPressGesture:)] longPressGesture:gestureRecognizer];
+    }
+    // 单指平移手势开始时只能有一个触点，只在移动过程中识别第二个触点
+    else if (gestureRecognizer == _recognizers[0][kPanGesture]
+             || gestureRecognizer == _recognizers[1][kPanGesture]) {
+        allow = [gestureRecognizer numberOfTouches] == 1;
     }
     
     return allow;
@@ -481,6 +695,9 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 
 + (void)ignoreTouchesBegan:(CGPoint)point view:(UIView*)sender {
     _ignorepoint = [sender convertPoint:point toView:[sender window]];
+}
+
+- (void)gestureStateChanged:(UIGestureRecognizer*)sender {
 }
 
 @end
@@ -505,13 +722,12 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 
 - (id<GiMotionHandler>)getCommand:(SEL)aSelector
 {
-    return [_cmdctl respondsToSelector:aSelector] ?
-        (id<GiMotionHandler>)_cmdctl : Nil;
+    return [_cmdctl respondsToSelector:aSelector] ? (id<GiMotionHandler>)_cmdctl : nil;
 }
 
 - (void)addGestureRecognizers:(int)t view:(UIView*)view
 {
-    if (_recognizers[t][0])
+    if (_recognizers[t][2])
         return;
     
     int n = 0;
@@ -533,7 +749,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     // 单指滑动手势
     UIPanGestureRecognizer *oneFingerPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
-    oneFingerPan.maximumNumberOfTouches = 2;                        // 同时识别双指滑动
+    oneFingerPan.maximumNumberOfTouches = 2;                        // 滑动中允许双指
     oneFingerPan.delegate = self;                                   // 用于检测长按
     _recognizers[t][n++] = oneFingerPan;
     
@@ -567,7 +783,9 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     _touchCount = 0;
     if (_gestureRecognizerUsed) {
         for (int i = 0; i < RECOGNIZER_COUNT; i++) {
-            [view addGestureRecognizer:_recognizers[t][i]];
+            if (_recognizers[t][i]) {
+                [view addGestureRecognizer:_recognizers[t][i]];
+            }
         }
     }
 }
@@ -576,15 +794,23 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 {
     if (_gestureRecognizerUsed) {
         for (int i = 0; i < RECOGNIZER_COUNT; i++) {
-            [self.view removeGestureRecognizer:_recognizers[0][i]];
-            [_magViews[0] removeGestureRecognizer:_recognizers[1][i]];
+            if (_recognizers[0][i]) {
+                [self.view removeGestureRecognizer:_recognizers[0][i]];
+            }
+            if (_recognizers[1][i]) {
+                [_magViews[0] removeGestureRecognizer:_recognizers[1][i]];
+            }
         }
     }
     _gestureRecognizerUsed = used;
     if (_gestureRecognizerUsed) {
         for (int i = 0; i < RECOGNIZER_COUNT; i++) {
-            [self.view addGestureRecognizer:_recognizers[0][i]];
-            [_magViews[0] addGestureRecognizer:_recognizers[1][i]];
+            if (_recognizers[0][i]) {
+                [self.view addGestureRecognizer:_recognizers[0][i]];
+            }
+            if (_recognizers[1][i]) {
+                [_magViews[0] addGestureRecognizer:_recognizers[1][i]];
+            }
         }
     }
 }
@@ -592,8 +818,12 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 - (void)setGestureRecognizerEnabled:(BOOL)enabled
 {
     for (int i = 0; i < RECOGNIZER_COUNT; i++) {
-        _recognizers[0][i].enabled = enabled;
-        _recognizers[1][i].enabled = enabled;
+        if (_recognizers[0][i]) {
+            _recognizers[0][i].enabled = enabled;
+        }
+        if (_recognizers[1][i]) {
+            _recognizers[1][i].enabled = enabled;
+        }
     }
 }
 
@@ -647,12 +877,32 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     }
 }
 
-- (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
+- (BOOL)gestureCheck:(UIGestureRecognizer*)sender
 {
     if (_ignoreTouches) {
         sender.cancelsTouchesInView = YES;
-        return;
+        return NO;
     }
+    if (MgShapesLock::lockedForRead([[self gview] shapes])      // 如果正在录屏复制
+        || MgDynShapeLock::lockedForRead()) {
+        if (sender.state == UIGestureRecognizerStateChanged)    // 触摸移动则忽略本次
+            return NO;
+        MgShapesLock([[self gview] shapes], MgShapesLock::Unknown);     // 等待
+        MgDynShapeLock();                                       // 等待录屏复制完成
+    }
+    if (sender.state == UIGestureRecognizerStateBegan
+        || sender.state != UIGestureRecognizerStateChanged) {
+        [self gestureStateChanged:sender];
+    }
+    
+    return YES;
+}
+
+- (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
+{
+    if (![self gestureCheck:sender])
+        return;
+    
     if (![[self getCommand:@selector(twoFingersPinch:)] twoFingersPinch:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(twoFingersPinch:)] twoFingersPinch:sender];
@@ -662,10 +912,9 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
-    if (_ignoreTouches) {
-        sender.cancelsTouchesInView = YES;
+    if (![self gestureCheck:sender])
         return;
-    }
+    
     if (sender.state == UIGestureRecognizerStateBegan) {
         _touchCount = [sender numberOfTouches];
     }
@@ -690,33 +939,21 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
-    if (_ignoreTouches) {
-        sender.cancelsTouchesInView = YES;
+    if (![self gestureCheck:sender])
         return;
+    
+    if (![[self getCommand:@selector(oneFingerPan:)] oneFingerPan:sender]
+        && sender.view == self.view) {
+        [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
     }
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        NSTimeInterval seconds = [[NSProcessInfo processInfo]systemUptime] - _timeBegan;
-        bool press = seconds > 0.8 && [sender numberOfTouches] == 2;
-        _touchCount = press ? 1 : [sender numberOfTouches]; // Press+Drag 视为单指滑动
-    }
-    if (2 == _touchCount) {
-        [self twoFingersPan:sender];
-    }
-    else if (1 == _touchCount) {
-        if (![[self getCommand:@selector(oneFingerPan:)] oneFingerPan:sender]
-            && sender.view == self.view) {
-            [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
-        }
-        [self updateMagnifierCenter:sender];
-    }
+    [self updateMagnifierCenter:sender];
 }
 
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
 {
-    if (_ignoreTouches) {
-        sender.cancelsTouchesInView = YES;
+    if (![self gestureCheck:sender])
         return;
-    }
+    
     if (![[self getCommand:@selector(oneFingerOneTap:)] oneFingerOneTap:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerOneTap:)] oneFingerOneTap:sender];
@@ -726,10 +963,9 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
-    if (_ignoreTouches) {
-        sender.cancelsTouchesInView = YES;
+    if (![self gestureCheck:sender])
         return;
-    }
+    
     if (![[self getCommand:@selector(oneFingerTwoTaps:)] oneFingerTwoTaps:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerTwoTaps:)] oneFingerTwoTaps:sender];
@@ -739,10 +975,9 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 
 - (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
 {
-    if (_ignoreTouches) {
-        sender.cancelsTouchesInView = YES;
+    if (![self gestureCheck:sender])
         return;
-    }
+    
     if (![[self getCommand:@selector(twoFingersTwoTaps:)] twoFingersTwoTaps:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(twoFingersTwoTaps:)] twoFingersTwoTaps:sender];

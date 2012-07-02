@@ -7,7 +7,7 @@
 
 UInt32      g_newShapeID = 0;
 
-MgCommandDraw::MgCommandDraw() : m_shape(NULL), m_step(0)
+MgCommandDraw::MgCommandDraw() : m_shape(NULL), m_step(0), m_needClear(false)
 {
 }
 
@@ -36,9 +36,11 @@ bool MgCommandDraw::_initialize(MgShape* (*creator)(), const MgMotion* sender)
     {
         m_shape = creator();
         assert(m_shape && m_shape->shape());
+        m_shape->setParent(sender->view->shapes(), 0);
     }
     g_newShapeID = 0;
     m_step = 0;
+    m_needClear = false;
     m_shape->shape()->clear();
     if (sender->view->context()) {
         *m_shape->context() = *sender->view->context();
@@ -49,7 +51,7 @@ bool MgCommandDraw::_initialize(MgShape* (*creator)(), const MgMotion* sender)
 
 bool MgCommandDraw::_addshape(const MgMotion* sender, MgShape* shape)
 {
-    MgShapesLock locker(sender->view->shapes());
+    MgShapesLock locker(sender->view->shapes(), MgShapesLock::Add);
     shape = shape ? shape : m_shape;
     bool ret = sender->view->shapeWillAdded(shape);
     
@@ -77,7 +79,19 @@ bool MgCommandDraw::_undo(const MgMotion* sender)
 
 bool MgCommandDraw::draw(const MgMotion* /*sender*/, GiGraphics* gs)
 {
+    if (m_needClear) {
+        m_needClear = false;
+        m_step = 0;
+        m_shape->shape()->clear();
+    }
     return m_step > 0 && m_shape->draw(*gs);
+}
+
+void MgCommandDraw::gatherShapes(const MgMotion* /*sender*/, MgShapes* shapes)
+{
+    if (m_step > 0 && m_shape) {
+        shapes->addShape(*m_shape);
+    }
 }
 
 bool MgCommandDraw::click(const MgMotion* /*sender*/)
@@ -115,4 +129,9 @@ bool MgCommandDraw::_touchEnded(const MgMotion* sender)
 {
     sender->view->redraw(true);
     return true;
+}
+
+void MgCommandDraw::_delayClear()
+{
+    m_needClear = true;
 }

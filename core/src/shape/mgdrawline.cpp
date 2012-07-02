@@ -52,8 +52,7 @@ bool MgCmdDrawLine::touchEnded(const MgMotion* sender)
     {
         _addshape(sender);
     }
-    m_shape->shape()->clear();
-    m_step = 0;
+    _delayClear();
 
     return _touchEnded(sender);
 }

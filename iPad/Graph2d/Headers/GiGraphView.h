@@ -4,19 +4,24 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #import "GiMotionHandler.h"
+#import "GiZoom.h"
 
 class GiGraphIos;
 
 //! 图形视图类
 /*! \ingroup GRAPH_IOS
 */
-@interface GiGraphView : UIView<GiView, GiMotionHandler> {
+@interface GiGraphView : UIView<GiView, GiMotionHandler, GiZoom> {
 @protected
     MgShapes*       _shapes;                //!< 图形列表
+    MgShapes*       _playShapes;            //!< 临时播放的图形列表
     GiGraphIos*     _graph;                 //!< 图形显示对象
     id              _drawingDelegate;       //!< 动态绘图用的委托控制器对象
     MgShape*        _shapeAdded;            //!< 待添加显示的图形
     BOOL            _cachedDraw;            //!< 刷新显示时是否使用缓冲图
+    BOOL            _scaleReaded;           //!< 是否已从图形列表取出放缩状态
+    id<GiZoomCallback>  _zoomCallback;      //!< 外部的放缩回调对象
+    UIImage*        _bkImg;                 //!< 背景图
     
     CGPoint         _firstPoint;            //!< 动态放缩用的开始点    
     BOOL            _enableZoom;            //!< 是否允许放缩或平移
@@ -33,11 +38,13 @@ class GiGraphIos;
 
 @property (nonatomic)          BOOL         enableZoom; //!< 是否允许放缩或平移
 @property (nonatomic,readonly) BOOL         zooming;    //!< 是否正在动态放缩或平移
+@property (nonatomic,readonly) MgShape*     shapeAdded; //!< 待添加显示的图形
 
 - (CGImageRef)cachedBitmap:(BOOL)invert;    //!< 当前缓存位图，上下翻转时由调用者释放
+- (MgShapes*)getPlayShapes:(BOOL)clear;        //!< 设置临时播放的图形列表
 
-- (void)afterCreated;                                   //!< 视图窗口后内部调用
-- (BOOL)draw:(GiGraphics*)gs;                           //!< 显示全部图形内部调用
+- (void)afterCreated;                       //!< 视图窗口后内部调用
+- (BOOL)draw:(GiGraphics*)gs;               //!< 显示全部图形内部调用
 
 @end
 
@@ -76,7 +83,7 @@ class GiGraphIos;
 - (BOOL)automoveSuperview:(CGPoint)point fromView:(UIView*)view;
 
 - (BOOL)draw:(GiGraphics*)gs;                           //!< 显示全部图形内部调用
-- (void)dynDraw:(GiGraphics*)gs;                        //!< 动态显示时内部调用
+- (BOOL)dynDraw:(GiGraphics*)gs;                        //!< 动态显示时内部调用
 - (BOOL)isActiveView;                                   //!< 返回本视图是否为当前交互视图
 
 @end

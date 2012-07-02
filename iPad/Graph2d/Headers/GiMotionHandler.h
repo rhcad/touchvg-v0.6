@@ -38,7 +38,7 @@ struct GiColor;
 @protocol GiMotionHandler
 @optional
 
-- (void)dynDraw:(GiGraphics*)gs;        //!< 动态显示图形
+- (BOOL)dynDraw:(GiGraphics*)gs;        //!< 动态显示图形
 - (BOOL)cancel;                         //!< 取消命令
 - (BOOL)undoMotion;                     //!< 晃动或撤销操作
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender; //!< 双指放缩手势

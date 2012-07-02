@@ -11,6 +11,8 @@
 		4AC4D3B41424794C0055F4CA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4D3B21424794C0055F4CA /* main.m */; };
 		7E3D20681500BE2F008ACC1B /* GraphViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7E3D20671500BE2F008ACC1B /* GraphViewController.mm */; };
 		7EC8FF911504CB1100F6193D /* TestGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7EC8FF901504CB1100F6193D /* TestGraphView.mm */; };
+		AE47CAE31574C8FD009E6F69 /* vgdot1.png in Resources */ = {isa = PBXBuildFile; fileRef = AE47CAE11574C8FD009E6F69 /* vgdot1.png */; };
+		AE47CAE41574C8FD009E6F69 /* vgdot2.png in Resources */ = {isa = PBXBuildFile; fileRef = AE47CAE21574C8FD009E6F69 /* vgdot2.png */; };
 		AEEB2512155CFE3500B03D0A /* app57.png in Resources */ = {isa = PBXBuildFile; fileRef = AEEB2510155CFE3500B03D0A /* app57.png */; };
 		AEEB2513155CFE3500B03D0A /* app72.png in Resources */ = {isa = PBXBuildFile; fileRef = AEEB2511155CFE3500B03D0A /* app72.png */; };
 		C97B07E715021F5200040728 /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C97B07E515021F5200040728 /* libGraph2d.a */; };
@@ -76,6 +78,8 @@
 		7E3D20671500BE2F008ACC1B /* GraphViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GraphViewController.mm; path = Sources/GraphViewController.mm; sourceTree = SOURCE_ROOT; };
 		7EC8FF8F1504CB1100F6193D /* TestGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestGraphView.h; path = Sources/TestGraphView.h; sourceTree = SOURCE_ROOT; };
 		7EC8FF901504CB1100F6193D /* TestGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TestGraphView.mm; path = Sources/TestGraphView.mm; sourceTree = SOURCE_ROOT; };
+		AE47CAE11574C8FD009E6F69 /* vgdot1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vgdot1.png; sourceTree = "<group>"; };
+		AE47CAE21574C8FD009E6F69 /* vgdot2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vgdot2.png; sourceTree = "<group>"; };
 		AEEB2510155CFE3500B03D0A /* app57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = app57.png; path = Resources/app57.png; sourceTree = SOURCE_ROOT; };
 		AEEB2511155CFE3500B03D0A /* app72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = app72.png; path = Resources/app72.png; sourceTree = SOURCE_ROOT; };
 		C97B07E515021F5200040728 /* libGraph2d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGraph2d.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,6 +153,7 @@
 			children = (
 				AEEB2510155CFE3500B03D0A /* app57.png */,
 				AEEB2511155CFE3500B03D0A /* app72.png */,
+				AE47CAE01574C8FD009E6F69 /* Graph2d */,
 				C985F85914562BE200728C97 /* images */,
 				4AE2C1A41424920700C67987 /* App-Info.plist */,
 			);
@@ -191,6 +196,16 @@
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
+		};
+		AE47CAE01574C8FD009E6F69 /* Graph2d */ = {
+			isa = PBXGroup;
+			children = (
+				AE47CAE11574C8FD009E6F69 /* vgdot1.png */,
+				AE47CAE21574C8FD009E6F69 /* vgdot2.png */,
+			);
+			name = Graph2d;
+			path = Resources/Graph2d;
+			sourceTree = SOURCE_ROOT;
 		};
 		C985F85914562BE200728C97 /* images */ = {
 			isa = PBXGroup;
@@ -319,6 +334,8 @@
 				C98AEA5B1456AF6900695359 /* back1.png in Resources */,
 				AEEB2512155CFE3500B03D0A /* app57.png in Resources */,
 				AEEB2513155CFE3500B03D0A /* app72.png in Resources */,
+				AE47CAE31574C8FD009E6F69 /* vgdot1.png in Resources */,
+				AE47CAE41574C8FD009E6F69 /* vgdot2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,7 +373,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_PREPROCESSOR_DEFINITIONS = _MACOSX;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -382,6 +399,7 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = _MACOSX;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -451,6 +469,7 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = _MACOSX;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -498,6 +517,7 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = _MACOSX;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

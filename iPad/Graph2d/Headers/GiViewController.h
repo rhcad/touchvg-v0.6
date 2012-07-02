@@ -19,6 +19,9 @@
     UIView  *_activeView;               //!< 当前的图形视图，主视图或第一个放大镜视图
     BOOL    _ignoreTouches;             //!< 忽略当前触摸手势，直到触摸结束
     NSTimeInterval  _timeBegan;         //!< 开始触摸时的时刻
+    void*   _shapesDynamic;             //!< 创建的临时图形列表, MgShapes*
+    long    _dynChangeCount[2];         //!< 动态图形改变计数
+    UInt32  _recordIndex;               //!< 上一次录屏的图形数
     
     enum { kPinchGesture = 0, kTwoFingersPan, kPanGesture, 
         kTapGesture, TwoTapsGesture, kTwoFingersTwoTaps,
@@ -60,17 +63,23 @@
 
 - (CGImageRef)cachedBitmap:(BOOL)invert;    //!< 得到当前缓存位图，上下翻转时由调用者释放
 - (void)clearCachedData;                    //!< 清除缓冲数据，下次重新构建显示
-- (void)removeShapes;                       //!< 清除所有图形
 - (void)regen;                              //!< 标记视图待重新构建显示
 - (void)undoMotion;                         //!< 触发晃动或撤销操作
 - (BOOL)isCommand:(const char*)cmdname;     //!< 检查当前是否为指定的命令
 - (UIGestureRecognizer*) getGestureRecognizer:(int)index;   //!< 得到主视图的触摸手势识别器
 
-- (BOOL)loadShapes:(void*)mgstorage;        //!< 从 MgStorage 对象加载图形列表
-- (BOOL)saveShapes:(void*)mgstorage;        //!< 保存图形列表到 MgStorage 对象
+- (void)removeShapes;                       //!< 清除所有图形
+- (BOOL)loadShapes:(void*)mgstorage record:(int)times;  //!< 从 MgStorage 对象加载图形列表
+- (BOOL)saveShapes:(void*)mgstorage record:(int)times;  //!< 保存图形列表到 MgStorage 对象
+- (NSUInteger)getChangeCount;               //!< 得到正式图形内容改变次数，可用于判断是否需要调用 getShapes
+- (NSUInteger)getRedrawCount;               //!< 得到重绘次数，可用于判断是否需要调用 getDynamicShapes
+- (BOOL)getDynamicShapes:(void*)mgstorage;  //!< 保存临时动态图形到 MgStorage 对象
+- (BOOL)setDynamicShapes:(void*)mgstorage;  //!< 从 MgStorage 对象加载临时动态图形，传空值则清除
 
-- (void)dynDraw:(id)sender;                 //!< 供图形视图动态显示时调用
+- (id)dynDraw:(id)sender;                   //!< 供图形视图动态显示时调用
 - (void)afterZoomed:(id)sender;             //!< 供图形视图在动态放缩后通知
+- (void)afterShapeChanged;                  //!< 图形列表改变后的通知
+- (void)gestureStateChanged:(UIGestureRecognizer*)sender;  //!< 手势开始或结束
 
 //! 创建图形视图(GiGraphView)和图形列表，不需要图形视图的派生类时使用
 /*! 新视图作为本对象的自身视图（替代原视图），并已加入到parentView中。
