@@ -83,7 +83,7 @@ bool MgCmdManagerImpl::cancel(const MgMotion* sender)
 
 UInt32 MgCmdManagerImpl::getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange)
 {
-    if (_cmdname == MgCommandSelect::Name() && shapes) {
+    if (_cmdname == MgCommandSelect::Name() && view) {
         MgCommandSelect* sel = (MgCommandSelect*)getCommand();
         return sel ? sel->getSelection(view, count, shapes, forChange) : 0;
     }
@@ -93,7 +93,7 @@ UInt32 MgCmdManagerImpl::getSelection(MgView* view, UInt32 count, MgShape** shap
 bool MgCmdManagerImpl::dynamicChangeEnded(MgView* view, bool apply)
 {
     bool changed = false;
-    if (_cmdname == MgCommandSelect::Name()) {
+    if (_cmdname == MgCommandSelect::Name() && view) {
         MgCommandSelect* sel = (MgCommandSelect*)getCommand();
         changed = sel && sel->dynamicChangeEnded(view, apply);
     }
