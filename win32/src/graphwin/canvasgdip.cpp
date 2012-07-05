@@ -360,14 +360,14 @@ void GiCanvasGdip::clearWindow()
 #define gdipCachedBmp(secondBmp)   \
     m_draw->m_cachedBmp[(secondBmp) ? 1 : 0]
 
-void GiCanvasGdip::clearCachedBitmap()
+void GiCanvasGdip::clearCachedBitmap(bool clearAll)
 {
     if (gdipCachedBmp(false) != NULL)
     {
         delete gdipCachedBmp(false);
         gdipCachedBmp(false) = NULL;
     }
-    if (gdipCachedBmp(true) != NULL)
+    if (clearAll && gdipCachedBmp(true))
     {
         delete gdipCachedBmp(true);
         gdipCachedBmp(true) = NULL;

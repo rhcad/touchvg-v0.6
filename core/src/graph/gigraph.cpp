@@ -1008,9 +1008,9 @@ bool GiGraphics::drawPath(const GiContext* ctx, int count,
     return rawPath(ctx, count, pxs, types);
 }
 
-void GiGraphics::clearCachedBitmap()
+void GiGraphics::clearCachedBitmap(bool clearAll)
 {
-    SafeCall(m_impl->canvas, clearCachedBitmap());
+    SafeCall(m_impl->canvas, clearCachedBitmap(clearAll));
 }
 
 GiColor GiGraphics::getBkColor() const

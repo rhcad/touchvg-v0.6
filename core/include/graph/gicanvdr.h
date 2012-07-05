@@ -19,7 +19,7 @@ class GiGraphicsImpl;
 struct GiCanvasDrawing
 {
     //! 清除后备缓冲位图，以便重新绘图
-    virtual void clearCachedBitmap() = 0;
+    virtual void clearCachedBitmap(bool clearAll = false) = 0;
 
     //! 返回屏幕分辨率DPI, 常量
     virtual float getScreenDpi() const = 0;

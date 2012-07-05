@@ -277,10 +277,11 @@ void GiCanvasGdi::clearWindow()
 #define GdiCachedBmp(secondBmp)   \
     m_draw->m_cachedBmp[secondBmp ? 1 : 0]
 
-void GiCanvasGdi::clearCachedBitmap()
+void GiCanvasGdi::clearCachedBitmap(bool clearAll)
 {
     m_draw->m_cachedBmp[0].clear();
-    m_draw->m_cachedBmp[1].clear();
+    if (clearAll)
+        m_draw->m_cachedBmp[1].clear();
 }
 
 bool GiCanvasGdi::drawCachedBitmap(float x, float y, bool secondBmp)

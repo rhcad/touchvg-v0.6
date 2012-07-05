@@ -331,7 +331,7 @@ public:
     void _endPaint();
 
 public:
-    void clearCachedBitmap();
+    void clearCachedBitmap(bool clearAll = false);
     float getScreenDpi() const;
     GiColor getBkColor() const;
     GiColor setBkColor(const GiColor& color);

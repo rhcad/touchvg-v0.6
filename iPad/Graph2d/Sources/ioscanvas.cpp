@@ -206,7 +206,6 @@ GiCanvasIos::GiCanvasIos(GiGraphics* gs, float dpi)
 
 GiCanvasIos::~GiCanvasIos()
 {
-    clearCachedBitmap();
     delete m_draw;
 }
 
@@ -421,10 +420,12 @@ bool GiCanvasIos::hasCachedBitmap(bool secondBmp) const
     return !m_draw->_cacheserr[n] && m_draw->_caches[n];
 }
 
-void GiCanvasIos::clearCachedBitmap()
+void GiCanvasIos::clearCachedBitmap(bool clearAll)
 {
     giInterlockedIncrement(&m_draw->_cacheserr[0]);
-    giInterlockedIncrement(&m_draw->_cacheserr[1]);
+    if (clearAll) {
+        giInterlockedIncrement(&m_draw->_cacheserr[1]);
+    }
 }
 
 bool GiCanvasIos::drawImage(CGImageRef image, const Point2d& centerM)

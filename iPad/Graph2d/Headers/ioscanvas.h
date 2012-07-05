@@ -73,7 +73,7 @@ public:
         float x = 0, float y = 0, bool secondBmp = false);
     virtual void saveCachedBitmap(bool secondBmp = false);
     virtual bool hasCachedBitmap(bool secondBmp = false) const;
-    virtual void clearCachedBitmap();
+    virtual void clearCachedBitmap(bool clearAll = false);
     virtual bool isBufferedDrawing() const;
     virtual int getCanvasType() const { return 10; }
     virtual float getScreenDpi() const;

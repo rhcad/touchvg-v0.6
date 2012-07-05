@@ -56,7 +56,7 @@ public:
         rectDrawW = rectDrawM * xform->modelToWorld();
         rectDrawMaxW = rectDrawMaxM * xform->modelToWorld();
         if (canvas)
-            canvas->clearCachedBitmap();
+            canvas->clearCachedBitmap(true);
     }
 
 private:
