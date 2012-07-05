@@ -68,8 +68,7 @@ public:
     
     virtual bool drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap, 
         const Box2d& rectW, bool fast = false);
-    bool drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp, 
-        const Box2d& rectW, bool fast = false);
+    bool drawGdipImage(LPVOID pBmp, const Box2d& rectW, bool fast = false);
 
 private:
     GiCanvasGdipImpl*   m_draw;

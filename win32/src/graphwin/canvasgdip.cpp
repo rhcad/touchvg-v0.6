@@ -190,8 +190,7 @@ public:
         }
     }
 
-    bool drawImage(G::Bitmap* pBmp, long hmWidth, long hmHeight, 
-        const Box2d& rectW, bool fast);
+    bool drawImage(G::Bitmap* pBmp, const Box2d& rectW, bool fast);
     bool addPolyToPath(G::GraphicsPath* pPath, int count, 
         const Point2d* pxs, const UInt8* types);
 };
@@ -866,11 +865,12 @@ bool GiCanvasGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count,
     return ret;
 }
 
-bool GiCanvasGdipImpl::drawImage(G::Bitmap* pBmp, long hmWidth, long hmHeight, 
-                                 const Box2d& rectW, bool fast)
+bool GiCanvasGdipImpl::drawImage(G::Bitmap* pBmp, const Box2d& rectW, bool fast)
 {
     RECT2D rc, rcDraw, rcFrom;
     Box2d rect;
+    float width = (float)pBmp->GetWidth();
+    float height = (float)pBmp->GetHeight();
 
     // rc: 整个图像对应的显示坐标区域
     (rectW * owner()->xf().worldToDisplay()).get(rc);
@@ -880,9 +880,6 @@ bool GiCanvasGdipImpl::drawImage(G::Bitmap* pBmp, long hmWidth, long hmHeight,
     if (rect.intersectWith(Box2d(rc), Box2d(rcDraw)).isEmpty())
         return false;
     rect.get(rcDraw);
-
-    float width = (float)hmWidth * owner()->xf().getDpiX() / 2540.f;
-    float height = (float)hmHeight * owner()->xf().getDpiY() / 2540.f;
 
     // rcFrom: rcDraw在原始图像上对应的图像范围
     rcFrom.left = (rcDraw.left - rc.left) * width / (rc.right - rc.left);
@@ -923,22 +920,20 @@ bool GiCanvasGdip::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
         && owner()->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
         G::Bitmap bmp (hbitmap, NULL);
-        ret = m_draw->drawImage(&bmp, hmWidth, hmHeight, rectW, fast);
+        ret = m_draw->drawImage(&bmp, rectW, fast);
     }
 
     return ret;
 }
 
-bool GiCanvasGdip::drawGdipImage(long hmWidth, long hmHeight, LPVOID pBmp, 
-                                 const Box2d& rectW, bool fast)
+bool GiCanvasGdip::drawGdipImage(LPVOID pBmp, const Box2d& rectW, bool fast)
 {
     bool ret = false;
 
-    if (m_draw->getDrawGs() != NULL
-        && hmWidth > 0 && hmHeight > 0 && pBmp != NULL
+    if (m_draw->getDrawGs() != NULL && pBmp != NULL
         && owner()->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
-        ret = m_draw->drawImage((G::Bitmap*)pBmp, hmWidth, hmHeight, rectW, fast);
+        ret = m_draw->drawImage((G::Bitmap*)pBmp, rectW, fast);
     }
 
     return ret;

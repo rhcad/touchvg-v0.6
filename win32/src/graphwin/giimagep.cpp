@@ -128,8 +128,7 @@ bool GiGdipImage::draw(GiCanvasWin& graph, const Box2d& rectW, bool fast) const
         if (graph.getCanvasType() == 2)
         {
             GiCanvasGdip* gs = (GiCanvasGdip*)(&graph);
-            ret = gs->drawGdipImage(
-                getHmWidth(), getHmHeight(), m_impl->bmp, rectW, fast);
+            ret = gs->drawGdipImage(m_impl->bmp, rectW, fast);
         }
         else
         {
