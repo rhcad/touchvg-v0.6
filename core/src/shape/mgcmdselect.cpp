@@ -209,7 +209,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
                 if (!sender->view->drawHandle(gs, pnt, false))
                     gs->drawEllipse(&ctxhd, pnt, radius);
             }
-            for (int j = 0; j < 2; j++) {
+            for (int j = sender->view->shapeCanRotated(shapes.front()) ? 1 : -1;
+                j >= 0; j--) {
                 mgGetRectHandle(selbox, j == 0 ? 7 : 5, pnt);
                 pnt = pnt.rulerPoint(selbox.center(), -mgDisplayMmToModel(10, sender), 0);
                 
@@ -218,7 +219,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
                 float sangle = mgMin(30.f, mgMax(10.f, mgRad2Deg(12.f / r)));
                 GiContext ctxarc(w, GiColor(0, 255, 0, 128), j ? kLineSolid : kLineDot);
                 gs->drawArc(&ctxarc, selbox.center(), r, r,
-                            j ? -mgDeg2Rad(sangle) : mgDeg2Rad(180.f - sangle), mgDeg2Rad(2.f * sangle));
+                            j ? -mgDeg2Rad(sangle) : mgDeg2Rad(180.f - sangle), 
+                            mgDeg2Rad(2.f * sangle));
                 
                 if (!sender->view->drawHandle(gs, pnt, false))
                     gs->drawEllipse(&ctxhd, pnt, radius);
@@ -517,7 +519,9 @@ bool MgCommandSelect::isDragRectCorner(const MgMotion* sender, Matrix2d& mat)
             m_boxHandle = i;
         }
     }
-    for (i = 0; i < 2; i++) {
+
+    for (i = sender->view->shapeCanRotated(getShape(m_selIds[0], sender)) ? 1 : -1;
+        i >= 0; i--) {
         mgGetRectHandle(selbox, i == 0 ? 7 : 5, pnt);
         pnt = pnt.rulerPoint(selbox.center(), -mgDisplayMmToModel(10, sender), 0);
         if (mindist > sender->startPointM.distanceTo(pnt)) {

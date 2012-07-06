@@ -22,8 +22,9 @@ public:
     ContextT    _context;
     UInt32      _id;
     MgShapes*   _parent;
+    UInt32      _tag;
     
-    MgShapeT() : _id(0), _parent(NULL)
+    MgShapeT() : _id(0), _parent(NULL), _tag(0)
     {
     }
     
@@ -82,6 +83,7 @@ public:
         p->shape()->copy(_shape);
         p->shape()->update();
         p->_context = _context;
+        p->_tag = _tag;
         
         return p;
     }
@@ -92,6 +94,7 @@ public:
             const ThisClass& _src = (const ThisClass&)src;
             shape()->copy(_src._shape);
             _context = _src._context;
+            _tag = _src._tag;
         }
         else if (src.isKindOf(ShapeT::Type())) {
             shape()->copy((const ShapeT&)src);
@@ -105,7 +108,8 @@ public:
         if (src.isKindOf(Type())) {
             const ThisClass& _src = (const ThisClass&)src;
             ret = shape()->equals(_src._shape)
-            && _context == _src._context;
+            && _context == _src._context
+            && _tag == _src._tag;
         }
         
         return ret;
@@ -126,11 +130,22 @@ public:
         _parent = p;
         _id = nID;
     }
+
+    UInt32 getTag() const
+    {
+        return _tag;
+    }
+
+    void setTag(UInt32 tag)
+    {
+        _tag = tag;
+    }
     
     bool save(MgStorage* s) const
     {
         GiColor c;
         
+        s->writeUInt32("tag", _tag);
         s->writeUInt8("lineStyle", (UInt8)_context.getLineStyle());
         s->writeFloat("lineWidth", _context.getLineWidth());
         
@@ -146,6 +161,7 @@ public:
     {
         UInt32 c;
         
+        _tag = s->readUInt32("tag", _tag);
         _context.setLineStyle((kLineStyle)s->readUInt8("lineStyle"));
         _context.setLineWidth(s->readFloat("lineWidth"));
         

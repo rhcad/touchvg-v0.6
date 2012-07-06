@@ -25,6 +25,7 @@ struct MgView {
     virtual bool shapeWillAdded(MgShape* shape) = 0;    //!< 通知将添加图形
     virtual void shapeAdded(MgShape* shape) = 0;        //!< 通知已添加图形，由视图重新构建显示
     virtual bool shapeWillDeleted(MgShape* shape) = 0;  //!< 通知将删除图形
+    virtual bool shapeCanRotated(MgShape* shape) = 0;   //!< 通知是否能旋转图形
     virtual bool longPressSelection(int selState) = 0;  //!< 选择状态下长按, MgSelection::kSelState
     virtual bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) = 0;   //!< 显示控制点
 };

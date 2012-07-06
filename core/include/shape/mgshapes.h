@@ -23,6 +23,7 @@ struct MgShapes : public MgObject
     virtual MgShape* getNextShape(void*& it) const = 0;
     virtual MgShape* getLastShape() const = 0;
     virtual MgShape* findShape(UInt32 nID) const = 0;
+    virtual MgShape* findShapeByTag(UInt32 tag) const = 0;
     virtual Box2d getExtent() const = 0;
     
     virtual MgShape* hitTest(const Box2d& limits, Point2d& nearpt, Int32& segment) const = 0;

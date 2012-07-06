@@ -146,6 +146,16 @@ public:
         return NULL;
     }
 
+    MgShape* findShapeByTag(UInt32 tag) const
+    {
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
+        {
+            if ((*it)->getTag() == tag)
+                return *it;
+        }
+        return NULL;
+    }
+
     Box2d getExtent() const
     {
         Box2d extent;

@@ -56,6 +56,7 @@ private:
     GiGraphics* graph() { return [_curview graph]; }
     bool shapeWillAdded(MgShape* shape) { return true; }
     bool shapeWillDeleted(MgShape* shape) { return true; }
+    bool shapeCanRotated(MgShape*) { return true; }
     
     void regen() {
         [_mainview regen];
