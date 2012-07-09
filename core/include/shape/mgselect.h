@@ -19,7 +19,7 @@ struct MgSelection {
     enum kSelState { kSelNone, kSelOneShape, kSelMultiShapes, kSelVertex };
     
     //! 得到当前选择的图形
-    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange) = 0;
+    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false) = 0;
     
     //! 返回选择状态
     virtual kSelState getSelectState(MgView* view) = 0;
@@ -35,6 +35,9 @@ struct MgSelection {
     
     //! 清除选择集
     virtual void resetSelection(MgView* view) = 0;
+
+    //! 添加选择图形
+    virtual bool addSelection(MgView* view, UInt32 shapeID) = 0;
     
     //! 删除当前图形的选中的顶点
     virtual bool deleteVertext(const MgMotion* sender) = 0;

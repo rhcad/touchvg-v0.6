@@ -24,12 +24,13 @@ public:
     bool dynamicChangeEnded(MgView* view, bool apply);
     
 public:
-    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange);
+    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false);
     virtual kSelState getSelectState(MgView* view);
     virtual bool selectAll(MgView* view);
     virtual bool deleteSelection(MgView* view);
     virtual bool cloneSelection(MgView* view);
     virtual void resetSelection(MgView* view);
+    virtual bool addSelection(MgView* view, UInt32 shapeID);
     virtual bool deleteVertext(const MgMotion* sender);
     virtual bool insertVertext(const MgMotion* sender);
     virtual bool switchClosed(MgView* view);

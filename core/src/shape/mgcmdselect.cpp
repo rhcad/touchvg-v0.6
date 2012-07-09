@@ -480,6 +480,12 @@ Box2d MgCommandSelect::getDragRect(const MgMotion* sender)
         if (shape)
             selbox.unionWith(shape->shape()->getExtent());
     }
+
+    float minDist = sender->view->xform()->displayToModel(8);
+    if (!m_selIds.empty() && selbox.width() < minDist)
+        selbox.inflate(minDist / 2, 0);
+    if (!m_selIds.empty() && selbox.height() < minDist)
+        selbox.inflate(0, minDist / 2);
     
     Box2d rcview(Box2d(0, 0, sender->view->xform()->getWidth(), sender->view->xform()->getHeight())
                  * sender->view->xform()->displayToModel());
@@ -487,10 +493,10 @@ Box2d MgCommandSelect::getDragRect(const MgMotion* sender)
     rcview.deflate(mgDisplayMmToModel(12, sender));
     selbox.intersectWith(rcview);
     
-    if (selbox.width() < mgDisplayMmToModel(2, sender)
-        && selbox.height() < mgDisplayMmToModel(2, sender)) {
-        selbox.empty();
-    }
+//     if (selbox.width() < mgDisplayMmToModel(2, sender)
+//         && selbox.height() < mgDisplayMmToModel(2, sender)) {
+//         selbox.empty();
+//     }
     
     return selbox;
 }
@@ -782,6 +788,20 @@ void MgCommandSelect::resetSelection(MgView* view)
     m_selIds.clear();
     m_id = 0;
     m_handleIndex = 0;
+}
+
+bool MgCommandSelect::addSelection(MgView* view, UInt32 shapeID)
+{
+    MgShape* shape = view->shapes()->findShape(shapeID);
+    
+    if (shape && !isSelected(shape))
+    {
+        m_selIds.push_back(shape->getID());
+        m_id = shape->getID();
+        view->redraw(true);
+    }
+
+    return shape != NULL;
 }
 
 bool MgCommandSelect::deleteVertext(const MgMotion* sender)
