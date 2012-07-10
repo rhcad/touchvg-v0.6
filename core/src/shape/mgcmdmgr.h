@@ -26,7 +26,7 @@ private:
     virtual bool cancel(const MgMotion* sender);
     virtual void unloadCommands();
     virtual void registerCommand(const char* name, MgCommand* (*factory)());
-    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange);
+    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false);
     virtual bool dynamicChangeEnded(MgView* view, bool apply);
     virtual MgSelection* getSelection(MgView* view);
 

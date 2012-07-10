@@ -76,6 +76,7 @@ bool MgCommandSelect::initialize(const MgMotion* sender)
         m_selIds.push_back(shape->getID());         // 选中最新绘制的图形
         m_id = shape->getID();
         sender->view->redraw(false);
+        sender->view->selChanged();
     }
     g_newShapeID = 0;
     
@@ -108,6 +109,7 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
         m_handleIndex = 0;
         m_selIds.clear();
         sender->view->redraw(false);
+        sender->view->selChanged();
         return true;
     }
     return false;
@@ -136,7 +138,8 @@ float mgDisplayMmToModel(float mm, GiGraphics* gs)
 
 float mgDisplayMmToModel(float mm, const MgMotion* sender)
 {
-    return mgDisplayMmToModel(mm, sender->view->graph());
+    return sender->view->xform()->displayToModel(
+        sender->view->useFinger() ? mm : 2 * mm, sender->view->useFinger());
 }
 
 bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
@@ -156,8 +159,10 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         if (shape)
             selection.push_back(shape);
     }
-    if (selection.empty() && !m_selIds.empty())     // 意外情况导致m_selIds部分ID无效
+    if (selection.empty() && !m_selIds.empty()) {   // 意外情况导致m_selIds部分ID无效
         m_selIds.clear();
+        sender->view->selChanged();
+    }
     
     if (!m_showSel || (!m_cloneShapes.empty() && !isCloneDrag(sender))) {
         GiContext ctxbk(-1, gs->getBkColor());
@@ -388,25 +393,21 @@ bool MgCommandSelect::click(const MgMotion* sender)
     }
     else {                                  // 上次是整体选中状态或没有选中
         shape = hitTestAll(sender, nearpt, segment);
-        
-        if (shape && isSelected(shape)) {   // 点击已选图形，从选择集中移除
-            if (m_selIds.size() > 1) {
-                m_selIds.erase(getSelectedPostion(shape));
-                m_id = 0;
-            }
+        bool changed = ((int)m_selIds.size() != (shape ? 1 : 0))
+            || (shape && shape->getID() != m_id);
+
+        m_selIds.clear();                   // 清除选择集
+        if (shape) {
+            m_selIds.push_back(shape->getID()); // 选中新图形
         }
-        else if (shape && !isSelected(shape)) { // 点击新图形，加入选择集
-            m_selIds.push_back(shape->getID());
-            m_id = shape->getID();
-        }
-        else if (!m_selIds.empty()) {    // 在空白处点击清除选择集
-            m_selIds.clear();
-            m_id = 0;
-        }
+        m_id = shape ? shape->getID() : 0;
         
         m_ptNear = nearpt;
         m_segment = segment;
         m_handleIndex = 0;
+
+        if (changed)
+            sender->view->selChanged();
     }
     sender->view->redraw(false);
     
@@ -641,6 +642,11 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
         m_handleIndex = hitTestHandles(getShape(m_selIds[0], sender), sender->pointM, sender);
         sender->view->redraw(true);
     }
+    if (m_boxsel) {
+        m_boxsel = false;
+        if (!m_selIds.empty())
+            sender->view->selChanged();
+    }
     
     return true;
 }
@@ -701,6 +707,8 @@ bool MgCommandSelect::applyCloneShapes(MgView* view, bool apply, bool addNewShap
     }
     if (changed) {
         view->regen();
+        if (addNewShapes)
+            view->selChanged();
     }
     else {
         view->redraw(true);
@@ -742,6 +750,9 @@ bool MgCommandSelect::selectAll(MgView* view)
         m_id = shape->getID();
     }
     view->redraw(false);
+
+    if (oldn != m_selIds.size() || !m_selIds.empty())
+        view->selChanged();
     
     return oldn != m_selIds.size();
 }
@@ -765,6 +776,7 @@ bool MgCommandSelect::deleteSelection(MgView* view)
     
     if (count > 0) {
         view->regen();
+        view->selChanged();
     }
     
     return count > 0;
@@ -784,10 +796,14 @@ bool MgCommandSelect::cloneSelection(MgView* view)
 
 void MgCommandSelect::resetSelection(MgView* view)
 {
+    bool has = !m_selIds.empty();
     applyCloneShapes(view, false);
     m_selIds.clear();
     m_id = 0;
     m_handleIndex = 0;
+    if (has) {
+        view->selChanged();
+    }
 }
 
 bool MgCommandSelect::addSelection(MgView* view, UInt32 shapeID)
@@ -799,6 +815,7 @@ bool MgCommandSelect::addSelection(MgView* view, UInt32 shapeID)
         m_selIds.push_back(shape->getID());
         m_id = shape->getID();
         view->redraw(true);
+        view->selChanged();
     }
 
     return shape != NULL;

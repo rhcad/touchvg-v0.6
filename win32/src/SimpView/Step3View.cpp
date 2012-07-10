@@ -36,6 +36,7 @@ private:
         RandomParam().setShapeProp(view->m_shapes->context());
         return view->m_shapes->context();
     }
+    bool useFingle() { return false; }
     void shapeAdded(MgShape* shape) { view->shapeAdded(shape); }
     bool shapeWillAdded(MgShape*) { return true; }
     bool shapeWillDeleted(MgShape*) { return true; }

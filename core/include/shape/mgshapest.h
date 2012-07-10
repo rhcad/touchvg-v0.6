@@ -170,18 +170,20 @@ public:
     MgShape* hitTest(const Box2d& limits, Point2d& nearpt, Int32& segment) const
     {
         MgShape* retshape = NULL;
-        float distMin = limits.width();
+        float distMin = _FLT_MAX;
 
         for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
         {
             const MgBaseShape* shape = (*it)->shape();
+            Box2d extent(shape->getExtent());
 
-            if (shape->getExtent().isIntersect(limits))
+            if (extent.isIntersect(limits))
             {
                 Point2d tmpNear;
                 Int32   tmpSegment;
-                float  dist = shape->hitTest(limits.center(), 
-                    limits.width() / 2, tmpNear, tmpSegment);
+                float  tol = !(*it)->context()->hasFillColor() ?
+                    limits.width() / 2 : mgMax(extent.width(), extent.height());
+                float  dist = shape->hitTest(limits.center(), tol, tmpNear, tmpSegment);
 
                 if (distMin > dist) {
                     distMin = dist;
@@ -190,6 +192,11 @@ public:
                     retshape = *it;
                 }
             }
+        }
+        if (retshape && distMin > limits.width()
+            && !retshape->context()->hasFillColor())
+        {
+            retshape = NULL;
         }
 
         return retshape;

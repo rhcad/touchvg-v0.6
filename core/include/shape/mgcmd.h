@@ -22,6 +22,8 @@ struct MgView {
     virtual void regen() = 0;                   //!< 标记视图待重新构建显示
     virtual void redraw(bool fast) = 0;         //!< 标记视图待更新显示
     virtual GiContext* context() = 0;           //!< 得到当前绘图属性
+    virtual bool useFinger() { return true; }   //!< 使用手指或鼠标交互
+    virtual void selChanged() {}                //!< 选择集改变的通知
     virtual bool shapeWillAdded(MgShape* shape) = 0;    //!< 通知将添加图形
     virtual void shapeAdded(MgShape* shape) = 0;        //!< 通知已添加图形，由视图重新构建显示
     virtual bool shapeWillDeleted(MgShape* shape) = 0;  //!< 通知将删除图形
@@ -87,7 +89,7 @@ struct MgCommandManager {
         \param forChange 是否用于修改，用于修改时将复制临时图形，动态修改完后要调用 dynamicChangeEnded()
         \return 获取多少个图形，或实际个数
     */
-    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange) = 0;
+    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false) = 0;
     
     //! 结束动态修改，提交或放弃所改的临时图形
     virtual bool dynamicChangeEnded(MgView* view, bool apply) = 0;
