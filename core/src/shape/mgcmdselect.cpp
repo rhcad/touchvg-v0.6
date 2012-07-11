@@ -182,7 +182,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         }
     }
     else if (m_cloneShapes.empty()) {   // 选中时比原图形宽4像素
-        GiContext ctxshape(-4.f, GiColor(0, 0, 255, 128));
+        GiContext ctxshape(sender->view->useFinger() ? -4.f : 0, GiColor(0, 0, 255, 128));
         for (it = shapes.begin(); it != shapes.end(); ++it) {
             GiContext ctx(ctxshape);
             (*it)->draw(*gs, &ctx);
