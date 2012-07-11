@@ -164,10 +164,12 @@ bool GiGraphics::isAntiAliasMode() const
     return m_impl->antiAlias;
 }
 
-void GiGraphics::setAntiAliasMode(bool antiAlias)
+bool GiGraphics::setAntiAliasMode(bool antiAlias)
 {
+    bool old = m_impl->antiAlias;
     m_impl->antiAlias = antiAlias;
     SafeCall(m_impl->canvas, _antiAliasModeChanged(antiAlias));
+    return old;
 }
 
 int GiGraphics::getColorMode() const
@@ -589,6 +591,13 @@ static bool _DrawPolygon(GiCanvas* cv, const GiContext* ctx,
             pt1 = pt2;
             pxs[n++] = pt1;
         }
+    }
+
+    if (n == 4 && mgIsZero(pxs[0].x - pxs[3].x) && mgIsZero(pxs[1].x - pxs[2].x)
+        && mgIsZero(pxs[0].y - pxs[1].y) && mgIsZero(pxs[2].y - pxs[3].y))
+    {
+        return cv->rawRect(&context, pxs[0].x, pxs[0].y, 
+            pxs[2].x - pxs[0].x, pxs[2].y - pxs[0].y);
     }
 
     return cv->rawPolygon(&context, pxs, n);

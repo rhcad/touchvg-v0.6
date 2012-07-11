@@ -44,7 +44,7 @@ public:
     virtual GiColor getNearestColor(const GiColor& color) const;
     virtual const GiContext* getCurrentContext() const;
     virtual void _clipBoxChanged(const RECT2D& clipBox);
-    virtual void _antiAliasModeChanged(bool) {}
+    virtual void _antiAliasModeChanged(bool antiAlias);
 
     virtual bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2);
     virtual bool rawLines(const GiContext* ctx, const Point2d* pxs, int count);

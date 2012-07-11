@@ -192,9 +192,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     if (m_boxsel) {                                 // 显示框选半透明蓝色边框
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
                           isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 32));
-        bool antiAlias = gs->isAntiAliasMode();
         
-        gs->setAntiAliasMode(false);
+        bool antiAlias = gs->setAntiAliasMode(false);
         gs->drawRect(&ctxshap, Box2d(sender->startPointM, sender->pointM));
         gs->setAntiAliasMode(antiAlias);
     }
@@ -203,9 +202,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         
         if (m_cloneShapes.empty() && !selbox.isEmpty()) {
             GiContext ctxshap(0, GiColor(0, 0, 255, 128), kLineDash);
-            bool antiAlias = gs->isAntiAliasMode();
             
-            gs->setAntiAliasMode(false);
+            bool antiAlias = gs->setAntiAliasMode(false);
             gs->drawRect(&ctxshap, selbox);
             gs->setAntiAliasMode(antiAlias);
             
@@ -259,8 +257,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         
         if (!m_cloneShapes.empty() || !m_insertPoint) {     // 不是(还未拖动但可插新点)，显示当前控制点
             pnt = shape->shape()->getHandlePoint(m_handleIndex - 1);
-            gs->drawEllipse(&ctxhd, pnt, r2x);
-            sender->view->drawHandle(gs, pnt, true);
+            if (!sender->view->drawHandle(gs, pnt, true))
+                gs->drawEllipse(&ctxhd, pnt, r2x);
         }
         if (m_insertPoint && !m_cloneShapes.empty()) {      // 在临时图形上显示新插入顶点
             GiContext insertctx(ctxhd);

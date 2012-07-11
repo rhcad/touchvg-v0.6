@@ -42,7 +42,16 @@ private:
     bool shapeWillDeleted(MgShape*) { return true; }
     bool shapeCanRotated(MgShape*) { return true; }
     bool longPressSelection(int) { return false; }
-    bool drawHandle(GiGraphics*, const Point2d&, bool) { return false; }
+
+    bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot)
+    {
+        GiContext ctx(0, GiColor::Black(), kLineSolid, 
+            GiColor(240, 240, 240, hotdot ? 200 : 128));
+        bool old = gs->setAntiAliasMode(false);
+        gs->drawRect(&ctx, Box2d(pnt, gs->xf().displayToModel(hotdot ? 3.f : 1.6f, true), 0));
+        gs->setAntiAliasMode(old);
+        return true;
+    }
 };
 
 CDrawShapeView::CDrawShapeView(RandomParam& param)
@@ -147,6 +156,8 @@ void CDrawShapeView::OnLButtonDown(UINT nFlags, CPoint point)
     m_proxy->motion.startPointM = m_proxy->motion.startPoint * m_graph->xf.displayToModel();
     m_proxy->motion.point = m_proxy->motion.startPoint;
     m_proxy->motion.pointM = m_proxy->motion.startPointM;
+    m_proxy->motion.lastPoint = m_proxy->motion.startPoint;
+    m_proxy->motion.lastPointM = m_proxy->motion.startPointM;
     m_moved = FALSE;
     m_delayUp = FALSE;
     m_downTime = GetTickCount();

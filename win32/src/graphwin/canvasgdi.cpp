@@ -111,7 +111,7 @@ public:
         return m_buffDC != NULL ? m_buffDC : m_hdc;
     }
 
-    HGDIOBJ createPen(const GiContext* ctx)
+    HGDIOBJ createPen(const GiContext* ctx, bool rectJoin = false)
     {
         if (ctx == NULL)
             ctx = &m_context;
@@ -143,7 +143,8 @@ public:
                 {
                     LOGBRUSH logBrush = { BS_SOLID, cr };
                     m_pen = ::ExtCreatePen(
-                        PS_GEOMETRIC | PS_ENDCAP_FLAT | lineStyle, 
+                        (rectJoin ? PS_JOIN_MITER : 0)
+                        | PS_GEOMETRIC | PS_ENDCAP_FLAT | lineStyle, 
                         width, &logBrush, 0, NULL);
                 }
                 else
@@ -419,6 +420,14 @@ void GiCanvasGdi::_clipBoxChanged(const RECT2D& clipBox)
     }
 }
 
+void GiCanvasGdi::_antiAliasModeChanged(bool antiAlias)
+{
+    if (m_draw->getDrawDC() != NULL)
+    {
+        ::SetROP2(m_draw->getDrawDC(), antiAlias ? R2_COPYPEN : R2_NOTXORPEN);
+    }
+}
+
 GiColor GiCanvasGdi::getBkColor() const
 {
     GiColor bkColor(GiColor::White());
@@ -536,7 +545,7 @@ bool GiCanvasGdi::rawRect(const GiContext* ctx,
                           float x, float y, float w, float h)
 {
     HDC hdc = m_draw->getDrawDC();
-    KGDIObject pen (hdc, m_draw->createPen(ctx), false);
+    KGDIObject pen (hdc, m_draw->createPen(ctx, true), false);
     KGDIObject brush (hdc, m_draw->createBrush(ctx), false);
     return ::Rectangle(hdc, mgRound(x), mgRound(y), 
         mgRound(x + w), mgRound(y + h)) ? true : false;

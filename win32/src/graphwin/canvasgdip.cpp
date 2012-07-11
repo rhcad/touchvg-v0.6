@@ -636,11 +636,13 @@ bool GiCanvasGdip::rawRect(const GiContext* ctx,
 
     if (pBrush != NULL && w > 0 && h > 0)
     {
-        ret = (G::Ok == m_draw->getDrawGs()->FillRectangle(pBrush, x, y, w, h));
+        ret = (G::Ok == m_draw->getDrawGs()->FillRectangle(pBrush, 
+            mgRound(x), mgRound(y), mgRound(w), mgRound(h)));
     }
     if (pPen != NULL && w > 0 && h > 0)
     {
-        ret = (G::Ok == m_draw->getDrawGs()->DrawRectangle(pPen, x, y, w, h));
+        ret = (G::Ok == m_draw->getDrawGs()->DrawRectangle(pPen, 
+            mgRound(x), mgRound(y), mgRound(w), mgRound(h)));
     }
 
     return ret;

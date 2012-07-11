@@ -124,7 +124,7 @@ public:
     bool isAntiAliasMode() const;
 
     //! 设置是否为反走样模式
-    void setAntiAliasMode(bool antiAlias);
+    bool setAntiAliasMode(bool antiAlias);
     
 public:
     //! 绘制直线段，模型坐标或世界坐标
