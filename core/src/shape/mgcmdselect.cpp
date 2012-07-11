@@ -148,8 +148,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     const std::vector<MgShape*>& shapes = m_cloneShapes.empty() ? selection : m_cloneShapes;
     std::vector<MgShape*>::const_iterator it;
     Point2d pnt;
-    GiContext ctxhd(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 64));
-    float radius = mgDisplayMmToModel(1, gs);
+    GiContext ctxhd(-2, GiColor(128, 128, 64, 200), kLineSolid, GiColor(172, 172, 172, 128));
+    float radius = mgDisplayMmToModel(1.2f, gs);
     float r2x = mgDisplayMmToModel(2, gs);
     bool rorate = (m_handleIndex == 0 && m_boxHandle >= 8 && m_boxHandle < 12);
     

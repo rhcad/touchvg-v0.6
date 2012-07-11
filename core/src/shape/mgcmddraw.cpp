@@ -135,3 +135,9 @@ void MgCommandDraw::_delayClear()
 {
     m_needClear = true;
 }
+
+bool MgCommandDraw::mouseHover(const MgMotion* sender)
+{
+    sender->view->redraw(true);
+    return true;
+}

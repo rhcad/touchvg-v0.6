@@ -40,6 +40,7 @@ protected:
     virtual bool click(const MgMotion* sender);
     virtual bool doubleClick(const MgMotion* sender);
     virtual bool longPress(const MgMotion* sender);
+    virtual bool mouseHover(const MgMotion* sender);
     
 private:
     UInt32 getStep() { return m_step; }

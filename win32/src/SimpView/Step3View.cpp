@@ -109,12 +109,12 @@ void CDrawShapeView::OnMouseMove(UINT nFlags, CPoint point)
 {
     CBaseView::OnMouseMove(nFlags, point);
 
+    MgCommand* cmd = mgGetCommandManager()->getCommand();
+
     if (!m_delayUp
         && (nFlags & MK_LBUTTON)
         && (m_downFlags & MK_LBUTTON))
     {
-        MgCommand* cmd = mgGetCommandManager()->getCommand();
-
         m_proxy->motion.point = Point2d((float)point.x, (float)point.y);
         m_proxy->motion.pointM = m_proxy->motion.point * m_graph->xf.displayToModel();
 
@@ -131,6 +131,10 @@ void CDrawShapeView::OnMouseMove(UINT nFlags, CPoint point)
 
         m_proxy->motion.lastPoint = m_proxy->motion.point;
         m_proxy->motion.lastPointM = m_proxy->motion.pointM;
+    }
+    else if (cmd && !(nFlags & MK_LBUTTON))
+    {
+        cmd->mouseHover(&m_proxy->motion);
     }
 }
 

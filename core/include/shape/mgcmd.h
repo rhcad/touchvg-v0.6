@@ -66,6 +66,7 @@ struct MgCommand {
     virtual bool touchBegan(const MgMotion* sender) = 0;    //!< 开始滑动
     virtual bool touchMoved(const MgMotion* sender) = 0;    //!< 正在滑动
     virtual bool touchEnded(const MgMotion* sender) = 0;    //!< 滑动结束
+    virtual bool mouseHover(const MgMotion*) { return false; }; //!< 鼠标掠过
 };
 
 //! 命令管理器接口
