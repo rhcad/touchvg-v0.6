@@ -19,7 +19,7 @@
 	- 图形接口库（graph）包含了各种显示类、符号类，用于屏幕显示、打印。\n
 	- 图形实体库（shape）包含跨平台矢量图形类和交互命令类。\n
 	- Windows图形接口库（win32/graphwin）采用GDI或GDI+实现，字符串为Unicode编码。\n
-	- iOS图形接口库（iPad/GraphView）采用CoreGraphics库和ObjC语言实现，还包含了iOS视图和交互控制器。
+	- iOS图形接口库（ios/Graph2d）采用CoreGraphics库和ObjC语言实现，还包含了iOS视图和交互控制器。
 
 	\section sectionDOM 接口说明
 
@@ -47,5 +47,5 @@
 		Windows图形接口库采用GDI/GDI+实现。\n\n
 		
 	- \ref GRAPH_IOS "iOS图形接口类" \n
-		iOS图形接口库（iPad/Graph2d）采用CoreGraphics实现，还包含了iOS视图和交互控制器（iPad/GraphView）。\n\n
+		iOS图形接口库（ios/Graph2d）采用CoreGraphics实现，还包含了iOS视图和交互控制器（ios/Graph2d）。\n\n
 */

@@ -18,11 +18,11 @@ move /Y %destpath%\MfcApp\BaseView.* %destpath%\GraphView.win\
 move /Y %destpath%\MfcApp\Step*View.* %destpath%\GraphView.win\
 del  /Q %destpath%\MfcApp\StdAfx.* %destpath%\MfcApp\resource.h
 
-xcopy ..\..\iPad\Graph2d\Headers\*.h %destpath%\GraphView.ios\ /Y
-xcopy ..\..\iPad\Graph2d\Sources\*.* %destpath%\GraphView.ios\ /Y
+xcopy ..\..\ios\Graph2d\Headers\*.h %destpath%\GraphView.ios\ /Y
+xcopy ..\..\ios\Graph2d\Sources\*.* %destpath%\GraphView.ios\ /Y
 
-mkdir %destpath%\graphios
-move /Y %destpath%\GraphView.ios\ios*.* %destpath%\graphios\
+mkdir %destpath%\CanvasIos
+move /Y %destpath%\GraphView.ios\ios*.* %destpath%\CanvasIos\
 
-xcopy ..\..\iPad\iPadDraw\Headers\*.h %destpath%\iPadApp\ /Y
-xcopy ..\..\iPad\iPadDraw\Sources\*.* %destpath%\iPadApp\ /Y
+xcopy ..\..\ios\FreeDraw\Headers\*.h %destpath%\iosApp\ /Y
+xcopy ..\..\ios\FreeDraw\Sources\*.* %destpath%\iosApp\ /Y
