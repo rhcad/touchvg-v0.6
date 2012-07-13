@@ -678,9 +678,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
@@ -699,9 +699,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;

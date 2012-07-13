@@ -67,7 +67,7 @@
 /* Begin PBXFileReference section */
 		2752EE9A1559202D00F0CCDD /* TestConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestConfig.h; path = Sources/TestConfig.h; sourceTree = SOURCE_ROOT; };
 		4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Graph2d.xcodeproj; path = ../Graph2d/Graph2d.xcodeproj; sourceTree = "<group>"; };
-		4AC4D32F142455C60055F4CA /* iPadDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPadDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AC4D32F142455C60055F4CA /* FreeDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FreeDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AC4D3B0142479420055F4CA /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Headers/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		4AC4D3B11424794C0055F4CA /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Sources/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		4AC4D3B21424794C0055F4CA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Sources/main.m; sourceTree = SOURCE_ROOT; };
@@ -143,7 +143,7 @@
 		4AC4D330142455C60055F4CA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4AC4D32F142455C60055F4CA /* iPadDraw.app */,
+				4AC4D32F142455C60055F4CA /* FreeDraw.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -158,7 +158,7 @@
 				4AE2C1A41424920700C67987 /* App-Info.plist */,
 			);
 			name = Resources;
-			path = iPadDraw;
+			path = FreeDraw;
 			sourceTree = "<group>";
 		};
 		4AC4D35A1424627A0055F4CA /* Sources */ = {
@@ -176,7 +176,7 @@
 				4AC4D3B11424794C0055F4CA /* AppDelegate.m */,
 			);
 			name = Sources;
-			path = iPadDraw;
+			path = FreeDraw;
 			sourceTree = "<group>";
 		};
 		4AC4D361142465220055F4CA /* Configurations */ = {
@@ -239,9 +239,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4AC4D32E142455C60055F4CA /* iPadDraw */ = {
+		4AC4D32E142455C60055F4CA /* FreeDraw */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4AC4D34A142455C60055F4CA /* Build configuration list for PBXNativeTarget "iPadDraw" */;
+			buildConfigurationList = 4AC4D34A142455C60055F4CA /* Build configuration list for PBXNativeTarget "FreeDraw" */;
 			buildPhases = (
 				4AC4D32B142455C60055F4CA /* Sources */,
 				4AC4D32C142455C60055F4CA /* Frameworks */,
@@ -252,9 +252,9 @@
 			dependencies = (
 				C9340F2F15021BC800C2831C /* PBXTargetDependency */,
 			);
-			name = iPadDraw;
-			productName = iPadDraw;
-			productReference = 4AC4D32F142455C60055F4CA /* iPadDraw.app */;
+			name = FreeDraw;
+			productName = FreeDraw;
+			productReference = 4AC4D32F142455C60055F4CA /* FreeDraw.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -266,7 +266,7 @@
 				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = com.yourcompany;
 			};
-			buildConfigurationList = 4AC4D329142455C50055F4CA /* Build configuration list for PBXProject "iPadDraw" */;
+			buildConfigurationList = 4AC4D329142455C50055F4CA /* Build configuration list for PBXProject "FreeDraw" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -284,7 +284,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				4AC4D32E142455C60055F4CA /* iPadDraw */,
+				4AC4D32E142455C60055F4CA /* FreeDraw */,
 			);
 		};
 /* End PBXProject section */
@@ -380,10 +380,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
 				);
 				INFOPLIST_FILE = "";
 				PROVISIONING_PROFILE = "";
@@ -405,10 +405,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -427,10 +427,10 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -448,10 +448,10 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -475,10 +475,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -496,10 +496,10 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -523,10 +523,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -544,10 +544,10 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../iPad\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../iPad/Graph2d\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
+					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -561,7 +561,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4AC4D329142455C50055F4CA /* Build configuration list for PBXProject "iPadDraw" */ = {
+		4AC4D329142455C50055F4CA /* Build configuration list for PBXProject "FreeDraw" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4AC4D348142455C60055F4CA /* Debug */,
@@ -572,7 +572,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4AC4D34A142455C60055F4CA /* Build configuration list for PBXNativeTarget "iPadDraw" */ = {
+		4AC4D34A142455C60055F4CA /* Build configuration list for PBXNativeTarget "FreeDraw" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4AC4D34B142455C60055F4CA /* Debug */,

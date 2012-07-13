@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'iPadDraw' target in the 'iPadDraw' project
+// Prefix header for all source files of the 'FreeDraw' target in the 'FreeDraw' project
 //
 
 #import <Availability.h>
