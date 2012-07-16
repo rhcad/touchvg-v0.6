@@ -224,7 +224,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\shape\mgcmddraw.h"
+				RelativePath="..\..\..\core\include\shape\mgcmddraw.h"
 				>
 			</File>
 			<File

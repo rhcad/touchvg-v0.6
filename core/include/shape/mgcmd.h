@@ -85,7 +85,7 @@ protected:
     
     virtual bool cancel(const MgMotion*) { return false; }
     virtual bool initialize(const MgMotion*) { return false; }
-    virtual bool undo(bool &enableRecall, const MgMotion*) { return false; }
+    virtual bool undo(bool &, const MgMotion*) { return false; }
     virtual bool draw(const MgMotion*, GiGraphics*) { return false; }
     virtual void gatherShapes(const MgMotion*, MgShapes*) {}
     virtual bool click(const MgMotion*) { return false; }
