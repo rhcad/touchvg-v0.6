@@ -13,6 +13,7 @@
 		7EC8FF911504CB1100F6193D /* TestGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7EC8FF901504CB1100F6193D /* TestGraphView.mm */; };
 		AE47CAE31574C8FD009E6F69 /* vgdot1.png in Resources */ = {isa = PBXBuildFile; fileRef = AE47CAE11574C8FD009E6F69 /* vgdot1.png */; };
 		AE47CAE41574C8FD009E6F69 /* vgdot2.png in Resources */ = {isa = PBXBuildFile; fileRef = AE47CAE21574C8FD009E6F69 /* vgdot2.png */; };
+		AEA2259A15B3BD1400A5173F /* TransformCmd.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEA2259915B3BD1400A5173F /* TransformCmd.mm */; };
 		AEEB2512155CFE3500B03D0A /* app57.png in Resources */ = {isa = PBXBuildFile; fileRef = AEEB2510155CFE3500B03D0A /* app57.png */; };
 		AEEB2513155CFE3500B03D0A /* app72.png in Resources */ = {isa = PBXBuildFile; fileRef = AEEB2511155CFE3500B03D0A /* app72.png */; };
 		C97B07E715021F5200040728 /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C97B07E515021F5200040728 /* libGraph2d.a */; };
@@ -80,6 +81,7 @@
 		7EC8FF901504CB1100F6193D /* TestGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TestGraphView.mm; path = Sources/TestGraphView.mm; sourceTree = SOURCE_ROOT; };
 		AE47CAE11574C8FD009E6F69 /* vgdot1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vgdot1.png; sourceTree = "<group>"; };
 		AE47CAE21574C8FD009E6F69 /* vgdot2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vgdot2.png; sourceTree = "<group>"; };
+		AEA2259915B3BD1400A5173F /* TransformCmd.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TransformCmd.mm; path = Sources/TransformCmd.mm; sourceTree = SOURCE_ROOT; };
 		AEEB2510155CFE3500B03D0A /* app57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = app57.png; path = Resources/app57.png; sourceTree = SOURCE_ROOT; };
 		AEEB2511155CFE3500B03D0A /* app72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = app72.png; path = Resources/app72.png; sourceTree = SOURCE_ROOT; };
 		C97B07E515021F5200040728 /* libGraph2d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGraph2d.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -164,6 +166,7 @@
 		4AC4D35A1424627A0055F4CA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				AEA2259915B3BD1400A5173F /* TransformCmd.mm */,
 				2752EE9A1559202D00F0CCDD /* TestConfig.h */,
 				C985F88814562C4400728C97 /* SCCalloutView.h */,
 				C985F88914562C4400728C97 /* SCCalloutView.m */,
@@ -351,6 +354,7 @@
 				7E3D20681500BE2F008ACC1B /* GraphViewController.mm in Sources */,
 				7EC8FF911504CB1100F6193D /* TestGraphView.mm in Sources */,
 				C985F88A14562C4400728C97 /* SCCalloutView.m in Sources */,
+				AEA2259A15B3BD1400A5173F /* TransformCmd.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

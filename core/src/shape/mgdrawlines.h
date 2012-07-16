@@ -14,10 +14,11 @@
 */
 class MgCmdDrawLines : public MgCommandDraw
 {
-public:
+protected:
     MgCmdDrawLines();
     virtual ~MgCmdDrawLines();
-
+    
+public:
     static const char* Name() { return "lines"; }
     static MgCommand* Create() { return new MgCmdDrawLines; }
     

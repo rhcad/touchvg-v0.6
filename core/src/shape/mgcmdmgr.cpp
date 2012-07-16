@@ -67,9 +67,11 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
             it = _cmds.find(name);
         }
     }
-    _cmdname = (it != _cmds.end()) ? name : "";
+    
+    bool ret = (it != _cmds.end() && it->second->initialize(sender));
+    _cmdname = ret ? name : "";     // change it at end of initialization
 
-    return it != _cmds.end() && it->second->initialize(sender);
+    return ret;
 }
 
 bool MgCmdManagerImpl::cancel(const MgMotion* sender)

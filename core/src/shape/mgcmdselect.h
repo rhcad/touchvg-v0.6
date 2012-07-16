@@ -15,10 +15,11 @@
 */
 class MgCommandSelect : public MgCommand, public MgSelection
 {
-public:
+protected:
     MgCommandSelect();
     virtual ~MgCommandSelect();
 
+public:
     static const char* Name() { return "select"; }
     static MgCommand* Create() { return new MgCommandSelect; }
     bool dynamicChangeEnded(MgView* view, bool apply);

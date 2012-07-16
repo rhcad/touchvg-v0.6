@@ -28,27 +28,27 @@ bool MgCmdDrawLine::undo(bool &, const MgMotion* sender)
 bool MgCmdDrawLine::touchBegan(const MgMotion* sender)
 {
     m_step = 1;
-    m_shape->shape()->setPoint(0, sender->pointM);
-    m_shape->shape()->setPoint(1, sender->pointM);
-    m_shape->shape()->update();
+    dynshape()->shape()->setPoint(0, sender->pointM);
+    dynshape()->shape()->setPoint(1, sender->pointM);
+    dynshape()->shape()->update();
 
     return _touchBegan(sender);
 }
 
 bool MgCmdDrawLine::touchMoved(const MgMotion* sender)
 {
-    m_shape->shape()->setPoint(1, sender->pointM);
-    m_shape->shape()->update();
+    dynshape()->shape()->setPoint(1, sender->pointM);
+    dynshape()->shape()->update();
 
     return _touchMoved(sender);
 }
 
 bool MgCmdDrawLine::touchEnded(const MgMotion* sender)
 {
-    m_shape->shape()->setPoint(1, sender->pointM);
-    m_shape->shape()->update();
+    dynshape()->shape()->setPoint(1, sender->pointM);
+    dynshape()->shape()->update();
 
-    if ( ((MgLine*)m_shape->shape())->length() > mgDisplayMmToModel(2, sender))
+    if ( ((MgLine*)dynshape()->shape())->length() > mgDisplayMmToModel(2, sender))
     {
         _addshape(sender);
     }

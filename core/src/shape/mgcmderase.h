@@ -14,10 +14,11 @@
 */
 class MgCommandErase : public MgCommand
 {
-public:
+protected:
     MgCommandErase();
     virtual ~MgCommandErase();
 
+public:
     static const char* Name() { return "erase"; }
     static MgCommand* Create() { return new MgCommandErase; }
     

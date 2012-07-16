@@ -14,10 +14,11 @@
 */
 class MgCmdDrawRect : public MgCommandDraw
 {
-public:
+protected:
     MgCmdDrawRect();
     virtual ~MgCmdDrawRect();
-
+    
+public:
     static const char* Name() { return "rect"; }
     static MgCommand* Create() { return new MgCmdDrawRect; }
     

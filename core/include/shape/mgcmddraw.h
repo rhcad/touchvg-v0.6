@@ -17,13 +17,18 @@ float mgDisplayMmToModel(float mm, GiGraphics* gs);
 float mgDisplayMmToModel(float mm, const MgMotion* sender);
 
 //! 绘图命令基类
-/*! \ingroup GEOM_SHAPE
+/*! example: mgGetCommandManager()->registerCommand(YourCmd::Name(), YourCmd::Create);
+    \ingroup GEOM_SHAPE
+    \see mgLineHalfWidthModel, mgDisplayMmToModel, MgBaseCommand
  */
 class MgCommandDraw : public MgCommand
 {
-public:
+protected:
     MgCommandDraw();
     virtual ~MgCommandDraw();
+    
+    //static const char* Name() { return "yourcmd"; }
+    //static MgCommand* Create() { return new YourCmd; }
     
 protected:
     bool _initialize(MgShape* (*creator)(), const MgMotion* sender);
@@ -42,12 +47,14 @@ protected:
     virtual bool longPress(const MgMotion* sender);
     virtual bool mouseHover(const MgMotion* sender);
     
-private:
+protected:
     UInt32 getStep() { return m_step; }
+    MgShape* dynshape() { return m_shape; }
     
 protected:
-    MgShape*    m_shape;
     UInt32      m_step;
+private:
+    MgShape*    m_shape;
     bool        m_needClear;
 };
 

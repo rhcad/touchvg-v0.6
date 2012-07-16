@@ -31,6 +31,8 @@ static const NSUInteger kYellowTag      = 2;
 static const NSUInteger kLineTag        = 3;
 static const NSUInteger kDashLineTag    = 4;
 
+void registerTransformCmd();
+
 @interface GiViewControllerEx : GiViewController {
     UIView              *downview;
 }
@@ -149,6 +151,7 @@ static const NSUInteger kDashLineTag    = 4;
                                      | UIViewAutoresizingFlexibleHeight
                                      | UIViewAutoresizingFlexibleRightMargin
                                      | UIViewAutoresizingFlexibleBottomMargin);
+    [self lockMagnifier:nil];
     
     // 创建缩小显示的放大镜视图
 #ifdef MAG_AT_BOTTOM
@@ -257,6 +260,8 @@ static const NSUInteger kDashLineTag    = 4;
 {
     [super viewDidLoad];
     [self colorBtnPress:yellowbtn];
+    
+    registerTransformCmd();
 }
 
 - (IBAction)lockMagnifier:(id)sender
@@ -358,6 +363,7 @@ static const NSUInteger kDashLineTag    = 4;
             [redBtn setImage:[UIImage imageNamed:@"redbrush1.png"] forState: UIControlStateNormal]; // 切换至红色画笔
             _graphc.commandName = "lines";
             _graphc.lineColor = [UIColor redColor];
+            _graphc.commandName = "xfdemo";     // transform demo command
 			break;
 		case kBlueTag:
 		    [self showUnlightButtons];
@@ -441,6 +447,8 @@ static const NSUInteger kDashLineTag    = 4;
         _graphc.magnifierView.superview.frame = rect;
     }
 #endif
+    
+    _graphc.commandName = "rect";
 }
 
 - (IBAction)hideOverview:(id)sender;    // 切换缩小显示的视图的可见性
@@ -486,9 +494,10 @@ static const NSUInteger kDashLineTag    = 4;
     RandomParam::init();
     
     RandomParam param;
-    param.lineCount = 200;
-    param.arcCount = 20;
-    param.curveCount = 20;
+    param.lineCount = 50;
+    param.rectCount = 20;
+    param.arcCount = 10;
+    param.curveCount = 10;
     param.randomLineStyle = true;
     
     param.initShapes((MgShapes*)_graphc.shapes);

@@ -27,28 +27,28 @@ bool MgCmdDrawRect::undo(bool &, const MgMotion* sender)
 bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
 {
     m_step = 1;
-    ((MgBaseRect*)m_shape->shape())->setRect(Box2d(sender->pointM, sender->pointM));
-    m_shape->shape()->update();
+    ((MgBaseRect*)dynshape()->shape())->setRect(Box2d(sender->pointM, sender->pointM));
+    dynshape()->shape()->update();
 
     return _touchBegan(sender);
 }
 
 bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
 {
-    ((MgBaseRect*)m_shape->shape())->setRect(Box2d(sender->startPointM, sender->pointM));
-    m_shape->shape()->update();
+    ((MgBaseRect*)dynshape()->shape())->setRect(Box2d(sender->startPointM, sender->pointM));
+    dynshape()->shape()->update();
 
     return _touchMoved(sender);
 }
 
 bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
 {
-    ((MgBaseRect*)m_shape->shape())->setRect(Box2d(sender->startPointM, sender->pointM));
-    m_shape->shape()->update();
+    ((MgBaseRect*)dynshape()->shape())->setRect(Box2d(sender->startPointM, sender->pointM));
+    dynshape()->shape()->update();
 
     float minDist = mgDisplayMmToModel(1, sender);
 
-    if (! ((MgBaseRect*)m_shape->shape())->isEmpty(minDist)) {
+    if (! ((MgBaseRect*)dynshape()->shape())->isEmpty(minDist)) {
         _addshape(sender);
     }
     _delayClear();

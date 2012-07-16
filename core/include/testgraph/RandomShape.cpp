@@ -46,14 +46,16 @@ void RandomParam::initShapes(MgShapes* shapes)
         
         if (0 == type && 0 == lineCount)
             type = 1;
-        if (1 == type && 0 == arcCount)
+        if (1 == type && 0 == rectCount)
             type = 2;
-        if (2 == type && 0 == curveCount)
+        if (2 == type && 0 == arcCount)
+            type = 3;
+        if (3 == type && 0 == curveCount)
             type = 0;
         if (0 == type && 0 == lineCount)
             type = 1;
         
-        if (2 == type)
+        if (3 == type)
         {
             MgShapeT<MgSplines> shape;
 
@@ -76,7 +78,7 @@ void RandomParam::initShapes(MgShapes* shapes)
                 }
             }
         }
-        else if (1 == type)
+        else if (2 == type)
         {
             arcCount--;
             /*
@@ -88,6 +90,16 @@ void RandomParam::initShapes(MgShapes* shapes)
             shape->startAngle = RandDbl(0, _M_2PI);
             shape->sweepAngle = RandDbl(0, _M_PI_2 * 6);
             */
+        }
+        else if (1 == type)
+        {
+            MgShapeT<MgRect> shape;
+            
+            shape._shape.setRect(Box2d(Point2d(RandF(-1000, 1000), RandF(-1000, 1000)), RandF(10, 200), RandF(10, 200)));
+            sp = shapes->addShape(shape);
+            rectCount--;
+            
+            setShapeProp(sp->context());
         }
         else
         {

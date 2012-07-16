@@ -51,6 +51,7 @@ struct MgMotion {
 //! 命令接口
 /*! \ingroup GEOM_SHAPE
     \interface MgCommand
+    \see mgGetCommandManager, MgBaseCommand
 */
 struct MgCommand {
     virtual const char* getName() const = 0;                //!< 返回命令名称
@@ -67,6 +68,32 @@ struct MgCommand {
     virtual bool touchMoved(const MgMotion* sender) = 0;    //!< 正在滑动
     virtual bool touchEnded(const MgMotion* sender) = 0;    //!< 滑动结束
     virtual bool mouseHover(const MgMotion*) { return false; }; //!< 鼠标掠过
+};
+
+//! 命令接口的默认实现，可以以此派生新命令类
+/*! example: mgGetCommandManager()->registerCommand(YourCmd::Name(), YourCmd::Create);
+    \ingroup GEOM_SHAPE
+    \see MgCommandDraw
+*/
+class MgBaseCommand : public MgCommand {
+protected:
+    MgBaseCommand() {}
+    virtual ~MgBaseCommand() {}
+    
+    //static const char* Name() { return "yourcmd"; }
+    //static MgCommand* Create() { return new YourCmd; }
+    
+    virtual bool cancel(const MgMotion*) { return false; }
+    virtual bool initialize(const MgMotion*) { return false; }
+    virtual bool undo(bool &enableRecall, const MgMotion*) { return false; }
+    virtual bool draw(const MgMotion*, GiGraphics*) { return false; }
+    virtual void gatherShapes(const MgMotion*, MgShapes*) {}
+    virtual bool click(const MgMotion*) { return false; }
+    virtual bool doubleClick(const MgMotion*) { return false; }
+    virtual bool longPress(const MgMotion*) { return false; }
+    virtual bool touchBegan(const MgMotion*) { return false; }
+    virtual bool touchMoved(const MgMotion*) { return false; }
+    virtual bool touchEnded(const MgMotion*) { return false; }
 };
 
 //! 命令管理器接口

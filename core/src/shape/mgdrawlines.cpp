@@ -24,8 +24,8 @@ bool MgCmdDrawLines::undo(bool &enableRecall, const MgMotion* sender)
 {
     enableRecall = true;
     if (m_step > 2) {                   // 去掉倒数第二个点，倒数第一点是临时动态点
-        ((MgBaseLines*)m_shape->shape())->removePoint(m_step - 1);
-        m_shape->shape()->update();
+        ((MgBaseLines*)dynshape()->shape())->removePoint(m_step - 1);
+        dynshape()->shape()->update();
     }
     return MgCommandDraw::_undo(sender);
 }
@@ -36,8 +36,8 @@ bool MgCmdDrawLines::draw(const MgMotion* sender, GiGraphics* gs)
         GiContext ctxaux(0, GiColor(64, 64, 64, 128), kLineSolid, GiColor(0, 64, 64, 168));
         float radius = gs->xf().displayToModel(3);
         
-        for (UInt32 i = 0; i < m_shape->shape()->getPointCount(); i++) {
-            gs->drawEllipse(&ctxaux, m_shape->shape()->getPoint(i), radius);
+        for (UInt32 i = 0; i < dynshape()->shape()->getPointCount(); i++) {
+            gs->drawEllipse(&ctxaux, dynshape()->shape()->getPoint(i), radius);
         }
     }*/
     return MgCommandDraw::draw(sender, gs);
@@ -45,26 +45,26 @@ bool MgCmdDrawLines::draw(const MgMotion* sender, GiGraphics* gs)
 
 bool MgCmdDrawLines::touchBegan(const MgMotion* sender)
 {
-    ((MgBaseLines*)m_shape->shape())->resize(2);
+    ((MgBaseLines*)dynshape()->shape())->resize(2);
     m_step = 1;
-    m_shape->shape()->setPoint(0, sender->startPointM);
-    m_shape->shape()->setPoint(1, sender->pointM);
-    m_shape->shape()->update();
+    dynshape()->shape()->setPoint(0, sender->startPointM);
+    dynshape()->shape()->setPoint(1, sender->pointM);
+    dynshape()->shape()->update();
 
     return _touchBegan(sender);
 }
 
 bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
 {
-    MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
+    MgBaseLines* lines = (MgBaseLines*)dynshape()->shape();
     
-    float closelen  = mgLineHalfWidthModel(m_shape, sender) + mgDisplayMmToModel(5, sender);
-    float closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
+    float closelen  = mgLineHalfWidthModel(dynshape(), sender) + mgDisplayMmToModel(5, sender);
+    float closedist = sender->pointM.distanceTo(dynshape()->shape()->getPoint(0));
     bool  closed    = (m_step > 2 && closedist < closelen
-        && m_shape->shape()->getExtent().width() > closedist * 1.5f
-        && m_shape->shape()->getExtent().height() > closedist * 1.5f);
+        && dynshape()->shape()->getExtent().width() > closedist * 1.5f
+        && dynshape()->shape()->getExtent().height() > closedist * 1.5f);
     
-    if (m_step > 2 && m_shape->shape()->isClosed() != closed) {
+    if (m_step > 2 && dynshape()->shape()->isClosed() != closed) {
         lines->setClosed(closed);
         if (closed)
             lines->removePoint(m_step);
@@ -72,30 +72,30 @@ bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
             lines->addPoint(sender->pointM);
     }
     if (!closed) {
-        m_shape->shape()->setPoint(m_step, sender->pointM);
+        dynshape()->shape()->setPoint(m_step, sender->pointM);
         if (m_step > 0 && canAddPoint(sender, false)) {
             m_step++;
-            if (m_step >= m_shape->shape()->getPointCount()) {
-                ((MgBaseLines*)m_shape->shape())->addPoint(sender->pointM);
+            if (m_step >= dynshape()->shape()->getPointCount()) {
+                ((MgBaseLines*)dynshape()->shape())->addPoint(sender->pointM);
             }
         }
     }
-    m_shape->shape()->update();
+    dynshape()->shape()->update();
 
     return _touchMoved(sender);
 }
 
 bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
 {
-    MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
+    MgBaseLines* lines = (MgBaseLines*)dynshape()->shape();
     
-    float closelen  = mgLineHalfWidthModel(m_shape, sender) + mgDisplayMmToModel(5, sender);
-    float closedist = sender->pointM.distanceTo(m_shape->shape()->getPoint(0));
+    float closelen  = mgLineHalfWidthModel(dynshape(), sender) + mgDisplayMmToModel(5, sender);
+    float closedist = sender->pointM.distanceTo(dynshape()->shape()->getPoint(0));
     bool  closed    = (m_step > 2 && closedist < closelen
-        && m_shape->shape()->getExtent().width() > closedist * 1.5f
-        && m_shape->shape()->getExtent().height() > closedist * 1.5f);
+        && dynshape()->shape()->getExtent().width() > closedist * 1.5f
+        && dynshape()->shape()->getExtent().height() > closedist * 1.5f);
     
-    if (m_step > 2 && m_shape->shape()->isClosed() != closed) {
+    if (m_step > 2 && dynshape()->shape()->isClosed() != closed) {
         lines->setClosed(closed);
         if (closed)
             lines->removePoint(m_step);
@@ -103,11 +103,11 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
             lines->addPoint(sender->pointM);
     }
     if (!closed) {
-        m_shape->shape()->setPoint(m_step, sender->pointM);
+        dynshape()->shape()->setPoint(m_step, sender->pointM);
         if (m_step > 0 && !canAddPoint(sender, true))
             lines->removePoint(m_step);
     }
-    m_shape->shape()->update();
+    dynshape()->shape()->update();
     
     if (m_step > 1) {
         _addshape(sender);
@@ -123,13 +123,13 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
 bool MgCmdDrawLines::canAddPoint(const MgMotion* /*sender*/, bool /*ended*/)
 {
     /*float minDist = mgDisplayMmToModel(3, sender);
-    Point2d endPt  = m_shape->shape()->getPoint(m_step - 1);
+    Point2d endPt  = dynshape()->shape()->getPoint(m_step - 1);
     float distToEnd = endPt.distanceTo(sender->pointM);
     float turnAngle = 90;
     
     if (m_step > 1)
     {
-        Point2d lastPt = m_shape->shape()->getPoint(m_step - 2);
+        Point2d lastPt = dynshape()->shape()->getPoint(m_step - 2);
         turnAngle = (endPt - lastPt).angleTo(sender->pointM - endPt);
         turnAngle = mgRad2Deg(fabs(turnAngle));
     }

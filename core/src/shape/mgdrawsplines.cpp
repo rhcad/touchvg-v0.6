@@ -24,8 +24,8 @@ bool MgCmdDrawSplines::undo(bool &enableRecall, const MgMotion* sender)
 {
     enableRecall = m_freehand;
     if (m_step > 1) {                   // freehand: 去掉倒数第二个点，倒数第一点是临时动态点
-        ((MgBaseLines*)m_shape->shape())->removePoint(m_freehand ? m_step - 1 : m_step);
-        m_shape->shape()->update();
+        ((MgBaseLines*)dynshape()->shape())->removePoint(m_freehand ? m_step - 1 : m_step);
+        dynshape()->shape()->update();
     }
     
     return MgCommandDraw::_undo(sender);
@@ -37,23 +37,23 @@ bool MgCmdDrawSplines::draw(const MgMotion* sender, GiGraphics* gs)
         GiContext ctx(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
         float radius = gs->xf().displayToModel(4);
         
-        for (UInt32 i = 1, n = m_shape->shape()->getPointCount(); i < 6 && n >= i; i++) {
-            gs->drawEllipse(&ctx, m_shape->shape()->getPoint(n - i), radius);
+        for (UInt32 i = 1, n = dynshape()->shape()->getPointCount(); i < 6 && n >= i; i++) {
+            gs->drawEllipse(&ctx, dynshape()->shape()->getPoint(n - i), radius);
         }
-        gs->drawEllipse(&ctx, m_shape->shape()->getPoint(0), radius * 1.5f);
+        gs->drawEllipse(&ctx, dynshape()->shape()->getPoint(0), radius * 1.5f);
     }
     return MgCommandDraw::draw(sender, gs);
 }
 
 bool MgCmdDrawSplines::touchBegan(const MgMotion* sender)
 {
-    MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
+    MgBaseLines* lines = (MgBaseLines*)dynshape()->shape();
     
     if (m_step > 0 && !m_freehand) {
         m_step++;
-        if (m_step >= m_shape->shape()->getPointCount()) {
+        if (m_step >= dynshape()->shape()->getPointCount()) {
             lines->addPoint(sender->pointM);
-            m_shape->shape()->update();
+            dynshape()->shape()->update();
         }
         
         return _touchMoved(sender);
@@ -62,9 +62,9 @@ bool MgCmdDrawSplines::touchBegan(const MgMotion* sender)
         lines->resize(2);
         m_freehand = !sender->pressDrag;
         m_step = 1;
-        m_shape->shape()->setPoint(0, sender->startPointM);
-        m_shape->shape()->setPoint(1, sender->pointM);
-        m_shape->shape()->update();
+        dynshape()->shape()->setPoint(0, sender->startPointM);
+        dynshape()->shape()->setPoint(1, sender->pointM);
+        dynshape()->shape()->update();
         
         return _touchBegan(sender);
     }
@@ -72,16 +72,16 @@ bool MgCmdDrawSplines::touchBegan(const MgMotion* sender)
 
 bool MgCmdDrawSplines::touchMoved(const MgMotion* sender)
 {
-    MgBaseLines* lines = (MgBaseLines*)m_shape->shape();
+    MgBaseLines* lines = (MgBaseLines*)dynshape()->shape();
     
-    m_shape->shape()->setPoint(m_step, sender->pointM);
+    dynshape()->shape()->setPoint(m_step, sender->pointM);
     if (m_step > 0 && canAddPoint(sender, false)) {
         m_step++;
-        if (m_step >= m_shape->shape()->getPointCount()) {
+        if (m_step >= dynshape()->shape()->getPointCount()) {
             lines->addPoint(sender->pointM);
         }
     }
-    m_shape->shape()->update();
+    dynshape()->shape()->update();
     
     return _touchMoved(sender);
 }
@@ -90,7 +90,7 @@ bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
 {
     if (m_freehand) {
         if (m_step > 1) {
-            //MgSplines* splines = (MgSplines*)m_shape->shape();
+            //MgSplines* splines = (MgSplines*)dynshape()->shape();
             //splines->smooth(mgLineHalfWidthModel(m_shape, sender) + mgDisplayMmToModel(1, sender));
             _addshape(sender);
         }
@@ -121,7 +121,7 @@ bool MgCmdDrawSplines::canAddPoint(const MgMotion* sender, bool ended)
         return false;
     
     if (m_step > 0 && mgDisplayMmToModel(ended ? 0.2f : 0.5f, sender)
-        > sender->pointM.distanceTo(m_shape->shape()->getPoint(m_step - 1))) {
+        > sender->pointM.distanceTo(dynshape()->shape()->getPoint(m_step - 1))) {
         return false;
     }
     
