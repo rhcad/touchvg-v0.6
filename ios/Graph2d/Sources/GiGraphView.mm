@@ -33,6 +33,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 @synthesize enableZoom = _enableZoom;
 @synthesize zooming = _zooming;
 @synthesize shapeAdded = _shapeAdded;
+@synthesize bufferEnabled;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -96,7 +97,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     _drawingDelegate = Nil;
     _shapeAdded = NULL;
     _playShapes = NULL;
-    _cachedDraw = YES;
+    _buffered = 0x11;
     _scaleReaded = NO;
     _zooming = NO;
     _doubleZoomed = NO;
@@ -114,7 +115,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 {
     GiCanvasIos &cv = _graph->canvas;
     GiGraphics &gs = _graph->gs;
-    bool cached = _cachedDraw || !cv.hasCachedBitmap();
+    bool buffered = (_buffered & 0x10) && ((_buffered & 1) || !cv.hasCachedBitmap());
     bool nextDraw = false;
     MgShape* tmpAdded = _shapeAdded;
     
@@ -126,7 +127,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     }
     
     if (cv.beginPaint(UIGraphicsGetCurrentContext(), // 在当前画布上准备绘图
-                      !!_zooming, cached))          // iPad3上不用缓冲更快
+                      !!_zooming, buffered))          // iPad3上不用缓冲更快
     {
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
             if ([self draw:&gs]) {                  // 不行则重新显示所有图形
@@ -161,12 +162,12 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 - (void)shapeAdded:(MgShape*)shape
 {
     if (_shapeAdded || !shape) {
-        _cachedDraw = YES;
+        _buffered |= 1;
         [self regen];
     }
     else {
         _shapeAdded = shape;
-        _cachedDraw = NO;
+        _buffered &= ~1;
         [self setNeedsDisplay];
     }
 }
@@ -252,14 +253,22 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (void)regen {
     _graph->gs.clearCachedBitmap();
-    _cachedDraw = YES;
+    _buffered |= 1;
     [self setNeedsDisplay];
 }
 
 - (void)redraw:(bool)fast
 {
-    _cachedDraw = !fast;
+    _buffered = fast ? (_buffered & ~1) : (_buffered | 1);
     [self setNeedsDisplay];
+}
+
+- (BOOL)bufferEnabled {
+    return (_buffered & 0x10) != 0;
+}
+
+- (void)setBufferEnabled:(BOOL)enabled {
+    _buffered = enabled ? (_buffered | 0x10) : (_buffered & ~0x10);
 }
 
 - (BOOL)isZooming {
