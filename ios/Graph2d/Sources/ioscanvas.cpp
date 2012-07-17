@@ -334,10 +334,14 @@ CGImageRef GiCanvasIos::cachedBitmap(bool invert)
 
 bool GiCanvasIosImpl::createBufferBitmap(float width, float height)
 {
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    
     width  *= _scale;                       // 点数宽度转为像素宽度
     height *= _scale;
+    
+    if (width < 4 || height < 4 || width > 2049 || height > 2049) {
+        return false;
+    }
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     _buffctx = CGBitmapContextCreate(NULL, width, height, 8, width * 4,
                                      colorSpace, kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(colorSpace);
@@ -428,21 +432,48 @@ void GiCanvasIos::clearCachedBitmap(bool clearAll)
     }
 }
 
-bool GiCanvasIos::drawImage(CGImageRef image, const Point2d& centerM)
+bool GiCanvasIos::drawImage(CGImageRef image, const Point2d& centerM, bool autoScale)
 {
     CGContextRef context = m_draw->getContext();
     bool ret = false;
     
     if (context && image) {
         Point2d ptD = centerM * m_draw->xf().modelToDisplay();
-        int w = CGImageGetWidth(image);
-        int h = CGImageGetHeight(image);
+        float w = CGImageGetWidth(image);
+        float h = CGImageGetHeight(image);
+        
+        if (autoScale) {
+            w *= m_draw->xf().getViewScale();
+            h *= m_draw->xf().getViewScale();
+        }
         
         CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
         af = CGAffineTransformTranslate(af, ptD.x - w * 0.5f, m_draw->height() - (ptD.y + h * 0.5f));
         
         CGContextConcatCTM(context, af);
         CGContextDrawImage(context, CGRectMake(0, 0, w, h), image);
+        CGContextConcatCTM(context, CGAffineTransformInvert(af));
+        ret = true;
+    }
+    
+    return ret;
+}
+
+bool GiCanvasIos::drawImage(CGImageRef image, const Box2d& rectM)
+{
+    CGContextRef context = m_draw->getContext();
+    bool ret = false;
+    
+    if (context && image) {
+        Point2d ptD = rectM.center() * m_draw->xf().modelToDisplay();
+        Box2d rect = rectM * m_draw->xf().modelToDisplay();
+        
+        CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
+        af = CGAffineTransformTranslate(af, ptD.x - rect.width() * 0.5f, 
+                                        m_draw->height() - (ptD.y + rect.height() * 0.5f));
+        
+        CGContextConcatCTM(context, af);
+        CGContextDrawImage(context, CGRectMake(0, 0, rect.width(), rect.height()), image);
         CGContextConcatCTM(context, CGAffineTransformInvert(af));
         ret = true;
     }

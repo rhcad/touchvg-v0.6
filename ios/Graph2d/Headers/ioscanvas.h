@@ -37,7 +37,7 @@ public:
     //! Set the screen's DPI and scale.
     /*!
         \param dpi dots per inches. iPad:132, iPhone or iPod Touch: 163.
-        \param scale 
+        \param scale 2: for the new iPad and iPhone4, 1: for iPad 2 and others.
      */
     static void setScreenDpi(float dpi, float scale);
     
@@ -45,12 +45,12 @@ public:
     /*!
         \param context drawing target.
         \param fast true if drawing with sketchy details.
-        \param buffered true if drawing on a cached bitmap, otherwise drawing directly on the target context.
+        \param buffered true if drawing on a buffered bitmap, otherwise drawing directly on the target context.
         \return true if successful.
      */
     bool beginPaint(CGContextRef context, bool fast = false, bool buffered = true);
     
-    //! Ready to draw shapes on a cached bitmap.
+    //! Ready to draw shapes on a buffered bitmap.
     bool beginPaintBuffered(bool fast);
     
     //! End to draw shapes and output to the view.
@@ -62,8 +62,11 @@ public:
     //! Returns the current context which shapes can draw on it.
     CGContextRef getCGContext();
     
-    //! Draw a image.
-    bool drawImage(CGImageRef image, const Point2d& centerM);
+    //! Draw a image at the point.
+    bool drawImage(CGImageRef image, const Point2d& centerM, bool autoScale = false);
+    
+    //! Draw a image within the rectangle extent.
+    bool drawImage(CGImageRef image, const Box2d& rectM);
 
 // Implement the GiCanvas interface.
 public:
