@@ -441,7 +441,14 @@ static long s_cmdRef = 0;
     
     if (cmd && locker.locked())
     {
-        if (sender.state == UIGestureRecognizerStateChanged) {
+        if (sender.state == UIGestureRecognizerStateBegan) {
+            if (_touchCount > [sender numberOfTouches]) {
+                _touchCount = [sender numberOfTouches];
+                point = [sender locationInView:sender.view];
+                [self touchesBegan:point view:sender.view count:_touchCount];
+            }
+        }
+        else if (sender.state == UIGestureRecognizerStateChanged) {
             CGPoint velocity = [sender velocityInView:sender.view];
             _motion->velocity = hypotf(velocity.x, velocity.y);
             
@@ -456,7 +463,7 @@ static long s_cmdRef = 0;
             ret = cmd->touchEnded(_motion);
             _touchCount = 0;
         }
-        else if (sender.state != UIGestureRecognizerStateBegan) {
+        else {
             ret = cmd->cancel(_motion);
             _touchCount = 0;
         }
@@ -474,7 +481,14 @@ static long s_cmdRef = 0;
     CGPoint point;
     
     if (_motion->pressDrag && cmd && locker.locked()) {
-        if (sender.state == UIGestureRecognizerStateChanged) {
+        if (sender.state == UIGestureRecognizerStateBegan) {
+            if (_touchCount > [sender numberOfTouches]) {
+                _touchCount = [sender numberOfTouches];
+                point = [sender locationInView:sender.view];
+                [self touchesBegan:point view:sender.view count:_touchCount];
+            }
+        }
+        else if (sender.state == UIGestureRecognizerStateChanged) {
             _motion->velocity = 0;
             ret = ([self getPointForPressDrag:sender :&point]
                    && [self touchesMoved:point view:sender.view
@@ -488,7 +502,7 @@ static long s_cmdRef = 0;
             ret = cmd->touchEnded(_motion);
             _touchCount = 0;
         }
-        else if (sender.state != UIGestureRecognizerStateBegan) {
+        else {
             ret = cmd->cancel(_motion);
             _touchCount = 0;
         }
