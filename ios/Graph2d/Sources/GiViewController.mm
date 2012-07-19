@@ -229,73 +229,81 @@
     [self setDynamicShapes:NULL];
 }
 
-- (BOOL)loadShapes:(void*)mgstorage record:(int)times
+- (BOOL)loadShapes:(void*)mgstorage
 {
-    BOOL ret = YES;
-    MgStorage* s = (MgStorage*)mgstorage;
+    MgShapes* sp = [[self gview] shapes];
+    MgShapesLock locker(sp, MgShapesLock::Edit);
+    BOOL ret = (locker.locked() && mgstorage
+                && sp->load((MgStorage*)mgstorage));
+    [self regen];
     
-    if (times > 0) {                                        // 播放录制的图形
-        GiGraphView *gview = (GiGraphView *)self.view;
-        MgShapes* sp = [gview getPlayShapes:!s];            // 播放图形列表，自动创建或删除
-        MgShapesLock locker(sp, MgShapesLock::Edit);        // 锁定改写播放图形列表
-        
-        ret = !sp || locker.locked();                       // 删除或锁定成功
-        if (locker.locked() && s->readNode("record", -1, false))
-        {            
-            int mode = s->readInt32("mode");                // 录制的标记
-            bool addOnly = (MgShapesLock::Add == mode);
-            UInt32 oldCount = sp->getShapeCount();          // 原来的图形数
-            
-            ret = sp->load(s, addOnly);                     // 增量播放
-            s->readNode("record", -1, true);
-            
-            if (!addOnly || oldCount + 1 != sp->getShapeCount()) {
-                [self regen];
-            }
-            else {                                          // 是增量录制最后一个图形
-                [[self gview] shapeAdded:sp->getLastShape()];   // 仅添加显示一个图形
-            }
-        }
-    }
-    else {
-        MgShapes* sp = [[self gview] shapes];
-        MgShapesLock locker(sp, MgShapesLock::Edit);
-        ret = (locker.locked() && mgstorage
-               && sp->load((MgStorage*)mgstorage));
-        [self regen];
+    return ret;
+}
+
+- (BOOL)saveShapes:(void*)mgstorage
+{
+    MgShapesLock locker([[self gview] shapes], MgShapesLock::ReadOnly);
+    bool ret = locker.locked() && mgstorage;
+    
+    if (ret) {
+        ret = locker.shapes->save((MgStorage*)mgstorage);
+        locker.resetEditFlags();
     }
     
     return ret;
 }
 
-- (BOOL)saveShapes:(void*)mgstorage record:(int)times
+- (BOOL)record:(void*)mgstorage
 {
     MgStorage* s = (MgStorage*)mgstorage;
     MgShapesLock locker([[self gview] shapes], MgShapesLock::ReadOnly);
     bool ret = locker.locked() && mgstorage;
     
     if (ret) {
-        if (times == 0) {
-            ret = locker.shapes->save(s);
-        }
-        else {                                              // 录屏
-            GiGraphView *gview = (GiGraphView *)self.view;
-            [gview getPlayShapes:YES];                      // 清除播放图形列表
-            
-            int mode = locker.getEditFlags();               // 修改标志
-            bool addOnly = (MgShapesLock::Add == mode);
-            
-            s->writeNode("record", -1, false);
-            s->writeInt32("mode", mode);
-            
-            ret = locker.shapes->save(s, addOnly ? _recordIndex : 0);   // 增量保存
-            s->writeNode("record", -1, true);
-            
-            if (!addOnly) {
-                _recordIndex = locker.shapes->getShapeCount();  // 下次新加图形时的序号
-            }
+        GiGraphView *gview = (GiGraphView *)self.view;
+        [gview getPlayShapes:YES];                      // 清除播放图形列表
+        
+        int mode = locker.getEditFlags();               // 修改标志
+        bool addOnly = (MgShapesLock::Add == mode);
+        
+        s->writeNode("record", -1, false);
+        s->writeInt32("mode", mode);
+        
+        ret = locker.shapes->save(s, addOnly ? _recordIndex : 0);   // 增量保存
+        s->writeNode("record", -1, true);
+        
+        if (!addOnly) {
+            _recordIndex = locker.shapes->getShapeCount();  // 下次新加图形时的序号
         }
         locker.resetEditFlags();                            // 清除修改标志，表示已录屏
+    }
+    
+    return ret;
+}
+
+- (BOOL)playback:(void*)mgstorage
+{
+    MgStorage* s = (MgStorage*)mgstorage;
+    GiGraphView *gview = (GiGraphView *)self.view;
+    MgShapes* sp = [gview getPlayShapes:!s];            // 播放图形列表，自动创建或删除
+    MgShapesLock locker(sp, MgShapesLock::Edit);        // 锁定改写播放图形列表
+    BOOL ret = !sp || locker.locked();                  // 删除或锁定成功
+    
+    if (locker.locked() && s->readNode("record", -1, false))
+    {            
+        int mode = s->readInt32("mode");                // 录制的标记
+        bool addOnly = (MgShapesLock::Add == mode);
+        UInt32 oldCount = sp->getShapeCount();          // 原来的图形数
+        
+        ret = sp->load(s, addOnly);                     // 增量播放
+        s->readNode("record", -1, true);
+        
+        if (!addOnly || oldCount + 1 != sp->getShapeCount()) {
+            [self regen];
+        }
+        else {                                              // 是增量录制最后一个图形
+            [[self gview] shapeAdded:sp->getLastShape()];   // 仅添加显示一个图形
+        }
     }
     
     return ret;

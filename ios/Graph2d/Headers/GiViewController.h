@@ -69,9 +69,12 @@
 - (UIGestureRecognizer*) getGestureRecognizer:(int)index;   //!< 得到主视图的触摸手势识别器
 
 - (void)removeShapes;                       //!< 清除所有图形
-- (BOOL)loadShapes:(void*)mgstorage record:(int)times;  //!< 从 MgStorage 对象加载图形列表
-- (BOOL)saveShapes:(void*)mgstorage record:(int)times;  //!< 保存图形列表到 MgStorage 对象
-- (NSUInteger)getChangeCount;               //!< 得到正式图形内容改变次数，可用于判断是否需要调用 getShapes
+- (BOOL)loadShapes:(void*)mgstorage;        //!< 从 MgStorage 对象加载图形列表
+- (BOOL)saveShapes:(void*)mgstorage;        //!< 保存图形列表到 MgStorage 对象
+
+- (BOOL)record:(void*)mgstorage;            //!< 录制图形到 MgStorage 对象
+- (BOOL)playback:(void*)mgstorage;          //!< 从 MgStorage 对象回放图形
+- (NSUInteger)getChangeCount;               //!< 得到正式图形内容改变次数，可用于判断是否需要调用 record
 - (NSUInteger)getRedrawCount;               //!< 得到重绘次数，可用于判断是否需要调用 getDynamicShapes
 - (BOOL)getDynamicShapes:(void*)mgstorage;  //!< 保存临时动态图形到 MgStorage 对象
 - (BOOL)setDynamicShapes:(void*)mgstorage;  //!< 从 MgStorage 对象加载临时动态图形，传空值则清除
