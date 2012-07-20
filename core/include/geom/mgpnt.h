@@ -13,7 +13,7 @@
     本类用于描述二维平面上任意位置的点，具有x和y两个坐标分量
     \ingroup GEOM_CLASS
 */
-class Point2d : public POINT2D
+class Point2d : public POINT_2D
 {
 public:
     //! 原点(0,0)
@@ -36,7 +36,7 @@ public:
     }
     
     //! 拷贝构造函数
-    Point2d(const POINT2D& src)
+    Point2d(const POINT_2D& src)
     {
         x = src.x; y = src.y;
     }

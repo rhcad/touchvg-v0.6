@@ -228,7 +228,7 @@ bool GiCanvasGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
         if ((m_draw->m_buffDC = ::CreateCompatibleDC(hdc)) != NULL)
         {
             RECT rc;
-            RECT2D clipBox;
+            RECT_2D clipBox;
 
             Box2d(owner()->getClipBox(clipBox)).get(rc);
 
@@ -268,7 +268,7 @@ void GiCanvasGdi::clearWindow()
     if (!m_owner->isPrint() && m_owner->isDrawing())
     {
         RECT rc;
-        RECT2D clipBox;
+        RECT_2D clipBox;
 
         Box2d(owner()->getClipBox(clipBox)).get(rc);
         ExtTextOut(m_draw->getDrawDC(), 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
@@ -370,7 +370,7 @@ void GiCanvasGdi::endPaint(bool draw)
         if (m_draw->m_buffBmp != NULL && draw)
         {
             RECT rc;
-            RECT2D clipBox;
+            RECT_2D clipBox;
 
             Box2d(owner()->getClipBox(clipBox)).get(rc);
             BitBlt(m_draw->m_hdc, rc.left, rc.top, 
@@ -407,7 +407,7 @@ void GiCanvasGdi::endPaint(bool draw)
     }
 }
 
-void GiCanvasGdi::_clipBoxChanged(const RECT2D& clipBox)
+void GiCanvasGdi::_clipBoxChanged(const RECT_2D& clipBox)
 {
     RECT rc = { mgRound(clipBox.left), mgRound(clipBox.top),
         mgRound(clipBox.right), mgRound(clipBox.bottom)
@@ -715,7 +715,7 @@ bool GiCanvasGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
     if (hdc != NULL && hmWidth > 0 && hmHeight > 0 && hbitmap != NULL
         && m_owner->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
-        RECT2D clipBox;
+        RECT_2D clipBox;
         RECT rc, rcDraw, rcFrom;
 
         // rc: 整个图像对应的显示坐标区域

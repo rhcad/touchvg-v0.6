@@ -216,7 +216,7 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
 
     if (owner()) {
         CGRect rc = CGContextGetClipBoundingBox(context);
-        RECT2D clipBox = { rc.origin.x, rc.origin.y, 
+        RECT_2D clipBox = { rc.origin.x, rc.origin.y, 
             rc.origin.x + rc.size.width, rc.origin.y + rc.size.height };
         owner()->_beginPaint(clipBox);
     }
@@ -251,7 +251,7 @@ bool GiCanvasIos::beginPaintBuffered(bool fast)
         return false;
     }
     
-    RECT2D clipBox = { 0, 0, m_draw->width(), m_draw->height() };
+    RECT_2D clipBox = { 0, 0, m_draw->width(), m_draw->height() };
     owner()->_beginPaint(clipBox);
     
     m_draw->_fast = fast;
@@ -497,7 +497,7 @@ float GiCanvasIos::getScreenDpi() const
     return GiCanvasIosImpl::_dpi;
 }
 
-void GiCanvasIos::_clipBoxChanged(const RECT2D& clipBox)
+void GiCanvasIos::_clipBoxChanged(const RECT_2D& clipBox)
 {
     if (m_draw->getContext())
     {

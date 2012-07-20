@@ -75,7 +75,7 @@ bool giPrintSetup(GiTransform& xf, HDC hdc, const Box2d& rectShow, bool bWorldRe
         rectShowW *= xf.modelToWorld();
 
     Box2d rectOld = xf.setWorldLimits(Box2d());
-    RECT2D rc2d(giConvertRect(rc));
+    RECT_2D rc2d(giConvertRect(rc));
     bool ret = xf.zoomTo(rectShowW, &rc2d, true);
     if (scale >= xf.getMinViewScale() && scale <= xf.getMaxViewScale())
     {
@@ -165,7 +165,7 @@ bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y, const wchar_t* str, int 
 }
 
 bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y, 
-                            UInt32 options, const RECT2D& rc, 
+                            UInt32 options, const RECT_2D& rc, 
                             const char* str, int len, const Int32* pDx)
 {
     RECT rect = { mgRound(rc.left), mgRound(rc.top), mgRound(rc.right), mgRound(rc.bottom) };
@@ -174,7 +174,7 @@ bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y,
 }
 
 bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y, 
-                            UInt32 options, const RECT2D& rc, 
+                            UInt32 options, const RECT_2D& rc, 
                             const wchar_t* str, int len, const Int32* pDx)
 {
     RECT rect = { mgRound(rc.left), mgRound(rc.top), mgRound(rc.right), mgRound(rc.bottom) };
@@ -182,9 +182,9 @@ bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y,
         str, len, reinterpret_cast<const INT *>(pDx)) != 0;
 }
 
-RECT2D giConvertRect(const RECT& rc)
+RECT_2D giConvertRect(const RECT& rc)
 {
-    RECT2D rect;
+    RECT_2D rect;
     rect.left = (float)rc.left;
     rect.top = (float)rc.top;
     rect.right = (float)rc.right;

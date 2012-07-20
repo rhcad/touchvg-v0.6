@@ -53,7 +53,7 @@ public:
         \param[out] rc 填充逻辑坐标矩形
         \return rc
     */
-    RECT2D& getClipBox(RECT2D& rc) const;
+    RECT_2D& getClipBox(RECT_2D& rc) const;
 
     //! 设置剪裁框，逻辑坐标
     /*! 只有正处于绘图状态时，该函数的返回值才有效。
@@ -63,7 +63,7 @@ public:
         \param[in] rc 逻辑坐标矩形
         \return 是否成功设置剪裁框，没有处于绘图状态中或计算出的剪裁框为空时失败
     */
-    bool setClipBox(const RECT2D& rc);
+    bool setClipBox(const RECT_2D& rc);
 
     //! 设置剪裁框，世界坐标
     /*! 新剪裁框将会和原始剪裁框相叠加求交，所以函数可能返回失败。\n
@@ -325,7 +325,7 @@ public:
     void _setCanvas(GiCanvas* canvas);
 
     //! 在显示适配类的 beginPaint() 中调用
-    void _beginPaint(const RECT2D& clipBox);
+    void _beginPaint(const RECT_2D& clipBox);
 
     //! 在显示适配类的 endPaint() 中调用
     void _endPaint();
@@ -399,7 +399,7 @@ public:
 
 private:
     GiGraphics* m_gs;
-    RECT2D      m_clipRect;
+    RECT_2D     m_clipRect;
     bool        m_clip;
 };
 

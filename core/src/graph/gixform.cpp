@@ -360,7 +360,7 @@ bool GiTransform::zoomWnd(const Point2d& pt1, const Point2d& pt2, bool adjust)
     return m_impl->zoomNoAdjust(ptW, scale);
 }
 
-bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT2D* rcTo, bool adjust)
+bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT_2D* rcTo, bool adjust)
 {
     // 如果图形范围的宽或高接近于零，就返回
     if (rectWorld.isEmpty())

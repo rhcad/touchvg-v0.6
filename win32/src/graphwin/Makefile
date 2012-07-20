@@ -1,12 +1,12 @@
-ROOT        =../../..
+ROOTDIR     =../../..
 TARGET      =libgraphwin.a
 SRCS        =$(wildcard *.cpp)
 OBJS        =$(SRCS:.cpp=.o)
-INSTALL_DIR ?=$(ROOT)/build
+INSTALL_DIR ?=$(ROOTDIR)/build
 
-CPPFLAGS    += -Wall -I$(ROOT)/core/include/geom \
-               -I$(ROOT)/core/include/graph \
-               -I$(ROOT)/win32/include/graphwin
+CPPFLAGS    += -Wall -I$(ROOTDIR)/core/include/geom \
+               -I$(ROOTDIR)/core/include/graph \
+               -I$(ROOTDIR)/win32/include/graphwin
 
 all:        $(TARGET)
 $(TARGET):  $(OBJS)

@@ -476,7 +476,7 @@ void GiCanvasGdip::endPaint(bool draw)
     }
 }
 
-void GiCanvasGdip::_clipBoxChanged(const RECT2D& clipBox)
+void GiCanvasGdip::_clipBoxChanged(const RECT_2D& clipBox)
 {
     m_draw->getDrawGs()->SetClip(G::RectF(clipBox.left, clipBox.top, 
         clipBox.right - clipBox.left, clipBox.bottom - clipBox.top));
@@ -869,7 +869,7 @@ bool GiCanvasGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count,
 
 bool GiCanvasGdipImpl::drawImage(G::Bitmap* pBmp, const Box2d& rectW, bool fast)
 {
-    RECT2D rc, rcDraw, rcFrom;
+    RECT_2D rc, rcDraw, rcFrom;
     Box2d rect;
     float width = (float)pBmp->GetWidth();
     float height = (float)pBmp->GetHeight();

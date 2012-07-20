@@ -112,7 +112,7 @@ public:
     /*! 调用 GiGraphics::setClipBox() 或 setClipWorld() 后会调用本函数。
         \param[in] clipBox 新剪裁框的逻辑坐标矩形
     */
-    virtual void _clipBoxChanged(const RECT2D& clipBox) = 0;
+    virtual void _clipBoxChanged(const RECT_2D& clipBox) = 0;
 
     //! 反走样模式已设置的通知，仅由 GiGraphics 调用
     virtual void _antiAliasModeChanged(bool antiAlias) = 0;

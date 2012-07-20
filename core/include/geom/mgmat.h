@@ -28,7 +28,7 @@
     每个矩阵 M 对应一个坐标系，其坐标原点为(dx, dy)，坐标轴为矢量(e0x, e0y)和
     (e1x, e1y)。M 为将(0,0)(1,0)(0,1)映射到(dx, dy)(e0x, e0y)(e1x, e1y)的矩阵。
 */
-class Matrix2d : public MATRIX2D
+class Matrix2d : public MATRIX_2D
 {
 public:
     //! 单位矩阵
@@ -42,7 +42,7 @@ public:
     Matrix2d();
     
     //! 拷贝构造函数
-    Matrix2d(const MATRIX2D& src);
+    Matrix2d(const MATRIX_2D& src);
     
     //! 给定元素构造
     Matrix2d(float _m11, float _m12, float _m21, float _m22, float _dx, float _dy);

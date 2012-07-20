@@ -48,7 +48,7 @@ GiTransform& GiGraphics::_xf()
     return *m_impl->xform;
 }
 
-void GiGraphics::_beginPaint(const RECT2D& clipBox)
+void GiGraphics::_beginPaint(const RECT_2D& clipBox)
 {
     if (m_impl->lastZoomTimes != xf().getZoomTimes())
     {
@@ -63,7 +63,7 @@ void GiGraphics::_beginPaint(const RECT2D& clipBox)
         m_impl->clipBox  = clipBox;
         m_impl->rectDraw = Box2d(clipBox);
         m_impl->rectDraw.inflate(GiGraphicsImpl::CLIP_INFLATE);
-        m_impl->rectDrawM = m_impl->rectDraw * xf().displayToModel();
+        m_impl->rectDrawM = Box2d(m_impl->rectDraw) * xf().displayToModel();
         m_impl->rectDrawMaxM = Box2d(0, 0, xf().getWidth(), xf().getHeight()) * xf().displayToModel();
         m_impl->rectDrawW = m_impl->rectDrawM * xf().modelToWorld();
         m_impl->rectDrawMaxW = m_impl->rectDrawMaxM * xf().modelToWorld();
@@ -100,13 +100,13 @@ Box2d GiGraphics::getClipWorld() const
     return m_impl->rectDrawW;
 }
 
-RECT2D& GiGraphics::getClipBox(RECT2D& rc) const
+RECT_2D& GiGraphics::getClipBox(RECT_2D& rc) const
 {
     rc = m_impl->clipBox;
     return rc;
 }
 
-bool GiGraphics::setClipBox(const RECT2D& rc)
+bool GiGraphics::setClipBox(const RECT_2D& rc)
 {
     if (m_impl->drawRefcnt < 1)
         return false;

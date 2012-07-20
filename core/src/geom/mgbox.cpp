@@ -5,7 +5,7 @@
 #include "mgbox.h"
 #include "mgmat.h"
 
-Box2d::Box2d(const BOX2D& src, bool bNormalize)
+Box2d::Box2d(const BOX_2D& src, bool bNormalize)
 {
     xmin = src.xmin;
     ymin = src.ymin;
@@ -15,7 +15,7 @@ Box2d::Box2d(const BOX2D& src, bool bNormalize)
         normalize();
 }
 
-Box2d& Box2d::set(const BOX2D& src, bool bNormalize)
+Box2d& Box2d::set(const BOX_2D& src, bool bNormalize)
 {
     xmin = src.xmin;
     ymin = src.ymin;

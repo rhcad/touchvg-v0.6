@@ -19,7 +19,7 @@ class GiTransform;
 /*! \ingroup GRAPH_WIN
     \see Box2d
 */
-RECT2D giConvertRect(const RECT& rc);
+RECT_2D giConvertRect(const RECT& rc);
 
 //! Windows平台的图形显示接口类
 /*! 本类用于在Windows平台显示各种图形，图元显示原语由派生类实现
@@ -96,11 +96,11 @@ public:
 
     //! 显示文字的原语函数(类似于ExtTextOutA)
     virtual bool rawTextOut(HDC hdc, float x, float y, UInt32 options, 
-        const RECT2D& rc, const char* str, int len, const Int32* pDx);
+        const RECT_2D& rc, const char* str, int len, const Int32* pDx);
 
     //! 显示文字的原语函数(类似于ExtTextOutW)
     virtual bool rawTextOut(HDC hdc, float x, float y, UInt32 options, 
-        const RECT2D& rc, const wchar_t* str, int len, const Int32* pDx);
+        const RECT_2D& rc, const wchar_t* str, int len, const Int32* pDx);
 
     //! 显示图像（旋转角度为90度的整数倍）
     /*!

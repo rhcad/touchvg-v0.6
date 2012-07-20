@@ -12,7 +12,7 @@ Matrix2d::Matrix2d()
 }
 
 // 拷贝构造函数
-Matrix2d::Matrix2d(const MATRIX2D& src)
+Matrix2d::Matrix2d(const MATRIX_2D& src)
 {
     m11 = src.m11; m12 = src.m12;
     m21 = src.m21; m22 = src.m22;

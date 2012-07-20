@@ -320,7 +320,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 {
     Box2d fromrc(pageRect.origin.x, pageRect.origin.y, 
                pageRect.origin.x + pageRect.size.width, pageRect.origin.y + pageRect.size.height);
-    RECT2D torc = { pxRect.origin.x, pxRect.origin.y, 
+    RECT_2D torc = { pxRect.origin.x, pxRect.origin.y, 
         pxRect.origin.x + pxRect.size.width, pxRect.origin.y + pxRect.size.height };
     
     fromrc *= _graph->xf.modelToWorld();

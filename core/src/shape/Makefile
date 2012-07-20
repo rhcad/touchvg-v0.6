@@ -1,12 +1,12 @@
-ROOT        =../../..
+ROOTDIR     =../../..
 TARGET      =libshape.a
 SRCS        =$(wildcard *.cpp)
 OBJS        =$(SRCS:.cpp=.o)
-INSTALL_DIR ?=$(ROOT)/build
+INSTALL_DIR ?=$(ROOTDIR)/build
 
-CPPFLAGS    += -Wall -I$(ROOT)/core/include/geom \
-               -I$(ROOT)/core/include/graph \
-               -I$(ROOT)/core/include/shape
+CPPFLAGS    += -Wall -I$(ROOTDIR)/core/include/geom \
+               -I$(ROOTDIR)/core/include/graph \
+               -I$(ROOTDIR)/core/include/shape
 
 all:        $(TARGET)
 $(TARGET):  $(OBJS)

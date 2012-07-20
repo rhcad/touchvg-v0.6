@@ -15,7 +15,7 @@ class Matrix2d;
     \ingroup GEOM_CLASS
     本类用于描述二维平面上水平矩形框，或坐标范围
 */
-class Box2d : public BOX2D
+class Box2d : public BOX_2D
 {
 public:
     //! 收缩到原点的空矩形框
@@ -32,7 +32,7 @@ public:
     }
 
     //! 拷贝构造函数，默认不自动规范化
-    Box2d(const BOX2D& src, bool normal = false);
+    Box2d(const BOX_2D& src, bool normal = false);
     
     //! 给定两个对角点构造，自动规范化
     Box2d(const Point2d& pnt1, const Point2d& pnt2)
@@ -49,7 +49,7 @@ public:
     }
 
     //! 给定显示坐标矩形框构造，默认不自动规范化
-    Box2d(const RECT2D& rc, bool normal = false)
+    Box2d(const RECT_2D& rc, bool normal = false)
     {
         xmin = rc.left; ymin = rc.top;
         xmax = rc.right; ymax = rc.bottom;
@@ -98,7 +98,7 @@ public:
     }
 
     //! 转换到显示坐标矩形框，已上下对调
-    RECT2D& get(RECT2D& rc) const
+    RECT_2D& get(RECT_2D& rc) const
     {
         rc.left = xmin; rc.top = ymin;
         rc.right = xmax; rc.bottom = ymax;
@@ -132,7 +132,7 @@ public:
     }
 
     //! 复制矩形，默认不自动规范化
-    Box2d& set(const BOX2D& src, bool normal = false);
+    Box2d& set(const BOX_2D& src, bool normal = false);
     
     //! 设置两个对角点，自动规范化
     Box2d& set(const Point2d& p1, const Point2d& p2);

@@ -15,7 +15,7 @@ class Matrix2d;
     本类用于描述二维平面上具有方向和长度的矢量，具有x和y两个坐标分量
     \ingroup GEOM_CLASS
 */
-class Vector2d : public VECTOR2D
+class Vector2d : public VECTOR_2D
 {
 public:
     //! 零矢量(0,0)
@@ -52,7 +52,7 @@ public:
     }
     
     //! 拷贝构造函数
-    Vector2d(const VECTOR2D& src)
+    Vector2d(const VECTOR_2D& src)
     {
         x = src.x; y = src.y;
     }
