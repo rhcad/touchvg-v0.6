@@ -284,7 +284,12 @@ void GiCanvasIos::endPaint(bool draw)
             if (image) {
                 CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
                 CGContextConcatCTM(context, af);    // 图像是朝上的，上下文坐标系朝下，上下颠倒显示
+                
+                CGInterpolationQuality oldQuality = CGContextGetInterpolationQuality(context);
+                CGContextSetInterpolationQuality(context, kCGInterpolationNone);
                 CGContextDrawImage(context, rect, image);
+                CGContextSetInterpolationQuality(context, oldQuality);
+                
                 CGContextConcatCTM(context, CGAffineTransformInvert(af));   // 恢复成坐标系朝下
                 CGImageRelease(image);
             }
@@ -375,7 +380,12 @@ bool GiCanvasIos::drawCachedBitmap(float x, float y, bool secondBmp)
         CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
         
         CGContextConcatCTM(context, af);    // 图像是朝上的，上下文坐标系朝下，上下颠倒显示
+        
+        CGInterpolationQuality oldQuality = CGContextGetInterpolationQuality(context);
+        CGContextSetInterpolationQuality(context, kCGInterpolationNone);
         CGContextDrawImage(context, rect, image);
+        CGContextSetInterpolationQuality(context, oldQuality);
+        
         CGContextConcatCTM(context, CGAffineTransformInvert(af));   // 恢复成坐标系朝下
         ret = true;
     }
@@ -398,7 +408,12 @@ bool GiCanvasIos::drawCachedBitmap2(const GiCanvas* p, float x, float y, bool se
             CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
             
             CGContextConcatCTM(context, af);
+            
+            CGInterpolationQuality oldQuality = CGContextGetInterpolationQuality(context);
+            CGContextSetInterpolationQuality(context, kCGInterpolationNone);
             CGContextDrawImage(context, rect, image);
+            CGContextSetInterpolationQuality(context, oldQuality);
+            
             CGContextConcatCTM(context, CGAffineTransformInvert(af));
             ret = true;
         }

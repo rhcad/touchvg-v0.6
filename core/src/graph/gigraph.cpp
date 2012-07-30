@@ -1029,7 +1029,8 @@ GiColor GiGraphics::getBkColor() const
 
 GiColor GiGraphics::setBkColor(const GiColor& color)
 {
-    return m_impl->canvas ? m_impl->canvas->setBkColor(color) : color;
+    GiColor colorNoAlhpa(color.r, color.g, color.b);
+    return m_impl->canvas ? m_impl->canvas->setBkColor(colorNoAlhpa) : color;
 }
 
 float GiGraphics::getScreenDpi() const

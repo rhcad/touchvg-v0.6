@@ -185,6 +185,11 @@
     aview.backgroundColor = [UIColor clearColor];
     aview.scale = scale;
     
+    UIColor* bkColor = parentView.backgroundColor;
+    if (!bkColor)
+        bkColor = parentView.superview.backgroundColor;
+    [aview graph]->setBkColor(giFromUIColor(bkColor ? bkColor : [UIColor whiteColor]));
+    
     [aview setDrawingDelegate:self];
     [parentView addSubview:aview];
     [self addGestureRecognizers:1 view:aview];

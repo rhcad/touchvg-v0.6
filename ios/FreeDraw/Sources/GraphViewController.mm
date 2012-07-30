@@ -86,7 +86,7 @@ void registerTransformCmd();
     // 创建占满窗口的总视图
     UIView *mainview = [[UIView alloc]initWithFrame:rect];
     self.view = mainview;
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = [UIColor darkGrayColor];
     [mainview release];
     rect.origin.y = 0;
     
@@ -108,7 +108,8 @@ void registerTransformCmd();
     // 创建图形视图及其视图控制器
     _graphc = [[GiViewControllerEx alloc]init];
     [_graphc createGraphView:self.view frame:viewFrame backgroundColor:nil];
-    _graphc.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight
+    _graphc.view.autoresizingMask = (UIViewAutoresizingFlexibleWidth
+                                     | UIViewAutoresizingFlexibleHeight
                                      | UIViewAutoresizingFlexibleBottomMargin);
     
     // 创建容纳放大镜视图的容器视图
@@ -117,8 +118,10 @@ void registerTransformCmd();
     magView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.7f];
     [self.view addSubview:magView];
 #ifdef MAG_AT_BOTTOM
-    magView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight 
-                                      | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);
+    magView.autoresizingMask = (UIViewAutoresizingFlexibleWidth
+                                | UIViewAutoresizingFlexibleHeight
+                                | UIViewAutoresizingFlexibleTopMargin
+                                | UIViewAutoresizingFlexibleBottomMargin);
 #endif
     
     // 创建放大镜视图的按钮栏
