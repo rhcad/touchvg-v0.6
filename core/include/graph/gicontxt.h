@@ -60,6 +60,12 @@ public:
     //! 赋值操作符函数
     GiContext& operator=(const GiContext& src)
     {
+        return copy(src);
+    }
+
+    //! 赋值函数
+    GiContext& copy(const GiContext& src)
+    {
         if (this != &src)
         {
             m_lineStyle = src.m_lineStyle;
@@ -69,9 +75,9 @@ public:
         }
         return *this;
     }
-    
+
     //! 比较相等操作符函数
-    bool operator==(const GiContext& src) const
+    bool equals(const GiContext& src) const
     {
         return m_lineStyle == src.m_lineStyle
             && m_lineWidth == src.m_lineWidth
@@ -79,10 +85,16 @@ public:
             && m_fillColor == src.m_fillColor;
     }
     
+    //! 比较相等操作符函数
+    bool operator==(const GiContext& src) const
+    {
+        return equals(src);
+    }
+    
     //! 比较不相等操作符函数
     bool operator!=(const GiContext& src) const
     {
-        return !operator==(src);
+        return !equals(src);
     }
     
     //! 返回线型

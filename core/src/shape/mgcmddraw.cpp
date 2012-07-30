@@ -7,7 +7,7 @@
 
 UInt32      g_newShapeID = 0;
 
-MgCommandDraw::MgCommandDraw() : m_shape(NULL), m_step(0), m_needClear(false)
+MgCommandDraw::MgCommandDraw() : m_step(0), m_shape(NULL), m_needClear(false)
 {
 }
 

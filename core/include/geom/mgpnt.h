@@ -42,6 +42,9 @@ public:
     }
 
     //! 矩阵变换, 点 * 矩阵
+    Point2d transform(const Matrix2d& m) const;
+
+    //! 矩阵变换, 点 * 矩阵
     Point2d operator*(const Matrix2d& m) const;
 
     //! 矩阵变换, 点 *= 矩阵
@@ -147,6 +150,12 @@ public:
     
     //! 返回负矢量
     Vector2d operator-() const
+    {
+        return Vector2d(-x, -y);
+    }
+
+    //! 返回负矢量
+    Vector2d negate() const
     {
         return Vector2d(-x, -y);
     }

@@ -58,6 +58,9 @@ public:
     }
 
     //! 矩阵变换, 矢量 * 矩阵
+    Vector2d transform(const Matrix2d& m) const;
+
+    //! 矩阵变换, 矢量 * 矩阵
     Vector2d operator*(const Matrix2d& m) const;
 
     //! 矩阵变换, 矢量 *= 矩阵

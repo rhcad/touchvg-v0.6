@@ -37,7 +37,7 @@ public:
         return &_context;
     }
     
-    const GiContext* context() const
+    const GiContext* contextc() const
     {
         return &_context;
     }
@@ -47,7 +47,7 @@ public:
         return &_shape;
     }
     
-    const MgBaseShape* shape() const
+    const MgBaseShape* shapec() const
     {
         return &_shape;
     }
@@ -55,7 +55,7 @@ public:
     bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const
     {
         ContextT tmpctx(getContext(gs, ctx));
-        return shape()->draw(gs, tmpctx);
+        return shapec()->draw(gs, tmpctx);
     }
     
     static MgShape* create()
@@ -107,7 +107,7 @@ public:
         
         if (src.isKindOf(Type())) {
             const ThisClass& _src = (const ThisClass&)src;
-            ret = shape()->equals(_src._shape)
+            ret = shapec()->equals(_src._shape)
             && _context == _src._context
             && _tag == _src._tag;
         }
@@ -154,7 +154,7 @@ public:
         c = _context.getFillColor();
         s->writeUInt32("fillColor", c.r | (c.g << 8) | (c.b << 16) | (c.a << 24));
         
-        return shape()->save(s);
+        return shapec()->save(s);
     }
     
     bool load(MgStorage* s)

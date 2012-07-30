@@ -38,6 +38,9 @@ public:
 
     //! 赋值操作符函数
     GiPath& operator=(const GiPath& src);
+
+    //! 赋值函数
+    GiPath& copy(const GiPath& src);
     
     //! 折线拐角圆角化
     /*!

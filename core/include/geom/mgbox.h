@@ -529,6 +529,17 @@ public:
     {
         return unionWith(pt.x, pt.y);
     }
+
+    //! 正向平移矩形框
+    /*!
+        \param box 指定四个方向偏移量的矩形框
+        \return 新的矩形框
+    */
+    Box2d offset(const Box2d& box) const
+    {
+        return Box2d(xmin + box.xmin, ymin + box.ymin, 
+            xmax + box.xmax, ymax + box.ymax);
+    }
     
     //! 正向平移矩形框
     /*!
@@ -572,6 +583,13 @@ public:
     {
         return set(xmin - box.xmin, ymin - box.ymin, 
             xmax - box.xmax, ymax - box.ymax);
+    }
+
+    //! 正向平移矩形框
+    Box2d offset(const Vector2d& vec) const
+    {
+        return Box2d(xmin + vec.x, ymin + vec.y, 
+            xmax + vec.x, ymax + vec.y);
     }
     
     //! 正向平移矩形框

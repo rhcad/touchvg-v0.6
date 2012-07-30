@@ -133,7 +133,7 @@ GiTransform::~GiTransform()
     delete m_impl;
 }
 
-GiTransform& GiTransform::operator=(const GiTransform& src)
+GiTransform& GiTransform::copy(const GiTransform& src)
 {
     if (this != &src)
         m_impl->coptFrom(src.m_impl);

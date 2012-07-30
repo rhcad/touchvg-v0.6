@@ -45,12 +45,12 @@ public:
     //! 析构函数
     ~GiTransform();
 
-    //! 赋值操作符函数
+    //! 赋值函数
     /*! 不复制 enableZoom 相应参数
         \param src 源对象
         \return 本对象的引用
     */
-    GiTransform& operator=(const GiTransform& src);
+    GiTransform& copy(const GiTransform& src);
     
 public:
     //! 返回当前绘图的设备X分辨率

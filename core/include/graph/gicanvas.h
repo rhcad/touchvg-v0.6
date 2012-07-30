@@ -37,7 +37,7 @@ public:
     }
 
     //! 返回图形系统对象，拥有者
-    GiGraphics* owner()
+    GiGraphics* owner2()
     {
         return m_owner;
     }

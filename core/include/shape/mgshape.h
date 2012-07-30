@@ -50,9 +50,9 @@ struct MgShape : public MgObject
     static UInt32 Type() { return 2; }
 
     virtual GiContext* context() = 0;
-    virtual const GiContext* context() const = 0;
+    virtual const GiContext* contextc() const = 0;
     virtual MgBaseShape* shape() = 0;
-    virtual const MgBaseShape* shape() const = 0;
+    virtual const MgBaseShape* shapec() const = 0;
     virtual bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
     virtual bool save(MgStorage* s) const = 0;
     virtual bool load(MgStorage* s) = 0;

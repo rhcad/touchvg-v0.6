@@ -46,6 +46,11 @@ Vector2d& Vector2d::operator*=(const Matrix2d& m)
     return set(x * m.m11 + y * m.m21, x * m.m12 + y * m.m22);
 }
 
+Vector2d Vector2d::transform(const Matrix2d& m) const
+{
+    return Vector2d(x * m.m11 + y * m.m21, x * m.m12 + y * m.m22);
+}
+
 // 矩阵变换, 点 * 矩阵
 Point2d Point2d::operator*(const Matrix2d& m) const
 {
@@ -57,6 +62,12 @@ Point2d Point2d::operator*(const Matrix2d& m) const
 Point2d& Point2d::operator*=(const Matrix2d& m)
 {
     return set(x * m.m11 + y * m.m21 + m.dx, 
+        x * m.m12 + y * m.m22 + m.dy);
+}
+
+Point2d Point2d::transform(const Matrix2d& m) const
+{
+    return Point2d(x * m.m11 + y * m.m21 + m.dx, 
         x * m.m12 + y * m.m22 + m.dy);
 }
 

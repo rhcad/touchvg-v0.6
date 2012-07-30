@@ -68,6 +68,11 @@ GiPath::~GiPath()
 
 GiPath& GiPath::operator=(const GiPath& src)
 {
+    return copy(src);
+}
+
+GiPath& GiPath::copy(const GiPath& src)
+{
     if (this != &src)
     {
         clear();

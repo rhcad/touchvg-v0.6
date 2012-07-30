@@ -58,14 +58,19 @@ struct GiColor
         return !a && !r && !g && !b;
     }
 
-    bool operator==(const GiColor& src) const
+    bool equals(const GiColor& src) const
     {
         return r==src.r && g==src.g && b==src.b && a==src.a;
     }
 
+    bool operator==(const GiColor& src) const
+    {
+        return equals(src);
+    }
+
     bool operator!=(const GiColor& src) const
     {
-        return !operator==(src);
+        return !equals(src);
     }
 };
 

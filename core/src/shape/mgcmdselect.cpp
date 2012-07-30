@@ -117,7 +117,7 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
 
 float mgLineHalfWidthModel(const MgShape* shape, GiGraphics* gs)
 {
-    float w = shape->context()->getLineWidth();
+    float w = shape->contextc()->getLineWidth();
     
     w = w > 0 ? - gs->calcPenWidth(w) : w;
     w = mgMax(1.f, -0.5f * w);
@@ -249,14 +249,14 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     if (shapes.size() == 1 && m_handleIndex > 0 && m_showSel) {
         const MgShape* shape = shapes.front();
         
-        for (UInt32 i = 0; i < shape->shape()->getHandleCount(); i++) {
-            pnt = shape->shape()->getHandlePoint(i);
+        for (UInt32 i = 0; i < shape->shapec()->getHandleCount(); i++) {
+            pnt = shape->shapec()->getHandlePoint(i);
             if (!sender->view->drawHandle(gs, pnt, false))
                 gs->drawEllipse(&ctxhd, pnt, radius);
         }
         
         if (!m_cloneShapes.empty() || !m_insertPoint) {     // 不是(还未拖动但可插新点)，显示当前控制点
-            pnt = shape->shape()->getHandlePoint(m_handleIndex - 1);
+            pnt = shape->shapec()->getHandlePoint(m_handleIndex - 1);
             if (!sender->view->drawHandle(gs, pnt, true))
                 gs->drawEllipse(&ctxhd, pnt, r2x);
         }
