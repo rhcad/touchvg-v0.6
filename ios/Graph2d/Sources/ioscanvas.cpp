@@ -218,7 +218,7 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
         CGRect rc = CGContextGetClipBoundingBox(context);
         RECT_2D clipBox = { rc.origin.x, rc.origin.y, 
             rc.origin.x + rc.size.width, rc.origin.y + rc.size.height };
-        owner()->_beginPaint(clipBox);
+        owner2()->_beginPaint(clipBox);
     }
 
     m_draw->_context = context;
@@ -238,8 +238,8 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
 
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineJoinRound);
-    if (owner())        // 设置最小线宽为0.5像素，使用屏幕放大倍数以便得到实际像素值
-        owner()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
+    if (owner2())        // 设置最小线宽为0.5像素，使用屏幕放大倍数以便得到实际像素值
+        owner2()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
 
     return true;
 }
@@ -252,7 +252,7 @@ bool GiCanvasIos::beginPaintBuffered(bool fast)
     }
     
     RECT_2D clipBox = { 0, 0, m_draw->width(), m_draw->height() };
-    owner()->_beginPaint(clipBox);
+    owner2()->_beginPaint(clipBox);
     
     m_draw->_fast = fast;
     m_draw->_ctxused[0] = false;
@@ -267,7 +267,7 @@ bool GiCanvasIos::beginPaintBuffered(bool fast)
     
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineJoinRound);
-    owner()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
+    owner2()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
     
     return true;
 }
@@ -299,8 +299,8 @@ void GiCanvasIos::endPaint(bool draw)
             m_draw->_buffctx = NULL;
         }
         m_draw->_context = NULL;
-        if (owner())
-            owner()->_endPaint();
+        if (owner2())
+            owner2()->_endPaint();
     }
 }
 
