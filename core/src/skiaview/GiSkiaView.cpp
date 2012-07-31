@@ -8,14 +8,10 @@
 #include <mgshapest.h>
 #include <list>
 
-MgShapes* GiSkiaView::createShapes()
-{
-    return new MgShapesT<std::list<MgShape*> >;
-}
-
-GiSkiaView::GiSkiaView(MgShapes* shapes) : m_gs(&m_xf), m_shapes(shapes)
+GiSkiaView::GiSkiaView() : m_gs(&m_xf)
 {
     m_canvas = new GiSkiaCanvas();
+    m_shapes = new MgShapesT<std::list<MgShape*> >;
     m_cmdc = new GiCmdController;
 }
 
@@ -23,6 +19,8 @@ GiSkiaView::~GiSkiaView()
 {
     delete m_cmdc;
     delete m_canvas;
+    if (m_shapes)
+        m_shapes->release();
 }
 
 bool GiSkiaView::saveShapes(MgStorageBase* s)
@@ -34,3 +32,16 @@ bool GiSkiaView::loadShapes(MgStorageBase* s)
 {
     return s && m_shapes && m_shapes->load(s);
 }
+
+void GiSkiaView::setDpi(float dpi)
+{
+}
+
+void GiSkiaView::onsize(int width, int height)
+{
+}
+
+void GiSkiaView::ondraw(void* canvas)
+{
+}
+
