@@ -8,6 +8,8 @@
 
 #include <mgtype.h>
 
+#ifndef SWIG
+
 //! 图形存取接口
 /*! \ingroup GEOM_SHAPE
     \interface MgStorage
@@ -41,9 +43,9 @@ struct MgStorage
     virtual float readFloat(const char* name, float defvalue = 0) = 0;
     
     //! 给定字段名称，取出浮点数数组. 传入缓冲为空时返回所需个数
-    virtual UInt32 readFloatArray(const char* name, float* values, UInt32 count) = 0;
+    virtual int readFloatArray(const char* name, float* values, int count) = 0;
     //! 给定字段名称，取出字符串内容，不含0结束符. 传入缓冲为空时返回所需个
-    virtual UInt32 readString(const char* name, wchar_t* value, UInt32 count) = 0;
+    virtual int readString(const char* name, wchar_t* value, int count) = 0;
     
     //! 添加一个给定节点名称的开始节点或结束节点
     /*! 一个节点会调用两次本函数。
@@ -72,9 +74,60 @@ struct MgStorage
     virtual void writeFloat(const char* name, float value) = 0;
     
     //! 添加一个给定字段名称的浮点数数组
-    virtual void writeFloatArray(const char* name, const float* values, UInt32 count) = 0;
+    virtual void writeFloatArray(const char* name, const float* values, int count) = 0;
     //! 添加一个给定字段名称的字符串内容
     virtual void writeString(const char* name, const wchar_t* value) = 0;
+};
+
+#endif // SWIG
+
+//! 序列化基类
+/*! \ingroup GEOM_SHAPE
+ */
+class MgStorageBase : public MgStorage
+{
+public:
+    MgStorageBase() {}
+    virtual ~MgStorageBase() {}
+    
+    virtual bool readNode(const char* name, int index, bool ended) {
+        return name && index && ended; }
+    virtual int readInt(const char* name, int defvalue = 0) {
+        return name && defvalue; }
+    virtual bool readBool(const char* name, bool defvalue) {
+        return name && defvalue; }
+    virtual float readFloat(const char* name, float defvalue = 0) {
+        return name && defvalue; }
+    virtual int readFloatArray(const char* name, float* values, int count) {
+        return name && values && count; }
+    virtual int readString(const char* name, wchar_t* value, int count) {
+        return name && value && count; }
+    virtual bool writeNode(const char* name, int index, bool ended) {
+        return name && index && ended; }
+    virtual void writeInt(const char* name, int value) {
+        name=name; value=value; }
+    virtual void writeBool(const char* name, bool value) {
+        name=name; value=value; }
+    virtual void writeFloat(const char* name, float value) {
+        name=name; value=value; }
+    virtual void writeFloatArray(const char* name, const float* values, int count) {
+        name=name; values=values; count=count; }
+    virtual void writeString(const char* name, const wchar_t* value) {
+        name=name; value=value; }
+    
+private:
+    virtual Int8  readInt8(const char* name, Int8 defvalue = 0) { return readInt(name, defvalue); }
+    virtual Int16 readInt16(const char* name, Int16 defvalue = 0) { return readInt(name, defvalue); }
+    virtual Int32 readInt32(const char* name, Int32 defvalue = 0) { return readInt(name, defvalue); }
+    virtual UInt8  readUInt8(const char* name, UInt8 defvalue = 0) { return readInt(name, defvalue); }
+    virtual UInt16 readUInt16(const char* name, UInt16 defvalue = 0) { return readInt(name, defvalue); }
+    virtual UInt32 readUInt32(const char* name, UInt32 defvalue = 0) { return readInt(name, defvalue); }
+    virtual void writeInt8(const char* name, Int8 value) { writeInt(name, value); }
+    virtual void writeInt16(const char* name, Int16 value) { writeInt(name, value); }
+    virtual void writeInt32(const char* name, Int32 value) { writeInt(name, value); }
+    virtual void writeUInt8(const char* name, UInt8 value) { writeInt(name, value); }
+    virtual void writeUInt16(const char* name, UInt16 value) { writeInt(name, value); }
+    virtual void writeUInt32(const char* name, UInt32 value) { writeInt(name, value); }
 };
 
 #endif // __GEOMETRY_MGSTORAGE_H_

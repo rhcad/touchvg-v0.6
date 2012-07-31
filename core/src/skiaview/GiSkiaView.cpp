@@ -24,3 +24,13 @@ GiSkiaView::~GiSkiaView()
     delete m_cmdc;
     delete m_canvas;
 }
+
+bool GiSkiaView::saveShapes(MgStorageBase* s)
+{
+    return s && m_shapes && m_shapes->save(s);
+}
+
+bool GiSkiaView::loadShapes(MgStorageBase* s)
+{
+    return s && m_shapes && m_shapes->load(s);
+}

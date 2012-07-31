@@ -20,6 +20,7 @@ static MgLockRW s_dynLock;
 #ifdef _WIN32
 void giSleep(int ms) { Sleep(ms); }
 #else
+#include <unistd.h>
 void giSleep(int ms) { usleep(ms * 1000); }
 #endif
 

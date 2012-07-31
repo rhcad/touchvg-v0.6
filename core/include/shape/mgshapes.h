@@ -64,6 +64,8 @@ struct MgShapes : public MgObject
     virtual MgLockRW* getLockData() = 0;
 };
 
+#ifndef SWIG
+
 //! 读写锁定数据类
 /*! \ingroup GEOM_SHAPE
 */
@@ -126,5 +128,7 @@ public:
     static bool lockedForRead();
     static bool lockedForWrite();
 };
+
+#endif // SWIG
 
 #endif // __GEOMETRY_MGSHAPES_H_
