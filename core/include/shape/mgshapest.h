@@ -113,20 +113,25 @@ public:
         return _shapes.size();
     }
 
+    void freeIterator(void*& it)
+    {
+        delete (const_iterator*)it;
+        it = NULL;
+    }
+
     MgShape* getFirstShape(void*& it) const
     {
-        it = (void*)0;
-        _it = _shapes.begin();
+        it = (void*)(new const_iterator(_shapes.begin()));
         return _shapes.empty() ? NULL : _shapes.front();
     }
     
     MgShape* getNextShape(void*& it) const
     {
-        int i = (int)it;
-        if (0 == i && _it != _shapes.end()) {
-            _it++;
-            if (_it != _shapes.end())
-                return *_it;
+        const_iterator* pit = (const_iterator*)it;
+        if (it == NULL && *pit != _shapes.end()) {
+            ++(*pit);
+            if (*pit != _shapes.end())
+                return *(*pit);
         }
         return NULL;
     }
@@ -377,7 +382,6 @@ private:
 
 protected:
     Container               _shapes;
-    mutable const_iterator  _it;
     ContextT*               _context;
     Matrix2d                _xf;
     float                   _scale;

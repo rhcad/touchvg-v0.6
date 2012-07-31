@@ -26,6 +26,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shape", "msvc\shape_vc90.vc
 		{4B5CE6E7-ED7D-425D-BD4D-ADCC23B2E02B} = {4B5CE6E7-ED7D-425D-BD4D-ADCC23B2E02B}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skiaview", "msvc\skiaview_vc90.vcproj", "{28A22068-41A6-47F8-8439-44BEFE4B39FD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{02C5A405-AEA8-43B1-A0C3-62D78CC7B434} = {02C5A405-AEA8-43B1-A0C3-62D78CC7B434}
+		{71448894-4C03-46D6-A696-7A40B7D50DEB} = {71448894-4C03-46D6-A696-7A40B7D50DEB}
+		{4B5CE6E7-ED7D-425D-BD4D-ADCC23B2E02B} = {4B5CE6E7-ED7D-425D-BD4D-ADCC23B2E02B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -52,6 +59,10 @@ Global
 		{71448894-4C03-46D6-A696-7A40B7D50DEB}.Debug|Win32.Build.0 = Debug|Win32
 		{71448894-4C03-46D6-A696-7A40B7D50DEB}.Release|Win32.ActiveCfg = Release|Win32
 		{71448894-4C03-46D6-A696-7A40B7D50DEB}.Release|Win32.Build.0 = Release|Win32
+		{28A22068-41A6-47F8-8439-44BEFE4B39FD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28A22068-41A6-47F8-8439-44BEFE4B39FD}.Debug|Win32.Build.0 = Debug|Win32
+		{28A22068-41A6-47F8-8439-44BEFE4B39FD}.Release|Win32.ActiveCfg = Release|Win32
+		{28A22068-41A6-47F8-8439-44BEFE4B39FD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

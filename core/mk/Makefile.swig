@@ -1,7 +1,7 @@
 # Included by Makefile of swig project.
 # x3py framework: https://github.com/rhcad/x3py
 
-SOURCES  =$(wildcard *.cpp)
+SOURCES ?=$(wildcard *.cpp)
 OBJDIR   =._$(SWIG_TYPE)o/
 OBJS     =$(addprefix $(OBJDIR), $(SOURCES:.cpp=$(OBJEXT)))
 
@@ -114,7 +114,7 @@ endif
 #------------------------------------------------
 TARGET              =$(SWIG_PRE)$(PROJNAME)$(SWIG_EXT)
 WRAPFILE            =$(PROJNAME)_$(SWIG_TYPE)_wrap
-OBJS               +=$(WRAPFILE)$(OBJEXT)
+OBJS               += $(OBJDIR)$(WRAPFILE)$(OBJEXT)
 TESTFILE           :=test$(PROJNAME)$(SWIG_TESTEXT)
 REMOTE_TARGET       =$(SWIG_OUTDIR)/$(TARGET)
 REMOTE_WRAPTARGET   =$(SWIG_OUTDIR)/$(WRAPTARGET)
@@ -131,13 +131,15 @@ $(REMOTE_TARGET): $(OBJS)
 	-@test -d $(SWIG_OUTDIR) || mkdir $(SWIG_OUTDIR)
 	$(LINK) $(LDFLAGS) $(OUTFLAG)$@ $(OBJS) $(LIBS)
 
-%$(OBJEXT): %.cxx
-	$(CPP) $(subst -Wall ,,$(subst -W4 ,,$(CPPFLAGS))) $(INCLUDES) -c $<
+$(OBJDIR)%$(OBJEXT): %.cxx
+	-@test -d $(OBJDIR) || mkdir $(OBJDIR)
+	$(CPP) $(subst -Wall ,,$(subst -W4 ,,$(CPPFLAGS))) $(INCLUDES) -c $< $(OFLAG)$@
 
 %.d: %.cpp
 	$(DEPEND_CC) $@ $(INCLUDES) $<
+
 $(OBJDIR)%$(OBJEXT): %.cpp
-	-@test -d $(OBJDIR) || mkdir $(OBJDIR)
+	-@test -d $(OBJDIR)$(dir $<) || mkdir $(OBJDIR)$(dir $<)
 	$(CPP) $(CPPFLAGS) $(INCLUDES) -c $< $(OFLAG)$@
 
 ifndef clean

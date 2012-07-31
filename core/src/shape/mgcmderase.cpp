@@ -131,7 +131,7 @@ bool MgCommandErase::isIntersectMode(const MgMotion* sender)
 bool MgCommandErase::touchMoved(const MgMotion* sender)
 {
     Box2d snap(sender->startPointM, sender->pointM);
-    void *it;
+    void *it = NULL;
     MgShape* shape = m_boxsel ? sender->view->shapes()->getFirstShape(it) : NULL;
     
     m_delIds.clear();
@@ -141,6 +141,7 @@ bool MgCommandErase::touchMoved(const MgMotion* sender)
             m_delIds.push_back(shape->getID());
         }
     }
+    sender->view->shapes()->freeIterator(it);
     sender->view->redraw(false);
     
     return true;

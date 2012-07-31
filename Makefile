@@ -1,14 +1,11 @@
 # The simplest way to compile TouchVG on MinGW, Linux, Mac OS X is:
 #
 # 1. `cd' to the directory containing the file of 'Makefile'.
-# 2. Type `make all install' to compile C++ libraries.
-#    The program binaries files are outputed to './build'.
+# 2. Type `make and' compile the swig projects for Android.
+#    The program binaries files are outputed to './build/java'.
 # 
-# 3. Type `make java' to compile the swig projects for Java.
-#    The swig projects binaries files are outputed to './build/java'.
-# 
-# 4. You can remove the program object files from the source code
-#    directory by typing `make clean java.clean'.
+# 3. You can remove the program object files from the source code
+#    directory by typing `make java.clean'.
 #
 # Readme about variables: https://github.com/rhcad/x3py/wiki/MakeVars
 #
@@ -19,7 +16,7 @@ INSTALLDIRS     =$(addsuffix .install, $(SUBDIRS))
 SWIGS  =python perl5 java csharp ruby php lua r
 CLEANSWIGS =$(addsuffix .clean, $(SWIGS))
 
-.PHONY:     $(SUBDIRS) $(SWIGS) clean install touch android
+.PHONY:     $(SUBDIRS) $(SWIGS) clean install touch and
 all:        $(SUBDIRS)
 clean:      $(CLEANDIRS)
 install:    $(INSTALLDIRS)
@@ -42,5 +39,6 @@ $(CLEANSWIGS):
 touch:
 	@export touch=1; $(MAKE) clean
 
-android:
-	$(MAKE) all install java
+and:
+	@test -d build || mkdir build
+	@export SWIG_TYPE=java; $(MAKE) -C core/src/skiaview -f Makefile.swig swig

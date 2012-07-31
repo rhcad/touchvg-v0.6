@@ -19,8 +19,11 @@ struct MgShapes : public MgObject
     static UInt32 Type() { return 1; }
     
     virtual UInt32 getShapeCount() const = 0;
+
     virtual MgShape* getFirstShape(void*& it) const = 0;
     virtual MgShape* getNextShape(void*& it) const = 0;
+    virtual void freeIterator(void*& it) = 0;
+
     virtual MgShape* getLastShape() const = 0;
     virtual MgShape* findShape(UInt32 nID) const = 0;
     virtual MgShape* findShapeByTag(UInt32 tag) const = 0;

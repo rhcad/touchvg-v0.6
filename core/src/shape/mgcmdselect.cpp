@@ -597,7 +597,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
     
     if (m_cloneShapes.empty() && m_boxsel) {    // 没有选中图形时就滑动多选
         Box2d snap(sender->startPointM, sender->pointM);
-        void *it;
+        void *it = NULL;
         MgShape* shape = sender->view->shapes()->getFirstShape(it);
         
         m_selIds.clear();
@@ -609,6 +609,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
                 m_id = shape->getID();
             }
         }
+        sender->view->shapes()->freeIterator(it);
         sender->view->redraw(true);
     }
     
@@ -735,7 +736,7 @@ MgCommandSelect::kSelState MgCommandSelect::getSelectState(MgView* view)
 bool MgCommandSelect::selectAll(MgView* view)
 {
     size_t oldn = m_selIds.size();
-    void* it;
+    void* it = NULL;
     
     m_selIds.clear();
     m_handleIndex = 0;
@@ -747,6 +748,7 @@ bool MgCommandSelect::selectAll(MgView* view)
         m_selIds.push_back(shape->getID());
         m_id = shape->getID();
     }
+    view->shapes()->freeIterator(it);
     view->redraw(false);
 
     if (oldn != m_selIds.size() || !m_selIds.empty())

@@ -6,6 +6,8 @@ build
 *.aps
 *.o
 *.a
+*.d
+*_wrap.cxx
 *.tmp
 *~
 *.DS_Store
