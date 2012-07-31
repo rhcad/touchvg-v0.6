@@ -139,6 +139,7 @@ $(OBJDIR)%$(OBJEXT): %.cxx
 	$(DEPEND_CC) $@ $(INCLUDES) $<
 
 $(OBJDIR)%$(OBJEXT): %.cpp
+	-@test -d $(OBJDIR) || mkdir $(OBJDIR)
 	-@test -d $(OBJDIR)$(dir $<) || mkdir $(OBJDIR)$(dir $<)
 	$(CPP) $(CPPFLAGS) $(INCLUDES) -c $< $(OFLAG)$@
 

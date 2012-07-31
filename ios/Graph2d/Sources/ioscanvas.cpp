@@ -285,10 +285,10 @@ void GiCanvasIos::endPaint(bool draw)
                 CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
                 CGContextConcatCTM(context, af);    // 图像是朝上的，上下文坐标系朝下，上下颠倒显示
                 
-                CGInterpolationQuality oldQuality = CGContextGetInterpolationQuality(context);
+                CGInterpolationQuality old = CGContextGetInterpolationQuality(context);
                 CGContextSetInterpolationQuality(context, kCGInterpolationNone);
                 CGContextDrawImage(context, rect, image);
-                CGContextSetInterpolationQuality(context, oldQuality);
+                CGContextSetInterpolationQuality(context, old);
                 
                 CGContextConcatCTM(context, CGAffineTransformInvert(af));   // 恢复成坐标系朝下
                 CGImageRelease(image);
@@ -463,7 +463,8 @@ bool GiCanvasIos::drawImage(CGImageRef image, const Point2d& centerM, bool autoS
         }
         
         CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, 0, m_draw->height());
-        af = CGAffineTransformTranslate(af, ptD.x - w * 0.5f, m_draw->height() - (ptD.y + h * 0.5f));
+        af = CGAffineTransformTranslate(af, ptD.x - w * 0.5f, 
+                                        m_draw->height() - (ptD.y + h * 0.5f));
         
         CGContextConcatCTM(context, af);
         CGContextDrawImage(context, CGRectMake(0, 0, w, h), image);
