@@ -29,6 +29,10 @@ SWIG_PRE      =_
 else
 ifdef USE_CSHARP
 SWIG_PRE      =_
+else
+ifndef IS_WIN
+SWIG_PRE      =lib
+endif
 endif
 endif
 
@@ -112,6 +116,7 @@ SWIG_CC      += -outdir $(SWIG_OUTDIR)
 endif
 
 #------------------------------------------------
+
 TARGET              =$(SWIG_PRE)$(PROJNAME)$(SWIG_EXT)
 WRAPFILE            =$(PROJNAME)_$(SWIG_TYPE)_wrap
 OBJS               += $(OBJDIR)$(WRAPFILE)$(OBJEXT)

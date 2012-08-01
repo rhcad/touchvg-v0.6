@@ -41,7 +41,7 @@ void GiSkiaView::onsize(int width, int height)
 {
 }
 
-void GiSkiaView::ondraw(void* canvas)
+void GiSkiaView::ondraw(int canvas)
 {
 }
 

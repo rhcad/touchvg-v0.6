@@ -30,7 +30,7 @@ public:
 
     void setDpi(float dpi);
     void onsize(int width, int height);
-    void ondraw(void* canvas);
+    void ondraw(int canvas);
 
 private:
     GiTransform         m_xf;

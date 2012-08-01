@@ -45,7 +45,7 @@ struct MgStorage
     //! 给定字段名称，取出浮点数数组. 传入缓冲为空时返回所需个数
     virtual int readFloatArray(const char* name, float* values, int count) = 0;
     //! 给定字段名称，取出字符串内容，不含0结束符. 传入缓冲为空时返回所需个
-    virtual int readString(const char* name, wchar_t* value, int count) = 0;
+    virtual int readString(const char* name, char* value, int count) = 0;
     
     //! 添加一个给定节点名称的开始节点或结束节点
     /*! 一个节点会调用两次本函数。
@@ -76,7 +76,7 @@ struct MgStorage
     //! 添加一个给定字段名称的浮点数数组
     virtual void writeFloatArray(const char* name, const float* values, int count) = 0;
     //! 添加一个给定字段名称的字符串内容
-    virtual void writeString(const char* name, const wchar_t* value) = 0;
+    virtual void writeString(const char* name, const char* value) = 0;
 };
 
 #endif // SWIG
@@ -100,7 +100,7 @@ public:
         return name && defvalue; }
     virtual int readFloatArray(const char* name, float* values, int count) {
         return name && values && count; }
-    virtual int readString(const char* name, wchar_t* value, int count) {
+    virtual int readString(const char* name, char* value, int count) {
         return name && value && count; }
     virtual bool writeNode(const char* name, int index, bool ended) {
         return name && index && ended; }
@@ -112,7 +112,7 @@ public:
         name=name; value=value; }
     virtual void writeFloatArray(const char* name, const float* values, int count) {
         name=name; values=values; count=count; }
-    virtual void writeString(const char* name, const wchar_t* value) {
+    virtual void writeString(const char* name, const char* value) {
         name=name; value=value; }
     
 private:
