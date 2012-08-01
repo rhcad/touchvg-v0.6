@@ -44,8 +44,8 @@ endif
 
 #-------------------------------------------------------------------
 
-OS           ?=$(shell uname -s)
-IS_WIN       :=$(shell echo $(OS)|grep -i Windows)
+OS            =$(shell uname -s)
+IS_WIN       :=$(shell echo $(OS)|grep -i Windows)$(shell echo $(OS)|grep -i MINGW)
 IS_MACOSX    :=$(shell echo $(OS)|grep -i Darwin)
 
 IS_CONSOLE   :=$(shell echo $(APPTYPE)|grep -i console)

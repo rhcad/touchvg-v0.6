@@ -8,6 +8,7 @@ build
 *.a
 *.d
 *_wrap.cxx
+*_wrap.h
 *.tmp
 *~
 *.DS_Store

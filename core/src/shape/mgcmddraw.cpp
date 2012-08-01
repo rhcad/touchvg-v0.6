@@ -3,7 +3,6 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgcmddraw.h"
-#include <assert.h>
 
 UInt32      g_newShapeID = 0;
 
@@ -35,7 +34,8 @@ bool MgCommandDraw::_initialize(MgShape* (*creator)(), const MgMotion* sender)
     if (!m_shape)
     {
         m_shape = creator();
-        assert(m_shape && m_shape->shape());
+        if (!m_shape || !m_shape->shape())
+            return false;
         m_shape->setParent(sender->view->shapes(), 0);
     }
     g_newShapeID = 0;
