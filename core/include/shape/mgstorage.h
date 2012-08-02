@@ -105,15 +105,15 @@ public:
     virtual bool writeNode(const char* name, int index, bool ended) {
         return name && index && ended; }
     virtual void writeInt(const char* name, int value) {
-        name=name; value=value; }
+        if (name) value=0; }
     virtual void writeBool(const char* name, bool value) {
-        name=name; value=value; }
+        if (name) value=false; }
     virtual void writeFloat(const char* name, float value) {
-        name=name; value=value; }
+        if (name) value=0; }
     virtual void writeFloatArray(const char* name, const float* values, int count) {
-        name=name; values=values; count=count; }
+        if (name) values=NULL; count=0; }
     virtual void writeString(const char* name, const char* value) {
-        name=name; value=value; }
+        if (name) value=NULL; }
     
 private:
     virtual Int8  readInt8(const char* name, Int8 defvalue = 0) { return readInt(name, defvalue); }

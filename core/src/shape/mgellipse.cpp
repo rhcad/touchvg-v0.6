@@ -30,9 +30,9 @@ float MgEllipse::getRadiusY() const
 void MgEllipse::setRadius(float rx, float ry)
 {
     rx = fabs(rx);
-    rx = fabs(ry);
-    if (rx < _MGZERO)
-        rx = rx;
+    ry = fabs(ry);
+    if (ry < _MGZERO)
+        ry = rx;
 
     setRect(Box2d(getCenter(), rx * 2, ry * 2), getAngle());
 }

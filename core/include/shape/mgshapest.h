@@ -29,7 +29,7 @@ public:
     {
     }
 
-    ~MgShapesT()
+    virtual ~MgShapesT()
     {
         clear();
         delete _context;

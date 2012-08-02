@@ -109,6 +109,9 @@ SWIG_CC       ="$(SWIG_BIN)swig" -c++ -$(SWIG_TYPE)
 ifdef USE_CSHARP
 SWIG_CC      += -namespace $(PKGNAME).$(PROJNAME) -dllimport _$(PROJNAME)
 endif
+ifdef USE_JAVA
+SWIG_CC      += -package $(PKGNAME).$(PROJNAME)
+endif
 ifdef SWIGTMP
 SWIG_CC      += -outdir $(SWIGTMP)
 else
