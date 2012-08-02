@@ -1,5 +1,5 @@
 ROOTDIR  =../../..
-PKGNAME  =vg
+PKGNAME  =core
 PROJNAME =skiaview
 
 INCLUDES += -I$(ROOTDIR)/core/include/geom \

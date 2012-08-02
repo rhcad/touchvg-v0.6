@@ -1,11 +1,12 @@
 ROOTDIR  =../../..
-PKGNAME  =vg
+PKGNAME  =core
 PROJNAME =graph
 
 INCLUDES += -I$(ROOTDIR)/core/include/geom \
             -I$(ROOTDIR)/core/include/graph
 
-LIBS     += $(LIBFLAG)geom$(LIBEND)
+SOURCES   =$(wildcard *.cpp) \
+           $(wildcard ../geom/*.cpp)
 
 include $(ROOTDIR)/core/mk/config.mk
 include $(ROOTDIR)/core/mk/Makefile.swig

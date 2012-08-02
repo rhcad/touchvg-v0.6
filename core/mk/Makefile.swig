@@ -105,15 +105,23 @@ else
 SWIG_OUTDIR  ?=$(SWIG_TESTDIR)
 endif
 
+PRODUCTNS    ?=touchvg
+
 SWIG_CC       ="$(SWIG_BIN)swig" -c++ -$(SWIG_TYPE)
 ifdef USE_CSHARP
-SWIG_CC      += -namespace $(PKGNAME).$(PROJNAME) -dllimport _$(PROJNAME)
+SWIG_CC      += -namespace $(PRODUCTNS).$(PKGNAME).$(PROJNAME) -dllimport _$(PROJNAME)
 endif
 ifdef USE_JAVA
-SWIG_CC      += -package $(PKGNAME).$(PROJNAME)
+SWIG_CC      += -package $(PRODUCTNS).$(PKGNAME).$(PROJNAME)
 endif
+
 ifdef SWIGTMP
+ifdef USE_JAVA
+JAVATMPDIR    =$(SWIGTMP)/$(PRODUCTNS)/$(PKGNAME)/$(PROJNAME)
+SWIG_CC      += -outdir $(JAVATMPDIR)
+else
 SWIG_CC      += -outdir $(SWIGTMP)
+endif
 else
 SWIG_CC      += -outdir $(SWIG_OUTDIR)
 endif
@@ -163,6 +171,16 @@ $(WRAPFILE).cxx: $(PROJNAME).i
 	-@test -d $(SWIG_OUTDIR) || mkdir $(SWIG_OUTDIR)
 ifdef SWIGTMP
 	-@test -d $(SWIGTMP) || mkdir $(SWIGTMP); rm -rf $(SWIGTMP)/*.*
+ifdef USE_JAVA
+	-@test -d $(SWIGTMP)/$(PRODUCTNS) || mkdir $(SWIGTMP)/$(PRODUCTNS)
+	-@test -d $(SWIGTMP)/$(PRODUCTNS)/$(PKGNAME) \
+        || mkdir $(SWIGTMP)/$(PRODUCTNS)/$(PKGNAME)
+	-@test -d $(SWIGTMP)/$(PRODUCTNS)/$(PKGNAME)/$(PROJNAME) \
+        || mkdir $(SWIGTMP)/$(PRODUCTNS)/$(PKGNAME)/$(PROJNAME)
+	-@rm -rf $(JAVATMPDIR)/*.*
+else
+	-@test -d $(SWIGTMP) || mkdir $(SWIGTMP); rm -rf $(SWIGTMP)/*.*
+endif
 endif
 	$(SWIG_CC) -o $(WRAPFILE).cxx $(INCLUDES) $<
 ifdef USE_PYTHON
@@ -176,8 +194,8 @@ ifdef SWIGTMP
 	@test -d $(SWIGTMP) || (rm -rf $(WRAPFILE).cxx; $(MAKE) $(WRAPFILE).cxx)
 endif
 ifdef USE_JAVA
-	@cd $(SWIGTMP); "$(JAVA_BIN)javac" *.java; \
-	    "$(JAVA_BIN)jar" cfM $(WRAPTARGET) *.class; \
+	@cd $(JAVATMPDIR); "$(JAVA_BIN)javac" *.java;
+	@cd $(SWIGTMP); "$(JAVA_BIN)jar" cfM $(WRAPTARGET) $(PRODUCTNS)/$(PKGNAME)/$(PROJNAME)/*.class; \
 	    cp -v $(WRAPTARGET) ../$(SWIG_OUTDIR)
 endif
 ifdef USE_CSHARP
