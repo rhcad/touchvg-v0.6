@@ -8,8 +8,6 @@
 
 #include <mgtype.h>
 
-#ifndef SWIG
-
 //! 图形存取接口
 /*! \ingroup GEOM_SHAPE
     \interface MgStorage
@@ -25,18 +23,28 @@ struct MgStorage
     */
     virtual bool readNode(const char* name, int index, bool ended) = 0;
     
+    //! 给定字段名称，取出一个整数
+    virtual int readInt(const char* name, int defvalue = 0) = 0;
+    
     //! 给定字段名称，取出一个单字节整数
-    virtual Int8  readInt8(const char* name, Int8 defvalue = 0) = 0;
+    virtual Int8  readInt8(const char* name, Int8 defvalue = 0) {
+        return readInt(name, defvalue); }
     //! 给定字段名称，取出一个双字节整数
-    virtual Int16 readInt16(const char* name, Int16 defvalue = 0) = 0;
+    virtual Int16 readInt16(const char* name, Int16 defvalue = 0) {
+        return readInt(name, defvalue); }
     //! 给定字段名称，取出一个长整数
-    virtual Int32 readInt32(const char* name, Int32 defvalue = 0) = 0;
+    virtual Int32 readInt32(const char* name, Int32 defvalue = 0) {
+        return readInt(name, defvalue); }
     //! 给定字段名称，取出一个单字节整数
-    virtual UInt8  readUInt8(const char* name, UInt8 defvalue = 0) = 0;
+    virtual UInt8  readUInt8(const char* name, UInt8 defvalue = 0) {
+        return readInt(name, defvalue); }
     //! 给定字段名称，取出一个双字节整数
-    virtual UInt16 readUInt16(const char* name, UInt16 defvalue = 0) = 0;
+    virtual UInt16 readUInt16(const char* name, UInt16 defvalue = 0) {
+        return readInt(name, defvalue); }
     //! 给定字段名称，取出一个长整数
-    virtual UInt32 readUInt32(const char* name, UInt32 defvalue = 0) = 0;
+    virtual UInt32 readUInt32(const char* name, UInt32 defvalue = 0) {
+        return readInt(name, defvalue); }
+    
     //! 给定字段名称，取出一个布尔值
     virtual bool readBool(const char* name, bool defvalue) = 0;
     //! 给定字段名称，取出一个浮点数
@@ -57,17 +65,21 @@ struct MgStorage
     virtual bool writeNode(const char* name, int index, bool ended) = 0;
     
     //! 添加一个给定字段名称的单字节整数
-    virtual void writeInt8(const char* name, Int8 value) = 0;
-    //! 添加一个给定字段名称的双字节整数
-    virtual void writeInt16(const char* name, Int16 value) = 0;
-    //! 添加一个给定字段名称的长整数
-    virtual void writeInt32(const char* name, Int32 value) = 0;
+    virtual void writeInt(const char* name, int value) = 0;
+    
     //! 添加一个给定字段名称的单字节整数
-    virtual void writeUInt8(const char* name, UInt8 value) = 0;
+    virtual void writeInt8(const char* name, Int8 value) { writeInt(name, value); }
     //! 添加一个给定字段名称的双字节整数
-    virtual void writeUInt16(const char* name, UInt16 value) = 0;
+    virtual void writeInt16(const char* name, Int16 value) { writeInt(name, value); }
     //! 添加一个给定字段名称的长整数
-    virtual void writeUInt32(const char* name, UInt32 value) = 0;
+    virtual void writeInt32(const char* name, Int32 value) { writeInt(name, value); }
+    //! 添加一个给定字段名称的单字节整数
+    virtual void writeUInt8(const char* name, UInt8 value) { writeInt(name, value); }
+    //! 添加一个给定字段名称的双字节整数
+    virtual void writeUInt16(const char* name, UInt16 value) { writeInt(name, value); }
+    //! 添加一个给定字段名称的长整数
+    virtual void writeUInt32(const char* name, UInt32 value) { writeInt(name, value); }
+    
     //! 添加一个给定字段名称的布尔值
     virtual void writeBool(const char* name, bool value) = 0;
     //! 添加一个给定字段名称的浮点数
@@ -78,8 +90,6 @@ struct MgStorage
     //! 添加一个给定字段名称的字符串内容
     virtual void writeString(const char* name, const char* value) = 0;
 };
-
-#endif // SWIG
 
 //! 序列化基类
 /*! \ingroup GEOM_SHAPE
@@ -92,42 +102,21 @@ public:
     
     virtual bool readNode(const char* name, int index, bool ended) {
         return name && index && ended; }
-    virtual int readInt(const char* name, int defvalue = 0) {
-        return name && defvalue; }
-    virtual bool readBool(const char* name, bool defvalue) {
-        return name && defvalue; }
-    virtual float readFloat(const char* name, float defvalue = 0) {
-        return name && defvalue; }
+    virtual int readInt(const char* name, int defvalue = 0) { return name && defvalue; }
+    virtual bool readBool(const char* name, bool defvalue) { return name && defvalue; }
+    virtual float readFloat(const char* name, float defvalue = 0) { return name && defvalue; }
     virtual int readFloatArray(const char* name, float* values, int count) {
         return name && values && count; }
     virtual int readString(const char* name, char* value, int count) {
         return name && value && count; }
     virtual bool writeNode(const char* name, int index, bool ended) {
         return name && index && ended; }
-    virtual void writeInt(const char* name, int value) {
-        if (name) value=0; }
-    virtual void writeBool(const char* name, bool value) {
-        if (name) value=false; }
-    virtual void writeFloat(const char* name, float value) {
-        if (name) value=0; }
+    virtual void writeInt(const char* name, int value) { if (name) value=0; }
+    virtual void writeBool(const char* name, bool value) { if (name) value=false; }
+    virtual void writeFloat(const char* name, float value) { if (name) value=0; }
     virtual void writeFloatArray(const char* name, const float* values, int count) {
         if (name) values=NULL; count=0; }
-    virtual void writeString(const char* name, const char* value) {
-        if (name) value=NULL; }
-    
-private:
-    virtual Int8  readInt8(const char* name, Int8 defvalue = 0) { return readInt(name, defvalue); }
-    virtual Int16 readInt16(const char* name, Int16 defvalue = 0) { return readInt(name, defvalue); }
-    virtual Int32 readInt32(const char* name, Int32 defvalue = 0) { return readInt(name, defvalue); }
-    virtual UInt8  readUInt8(const char* name, UInt8 defvalue = 0) { return readInt(name, defvalue); }
-    virtual UInt16 readUInt16(const char* name, UInt16 defvalue = 0) { return readInt(name, defvalue); }
-    virtual UInt32 readUInt32(const char* name, UInt32 defvalue = 0) { return readInt(name, defvalue); }
-    virtual void writeInt8(const char* name, Int8 value) { writeInt(name, value); }
-    virtual void writeInt16(const char* name, Int16 value) { writeInt(name, value); }
-    virtual void writeInt32(const char* name, Int32 value) { writeInt(name, value); }
-    virtual void writeUInt8(const char* name, UInt8 value) { writeInt(name, value); }
-    virtual void writeUInt16(const char* name, UInt16 value) { writeInt(name, value); }
-    virtual void writeUInt32(const char* name, UInt32 value) { writeInt(name, value); }
+    virtual void writeString(const char* name, const char* value) { if (name) value=NULL; }
 };
 
 #endif // __GEOMETRY_MGSTORAGE_H_

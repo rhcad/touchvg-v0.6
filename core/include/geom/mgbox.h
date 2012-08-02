@@ -584,13 +584,6 @@ public:
         return set(xmin - box.xmin, ymin - box.ymin, 
             xmax - box.xmax, ymax - box.ymax);
     }
-
-    //! 正向平移矩形框
-    Box2d offset(const Vector2d& vec) const
-    {
-        return Box2d(xmin + vec.x, ymin + vec.y, 
-            xmax + vec.x, ymax + vec.y);
-    }
     
     //! 正向平移矩形框
     Box2d operator+(const Vector2d& vec) const
