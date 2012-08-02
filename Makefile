@@ -1,7 +1,8 @@
-# The simplest way to compile TouchVG on MinGW, Linux, Mac OS X is:
+# The simplest way to compile TouchVG on MinGW, Cygwin, Linux or Mac OS X is:
 #
 # 1. `cd' to the directory containing the file of 'Makefile'.
-# 2. Type `make and' compile the swig projects for Android.
+#
+# 2. Type `make android' to compile the swig projects for Android.
 #    The program binaries files are outputed to './build/java'.
 # 
 # 3. You can remove the program object files from the source code
@@ -16,7 +17,7 @@ INSTALLDIRS     =$(addsuffix .install, $(SUBDIRS))
 SWIGS  =python perl5 java csharp ruby php lua r
 CLEANSWIGS =$(addsuffix .clean, $(SWIGS))
 
-.PHONY:     $(SUBDIRS) $(SWIGS) clean install touch and
+.PHONY:     $(SUBDIRS) $(SWIGS) clean install touch android
 all:        $(SUBDIRS)
 clean:      $(CLEANDIRS)
 install:    $(INSTALLDIRS)
@@ -39,6 +40,6 @@ $(CLEANSWIGS):
 touch:
 	@export touch=1; $(MAKE) clean
 
-and:
+android:
 	@test -d build || mkdir build
 	@export SWIG_TYPE=java; $(MAKE) -C core/src/skiaview -f Makefile.swig swig
