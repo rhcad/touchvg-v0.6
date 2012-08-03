@@ -28,19 +28,19 @@ struct MgStorage
     
     //! 给定字段名称，取出一个单字节整数
     virtual Int8  readInt8(const char* name, Int8 defvalue = 0) {
-        return readInt(name, defvalue); }
+        return (Int8)readInt(name, defvalue); }
     //! 给定字段名称，取出一个双字节整数
     virtual Int16 readInt16(const char* name, Int16 defvalue = 0) {
-        return readInt(name, defvalue); }
+        return (Int16)readInt(name, defvalue); }
     //! 给定字段名称，取出一个长整数
     virtual Int32 readInt32(const char* name, Int32 defvalue = 0) {
         return readInt(name, defvalue); }
     //! 给定字段名称，取出一个单字节整数
     virtual UInt8  readUInt8(const char* name, UInt8 defvalue = 0) {
-        return readInt(name, defvalue); }
+        return (UInt8)readInt(name, defvalue); }
     //! 给定字段名称，取出一个双字节整数
     virtual UInt16 readUInt16(const char* name, UInt16 defvalue = 0) {
-        return readInt(name, defvalue); }
+        return (UInt16)readInt(name, defvalue); }
     //! 给定字段名称，取出一个长整数
     virtual UInt32 readUInt32(const char* name, UInt32 defvalue = 0) {
         return readInt(name, defvalue); }

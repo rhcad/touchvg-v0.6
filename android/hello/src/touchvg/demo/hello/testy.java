@@ -14,8 +14,10 @@ public class testy extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        GiSkiaView g = new GiSkiaView();
-        g.setDpi(11);
-        g.delete();
+        GiSkiaView v = new GiSkiaView();
+        float dpi = 120;
+        v.setDpi(dpi);
+        dpi = v.getDpi();
+        v.delete();
     }
 }

@@ -28,9 +28,13 @@ public:
     //! 加载图形列表
     bool loadShapes(MgStorageBase* s);
 
+    float getDpi() const;
+    int getWidth() const;
+    int getHeight() const;
+
     void setDpi(float dpi);
-    void onsize(int width, int height);
-    void ondraw(int canvas);
+    void onSize(int width, int height);
+    bool onDraw(int canvas);
 
 private:
     GiTransform         m_xf;

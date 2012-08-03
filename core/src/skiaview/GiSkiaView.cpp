@@ -35,13 +35,30 @@ bool GiSkiaView::loadShapes(MgStorageBase* s)
 
 void GiSkiaView::setDpi(float dpi)
 {
+    m_xf.setResolution(dpi);
 }
 
-void GiSkiaView::onsize(int width, int height)
+float GiSkiaView::getDpi() const
 {
+    return m_xf.getDpiY();
 }
 
-void GiSkiaView::ondraw(int canvas)
+int GiSkiaView::getWidth() const
 {
+    return m_xf.getWidth();
 }
 
+int GiSkiaView::getHeight() const
+{
+    return m_xf.getHeight();
+}
+
+void GiSkiaView::onSize(int width, int height)
+{
+    m_xf.setWndSize(width, height);
+}
+
+bool GiSkiaView::onDraw(int canvas)
+{
+    return !!canvas;
+}

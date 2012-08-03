@@ -4,6 +4,7 @@ build
 *.suo
 *.user
 *.aps
+*.obj
 *.o
 *.a
 *.d

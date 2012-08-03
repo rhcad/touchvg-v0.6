@@ -590,6 +590,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
         }
         else {
             shape->offset(pointM - sender->startPointM, m_segment);
+            sender->view->shapeMoved(m_cloneShapes[i], m_segment);
         }
         shape->update();
         sender->view->redraw(m_cloneShapes.size() < 2);
