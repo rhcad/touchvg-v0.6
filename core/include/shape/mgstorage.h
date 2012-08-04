@@ -23,9 +23,6 @@ struct MgStorage
     */
     virtual bool readNode(const char* name, int index, bool ended) = 0;
     
-    //! 给定字段名称，取出一个整数
-    virtual int readInt(const char* name, int defvalue = 0) = 0;
-    
     //! 给定字段名称，取出一个单字节整数
     virtual Int8  readInt8(const char* name, Int8 defvalue = 0) {
         return (Int8)readInt(name, defvalue); }
@@ -65,9 +62,6 @@ struct MgStorage
     virtual bool writeNode(const char* name, int index, bool ended) = 0;
     
     //! 添加一个给定字段名称的单字节整数
-    virtual void writeInt(const char* name, int value) = 0;
-    
-    //! 添加一个给定字段名称的单字节整数
     virtual void writeInt8(const char* name, Int8 value) { writeInt(name, value); }
     //! 添加一个给定字段名称的双字节整数
     virtual void writeInt16(const char* name, Int16 value) { writeInt(name, value); }
@@ -89,6 +83,12 @@ struct MgStorage
     virtual void writeFloatArray(const char* name, const float* values, int count) = 0;
     //! 添加一个给定字段名称的字符串内容
     virtual void writeString(const char* name, const char* value) = 0;
+
+protected:
+    //! 给定字段名称，取出一个整数
+    virtual int readInt(const char* name, int defvalue = 0) = 0;
+    //! 添加一个给定字段名称的单字节整数
+    virtual void writeInt(const char* name, int value) = 0;
 };
 
 //! 序列化基类
