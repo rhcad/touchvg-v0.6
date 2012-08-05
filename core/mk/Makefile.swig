@@ -136,10 +136,11 @@ REMOTE_WRAPTARGET   =$(SWIG_OUTDIR)/$(WRAPTARGET)
 REMOTE_TESTFILE    :=$(SWIG_TESTDIR)/$(TESTFILE)
 HASTESTFILE         =(test -e $(TESTFILE))
 
-.PHONY: swig clean $(TESTFILE)
+.PHONY: swig clean swigonly $(TESTFILE)
 
 all:
 swig: $(REMOTE_TARGET) $(REMOTE_WRAPTARGET) $(REMOTE_TESTFILE)
+swigonly: $(REMOTE_WRAPTARGET)
 
 $(REMOTE_TARGET): $(OBJS)
 	-@test -d $(SWIG_TESTDIR) || mkdir -v $(SWIG_TESTDIR)
@@ -230,6 +231,6 @@ endif
 else
 	@rm -rfv *.d $(WRAPFILE)*  ._$(SWIG_TYPE)*
 ifdef cleanall
-	@rm -rfv $(REMOTE_TARGET) $(REMOTE_WRAPTARGET) $(REMOTE_TESTFILE)
+	@rm -rfv *.cc $(REMOTE_TARGET) $(REMOTE_WRAPTARGET) $(REMOTE_TESTFILE)
 endif
 endif
