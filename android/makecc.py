@@ -3,7 +3,7 @@
 # Run "python makecc.py" to replace the source files' extension.
 #
 
-import os
+import os,shutil
 
 def makecc(dir, extold, extnew):
     for fn in os.listdir(dir):
@@ -13,7 +13,7 @@ def makecc(dir, extold, extnew):
             continue
         if extold in fn:
             newfile = sfile.replace(extold, extnew)
-            open(newfile, 'wb').write(open(sfile, 'rb').read())
+            shutil.copy(sfile, sfile.replace(extold, extnew))
 
 if __name__=="__main__":
     makecc(os.path.abspath('../core'), '.cpp', '.cc')
