@@ -14,7 +14,6 @@ def makecc(dir, extold, extnew):
         if extold in fn:
             newfile = sfile.replace(extold, extnew)
             open(newfile, 'wb').write(open(sfile, 'rb').read())
-            print(newfile)
 
 if __name__=="__main__":
     makecc(os.path.abspath('../core'), '.cpp', '.cc')

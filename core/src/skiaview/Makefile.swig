@@ -1,11 +1,12 @@
 ROOTDIR  =../../..
-PKGNAME  =core
+PKGNAME  =touchvg
 PROJNAME =skiaview
 
 INCLUDES += -I$(ROOTDIR)/core/include/geom \
             -I$(ROOTDIR)/core/include/graph \
             -I$(ROOTDIR)/core/include/shape \
-            -I$(ROOTDIR)/core/include/skiaview
+            -I$(ROOTDIR)/core/include/skiaview \
+            -I$(ROOTDIR)/core/src/skiaview
 
 SOURCES   =$(wildcard *.cpp) \
            $(wildcard ../geom/*.cpp) \

@@ -1,5 +1,5 @@
 ROOTDIR  =../../..
-PKGNAME  =core
+PKGNAME  =touchvg
 PROJNAME =graph
 
 INCLUDES += -I$(ROOTDIR)/core/include/geom \

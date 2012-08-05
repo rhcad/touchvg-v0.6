@@ -2,7 +2,8 @@
 # x3py framework: https://github.com/rhcad/x3py
 
 SOURCES ?=$(wildcard *.cpp)
-OBJDIR   =._$(SWIG_TYPE)o/
+OBJDIR0  =._$(SWIG_TYPE)o/
+OBJDIR   =._$(SWIG_TYPE)o/o/
 OBJS     =$(addprefix $(OBJDIR), $(SOURCES:.cpp=$(OBJEXT)))
 
 # SWIG_TYPE == ?
@@ -105,19 +106,17 @@ else
 SWIG_OUTDIR  ?=$(SWIG_TESTDIR)
 endif
 
-PRODUCTNS    ?=touchvg
-
 SWIG_CC       ="$(SWIG_BIN)swig" -c++ -$(SWIG_TYPE)
 ifdef USE_CSHARP
-SWIG_CC      += -namespace $(PRODUCTNS).$(PKGNAME).$(PROJNAME) -dllimport _$(PROJNAME)
+SWIG_CC      += -namespace $(PKGNAME).$(PROJNAME) -dllimport _$(PROJNAME)
 endif
 ifdef USE_JAVA
-SWIG_CC      += -package $(PRODUCTNS).$(PKGNAME).$(PROJNAME)
+SWIG_CC      += -package $(PKGNAME).$(PROJNAME)
 endif
 
 ifdef SWIGTMP
 ifdef USE_JAVA
-JAVATMPDIR    =$(SWIGTMP)/$(PRODUCTNS)/$(PKGNAME)/$(PROJNAME)
+JAVATMPDIR    =$(SWIGTMP)/$(PKGNAME)/$(PROJNAME)
 SWIG_CC      += -outdir $(JAVATMPDIR)
 else
 SWIG_CC      += -outdir $(SWIGTMP)
@@ -143,43 +142,41 @@ all:
 swig: $(REMOTE_TARGET) $(REMOTE_WRAPTARGET) $(REMOTE_TESTFILE)
 
 $(REMOTE_TARGET): $(OBJS)
-	-@test -d $(SWIG_TESTDIR) || mkdir $(SWIG_TESTDIR)
-	-@test -d $(SWIG_OUTDIR) || mkdir $(SWIG_OUTDIR)
+	-@test -d $(SWIG_TESTDIR) || mkdir -v $(SWIG_TESTDIR)
+	-@test -d $(SWIG_OUTDIR) || mkdir -v $(SWIG_OUTDIR)
 	$(LINK) $(LDFLAGS) $(OUTFLAG)$@ $(OBJS) $(LIBS)
 
 $(OBJDIR)%$(OBJEXT): %.cxx
-	-@test -d $(OBJDIR) || mkdir $(OBJDIR)
+	-@test -d $(OBJDIR) || mkdir -v $(OBJDIR)
 	$(CPP) $(subst -Wall ,,$(subst -W4 ,,$(CPPFLAGS))) $(INCLUDES) -c $< $(OFLAG)$@
 
-%.d: %.cpp
-	$(DEPEND_CC) $@ $(INCLUDES) $<
+$(OBJDIR)%.d: %.cpp
+	-@test -d $(OBJDIR0) || mkdir -v $(OBJDIR0)
+	-@test -d $(OBJDIR)$(dir $<) || mkdir -v $(OBJDIR)$(dir $<)
+	@echo Making $@ from $<; $(DEPEND_CC) $@ $(INCLUDES) $<
 
 $(OBJDIR)%$(OBJEXT): %.cpp
-	-@test -d $(OBJDIR) || mkdir $(OBJDIR)
-	-@test -d $(OBJDIR)$(dir $<) || mkdir $(OBJDIR)$(dir $<)
 	$(CPP) $(CPPFLAGS) $(INCLUDES) -c $< $(OFLAG)$@
 
 ifndef clean
-include $(SOURCES:.cpp=.d)
+include $(addprefix $(OBJDIR), $(SOURCES:.cpp=.d))
 endif
 
 #------------------------------------------------
 
 $(WRAPFILE).cxx: $(PROJNAME).i
 	@echo --Making $(SWIG_TYPE) project $(PROJNAME)...
-	-@test -d $(SWIG_TESTDIR) || mkdir $(SWIG_TESTDIR)
-	-@test -d $(SWIG_OUTDIR) || mkdir $(SWIG_OUTDIR)
+	-@test -d $(SWIG_TESTDIR) || mkdir -v $(SWIG_TESTDIR)
+	-@test -d $(SWIG_OUTDIR) || mkdir -v $(SWIG_OUTDIR)
 ifdef SWIGTMP
-	-@test -d $(SWIGTMP) || mkdir $(SWIGTMP); rm -rf $(SWIGTMP)/*.*
+	-@test -d $(SWIGTMP) || mkdir -v $(SWIGTMP); rm -rf $(SWIGTMP)/*.*
 ifdef USE_JAVA
-	-@test -d $(SWIGTMP)/$(PRODUCTNS) || mkdir $(SWIGTMP)/$(PRODUCTNS)
-	-@test -d $(SWIGTMP)/$(PRODUCTNS)/$(PKGNAME) \
-        || mkdir $(SWIGTMP)/$(PRODUCTNS)/$(PKGNAME)
-	-@test -d $(SWIGTMP)/$(PRODUCTNS)/$(PKGNAME)/$(PROJNAME) \
-        || mkdir $(SWIGTMP)/$(PRODUCTNS)/$(PKGNAME)/$(PROJNAME)
+	-@test -d $(SWIGTMP)/$(PKGNAME) || mkdir $(SWIGTMP)/$(PKGNAME)
+	-@test -d $(SWIGTMP)/$(PKGNAME)/$(PROJNAME) \
+        || mkdir -v $(SWIGTMP)/$(PKGNAME)/$(PROJNAME)
 	-@rm -rf $(JAVATMPDIR)/*.*
 else
-	-@test -d $(SWIGTMP) || mkdir $(SWIGTMP); rm -rf $(SWIGTMP)/*.*
+	-@test -d $(SWIGTMP) || mkdir -v $(SWIGTMP); rm -rf $(SWIGTMP)/*.*
 endif
 endif
 	$(SWIG_CC) -o $(WRAPFILE).cxx $(INCLUDES) $<
@@ -195,7 +192,7 @@ ifdef SWIGTMP
 endif
 ifdef USE_JAVA
 	@cd $(JAVATMPDIR); "$(JAVA_BIN)javac" *.java;
-	@cd $(SWIGTMP); "$(JAVA_BIN)jar" cfM $(WRAPTARGET) $(PRODUCTNS)/$(PKGNAME)/$(PROJNAME)/*.class; \
+	@cd $(SWIGTMP); "$(JAVA_BIN)jar" cfv $(WRAPTARGET) $(PKGNAME)/$(PROJNAME)/*.class; \
 	    cp -v $(WRAPTARGET) ../$(SWIG_OUTDIR)
 endif
 ifdef USE_CSHARP
@@ -226,13 +223,13 @@ endif #SWIG_TESTEXT
 
 clean:
 ifndef SWIG_TYPE
-	rm -rf *.d *$(OBJEXT)  *_wrap.*  ._*
+	@rm -rfv *.d *$(OBJEXT)  *_wrap.*  ._*
 ifdef touch
-	touch -c *
+	@touch -c *
 endif
 else
-	rm -rf *.d $(WRAPFILE)*  ._$(SWIG_TYPE)*
+	@rm -rfv *.d $(WRAPFILE)*  ._$(SWIG_TYPE)*
 ifdef cleanall
-	rm -rf $(REMOTE_TARGET) $(REMOTE_WRAPTARGET) $(REMOTE_TESTFILE)
+	@rm -rfv $(REMOTE_TARGET) $(REMOTE_WRAPTARGET) $(REMOTE_TESTFILE)
 endif
 endif

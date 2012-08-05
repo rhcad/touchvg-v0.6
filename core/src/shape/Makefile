@@ -13,9 +13,9 @@ $(TARGET):  $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
 clean:
-	rm -rf *.o *.a
+	@rm -rfv *.o *.a
 ifdef touch
-	touch -c *
+	@touch -c *
 endif
 
 install:

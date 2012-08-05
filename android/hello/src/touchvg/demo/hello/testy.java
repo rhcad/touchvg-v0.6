@@ -1,6 +1,6 @@
 package touchvg.demo.hello;
 
-import touchvg.core.skiaview.GiSkiaView;
+import touchvg.skiaview.GiSkiaView;
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -15,9 +15,7 @@ public class testy extends Activity {
         setContentView(R.layout.main);
         
         GiSkiaView v = new GiSkiaView();
-        float dpi = 120;
-        v.setDpi(dpi);
-        dpi = v.getDpi();
+        v.onSize(100, 200);
         v.delete();
     }
 }

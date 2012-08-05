@@ -6,17 +6,16 @@ INSTALL_DIR ?=$(ROOTDIR)/build
 
 CPPFLAGS    += -Wall -I$(ROOTDIR)/core/include/geom \
                -I$(ROOTDIR)/core/include/graph \
-               -I$(ROOTDIR)/core/include/shape \
-               -I$(ROOTDIR)/core/include/skiaview
+               -I$(ROOTDIR)/core/include/shape
 
 all:        $(TARGET)
 $(TARGET):  $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
 clean:
-	rm -rf *.o *.a
+	@rm -rfv *.o *.a
 ifdef touch
-	touch -c *
+	@touch -c *
 endif
 
 install:
