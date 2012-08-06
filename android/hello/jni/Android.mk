@@ -45,4 +45,5 @@ LOCAL_SRC_FILES := $(VCORE_PATH)/src/skiaview/skiaview_java_wrap.cc \
 				   $(VCORE_PATH)/src/geom/mgnearbz.cc \
 				   $(VCORE_PATH)/src/geom/mgvec.cc
 
+LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
 include $(BUILD_SHARED_LIBRARY)

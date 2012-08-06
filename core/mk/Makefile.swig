@@ -154,7 +154,7 @@ $(OBJDIR)%$(OBJEXT): %.cxx
 $(OBJDIR)%.d: %.cpp
 	-@test -d $(OBJDIR0) || mkdir -v $(OBJDIR0)
 	-@test -d $(OBJDIR)$(dir $<) || mkdir -v $(OBJDIR)$(dir $<)
-	@echo Making $@ from $<; $(DEPEND_CC) $@ $(INCLUDES) $<
+	@echo Generating $@ from $<; $(DEPEND_CC) $@ $(INCLUDES) $<
 
 $(OBJDIR)%$(OBJEXT): %.cpp
 	$(CPP) $(CPPFLAGS) $(INCLUDES) -c $< $(OFLAG)$@
@@ -229,7 +229,7 @@ ifdef touch
 	@touch -c *
 endif
 else
-	@rm -rfv *.d $(WRAPFILE)*  ._$(SWIG_TYPE)*
+	@rm -rfv *.d $(WRAPFILE).cxx $(WRAPFILE).h  ._$(SWIG_TYPE)*
 ifdef cleanall
 	@rm -rfv *.cc $(REMOTE_TARGET) $(REMOTE_WRAPTARGET) $(REMOTE_TESTFILE)
 endif

@@ -16,6 +16,7 @@ public class testy extends Activity {
         
         GiSkiaView v = new GiSkiaView();
         v.onSize(100, 200);
+        System.out.println(v.getWidth());
         v.delete();
     }
 }

@@ -4,10 +4,6 @@
 #include <mgstorage.h>
 %}
 
-%include ../geom/geom.i
-%include ../graph/graph.i
-%include ../shape/shape.i
-
 %include "GiSkiaView.h"
 
 %include <mgstorage.h>
