@@ -1,5 +1,5 @@
 //! \file GiSkiaView.h
-//! \brief 瀹氫箟鏀寔Android骞冲彴鐨勫浘褰㈣鍥剧被 GiSkiaView
+//! \brief 定义支持Android平台的图形视图类 GiSkiaView
 // Copyright (c) 2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchvg
 
@@ -7,13 +7,14 @@
 #define __TOUCHVG_SKIAVIEW_H_
 
 #include <gigraph.h>
+#include <jni.h>
 
 class GiSkiaCanvas;
 class GiCmdController;
 class MgStorageBase;
 struct MgShapes;
 
-//! 鏀寔Android骞冲彴鐨勫浘褰㈣鍥剧被
+//! 支持Android平台的图形视图类
 /*! \ingroup GRAPH_SKIA
 */
 class GiSkiaView
@@ -22,19 +23,17 @@ public:
     GiSkiaView();
     virtual ~GiSkiaView();
     
-    //! 淇濆瓨鍥惧舰鍒楄〃
+    //! 保存图形列表
     bool saveShapes(MgStorageBase* s);
     
-    //! 鍔犺浇鍥惧舰鍒楄〃
+    //! 加载图形列表
     bool loadShapes(MgStorageBase* s);
 
-    float getDpi() const;
     int getWidth() const;
     int getHeight() const;
 
-    void setDpi(float dpi);
     void onSize(int width, int height);
-    bool onDraw(int canvas);
+    bool onDraw(jobject canvas);
 
 private:
     GiTransform         m_xf;

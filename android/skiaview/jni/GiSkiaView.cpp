@@ -7,6 +7,7 @@
 #include "GiCmdController.h"
 #include <mgshapest.h>
 #include <list>
+//#include <GraphicsJNI.h>
 
 GiSkiaView::GiSkiaView() : m_gs(&m_xf)
 {
@@ -33,16 +34,6 @@ bool GiSkiaView::loadShapes(MgStorageBase* s)
     return s && m_shapes && m_shapes->load(s);
 }
 
-void GiSkiaView::setDpi(float dpi)
-{
-    m_xf.setResolution(dpi);
-}
-
-float GiSkiaView::getDpi() const
-{
-    return m_xf.getDpiY();
-}
-
 int GiSkiaView::getWidth() const
 {
     return m_xf.getWidth();
@@ -58,7 +49,11 @@ void GiSkiaView::onSize(int width, int height)
     m_xf.setWndSize(width, height);
 }
 
-bool GiSkiaView::onDraw(int canvas)
+bool GiSkiaView::onDraw(jobject canvas)
 {
+	//SkCanvas* canv = GraphicsJNI::getNativeCanvas(env, canvas);
+	//SkPaint paint;
+	//paint.setColor(SK_ColorRED);
+	//canv->drawText("hello skia", 10, 20, 20, paint);
     return !!canvas;
 }

@@ -1,5 +1,5 @@
 //! \file GiSkiaCanvas.h
-//! \brief 瀹氫箟鐢⊿kia瀹炵幇鐨勫浘褰㈡樉绀虹被 GiSkiaCanvas
+//! \brief 定义用Skia实现的图形显示类 GiSkiaCanvas
 // Copyright (c) 2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchvg
 
@@ -9,7 +9,7 @@
 #include <gigraph.h>
 #include <mgshapes.h>
 
-//! 鐢⊿kia瀹炵幇鐨勫浘褰㈡樉绀虹被
+//! 用Skia实现的图形显示类
 /*! \ingroup GRAPH_SKIA
 */
 class GiSkiaCanvas

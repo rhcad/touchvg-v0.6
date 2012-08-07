@@ -1,12 +1,12 @@
 //! \file GiCmdController.h
-//! \brief å®šä¹‰å‘½ä»¤æ§åˆ¶å™¨ç±» GiCmdController
+//! \brief ¶¨ÒåÃüÁî¿ØÖÆÆ÷Àà GiCmdController
 // Copyright (c) 2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #ifndef __TOUCHVG_SKIA_CMDCONTROLLER_H_
 #define __TOUCHVG_SKIA_CMDCONTROLLER_H_
 
-//! å‘½ä»¤æ§åˆ¶å™¨ç±»ï¼Œä»£ç†è°ƒç”¨å†…éƒ¨å‘½ä»¤(MgCommand)
+//! ÃüÁî¿ØÖÆÆ÷Àà£¬´úÀíµ÷ÓÃÄÚ²¿ÃüÁî(MgCommand)
 /*! \ingroup GRAPH_SKIA
 */
 class GiCmdController
