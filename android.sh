@@ -1,3 +1,4 @@
 #!/bin/sh
-make java.cleanall and
-make java.clean
+#make java.cleanall
+make and
+ndk-build -C android/hello/jni

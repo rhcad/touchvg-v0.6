@@ -50,5 +50,4 @@ and:
 	@export SWIG_TYPE=java; export clean=1; $(MAKE) -C core/src/skiaview -f Makefile.swig swigonly
 	@test -d android/hello/libs || mkdir android/hello/libs
 	@cp -v build/java/skiaview.jar android/hello/libs
-	@cd android; python makecc.py
-	ndk-build -C android/hello/jni
+	@cp -v core/src/skiaview/skiaview_java_wrap.cxx android/hello/jni/skiaview_java_wrap.cpp
