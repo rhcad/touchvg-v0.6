@@ -14,11 +14,13 @@ endif
 
 LOCAL_C_INCLUDES := $(VCORE_PATH)/include/geom \
                     $(VCORE_PATH)/include/graph \
-                    $(VCORE_PATH)/include/shape \
-                    $(VCORE_PATH)/include/skiaview \
-                    $(VCORE_PATH)/src/skiaview
+                    $(VCORE_PATH)/include/shape
 
-LOCAL_SRC_FILES  := $(SRC_PATH)/geom/mgmat.cpp \
+LOCAL_SRC_FILES  := GiSkiaView.cpp \
+                    GiSkiaCanvas.cpp \
+                    GiCmdController.cpp \
+                    skiaview_java_wrap.cpp \
+                    $(SRC_PATH)/geom/mgmat.cpp \
                     $(SRC_PATH)/geom/mgbase.cpp \
                     $(SRC_PATH)/geom/mgbnd.cpp \
                     $(SRC_PATH)/geom/mgbox.cpp \
@@ -45,10 +47,6 @@ LOCAL_SRC_FILES  := $(SRC_PATH)/geom/mgmat.cpp \
                     $(SRC_PATH)/shape/mgrdrect.cpp \
                     $(SRC_PATH)/shape/mgrect.cpp \
                     $(SRC_PATH)/shape/mgshape.cpp \
-                    $(SRC_PATH)/shape/mgsplines.cpp \
-                    $(SRC_PATH)/skiaview/GiSkiaView.cpp \
-                    $(SRC_PATH)/skiaview/GiSkiaCanvas.cpp \
-                    $(SRC_PATH)/skiaview/GiCmdController.cpp \
-                    skiaview_java_wrap.cpp
+                    $(SRC_PATH)/shape/mgsplines.cpp
 
 include $(BUILD_SHARED_LIBRARY)
