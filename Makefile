@@ -45,18 +45,21 @@ $(CLEANALLSWIGS):
 touch:
 	@export touch=1; $(MAKE) clean
 
+AndJarPath  =._java
+AndJavaPath =$(AndJarPath)/touchvg/skiaview
+
 and:
 	@cd android/skiaview/jni; \
-	    test -d ._java || mkdir ._java; \
-	    test -d ._java/touchvg || mkdir ._java/touchvg; \
-	    test -d ._java/touchvg/skiaview || mkdir -v ._java/touchvg/skiaview; \
-	    rm -rf ._java/*.* ._java/touchvg/skiaview/*.*; \
-	swig -c++ -java -package touchvg.skiaview \
-	    -outdir ._java/touchvg/skiaview -o skiaview_java_wrap.cpp \
+	    test -d $(AndJarPath) || mkdir $(AndJarPath); \
+	    test -d $(AndJarPath)/touchvg || mkdir $(AndJarPath)/touchvg; \
+	    test -d $(AndJavaPath) || mkdir -v $(AndJavaPath); \
+	    rm -rf $(AndJarPath)/*.* $(AndJavaPath)/*.*; \
+	"$(SWIG_BIN)swig" -c++ -java -package touchvg.skiaview \
+	    -outdir $(AndJavaPath) -o skiaview_java_wrap.cpp \
 	    -I../../../core/include/geom -I../../../core/include/graph \
 	    -I../../../core/include/shape -I../../../core/include/skiaview \
 	    -I../../../android/skiaview/jni -I"$(JAVA_INCLUDE)" skiaview.swig;
-	@cd android/skiaview/jni/._java/touchvg/skiaview; "javac" *.java;
-	@cd android/skiaview/jni/._java; "jar" cfv skiaview.jar touchvg/skiaview/*.class;
+	@cd android/skiaview/jni/$(AndJavaPath); "javac" *.java;
+	@cd android/skiaview/jni/$(AndJarPath); "jar" cfv skiaview.jar touchvg/skiaview/*.class;
 	@test -d android/skiaview/libs || mkdir android/skiaview/libs
-	@cp -v android/skiaview/jni/._java/skiaview.jar android/skiaview/libs
+	@cp -v android/skiaview/jni/$(AndJarPath)/skiaview.jar android/skiaview/libs
