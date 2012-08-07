@@ -46,8 +46,18 @@ touch:
 	@export touch=1; $(MAKE) clean
 
 and:
-	@test -d build || mkdir build
-	@export SWIG_TYPE=java; export clean=1; $(MAKE) -C core/src/skiaview -f Makefile.swig swigonly
+	@cd core/src/skiaview; \
+	    test -d ._java || mkdir ._java; \
+	    test -d ._java/touchvg || mkdir ._java/touchvg; \
+	    test -d ._java/touchvg/skiaview || mkdir -v ._java/touchvg/skiaview; \
+	    rm -rf ._java/*.* ._java/touchvg/skiaview/*.*; \
+	swig -c++ -java -package touchvg.skiaview \
+	    -outdir ._java/touchvg/skiaview -o skiaview_java_wrap.cxx \
+	    -I../../../core/include/geom -I../../../core/include/graph \
+	    -I../../../core/include/shape -I../../../core/include/skiaview \
+	    -I../../../core/src/skiaview -I"$(JAVA_INCLUDE)" skiaview.i;
+	@cd core/src/skiaview/._java/touchvg/skiaview; "javac" *.java;
+	@cd core/src/skiaview/._java; "jar" cfv skiaview.jar touchvg/skiaview/*.class;
 	@test -d android/hello/libs || mkdir android/hello/libs
-	@cp -v build/java/skiaview.jar android/hello/libs
+	@cp -v core/src/skiaview/._java/skiaview.jar android/hello/libs
 	@cp -v core/src/skiaview/skiaview_java_wrap.cxx android/hello/jni/skiaview_java_wrap.cpp

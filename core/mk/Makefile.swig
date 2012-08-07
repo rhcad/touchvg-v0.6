@@ -153,6 +153,7 @@ $(OBJDIR)%$(OBJEXT): %.cxx
 
 $(OBJDIR)%.d: %.cpp
 	-@test -d $(OBJDIR0) || mkdir -v $(OBJDIR0)
+	-@test -d $(OBJDIR) || mkdir -v $(OBJDIR)
 	-@test -d $(OBJDIR)$(dir $<) || mkdir -v $(OBJDIR)$(dir $<)
 	@echo Generating $@ from $<; $(DEPEND_CC) $@ $(INCLUDES) $<
 
