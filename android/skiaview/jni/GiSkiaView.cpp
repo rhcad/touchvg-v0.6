@@ -3,15 +3,12 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "GiSkiaView.h"
-#include "GiSkiaCanvas.h"
 #include "GiCmdController.h"
 #include <mgshapest.h>
 #include <list>
-//#include <GraphicsJNI.h>
 
-GiSkiaView::GiSkiaView() : m_gs(&m_xf)
+GiSkiaView::GiSkiaView(GiCanvasBase& canvas) : m_canvas(canvas)
 {
-    m_canvas = new GiSkiaCanvas();
     m_shapes = new MgShapesT<std::list<MgShape*> >;
     m_cmdc = new GiCmdController;
 }
@@ -19,7 +16,6 @@ GiSkiaView::GiSkiaView() : m_gs(&m_xf)
 GiSkiaView::~GiSkiaView()
 {
     delete m_cmdc;
-    delete m_canvas;
     if (m_shapes)
         m_shapes->release();
 }
@@ -36,24 +32,20 @@ bool GiSkiaView::loadShapes(MgStorageBase* s)
 
 int GiSkiaView::getWidth() const
 {
-    return m_xf.getWidth();
+    return m_canvas.xf().getWidth();
 }
 
 int GiSkiaView::getHeight() const
 {
-    return m_xf.getHeight();
+    return m_canvas.xf().getHeight();
 }
 
 void GiSkiaView::onSize(int width, int height)
 {
-    m_xf.setWndSize(width, height);
+    m_canvas.xf().setWndSize(width, height);
 }
 
-bool GiSkiaView::onDraw(jobject canvas)
+bool GiSkiaView::onDraw()
 {
-	//SkCanvas* canv = GraphicsJNI::getNativeCanvas(env, canvas);
-	//SkPaint paint;
-	//paint.setColor(SK_ColorRED);
-	//canv->drawText("hello skia", 10, 20, 20, paint);
-    return !!canvas;
+    return false;
 }

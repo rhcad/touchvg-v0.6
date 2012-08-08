@@ -38,12 +38,12 @@ public:
     /*! 填充参数为不填充
         \param width 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
         \param color 线条颜色， GiColor::Invalid() 表示不画线条
-        \param style 线型，取值为 kLineSolid 等
+        \param style 线型, kLineStyle, 取值为 kLineSolid 等
         \param fillcr 填充颜色， GiColor::Invalid() 表示不填充
     */
     GiContext(float width, GiColor color = GiColor::Black(), 
-              kLineStyle style = kLineSolid, const GiColor& fillcr = GiColor::Invalid())
-        : m_type(0), m_lineStyle(style), m_lineWidth(width)
+              int lstyle = kLineSolid, const GiColor& fillcr = GiColor::Invalid())
+        : m_type(0), m_lineStyle(lstyle), m_lineWidth(width)
         , m_lineColor(color), m_fillColor(fillcr)
     {
     }
@@ -97,14 +97,14 @@ public:
         return !equals(src);
     }
     
-    //! 返回线型
-    kLineStyle getLineStyle() const
+    //! 返回线型, kLineStyle
+    int getLineStyle() const
     {
         return m_lineColor.isInvalid() ? kLineNull : m_lineStyle;
     }
     
-    //! 设置线型
-    void setLineStyle(kLineStyle style)
+    //! 设置线型, kLineStyle
+    void setLineStyle(int style)
     {
         m_lineStyle = style;
     }
@@ -153,13 +153,13 @@ public:
     }
     
     //! 返回线条透明度
-    UInt8 getLineAlpha() const
+    char getLineAlpha() const
     {
         return m_lineColor.a;
     }
     
     //! 设置线条透明度，0到255，0表示全透明，255表示不透明
-    void setLineAlpha(UInt8 alpha)
+    void setLineAlpha(char alpha)
     {
         m_lineColor.a = alpha;
     }
@@ -189,13 +189,13 @@ public:
     }
     
     //! 返回填充透明度
-    UInt8 getFillAlpha() const
+    char getFillAlpha() const
     {
         return m_fillColor.a;
     }
     
     //! 设置填充透明度，0到255，0表示全透明，255表示不透明
-    void setFillAlpha(UInt8 alpha)
+    void setFillAlpha(char alpha)
     {
         m_fillColor.a = alpha;
     }
@@ -211,7 +211,7 @@ public:
 protected:
     int         m_type;            //!< 派生类可指定其他值来表示不同类型
 private:
-    kLineStyle  m_lineStyle;       //!< 线型
+    int         m_lineStyle;       //!< 线型, kLineStyle
     float       m_lineWidth;       //!< 线宽, >0: 0.01mm, =0: 1px, <0:px
     GiColor     m_lineColor;
     GiColor     m_fillColor;

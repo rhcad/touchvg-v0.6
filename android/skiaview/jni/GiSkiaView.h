@@ -6,10 +6,8 @@
 #ifndef __TOUCHVG_SKIAVIEW_H_
 #define __TOUCHVG_SKIAVIEW_H_
 
-#include <gigraph.h>
-#include <jni.h>
+#include "GiCanvasBase.h"
 
-class GiSkiaCanvas;
 class GiCmdController;
 class MgStorageBase;
 struct MgShapes;
@@ -20,7 +18,7 @@ struct MgShapes;
 class GiSkiaView
 {
 public:
-    GiSkiaView();
+    GiSkiaView(GiCanvasBase& canvas);
     virtual ~GiSkiaView();
     
     //! 保存图形列表
@@ -33,12 +31,10 @@ public:
     int getHeight() const;
 
     void onSize(int width, int height);
-    bool onDraw(jobject canvas);
+    bool onDraw();
 
 private:
-    GiTransform         m_xf;
-    GiGraphics          m_gs;
-    GiSkiaCanvas*       m_canvas;
+    GiCanvasBase& 		m_canvas;
     MgShapes*           m_shapes;
     GiCmdController*    m_cmdc;
 };

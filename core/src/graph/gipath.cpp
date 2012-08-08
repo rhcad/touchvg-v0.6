@@ -19,7 +19,7 @@ class GiPathImpl
 {
 public:
     std::vector<Point2d>    points;         //!< 每个节点的坐标
-    std::vector<UInt8>      types;          //!< 每个节点的类型, kGiLineTo 等
+    std::vector<char>       types;          //!< 每个节点的类型, kGiLineTo 等
     int                     beginIndex;     //!< 新图形的起始节点(即MOVETO节点)的序号
 };
 
@@ -35,16 +35,17 @@ GiPath::GiPath(const GiPath& src)
 
     UInt32 count = src.m_data->points.size();
     m_data->points.reserve(count);
-    m_data->types.reserve(count);
+    m_data->types.reserve(count + 1);
     for (UInt32 i = 0; i < count; i++)
     {
         m_data->points.push_back(src.m_data->points[i]);
         m_data->types.push_back(src.m_data->types[i]);
     }
+    m_data->types.push_back(0);
     m_data->beginIndex = src.m_data->beginIndex;
 }
 
-GiPath::GiPath(int count, const Point2d* points, const UInt8* types)
+GiPath::GiPath(int count, const Point2d* points, const char* types)
 {
     m_data = new GiPathImpl();
     m_data->beginIndex = -1;
@@ -52,12 +53,13 @@ GiPath::GiPath(int count, const Point2d* points, const UInt8* types)
     if (count > 0 && points != NULL && types != NULL)
     {
         m_data->points.reserve(count);
-        m_data->types.reserve(count);
+        m_data->types.reserve(count + 1);
         for (int i = 0; i < count; i++)
         {
             m_data->points.push_back(points[i]);
             m_data->types.push_back(types[i]);
         }
+        m_data->types.push_back(0);
     }
 }
 
@@ -78,12 +80,13 @@ GiPath& GiPath::copy(const GiPath& src)
         clear();
         UInt32 count = src.m_data->points.size();
         m_data->points.reserve(count);
-        m_data->types.reserve(count);
+        m_data->types.reserve(count + 1);
         for (UInt32 i = 0; i < count; i++)
         {
             m_data->points.push_back(src.m_data->points[i]);
             m_data->types.push_back(src.m_data->types[i]);
         }
+        m_data->types.push_back(0);
         m_data->beginIndex = src.m_data->beginIndex;
     }
     return *this;
@@ -99,7 +102,7 @@ const Point2d* GiPath::getPoints() const
     return m_data->points.size() > 0 ? &m_data->points.front() : NULL;
 }
 
-const UInt8* GiPath::getTypes() const
+const char* GiPath::getTypes() const
 {
     return m_data->types.size() > 0 ? &m_data->types.front() : NULL;
 }
@@ -124,10 +127,17 @@ void GiPath::startFigure()
     m_data->beginIndex = -1;
 }
 
+void GiPath::addType(kGiPathNode type)
+{
+    while (m_data->types.size() <= m_data->points.size())
+        m_data->types.push_back(0);
+    m_data->types[m_data->points.size() - 1] = (char)type;
+}
+
 bool GiPath::moveTo(const Point2d& point)
 {
     m_data->points.push_back(point);
-    m_data->types.push_back(kGiMoveTo);
+    addType(kGiMoveTo);
     m_data->beginIndex = getSize(m_data->points) - 1;
 
     return true;
@@ -139,7 +149,7 @@ bool GiPath::lineTo(const Point2d& point)
     if (ret)
     {
         m_data->points.push_back(point);
-        m_data->types.push_back(kGiLineTo);
+        addType(kGiLineTo);
     }
 
     return ret;
@@ -153,7 +163,7 @@ bool GiPath::linesTo(int count, const Point2d* points)
         for (int i = 0; i < count; i++)
         {
             m_data->points.push_back(points[i]);
-            m_data->types.push_back(kGiLineTo);
+            addType(kGiLineTo);
         }
     }
 
@@ -169,7 +179,7 @@ bool GiPath::beziersTo(int count, const Point2d* points)
         for (int i = 0; i < count; i++)
         {
             m_data->points.push_back(points[i]);
-            m_data->types.push_back(kGiBeziersTo);
+            addType(kGiBeziersTo);
         }
     }
 
@@ -182,7 +192,7 @@ bool GiPath::arcTo(const Point2d& point)
 
     if (m_data->beginIndex >= 0 
         && getSize(m_data->points) >= m_data->beginIndex + 2
-        && m_data->points.size() == m_data->types.size())
+        && m_data->points.size() <= m_data->types.size())
     {
         Point2d start = m_data->points[m_data->points.size() - 1];
         Vector2d tanv = start - m_data->points[m_data->points.size() - 2];
@@ -200,7 +210,7 @@ bool GiPath::arcTo(const Point2d& point)
                 for (int i = 0; i < n; i++)
                 {
                     m_data->points.push_back(pts[i]);
-                    m_data->types.push_back(kGiBeziersTo);
+                    addType(kGiBeziersTo);
                 }
             }
         }
@@ -215,7 +225,7 @@ bool GiPath::arcTo(const Point2d& point, const Point2d& end)
 
     if (m_data->beginIndex >= 0 
         && getSize(m_data->points) >= m_data->beginIndex + 1
-        && m_data->points.size() == m_data->types.size())
+        && m_data->points.size() <= m_data->types.size())
     {
         Point2d start = m_data->points[m_data->points.size() - 1];
         Point2d center;
@@ -232,7 +242,7 @@ bool GiPath::arcTo(const Point2d& point, const Point2d& end)
                 for (int i = 0; i < n; i++)
                 {
                     m_data->points.push_back(pts[i]);
-                    m_data->types.push_back(kGiBeziersTo);
+                    addType(kGiBeziersTo);
                 }
             }
         }
@@ -247,12 +257,12 @@ bool GiPath::closeFigure()
 
     if (m_data->beginIndex >= 0 
         && getSize(m_data->points) >= m_data->beginIndex + 3
-        && m_data->points.size() == m_data->types.size())
+        && m_data->points.size() <= m_data->types.size())
     {
-        UInt8 type = m_data->types[m_data->types.size() - 1];
+        char type = m_data->types[m_data->points.size() - 1];
         if (type == kGiLineTo || type == kGiBeziersTo)
         {
-            m_data->types[m_data->types.size() - 1] |= kGiCloseFigure;
+            m_data->types[m_data->points.size() - 1] |= kGiCloseFigure;
             m_data->beginIndex = -1;
             ret = true;
         }

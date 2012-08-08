@@ -1,4 +1,3 @@
 #!/bin/sh
-#make java.cleanall
 make and
-ndk-build -C android/skiaview/jni
+$ANDROID_NDK_ROOT/ndk-build -C android/skiaview/jni

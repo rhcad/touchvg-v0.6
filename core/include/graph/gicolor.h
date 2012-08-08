@@ -15,16 +15,16 @@
 */
 struct GiColor
 {
-    UInt8   r;  //!< Red component, 0 to 255.
-    UInt8   g;  //!< Green component, 0 to 255.
-    UInt8   b;  //!< Blue component, 0 to 255.
-    UInt8   a;  //!< Alpha component, 0 to 255. 0: transparent, 255: opaque.
+    char    r;  //!< Red component, 0 to 255.
+    char    g;  //!< Green component, 0 to 255.
+    char    b;  //!< Blue component, 0 to 255.
+    char    a;  //!< Alpha component, 0 to 255. 0: transparent, 255: opaque.
 
     GiColor() : r(0), g(0), b(0), a(255)
     {
     }
 
-    GiColor(UInt8 _r, UInt8 _g, UInt8 _b, UInt8 _a = 255)
+    GiColor(char _r, char _g, char _b, char _a = 255)
         : r(_r), g(_g), b(_b), a(_a)
     {
     }
@@ -37,7 +37,7 @@ struct GiColor
     static GiColor Black() { return GiColor(0, 0, 0); }
     static GiColor Invalid() { return GiColor(0, 0, 0, 0); }
 
-    void set(UInt8 _r, UInt8 _g, UInt8 _b)
+    void set(char _r, char _g, char _b)
     {
         r = _r;
         g = _g;
@@ -45,7 +45,7 @@ struct GiColor
         a = a ? a : 255;
     }
 
-    void set(UInt8 _r, UInt8 _g, UInt8 _b, UInt8 _a)
+    void set(char _r, char _g, char _b, char _a)
     {
         r = _r;
         g = _g;
