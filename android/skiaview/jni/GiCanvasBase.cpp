@@ -83,14 +83,14 @@ GiColor GiCanvasBase::setBkColor(const GiColor& color) {
 }
 
 bool GiCanvasBase::rawLine(float, float, float, float) { return false; }
-bool GiCanvasBase::rawLines(const std::vector<float>&) { return false; }
-bool GiCanvasBase::rawBeziers(const std::vector<float>&) { return false; }
-bool GiCanvasBase::rawPolygon(const std::vector<float>&, bool, bool) { return false; }
+bool GiCanvasBase::rawLines(const mgvector<float>&) { return false; }
+bool GiCanvasBase::rawBeziers(const mgvector<float>&) { return false; }
+bool GiCanvasBase::rawPolygon(const mgvector<float>&, bool, bool) { return false; }
 bool GiCanvasBase::rawRect(float, float, float, float, bool, bool) { return false; }
 bool GiCanvasBase::rawEllipse(float, float, float, float, bool, bool) { return false; }
 bool GiCanvasBase::rawEndPath(bool, bool) { return false; }
-bool GiCanvasBase::rawBezierTo(const std::vector<float>&) { return false; }
-bool GiCanvasBase::rawPath(const std::vector<float>&, const char*, bool, bool) { return false; }
+bool GiCanvasBase::rawBezierTo(const mgvector<float>&) { return false; }
+bool GiCanvasBase::rawPath(const mgvector<float>&, const mgvector<char>&, bool, bool) { return false; }
 
 bool GiCanvasBase::rawMoveTo(float, float) { return false; }
 bool GiCanvasBase::rawLineTo(float, float) { return false; }
@@ -111,14 +111,9 @@ bool GiCanvasBase::rawLine(const GiContext* ctx, float x1, float y1, float x2, f
 
 bool GiCanvasBase::rawLines(const GiContext* ctx, const Point2d* pxs, int count)
 {
-	bool ret = checkStroke(ctx);
+	bool ret = checkStroke(ctx) && pxs && count > 0;
 	if (ret) {
-		std::vector<float> arr(2 * count);
-
-		for (int i = 0; i < count; i++) {
-			arr[2*i] = pxs[i].x;
-			arr[2*i+1] = pxs[i].y;
-		}
+		mgvector<float> arr(&pxs[0].x, 2 * count);
 		ret = rawLines(arr);
 	}
 
@@ -129,12 +124,7 @@ bool GiCanvasBase::rawBeziers(const GiContext* ctx, const Point2d* pxs, int coun
 {
 	bool ret = checkStroke(ctx);
 	if (ret) {
-		std::vector<float> arr(2 * count);
-
-		for (int i = 0; i < count; i++) {
-			arr[2*i] = pxs[i].x;
-			arr[2*i+1] = pxs[i].y;
-		}
+		mgvector<float> arr(&pxs[0].x, 2 * count);
 		ret = rawBeziers(arr);
 	}
 
@@ -148,12 +138,7 @@ bool GiCanvasBase::rawPolygon(const GiContext* ctx, const Point2d* pxs, int coun
 	bool ret = stroke || fill;
 
 	if (ret) {
-		std::vector<float> arr(2 * count);
-
-		for (int i = 0; i < count; i++) {
-			arr[2*i] = pxs[i].x;
-			arr[2*i+1] = pxs[i].y;
-		}
+		mgvector<float> arr(&pxs[0].x, 2 * count);
 		ret = rawPolygon(arr, stroke, fill);
 	}
 
@@ -183,11 +168,7 @@ bool GiCanvasBase::rawEndPath(const GiContext* ctx, bool fill)
 
 bool GiCanvasBase::rawBezierTo(const Point2d* pxs, int count)
 {
-	std::vector<float> arr(2 * count);
-	for (int i = 0; i < count; i++) {
-		arr[2*i] = pxs[i].x;
-		arr[2*i+1] = pxs[i].y;
-	}
+	mgvector<float> arr(&pxs[0].x, 2 * count);
 	return rawBezierTo(arr);
 }
 
@@ -198,13 +179,9 @@ bool GiCanvasBase::rawPath(const GiContext* ctx, int count, const Point2d* pxs, 
 	bool ret = stroke || fill;
 
 	if (ret) {
-		std::vector<float> arr(2 * count);
-
-		for (int i = 0; i < count; i++) {
-			arr[2*i] = pxs[i].x;
-			arr[2*i+1] = pxs[i].y;
-		}
-		ret = rawPath(arr, (const char*)types, stroke, fill);
+		mgvector<float> arr(&pxs[0].x, 2 * count);
+		mgvector<char> arr2((const char*)types, count);
+		ret = rawPath(arr, arr2, stroke, fill);
 	}
 
 	return ret;

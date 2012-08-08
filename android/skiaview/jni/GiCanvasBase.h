@@ -7,7 +7,7 @@
 #define __TOUCHVG_SWIG_CANVAS_H_
 
 #include <gigraph.h>
-#include <vector>
+#include "mgvector.h"
 
 class GiCanvasBase_;
 
@@ -32,14 +32,14 @@ public:
     virtual void penChanged(const GiContext& ctx);
 	virtual void brushChanged(const GiContext& ctx);
     virtual bool rawLine(float x1, float y1, float x2, float y2);
-	virtual bool rawLines(const std::vector<float>& pxs);
-	virtual bool rawBeziers(const std::vector<float>& pxs);
-	virtual bool rawPolygon(const std::vector<float>& pxs, bool stroke, bool fill);
+	virtual bool rawLines(const mgvector<float>& pxs);
+	virtual bool rawBeziers(const mgvector<float>& pxs);
+	virtual bool rawPolygon(const mgvector<float>& pxs, bool stroke, bool fill);
 	virtual bool rawRect(float x, float y, float w, float h, bool stroke, bool fill);
 	virtual bool rawEllipse(float x, float y, float w, float h, bool stroke, bool fill);
 	virtual bool rawEndPath(bool stroke, bool fill);
-	virtual bool rawBezierTo(const std::vector<float>& pxs);
-	virtual bool rawPath(const std::vector<float>& pxs, const char* types, bool stroke, bool fill);
+	virtual bool rawBezierTo(const mgvector<float>& pxs);
+	virtual bool rawPath(const mgvector<float>& pxs, const mgvector<char>& types, bool stroke, bool fill);
 
     virtual bool rawBeginPath() { return false; }
     virtual bool rawMoveTo(float x, float y);
