@@ -42,8 +42,8 @@ public:
         \param fillcr 填充颜色， GiColor::Invalid() 表示不填充
     */
     GiContext(float width, GiColor color = GiColor::Black(), 
-              int lstyle = kLineSolid, const GiColor& fillcr = GiColor::Invalid())
-        : m_type(0), m_lineStyle(lstyle), m_lineWidth(width)
+              int style = kLineSolid, const GiColor& fillcr = GiColor::Invalid())
+        : m_type(0), m_lineStyle(style), m_lineWidth(width)
         , m_lineColor(color), m_fillColor(fillcr)
     {
     }

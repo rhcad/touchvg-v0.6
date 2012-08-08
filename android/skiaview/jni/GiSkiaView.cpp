@@ -3,7 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "GiSkiaView.h"
-#include "GiCmdController.h"
+#include "GiCmdAndr.h"
 #include <mgshapest.h>
 #include <list>
 

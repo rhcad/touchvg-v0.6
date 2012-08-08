@@ -7,7 +7,8 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := skiaview
 LOCAL_SHARED_LIBRARIES := libcutils libdl libstlport
 LOCAL_PRELINK_MODULE := false
-LOCAL_CPPFLAGS += -fexceptions
+LOCAL_CPPFLAGS += -fexceptions -lstdc++
+LOCAL_ALLOW_UNDEFINED_SYMBOLS := true
 
 ifndef NDK_ROOT
 include external/stlport/libstlport.mk
@@ -19,7 +20,7 @@ LOCAL_C_INCLUDES := $(VCORE_PATH)/include/geom \
 
 LOCAL_SRC_FILES  := GiSkiaView.cpp \
                     GiCanvasBase.cpp \
-                    GiCmdController.cpp \
+                    GiCmdAndr.cpp \
                     skiaview_java_wrap.cpp \
                     $(SRC_PATH)/geom/mgmat.cpp \
                     $(SRC_PATH)/geom/mgbase.cpp \

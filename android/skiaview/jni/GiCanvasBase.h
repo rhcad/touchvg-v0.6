@@ -12,8 +12,9 @@
 class GiCanvasBase_;
 
 //! The canvas adapter class.
-/*! \ingroup GRAPH_SKIA
-*/
+/** \ingroup GRAPH_SKIA
+ *  \see GiCanvas
+ */
 class GiCanvasBase
 {
 public:

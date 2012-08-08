@@ -2,7 +2,7 @@
 #
 # 1. `cd' to the directory containing the file of 'Makefile'.
 #
-# 2. Type `make and' to compile the swig projects for Android.
+# 2. Type `make skiaview' to compile the swig projects for Android.
 #    The program binaries files are outputed to './build/java'.
 # 
 # 3. You can remove the program object files from the source code
@@ -18,7 +18,7 @@ SWIGS           =python perl5 java csharp ruby php lua r
 CLEANSWIGS      =$(addsuffix .clean, $(SWIGS))
 CLEANALLSWIGS   =$(addsuffix .cleanall, $(SWIGS))
 
-.PHONY:     $(SUBDIRS) $(SWIGS) clean install touch and
+.PHONY:     $(SUBDIRS) $(SWIGS) clean install touch skiaview
 all:        $(SUBDIRS)
 clean:      $(CLEANDIRS)
 install:    $(INSTALLDIRS)
@@ -48,7 +48,7 @@ touch:
 AndJarPath  =._java
 AndJavaPath =$(AndJarPath)/touchvg/skiaview
 
-and:
+skiaview:
 	@cd android/skiaview/jni; \
 	    test -d $(AndJarPath) || mkdir $(AndJarPath); \
 	    test -d $(AndJarPath)/touchvg || mkdir $(AndJarPath)/touchvg; \
