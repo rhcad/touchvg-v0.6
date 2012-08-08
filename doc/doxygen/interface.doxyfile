@@ -670,10 +670,10 @@ WARN_LOGFILE           =
 # documented source files. You may enter file names like "myfile.cpp" or 
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
-
 INPUT                  = ../../core/include \
                          ../../win32/include \
                          ../../ios/Graph2d/Headers \
+                         ../../android/skiaview/jni \
                          MainPage.txt
 
 # This tag can be used to specify the character encoding of the source files 

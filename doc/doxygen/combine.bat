@@ -26,3 +26,6 @@ move /Y %destpath%\GraphView.ios\ios*.* %destpath%\CanvasIos\
 
 xcopy ..\..\ios\FreeDraw\Headers\*.h %destpath%\iosApp\ /Y
 xcopy ..\..\ios\FreeDraw\Sources\*.* %destpath%\iosApp\ /Y
+
+mkdir %destpath%\AndroidView
+xcopy ..\..\android\skiaview\jni\*.* %destpath%\AndroidView\ /Y
