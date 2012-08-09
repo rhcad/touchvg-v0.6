@@ -6,27 +6,25 @@
 #ifndef __TOUCHVG_SWIG_CANVAS_H_
 #define __TOUCHVG_SWIG_CANVAS_H_
 
+#include <gicanvas.h>
 #include <gigraph.h>
 #include <mgvector.h>
 
-class GiCanvasBase_;
-
 //! The canvas adapter class.
 /** \ingroup GRAPH_SKIA
- *  \see GiCanvas
  */
-class GiCanvasBase
+class GiCanvasBase : public GiCanvas
 {
 public:
     GiCanvasBase();
     virtual ~GiCanvasBase();
 
-    GiTransform& xf();
-	GiGraphics& gs();
+    GiTransform& xf() { return _xf; }
+	GiGraphics& gs() { return _gs; }
 
     static void setScreenDpi(float dpi) { screenDpi() = dpi; }
     virtual float getScreenDpi() const { return screenDpi(); }
-    virtual GiColor getBkColor() const;
+    virtual GiColor getBkColor() const { return _bkcolor; }
     virtual GiColor setBkColor(const GiColor& color);
 
     virtual void penChanged(const GiContext& ctx);
@@ -59,11 +57,12 @@ public:
 private:
     bool checkStroke(const GiContext* ctx);
     bool checkFill(const GiContext* ctx);
-    virtual const GiContext* getCurrentContext() const;
+    virtual const GiContext* getCurrentContext() const { return &_gictx; }
     virtual int getCanvasType() const { return 11; }
     virtual GiColor getNearestColor(const GiColor& color) const { return color; }
     virtual bool drawCachedBitmap2(const GiCanvas* p, float x = 0, float y = 0, bool secondBmp = false);
     virtual void _clipBoxChanged(const RECT_2D& clipBox);
+    virtual void _antiAliasModeChanged(bool antiAlias) { antiAliasModeChanged(antiAlias); }
 
     static float& screenDpi() { static float dpi = 120; return dpi; }
 
@@ -78,8 +77,11 @@ private:
 	virtual bool rawPath(const GiContext* ctx, int count, const Point2d* pxs, const UInt8* types);
 
 private:
-	friend class GiCanvasBase_;
-	GiCanvasBase_*	impl;
+	GiTransform 	_xf;
+	GiGraphics  	_gs;
+	GiColor     	_bkcolor;
+	GiContext   	_gictx;
+	int         	_ctxstatus;
 };
 
 #endif // __TOUCHVG_SWIG_CANVAS_H_

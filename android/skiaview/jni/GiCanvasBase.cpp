@@ -3,83 +3,15 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "GiCanvasBase.h"
-#include <gicanvas.h>
 
-class GiCanvasBase_ : public GiCanvas
+GiCanvasBase::GiCanvasBase() : _gs(&_xf), _bkcolor(GiColor::White()), _ctxstatus(0)
 {
-public:
-	GiCanvasBase*	owner;
-	GiTransform 	xf;
-	GiGraphics  	gs;
-	GiColor     	bkcolor;
-	GiContext   	gictx;
-	int         	ctxstatus;
-
-	GiCanvasBase_(GiCanvasBase* p) : owner(p), gs(&xf), bkcolor(GiColor::White()), ctxstatus(0) {}
-	virtual ~GiCanvasBase_() {}
-
-private:
-	virtual float getScreenDpi() const { return owner->getScreenDpi(); }
-	virtual GiColor getBkColor() const { return owner->getBkColor(); }
-	virtual GiColor setBkColor(const GiColor& color) { return owner->setBkColor(color); }
-
-	virtual bool rawBeginPath() { return owner->rawBeginPath(); }
-	virtual bool rawMoveTo(float x, float y) { return owner->rawMoveTo(x, y); }
-	virtual bool rawLineTo(float x, float y) { return owner->rawLineTo(x, y); }
-	virtual bool rawClosePath() { return owner->rawClosePath(); }
-
-	virtual void clearWindow() { owner->clearWindow(); }
-	virtual void clearCachedBitmap(bool clearAll = false) { owner->clearCachedBitmap(clearAll); }
-	virtual bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false) {
-		return owner->drawCachedBitmap(x, y, secondBmp); }
-	virtual bool drawCachedBitmap2(const GiCanvas* p, float x = 0, float y = 0, bool secondBmp = false) {
-		return owner->getScreenDpi(); }
-	virtual void saveCachedBitmap(bool secondBmp = false) { owner->saveCachedBitmap(secondBmp); }
-	virtual bool hasCachedBitmap(bool secondBmp = false) const { return owner->hasCachedBitmap(secondBmp); }
-	virtual bool isBufferedDrawing() const { return owner->isBufferedDrawing(); }
-
-	virtual const GiContext* getCurrentContext() const { return owner->getCurrentContext(); }
-	virtual int getCanvasType() const { return owner->getCanvasType(); }
-	virtual GiColor getNearestColor(const GiColor& color) const { return owner->getNearestColor(color); }
-	virtual void _clipBoxChanged(const RECT_2D& clipBox) { return owner->_clipBoxChanged(clipBox); }
-	virtual void _antiAliasModeChanged(bool antiAlias) { return owner->antiAliasModeChanged(antiAlias); }
-
-	virtual bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2) {
-		return owner->rawLine(ctx, x1, y1, x2, y2); }
-	virtual bool rawLines(const GiContext* ctx, const Point2d* pxs, int count) {
-		return owner->rawLines(ctx, pxs, count); }
-	virtual bool rawBeziers(const GiContext* ctx, const Point2d* pxs, int count) {
-		return owner->rawBeziers(ctx, pxs, count); }
-	virtual bool rawPolygon(const GiContext* ctx, const Point2d* pxs, int count) {
-		return owner->rawPolygon(ctx, pxs, count); }
-	virtual bool rawRect(const GiContext* ctx, float x, float y, float w, float h) {
-		return owner->rawRect(ctx, x, y, w, h); }
-	virtual bool rawEllipse(const GiContext* ctx, float x, float y, float w, float h) {
-		return owner->rawEllipse(ctx, x, y, w, h); }
-	virtual bool rawEndPath(const GiContext* ctx, bool fill) { return owner->rawEndPath(ctx, fill); }
-	virtual bool rawBezierTo(const Point2d* pxs, int count) { return owner->rawBezierTo(pxs, count); }
-	virtual bool rawPath(const GiContext* ctx, int count, const Point2d* pxs, const UInt8* types) {
-		return owner->rawPath(ctx, count, pxs, types); }
-};
-
-GiCanvasBase::GiCanvasBase()
-{
-	impl = new GiCanvasBase_(this);
-    impl->gs._setCanvas(impl);
-    impl->xf.setResolution(screenDpi());
+    _gs._setCanvas(this);
+    _xf.setResolution(screenDpi());
 }
 
 GiCanvasBase::~GiCanvasBase()
 {
-	delete impl;
-}
-
-GiTransform& GiCanvasBase::xf() { return impl->xf; }
-GiGraphics& GiCanvasBase::gs() { return impl->gs; }
-const GiContext* GiCanvasBase::getCurrentContext() const { return &impl->gictx; }
-GiColor GiCanvasBase::getBkColor() const { return impl->bkcolor; }
-GiColor GiCanvasBase::setBkColor(const GiColor& color) {
-	GiColor old(impl->bkcolor); impl->bkcolor = color; return old;
 }
 
 bool GiCanvasBase::rawLine(float, float, float, float) { return false; }
@@ -192,30 +124,35 @@ void GiCanvasBase::_clipBoxChanged(const RECT_2D& clipBox)
 	clipBoxChanged(clipBox.left, clipBox.top, clipBox.right - clipBox.left, clipBox.bottom - clipBox.top);
 }
 
+GiColor GiCanvasBase::setBkColor(const GiColor& color)
+{
+	GiColor old(_bkcolor); _bkcolor = color; return old;
+}
+
 bool GiCanvasBase::checkStroke(const GiContext* ctx)
 {
-	bool changed = !(impl->ctxstatus & 1);
+	bool changed = !(_ctxstatus & 1);
 
 	if (ctx && !ctx->isNullLine())
 	{
-		if (impl->gictx.getLineColor() != ctx->getLineColor()) {
-			impl->gictx.setLineColor(ctx->getLineColor());
+		if (_gictx.getLineColor() != ctx->getLineColor()) {
+			_gictx.setLineColor(ctx->getLineColor());
 			changed = true;
 		}
-		if (impl->gictx.getLineWidth() != ctx->getLineWidth()) {
-			impl->gictx.setLineWidth(ctx->getLineWidth());
+		if (_gictx.getLineWidth() != ctx->getLineWidth()) {
+			_gictx.setLineWidth(ctx->getLineWidth());
 			changed = true;
 		}
-		if (impl->gictx.getLineStyle() != ctx->getLineStyle()) {
-			impl->gictx.setLineStyle(ctx->getLineStyle());
+		if (_gictx.getLineStyle() != ctx->getLineStyle()) {
+			_gictx.setLineStyle(ctx->getLineStyle());
 			changed = true;
 		}
 	}
 
-	if (!ctx) ctx = &impl->gictx;
+	if (!ctx) ctx = &_gictx;
 	if (!ctx->isNullLine() && changed)
 	{
-		impl->ctxstatus |= 1;
+		_ctxstatus |= 1;
 		penChanged(*ctx);
 	}
 
@@ -224,19 +161,19 @@ bool GiCanvasBase::checkStroke(const GiContext* ctx)
 
 bool GiCanvasBase::checkFill(const GiContext* ctx)
 {
-	bool changed = !(impl->ctxstatus & 2);
+	bool changed = !(_ctxstatus & 2);
 
 	if (ctx && ctx->hasFillColor())
 	{
-		if (impl->gictx.getFillColor() != ctx->getFillColor()) {
-			impl->gictx.setFillColor(ctx->getFillColor());
+		if (_gictx.getFillColor() != ctx->getFillColor()) {
+			_gictx.setFillColor(ctx->getFillColor());
 			changed = true;
 		}
 	}
-	if (!ctx) ctx = &impl->gictx;
+	if (!ctx) ctx = &_gictx;
 	if (ctx->hasFillColor() && changed)
 	{
-		impl->ctxstatus |= 2;
+		_ctxstatus |= 2;
 		penChanged(*ctx);
 	}
 
