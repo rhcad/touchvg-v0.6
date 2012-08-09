@@ -63,6 +63,7 @@ struct GiColor
         return r==src.r && g==src.g && b==src.b && a==src.a;
     }
 
+#ifndef SWIG
     bool operator==(const GiColor& src) const
     {
         return equals(src);
@@ -72,6 +73,7 @@ struct GiColor
     {
         return !equals(src);
     }
+#endif // SWIG
 };
 
 #endif // __GEOMETRY_GICOLOR_H_

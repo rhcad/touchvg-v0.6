@@ -1,5 +1,4 @@
-/* File : mgvector.h */
-// Some template definitions
+// mgvector.h: template vector definition
 #ifndef SWIG_MGVECTOR_H
 #define SWIG_MGVECTOR_H
 
@@ -8,31 +7,27 @@ template<class T> class mgvector {
     int sz;
 public:
     mgvector(int _sz) {
-        v = new T[_sz];
+        v = _sz > 0 ? new T[_sz] : NULL;
         sz = _sz;
     }
     mgvector(const T *_v, int _sz) {
-        v = new T[_sz];
+        v = _sz > 0 ? new T[_sz] : NULL;
         sz = _sz;
         for (int i = 0; i < sz; i++)
             v[i] = _v[i];
     }
-    T get(int index) {
+    ~mgvector() {
+        delete[] v;
+    }
+    int count() const {
+        return sz;
+    }
+    T get(int index) const {
         return v[index];
     }
     void set(int index, T val) {
         v[index] = val;
     }
-#ifdef SWIG
-    %extend {
-        T getitem(int index) {
-            return $self->get(index);
-        }
-        void setitem(int index, T val) {
-            $self->set(index,val);
-        }
-    }
-#endif
 };
 
 #endif // SWIG_MGVECTOR_H

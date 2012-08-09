@@ -56,11 +56,13 @@ public:
     */
     Matrix2d(const Vector2d& e0, const Vector2d& e1, const Point2d& origin);
     
+#ifndef SWIG
     //! 矩阵乘法
     Matrix2d operator*(const Matrix2d& mat) const;
     
     //! 矩阵乘法
     Matrix2d& operator*=(const Matrix2d& mat);
+#endif
     
     //! 左乘一个矩阵，leftSide * (*this)
     Matrix2d& preMultBy(const Matrix2d& leftSide);
@@ -76,14 +78,14 @@ public:
         \param[in] count 点的个数
         \param[in,out] points 要变换的点的数组，元素个数为count
     */
-    void TransformPoints(Int32 count, Point2d* points) const;
+    void TransformPoints(int count, Point2d* points) const;
 
     //! 对多个矢量进行矩阵变换
     /*! 对矢量进行矩阵变换时，矩阵的平移分量部分不起作用
         \param[in] count 矢量的个数
         \param[in,out] vectors 要变换的矢量的数组，元素个数为count
     */
-    void TransformVectors(Int32 count, Vector2d* vectors) const;
+    void TransformVectors(int count, Vector2d* vectors) const;
     
     //! 行列式值
     float det() const;
@@ -109,11 +111,13 @@ public:
     //! Y比例大小
     float scaleY() const;
     
+#ifndef SWIG
     //! 判断两个矩阵是否相等
     bool operator==(const Matrix2d& mat) const;
     
     //! 判断两个矩阵是否不相等
     bool operator!=(const Matrix2d& mat) const;
+#endif
     
     //! 用欧拉规则判断两个矩阵是否相等，即判断矩阵的行矢量是否相等
     bool isEqualTo(const Matrix2d& mat, const Tol& tol = Tol::gTol()) const;

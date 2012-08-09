@@ -1,7 +1,6 @@
 package touchvg.demo.hello;
 
 import touchvg.skiaview.GiSkiaView;
-import touchvg.skiaview.GiCanvasBase;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -17,10 +16,11 @@ public class testy extends Activity {
         setContentView(R.layout.main);
         TextView t = (TextView) findViewById(R.id.id);
         
-        GiCanvasBase c = new GiCanvasBase();
+        CanvasTest c = new CanvasTest();
         GiSkiaView v = new GiSkiaView(c);
         v.onSize(100, 200);
         t.setText("Hello TouchVG! w=" + v.getWidth() + " h=" + v.getHeight());
+        v.onDraw();
         v.delete();
         c.delete();
     }

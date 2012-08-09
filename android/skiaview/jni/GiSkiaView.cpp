@@ -6,6 +6,7 @@
 #include "GiCmdAndr.h"
 #include <mgshapest.h>
 #include <list>
+#include <mgstoragebs.h>
 
 GiSkiaView::GiSkiaView(GiCanvasBase& canvas) : m_canvas(canvas)
 {
@@ -47,5 +48,13 @@ void GiSkiaView::onSize(int width, int height)
 
 bool GiSkiaView::onDraw()
 {
+	m_canvas.rawLine(1, 2, 3, 4);
+
+	mgvector<float> lines(3);
+	lines.set(0, 11);
+	lines.set(1, 22);
+	lines.set(2, 33);
+	m_canvas.rawLines(lines);
+
     return false;
 }

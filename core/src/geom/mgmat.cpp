@@ -72,16 +72,16 @@ Point2d Point2d::transform(const Matrix2d& m) const
 }
 
 // 对多个点进行矩阵变换
-void Matrix2d::TransformPoints(Int32 count, Point2d* points) const
+void Matrix2d::TransformPoints(int count, Point2d* points) const
 {
-    for (Int32 i = 0; i < count; i++)
+    for (int i = 0; i < count; i++)
         points[i] *= (*this);
 }
 
 // 对多个矢量进行矩阵变换
-void Matrix2d::TransformVectors(Int32 count, Vector2d* vectors) const
+void Matrix2d::TransformVectors(int count, Vector2d* vectors) const
 {
-    for (Int32 i = 0; i < count; i++)
+    for (int i = 0; i < count; i++)
         vectors[i] *= (*this);
 }
 

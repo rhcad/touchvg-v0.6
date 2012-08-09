@@ -58,13 +58,13 @@ Box2d& Box2d::set(const Point2d& p1, const Point2d& p2,
     return *this;
 }
 
-Box2d& Box2d::set(Int32 count, const Point2d* points)
+Box2d& Box2d::set(int count, const Point2d* points)
 {
     if (count < 1 || !points)
         return empty();
 
     set(points[0], points[0]);
-    for (Int32 i = 0; i < count; i++)
+    for (int i = 0; i < count; i++)
     {
         if (xmin > points[i].x)
             xmin = points[i].x;

@@ -7,7 +7,7 @@
 #define __TOUCHVG_SWIG_CANVAS_H_
 
 #include <gigraph.h>
-#include "mgvector.h"
+#include <mgvector.h>
 
 class GiCanvasBase_;
 

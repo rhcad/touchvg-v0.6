@@ -60,6 +60,7 @@ public:
     //! 矩阵变换, 矢量 * 矩阵
     Vector2d transform(const Matrix2d& m) const;
 
+#ifndef SWIG
     //! 矩阵变换, 矢量 * 矩阵
     Vector2d operator*(const Matrix2d& m) const;
 
@@ -101,6 +102,7 @@ public:
     {
         return Vector2d(-x, -y);
     }
+#endif // SWIG
     
     //! 矢量反向，即将该矢量设置为(-x, -y)
     Vector2d& negate()
@@ -114,6 +116,7 @@ public:
         return Vector2d(-y, x);
     }
     
+#ifndef SWIG
     //! 标量积, 数 * 矢量
     friend Vector2d operator*(float s, const Vector2d& v)
     {
@@ -145,6 +148,7 @@ public:
         s = 1 / s;
         x *= s; y *= s; return *this;
     }
+#endif // SWIG
 
     //! 比例放缩
     Vector2d& scaleBy(float sx, float sy)
@@ -158,6 +162,13 @@ public:
         return (x * v.x + y * v.y);
     }
     
+    //! 矢量叉积(0,0,z)中的z, |A×B|
+    float crossProduct(const Vector2d& v) const
+    {
+        return (x * v.y - y * v.x);
+    }
+    
+#ifndef SWIG
     //! 矢量点积, A·B
     float operator/(const Vector2d& v) const
     {
@@ -165,16 +176,11 @@ public:
     }
     
     //! 矢量叉积(0,0,z)中的z, |A×B|
-    float crossProduct(const Vector2d& v) const
-    {
-        return (x * v.y - y * v.x);
-    }
-    
-    //! 矢量叉积(0,0,z)中的z, |A×B|
     float operator*(const Vector2d& v) const
     {
         return crossProduct(v);
-    }    
+    }
+#endif // SWIG
     
     //! 矢量角度, 与X轴的夹角, [0, PI)
     /*!
@@ -268,6 +274,7 @@ public:
         return mgHypot(x, y) < tol.equalPoint();
     }
     
+#ifndef SWIG
     //! 判断两个矢量是否相等
     bool operator==(const Vector2d& v) const
     {
@@ -279,6 +286,7 @@ public:
     {
         return !isEqualTo(v);
     }
+#endif // SWIG
     
     //! 用欧拉规则判断两个矢量是否相等
     /*! 如果两个矢量相减的差矢量的长度不大于矢量容差，则相等

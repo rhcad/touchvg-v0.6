@@ -56,12 +56,6 @@ public:
         m_lineColor = src.m_lineColor;
         m_fillColor = src.m_fillColor;
     }
-    
-    //! 赋值操作符函数
-    GiContext& operator=(const GiContext& src)
-    {
-        return copy(src);
-    }
 
     //! 赋值函数
     GiContext& copy(const GiContext& src)
@@ -85,6 +79,13 @@ public:
             && m_fillColor == src.m_fillColor;
     }
     
+#ifndef SWIG
+    //! 赋值操作符函数
+    GiContext& operator=(const GiContext& src)
+    {
+        return copy(src);
+    }
+    
     //! 比较相等操作符函数
     bool operator==(const GiContext& src) const
     {
@@ -96,6 +97,7 @@ public:
     {
         return !equals(src);
     }
+#endif // SWIG
     
     //! 返回线型, kLineStyle
     int getLineStyle() const

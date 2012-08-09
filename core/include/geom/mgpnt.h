@@ -44,6 +44,7 @@ public:
     //! 矩阵变换, 点 * 矩阵
     Point2d transform(const Matrix2d& m) const;
 
+#ifndef SWIG
     //! 矩阵变换, 点 * 矩阵
     Point2d operator*(const Matrix2d& m) const;
 
@@ -87,6 +88,7 @@ public:
         s = 1 / s;
         x *= s; y *= s; return *this;
     }
+#endif // SWIG
 
     //! 比例放缩
     Point2d& scaleBy(float sx, float sy)
@@ -94,6 +96,7 @@ public:
         x *= sx; y *= sy; return *this;
     }
     
+#ifndef SWIG
     //! 点累加
     Point2d operator+(const Point2d& pnt) const
     {
@@ -135,6 +138,7 @@ public:
     {
         x -= vec.x; y -= vec.y; return *this;
     }
+#endif // SWIG
     
     //! 平移
     void offset(float dx, float dy)
@@ -142,6 +146,7 @@ public:
         x += dx; y += dy;
     }
     
+#ifndef SWIG
     //! 得到两点之间的矢量, 点 - 点 = 矢量
     Vector2d operator-(const Point2d& pnt) const
     {
@@ -153,6 +158,7 @@ public:
     {
         return Vector2d(-x, -y);
     }
+#endif // SWIG
 
     //! 返回负矢量
     Vector2d negate() const
@@ -178,6 +184,7 @@ public:
         return mgHypot(x - pnt.x, y - pnt.y);
     }
     
+#ifndef SWIG
     //! 判断两个点是否相等
     bool operator==(const Point2d& pnt) const
     {
@@ -189,6 +196,7 @@ public:
     {
         return !isEqualTo(pnt);
     }
+#endif
     
     //! 用欧拉规则判断两个点是否相等
     /*! 如果两个点的距离小于长度容差，则相等

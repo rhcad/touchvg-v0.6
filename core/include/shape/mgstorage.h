@@ -91,32 +91,4 @@ protected:
     virtual void writeInt(const char* name, int value) = 0;
 };
 
-//! 序列化基类
-/*! \ingroup GEOM_SHAPE
- */
-class MgStorageBase : public MgStorage
-{
-public:
-    MgStorageBase() {}
-    virtual ~MgStorageBase() {}
-    
-    virtual bool readNode(const char* name, int index, bool ended) {
-        return name && index && ended; }
-    virtual int readInt(const char* name, int defvalue = 0) { return name && defvalue; }
-    virtual bool readBool(const char* name, bool defvalue) { return name && defvalue; }
-    virtual float readFloat(const char* name, float defvalue = 0) { return name && defvalue; }
-    virtual int readFloatArray(const char* name, float* values, int count) {
-        return name && values && count; }
-    virtual int readString(const char* name, char* value, int count) {
-        return name && value && count; }
-    virtual bool writeNode(const char* name, int index, bool ended) {
-        return name && index && ended; }
-    virtual void writeInt(const char* name, int value) { if (name) value=0; }
-    virtual void writeBool(const char* name, bool value) { if (name) value=false; }
-    virtual void writeFloat(const char* name, float value) { if (name) value=0; }
-    virtual void writeFloatArray(const char* name, const float* values, int count) {
-        if (name) values=NULL; count=0; }
-    virtual void writeString(const char* name, const char* value) { if (name) value=NULL; }
-};
-
 #endif // __GEOMETRY_MGSTORAGE_H_

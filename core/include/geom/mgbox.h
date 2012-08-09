@@ -74,7 +74,7 @@ public:
     }
     
     //! 给定多个顶点构造
-    Box2d(Int32 count, const Point2d* points)
+    Box2d(int count, const Point2d* points)
     {
         set(count, points);
     }
@@ -145,7 +145,7 @@ public:
         const Point2d& p3, const Point2d& p4);
     
     //! 设置为多个顶点的包容框
-    Box2d& set(Int32 count, const Point2d* points);
+    Box2d& set(int count, const Point2d* points);
     
     //! 设置中心坐标和宽高
     /*!
@@ -541,6 +541,7 @@ public:
             xmax + box.xmax, ymax + box.ymax);
     }
     
+#ifndef SWIG
     //! 正向平移矩形框
     /*!
         \param box 指定四个方向偏移量的矩形框
@@ -683,6 +684,7 @@ public:
     {
         return !operator==(box);
     }
+#endif // SWIG
     
     //! 判断两个矩形框是否相等
     /*!

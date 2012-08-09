@@ -5,12 +5,19 @@
 #include <mgstorage.h>
 %}
 
+%include <mgtype.h>
+%include <mgvec.h>
+%include <mgpnt.h>
+%include <mgmat.h>
+%include <mgbox.h>
 %include <gicolor.h>
 %include <gicontxt.h>
+%include <gixform.h>
+%include <gigraph.h>
 
 %include "mgvector.h"
-%template(floats) mgvector<float>;
-%template(chars) mgvector<char>;
+%template(Floats) mgvector<float>;
+%template(Chars) mgvector<char>;
 
 %include "GiCanvasBase.h"
 %feature("director") GiCanvasBase;
