@@ -180,4 +180,12 @@ bool GiCanvasBase::checkFill(const GiContext* ctx)
 	return ctx->hasFillColor();
 }
 
-GiCanvasBase ddd;
+bool GiCanvasBase::beginPaint()
+{
+	_ctxstatus = 0;
+	return true;
+}
+
+void GiCanvasBase::endPaint()
+{
+}

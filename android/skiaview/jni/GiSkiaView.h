@@ -23,15 +23,16 @@ public:
     
     //! 保存图形列表
     bool saveShapes(MgStorageBase* s);
-    
     //! 加载图形列表
     bool loadShapes(MgStorageBase* s);
+    int addTestingShapes();
 
     int getWidth() const;
     int getHeight() const;
 
     void onSize(int width, int height);
-    bool onDraw();
+    bool onDraw(GiCanvasBase& canvas);
+    bool onDynDraw(GiCanvasBase& canvas);
 
 private:
     GiCanvasBase& 		m_canvas;

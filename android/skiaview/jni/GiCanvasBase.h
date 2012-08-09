@@ -27,6 +27,8 @@ public:
     virtual GiColor getBkColor() const { return _bkcolor; }
     virtual GiColor setBkColor(const GiColor& color);
 
+    virtual bool beginPaint();
+	virtual void endPaint();
     virtual void penChanged(const GiContext& ctx);
 	virtual void brushChanged(const GiContext& ctx);
     virtual bool rawLine(float x1, float y1, float x2, float y2);

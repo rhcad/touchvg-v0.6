@@ -21,10 +21,10 @@
 %template(Floats) mgvector<float>;
 %template(Chars) mgvector<char>;
 
-%include "GiCanvasBase.h"
 %feature("director") GiCanvasBase;
+%include "GiCanvasBase.h"
 
 %include "GiSkiaView.h"
 
-%include <mgstorage.h>
 %feature("director") MgStorageBase;
+%include <mgstorage.h>

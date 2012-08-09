@@ -18,9 +18,17 @@ public class testy extends Activity {
         
         CanvasTest c = new CanvasTest();
         GiSkiaView v = new GiSkiaView(c);
+        
         v.onSize(100, 200);
         t.setText("Hello TouchVG! w=" + v.getWidth() + " h=" + v.getHeight());
-        v.onDraw();
+        v.addTestingShapes();
+        
+        if (c.beginPaint()) {
+        	v.onDraw(c);
+        	v.onDynDraw(c);
+        	c.endPaint();
+        }
+    	
         v.delete();
         c.delete();
     }

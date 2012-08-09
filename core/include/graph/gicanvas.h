@@ -105,8 +105,10 @@ public:
     */
     virtual GiColor getNearestColor(const GiColor& color) const { return color; }
 
+#ifndef SWIG
     //! 返回当前绘图参数
     virtual const GiContext* getCurrentContext() const = 0;
+#endif
 
     //! 剪裁框改变后的通知，仅由 GiGraphics 调用
     /*! 调用 GiGraphics::setClipBox() 或 setClipWorld() 后会调用本函数。

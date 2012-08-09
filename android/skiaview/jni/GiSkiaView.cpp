@@ -46,15 +46,24 @@ void GiSkiaView::onSize(int width, int height)
     m_canvas.xf().setWndSize(width, height);
 }
 
-bool GiSkiaView::onDraw()
+bool GiSkiaView::onDraw(GiCanvasBase& canvas)
 {
-	m_canvas.rawLine(1, 2, 3, 4);
+	return m_shapes->draw(canvas.gs());
+}
 
-	mgvector<float> lines(3);
-	lines.set(0, 11);
-	lines.set(1, 22);
-	lines.set(2, 33);
-	m_canvas.rawLines(lines);
+bool GiSkiaView::onDynDraw(GiCanvasBase& canvas)
+{
+	return false;
+}
 
-    return false;
+#include <testgraph/RandomShape.cpp>
+
+int GiSkiaView::addTestingShapes()
+{
+	RandomParam param;
+
+	RandomParam::init();
+	param.initShapes(m_shapes);
+
+	return param.getShapeCount();
 }

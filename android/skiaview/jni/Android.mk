@@ -14,7 +14,8 @@ endif
 
 LOCAL_C_INCLUDES := $(VCORE_PATH)/include/geom \
                     $(VCORE_PATH)/include/graph \
-                    $(VCORE_PATH)/include/shape
+                    $(VCORE_PATH)/include/shape \
+                    $(VCORE_PATH)/include
 
 LOCAL_SRC_FILES  := GiSkiaView.cpp \
                     GiCanvasBase.cpp \
