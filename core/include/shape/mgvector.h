@@ -20,7 +20,7 @@ public:
         delete[] v;
     }
     int count() const {
-        return sz;
+        return this ? sz : 0;
     }
     T get(int index) const {
         return v[index];

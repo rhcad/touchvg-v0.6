@@ -14,7 +14,6 @@
 %include <gicontxt.h>
 %include <gixform.h>
 %include <gicanvdr.h>
-%include <gicanvas.h>
 %include <gigraph.h>
 
 %include "mgvector.h"

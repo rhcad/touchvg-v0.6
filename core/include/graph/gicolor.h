@@ -15,16 +15,16 @@
 */
 struct GiColor
 {
-    char    r;  //!< Red component, 0 to 255.
-    char    g;  //!< Green component, 0 to 255.
-    char    b;  //!< Blue component, 0 to 255.
-    char    a;  //!< Alpha component, 0 to 255. 0: transparent, 255: opaque.
+    unsigned char    r;  //!< Red component, 0 to 255.
+    unsigned char    g;  //!< Green component, 0 to 255.
+    unsigned char    b;  //!< Blue component, 0 to 255.
+    unsigned char    a;  //!< Alpha component, 0 to 255. 0: transparent, 255: opaque.
 
     GiColor() : r(0), g(0), b(0), a(255)
     {
     }
 
-    GiColor(char _r, char _g, char _b, char _a = 255)
+    GiColor(unsigned char _r, unsigned char _g, unsigned char _b, unsigned char _a = 255)
         : r(_r), g(_g), b(_b), a(_a)
     {
     }
@@ -37,7 +37,20 @@ struct GiColor
     static GiColor Black() { return GiColor(0, 0, 0); }
     static GiColor Invalid() { return GiColor(0, 0, 0, 0); }
 
-    void set(char _r, char _g, char _b)
+    int getARGB() const
+    {
+        return ((int)a) << 24 | ((int)r) << 16 | ((int)g) << 8 | b;
+    }
+
+    void setARGB(int value)
+    {
+        a = (unsigned char)(value >> 24);
+        r = (unsigned char)(value >> 16);
+        g = (unsigned char)(value >> 8);
+        b = (unsigned char)value;
+    }
+
+    void set(unsigned char _r, unsigned char _g, unsigned char _b)
     {
         r = _r;
         g = _g;
@@ -45,7 +58,7 @@ struct GiColor
         a = a ? a : 255;
     }
 
-    void set(char _r, char _g, char _b, char _a)
+    void set(unsigned char _r, unsigned char _g, unsigned char _b, unsigned char _a)
     {
         r = _r;
         g = _g;

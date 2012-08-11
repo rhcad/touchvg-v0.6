@@ -41,7 +41,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\..\core\include\shape;..\..\..\core\include\skiaview;..\..\..\core\src\skiaview"
+				AdditionalIncludeDirectories="..\..\..\core\include;..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\..\core\include\shape"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				WarningLevel="4"
@@ -101,7 +101,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\..\core\include\shape;..\..\..\core\include\skiaview;..\..\..\core\src\skiaview"
+				AdditionalIncludeDirectories="..\..\..\core\include;..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\..\core\include\shape"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -147,31 +147,32 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\..\core\include\skiaview\GiCmdController.h"
+				RelativePath="..\..\..\android\skiaview\jni\GiCanvasBase.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\skiaview\GiSkiaCanvas.h"
+				RelativePath="..\..\..\android\skiaview\jni\GiCmdAndr.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\skiaview\GiSkiaView.h"
+				RelativePath="..\..\..\android\skiaview\jni\GiSkiaView.h"
 				>
 			</File>
 		</Filter>
 		<Filter
 			Name="swig"
+			Filter="swig;mk"
 			>
 			<File
-				RelativePath="..\..\..\core\src\skiaview\Makefile"
+				RelativePath="..\..\..\android\skiaview\jni\Android.mk"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\skiaview\Makefile.swig"
+				RelativePath="..\..\..\android\skiaview\jni\Application.mk"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\skiaview\skiaview.i"
+				RelativePath="..\..\..\android\skiaview\jni\skiaview.swig"
 				>
 			</File>
 		</Filter>
@@ -180,15 +181,15 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\core\src\skiaview\GiCmdController.cpp"
+				RelativePath="..\..\..\android\skiaview\jni\GiCanvasBase.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\skiaview\GiSkiaCanvas.cpp"
+				RelativePath="..\..\..\android\skiaview\jni\GiCmdAndr.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\skiaview\GiSkiaView.cpp"
+				RelativePath="..\..\..\android\skiaview\jni\GiSkiaView.cpp"
 				>
 			</File>
 		</Filter>

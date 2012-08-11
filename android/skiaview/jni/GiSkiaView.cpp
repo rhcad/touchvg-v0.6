@@ -8,47 +8,51 @@
 #include <list>
 #include <mgstoragebs.h>
 
-GiSkiaView::GiSkiaView(GiCanvasBase& canvas) : m_canvas(canvas)
+GiSkiaView::GiSkiaView(GiCanvasBase* canvas) : _canvas(canvas)
 {
-    m_shapes = new MgShapesT<std::list<MgShape*> >;
-    m_cmdc = new GiCmdController;
+    _shapes = new MgShapesT<std::list<MgShape*> >;
+    _cmdc = new GiCmdController;
 }
 
 GiSkiaView::~GiSkiaView()
 {
-    delete m_cmdc;
-    if (m_shapes)
-        m_shapes->release();
+    delete _cmdc;
+    if (_shapes)
+        _shapes->release();
 }
 
 bool GiSkiaView::saveShapes(MgStorageBase* s)
 {
-    return s && m_shapes && m_shapes->save(s);
+    return s && _shapes && _shapes->save(s);
 }
 
 bool GiSkiaView::loadShapes(MgStorageBase* s)
 {
-    return s && m_shapes && m_shapes->load(s);
+    if (_shapes && !s) {
+        _shapes->clear();
+        return true;
+    }
+    return _shapes && s && _shapes->load(s);
 }
 
 int GiSkiaView::getWidth() const
 {
-    return m_canvas.xf().getWidth();
+    return _canvas->xf().getWidth();
 }
 
 int GiSkiaView::getHeight() const
 {
-    return m_canvas.xf().getHeight();
+    return _canvas->xf().getHeight();
 }
 
 void GiSkiaView::onSize(int width, int height)
 {
-    m_canvas.xf().setWndSize(width, height);
+    _canvas->xf().setWndSize(width, height);
 }
 
 bool GiSkiaView::onDraw(GiCanvasBase& canvas)
 {
-	return m_shapes->draw(canvas.gs());
+	return _shapes && _shapes->draw(canvas.gs()) > 0;
 }
 
 bool GiSkiaView::onDynDraw(GiCanvasBase& canvas)
@@ -61,9 +65,15 @@ bool GiSkiaView::onDynDraw(GiCanvasBase& canvas)
 int GiSkiaView::addTestingShapes()
 {
 	RandomParam param;
+    UInt32 n = _shapes->getShapeCount();
 
 	RandomParam::init();
-	param.initShapes(m_shapes);
+	param.initShapes(_shapes);
 
-	return param.getShapeCount();
+	if (n == 0) {
+		_canvas->xf().zoomTo(_shapes->getExtent() * _canvas->xf().modelToWorld());
+		_canvas->xf().zoomByFactor(1.5f);
+	}
+
+	return _shapes->getShapeCount() - n;
 }

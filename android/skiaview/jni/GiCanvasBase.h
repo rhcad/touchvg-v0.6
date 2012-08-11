@@ -29,22 +29,23 @@ public:
 
     virtual bool beginPaint();
 	virtual void endPaint();
-    virtual void penChanged(const GiContext& ctx);
+    virtual void penChanged(const GiContext& ctx, float penWidth);
 	virtual void brushChanged(const GiContext& ctx);
-    virtual bool rawLine(float x1, float y1, float x2, float y2);
-	virtual bool rawLines(const mgvector<float>& pxs);
-	virtual bool rawBeziers(const mgvector<float>& pxs);
-	virtual bool rawPolygon(const mgvector<float>& pxs, bool stroke, bool fill);
-	virtual bool rawRect(float x, float y, float w, float h, bool stroke, bool fill);
-	virtual bool rawEllipse(float x, float y, float w, float h, bool stroke, bool fill);
-	virtual bool rawEndPath(bool stroke, bool fill);
-	virtual bool rawBezierTo(const mgvector<float>& pxs);
-	virtual bool rawPath(const mgvector<float>& pxs, const mgvector<char>& types, bool stroke, bool fill);
 
-    virtual bool rawBeginPath() { return false; }
-    virtual bool rawMoveTo(float x, float y);
-    virtual bool rawLineTo(float x, float y);
-    virtual bool rawClosePath() { return false; }
+    virtual bool drawLine(float x1, float y1, float x2, float y2);
+	virtual bool drawLines(const mgvector<float>& pxs);
+	virtual bool drawBeziers(const mgvector<float>& pxs);
+	virtual bool drawPolygon(const mgvector<float>& pxs, bool stroke, bool fill);
+	virtual bool drawRect(float x, float y, float w, float h, bool stroke, bool fill);
+	virtual bool drawEllipse(float x, float y, float w, float h, bool stroke, bool fill);
+	virtual bool drawPath(const mgvector<float>& pxs, const mgvector<char>& types, bool stroke, bool fill);
+
+    virtual bool beginPath() { return false; }
+    virtual bool pathMoveTo(float x, float y);
+    virtual bool pathLineTo(float x, float y);
+    virtual bool pathBezierTo(const mgvector<float>& pxs);
+    virtual bool closePath() { return false; }
+    virtual bool endPath(bool stroke, bool fill);
 
     virtual void clearWindow() {}
     virtual void clearCachedBitmap(bool clearAll = false);
@@ -66,7 +67,7 @@ private:
     virtual void _clipBoxChanged(const RECT_2D& clipBox);
     virtual void _antiAliasModeChanged(bool antiAlias) { antiAliasModeChanged(antiAlias); }
 
-    static float& screenDpi() { static float dpi = 120; return dpi; }
+    static float& screenDpi() { static float dpi = 240; return dpi; }
 
     virtual bool rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2);
 	virtual bool rawLines(const GiContext* ctx, const Point2d* pxs, int count);
@@ -77,6 +78,10 @@ private:
 	virtual bool rawEndPath(const GiContext* ctx, bool fill);
 	virtual bool rawBezierTo(const Point2d* pxs, int count);
 	virtual bool rawPath(const GiContext* ctx, int count, const Point2d* pxs, const UInt8* types);
+	virtual bool rawBeginPath() { return beginPath(); }
+	virtual bool rawMoveTo(float x, float y) { return pathMoveTo(x, y); }
+	virtual bool rawLineTo(float x, float y) { return pathLineTo(x, y); }
+	virtual bool rawClosePath() { return closePath(); }
 
 private:
 	GiTransform 	_xf;

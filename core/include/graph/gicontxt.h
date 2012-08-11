@@ -153,6 +153,18 @@ public:
     {
         m_lineColor = color;
     }
+
+    //! 返回线条ARGB颜色
+    int getLineARGB() const
+    {
+        return m_lineColor.getARGB();
+    }
+    
+    //! 设置线条ARGB颜色，0表示不画线条
+    void setLineARGB(int argb)
+    {
+        m_lineColor.setARGB(argb);
+    }
     
     //! 返回线条透明度
     char getLineAlpha() const
@@ -188,6 +200,18 @@ public:
     void setFillColor(const GiColor& color)
     {
         m_fillColor = color;
+    }
+
+    //! 返回线条ARGB颜色
+    int getFillARGB() const
+    {
+        return m_fillColor.getARGB();
+    }
+    
+    //! 设置线条ARGB颜色，0表示不填充
+    void setFillARGB(int argb)
+    {
+        m_fillColor.setARGB(argb);
     }
     
     //! 返回填充透明度

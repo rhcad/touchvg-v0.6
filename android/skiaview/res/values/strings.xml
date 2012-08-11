@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="skiaview">Hello World, TouchVG!</string>
-    <string name="app_name">Hello</string>
-
+    <string name="app_name">TouchVG</string>
+    <string name="addshapes_button">addShapes</string>
+    <string name="clearshapes_button">clearShapes</string>
 </resources>
