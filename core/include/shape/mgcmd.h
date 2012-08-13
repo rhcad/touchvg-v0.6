@@ -21,17 +21,25 @@ struct MgView {
     virtual GiGraphics* graph() = 0;            //!< 得到图形显示对象
     virtual void regen() = 0;                   //!< 标记视图待重新构建显示
     virtual void redraw(bool fast) = 0;         //!< 标记视图待更新显示
-    virtual GiContext* context() = 0;           //!< 得到当前绘图属性
+    
+    virtual GiContext* context() {              //!< 得到当前绘图属性
+        return shapes()->context(); }
     virtual bool useFinger() { return true; }   //!< 使用手指或鼠标交互
     virtual void selChanged() {}                //!< 选择集改变的通知
-    virtual bool shapeWillAdded(MgShape* shape) = 0;    //!< 通知将添加图形
-    virtual void shapeAdded(MgShape* shape) = 0;        //!< 通知已添加图形，由视图重新构建显示
-    virtual bool shapeWillDeleted(MgShape* shape) = 0;  //!< 通知将删除图形
-    virtual bool shapeCanRotated(MgShape* shape) = 0;   //!< 通知是否能旋转图形
+    virtual bool shapeWillAdded(MgShape* shape) {       //!< 通知将添加图形
+        return !!shape; }
+    virtual void shapeAdded(MgShape* shape) {           //!< 通知已添加图形，由视图重新构建显示
+        if (shape) regen(); }
+    virtual bool shapeWillDeleted(MgShape* shape) {     //!< 通知将删除图形
+        return !!shape; }
+    virtual bool shapeCanRotated(MgShape* shape) {      //!< 通知是否能旋转图形
+        return !!shape; }
     virtual void shapeMoved(MgShape* shape, int segment) {  //!< 通知图形已拖动
         if (shape) segment=1; }
-    virtual bool longPressSelection(int selState) = 0;  //!< 选择状态下长按, MgSelection::kSelState
-    virtual bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) = 0;   //!< 显示控制点
+    virtual bool longPressSelection(int selState) {     //!< 选择状态下长按, MgSelection::kSelState
+        return selState==-1; }
+    virtual bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) {  //!< 显示控制点
+        return gs && pnt != pnt && hotdot; }
 };
 
 //! 命令参数

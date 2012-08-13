@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class PaintView extends View {
@@ -47,4 +48,30 @@ public class PaintView extends View {
 		}
 	}
 	
+	@Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+
+        switch (event.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+        	mView.onGesture(1, 1, 1, x, y, 0, 0);
+            break;
+        case MotionEvent.ACTION_MOVE:
+        	mView.onGesture(1, 2, 1, x, y, 0, 0);
+            break;
+        case MotionEvent.ACTION_UP:
+        	mView.onGesture(1, 3, 1, x, y, 0, 0);
+            break;
+        default:
+            break;
+        }
+        
+        if (mView.isNeedRedraw()) {
+        	this.invalidate();
+        }
+
+        return true;
+    }
+
 }

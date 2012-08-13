@@ -33,12 +33,14 @@ public class testy extends Activity {
     private void onAddShapes() {
     	PaintView view = (PaintView)this.findViewById(R.id.paintView);
     	view.getCoreView().addTestingShapes();
+    	view.getCoreView().setCommandName("select");
     	view.invalidate();
     }
     
     private void onClearShapes() {
     	PaintView view = (PaintView)this.findViewById(R.id.paintView);
     	view.getCoreView().loadShapes(null);
+    	view.getCoreView().setCommandName("splines");
     	view.invalidate();
     }
 }
