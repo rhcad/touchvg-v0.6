@@ -16,8 +16,9 @@ public:
 	GiCanvasBase*	_canvas;
 	MgShapes*		_shapes;
 	MgMotion		_motion;
+	bool			_moved;
 
-	MgViewProxy(GiCanvasBase* canvas) : _needRedraw(true), _canvas(canvas) {
+	MgViewProxy(GiCanvasBase* canvas) : _needRedraw(true), _canvas(canvas), _moved(false) {
 		_shapes = new MgShapesT<std::list<MgShape*> >;
 		_motion.view = this;
 	}
@@ -130,6 +131,7 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int fingerCount,
 	if (1 == gestureState) {
 		_view->_motion.startPoint = _view->_motion.point;
 		_view->_motion.startPointM = _view->_motion.pointM;
+		_view->_moved = false;
 	}
 
 	switch (gestureType) {
@@ -139,9 +141,13 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int fingerCount,
 			}
 			else if (2 == gestureState) {
 				ret = cmd->touchMoved(&_view->_motion);
+				_view->_moved = _view->_moved || _view->_motion.startPoint.distanceTo(_view->_motion.point) > 2;
 			}
 			else if (3 == gestureState) {
 				ret = cmd->touchEnded(&_view->_motion);
+				if (!_view->_moved) {
+					ret = cmd->click(&_view->_motion);
+				}
 			}
 			_view->_motion.lastPoint = _view->_motion.point;
 			_view->_motion.lastPointM = _view->_motion.pointM;
