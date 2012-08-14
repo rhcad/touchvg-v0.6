@@ -26,7 +26,7 @@ public class GiCanvasEx extends GiCanvasBase{
 	}
 
 	public boolean beginPaint(Canvas canvas) {
-		if (this.mCanvas || !canvas) {
+		if (this.mCanvas != null || canvas == null) {
 			return false;
 		}
 		
