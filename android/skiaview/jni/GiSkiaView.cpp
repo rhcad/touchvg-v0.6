@@ -43,7 +43,7 @@ public:
     }
 };
 
-GiSkiaView::GiSkiaView(GiCanvasBase* canvas)
+GiSkiaView::GiSkiaView(GiCanvasBase* canvas) : _zoomMask(7)
 {
 	_view = new MgViewProxy(canvas);
 }
@@ -153,8 +153,14 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int fingerCount,
 			ret = cmd->longPress(&_view->_motion);
 			break;
 		case 5:	// Ë«Ö¸ÒÆ¶¯
+			if (_zoomMask & 4) {
+				dynZoom(_view->_motion.point, Point2d(x2, y2), gestureState);
+			}
 			break;
 		case 6:	// Ë«Ö¸Ë«»÷
+			if (_zoomMask & 4) {
+				switchZoom(_view->_motion.point);
+			}
 			break;
 	}
 
@@ -188,6 +194,38 @@ void GiSkiaView::applyContext(const GiContext& ctx, int mask, int apply)
 	if (apply != 0) {
 		mgGetCommandManager()->dynamicChangeEnded(_view, apply > 0);
 	}
+}
+
+void GiSkiaView::setZoomFeature(int mask)
+{
+	_zoomMask = mask;
+}
+
+void GiSkiaView::dynZoom(const Point2d& pt1, const Point2d& pt2, int gestureState)
+{
+	Point2d ptw1 = pt1 * _view->_canvas->xf().displayToWorld();
+	Point2d ptw2 = pt2 * _view->_canvas->xf().displayToWorld();
+
+	if (1 == gestureState) {
+		_lastPtW[0] = ptw1;
+		_lastPtW[1] = ptw2;
+	}
+	else if (2 == gestureState) {
+		float scale = (float)(ptw1.distanceTo(ptw2) / _lastPtW[0].distanceTo(_lastPtW[1]));
+		Vector2d offset = (ptw1 - _lastPtW[0]) * _view->_canvas->xf().worldToDisplay();
+		Point2d ptAt = _lastPtW[0] * _view->_canvas->xf().worldToDisplay();
+
+		_view->_canvas->xf().zoomScale(_view->_canvas->xf().getViewScale() * scale, &ptAt);
+		_view->_canvas->xf().zoomPan(offset.x, offset.y);
+		_view->regen();
+
+		_lastPtW[0] = ptw1;
+		_lastPtW[1] = ptw2;
+	}
+}
+
+void GiSkiaView::switchZoom(const Point2d&)
+{
 }
 
 #include <testgraph/RandomShape.cpp>

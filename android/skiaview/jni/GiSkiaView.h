@@ -81,8 +81,17 @@ public:
      */
     void applyContext(const GiContext& ctx, int mask, int apply);
 
+    //! 设置允许的放缩类型: 0-禁止, 1-平移, 2-缩放, 4-局部放大和还原, 7-全部
+    void setZoomFeature(int mask);
+
+private:
+    void dynZoom(const Point2d& pt1, const Point2d& pt2, int gestureState);
+    void switchZoom(const Point2d& pt);
+
 private:
     MgViewProxy*		_view;
+    int					_zoomMask;
+    Point2d				_lastPtW[2];
 };
 
 #endif // __TOUCHVG_SKIAVIEW_H_

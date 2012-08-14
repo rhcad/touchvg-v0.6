@@ -626,8 +626,9 @@ bool MgCommandSelect::isCloneDrag(const MgMotion* sender)
 
 bool MgCommandSelect::touchEnded(const MgMotion* sender)
 {
-    if (m_insertPoint && sender->pointM.distanceTo(m_ptNear)
-        < mgDisplayMmToModel(5, sender)) {  // 拖动刚新加的点到起始点时取消新增
+    // 拖动刚新加的点到起始点时取消新增
+    if (m_insertPoint && m_cloneShapes.size() == 1
+        && sender->pointM.distanceTo(m_ptNear) < mgDisplayMmToModel(5, sender)) {
         m_cloneShapes[0]->release();
         m_cloneShapes.clear();
     }
@@ -663,7 +664,8 @@ void MgCommandSelect::cloneShapes(MgView* view)
         MgShape* shape = view->shapes()->findShape(*its);
         if (shape) {
             shape = (MgShape*)(shape->clone());
-            m_cloneShapes.push_back(shape);
+            if (shape)
+                m_cloneShapes.push_back(shape);
         }
     }
 }
