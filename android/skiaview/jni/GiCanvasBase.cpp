@@ -36,6 +36,7 @@ void GiCanvasBase::antiAliasModeChanged(bool) {}
 bool GiCanvasBase::drawCachedBitmap2(const GiCanvas*, float, float, bool) { return false; }
 void GiCanvasBase::penChanged(const GiContext&, float penWidth) {}
 void GiCanvasBase::brushChanged(const GiContext&) {}
+void GiCanvasBase::setNeedRedraw() {}
 
 bool GiCanvasBase::rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2)
 {

@@ -20,7 +20,6 @@ LOCAL_C_INCLUDES := $(VCORE_PATH)/include/geom \
 
 LOCAL_SRC_FILES  := GiSkiaView.cpp \
                     GiCanvasBase.cpp \
-                    GiCmdAndr.cpp \
                     skiaview_java_wrap.cpp \
                     $(SRC_PATH)/geom/mgmat.cpp \
                     $(SRC_PATH)/geom/mgbase.cpp \

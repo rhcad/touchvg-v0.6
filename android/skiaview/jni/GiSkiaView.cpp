@@ -3,22 +3,21 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "GiSkiaView.h"
-#include "GiCmdAndr.h"
 #include <mgshapest.h>
 #include <list>
 #include <mgstoragebs.h>
 #include <mgcmd.h>
+#include <vector>
 
 class MgViewProxy : public MgView
 {
 public:
-	bool			_needRedraw;
 	GiCanvasBase*	_canvas;
 	MgShapes*		_shapes;
 	MgMotion		_motion;
 	bool			_moved;
 
-	MgViewProxy(GiCanvasBase* canvas) : _needRedraw(true), _canvas(canvas), _moved(false) {
+	MgViewProxy(GiCanvasBase* canvas) : _canvas(canvas), _moved(false) {
 		_shapes = new MgShapesT<std::list<MgShape*> >;
 		_motion.view = this;
 	}
@@ -37,22 +36,20 @@ public:
     }
     virtual void regen() {
     	_canvas->clearCachedBitmap();
-    	_needRedraw = true;
+    	_canvas->setNeedRedraw();
     }
     virtual void redraw(bool) {
-    	_needRedraw = true;
+    	_canvas->setNeedRedraw();
     }
 };
 
 GiSkiaView::GiSkiaView(GiCanvasBase* canvas)
 {
 	_view = new MgViewProxy(canvas);
-    _cmdc = new GiCmdController;
 }
 
 GiSkiaView::~GiSkiaView()
 {
-    delete _cmdc;
     delete _view;
 }
 
@@ -87,13 +84,11 @@ void GiSkiaView::onSize(int width, int height)
 
 bool GiSkiaView::onDraw(GiCanvasBase& canvas)
 {
-	_view->_needRedraw = false;
 	return _view->_shapes && _view->_shapes->draw(canvas.gs()) > 0;
 }
 
 bool GiSkiaView::onDynDraw(GiCanvasBase& canvas)
 {
-	_view->_needRedraw = false;
 	MgCommand* cmd = mgGetCommandManager()->getCommand();
 	return cmd && cmd->draw(&_view->_motion, &canvas.gs());
 }
@@ -108,11 +103,6 @@ bool GiSkiaView::setCommandName(const char* name)
 	return mgGetCommandManager()->setCommand(&_view->_motion, name);
 }
 
-bool GiSkiaView::isNeedRedraw() const
-{
-	return _view->_needRedraw;
-}
-
 bool GiSkiaView::onGesture(int gestureType, int gestureState, int fingerCount,
 		                   float x1, float y1, float x2, float y2)
 {
@@ -122,7 +112,7 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int fingerCount,
 	if (!cmd) {
 		return false;
 	}
-	if (gestureState < 1 || gestureState > 3) {
+	if ((gestureState < 1 || gestureState > 3) && (1 == gestureType || 5 == gestureType)) {
 		return cmd->cancel(&_view->_motion);
 	}
 
@@ -152,6 +142,7 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int fingerCount,
 			_view->_motion.lastPoint = _view->_motion.point;
 			_view->_motion.lastPointM = _view->_motion.pointM;
 			break;
+
 		case 2:	// 单指单击
 			ret = cmd->click(&_view->_motion);
 			break;
@@ -161,15 +152,42 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int fingerCount,
 		case 4:	// 长按
 			ret = cmd->longPress(&_view->_motion);
 			break;
-		case 5:	// 双指滑动
+		case 5:	// 双指移动
 			break;
-		case 6:	// 双指放缩
-			break;
-		case 7:	// 双指双击
+		case 6:	// 双指双击
 			break;
 	}
 
 	return ret;
+}
+
+GiContext& GiSkiaView::getCurrentContext(bool forChange)
+{
+	MgShape* shape = NULL;
+	mgGetCommandManager()->getSelection(_view, 1, &shape, forChange);
+	return shape ? *shape->context() : *_view->context();
+}
+
+void GiSkiaView::applyContext(const GiContext& ctx, int mask, int apply)
+{
+	UInt32 n = mgGetCommandManager()->getSelection(_view, 0, NULL, true);
+	std::vector<MgShape*> shapes(n, NULL);
+
+	if (n > 0 && mgGetCommandManager()->getSelection(_view, n, (MgShape**)&shapes.front(), true) > 0) {
+		for (int i = 0; i < n; i++) {
+			if (shapes[i]) {
+				shapes[i]->context()->copy(ctx, mask);
+			}
+		}
+		_view->redraw(false);
+	}
+	else {
+		_view->context()->copy(ctx, mask);
+	}
+
+	if (apply != 0) {
+		mgGetCommandManager()->dynamicChangeEnded(_view, apply > 0);
+	}
 }
 
 #include <testgraph/RandomShape.cpp>

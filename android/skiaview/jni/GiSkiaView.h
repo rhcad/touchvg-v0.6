@@ -8,10 +8,10 @@
 
 #include "GiCanvasBase.h"
 
-class GiCmdController;
 class MgStorageBase;
 struct MgShapes;
 class MgViewProxy;
+class GiContext;
 
 //! 支持Android平台的图形视图类
 /*! \ingroup GRAPH_SKIA
@@ -52,27 +52,37 @@ public:
     //! 启动指定名称的命令
     bool setCommandName(const char* name);
 
-    //! 返回是否需要重绘视图
-	bool isNeedRedraw() const;
-
     //! 传递触摸手势消息
     /**
-     * \param gestureType 手势类型，1-单指滑动，2-单指单击，3-单指双击，4-长按，5-双指滑动，6-双指放缩，7-双指双击
-     * \param gestureState 手势状态，1-开始，2-改变，3-结束，0-取消
+     * \param gestureType 手势类型，1-单指滑动，2-单指单击，3-单指双击，4-长按，5-双指移动，6-双指双击
+     * \param gestureState 手势状态，1-开始，2-改变，3-结束，0-取消，gestureType为1或5时有效
      * \param fingerCount 触点个数
      * \param x1 第一个触点的X坐标，fingerCount小于1时忽略
      * \param y1 第一个触点的Y坐标，fingerCount小于1时忽略
      * \param x2 第二个触点的X坐标，fingerCount小于2时忽略
      * \param y2 第二个触点的Y坐标，fingerCount小于2时忽略
      * \return 内部是否响应了此手势
-     * \see isNeedRedraw
      */
     bool onGesture(int gestureType, int gestureState, int fingerCount,
     		float x1, float y1, float x2, float y2);
 
+    //! 返回当前绘图属性
+    /**
+     * \param forChange 是否用于改动绘图属性
+     * \return 当前绘图属性，如果选中了图形则为所选图形的属性
+     */
+    GiContext& getCurrentContext(bool forChange);
+
+    //! 绘图属性改变后提交更新
+    /** 在 getCurrentContext(true) 后调用本函数。
+     * \param ctx 绘图属性
+     * \param mask 需要应用哪些属性，-1表示全部属性，0则不修改，按位组合值见 GiContext 的 kContextBits
+     * \param apply 0表示还要继续动态修改属性，1表示结束动态修改并提交，-1表示结束动态修改并放弃改动
+     */
+    void applyContext(const GiContext& ctx, int mask, int apply);
+
 private:
     MgViewProxy*		_view;
-    GiCmdController*    _cmdc;
 };
 
 #endif // __TOUCHVG_SKIAVIEW_H_

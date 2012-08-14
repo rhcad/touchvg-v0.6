@@ -1,5 +1,6 @@
 package touchvg.view;
 
+import android.view.View;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -13,9 +14,11 @@ public class GiCanvasEx extends GiCanvasBase{
 	private Paint mPen = new Paint();
 	private Paint mBrush = new Paint();
 	private Canvas mCanvas = null;
+	private View mView = null;
 	
-	public GiCanvasEx()
+	public GiCanvasEx(View view)
 	{
+		mView = view;
 	}
 	
 	public Canvas getCanvas() {
@@ -23,6 +26,10 @@ public class GiCanvasEx extends GiCanvasBase{
 	}
 
 	public boolean beginPaint(Canvas canvas) {
+		if (this.mCanvas || !canvas) {
+			return false;
+		}
+		
 		this.mCanvas = canvas;
 		super.beginPaint();
 		
@@ -31,15 +38,19 @@ public class GiCanvasEx extends GiCanvasBase{
 		mPen.setStyle(Paint.Style.STROKE);
 		mPen.setStrokeJoin(Paint.Join.ROUND);
 		mPen.setStrokeCap(Paint.Cap.ROUND);
-		
 		mBrush.setStyle(Paint.Style.FILL);
         
 		return true;
 	}
 	
-	public void endPaint(Canvas canvas) {
+	public void endPaint() {
 		this.mCanvas = null;
 		super.endPaint();
+	}
+	
+	@Override
+	public void setNeedRedraw() {
+		mView.invalidate();
 	}
 	
 	@Override
@@ -119,7 +130,7 @@ public class GiCanvasEx extends GiCanvasBase{
 	
 	@Override
 	public boolean drawRect(float x, float y, float w, float h, 
-			               boolean stroke, boolean fill) {
+			                boolean stroke, boolean fill) {
 		if (fill)
 			mCanvas.drawRect(x, y, x+w, y+h, mBrush);
 		if (stroke)
@@ -129,7 +140,7 @@ public class GiCanvasEx extends GiCanvasBase{
 
 	@Override
 	public boolean drawEllipse(float x, float y, float w, float h,
-			boolean stroke, boolean fill) {
+			                   boolean stroke, boolean fill) {
 		if (fill)
 			mCanvas.drawOval(new RectF(x, y, x+w, y+h), mBrush);
 		if (stroke)

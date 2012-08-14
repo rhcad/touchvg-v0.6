@@ -18,6 +18,19 @@ enum kLineStyle {
     kLineNull           //!< Not draw.
 };
 
+//! 设置属性的位掩码类型
+enum kContextBits {
+    kContextLineRGB   = 0x01,
+    kContextLineAlpha = 0x02,
+    kContextLineColor = 0x03,
+    kContextLineWidth = 0x04,
+    kContextLineStyle = 0x08,
+    kContextFillRGB   = 0x10,
+    kContextFillAlpha = 0x20,
+    kContextFillColor = 0x30,
+    kContextCopyAll   = 0xFF,
+};
+
 //! 绘图参数上下文类
 /*! 用于在图形系统的绘图函数中传入绘图参数
     \ingroup GRAPH_INTERFACE
@@ -57,15 +70,31 @@ public:
         m_fillColor = src.m_fillColor;
     }
 
-    //! 赋值函数
-    GiContext& copy(const GiContext& src)
+    //! 赋值函数, kContextBits 按位设置
+    GiContext& copy(const GiContext& src, int mask = -1)
     {
         if (this != &src)
         {
-            m_lineStyle = src.m_lineStyle;
-            m_lineWidth = src.m_lineWidth;
-            m_lineColor = src.m_lineColor;
-            m_fillColor = src.m_fillColor;
+            if (mask & 0x01) {
+                GiColor c = src.m_lineColor;
+                m_lineColor.set(c.r, c.g, c.b);
+            }
+            if (mask & 0x02) {
+                m_lineColor.a = src.m_lineColor.a;
+            }
+            if (mask & 0x04) {
+                m_lineWidth = src.m_lineWidth;
+            }
+            if (mask & 0x08) {
+                m_lineStyle = src.m_lineStyle;
+            }
+            if (mask & 0x10) {
+                GiColor c = src.m_fillColor;
+                m_fillColor.set(c.r, c.g, c.b);
+            }
+            if (mask & 0x20) {
+                m_fillColor.a = src.m_fillColor.a;
+            }
         }
         return *this;
     }

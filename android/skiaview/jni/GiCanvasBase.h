@@ -27,8 +27,9 @@ public:
     virtual GiColor getBkColor() const { return _bkcolor; }
     virtual GiColor setBkColor(const GiColor& color);
 
-    virtual bool beginPaint();
-	virtual void endPaint();
+	bool beginPaint();
+	void endPaint();
+	virtual void setNeedRedraw();
     virtual void penChanged(const GiContext& ctx, float penWidth);
 	virtual void brushChanged(const GiContext& ctx);
 

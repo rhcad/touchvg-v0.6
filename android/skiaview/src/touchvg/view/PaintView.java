@@ -28,7 +28,7 @@ public class PaintView extends View {
 	
 	private void init()
 	{
-		mCanvas = new GiCanvasEx();
+		mCanvas = new GiCanvasEx(this);
 		mView = new GiSkiaView(mCanvas);
 	}
 	
@@ -65,10 +65,6 @@ public class PaintView extends View {
             break;
         default:
             break;
-        }
-        
-        if (mView.isNeedRedraw()) {
-        	this.invalidate();
         }
 
         return true;
