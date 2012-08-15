@@ -23,6 +23,7 @@ public class PaintView extends View {
 	private float lastX1 = 1;
 	private float lastY1 = 1;
 	private boolean isMoving = false;
+	private int mBkColor = Color.WHITE;
 	
 	static {
 		System.loadLibrary("skiaview");
@@ -106,11 +107,16 @@ public class PaintView extends View {
 		return mView;
 	}
 	
+	public void setBkColor(int argb) {
+		mBkColor = argb;
+	}
+	
 	protected void onDraw(Canvas canvas) {
 		mView.onSize(canvas.getWidth(), canvas.getHeight());
 		
 		if (mCanvas.beginPaint(canvas)) {
-			canvas.drawColor(Color.WHITE);
+			if ((mBkColor & 0xFF000000) != 0)
+				canvas.drawColor(mBkColor);
 			mView.onDraw(mCanvas);
 			mView.onDynDraw(mCanvas);
 			mCanvas.endPaint();

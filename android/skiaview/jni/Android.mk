@@ -7,7 +7,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := skiaview
 LOCAL_SHARED_LIBRARIES := libcutils libdl libstlport
 LOCAL_PRELINK_MODULE   := false
-LOCAL_CFLAGS           := -frtti -g
+LOCAL_CFLAGS           := -frtti -Wall -g
 
 ifndef NDK_ROOT
 include external/stlport/libstlport.mk

@@ -128,7 +128,7 @@ public:
     MgShape* getNextShape(void*& it) const
     {
         const_iterator* pit = (const_iterator*)it;
-        if (it == NULL && *pit != _shapes.end()) {
+        if (pit && *pit != _shapes.end()) {
             ++(*pit);
             if (*pit != _shapes.end())
                 return *(*pit);
