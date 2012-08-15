@@ -143,8 +143,8 @@ MgCommandManager* mgGetCommandManager();
 
 //! 注册图形实体类型
 /*! \ingroup GEOM_SHAPE
-    \param type MgBaseShape 派生图形类的Type()，或 MgShapeT<图形类>的Type()
-    \param factory 创建函数，例如 MgShapeT<图形类>的create, 为NULL则取消注册
+    \param type MgBaseShape 派生图形类的 Type()，或 MgShapeT(图形类)的 Type()
+    \param factory 图形类的创建函数，例如 MgShapeT(图形类)的 create, 为NULL则取消注册
 */
 void mgRegisterShapeCreator(UInt32 type, MgShape* (*factory)());
 
