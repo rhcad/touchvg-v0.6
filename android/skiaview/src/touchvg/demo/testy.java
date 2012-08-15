@@ -1,6 +1,5 @@
 package touchvg.demo;
 
-import touchvg.skiaview.GiColor;
 import touchvg.skiaview.GiContext;
 import touchvg.skiaview.GiSkiaView;
 import touchvg.view.PaintView;
@@ -11,28 +10,28 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class Testy extends Activity {
-	private PaintView mView;        //ç»„ä»¶ç±»
-	private GiSkiaView mCoreView;   //å†…æ ¸ç»„ä»¶ç±»
-	private Button buttonSelect;    //é€‰æ‹©å›¾å½¢æŒ‰é’®
-	private Button buttonClear;     //æ¸…é™¤å›¾å½¢æŒ‰é’®
-	private Button buttonRed;       //çº¢è‰²ç”»ç¬”æŒ‰é’®
-	private Button buttonBlue;      //è“è‰²ç”»ç¬”æŒ‰é’®
-	private Button buttonThickPen;  //ç”»ç¬”å˜ç»†æŒ‰é’®
-	private Button buttonBoldPen;   //ç”»ç¬”å˜ç²—æŒ‰é’®
-	private Button buttonYellow;    //é»„è‰²ç”»ç¬”æŒ‰é’®
-	private final Testy mHandler = this;  //è§†å›¾ç±»å®ä¾‹
-	private Button eraser;
+	private PaintView mView;        //×é¼şÀà
+	private GiSkiaView mCoreView;   //ÄÚºË×é¼şÀà
+	private Button buttonSelect;    //Ñ¡ÔñÍ¼ĞÎ°´Å¥
+	private Button buttonClear;     //Çå³ıÍ¼ĞÎ°´Å¥
+	private Button buttonRed;       //ºìÉ«»­±Ê°´Å¥
+	private Button buttonBlue;      //À¶É«»­±Ê°´Å¥
+	private Button buttonThickPen;  //»­±Ê±äÏ¸°´Å¥
+	private Button buttonBoldPen;   //»­±Ê±ä´Ö°´Å¥
+	private Button buttonYellow;    //»ÆÉ«»­±Ê°´Å¥
+	private Button buttonEraser;	//ÏğÆ¤°´Å¥
+	private final Testy mHandler = this;  //ÊÓÍ¼ÀàÊµÀı
 	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        this.initComponent();  //åˆå§‹åŒ–æŒ‰é’®å®ä¾‹
-        this.bindEvent();    //ä¸ºæŒ‰é’®ç»‘å®šæ–¹æ³•
+        this.initComponent();  	//³õÊ¼»¯°´Å¥ÊµÀı
+        this.bindEvent();    	//Îª°´Å¥°ó¶¨·½·¨
     }
     
-    //ç›‘å¬å™¨æ–¹æ³•
+    //ÊÂ¼ş¼àÌıÆ÷·½·¨
     private void bindEvent()
     {
     	buttonSelect.setOnClickListener(new OnClickListener() {
@@ -77,7 +76,7 @@ public class Testy extends Activity {
 			}
 		});
     	
-    	eraser.setOnClickListener(new OnClickListener() {
+    	buttonEraser.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				mHandler.onEraser();
 			}
@@ -146,6 +145,6 @@ public class Testy extends Activity {
     	buttonYellow = (Button) this.findViewById(R.id.yellowPen_button);
     	buttonBoldPen = (Button) this.findViewById(R.id.boldPen_button);
     	buttonThickPen = (Button) this.findViewById(R.id.thickPen_button);
-    	eraser = (Button) this.findViewById(R.id.eraser_button);
+    	buttonEraser = (Button) this.findViewById(R.id.eraser_button);
     }
 }

@@ -20,15 +20,15 @@ enum kLineStyle {
 
 //! 设置属性的位掩码类型
 enum kContextBits {
-    kContextLineRGB   = 0x01,
-    kContextLineAlpha = 0x02,
-    kContextLineColor = 0x03,
-    kContextLineWidth = 0x04,
-    kContextLineStyle = 0x08,
-    kContextFillRGB   = 0x10,
-    kContextFillAlpha = 0x20,
-    kContextFillColor = 0x30,
-    kContextCopyAll   = 0xFF,
+    kContextLineRGB   = 0x01,   //!< 设置线色的RGB分量
+    kContextLineAlpha = 0x02,   //!< 设置线色的透明度分量
+    kContextLineColor = 0x03,   //!< 设置线色的所有分量
+    kContextLineWidth = 0x04,   //!< 设置线宽
+    kContextLineStyle = 0x08,   //!< 设置线型
+    kContextFillRGB   = 0x10,   //!< 设置填充色的RGB分量
+    kContextFillAlpha = 0x20,   //!< 设置填充色的透明度分量
+    kContextFillColor = 0x30,   //!< 设置填充色的所有分量
+    kContextCopyAll   = 0xFF,   //!< 设置所有属性
 };
 
 //! 绘图参数上下文类
@@ -184,9 +184,9 @@ public:
     }
     
     //! 设置线条颜色
-    void setLineColor(unsigned char r, unsigned char g, unsigned char b)
+    void setLineColor(int r, int g, int b)
     {
-        m_lineColor.set(r, g, b);
+        m_lineColor.set((UInt8)r, (UInt8)g, (UInt8)b);
     }
 
     //! 返回线条ARGB颜色
@@ -238,9 +238,9 @@ public:
     }
     
     //! 设置填充颜色
-    void setFillColor(unsigned char r, unsigned char g, unsigned char b)
+    void setFillColor(int r, int g, int b)
     {
-        m_fillColor.set(r, g, b);
+        m_fillColor.set((UInt8)r, (UInt8)g, (UInt8)b);
     }
 
     //! 返回线条ARGB颜色
