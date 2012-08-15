@@ -16,10 +16,12 @@ public:
 	MgShapes*		_shapes;
 	MgMotion		_motion;
 	bool			_moved;
+	GiContext		_tmpContext;
 
 	MgViewProxy(GiCanvasBase* canvas) : _canvas(canvas), _moved(false) {
 		_shapes = new MgShapesT<std::list<MgShape*> >;
 		_motion.view = this;
+		_shapes->context()->setLineAlpha(140);
 	}
 	virtual ~MgViewProxy() {
 		_shapes->release();
@@ -180,24 +182,27 @@ GiContext& GiSkiaView::getCurrentContext(bool forChange)
 {
 	MgShape* shape = NULL;
 	mgGetCommandManager()->getSelection(_view, 1, &shape, forChange);
-	return shape ? *shape->context() : *_view->context();
+	_view->_tmpContext = shape ? *shape->context() : *_view->context();
+	return _view->_tmpContext;
 }
 
 void GiSkiaView::applyContext(const GiContext& ctx, int mask, int apply)
 {
-	UInt32 n = mgGetCommandManager()->getSelection(_view, 0, NULL, true);
-	std::vector<MgShape*> shapes(n, NULL);
+	if (mask != 0) {
+		UInt32 n = mgGetCommandManager()->getSelection(_view, 0, NULL, true);
+		std::vector<MgShape*> shapes(n, NULL);
 
-	if (n > 0 && mgGetCommandManager()->getSelection(_view, n, (MgShape**)&shapes.front(), true) > 0) {
-		for (int i = 0; i < n; i++) {
-			if (shapes[i]) {
-				shapes[i]->context()->copy(ctx, mask);
+		if (n > 0 && mgGetCommandManager()->getSelection(_view, n, (MgShape**)&shapes.front(), true) > 0) {
+			for (int i = 0; i < n; i++) {
+				if (shapes[i]) {
+					shapes[i]->context()->copy(ctx, mask);
+				}
 			}
+			_view->redraw(false);
 		}
-		_view->redraw(false);
-	}
-	else {
-		_view->context()->copy(ctx, mask);
+		else {
+			_view->context()->copy(ctx, mask);
+		}
 	}
 
 	if (apply != 0) {

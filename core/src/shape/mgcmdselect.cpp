@@ -696,7 +696,7 @@ bool MgCommandSelect::applyCloneShapes(MgView* view, bool apply, bool addNewShap
             else if (apply) {
                 MgShape* shape = i < m_selIds.size() ? view->shapes()->findShape(m_selIds[i]) : NULL;
                 if (shape) {
-                    shape->shape()->copy(*m_cloneShapes[i]->shape());
+                    shape->copy(*m_cloneShapes[i]);
                     shape->shape()->update();
                     changed = true;
                 }

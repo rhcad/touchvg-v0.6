@@ -85,7 +85,7 @@ public class Testy extends Activity {
 
     private void onPenYellow() {
     	mCoreView.setCommandName("splines");
-    	GiContext ctx = mCoreView.getCurrentContext(true);
+    	GiContext ctx = mCoreView.getCurrentContext(false);
     	ctx.setLineColor(255, 255, 0);
     	mCoreView.applyContext(ctx, 1, 1);
     	ctx.delete();
@@ -93,7 +93,7 @@ public class Testy extends Activity {
     
     private void onPenBlue() {
     	mCoreView.setCommandName("splines");
-    	GiContext ctx = mCoreView.getCurrentContext(true);
+    	GiContext ctx = mCoreView.getCurrentContext(false);
     	ctx.setLineColor(0, 0, 255);
     	mCoreView.applyContext(ctx, 1, 1);
     	ctx.delete();
@@ -101,7 +101,7 @@ public class Testy extends Activity {
     
     private void onPenRed() {
     	mCoreView.setCommandName("splines");
-    	GiContext ctx = mCoreView.getCurrentContext(true);
+    	GiContext ctx = mCoreView.getCurrentContext(false);
     	ctx.setLineColor(255, 0, 0);
     	mCoreView.applyContext(ctx, 1, 1);
     	ctx.delete();

@@ -13,7 +13,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/selectshapes_button" />
-        
+        <Button
+            android:id="@+id/eraser_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/eraser" />
         <Button
             android:id="@+id/clearshapes_button"
             android:layout_width="wrap_content"
@@ -25,7 +29,6 @@
             android:layout_height="wrap_content"
             android:textColor="#ff0000"
             android:text="@string/redPen" />
-        
         <Button
             android:id="@+id/yellowPen_button"
             android:layout_width="wrap_content"
@@ -38,7 +41,6 @@
             android:layout_height="wrap_content"
             android:textColor="#0000ff"
             android:text="@string/bluePen" />
-        
         <Button
             android:id="@+id/thickPen_button"
             android:layout_width="wrap_content"
@@ -49,11 +51,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/boldPen" />
-                <Button
-            android:id="@+id/eraser_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/eraser" />
     </LinearLayout>
     
     <touchvg.view.PaintView
