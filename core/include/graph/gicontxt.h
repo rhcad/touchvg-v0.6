@@ -182,6 +182,12 @@ public:
     {
         m_lineColor = color;
     }
+    
+    //! 设置线条颜色
+    void setLineColor(unsigned char r, unsigned char g, unsigned char b)
+    {
+        m_lineColor.set(r, g, b);
+    }
 
     //! 返回线条ARGB颜色
     int getLineARGB() const
@@ -229,6 +235,12 @@ public:
     void setFillColor(const GiColor& color)
     {
         m_fillColor = color;
+    }
+    
+    //! 设置填充颜色
+    void setFillColor(unsigned char r, unsigned char g, unsigned char b)
+    {
+        m_fillColor.set(r, g, b);
     }
 
     //! 返回线条ARGB颜色

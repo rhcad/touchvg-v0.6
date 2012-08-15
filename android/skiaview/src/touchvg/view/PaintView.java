@@ -5,12 +5,24 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class PaintView extends View {
 	private GiSkiaView mView;
 	private GiCanvasEx mCanvas;
+	private Context context;
+	private GestureDetector detector;
+	private int gestureState ;
+	private int gestureType ;
+	private int fingerCount;
+	private float lastX = 1;
+	private float lastY = 1;
+	private float lastX1 = 1;
+	private float lastY1 = 1;
+	private boolean isScolling = false;
 	
 	static {
 		System.loadLibrary("skiaview");
@@ -18,25 +30,82 @@ public class PaintView extends View {
 	
 	public PaintView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.context = context;
 		init();
 	}
 	
 	public PaintView(Context context) {
 		super(context);
+		this.context = context;
 		init();
 	}
 	
 	private void init()
 	{
+		DisplayMetrics dm = new DisplayMetrics(); 
+		dm = context.getApplicationContext().getResources().getDisplayMetrics(); 
+		GiCanvasEx.setScreenDpi(dm.densityDpi);
+		
 		mCanvas = new GiCanvasEx(this);
 		mView = new GiSkiaView(mCanvas);
+		detector = new GestureDetector(context, new PaintGestureDetector());
+		
+		this.setOnTouchListener(new OnTouchListener() {
+			
+			public boolean onTouch(View v, MotionEvent event) {
+				switch(event.getAction())
+				{
+				case MotionEvent.ACTION_MOVE:
+					fingerCount = event.getPointerCount();
+					isScolling = true;
+					if(fingerCount == 2)
+					{
+						gestureType = 5;
+						onGesture(gestureType, gestureState, fingerCount, event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+						lastX = event.getX(0);
+						lastY = event.getY(0);
+						lastX1 = event.getX(1);
+						lastY1 = event.getY(1);
+						gestureState = 2;
+					}
+					break;
+				case MotionEvent.ACTION_UP:
+					if (isScolling)
+					{
+						isScolling = false;
+						gestureState = 3;
+						if(fingerCount == 1)
+						{
+							if(gestureType == 1)
+							{
+								onGesture(gestureType, gestureState, fingerCount, event.getX(), event.getY(), 0, 0);
+								gestureType = 0;
+							}
+						}
+						else if(fingerCount == 2)
+						{
+							if(gestureType == 5)
+							{
+								onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
+								gestureType = 0;
+							}
+						}
+						lastX = 1;
+						lastY = 1;
+						lastX1 = 1;
+						lastY1 = 1;
+					}
+					break;
+				}
+				return detector.onTouchEvent(event);
+			}
+		});
 	}
 	
 	public GiSkiaView getCoreView() {
 		return mView;
 	}
 	
-	@Override
 	protected void onDraw(Canvas canvas) {
 		mView.onSize(canvas.getWidth(), canvas.getHeight());
 		
@@ -48,26 +117,64 @@ public class PaintView extends View {
 		}
 	}
 	
-	@Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
+	private class PaintGestureDetector extends GestureDetector.SimpleOnGestureListener
+	{
+		@Override
+		public boolean onSingleTapConfirmed(MotionEvent e) {
+			gestureState = 2;
+			gestureType = 2;
+			mView.onGesture(gestureType, gestureState, 1, e.getX(), e.getY(), 0, 0);
+			gestureType = 0;
+			return false;
+		}
+		@Override
+		public void onLongPress(MotionEvent e) {
+			gestureType = 4;//长按	
+			fingerCount = e.getPointerCount();
+			gestureState = 1;
+			mView.onGesture(gestureType, gestureState, 1, e.getX(), e.getY(), 0, 0);
+			gestureType = 0;
+		}
 
-        switch (event.getAction()) {
-        case MotionEvent.ACTION_DOWN:
-        	mView.onGesture(1, 1, 1, x, y, 0, 0);
-            break;
-        case MotionEvent.ACTION_MOVE:
-        	mView.onGesture(1, 2, 1, x, y, 0, 0);
-            break;
-        case MotionEvent.ACTION_UP:
-        	mView.onGesture(1, 3, 1, x, y, 0, 0);
-            break;
-        default:
-            break;
-        }
-
-        return true;
-    }
-
+		@Override
+		public boolean onDown(MotionEvent e) {
+			gestureState = 1;
+			fingerCount = e.getPointerCount();
+			return true;
+		}
+		
+		@Override
+		public boolean onDoubleTap(MotionEvent e) {
+			gestureState = 1;
+			gestureType = 3;
+			onGesture(gestureType, gestureState, 1, e.getX(), e.getY(), 0, 0);
+			gestureType = 0;
+			return false;
+		}
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2,
+				float distanceX, float distanceY) {
+			fingerCount = e2.getPointerCount();
+			if (fingerCount == 1)
+			{
+				gestureType = 1;
+				onGesture(gestureType, gestureState, fingerCount, e2.getX(0), e2.getY(0), 0, 0);
+				switch (e2.getAction())
+				{
+				case MotionEvent.ACTION_MOVE:
+					isScolling = true;
+					gestureState = 2;
+					
+					break;
+				case MotionEvent.ACTION_CANCEL:
+					gestureState = 0;
+					break;
+					
+				}
+			}
+			
+			return false;
+		}
+	}
+	
 }

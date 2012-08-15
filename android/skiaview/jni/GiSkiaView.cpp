@@ -60,12 +60,19 @@ bool GiSkiaView::saveShapes(MgStorageBase* s)
 
 bool GiSkiaView::loadShapes(MgStorageBase* s)
 {
+	bool ret = true;
+	
     if (_view->_shapes && !s) {
         _view->_shapes->clear();
-        return true;
     }
-    return _view->_shapes && s && _view->_shapes->load(s);
+    else {
+    	ret = _view->_shapes && s && _view->_shapes->load(s);
+    }
+    _view->regen();
+    
+    return ret;
 }
+
 
 int GiSkiaView::getWidth() const
 {
@@ -118,14 +125,16 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int fingerCount,
 
 	_view->_motion.point.set(x1, y1);
 	_view->_motion.pointM = _view->_motion.point * _view->_canvas->xf().displayToModel();
-	if (1 == gestureState) {
+	if (1 == gestureState || (gestureType != 1 && gestureType != 5)) {
 		_view->_motion.startPoint = _view->_motion.point;
 		_view->_motion.startPointM = _view->_motion.pointM;
+		_view->_motion.lastPoint = _view->_motion.point;
+		_view->_motion.lastPointM = _view->_motion.pointM;
 		_view->_moved = false;
 	}
 
 	switch (gestureType) {
-		case 1:	// 单指滑动
+		case 1:	// pan
 			if (1 == gestureState) {
 				ret = cmd->touchBegan(&_view->_motion);
 			}
@@ -143,21 +152,21 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int fingerCount,
 			_view->_motion.lastPointM = _view->_motion.pointM;
 			break;
 
-		case 2:	// 单指单击
+		case 2:	// click
 			ret = cmd->click(&_view->_motion);
 			break;
-		case 3:	// 单指双击
+		case 3:
 			ret = cmd->doubleClick(&_view->_motion);
 			break;
-		case 4:	// 长按
+		case 4:
 			ret = cmd->longPress(&_view->_motion);
 			break;
-		case 5:	// 双指移动
+		case 5:	// two fingers pan
 			if (_zoomMask & 4) {
 				dynZoom(_view->_motion.point, Point2d(x2, y2), gestureState);
 			}
 			break;
-		case 6:	// 双指双击
+		case 6:	// two fingers double click
 			if (_zoomMask & 4) {
 				switchZoom(_view->_motion.point);
 			}
