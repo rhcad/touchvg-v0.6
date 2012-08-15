@@ -9,7 +9,7 @@ def utf8togbk(dir):
         if os.path.isdir(sfile):
             utf8togbk(sfile)
             continue
-        if 'index.hh' in fn or '.htm' in fn:
+        if '.h' in fn:
             try:
                 text = open(sfile,'r',-1,'utf-8').read()
             except UnicodeDecodeError:
@@ -26,5 +26,6 @@ def utf8togbk(dir):
             print(sfile)
 
 if __name__=="__main__":
+    utf8togbk(os.path.abspath('../../android'))
     utf8togbk(os.path.abspath('../html'))
     utf8togbk(os.path.abspath('../htmlall'))
