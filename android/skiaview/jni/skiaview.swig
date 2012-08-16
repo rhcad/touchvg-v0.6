@@ -2,7 +2,7 @@
 %{
 #include "GiSkiaView.h"
 #include "GiCanvasBase.h"
-#include <mgstorage.h>
+#include <mgstoragebs.h>
 %}
 
 %include <mgtype.h>
@@ -26,4 +26,4 @@
 %include "GiSkiaView.h"
 
 %feature("director") MgStorageBase;
-%include <mgstorage.h>
+%include <mgstoragebs.h>

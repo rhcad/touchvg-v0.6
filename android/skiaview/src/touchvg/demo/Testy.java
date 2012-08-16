@@ -20,6 +20,7 @@ public class Testy extends Activity {
 	private Button buttonBoldPen;   //»­±Ê±ä´Ö°´Å¥
 	private Button buttonYellow;    //»ÆÉ«»­±Ê°´Å¥
 	private Button buttonEraser;	//ÏðÆ¤°´Å¥
+	private Button buttonStyle;     //ÏßÐÍ°´Å¥
 	private final Testy mHandler = this;  //ÊÓÍ¼ÀàÊµÀý
 	
 	/** Called when the activity is first created. */
@@ -81,6 +82,12 @@ public class Testy extends Activity {
 				mHandler.onEraser();
 			}
 		});
+		
+		buttonStyle.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				mHandler.onPenStyle();
+			}
+		});
     }
 
     private void onPenYellow() {
@@ -130,6 +137,15 @@ public class Testy extends Activity {
     	ctx.delete();
     }
     
+    private void onPenStyle() {
+    	GiContext ctx = mCoreView.getCurrentContext(true);
+    	if (ctx.getLineStyle() == 4)
+    		ctx.setLineStyle(0);
+    	else
+    		ctx.setLineStyle(ctx.getLineStyle() + 1);
+    	mCoreView.applyContext(ctx, 8, 1);
+    }
+    
     private void onEraser() {
     	mCoreView.setCommandName("erase");
     }
@@ -146,5 +162,6 @@ public class Testy extends Activity {
     	buttonBoldPen = (Button) this.findViewById(R.id.boldPen_button);
     	buttonThickPen = (Button) this.findViewById(R.id.thickPen_button);
     	buttonEraser = (Button) this.findViewById(R.id.eraser_button);
+    	buttonStyle = (Button) this.findViewById(R.id.stylePen_button);
     }
 }

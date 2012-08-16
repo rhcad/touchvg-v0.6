@@ -1,9 +1,12 @@
 package touchvg.view;
 
+
 import android.view.View;
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PathEffect;
 import android.graphics.RectF;
 import touchvg.skiaview.Floats;
 import touchvg.skiaview.GiCanvasBase;
@@ -15,6 +18,11 @@ public class GiCanvasEx extends GiCanvasBase{
 	private Paint mBrush = new Paint();
 	private Canvas mCanvas = null;
 	private View mView = null;
+	private static final float patDash[]      = { 5, 5 };
+	private static final float patDot[]       = { 1, 3 };
+	private static final float patDashDot[]   = { 10, 2, 2, 2 };
+	private static final float dashDotdot[]   = { 20, 2, 2, 2, 2, 2 };
+	private PathEffect mEffects = null;
 	
 	public GiCanvasEx(View view)
 	{
@@ -57,11 +65,34 @@ public class GiCanvasEx extends GiCanvasBase{
 	public void antiAliasModeChanged(boolean alias) {
 		mPen.setAntiAlias(alias);
 	}
+	
+	private void makeLinePattern(float arr[], float penWidth)
+	{
+		float f[] = new float[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			f[i] = arr[i] * (penWidth < 1 ? 1 : penWidth);
+		}
+		this.mEffects = new DashPathEffect(f, 1);
+	}
 
 	@Override
 	public void penChanged(GiContext context, float penWidth) {
 		mPen.setColor(context.getLineARGB());
 		mPen.setStrokeWidth(penWidth);
+		
+		int lineStyle = context.getLineStyle();
+		
+		if (lineStyle == 1)
+			this.makeLinePattern(patDash, penWidth);
+		else if (lineStyle == 2)
+			this.makeLinePattern(patDot, penWidth);
+		else if (lineStyle == 3)
+			this.makeLinePattern(patDashDot, penWidth);
+		else if (lineStyle == 4)
+			this.makeLinePattern(dashDotdot, penWidth);
+		else
+		    this.mEffects = null;
+		mPen.setPathEffect(this.mEffects);
 	}
 	
 	@Override

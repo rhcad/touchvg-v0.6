@@ -9,4 +9,6 @@
     <string name="bluePen">蓝笔</string>
     <string name="thickPen">变细</string>
     <string name="boldPen">变粗</string>
+    <string name="stylePen">线型</string>
+    
 </resources>
