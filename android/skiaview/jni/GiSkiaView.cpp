@@ -193,7 +193,7 @@ void GiSkiaView::applyContext(const GiContext& ctx, int mask, int apply)
 		std::vector<MgShape*> shapes(n, NULL);
 
 		if (n > 0 && mgGetCommandManager()->getSelection(_view, n, (MgShape**)&shapes.front(), true) > 0) {
-			for (int i = 0; i < n; i++) {
+			for (UInt32 i = 0; i < n; i++) {
 				if (shapes[i]) {
 					shapes[i]->context()->copy(ctx, mask);
 				}
