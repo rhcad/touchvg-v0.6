@@ -6,7 +6,9 @@
 #ifndef __GEOMETRY_MGSTORAGEBASE_H_
 #define __GEOMETRY_MGSTORAGEBASE_H_
 
+#ifndef SWIG
 #include "mgstorage.h"
+#endif
 #include "mgvector.h"
 
 //! 序列化基类
@@ -41,7 +43,7 @@ public:
         name=values.count() ? name:NULL; }
     virtual void writeString(const char* name, const char* value) { if (name) value=NULL; }
 
-protected:
+private:
     virtual int readFloatArray(const char* name, float* values, int count) {
         mgvector<float> arr(values, count);
         int n = readFloatArray(name, arr);
