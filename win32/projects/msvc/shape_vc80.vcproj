@@ -283,6 +283,14 @@
 				RelativePath="..\..\..\core\include\shape\mgstorage.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\core\include\shape\mgstoragebs.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\include\shape\mgvector.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

@@ -1,5 +1,5 @@
-//! \file GiSkiaView.h
-//! \brief ¶¨ÒåÖ§³ÖAndroidÆ½Ì¨µÄÍ¼ĞÎÊÓÍ¼Àà GiSkiaView
+ï»¿//! \file GiSkiaView.h
+//! \brief å®šä¹‰æ”¯æŒAndroidå¹³å°çš„å›¾å½¢è§†å›¾ç±» GiSkiaView
 // Copyright (c) 2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchvg
 
@@ -13,7 +13,7 @@ struct MgShapes;
 class MgViewProxy;
 class GiContext;
 
-//! Ö§³ÖAndroidÆ½Ì¨µÄÍ¼ĞÎÊÓÍ¼Àà
+//! æ”¯æŒAndroidå¹³å°çš„å›¾å½¢è§†å›¾ç±»
 /*! \ingroup GRAPH_SKIA
 */
 class GiSkiaView
@@ -22,66 +22,66 @@ public:
     GiSkiaView(GiCanvasBase* canvas);
     virtual ~GiSkiaView();
     
-    //! ±£´æÍ¼ĞÎÁĞ±í
+    //! ä¿å­˜å›¾å½¢åˆ—è¡¨
     bool saveShapes(MgStorageBase* s);
 
-    //! ¼ÓÔØÍ¼ĞÎÁĞ±í£¬sÎªNULLÔòÇå¿Õ
+    //! åŠ è½½å›¾å½¢åˆ—è¡¨ï¼Œsä¸ºNULLåˆ™æ¸…ç©º
     bool loadShapes(MgStorageBase* s);
 
-    //! Ìí¼Ó²âÊÔÍ¼ĞÎ
+    //! æ·»åŠ æµ‹è¯•å›¾å½¢
     int addTestingShapes();
 
-    //! ·µ»ØÊÓÍ¼¿í¶È£¬ÏñËØ
+    //! è¿”å›è§†å›¾å®½åº¦ï¼Œåƒç´ 
     int getWidth() const;
 
-    //! ·µ»ØÊÓÍ¼¸ß¶È£¬ÏñËØ
+    //! è¿”å›è§†å›¾é«˜åº¦ï¼Œåƒç´ 
     int getHeight() const;
 
-    //! ÉèÖÃÊÓÍ¼¿í¸ß£¬ÏñËØ
+    //! è®¾ç½®è§†å›¾å®½é«˜ï¼Œåƒç´ 
     void onSize(int width, int height);
 
-    //! ÏÔÊ¾ÕıÊ½Í¼ĞÎ
+    //! æ˜¾ç¤ºæ­£å¼å›¾å½¢
     bool onDraw(GiCanvasBase& canvas);
 
-    //! ÏÔÊ¾ÁÙÊ±¶¯Ì¬Í¼ĞÎ
+    //! æ˜¾ç¤ºä¸´æ—¶åŠ¨æ€å›¾å½¢
     bool onDynDraw(GiCanvasBase& canvas);
 
-    //! ·µ»Øµ±Ç°ÃüÁîÃû³Æ
+    //! è¿”å›å½“å‰å‘½ä»¤åç§°
     const char* getCommandName() const;
 
-    //! Æô¶¯Ö¸¶¨Ãû³ÆµÄÃüÁî
+    //! å¯åŠ¨æŒ‡å®šåç§°çš„å‘½ä»¤
     bool setCommandName(const char* name);
 
-    //! ´«µİ´¥ÃşÊÖÊÆÏûÏ¢
+    //! ä¼ é€’è§¦æ‘¸æ‰‹åŠ¿æ¶ˆæ¯
     /**
-     * \param gestureType ÊÖÊÆÀàĞÍ£¬1-µ¥Ö¸»¬¶¯£¬2-µ¥Ö¸µ¥»÷£¬3-µ¥Ö¸Ë«»÷£¬4-³¤°´£¬5-Ë«Ö¸ÒÆ¶¯£¬6-Ë«Ö¸Ë«»÷
-     * \param gestureState ÊÖÊÆ×´Ì¬£¬1-¿ªÊ¼£¬2-¸Ä±ä£¬3-½áÊø£¬0-È¡Ïû£¬gestureTypeÎª1»ò5Ê±ÓĞĞ§
-     * \param fingerCount ´¥µã¸öÊı
-     * \param x1 µÚÒ»¸ö´¥µãµÄX×ø±ê£¬fingerCountĞ¡ÓÚ1Ê±ºöÂÔ
-     * \param y1 µÚÒ»¸ö´¥µãµÄY×ø±ê£¬fingerCountĞ¡ÓÚ1Ê±ºöÂÔ
-     * \param x2 µÚ¶ş¸ö´¥µãµÄX×ø±ê£¬fingerCountĞ¡ÓÚ2Ê±ºöÂÔ
-     * \param y2 µÚ¶ş¸ö´¥µãµÄY×ø±ê£¬fingerCountĞ¡ÓÚ2Ê±ºöÂÔ
-     * \return ÄÚ²¿ÊÇ·ñÏìÓ¦ÁË´ËÊÖÊÆ
+     * \param gestureType æ‰‹åŠ¿ç±»å‹ï¼Œ1-å•æŒ‡æ»‘åŠ¨ï¼Œ2-å•æŒ‡å•å‡»ï¼Œ3-å•æŒ‡åŒå‡»ï¼Œ4-é•¿æŒ‰ï¼Œ5-åŒæŒ‡ç§»åŠ¨ï¼Œ6-åŒæŒ‡åŒå‡»
+     * \param gestureState æ‰‹åŠ¿çŠ¶æ€ï¼Œ1-å¼€å§‹ï¼Œ2-æ”¹å˜ï¼Œ3-ç»“æŸï¼Œ0-å–æ¶ˆï¼ŒgestureTypeä¸º1æˆ–5æ—¶æœ‰æ•ˆ
+     * \param fingerCount è§¦ç‚¹ä¸ªæ•°
+     * \param x1 ç¬¬ä¸€ä¸ªè§¦ç‚¹çš„Xåæ ‡ï¼ŒfingerCountå°äº1æ—¶å¿½ç•¥
+     * \param y1 ç¬¬ä¸€ä¸ªè§¦ç‚¹çš„Yåæ ‡ï¼ŒfingerCountå°äº1æ—¶å¿½ç•¥
+     * \param x2 ç¬¬äºŒä¸ªè§¦ç‚¹çš„Xåæ ‡ï¼ŒfingerCountå°äº2æ—¶å¿½ç•¥
+     * \param y2 ç¬¬äºŒä¸ªè§¦ç‚¹çš„Yåæ ‡ï¼ŒfingerCountå°äº2æ—¶å¿½ç•¥
+     * \return å†…éƒ¨æ˜¯å¦å“åº”äº†æ­¤æ‰‹åŠ¿
      */
     bool onGesture(int gestureType, int gestureState, int fingerCount,
-    		float x1, float y1, float x2, float y2);
+            float x1, float y1, float x2, float y2);
 
-    //! ·µ»Øµ±Ç°»æÍ¼ÊôĞÔ
+    //! è¿”å›å½“å‰ç»˜å›¾å±æ€§
     /**
-     * \param forChange ÊÇ·ñÓÃÓÚ¸Ä¶¯»æÍ¼ÊôĞÔ
-     * \return µ±Ç°»æÍ¼ÊôĞÔ£¬Èç¹ûÑ¡ÖĞÁËÍ¼ĞÎÔòÎªËùÑ¡Í¼ĞÎµÄÊôĞÔ
+     * \param forChange æ˜¯å¦ç”¨äºæ”¹åŠ¨ç»˜å›¾å±æ€§
+     * \return å½“å‰ç»˜å›¾å±æ€§ï¼Œå¦‚æœé€‰ä¸­äº†å›¾å½¢åˆ™ä¸ºæ‰€é€‰å›¾å½¢çš„å±æ€§
      */
     GiContext& getCurrentContext(bool forChange);
 
-    //! »æÍ¼ÊôĞÔ¸Ä±äºóÌá½»¸üĞÂ
-    /** ÔÚ getCurrentContext(true) ºóµ÷ÓÃ±¾º¯Êı¡£
-     * \param ctx »æÍ¼ÊôĞÔ
-     * \param mask ĞèÒªÓ¦ÓÃÄÄĞ©ÊôĞÔ£¬-1±íÊ¾È«²¿ÊôĞÔ£¬0Ôò²»ĞŞ¸Ä£¬°´Î»×éºÏÖµ¼û GiContext µÄ kContextBits
-     * \param apply 0±íÊ¾»¹Òª¼ÌĞø¶¯Ì¬ĞŞ¸ÄÊôĞÔ£¬1±íÊ¾½áÊø¶¯Ì¬ĞŞ¸Ä²¢Ìá½»£¬-1±íÊ¾½áÊø¶¯Ì¬ĞŞ¸Ä²¢·ÅÆú¸Ä¶¯
+    //! ç»˜å›¾å±æ€§æ”¹å˜åæäº¤æ›´æ–°
+    /** åœ¨ getCurrentContext(true) åè°ƒç”¨æœ¬å‡½æ•°ã€‚
+     * \param ctx ç»˜å›¾å±æ€§
+     * \param mask éœ€è¦åº”ç”¨å“ªäº›å±æ€§ï¼Œ-1è¡¨ç¤ºå…¨éƒ¨å±æ€§ï¼Œ0åˆ™ä¸ä¿®æ”¹ï¼ŒæŒ‰ä½ç»„åˆå€¼è§ GiContext çš„ kContextBits
+     * \param apply 0è¡¨ç¤ºè¿˜è¦ç»§ç»­åŠ¨æ€ä¿®æ”¹å±æ€§ï¼Œ1è¡¨ç¤ºç»“æŸåŠ¨æ€ä¿®æ”¹å¹¶æäº¤ï¼Œ-1è¡¨ç¤ºç»“æŸåŠ¨æ€ä¿®æ”¹å¹¶æ”¾å¼ƒæ”¹åŠ¨
      */
     void applyContext(const GiContext& ctx, int mask, int apply);
 
-    //! ÉèÖÃÔÊĞíµÄ·ÅËõÀàĞÍ: 0-½ûÖ¹, 1-Æ½ÒÆ, 2-Ëõ·Å, 4-¾Ö²¿·Å´óºÍ»¹Ô­, 7-È«²¿
+    //! è®¾ç½®å…è®¸çš„æ”¾ç¼©ç±»å‹: 0-ç¦æ­¢, 1-å¹³ç§», 2-ç¼©æ”¾, 4-å±€éƒ¨æ”¾å¤§å’Œè¿˜åŸ, 7-å…¨éƒ¨
     void setZoomFeature(int mask);
 
 private:
@@ -89,9 +89,9 @@ private:
     void switchZoom(const Point2d& pt);
 
 private:
-    MgViewProxy*		_view;
-    int					_zoomMask;
-    Point2d				_lastPtW[2];
+    MgViewProxy*        _view;
+    int                 _zoomMask;
+    Point2d             _lastPtW[2];
 };
 
 #endif // __TOUCHVG_SKIAVIEW_H_

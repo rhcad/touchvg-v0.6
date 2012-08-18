@@ -33,9 +33,9 @@ struct GdipDrawImplBase
     {
     }
 
-    const GiGraphics* owner() const
+    const GiGraphics* gs() const
     {
-        return m_this->owner();
+        return m_this->gs();
     }
 
     G::Graphics* getDrawGs() const
@@ -70,8 +70,8 @@ struct GdipDrawImplBase
                     m_pen = NULL;
                 }
 
-                float width = owner()->calcPenWidth(ctx->getLineWidth());
-                GiColor color = owner()->calcPenColor(ctx->getLineColor());
+                float width = gs()->calcPenWidth(ctx->getLineWidth());
+                GiColor color = gs()->calcPenColor(ctx->getLineColor());
                 m_pen = new G::Pen(G::Color(ctx->getLineAlpha(), 
                     color.r, color.g, color.b), width);
 
@@ -115,7 +115,7 @@ struct GdipDrawImplBase
                     m_brush = NULL;
                 }
 
-                GiColor color = owner()->calcPenColor(ctx->getFillColor());
+                GiColor color = gs()->calcPenColor(ctx->getFillColor());
                 m_brush = new G::SolidBrush(
                     G::Color(ctx->getFillAlpha(), 
                     color.r, color.g, color.b));
@@ -321,7 +321,7 @@ bool GiCanvasGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay
     if (!ret)
         return false;
 
-    buffered = buffered && !owner()->isPrint();
+    buffered = buffered && !gs()->isPrint();
     COLORREF cr = ::GetBkColor(hdc);
     m_draw->m_bkColor.set(GetRValue(cr), GetGValue(cr), GetBValue(cr));
 
@@ -343,14 +343,14 @@ bool GiCanvasGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay
         oldDrawing.draw(m_draw->m_memGs);
     }
 
-    _antiAliasModeChanged(owner()->isAntiAliasMode());
+    _antiAliasModeChanged(gs()->isAntiAliasMode());
 
     return ret;
 }
 
 void GiCanvasGdip::clearWindow()
 {
-    if (!owner()->isPrint() && owner()->isDrawing())
+    if (!gs()->isPrint() && gs()->isDrawing())
     {
         G::Color color(m_draw->m_bkColor.r, m_draw->m_bkColor.g, m_draw->m_bkColor.b);
         m_draw->getDrawGs()->Clear(color);
@@ -432,7 +432,7 @@ bool GiCanvasGdip::hasCachedBitmap(bool secondBmp) const
 
 void GiCanvasGdip::endPaint(bool draw)
 {
-    if (owner()->isDrawing())
+    if (gs()->isDrawing())
     {
         if (m_draw->m_memGs != NULL && draw)
         {
@@ -875,10 +875,10 @@ bool GiCanvasGdipImpl::drawImage(G::Bitmap* pBmp, const Box2d& rectW, bool fast)
     float height = (float)pBmp->GetHeight();
 
     // rc: 整个图像对应的显示坐标区域
-    (rectW * owner()->xf().worldToDisplay()).get(rc);
+    (rectW * gs()->xf().worldToDisplay()).get(rc);
 
     // rcDraw: 图像经剪裁后的可显示部分
-    owner()->getClipBox(rcDraw);
+    gs()->getClipBox(rcDraw);
     if (rect.intersectWith(Box2d(rc), Box2d(rcDraw)).isEmpty())
         return false;
     rect.get(rcDraw);
@@ -896,7 +896,7 @@ bool GiCanvasGdipImpl::drawImage(G::Bitmap* pBmp, const Box2d& rectW, bool fast)
         mgSwap(rcDraw.top, rcDraw.bottom);
 
     G::InterpolationMode nOldMode = getDrawGs()->GetInterpolationMode();
-    getDrawGs()->SetInterpolationMode( (!fast || owner()->isPrint())
+    getDrawGs()->SetInterpolationMode( (!fast || gs()->isPrint())
         ? G::InterpolationModeBilinear : G::InterpolationModeLowQuality);
 
     G::Status ret = getDrawGs()->DrawImage(pBmp, 
@@ -919,7 +919,7 @@ bool GiCanvasGdip::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
 
     if (m_draw->getDrawGs() != NULL
         && hmWidth > 0 && hmHeight > 0 && hbitmap != NULL
-        && owner()->getClipWorld().isIntersect(Box2d(rectW, true)))
+        && gs()->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
         G::Bitmap bmp (hbitmap, NULL);
         ret = m_draw->drawImage(&bmp, rectW, fast);
@@ -933,7 +933,7 @@ bool GiCanvasGdip::drawGdipImage(LPVOID pBmp, const Box2d& rectW, bool fast)
     bool ret = false;
 
     if (m_draw->getDrawGs() != NULL && pBmp != NULL
-        && owner()->getClipWorld().isIntersect(Box2d(rectW, true)))
+        && gs()->getClipWorld().isIntersect(Box2d(rectW, true)))
     {
         ret = m_draw->drawImage((G::Bitmap*)pBmp, rectW, fast);
     }

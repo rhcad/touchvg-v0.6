@@ -575,7 +575,7 @@ static bool _DrawPolygon(GiCanvas* cv, const GiContext* ctx,
 
     vector<Point2d> pxpoints;
     Point2d pt1, pt2;
-    Matrix2d matD(S2D(cv->owner()->xf(), modelUnit));
+    Matrix2d matD(S2D(cv->gs()->xf(), modelUnit));
 
     pxpoints.resize(count);
     Point2d *pxs = &pxpoints.front();

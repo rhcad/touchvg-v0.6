@@ -52,14 +52,14 @@ public:
         }
     }
 
-    const GiGraphics* owner() const
+    const GiGraphics* gs() const
     {
-        return _gs->owner();
+        return _gs->gs();
     }
     
     const GiTransform& xf() const
     {
-        return owner()->xf();
+        return gs()->xf();
     }
     
     CGContextRef getContext() const
@@ -115,14 +115,14 @@ public:
             _ctxused[0] = true;
             
             GiColor color = ctx->getLineColor();
-            if (owner())
-                color = owner()->calcPenColor(color);
+            if (gs())
+                color = gs()->calcPenColor(color);
             CGContextSetRGBStrokeColor(getContext(), 
                                        toFloat(color.r), toFloat(color.g),
                                        toFloat(color.b), toFloat(color.a));
             
             float w = ctx->getLineWidth();
-            w = owner() ? owner()->calcPenWidth(w) : (w < 0 ? -w : 1);
+            w = gs() ? gs()->calcPenWidth(w) : (w < 0 ? -w : 1);
             CGContextSetLineWidth(getContext(), _fast && w > 1 ? w - 1 : w); // 不是反走样就细一点
             
             int style = ctx->getLineStyle();
@@ -159,8 +159,8 @@ public:
             _ctxused[1] = true;
             
             GiColor color = ctx->getFillColor();
-            if (owner())
-                color = owner()->calcPenColor(color);
+            if (gs())
+                color = gs()->calcPenColor(color);
             CGContextSetRGBFillColor(getContext(), 
                                      toFloat(color.r), toFloat(color.g),
                                      toFloat(color.b), toFloat(color.a));
@@ -214,11 +214,11 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
     if (m_draw->getContext() || !context)
         return false;
 
-    if (owner()) {
+    if (gs()) {
         CGRect rc = CGContextGetClipBoundingBox(context);
         RECT_2D clipBox = { rc.origin.x, rc.origin.y, 
             rc.origin.x + rc.size.width, rc.origin.y + rc.size.height };
-        owner2()->_beginPaint(clipBox);
+        owner()->_beginPaint(clipBox);
     }
 
     m_draw->_context = context;
@@ -226,40 +226,40 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
     m_draw->_ctxused[0] = false;
     m_draw->_ctxused[1] = false;
     
-    if (buffered && owner()) {
+    if (buffered && gs()) {
         m_draw->createBufferBitmap(m_draw->width(), m_draw->height());
         context = m_draw->getContext();
     }
 
-    bool antiAlias = !fast && (!owner() || owner()->isAntiAliasMode());
+    bool antiAlias = !fast && (!gs() || gs()->isAntiAliasMode());
     CGContextSetAllowsAntialiasing(context, antiAlias);
     CGContextSetShouldAntialias(context, antiAlias);
     CGContextSetFlatness(context, fast ? 20 : 1);
 
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineJoinRound);
-    if (owner2())        // 设置最小线宽为0.5像素，使用屏幕放大倍数以便得到实际像素值
-        owner2()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
+    if (owner())        // 设置最小线宽为0.5像素，使用屏幕放大倍数以便得到实际像素值
+        owner()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
 
     return true;
 }
 
 bool GiCanvasIos::beginPaintBuffered(bool fast)
 {
-    if (m_draw->getContext() || !owner()
+    if (m_draw->getContext() || !gs()
         || !m_draw->createBufferBitmap(m_draw->width(), m_draw->height())) {
         return false;
     }
     
     RECT_2D clipBox = { 0, 0, m_draw->width(), m_draw->height() };
-    owner2()->_beginPaint(clipBox);
+    owner()->_beginPaint(clipBox);
     
     m_draw->_fast = fast;
     m_draw->_ctxused[0] = false;
     m_draw->_ctxused[1] = false;
     
     CGContextRef context = m_draw->getContext();
-    bool antiAlias = !fast && owner()->isAntiAliasMode();
+    bool antiAlias = !fast && gs()->isAntiAliasMode();
     
     CGContextSetAllowsAntialiasing(context, antiAlias);
     CGContextSetShouldAntialias(context, antiAlias);
@@ -267,7 +267,7 @@ bool GiCanvasIos::beginPaintBuffered(bool fast)
     
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineJoinRound);
-    owner2()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
+    owner()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
     
     return true;
 }
@@ -299,8 +299,8 @@ void GiCanvasIos::endPaint(bool draw)
             m_draw->_buffctx = NULL;
         }
         m_draw->_context = NULL;
-        if (owner2())
-            owner2()->_endPaint();
+        if (owner())
+            owner()->_endPaint();
     }
 }
 
@@ -362,7 +362,7 @@ bool GiCanvasIosImpl::createBufferBitmap(float width, float height)
 
 void GiCanvasIos::clearWindow()
 {
-    if (owner() && m_draw->getContext()) {
+    if (gs() && m_draw->getContext()) {
         CGContextClearRect(m_draw->getContext(), 
                            CGRectMake(0, 0, m_draw->width(), m_draw->height()));
     }
@@ -428,7 +428,7 @@ void GiCanvasIos::saveCachedBitmap(bool secondBmp)
     if (m_draw->_caches[n])
         CGImageRelease(m_draw->_caches[n]);
     m_draw->_cacheserr[n] = 0;
-    if (owner() && m_draw->getContext()) {
+    if (gs() && m_draw->getContext()) {
         m_draw->_caches[n] = CGBitmapContextCreateImage(m_draw->getContext());
     }
 }

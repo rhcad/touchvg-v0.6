@@ -208,9 +208,9 @@ public:
     }
     
     //! 设置线条透明度，0到255，0表示全透明，255表示不透明
-    void setLineAlpha(char alpha)
+    void setLineAlpha(int alpha)
     {
-        m_lineColor.a = alpha;
+        m_lineColor.a = (unsigned char)alpha;
     }
     
     //! 返回是否填充
@@ -262,9 +262,9 @@ public:
     }
     
     //! 设置填充透明度，0到255，0表示全透明，255表示不透明
-    void setFillAlpha(char alpha)
+    void setFillAlpha(int alpha)
     {
-        m_fillColor.a = alpha;
+        m_fillColor.a = (unsigned char)alpha;
     }
     
     //! 返回绘图环境类型，供派生类用

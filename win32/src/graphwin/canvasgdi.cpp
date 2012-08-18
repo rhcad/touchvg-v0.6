@@ -134,8 +134,8 @@ public:
                 m_pen = ::GetStockObject(NULL_PEN);
             else
             {
-                int width = mgRound(m_this->owner()->calcPenWidth(ctx->getLineWidth()));
-                GiColor color = m_this->owner()->calcPenColor(ctx->getLineColor());
+                int width = mgRound(m_this->gs()->calcPenWidth(ctx->getLineWidth()));
+                GiColor color = m_this->gs()->calcPenColor(ctx->getLineColor());
                 COLORREF cr = RGB(color.r, color.g, color.b);
                 int lineStyle = ctx->getLineStyle();
 
@@ -176,7 +176,7 @@ public:
                 m_brush = ::GetStockObject(NULL_BRUSH);
             else
             {
-                GiColor color = m_this->owner()->calcPenColor(ctx->getFillColor());
+                GiColor color = m_this->gs()->calcPenColor(ctx->getFillColor());
                 m_brush = ::CreateSolidBrush(RGB(color.r, color.g, color.b));
             }
         }
@@ -230,7 +230,7 @@ bool GiCanvasGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
             RECT rc;
             RECT_2D clipBox;
 
-            Box2d(owner()->getClipBox(clipBox)).get(rc);
+            Box2d(gs()->getClipBox(clipBox)).get(rc);
 
             m_draw->m_buffBmp = ::CreateCompatibleBitmap(hdc, 
                 rc.right - rc.left, rc.bottom - rc.top);
@@ -270,7 +270,7 @@ void GiCanvasGdi::clearWindow()
         RECT rc;
         RECT_2D clipBox;
 
-        Box2d(owner()->getClipBox(clipBox)).get(rc);
+        Box2d(gs()->getClipBox(clipBox)).get(rc);
         ExtTextOut(m_draw->getDrawDC(), 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
     }
 }
@@ -372,7 +372,7 @@ void GiCanvasGdi::endPaint(bool draw)
             RECT rc;
             RECT_2D clipBox;
 
-            Box2d(owner()->getClipBox(clipBox)).get(rc);
+            Box2d(gs()->getClipBox(clipBox)).get(rc);
             BitBlt(m_draw->m_hdc, rc.left, rc.top, 
                 rc.right - rc.left, rc.bottom - rc.top,
                 m_draw->m_buffDC, rc.left, rc.top, SRCCOPY);
@@ -722,7 +722,7 @@ bool GiCanvasGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap,
         (rectW * xf().worldToDisplay()).get(rc);
 
         // rcDraw: 图像经剪裁后的可显示部分
-        Box2d(owner()->getClipBox(clipBox)).get(rcFrom);
+        Box2d(gs()->getClipBox(clipBox)).get(rcFrom);
         if (!IntersectRect(&rcDraw, &rc, &rcFrom))
             return false;
 

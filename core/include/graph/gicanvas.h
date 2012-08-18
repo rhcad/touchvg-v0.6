@@ -31,13 +31,13 @@ public:
     }
 
     //! 返回图形系统对象，拥有者
-    const GiGraphics* owner() const
+    const GiGraphics* gs() const
     {
         return m_owner;
     }
 
     //! 返回图形系统对象，拥有者
-    GiGraphics* owner2()
+    GiGraphics* owner()
     {
         return m_owner;
     }

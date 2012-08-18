@@ -151,10 +151,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\android\skiaview\jni\GiCmdAndr.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\android\skiaview\jni\GiSkiaView.h"
 				>
 			</File>
@@ -182,10 +178,6 @@
 			>
 			<File
 				RelativePath="..\..\..\android\skiaview\jni\GiCanvasBase.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\android\skiaview\jni\GiCmdAndr.cpp"
 				>
 			</File>
 			<File
