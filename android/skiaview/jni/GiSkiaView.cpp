@@ -163,8 +163,8 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int,
         case 4:
             ret = cmd->longPress(&_view->_motion);
             break;
-        case 5: // two fingers pan
-            if (_zoomMask & 4) {
+        case 5: // two fingers pan/zoom
+            if (_zoomMask & 3) {
                 dynZoom(_view->_motion.point, Point2d(x2, y2), gestureState);
             }
             break;
