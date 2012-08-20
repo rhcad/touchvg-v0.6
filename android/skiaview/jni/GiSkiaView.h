@@ -52,10 +52,25 @@ public:
     //! 启动指定名称的命令
     bool setCommandName(const char* name);
     
+    enum kGestureType {			//!< 手势类型
+    	kGestureUnknown,		//!< 未知的手势
+    	kSinglePan = 1,			//!< 单指滑动
+    	kSingleTap,				//!< 单指单击
+    	kDoubleTap,				//!< 单指双击
+    	kLongPress,				//!< 长按
+    	kZoomRotatePan,			//!< 双指移动
+    	kTwoFingersDblClick,	//!< 双指双击
+    };
+    enum kGestureState {		//!< 手势状态
+    	kGestureCancel = 0,		//!< 取消
+    	kGestureBegan,			//!< 开始
+    	kGestureMoved,			//!< 改变
+    	kGestureEnded,			//!< 结束
+    };
     //! 传递触摸手势消息
     /**
-     * \param gestureType 手势类型，1-单指滑动，2-单指单击，3-单指双击，4-长按，5-双指移动，6-双指双击
-     * \param gestureState 手势状态，1-开始，2-改变，3-结束，0-取消，gestureType为1或5时有效
+     * \param gestureType 手势类型, kGestureType
+     * \param gestureState 手势状态, kGestureState, gestureType为 kSinglePan 或 kZoomRotatePan 时有效
      * \param fingerCount 触点个数
      * \param x1 第一个触点的X坐标，fingerCount小于1时忽略
      * \param y1 第一个触点的Y坐标，fingerCount小于1时忽略
@@ -63,7 +78,7 @@ public:
      * \param y2 第二个触点的Y坐标，fingerCount小于2时忽略
      * \return 内部是否响应了此手势
      */
-    bool onGesture(int gestureType, int gestureState, int fingerCount,
+    bool onGesture(kGestureType gestureType, kGestureState gestureState, int fingerCount,
                    float x1, float y1, float x2, float y2);
     
     //! 返回当前绘图属性
@@ -85,13 +100,16 @@ public:
     void setZoomFeature(int mask);
     
 private:
-    void dynZoom(const Point2d& pt1, const Point2d& pt2, int gestureState);
-    void switchZoom(const Point2d& pt);
+    bool dynZoom(const Point2d& pt1, const Point2d& pt2, int gestureState);
+    bool switchZoom(const Point2d& pt);
     
 private:
     MgViewProxy*        _view;
     int                 _zoomMask;
-    Point2d             _lastPtW[2];
+    Point2d 			_lastCenterW;
+    float				_lastViewScale;
+    Point2d				_firstPt;
+    float				_firstDist;
 };
 
 #endif // __TOUCHVG_SKIAVIEW_H_

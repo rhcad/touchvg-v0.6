@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TouchVG for Android</string>
+    <string name="app_name">TouchVG</string>
     <string name="selectshapes_button">选择</string>
     <string name="eraser">橡皮</string>
     <string name="clearshapes_button">清除</string>

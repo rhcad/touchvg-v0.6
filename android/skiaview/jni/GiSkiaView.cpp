@@ -9,21 +9,23 @@
 #include <mgcmd.h>
 #include <vector>
 
+//! 绘图视图代理类
 class MgViewProxy : public MgView
 {
 public:
-    GiCanvasBase*   _canvas;
-    MgShapes*       _shapes;
-    MgMotion        _motion;
-    bool            _moved;
-    GiContext       _tmpContext;
+    GiCanvasBase*   _canvas;		//!< 由Android等画布适配器继承的画布对象
+    MgShapes*       _shapes;		//!< 矢量图形列表
+    MgMotion        _motion;		//!< 当前触摸参数
+    bool            _moved;			//!< 是否开始移动
+    GiContext       _tmpContext;	//!< 临时绘图参数，用于避免applyContext引用参数问题
 
     MgViewProxy(GiCanvasBase* canvas) : _canvas(canvas), _moved(false) {
         _shapes = new MgShapesT<std::list<MgShape*> >;
         _motion.view = this;
-        _shapes->context()->setLineAlpha(140);
+        _shapes->context()->setLineAlpha(140);	// 默认55%透明度
     }
     virtual ~MgViewProxy() {
+    	mgGetCommandManager()->unloadCommands();
         _shapes->release();
     }
 
@@ -112,7 +114,7 @@ bool GiSkiaView::setCommandName(const char* name)
     return mgGetCommandManager()->setCommand(&_view->_motion, name);
 }
 
-bool GiSkiaView::onGesture(int gestureType, int gestureState, int,
+bool GiSkiaView::onGesture(kGestureType gestureType, kGestureState gestureState, int,
                            float x1, float y1, float x2, float y2)
 {
     bool ret = false;
@@ -121,13 +123,14 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int,
     if (!cmd) {
         return false;
     }
-    if ((gestureState < 1 || gestureState > 3) && (1 == gestureType || 5 == gestureType)) {
+    if (gestureState == kGestureCancel
+    	&& (kSinglePan == gestureType || kZoomRotatePan == gestureType)) {
         return cmd->cancel(&_view->_motion);
     }
 
     _view->_motion.point.set(x1, y1);
     _view->_motion.pointM = _view->_motion.point * _view->_canvas->xf().displayToModel();
-    if (1 == gestureState || (gestureType != 1 && gestureType != 5)) {
+    if (1 == gestureState || (gestureType != kSinglePan && gestureType != kZoomRotatePan)) {
         _view->_motion.startPoint = _view->_motion.point;
         _view->_motion.startPointM = _view->_motion.pointM;
         _view->_motion.lastPoint = _view->_motion.point;
@@ -136,15 +139,15 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int,
     }
 
     switch (gestureType) {
-        case 1: // pan
-            if (1 == gestureState) {
+        case kSinglePan:
+            if (kGestureBegan == gestureState) {
                 ret = cmd->touchBegan(&_view->_motion);
             }
-            else if (2 == gestureState) {
+            else if (kGestureMoved == gestureState) {
                 ret = cmd->touchMoved(&_view->_motion);
                 _view->_moved = _view->_moved || _view->_motion.startPoint.distanceTo(_view->_motion.point) > 2;
             }
-            else if (3 == gestureState) {
+            else if (kGestureEnded == gestureState) {
                 ret = cmd->touchEnded(&_view->_motion);
                 if (!_view->_moved) {
                     ret = cmd->click(&_view->_motion);
@@ -154,23 +157,23 @@ bool GiSkiaView::onGesture(int gestureType, int gestureState, int,
             _view->_motion.lastPointM = _view->_motion.pointM;
             break;
 
-        case 2: // click
+        case kSingleTap:
             ret = cmd->click(&_view->_motion);
             break;
-        case 3:
+        case kDoubleTap:
             ret = cmd->doubleClick(&_view->_motion);
             break;
-        case 4:
+        case kLongPress:
             ret = cmd->longPress(&_view->_motion);
             break;
-        case 5: // two fingers pan/zoom
+        case kZoomRotatePan:
             if (_zoomMask & 3) {
-                dynZoom(_view->_motion.point, Point2d(x2, y2), gestureState);
+            	ret = dynZoom(_view->_motion.point, Point2d(x2, y2), gestureState);
             }
             break;
-        case 6: // two fingers double click
+        case kTwoFingersDblClick:
             if (_zoomMask & 4) {
-                switchZoom(_view->_motion.point);
+            	ret = switchZoom(_view->_motion.point);
             }
             break;
     }
@@ -215,31 +218,30 @@ void GiSkiaView::setZoomFeature(int mask)
     _zoomMask = mask;
 }
 
-void GiSkiaView::dynZoom(const Point2d& pt1, const Point2d& pt2, int gestureState)
+bool GiSkiaView::dynZoom(const Point2d& pt1, const Point2d& pt2, int gestureState)
 {
-    Point2d ptw1 = pt1 * _view->_canvas->xf().displayToWorld();
-    Point2d ptw2 = pt2 * _view->_canvas->xf().displayToWorld();
-
-    if (1 == gestureState) {
-        _lastPtW[0] = ptw1;
-        _lastPtW[1] = ptw2;
+    if (kGestureBegan == gestureState) {
+    	_view->_canvas->xf().getZoomValue(_lastCenterW, _lastViewScale);
+    	_firstDist = pt1.distanceTo(pt2);
+    	_firstPt = (pt1 + pt2) / 2;
     }
-    else if (2 == gestureState) {
-        float scale = (float)(ptw1.distanceTo(ptw2) / _lastPtW[0].distanceTo(_lastPtW[1]));
-        Vector2d offset = (ptw1 - _lastPtW[0]) * _view->_canvas->xf().worldToDisplay();
-        Point2d ptAt = _lastPtW[0] * _view->_canvas->xf().worldToDisplay();
+    else if (kGestureMoved == gestureState && _firstDist > 1) {
+    	float scale = pt1.distanceTo(pt2) / _firstDist;
+    	Point2d pt = (pt1 + pt2) / 2;
 
-        _view->_canvas->xf().zoomScale(_view->_canvas->xf().getViewScale() * scale, &ptAt);
-        _view->_canvas->xf().zoomPan(offset.x, offset.y);
+    	_view->_canvas->xf().zoom(_lastCenterW, _lastViewScale);   		// 先恢复
+    	_view->_canvas->xf().zoomByFactor(scale - 1, &_firstPt);		// 以起始点为中心放缩显示
+    	_view->_canvas->xf().zoomPan(pt.x - _firstPt.x, pt.y - _firstPt.y);	// 平移到当前点
+
         _view->regen();
-
-        _lastPtW[0] = ptw1;
-        _lastPtW[1] = ptw2;
     }
+
+    return true;
 }
 
-void GiSkiaView::switchZoom(const Point2d&)
+bool GiSkiaView::switchZoom(const Point2d&)
 {
+	return false;
 }
 
 #include <testgraph/RandomShape.cpp>
