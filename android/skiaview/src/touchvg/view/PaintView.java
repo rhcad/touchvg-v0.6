@@ -56,35 +56,35 @@ public class PaintView extends View {
         this.setOnTouchListener(new OnTouchListener() {
             
             public boolean onTouch(View v, MotionEvent event) {
-            	if (!mGestureEnable) {
-            		return false;
-            	}
+                if (!mGestureEnable) {
+                    return false;
+                }
                 switch (event.getAction())
                 {
                 case MotionEvent.ACTION_MOVE:
-                	if (event.getPointerCount() == 2 && fingerCount == 1) {
-            			fingerCount = event.getPointerCount();
-            			lastX = event.getX(0);
+                    if (event.getPointerCount() == 2 && fingerCount == 1) {
+                        fingerCount = event.getPointerCount();
+                        lastX = event.getX(0);
                         lastY = event.getY(0);
                         lastX1 = event.getX(1);
                         lastY1 = event.getY(1);
                         gestureState = kGestureState.kGestureBegan;
-            		}
-                	if (gestureState == kGestureState.kGestureBegan) {
-                		gestureType = fingerCount > 1 ? kGestureType.kZoomRotatePan : kGestureType.kSinglePan;
-                		mView.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
-                	}
-                	gestureState = kGestureState.kGestureMoved;
+                    }
+                    if (gestureState == kGestureState.kGestureBegan) {
+                        gestureType = fingerCount > 1 ? kGestureType.kZoomRotatePan : kGestureType.kSinglePan;
+                        mView.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
+                    }
+                    gestureState = kGestureState.kGestureMoved;
                     isMoving = true;
                     lastX = event.getX(0);
                     lastY = event.getY(0);
                     if (event.getPointerCount() > 1)
                     {
-                    	lastX1 = event.getX(1);
+                        lastX1 = event.getX(1);
                         lastY1 = event.getY(1);
                     }
                     if (event.getPointerCount() >= fingerCount) {
-                    	mView.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
+                        mView.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
                     }
                     break;
                     
@@ -124,13 +124,13 @@ public class PaintView extends View {
     }
     
     public void setGestureEnable(boolean enable) {
-    	mGestureEnable = enable;
-    	this.getParent().requestDisallowInterceptTouchEvent(enable);
-    	
-    	if (!enable && gestureState == kGestureState.kGestureMoved) {
-    		gestureState = kGestureState.kGestureCancel;
-    		mView.onGesture(gestureType, gestureState, 0, 0, 0, 0, 0);
-    	}
+        mGestureEnable = enable;
+        this.getParent().requestDisallowInterceptTouchEvent(enable);
+        
+        if (!enable && gestureState == kGestureState.kGestureMoved) {
+            gestureState = kGestureState.kGestureCancel;
+            mView.onGesture(gestureType, gestureState, 0, 0, 0, 0, 0);
+        }
     }
     
     private class PaintGestureDetector extends GestureDetector.SimpleOnGestureListener
@@ -167,10 +167,10 @@ public class PaintView extends View {
         
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float dx, float dy) {
-        	if (e2.getAction() == MotionEvent.ACTION_CANCEL) {
-        		gestureState = kGestureState.kGestureCancel;
-            	mView.onGesture(gestureType, gestureState, 0, 0, 0, 0, 0);
-        	}
+            if (e2.getAction() == MotionEvent.ACTION_CANCEL) {
+                gestureState = kGestureState.kGestureCancel;
+                mView.onGesture(gestureType, gestureState, 0, 0, 0, 0, 0);
+            }
             return false;
         }
     }

@@ -13,19 +13,19 @@
 class MgViewProxy : public MgView
 {
 public:
-    GiCanvasBase*   _canvas;		//!< 由Android等画布适配器继承的画布对象
-    MgShapes*       _shapes;		//!< 矢量图形列表
-    MgMotion        _motion;		//!< 当前触摸参数
-    bool            _moved;			//!< 是否开始移动
-    GiContext       _tmpContext;	//!< 临时绘图参数，用于避免applyContext引用参数问题
+    GiCanvasBase*   _canvas;        //!< 由Android等画布适配器继承的画布对象
+    MgShapes*       _shapes;        //!< 矢量图形列表
+    MgMotion        _motion;        //!< 当前触摸参数
+    bool            _moved;         //!< 是否开始移动
+    GiContext       _tmpContext;    //!< 临时绘图参数，用于避免applyContext引用参数问题
 
     MgViewProxy(GiCanvasBase* canvas) : _canvas(canvas), _moved(false) {
         _shapes = new MgShapesT<std::list<MgShape*> >;
         _motion.view = this;
-        _shapes->context()->setLineAlpha(140);	// 默认55%透明度
+        _shapes->context()->setLineAlpha(140);  // 默认55%透明度
     }
     virtual ~MgViewProxy() {
-    	mgGetCommandManager()->unloadCommands();
+        mgGetCommandManager()->unloadCommands();
         _shapes->release();
     }
 
@@ -124,7 +124,7 @@ bool GiSkiaView::onGesture(kGestureType gestureType, kGestureState gestureState,
         return false;
     }
     if (gestureState == kGestureCancel
-    	&& (kSinglePan == gestureType || kZoomRotatePan == gestureType)) {
+        && (kSinglePan == gestureType || kZoomRotatePan == gestureType)) {
         return cmd->cancel(&_view->_motion);
     }
 
@@ -168,12 +168,12 @@ bool GiSkiaView::onGesture(kGestureType gestureType, kGestureState gestureState,
             break;
         case kZoomRotatePan:
             if (_zoomMask & 3) {
-            	ret = dynZoom(_view->_motion.point, Point2d(x2, y2), gestureState);
+                ret = dynZoom(_view->_motion.point, Point2d(x2, y2), gestureState);
             }
             break;
         case kTwoFingersDblClick:
             if (_zoomMask & 4) {
-            	ret = switchZoom(_view->_motion.point);
+                ret = switchZoom(_view->_motion.point);
             }
             break;
     }
@@ -221,17 +221,17 @@ void GiSkiaView::setZoomFeature(int mask)
 bool GiSkiaView::dynZoom(const Point2d& pt1, const Point2d& pt2, int gestureState)
 {
     if (kGestureBegan == gestureState) {
-    	_view->_canvas->xf().getZoomValue(_lastCenterW, _lastViewScale);
-    	_firstDist = pt1.distanceTo(pt2);
-    	_firstPt = (pt1 + pt2) / 2;
+        _view->_canvas->xf().getZoomValue(_lastCenterW, _lastViewScale);
+        _firstDist = pt1.distanceTo(pt2);
+        _firstPt = (pt1 + pt2) / 2;
     }
     else if (kGestureMoved == gestureState && _firstDist > 1) {
-    	float scale = pt1.distanceTo(pt2) / _firstDist;
-    	Point2d pt = (pt1 + pt2) / 2;
+        float scale = pt1.distanceTo(pt2) / _firstDist;
+        Point2d pt = (pt1 + pt2) / 2;
 
-    	_view->_canvas->xf().zoom(_lastCenterW, _lastViewScale);   		// 先恢复
-    	_view->_canvas->xf().zoomByFactor(scale - 1, &_firstPt);		// 以起始点为中心放缩显示
-    	_view->_canvas->xf().zoomPan(pt.x - _firstPt.x, pt.y - _firstPt.y);	// 平移到当前点
+        _view->_canvas->xf().zoom(_lastCenterW, _lastViewScale);        // 先恢复
+        _view->_canvas->xf().zoomByFactor(scale - 1, &_firstPt);        // 以起始点为中心放缩显示
+        _view->_canvas->xf().zoomPan(pt.x - _firstPt.x, pt.y - _firstPt.y); // 平移到当前点
 
         _view->regen();
     }
@@ -241,7 +241,7 @@ bool GiSkiaView::dynZoom(const Point2d& pt1, const Point2d& pt2, int gestureStat
 
 bool GiSkiaView::switchZoom(const Point2d&)
 {
-	return false;
+    return false;
 }
 
 #include <testgraph/RandomShape.cpp>

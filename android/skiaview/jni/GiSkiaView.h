@@ -52,20 +52,20 @@ public:
     //! 启动指定名称的命令
     bool setCommandName(const char* name);
     
-    enum kGestureType {			//!< 手势类型
-    	kGestureUnknown,		//!< 未知的手势
-    	kSinglePan = 1,			//!< 单指滑动
-    	kSingleTap,				//!< 单指单击
-    	kDoubleTap,				//!< 单指双击
-    	kLongPress,				//!< 长按
-    	kZoomRotatePan,			//!< 双指移动
-    	kTwoFingersDblClick,	//!< 双指双击
+    enum kGestureType {         //!< 手势类型
+        kGestureUnknown,        //!< 未知的手势
+        kSinglePan = 1,         //!< 单指滑动
+        kSingleTap,             //!< 单指单击
+        kDoubleTap,             //!< 单指双击
+        kLongPress,             //!< 长按
+        kZoomRotatePan,         //!< 双指移动
+        kTwoFingersDblClick,    //!< 双指双击
     };
-    enum kGestureState {		//!< 手势状态
-    	kGestureCancel = 0,		//!< 取消
-    	kGestureBegan,			//!< 开始
-    	kGestureMoved,			//!< 改变
-    	kGestureEnded,			//!< 结束
+    enum kGestureState {        //!< 手势状态
+        kGestureCancel = 0,     //!< 取消
+        kGestureBegan,          //!< 开始
+        kGestureMoved,          //!< 改变
+        kGestureEnded,          //!< 结束
     };
     //! 传递触摸手势消息
     /**
@@ -106,10 +106,10 @@ private:
 private:
     MgViewProxy*        _view;
     int                 _zoomMask;
-    Point2d 			_lastCenterW;
-    float				_lastViewScale;
-    Point2d				_firstPt;
-    float				_firstDist;
+    Point2d             _lastCenterW;
+    float               _lastViewScale;
+    Point2d             _firstPt;
+    float               _firstDist;
 };
 
 #endif // __TOUCHVG_SKIAVIEW_H_
