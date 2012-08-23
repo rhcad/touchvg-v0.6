@@ -1,0 +1,350 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AE6E22B115E5CAC400007602 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE6E22B015E5CAC400007602 /* UIKit.framework */; };
+		AE6E22B315E5CAC400007602 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE6E22B215E5CAC400007602 /* Foundation.framework */; };
+		AE6E22B515E5CAC400007602 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE6E22B415E5CAC400007602 /* CoreGraphics.framework */; };
+		AE6E22BB15E5CAC400007602 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AE6E22B915E5CAC400007602 /* InfoPlist.strings */; };
+		AE6E22BD15E5CAC400007602 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AE6E22BC15E5CAC400007602 /* main.m */; };
+		AE6E22C115E5CAC400007602 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AE6E22C015E5CAC400007602 /* AppDelegate.m */; };
+		AE6E22C415E5CAC400007602 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE6E22C315E5CAC400007602 /* ViewController.m */; };
+		AE6E22C715E5CAC400007602 /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE6E22C515E5CAC400007602 /* ViewController_iPhone.xib */; };
+		AE6E22CA15E5CAC400007602 /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE6E22C815E5CAC400007602 /* ViewController_iPad.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AE6E22E115E5D09700007602 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AE6E22D915E5D09700007602 /* Graph2d.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4AE2C1D21424998500C67987;
+			remoteInfo = Graph2d;
+		};
+		AE6E22E315E5D09700007602 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AE6E22D915E5D09700007602 /* Graph2d.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4AE2C1DF1424998500C67987;
+			remoteInfo = Graph2dUnitTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AE6E22AC15E5CAC400007602 /* TestGesture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestGesture.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE6E22B015E5CAC400007602 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		AE6E22B215E5CAC400007602 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		AE6E22B415E5CAC400007602 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		AE6E22B815E5CAC400007602 /* TestGesture-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TestGesture-Info.plist"; sourceTree = "<group>"; };
+		AE6E22BA15E5CAC400007602 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AE6E22BC15E5CAC400007602 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		AE6E22BE15E5CAC400007602 /* TestGesture-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestGesture-Prefix.pch"; sourceTree = "<group>"; };
+		AE6E22BF15E5CAC400007602 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		AE6E22C015E5CAC400007602 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		AE6E22C215E5CAC400007602 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		AE6E22C315E5CAC400007602 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		AE6E22C615E5CAC400007602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
+		AE6E22C915E5CAC400007602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
+		AE6E22D915E5D09700007602 /* Graph2d.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Graph2d.xcodeproj; path = ../Graph2d/Graph2d.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AE6E22A915E5CAC400007602 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE6E22B115E5CAC400007602 /* UIKit.framework in Frameworks */,
+				AE6E22B315E5CAC400007602 /* Foundation.framework in Frameworks */,
+				AE6E22B515E5CAC400007602 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AE6E22A115E5CAC400007602 = {
+			isa = PBXGroup;
+			children = (
+				AE6E22D915E5D09700007602 /* Graph2d.xcodeproj */,
+				AE6E22B615E5CAC400007602 /* TestGesture */,
+				AE6E22AF15E5CAC400007602 /* Frameworks */,
+				AE6E22AD15E5CAC400007602 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AE6E22AD15E5CAC400007602 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AE6E22AC15E5CAC400007602 /* TestGesture.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AE6E22AF15E5CAC400007602 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AE6E22B015E5CAC400007602 /* UIKit.framework */,
+				AE6E22B215E5CAC400007602 /* Foundation.framework */,
+				AE6E22B415E5CAC400007602 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AE6E22B615E5CAC400007602 /* TestGesture */ = {
+			isa = PBXGroup;
+			children = (
+				AE6E22BF15E5CAC400007602 /* AppDelegate.h */,
+				AE6E22C015E5CAC400007602 /* AppDelegate.m */,
+				AE6E22C215E5CAC400007602 /* ViewController.h */,
+				AE6E22C315E5CAC400007602 /* ViewController.m */,
+				AE6E22C515E5CAC400007602 /* ViewController_iPhone.xib */,
+				AE6E22C815E5CAC400007602 /* ViewController_iPad.xib */,
+				AE6E22B715E5CAC400007602 /* Supporting Files */,
+			);
+			path = TestGesture;
+			sourceTree = "<group>";
+		};
+		AE6E22B715E5CAC400007602 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AE6E22B815E5CAC400007602 /* TestGesture-Info.plist */,
+				AE6E22B915E5CAC400007602 /* InfoPlist.strings */,
+				AE6E22BC15E5CAC400007602 /* main.m */,
+				AE6E22BE15E5CAC400007602 /* TestGesture-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AE6E22DA15E5D09700007602 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AE6E22E215E5D09700007602 /* libGraph2d.a */,
+				AE6E22E415E5D09700007602 /* Graph2dUnitTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AE6E22AB15E5CAC400007602 /* TestGesture */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AE6E22CD15E5CAC400007602 /* Build configuration list for PBXNativeTarget "TestGesture" */;
+			buildPhases = (
+				AE6E22A815E5CAC400007602 /* Sources */,
+				AE6E22A915E5CAC400007602 /* Frameworks */,
+				AE6E22AA15E5CAC400007602 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestGesture;
+			productName = TestGesture;
+			productReference = AE6E22AC15E5CAC400007602 /* TestGesture.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AE6E22A315E5CAC400007602 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = Founder;
+			};
+			buildConfigurationList = AE6E22A615E5CAC400007602 /* Build configuration list for PBXProject "TestGesture" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = AE6E22A115E5CAC400007602;
+			productRefGroup = AE6E22AD15E5CAC400007602 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = AE6E22DA15E5D09700007602 /* Products */;
+					ProjectRef = AE6E22D915E5D09700007602 /* Graph2d.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				AE6E22AB15E5CAC400007602 /* TestGesture */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		AE6E22E215E5D09700007602 /* libGraph2d.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGraph2d.a;
+			remoteRef = AE6E22E115E5D09700007602 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AE6E22E415E5D09700007602 /* Graph2dUnitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Graph2dUnitTests.octest;
+			remoteRef = AE6E22E315E5D09700007602 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AE6E22AA15E5CAC400007602 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE6E22BB15E5CAC400007602 /* InfoPlist.strings in Resources */,
+				AE6E22C715E5CAC400007602 /* ViewController_iPhone.xib in Resources */,
+				AE6E22CA15E5CAC400007602 /* ViewController_iPad.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AE6E22A815E5CAC400007602 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE6E22BD15E5CAC400007602 /* main.m in Sources */,
+				AE6E22C115E5CAC400007602 /* AppDelegate.m in Sources */,
+				AE6E22C415E5CAC400007602 /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		AE6E22B915E5CAC400007602 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AE6E22BA15E5CAC400007602 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		AE6E22C515E5CAC400007602 /* ViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AE6E22C615E5CAC400007602 /* en */,
+			);
+			name = ViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		AE6E22C815E5CAC400007602 /* ViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AE6E22C915E5CAC400007602 /* en */,
+			);
+			name = ViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AE6E22CB15E5CAC400007602 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AE6E22CC15E5CAC400007602 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AE6E22CE15E5CAC400007602 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TestGesture/TestGesture-Prefix.pch";
+				INFOPLIST_FILE = "TestGesture/TestGesture-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		AE6E22CF15E5CAC400007602 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TestGesture/TestGesture-Prefix.pch";
+				INFOPLIST_FILE = "TestGesture/TestGesture-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AE6E22A615E5CAC400007602 /* Build configuration list for PBXProject "TestGesture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AE6E22CB15E5CAC400007602 /* Debug */,
+				AE6E22CC15E5CAC400007602 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AE6E22CD15E5CAC400007602 /* Build configuration list for PBXNativeTarget "TestGesture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AE6E22CE15E5CAC400007602 /* Debug */,
+				AE6E22CF15E5CAC400007602 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AE6E22A315E5CAC400007602 /* Project object */;
+}
