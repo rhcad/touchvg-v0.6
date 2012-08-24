@@ -23,10 +23,11 @@ enum kGestureType {
 };
 
 @interface ViewController : UIViewController<UIGestureRecognizerDelegate> {
+    IBOutlet UIView     *_testView;
+    IBOutlet UILabel    *_gestureLabel;
+    IBOutlet UIView     *_buttonsView;
     UIGestureRecognizer *_recognizers[kGestureMax];
 }
-
-@property (retain, nonatomic) IBOutlet UILabel *gestureLabel;
 
 - (IBAction)switchPinchGesture:(id)sender;
 - (IBAction)switchRotationGesture:(id)sender;

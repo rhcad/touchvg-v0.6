@@ -8,29 +8,31 @@
 @end
 
 @implementation ViewController
-@synthesize gestureLabel;
 
 - (void)dealloc {
-    [gestureLabel release];
+    [_testView release];
+    [_gestureLabel release];
+    [_buttonsView release];
     [super dealloc];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    for (int i = 0; i < kGestureMax; i++)
-        _recognizers[i] = nil;
-    [self addGestureRecognizers];
+    [self addGestureRecognizers];   // 初始化手势识别器
 	
-    gestureLabel.text = @"Ready to check gestures.";
+    _gestureLabel.text = @"Ready to check gestures.";
 }
 
 - (void)viewDidUnload
 {
-    [self setGestureLabel:nil];
+    [_testView release];
+    _testView = nil;
+    [_gestureLabel release];
+    _gestureLabel = nil;
+    [_buttonsView release];
+    _buttonsView = nil;
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -140,13 +142,11 @@
     UIPanGestureRecognizer *oneFingerPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
     oneFingerPan.maximumNumberOfTouches = 1;
-    oneFingerPan.delaysTouchesBegan = YES;
     _recognizers[kGesturePan] = oneFingerPan;
     
     // 单指点击手势
     UITapGestureRecognizer *oneFingerOneTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
-    [oneFingerOneTap requireGestureRecognizerToFail:oneFingerPan];  // 不是滑动才算点击
     _recognizers[kGestureTap] = oneFingerOneTap;
     
     // 单指双击手势
@@ -185,6 +185,7 @@
         if (_recognizers[i]) {
             _recognizers[i].delegate = self;
             [self.view addGestureRecognizer:_recognizers[i]];
+            [_recognizers[i] release];
         }
     }
 }
@@ -192,10 +193,15 @@
 - (void)showGesture:(UIGestureRecognizer *)sender :(NSString *)name :(NSString *)info
 {
     CGPoint pt = [sender locationInView:sender.view];
-    NSString *str = [NSString stringWithFormat:@"%@\n%@\nstate:%d\npoints:%d (%6.1f, %6.1f)",
-                     name, info ? info : @"", sender.state, 
-                     sender.numberOfTouches, pt.x, pt.y];    
-    gestureLabel.text = str;
+    NSString *str = [NSString stringWithFormat:@"%@\n%@\nstate:%d\n(%6.1f, %6.1f)",
+                     name, info ? info : @"", sender.state, pt.x, pt.y];
+    if ([sender numberOfTouches] > 1) {
+        CGPoint pt2 = [sender locationOfTouch:1 inView:sender.view];
+        pt = [sender locationOfTouch:0 inView:sender.view];
+        str = [str stringByAppendingFormat:@":(%6.1f, %6.1f),(%6.1f, %6.1f)", 
+               pt.x, pt.y, pt2.x, pt2.y];
+    }
+    _gestureLabel.text = str;
 }
 
 - (void)longPressGesture:(UILongPressGestureRecognizer *)sender
@@ -255,11 +261,31 @@
 - (void)swipeRightGesture:(UISwipeGestureRecognizer *)sender
 {
     [self showGesture:sender :@"swipeRightGesture" :nil];
+    
+    if ([sender locationInView:sender.view].y < _gestureLabel.frame.size.height
+        && _buttonsView.hidden) {
+        _buttonsView.hidden = NO;
+        
+        CGRect rect = _gestureLabel.frame;
+        rect.origin.x = _buttonsView.frame.size.width;
+        rect.size.width -= rect.origin.x;
+        _gestureLabel.frame = rect;
+    }
 }
 
 - (void)swipeLeftGesture:(UISwipeGestureRecognizer *)sender
 {
     [self showGesture:sender :@"swipeLeftGesture" :nil];
+    
+    if ([sender locationInView:sender.view].y < _gestureLabel.frame.size.height
+        && !_buttonsView.hidden) {
+        _buttonsView.hidden = YES;
+        
+        CGRect rect = _gestureLabel.frame;
+        rect.size.width += rect.origin.x;
+        rect.origin.x = 0;
+        _gestureLabel.frame = rect;
+    }
 }
 
 - (void)swipeDownGesture:(UISwipeGestureRecognizer *)sender
