@@ -3,8 +3,17 @@
 //
 
 #import "AppDelegate.h"
-
 #import "ViewController.h"
+
+// Inner property and methods
+@interface AppDelegate ()
+
+#ifndef __IPHONE_5_0
+@property (nonatomic, retain) UIWindow *window;
+#endif
+@property (nonatomic, retain) ViewController *viewController;
+
+@end
 
 @implementation AppDelegate
 
@@ -20,15 +29,17 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
+        _viewController = [[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil];
     } else {
-        self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPad" bundle:nil] autorelease];
+        _viewController = [[ViewController alloc] initWithNibName:@"ViewController_iPad" bundle:nil];
     }
-    self.window.rootViewController = self.viewController;
-    [self.window makeKeyAndVisible];
+    
+    [_window addSubview:_viewController.view];
+    [_window makeKeyAndVisible];
+    
     return YES;
 }
 

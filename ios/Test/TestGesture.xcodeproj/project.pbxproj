@@ -18,23 +18,6 @@
 		AE6E22CA15E5CAC400007602 /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE6E22C815E5CAC400007602 /* ViewController_iPad.xib */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		AE6E22E115E5D09700007602 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AE6E22D915E5D09700007602 /* Graph2d.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4AE2C1D21424998500C67987;
-			remoteInfo = Graph2d;
-		};
-		AE6E22E315E5D09700007602 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AE6E22D915E5D09700007602 /* Graph2d.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4AE2C1DF1424998500C67987;
-			remoteInfo = Graph2dUnitTests;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		AE6E22AC15E5CAC400007602 /* TestGesture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestGesture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE6E22B015E5CAC400007602 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -50,7 +33,6 @@
 		AE6E22C315E5CAC400007602 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		AE6E22C615E5CAC400007602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
 		AE6E22C915E5CAC400007602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
-		AE6E22D915E5D09700007602 /* Graph2d.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Graph2d.xcodeproj; path = ../Graph2d/Graph2d.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +52,6 @@
 		AE6E22A115E5CAC400007602 = {
 			isa = PBXGroup;
 			children = (
-				AE6E22D915E5D09700007602 /* Graph2d.xcodeproj */,
 				AE6E22B615E5CAC400007602 /* TestGesture */,
 				AE6E22AF15E5CAC400007602 /* Frameworks */,
 				AE6E22AD15E5CAC400007602 /* Products */,
@@ -120,15 +101,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		AE6E22DA15E5D09700007602 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				AE6E22E215E5D09700007602 /* libGraph2d.a */,
-				AE6E22E415E5D09700007602 /* Graph2dUnitTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -168,35 +140,12 @@
 			mainGroup = AE6E22A115E5CAC400007602;
 			productRefGroup = AE6E22AD15E5CAC400007602 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = AE6E22DA15E5D09700007602 /* Products */;
-					ProjectRef = AE6E22D915E5D09700007602 /* Graph2d.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				AE6E22AB15E5CAC400007602 /* TestGesture */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		AE6E22E215E5D09700007602 /* libGraph2d.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libGraph2d.a;
-			remoteRef = AE6E22E115E5D09700007602 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		AE6E22E415E5D09700007602 /* Graph2dUnitTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = Graph2dUnitTests.octest;
-			remoteRef = AE6E22E315E5D09700007602 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		AE6E22AA15E5CAC400007602 /* Resources */ = {

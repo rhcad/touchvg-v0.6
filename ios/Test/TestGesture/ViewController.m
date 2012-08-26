@@ -1,10 +1,28 @@
-// ViewController.m
+﻿// ViewController.m
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 //
 
 #import "ViewController.h"
 
 @interface ViewController ()
+
+- (void)addGestureRecognizers;
+
+- (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
+- (void)twoFingersRotate:(UIRotationGestureRecognizer *)sender;
+- (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
+- (void)twoFingersTwoTaps:(UIGestureRecognizer *)sender;
+
+- (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
+- (void)oneFingerOneTap:(UIGestureRecognizer *)sender;
+- (void)oneFingerTwoTaps:(UIGestureRecognizer *)sender;
+- (void)longPressGesture:(UIGestureRecognizer *)sender;
+
+- (void)swipeLeftGesture:(UIGestureRecognizer *)sender;
+- (void)swipeRightGesture:(UIGestureRecognizer *)sender;
+- (void)swipeUpGesture:(UIGestureRecognizer *)sender;
+- (void)swipeDownGesture:(UIGestureRecognizer *)sender;
+
 @end
 
 @implementation ViewController
@@ -204,17 +222,17 @@
     _gestureLabel.text = str;
 }
 
-- (void)longPressGesture:(UILongPressGestureRecognizer *)sender
+- (void)longPressGesture:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"longPressGesture" :nil];
 }
 
-- (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
+- (void)oneFingerOneTap:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"oneFingerOneTap" :nil];
 }
 
-- (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
+- (void)oneFingerTwoTaps:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"oneFingerTwoTaps" :nil];
 }
@@ -253,47 +271,51 @@
                        translation.x, translation.y, velocity.x, velocity.y]];
 }
 
-- (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender
+- (void)twoFingersTwoTaps:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"twoFingersTwoTaps" :nil];
 }
 
-- (void)swipeRightGesture:(UISwipeGestureRecognizer *)sender
+- (void)swipeRightGesture:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"swipeRightGesture" :nil];
-    
-    if ([sender locationInView:sender.view].y < _gestureLabel.frame.size.height
+        
+    if (CGRectContainsPoint(_gestureLabel.frame, [sender locationInView:sender.view])
         && _buttonsView.hidden) {
         _buttonsView.hidden = NO;
         
-        CGRect rect = _gestureLabel.frame;
-        rect.origin.x = _buttonsView.frame.size.width;
-        rect.size.width -= rect.origin.x;
-        _gestureLabel.frame = rect;
+        if (fabs(_gestureLabel.frame.origin.y - _buttonsView.frame.origin.y) < 5) {
+            CGRect rect = _gestureLabel.frame;
+            rect.origin.x = _buttonsView.frame.size.width;
+            rect.size.width -= rect.origin.x;
+            _gestureLabel.frame = rect;
+        }
     }
 }
 
-- (void)swipeLeftGesture:(UISwipeGestureRecognizer *)sender
+- (void)swipeLeftGesture:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"swipeLeftGesture" :nil];
     
-    if ([sender locationInView:sender.view].y < _gestureLabel.frame.size.height
+    if (CGRectContainsPoint(_gestureLabel.frame, [sender locationInView:sender.view])
         && !_buttonsView.hidden) {
         _buttonsView.hidden = YES;
         
-        CGRect rect = _gestureLabel.frame;
-        rect.size.width += rect.origin.x;
-        rect.origin.x = 0;
-        _gestureLabel.frame = rect;
+        if (fabs(_gestureLabel.frame.origin.y - _buttonsView.frame.origin.y) < 5) {
+            CGRect rect = _gestureLabel.frame;
+            rect.size.width += rect.origin.x;
+            rect.origin.x = 0;
+            _gestureLabel.frame = rect;
+        }
     }
 }
 
-- (void)swipeDownGesture:(UISwipeGestureRecognizer *)sender
+- (void)swipeDownGesture:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"swipeDownGesture" :nil];
 }
 
-- (void)swipeUpGesture:(UISwipeGestureRecognizer *)sender
+- (void)swipeUpGesture:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"swipeUpGesture" :nil];
 }

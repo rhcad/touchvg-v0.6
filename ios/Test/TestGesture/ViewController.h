@@ -1,24 +1,25 @@
-// ViewController.h
+﻿// ViewController.h
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 //
 
 #import <UIKit/UIKit.h>
 
+//! 手势类型
 enum kGestureType {
-    kGesturePinch,
-    kGestureRotate,
-    kGestureTwoFingersPan,
-    kGestureTwoFingersTwoTaps,
+    kGesturePinch,                  //!< 放缩
+    kGestureRotate,                 //!< 旋转
+    kGestureTwoFingersPan,          //!< 双指拖动
+    kGestureTwoFingersTwoTaps,      //!< 双指双击
     
-    kGesturePan,
-    kGestureTap,
-    kGestureTwoTaps,
-    kGestureLongPress,
+    kGesturePan,                    //!< 拖动
+    kGestureTap,                    //!< 点击
+    kGestureTwoTaps,                //!< 双击
+    kGestureLongPress,              //!< 长按
     
-    kGestureSwipeRight,
-    kGestureSwipeLeft,
-    kGestureSwipeUp,
-    kGestureSwipeDown,
+    kGestureSwipeRight,             //!< 右扫
+    kGestureSwipeLeft,              //!< 左扫
+    kGestureSwipeUp,                //!< 上扫
+    kGestureSwipeDown,              //!< 下扫
     kGestureMax
 };
 
