@@ -5,10 +5,19 @@
 #import "ViewController.h"
 #import "TestPaintView.h"
 
+typedef struct {
+    UIView  *view;
+    UIGestureRecognizer *recognizers[kGestureMax];
+} GestureView;
+
+static GestureView s_views[20];
+static int s_viewCount = 0;
+
 @interface ViewController ()
 
-- (void)addGestureRecognizers;
+- (void)addGestureRecognizers:(GestureView *)target;
 - (id)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture :(UIView *)pview;
+- (UIGestureRecognizer *)findRecognizers:(id)aview :(int)type;
 - (void)addTestingViews;
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
@@ -41,7 +50,6 @@
 {
     [super viewDidLoad];
     [self addTestingViews];
-    [self addGestureRecognizers:_contentView];
 	
     _gestureLabel.text = @"Ready to check gestures.";
 }
@@ -65,74 +73,98 @@
 
 - (IBAction)switchPinchGesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGesturePinch];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGesturePinch].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchRotationGesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGestureRotate];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGestureRotate].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchPan2Gesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGestureTwoFingersPan];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGestureTwoFingersPan].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchTwoTaps2Gesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGestureTwoFingersTwoTaps];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGestureTwoFingersTwoTaps].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchPan1Gesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGesturePan];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGesturePan].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchTap1Gesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGestureTap];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGestureTap].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchTwoTaps1Gesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGestureTwoTaps];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGestureTwoTaps].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchLongPressGesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGestureLongPress];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGestureLongPress].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchSwipeRightGesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGestureSwipeRight];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGestureSwipeRight].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchSwipeLeftGesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGestureSwipeLeft];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGestureSwipeLeft].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchSwipeUpGesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGestureSwipeUp];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGestureSwipeUp].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (IBAction)switchSwipeDownGesture:(id)sender
 {
+    UIGestureRecognizer *recognizer = [self findRecognizers:_lockedHandler :kGestureSwipeDown];
     UISwitch *button = (UISwitch *)sender;
-    _recognizers[kGestureSwipeDown].enabled = button.on;
+    if (recognizer)
+        recognizer.enabled = button.on;
 }
 
 - (void)addTestingViews
@@ -141,17 +173,15 @@
     UIColor *bkColors[] = { [UIColor whiteColor], [UIColor greenColor],
         [UIColor purpleColor], [UIColor brownColor], [UIColor grayColor] };
     
-    _contentView = [[UIView alloc] initWithFrame:_testView.bounds];
-    _contentView.clipsToBounds = YES;
-    [_testView addSubview:_contentView];
-    [_contentView release];
-    
     for (int i = 0; i < 15; i++) {
         TestPaintView *view1 = [[TestPaintView alloc]initWithFrame:CGRectMake(x, y, w, h)];
-        [_contentView addSubview:view1];
+        [_testView addSubview:view1];
         view1.tag = i + 1;
         view1.backgroundColor = bkColors[i % 5];
         [view1 release];
+        
+        s_views[s_viewCount].view = view1;
+        [self addGestureRecognizers:&s_views[s_viewCount++]];
         
         x += w + diff;
         if (i % 3 == 2) {
@@ -160,8 +190,7 @@
         }
     }
     
-    _contentView.frame = CGRectMake(0, 0, w * 3 + 2 * diff, y);
-    _testView.contentSize = _contentView.frame.size;
+    _testView.contentSize = CGSizeMake(w * 3 + 2 * diff, y);
     _testView.contentInset = UIEdgeInsetsMake(diff, diff, diff, diff);
     _testView.minimumZoomScale = 0.5f;
     _testView.maximumZoomScale = 3.0f;
@@ -176,80 +205,91 @@
 {
 }
 
-- (void)addGestureRecognizers:(UIView *)targetView
+- (UIGestureRecognizer *)findRecognizers:(id)aview :(int)type
+{
+    for (int i = 0; i < s_viewCount; i++) {
+        if (s_views[i].view == aview && type >= 0 && type < kGestureMax) {
+            return s_views[i].recognizers[type];
+        }
+    }
+    return nil;
+}
+
+- (void)addGestureRecognizers:(GestureView *)target
 {
     // 双指捏合手势
     UIPinchGestureRecognizer *twoFingersPinch =
     [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPinch:)];
-    _recognizers[kGesturePinch] = twoFingersPinch;
+    target->recognizers[kGesturePinch] = twoFingersPinch;
     
     // 双指旋转手势
     UIRotationGestureRecognizer *twoFingersRotate =
     [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersRotate:)];
-    _recognizers[kGestureRotate] = twoFingersRotate;
+    target->recognizers[kGestureRotate] = twoFingersRotate;
     
     // 双指滑动手势
     UIPanGestureRecognizer *twoFingersPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
     twoFingersPan.maximumNumberOfTouches = 2;
     twoFingersPan.minimumNumberOfTouches = 2;
-    _recognizers[kGestureTwoFingersPan] = twoFingersPan;
+    target->recognizers[kGestureTwoFingersPan] = twoFingersPan;
+    twoFingersPan.enabled = NO;
     
     // 双指双击手势
     UITapGestureRecognizer *twoFingersTwoTaps =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersTwoTaps:)];
     twoFingersTwoTaps.numberOfTapsRequired = 2;
     twoFingersTwoTaps.numberOfTouchesRequired = 2;
-    _recognizers[kGestureTwoFingersTwoTaps] = twoFingersTwoTaps;
+    target->recognizers[kGestureTwoFingersTwoTaps] = twoFingersTwoTaps;
     
     // 单指滑动手势
     UIPanGestureRecognizer *oneFingerPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
     oneFingerPan.maximumNumberOfTouches = 1;
-    _recognizers[kGesturePan] = oneFingerPan;
+    target->recognizers[kGesturePan] = oneFingerPan;
     
     // 单指点击手势
     UITapGestureRecognizer *oneFingerOneTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
-    _recognizers[kGestureTap] = oneFingerOneTap;
+    target->recognizers[kGestureTap] = oneFingerOneTap;
     
     // 单指双击手势
     UITapGestureRecognizer *oneFingerTwoTaps =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerTwoTaps:)];
     oneFingerTwoTaps.numberOfTapsRequired = 2;
-    _recognizers[kGestureTwoTaps] = oneFingerTwoTaps;
+    target->recognizers[kGestureTwoTaps] = oneFingerTwoTaps;
     
     // 单指长按手势
     UILongPressGestureRecognizer *longPressGesture =
     [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
     longPressGesture.minimumPressDuration = 0.8;
-    _recognizers[kGestureLongPress] = longPressGesture;
+    target->recognizers[kGestureLongPress] = longPressGesture;
     
     UISwipeGestureRecognizer *swipeGesture;
     
     // 单指横向轻扫手势
     swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeRightGesture:)];
     swipeGesture.direction = UISwipeGestureRecognizerDirectionRight;
-    _recognizers[kGestureSwipeRight] = swipeGesture;
+    target->recognizers[kGestureSwipeRight] = swipeGesture;
     
     swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeLeftGesture:)];
     swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft;
-    _recognizers[kGestureSwipeLeft] = swipeGesture;
+    target->recognizers[kGestureSwipeLeft] = swipeGesture;
     
     // 单指纵向轻扫手势
     swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeUpGesture:)];
     swipeGesture.direction = UISwipeGestureRecognizerDirectionUp;
-    _recognizers[kGestureSwipeUp] = swipeGesture;
+    target->recognizers[kGestureSwipeUp] = swipeGesture;
     
     swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeDownGesture:)];
     swipeGesture.direction = UISwipeGestureRecognizerDirectionDown;
-    _recognizers[kGestureSwipeDown] = swipeGesture;
+    target->recognizers[kGestureSwipeDown] = swipeGesture;
     
     for (int i = 0; i < kGestureMax; i++) {
-        if (_recognizers[i]) {
-            [targetView addGestureRecognizer:_recognizers[i]];
-            _recognizers[i].delegate = self;
-            [_recognizers[i] release];
+        if (target->recognizers[i]) {
+            [target->view addGestureRecognizer:target->recognizers[i]];
+            target->recognizers[i].delegate = self;
+            [target->recognizers[i] release];
         }
     }
 }
@@ -258,8 +298,8 @@
 {
     id ret = nil;
     
-    if (!_lockedHandler && (gesture.state == UIGestureRecognizerStateBegan
-                            || gesture.state == UIGestureRecognizerStateEnded)) {
+    if (!_lockedHandler || gesture.state == UIGestureRecognizerStateBegan
+        || gesture.state == UIGestureRecognizerStateEnded) {
         _lockedHandler = nil;
         
         for (UIView *aview in pview.subviews) {
@@ -292,7 +332,7 @@
     }
     if (gesture.state == UIGestureRecognizerStateEnded
         || gesture.state == UIGestureRecognizerStateCancelled) {
-        _lockedHandler = nil;
+        //_lockedHandler = nil;
     }
     
     return ret;

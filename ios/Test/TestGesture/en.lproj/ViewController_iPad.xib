@@ -41,7 +41,7 @@
 						<int key="NSvFlags">266</int>
 						<string key="NSFrame">{{406, 852}, {362, 152}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
-						<reference key="NSNextKeyView" ref="817037932"/>
+						<reference key="NSNextKeyView"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="538062531">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
@@ -115,7 +115,6 @@
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<int key="IBUIContentHorizontalAlignment">0</int>
 								<int key="IBUIContentVerticalAlignment">0</int>
-								<bool key="IBUIOn">YES</bool>
 							</object>
 							<object class="IBUISwitch" id="936183904">
 								<reference key="NSNextResponder" ref="799411039"/>
@@ -465,6 +464,7 @@
 						<int key="NSvFlags">274</int>
 						<string key="NSFrame">{{1, 0}, {768, 851}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
+						<reference key="NSNextKeyView" ref="799411039"/>
 						<object class="NSColor" key="IBUIBackgroundColor" id="134234643">
 							<int key="NSColorSpace">10</int>
 							<object class="NSImage" key="NSImage">
@@ -4866,7 +4866,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 				</array>
 				<string key="NSFrame">{{0, 20}, {768, 1004}}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSNextKeyView" ref="799411039"/>
+				<reference key="NSNextKeyView" ref="817037932"/>
 				<reference key="IBUIBackgroundColor" ref="134234643"/>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 					<int key="IBUIStatusBarStyle">2</int>
