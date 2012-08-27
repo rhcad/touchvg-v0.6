@@ -1,4 +1,4 @@
-﻿// ViewController.m
+// ViewController.m
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 //
 
@@ -211,12 +211,12 @@
 - (void)showGesture:(UIGestureRecognizer *)sender :(NSString *)name :(NSString *)info
 {
     CGPoint pt = [sender locationInView:sender.view];
-    NSString *str = [NSString stringWithFormat:@"%@\n%@\nstate:%d\n(%6.1f, %6.1f)",
+    NSString *str = [NSString stringWithFormat:@"%@\n%@\nstate:%d\n(%5.1f, %5.1f)",
                      name, info ? info : @"", sender.state, pt.x, pt.y];
     if ([sender numberOfTouches] > 1) {
         CGPoint pt2 = [sender locationOfTouch:1 inView:sender.view];
         pt = [sender locationOfTouch:0 inView:sender.view];
-        str = [str stringByAppendingFormat:@":(%6.1f, %6.1f),(%6.1f, %6.1f)", 
+        str = [str stringByAppendingFormat:@":(%5.1f, %5.1f)(%5.1f, %5.1f)", 
                pt.x, pt.y, pt2.x, pt2.y];
     }
     _gestureLabel.text = str;
@@ -279,7 +279,7 @@
 - (void)swipeRightGesture:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"swipeRightGesture" :nil];
-        
+    
     if (CGRectContainsPoint(_gestureLabel.frame, [sender locationInView:sender.view])
         && _buttonsView.hidden) {
         _buttonsView.hidden = NO;

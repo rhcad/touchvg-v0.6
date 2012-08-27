@@ -1,4 +1,4 @@
-﻿// ViewController.h
+// ViewController.h
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 //
 
