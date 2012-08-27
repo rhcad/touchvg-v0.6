@@ -41,7 +41,7 @@
 {
     [super viewDidLoad];
     [self addTestingViews];
-    [self addGestureRecognizers];   // 初始化手势识别器
+    [self addGestureRecognizers:_contentView];
 	
     _gestureLabel.text = @"Ready to check gestures.";
 }
@@ -54,6 +54,7 @@
     _gestureLabel = nil;
     [_buttonsView release];
     _buttonsView = nil;
+            
     [super viewDidUnload];
 }
 
@@ -136,7 +137,7 @@
 
 - (void)addTestingViews
 {
-    float x = 0, y = 0, w = 300, h = 300;
+    float x = 0, y = 0, w = 300, h = 300, diff = 20;
     UIColor *bkColors[] = { [UIColor whiteColor], [UIColor greenColor],
         [UIColor purpleColor], [UIColor brownColor], [UIColor grayColor] };
     
@@ -152,16 +153,16 @@
         view1.backgroundColor = bkColors[i % 5];
         [view1 release];
         
-        x += w + 10;
+        x += w + diff;
         if (i % 3 == 2) {
             x = 0;
-            y += h + 10;
+            y += h + diff;
         }
     }
     
-    _contentView.frame = CGRectMake(0, 0, w * 3 + 20, y);
+    _contentView.frame = CGRectMake(0, 0, w * 3 + 2 * diff, y);
     _testView.contentSize = _contentView.frame.size;
-    _testView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    _testView.contentInset = UIEdgeInsetsMake(diff, diff, diff, diff);
     _testView.minimumZoomScale = 0.5f;
     _testView.maximumZoomScale = 3.0f;
     _testView.delegate = self;
@@ -175,7 +176,7 @@
 {
 }
 
-- (void)addGestureRecognizers
+- (void)addGestureRecognizers:(UIView *)targetView
 {
     // 双指捏合手势
     UIPinchGestureRecognizer *twoFingersPinch =
@@ -246,8 +247,8 @@
     
     for (int i = 0; i < kGestureMax; i++) {
         if (_recognizers[i]) {
+            [targetView addGestureRecognizer:_recognizers[i]];
             _recognizers[i].delegate = self;
-            [_contentView addGestureRecognizer:_recognizers[i]];
             [_recognizers[i] release];
         }
     }
