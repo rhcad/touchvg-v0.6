@@ -213,30 +213,40 @@
 {
     BOOL ret = NO;        
     
-    if (!_lockedView) {
+    if (!_lockedHandler && (gesture.state == UIGestureRecognizerStateBegan
+        || gesture.state == UIGestureRecognizerStateEnded)) {
+        _lockedHandler = nil;
+        
         for (UIView *aview in pview.subviews) {
+            if (!CGRectContainsPoint(aview.frame, [gesture locationInView:aview]))
+                continue;
             if ([self dispatchGesture:aSelector :gesture :aview]) {
                 ret = YES;
                 break;
             }
-            if ([aview respondsToSelector:aSelector]
-                && CGRectContainsPoint(aview.frame, [gesture locationInView:aview])) {
-                if ([aview performSelector:aSelector withObject:gesture]) {
-                    _lockedView = aview;
-                    ret = YES;
-                    break;
-                }
+            if ([aview respondsToSelector:aSelector] &&
+                [aview performSelector:aSelector withObject:gesture]) {
+                _lockedHandler = aview;
+                ret = YES;
+                break;
+            }
+            UIResponder* controller = [aview nextResponder];
+            if ([controller isKindOfClass:[UIViewController class]]
+                && [controller respondsToSelector:aSelector]
+                && [controller performSelector:aSelector withObject:gesture]) {
+                _lockedHandler = controller;
+                ret = YES;
+                break;
             }
         }
     }
-    else if ([_lockedView respondsToSelector:aSelector]) {
-        if ([_lockedView performSelector:aSelector withObject:gesture]) {
-            ret = YES;
-        }
+    else if ([_lockedHandler respondsToSelector:aSelector] &&
+             [_lockedHandler performSelector:aSelector withObject:gesture]) {
+        ret = YES;
     }
     if (gesture.state == UIGestureRecognizerStateEnded
         || gesture.state == UIGestureRecognizerStateCancelled) {
-        _lockedView = nil;
+        _lockedHandler = nil;
     }
     
     return ret;

@@ -6,7 +6,7 @@
 
 @interface ViewController : UIViewController<UIGestureRecognizerDelegate> {
     UIGestureRecognizer *_recognizers[kGestureMax];
-    UIView              *_lockedView;
+    id                  _lockedHandler;
     
     IBOutlet UIView     *_testView;
     IBOutlet UILabel    *_gestureLabel;
