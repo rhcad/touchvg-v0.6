@@ -33,6 +33,7 @@
 		AE6E22C315E5CAC400007602 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		AE6E22C615E5CAC400007602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
 		AE6E22C915E5CAC400007602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
+		AE8C6E0F15EB0B37005AE349 /* GestureHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GestureHandler.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +80,7 @@
 		AE6E22B615E5CAC400007602 /* TestGesture */ = {
 			isa = PBXGroup;
 			children = (
+				AE8C6E0F15EB0B37005AE349 /* GestureHandler.h */,
 				AE6E22BF15E5CAC400007602 /* AppDelegate.h */,
 				AE6E22C015E5CAC400007602 /* AppDelegate.m */,
 				AE6E22C215E5CAC400007602 /* ViewController.h */,
