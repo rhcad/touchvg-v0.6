@@ -8,7 +8,7 @@
 @interface ViewController ()
 
 - (void)addGestureRecognizers;
-- (BOOL)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture :(UIView *)pview;
+- (id)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture :(UIView *)pview;
 - (void)addTestingViews;
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
@@ -147,15 +147,26 @@
         view1.backgroundColor = bkColors[i % 5];
         [view1 release];
         
-        x += w;
+        x += w + 10;
         if (i % 3 == 2) {
             x = 0;
-            y += h;
+            y += h + 10;
         }
     }
     
-    _testView.contentSize = CGSizeMake(w * 3, h);
+    _testView.contentSize = CGSizeMake(w * 3 + 20, h);
     _testView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    _testView.minimumZoomScale = 0.5f;
+    _testView.maximumZoomScale = 3.0f;
+    _testView.delegate = self;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView
+{
 }
 
 - (void)addGestureRecognizers
@@ -236,40 +247,41 @@
     }
 }
 
-- (BOOL)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture :(UIView *)pview
+- (id)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture :(UIView *)pview
 {
-    BOOL ret = NO;        
+    id ret = nil;
     
     if (!_lockedHandler && (gesture.state == UIGestureRecognizerStateBegan
-        || gesture.state == UIGestureRecognizerStateEnded)) {
+                            || gesture.state == UIGestureRecognizerStateEnded)) {
         _lockedHandler = nil;
         
         for (UIView *aview in pview.subviews) {
             if (!CGRectContainsPoint(aview.frame, [gesture locationInView:aview.superview]))
                 continue;
-            if ([self dispatchGesture:aSelector :gesture :aview]) {
-                ret = YES;
+            ret = [self dispatchGesture:aSelector :gesture :aview];
+            if (ret) {
                 break;
             }
-            if ([aview respondsToSelector:aSelector] &&
-                [aview performSelector:aSelector withObject:gesture]) {
-                _lockedHandler = aview;
-                ret = YES;
-                break;
+            if ([aview respondsToSelector:aSelector]) {
+                ret = [aview performSelector:aSelector withObject:gesture];
+                if (ret) {
+                    _lockedHandler = aview;
+                    break;
+                }
             }
             UIResponder* controller = [aview nextResponder];
             if ([controller isKindOfClass:[UIViewController class]]
-                && [controller respondsToSelector:aSelector]
-                && [controller performSelector:aSelector withObject:gesture]) {
-                _lockedHandler = controller;
-                ret = YES;
-                break;
+                && [controller respondsToSelector:aSelector]) {
+                ret = [controller performSelector:aSelector withObject:gesture];
+                if (ret) {
+                    _lockedHandler = controller;
+                    break;
+                }
             }
         }
     }
-    else if ([_lockedHandler respondsToSelector:aSelector] &&
-             [_lockedHandler performSelector:aSelector withObject:gesture]) {
-        ret = YES;
+    else if ([_lockedHandler respondsToSelector:aSelector]) {
+        ret = [_lockedHandler performSelector:aSelector withObject:gesture];
     }
     if (gesture.state == UIGestureRecognizerStateEnded
         || gesture.state == UIGestureRecognizerStateCancelled) {
