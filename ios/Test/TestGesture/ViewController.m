@@ -40,8 +40,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addGestureRecognizers];   // 初始化手势识别器
     [self addTestingViews];
+    [self addGestureRecognizers];   // 初始化手势识别器
 	
     _gestureLabel.text = @"Ready to check gestures.";
 }
@@ -140,9 +140,14 @@
     UIColor *bkColors[] = { [UIColor whiteColor], [UIColor greenColor],
         [UIColor purpleColor], [UIColor brownColor], [UIColor grayColor] };
     
+    _contentView = [[UIView alloc] initWithFrame:_testView.bounds];
+    _contentView.clipsToBounds = YES;
+    [_testView addSubview:_contentView];
+    [_contentView release];
+    
     for (int i = 0; i < 15; i++) {
         TestPaintView *view1 = [[TestPaintView alloc]initWithFrame:CGRectMake(x, y, w, h)];
-        [_testView addSubview:view1];
+        [_contentView addSubview:view1];
         view1.tag = i + 1;
         view1.backgroundColor = bkColors[i % 5];
         [view1 release];
@@ -154,7 +159,8 @@
         }
     }
     
-    _testView.contentSize = CGSizeMake(w * 3 + 20, h);
+    _contentView.frame = CGRectMake(0, 0, w * 3 + 20, y);
+    _testView.contentSize = _contentView.frame.size;
     _testView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10);
     _testView.minimumZoomScale = 0.5f;
     _testView.maximumZoomScale = 3.0f;
@@ -241,7 +247,7 @@
     for (int i = 0; i < kGestureMax; i++) {
         if (_recognizers[i]) {
             _recognizers[i].delegate = self;
-            [self.view addGestureRecognizer:_recognizers[i]];
+            [_contentView addGestureRecognizer:_recognizers[i]];
             [_recognizers[i] release];
         }
     }
