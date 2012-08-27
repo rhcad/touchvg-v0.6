@@ -4,11 +4,11 @@
 
 #import "GestureHandler.h"
 
-@interface ViewController : UIViewController<UIGestureRecognizerDelegate> {
+@interface ViewController : UIViewController<UIGestureRecognizerDelegate,UIScrollViewDelegate> {
     UIGestureRecognizer *_recognizers[kGestureMax];
     id                  _lockedHandler;
     
-    IBOutlet UIView     *_testView;
+    IBOutlet UIScrollView   *_testView;
     IBOutlet UILabel    *_gestureLabel;
     IBOutlet UIView     *_buttonsView;
 }

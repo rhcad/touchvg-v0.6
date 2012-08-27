@@ -3,11 +3,13 @@
 //
 
 #import "ViewController.h"
+#import "TestPaintView.h"
 
 @interface ViewController ()
 
 - (void)addGestureRecognizers;
 - (BOOL)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture :(UIView *)pview;
+- (void)addTestingViews;
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
 - (void)twoFingersRotate:(UIRotationGestureRecognizer *)sender;
@@ -39,6 +41,7 @@
 {
     [super viewDidLoad];
     [self addGestureRecognizers];   // 初始化手势识别器
+    [self addTestingViews];
 	
     _gestureLabel.text = @"Ready to check gestures.";
 }
@@ -131,6 +134,30 @@
     _recognizers[kGestureSwipeDown].enabled = button.on;
 }
 
+- (void)addTestingViews
+{
+    float x = 0, y = 0, w = 300, h = 300;
+    UIColor *bkColors[] = { [UIColor whiteColor], [UIColor greenColor],
+        [UIColor purpleColor], [UIColor brownColor], [UIColor grayColor] };
+    
+    for (int i = 0; i < 15; i++) {
+        TestPaintView *view1 = [[TestPaintView alloc]initWithFrame:CGRectMake(x, y, w, h)];
+        [_testView addSubview:view1];
+        view1.tag = i + 1;
+        view1.backgroundColor = bkColors[i % 5];
+        [view1 release];
+        
+        x += w;
+        if (i % 3 == 2) {
+            x = 0;
+            y += h;
+        }
+    }
+    
+    _testView.contentSize = CGSizeMake(w * 3, h);
+    _testView.contentInset = UIEdgeInsetsMake(10, 10, 10, 10);
+}
+
 - (void)addGestureRecognizers
 {
     // 双指捏合手势
@@ -218,7 +245,7 @@
         _lockedHandler = nil;
         
         for (UIView *aview in pview.subviews) {
-            if (!CGRectContainsPoint(aview.frame, [gesture locationInView:aview]))
+            if (!CGRectContainsPoint(aview.frame, [gesture locationInView:aview.superview]))
                 continue;
             if ([self dispatchGesture:aSelector :gesture :aview]) {
                 ret = YES;

@@ -27,19 +27,19 @@ enum kGestureType {
 @protocol UIGestureHandler <NSObject>
 @optional
 
-- (id)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
-- (id)twoFingersRotate:(UIRotationGestureRecognizer *)sender;
-- (id)twoFingersPan:(UIPanGestureRecognizer *)sender;
-- (id)twoFingersTwoTaps:(UIGestureRecognizer *)sender;
+- (id)twoFingersPinch:(UIPinchGestureRecognizer *)gesture;
+- (id)twoFingersRotate:(UIRotationGestureRecognizer *)gesture;
+- (id)twoFingersPan:(UIPanGestureRecognizer *)gesture;
+- (id)twoFingersTwoTaps:(UIGestureRecognizer *)gesture;
 
-- (id)oneFingerPan:(UIPanGestureRecognizer *)sender;
-- (id)oneFingerOneTap:(UIGestureRecognizer *)sender;
-- (id)oneFingerTwoTaps:(UIGestureRecognizer *)sender;
-- (id)longPressGesture:(UIGestureRecognizer *)sender;
+- (id)oneFingerPan:(UIPanGestureRecognizer *)gesture;
+- (id)oneFingerOneTap:(UIGestureRecognizer *)gesture;
+- (id)oneFingerTwoTaps:(UIGestureRecognizer *)gesture;
+- (id)longPressGesture:(UIGestureRecognizer *)gesture;
 
-- (id)swipeLeftGesture:(UIGestureRecognizer *)sender;
-- (id)swipeRightGesture:(UIGestureRecognizer *)sender;
-- (id)swipeUpGesture:(UIGestureRecognizer *)sender;
-- (id)swipeDownGesture:(UIGestureRecognizer *)sender;
+- (id)swipeLeftGesture:(UIGestureRecognizer *)gesture;
+- (id)swipeRightGesture:(UIGestureRecognizer *)gesture;
+- (id)swipeUpGesture:(UIGestureRecognizer *)gesture;
+- (id)swipeDownGesture:(UIGestureRecognizer *)gesture;
 
 @end

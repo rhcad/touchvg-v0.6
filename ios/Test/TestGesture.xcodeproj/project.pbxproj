@@ -16,6 +16,7 @@
 		AE6E22C415E5CAC400007602 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE6E22C315E5CAC400007602 /* ViewController.m */; };
 		AE6E22C715E5CAC400007602 /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE6E22C515E5CAC400007602 /* ViewController_iPhone.xib */; };
 		AE6E22CA15E5CAC400007602 /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE6E22C815E5CAC400007602 /* ViewController_iPad.xib */; };
+		AE8C6E1315EB2FD1005AE349 /* TestPaintView.m in Sources */ = {isa = PBXBuildFile; fileRef = AE8C6E1215EB2FD1005AE349 /* TestPaintView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,7 +34,9 @@
 		AE6E22C315E5CAC400007602 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		AE6E22C615E5CAC400007602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
 		AE6E22C915E5CAC400007602 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
-		AE8C6E0F15EB0B37005AE349 /* GestureHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GestureHandler.h; sourceTree = "<group>"; };
+		AE8C6E0F15EB0B37005AE349 /* GestureHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureHandler.h; sourceTree = "<group>"; };
+		AE8C6E1115EB2FD1005AE349 /* TestPaintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestPaintView.h; sourceTree = "<group>"; };
+		AE8C6E1215EB2FD1005AE349 /* TestPaintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestPaintView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,8 @@
 				AE6E22C515E5CAC400007602 /* ViewController_iPhone.xib */,
 				AE6E22C815E5CAC400007602 /* ViewController_iPad.xib */,
 				AE6E22B715E5CAC400007602 /* Supporting Files */,
+				AE8C6E1115EB2FD1005AE349 /* TestPaintView.h */,
+				AE8C6E1215EB2FD1005AE349 /* TestPaintView.m */,
 			);
 			path = TestGesture;
 			sourceTree = "<group>";
@@ -170,6 +175,7 @@
 				AE6E22BD15E5CAC400007602 /* main.m in Sources */,
 				AE6E22C115E5CAC400007602 /* AppDelegate.m in Sources */,
 				AE6E22C415E5CAC400007602 /* ViewController.m in Sources */,
+				AE8C6E1315EB2FD1005AE349 /* TestPaintView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
