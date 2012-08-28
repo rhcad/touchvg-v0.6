@@ -27,19 +27,38 @@ enum kGestureType {
 @protocol UIGestureHandler <NSObject>
 @optional
 
+//! 放缩手势
 - (id)twoFingersPinch:(UIPinchGestureRecognizer *)gesture;
+//! 旋转手势
 - (id)twoFingersRotate:(UIRotationGestureRecognizer *)gesture;
+//! 双指拖动手势
 - (id)twoFingersPan:(UIPanGestureRecognizer *)gesture;
+//! 双指双击手势
 - (id)twoFingersTwoTaps:(UIGestureRecognizer *)gesture;
 
+//! 任何手势开始，给定触点起始屏幕坐标
+- (id)gestureBegan:(UIGestureRecognizer *)gesture type:(int)gestureType point:(CGPoint)screenPt;
+//! 任何手势结束
+- (id)gestureEnded:(UIGestureRecognizer *)gesture type:(int)gestureType;
+//! 任何手势取消
+- (id)gestureCancelled:(UIGestureRecognizer *)gesture;
+
+//! 单指拖动手势
 - (id)oneFingerPan:(UIPanGestureRecognizer *)gesture;
+//! 点击手势
 - (id)oneFingerOneTap:(UIGestureRecognizer *)gesture;
+//! 双击手势
 - (id)oneFingerTwoTaps:(UIGestureRecognizer *)gesture;
+//! 长按手势
 - (id)longPressGesture:(UIGestureRecognizer *)gesture;
 
+//! 左扫手势
 - (id)swipeLeftGesture:(UIGestureRecognizer *)gesture;
+//! 右扫手势
 - (id)swipeRightGesture:(UIGestureRecognizer *)gesture;
+//! 上扫手势
 - (id)swipeUpGesture:(UIGestureRecognizer *)gesture;
+//! 下扫手势
 - (id)swipeDownGesture:(UIGestureRecognizer *)gesture;
 
 @end

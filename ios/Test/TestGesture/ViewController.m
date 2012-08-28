@@ -174,9 +174,18 @@ static int s_viewCount = 0;
     UIColor *bkColors[] = { [UIColor whiteColor], [UIColor greenColor],
         [UIColor purpleColor], [UIColor brownColor], [UIColor grayColor] };
     
+    UIView *contentView = [[UIView alloc]initWithFrame:
+                           CGRectMake(0, 0, (w + diff) * 3 - diff, (h + diff) * 5 - diff)];
+    [_testView addSubview:contentView];
+    [contentView release];
+    s_views[s_viewCount].view = contentView;
+    [self addGestureRecognizers:&s_views[s_viewCount++]];
+    s_views[0].recognizers[kGesturePinch].enabled = NO;
+    [_testView.panGestureRecognizer requireGestureRecognizerToFail:s_views[0].recognizers[kGesturePan]];
+    
     for (int i = 0; i < 15; i++) {
         TestPaintView *view1 = [[TestPaintView alloc]initWithFrame:CGRectMake(x, y, w, h)];
-        [_testView addSubview:view1];
+        [contentView addSubview:view1];
         view1.tag = i + 1;
         view1.backgroundColor = bkColors[i % 5];
         [view1 release];
@@ -191,19 +200,16 @@ static int s_viewCount = 0;
         }
     }
     
-    _testView.contentSize = CGSizeMake(w * 3 + 2 * diff, y);
+    _testView.contentSize = contentView.frame.size;
     _testView.contentInset = UIEdgeInsetsMake(diff, diff, diff, diff);
     _testView.minimumZoomScale = 0.5f;
     _testView.maximumZoomScale = 3.0f;
     _testView.delegate = self;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-}
-
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView
-{
+    return [scrollView.subviews objectAtIndex:0];
 }
 
 - (UIGestureRecognizer *)findRecognizers:(id)aview :(int)type
