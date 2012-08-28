@@ -5,6 +5,7 @@
 #import "GestureHandler.h"
 
 @interface TestPaintView : UIView<UIGestureHandler> {
-    CGPoint     _points[2];
+    CGPoint     _points[200];
+    int         _count;
 }
 @end
