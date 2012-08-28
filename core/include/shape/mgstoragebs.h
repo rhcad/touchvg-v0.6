@@ -27,11 +27,6 @@ public:
     virtual bool readBool(const char* name, bool defvalue) { return name && defvalue; }
     virtual float readFloat(const char* name, float defvalue = 0) { return name && defvalue; }
     
-    virtual int readFloatArray(const char* name, mgvector<float>& values) {
-        return name && values.count(); }
-    virtual int readString(const char* name, mgvector<char>& value) {
-        return name && value.count(); }
-    
     virtual bool writeNode(const char* name, int index, bool ended) {
         return name && index && ended; }
     
@@ -39,9 +34,15 @@ public:
     virtual void writeBool(const char* name, bool value) { if (name) value=false; }
     virtual void writeFloat(const char* name, float value) { if (name) value=0; }
     
+    virtual int readFloatArray(const char* name, mgvector<float>& values) {
+        return name && values.count(); }
     virtual void writeFloatArray(const char* name, const mgvector<float>& values) {
         name=values.count() ? name:NULL; }
-    virtual void writeString(const char* name, const char* value) { if (name) value=NULL; }
+    
+    virtual int readString(const char* name, mgvector<wchar_t>& value) {
+        return name && value.count(); }
+    virtual void writeString(const char* name, const mgvector<wchar_t>& value) {
+        if (value.count()) name=NULL; }
 
 private:
     virtual int readFloatArray(const char* name, float* values, int count) {
@@ -51,8 +52,11 @@ private:
             values[i] = arr.get(i);
         return n;
     }
-    virtual int readString(const char* name, char* value, int count) {
-        mgvector<char> arr(value, count);
+    
+    virtual void writeString(const char* name, const wchar_t* value) { if (name) value=NULL; }
+    
+    virtual int readString(const char* name, wchar_t* value, int count) {
+        mgvector<wchar_t> arr(value, count);
         int n = readString(name, arr);
         for (int i = 0; i < n; i++)
             value[i] = arr.get(i);
