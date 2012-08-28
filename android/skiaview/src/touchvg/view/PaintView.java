@@ -13,10 +13,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class PaintView extends View {
-    private GiSkiaView mView;
+    private GiSkiaView mCore;
     private GiCanvasEx mCanvas;
-    private Context context;
-    private GestureDetector detector;
+    private Context mContext;
+    private GestureDetector mDetector;
     private kGestureState gestureState;
     private kGestureType gestureType;
     private int fingerCount;
@@ -27,6 +27,7 @@ public class PaintView extends View {
     private boolean isMoving = false;
     private boolean mGestureEnable = true;
     private int mBkColor = Color.TRANSPARENT;
+    private final PaintView mView = this;
     
     static {
         System.loadLibrary("skiaview");
@@ -34,24 +35,24 @@ public class PaintView extends View {
     
     public PaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
+        this.mContext = context;
         init();
     }
     
     public PaintView(Context context) {
         super(context);
-        this.context = context;
+        this.mContext = context;
         init();
     }
     
     private void init()
     {
-        DisplayMetrics dm = context.getApplicationContext().getResources().getDisplayMetrics(); 
+        DisplayMetrics dm = mContext.getApplicationContext().getResources().getDisplayMetrics(); 
         GiCanvasEx.setScreenDpi(dm.densityDpi);
         
         mCanvas = new GiCanvasEx(this);
-        mView = new GiSkiaView(mCanvas);
-        detector = new GestureDetector(context, new PaintGestureDetector());
+        mCore = new GiSkiaView(mCanvas);
+        mDetector = new GestureDetector(mContext, new PaintGestureDetector());
         
         this.setOnTouchListener(new OnTouchListener() {
             
@@ -59,6 +60,7 @@ public class PaintView extends View {
                 if (!mGestureEnable) {
                     return false;
                 }
+                mView.getParent().requestDisallowInterceptTouchEvent(true);
                 switch (event.getAction())
                 {
                 case MotionEvent.ACTION_MOVE:
@@ -72,7 +74,7 @@ public class PaintView extends View {
                     }
                     if (gestureState == kGestureState.kGestureBegan) {
                         gestureType = fingerCount > 1 ? kGestureType.kZoomRotatePan : kGestureType.kSinglePan;
-                        mView.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
+                        mCore.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
                     }
                     gestureState = kGestureState.kGestureMoved;
                     isMoving = true;
@@ -84,7 +86,7 @@ public class PaintView extends View {
                         lastY1 = event.getY(1);
                     }
                     if (event.getPointerCount() >= fingerCount) {
-                        mView.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
+                        mCore.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
                     }
                     break;
                     
@@ -93,19 +95,19 @@ public class PaintView extends View {
                     {
                         isMoving = false;
                         gestureState = kGestureState.kGestureEnded;
-                        mView.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
+                        mCore.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
                         gestureType = kGestureType.kGestureUnknown;
                         fingerCount = 0;
                     }
                     break;
                 }
-                return detector.onTouchEvent(event);
+                return mDetector.onTouchEvent(event);
             }
         });
     }
     
     public GiSkiaView getCoreView() {
-        return mView;
+        return mCore;
     }
     
     public void setBkColor(int argb) {
@@ -113,23 +115,22 @@ public class PaintView extends View {
     }
     
     protected void onDraw(Canvas canvas) {
-        mView.onSize(canvas.getWidth(), canvas.getHeight());
+        mCore.onSize(canvas.getWidth(), canvas.getHeight());
         
         if (mCanvas.beginPaint(canvas)) {
             canvas.drawColor(mBkColor);
-            mView.onDraw(mCanvas);
-            mView.onDynDraw(mCanvas);
+            mCore.onDraw(mCanvas);
+            mCore.onDynDraw(mCanvas);
             mCanvas.endPaint();
         }
     }
     
     public void setGestureEnable(boolean enable) {
         mGestureEnable = enable;
-        this.getParent().requestDisallowInterceptTouchEvent(enable);
         
         if (!enable && gestureState == kGestureState.kGestureMoved) {
             gestureState = kGestureState.kGestureCancel;
-            mView.onGesture(gestureType, gestureState, 0, 0, 0, 0, 0);
+            mCore.onGesture(gestureType, gestureState, 0, 0, 0, 0, 0);
         }
     }
     
@@ -137,13 +138,13 @@ public class PaintView extends View {
     {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            mView.onGesture(kGestureType.kSingleTap, kGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
+            mCore.onGesture(kGestureType.kSingleTap, kGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
             return false;
         }
         
         @Override
         public void onLongPress(MotionEvent e) {
-            mView.onGesture(kGestureType.kLongPress, kGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
+            mCore.onGesture(kGestureType.kLongPress, kGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
         }
 
         @Override
@@ -155,13 +156,13 @@ public class PaintView extends View {
             if (fingerCount > 1) {
                 lastX1 = e.getX(1);
                 lastY1 = e.getY(1);
-            }   // call mView.onGesture in onTouch() after later.
+            }   // call mCore.onGesture in onTouch() after later.
             return true;
         }
         
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            mView.onGesture(kGestureType.kDoubleTap, kGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
+            mCore.onGesture(kGestureType.kDoubleTap, kGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
             return false;
         }
         
@@ -169,7 +170,7 @@ public class PaintView extends View {
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float dx, float dy) {
             if (e2.getAction() == MotionEvent.ACTION_CANCEL) {
                 gestureState = kGestureState.kGestureCancel;
-                mView.onGesture(gestureType, gestureState, 0, 0, 0, 0, 0);
+                mCore.onGesture(gestureType, gestureState, 0, 0, 0, 0, 0);
             }
             return false;
         }
