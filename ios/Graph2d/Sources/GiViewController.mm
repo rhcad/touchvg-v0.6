@@ -168,6 +168,9 @@
     }
     
     [self viewDidLoad];
+    _recognizers[0][kPinchGesture].enabled = NO;
+    _recognizers[0][kTwoFingersPan].enabled = NO;
+    _recognizers[0][kTwoFingersTwoTaps].enabled = NO;
     
     [aview release];
     return self.view;

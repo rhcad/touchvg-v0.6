@@ -91,7 +91,8 @@
     \param bkColor 绘图背景色, 为空表示取上级视图的背景色或白色，新视图的背景色为透明色
     \return 创建的子图形视图(GiGraphView)
  */
-- (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame backgroundColor:(UIColor*)bkColor;
+- (UIView*)createGraphView:(UIView*)parentView frame:(CGRect)frame
+           backgroundColor:(UIColor*)bkColor;
 
 //! 在已有视图中创建子图形视图(GiGraphView)
 /*! 创建的视图内默认不能放缩显示，背景色为透明色。新视图作为本对象的自身视图（替代原视图），并已加入到parentView中。
