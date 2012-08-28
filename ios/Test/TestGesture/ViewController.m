@@ -16,7 +16,8 @@ static int s_viewCount = 0;
 @interface ViewController ()
 
 - (void)addGestureRecognizers:(GestureView *)target;
-- (id)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture :(UIView *)pview;
+- (id)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture
+                     :(int)type :(UIView *)pview;
 - (UIGestureRecognizer *)findRecognizers:(id)aview :(int)type;
 - (void)addTestingViews;
 
@@ -294,18 +295,24 @@ static int s_viewCount = 0;
     }
 }
 
-- (id)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture :(UIView *)pview
+- (id)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture
+                     :(int)type :(UIView *)pview
 {
     id ret = nil;
+    BOOL click = (type == kGestureTwoFingersTwoTaps
+                  || type == kGestureTap
+                  || type == kGestureTwoTaps
+                  || type >= kGestureSwipeRight);
     
-    if (!_lockedHandler || gesture.state == UIGestureRecognizerStateBegan
-        || gesture.state == UIGestureRecognizerStateEnded) {
+    if (!_lockedHandler
+        || gesture.state == UIGestureRecognizerStateBegan
+        || (gesture.state == UIGestureRecognizerStateEnded && click)) {
         _lockedHandler = nil;
         
         for (UIView *aview in pview.subviews) {
             if (!CGRectContainsPoint(aview.frame, [gesture locationInView:aview.superview]))
                 continue;
-            ret = [self dispatchGesture:aSelector :gesture :aview];
+            ret = [self dispatchGesture:aSelector :gesture :type :aview];
             if (ret) {
                 break;
             }
@@ -356,21 +363,21 @@ static int s_viewCount = 0;
 {
     [self showGesture:sender :@"longPressGesture" :nil];
     
-    [self dispatchGesture:@selector(longPressGesture:) :sender :self.view];
+    [self dispatchGesture:@selector(longPressGesture:) :sender :kGestureLongPress :self.view];
 }
 
 - (void)oneFingerOneTap:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"oneFingerOneTap" :nil];
     
-    [self dispatchGesture:@selector(oneFingerOneTap:) :sender :self.view];
+    [self dispatchGesture:@selector(oneFingerOneTap:) :sender :kGestureTap :self.view];
 }
 
 - (void)oneFingerTwoTaps:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"oneFingerTwoTaps" :nil];
     
-    [self dispatchGesture:@selector(oneFingerTwoTaps:) :sender :self.view];
+    [self dispatchGesture:@selector(oneFingerTwoTaps:) :sender :kGestureTwoTaps :self.view];
 }
 
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender
@@ -382,7 +389,7 @@ static int s_viewCount = 0;
                      :[NSString stringWithFormat:@"dx:%6.1f\ndy:%6.1f\nvx:%7.2f\nvy:%7.2f",
                        translation.x, translation.y, velocity.x, velocity.y]];
     
-    [self dispatchGesture:@selector(oneFingerPan:) :sender :self.view];
+    [self dispatchGesture:@selector(oneFingerPan:) :sender :kGesturePan :self.view];
 }
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
@@ -391,7 +398,7 @@ static int s_viewCount = 0;
                      :[NSString stringWithFormat:@"scale:%6.2f\nv:%7.2f",
                        sender.scale, sender.velocity]];
     
-    [self dispatchGesture:@selector(twoFingersPinch:) :sender :self.view];
+    [self dispatchGesture:@selector(twoFingersPinch:) :sender :kGesturePinch :self.view];
 }
 
 - (void)twoFingersRotate:(UIRotationGestureRecognizer *)sender
@@ -400,7 +407,7 @@ static int s_viewCount = 0;
                      :[NSString stringWithFormat:@"rotation:%6.1fd\nv:%7.2f",
                        sender.rotation / M_PI * 180.f, sender.velocity]];
     
-    [self dispatchGesture:@selector(twoFingersRotate:) :sender :self.view];
+    [self dispatchGesture:@selector(twoFingersRotate:) :sender :kGestureRotate :self.view];
 }
 
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender
@@ -412,21 +419,21 @@ static int s_viewCount = 0;
                      :[NSString stringWithFormat:@"dx:%6.1f\ndy:%6.1f\nvx:%7.2f\nvy:%7.2f",
                        translation.x, translation.y, velocity.x, velocity.y]];
     
-    [self dispatchGesture:@selector(twoFingersPan:) :sender :self.view];
+    [self dispatchGesture:@selector(twoFingersPan:) :sender :kGestureTwoFingersPan :self.view];
 }
 
 - (void)twoFingersTwoTaps:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"twoFingersTwoTaps" :nil];
     
-    [self dispatchGesture:@selector(twoFingersTwoTaps:) :sender :self.view];
+    [self dispatchGesture:@selector(twoFingersTwoTaps:) :sender :kGestureTwoFingersTwoTaps :self.view];
 }
 
 - (void)swipeRightGesture:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"swipeRightGesture" :nil];
     
-    if (![self dispatchGesture:@selector(swipeRightGesture:) :sender :self.view]) {
+    if (![self dispatchGesture:@selector(swipeRightGesture:) :sender :kGestureSwipeRight :self.view]) {
         
         if (CGRectContainsPoint(_gestureLabel.frame, [sender locationInView:sender.view])
             && _buttonsView.hidden) {
@@ -446,7 +453,7 @@ static int s_viewCount = 0;
 {
     [self showGesture:sender :@"swipeLeftGesture" :nil];
     
-    if (![self dispatchGesture:@selector(swipeLeftGesture:) :sender :self.view]) {
+    if (![self dispatchGesture:@selector(swipeLeftGesture:) :sender :kGestureSwipeLeft :self.view]) {
         
         if (CGRectContainsPoint(_gestureLabel.frame, [sender locationInView:sender.view])
             && !_buttonsView.hidden) {
@@ -466,14 +473,14 @@ static int s_viewCount = 0;
 {
     [self showGesture:sender :@"swipeDownGesture" :nil];
     
-    [self dispatchGesture:@selector(swipeDownGesture:) :sender :self.view];
+    [self dispatchGesture:@selector(swipeDownGesture:) :sender :kGestureSwipeDown :self.view];
 }
 
 - (void)swipeUpGesture:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"swipeUpGesture" :nil];
     
-    [self dispatchGesture:@selector(swipeUpGesture:) :sender :self.view];
+    [self dispatchGesture:@selector(swipeUpGesture:) :sender :kGestureSwipeUp :self.view];
 }
 
 @end
