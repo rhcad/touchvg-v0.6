@@ -9,3 +9,10 @@
     int         _count;
 }
 @end
+
+@interface TestDragView : UIView<UIGestureHandler> {
+    CGPoint     _points[5];
+    int         _count;
+    int         _index;
+}
+@end

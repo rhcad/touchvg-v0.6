@@ -19,6 +19,7 @@ static int s_viewCount = 0;
 - (BOOL)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture
                      :(int)type :(UIView *)pview;
 - (UIGestureRecognizer *)findRecognizers:(id)aview :(int)type;
+- (int)getRecognizerType:(UIGestureRecognizer *)gesture;
 - (void)addTestingViews;
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
@@ -40,6 +41,17 @@ static int s_viewCount = 0;
 @end
 
 @implementation ViewController
+
+- (int)getRecognizerType:(UIGestureRecognizer *)gesture
+{
+    for (int i = 0; i < s_viewCount; i++) {
+        for (int j = 0; j < kGestureMax; j++) {
+            if (gesture == s_views[i].recognizers[j])
+                return j;
+        }
+    }
+    return -1;
+}
 
 - (void)dealloc {
     [_testView release];
@@ -192,11 +204,19 @@ static int s_viewCount = 0;
     s_views[0].recognizers[kGesturePinch].enabled = NO;
     [_testView.panGestureRecognizer requireGestureRecognizerToFail:s_views[0].recognizers[kGesturePan]];
     
-    for (int i = 0; i < 15; i++) {
+    TestDragView *viewD = [[TestDragView alloc]initWithFrame:CGRectMake(x, y, (w + diff) * 3 - diff, h * 2 + diff)];
+    [contentView addSubview:viewD];
+    viewD.backgroundColor = [UIColor clearColor];
+    [viewD release];
+    s_views[s_viewCount].view = viewD;
+    [self addGestureRecognizers:&s_views[s_viewCount++]];
+        
+    for (int i = 0; i < 12; i++) {
         TestPaintView *view1 = [[TestPaintView alloc]initWithFrame:CGRectMake(x, y, w, h)];
         [contentView addSubview:view1];
         view1.tag = i + 1;
         view1.backgroundColor = bkColors[i % 5];
+        view1.alpha = 0.4f;
         [view1 release];
         
         s_views[s_viewCount].view = view1;
@@ -209,9 +229,16 @@ static int s_viewCount = 0;
         }
     }
     
+    TestDragView *view2 = [[TestDragView alloc]initWithFrame:CGRectMake(x, y, (w + diff) * 3 - diff, h)];
+    [contentView addSubview:view2];
+    view2.backgroundColor = [UIColor darkGrayColor];
+    [view2 release];
+    s_views[s_viewCount].view = view2;
+    [self addGestureRecognizers:&s_views[s_viewCount++]];
+    
     _testView.contentSize = contentView.frame.size;
     _testView.contentInset = UIEdgeInsetsMake(diff, diff, diff, diff);
-    _testView.minimumZoomScale = 0.5f;
+    _testView.minimumZoomScale = 0.3f;
     _testView.maximumZoomScale = 3.0f;
     _testView.delegate = self;
 }
@@ -324,6 +351,58 @@ static int s_viewCount = 0;
     }
 }
 
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    int type = [self getRecognizerType:gestureRecognizer];
+    SEL action = nil;
+    
+    switch (type) {
+        case kGesturePinch:
+            action = @selector(gesturePinch:);
+            break;
+        case kGestureRotate:
+            action = @selector(gestureRotate:);
+            break;
+        case kGestureTwoPan:
+            action = @selector(gestureTwoPan:);
+            break;
+        case kGestureTwoTap:
+            action = @selector(gestureTwoTap:);
+            break;
+        case kGestureTwoDblTaps:
+            action = @selector(gestureTwoDblTaps:);
+            break;
+        case kGesturePan:
+            action = @selector(gesturePan:);
+            break;
+        case kGestureTap:
+            action = @selector(gestureTap:);
+            break;
+        case kGestureDblTaps:
+            action = @selector(gestureDblTaps:);
+            break;
+        case kGestureLongPress:
+            action = @selector(gestureLongPress:);
+            break;
+        case kGestureSwipeRight:
+            action = @selector(gestureSwipeRight:);
+            break;
+        case kGestureSwipeLeft:
+            action = @selector(gestureSwipeLeft:);
+            break;
+        case kGestureSwipeUp:
+            action = @selector(gestureSwipeUp:);
+            break;
+        case kGestureSwipeDown:
+            action = @selector(gestureSwipeDown:);
+            break;
+        default:
+            break;
+    }
+    
+    return action && [self dispatchGesture:action :gestureRecognizer :type :self.view];
+}
+
 - (BOOL)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture
                      :(int)type :(UIView *)pview
 {
@@ -334,7 +413,7 @@ static int s_viewCount = 0;
                   || type >= kGestureSwipeRight);
     
     if (!_lockedHandler
-        || gesture.state == UIGestureRecognizerStateBegan
+        || gesture.state <= UIGestureRecognizerStateBegan
         || (gesture.state == UIGestureRecognizerStateEnded && click)) {
         _lockedHandler = nil;
         

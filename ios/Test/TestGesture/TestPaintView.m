@@ -46,30 +46,34 @@
 
 - (BOOL)gesturePan:(UIPanGestureRecognizer *)gesture
 {
-    if (_count >= 198) {
-        for (int i = 20; i < _count; i++)
-            _points[i - 20] = _points[i];
-        _count -= 20;
+    if (gesture.state != UIGestureRecognizerStatePossible) {
+        if (_count >= 198) {
+            for (int i = 20; i < _count; i++)
+                _points[i - 20] = _points[i];
+            _count -= 20;
+        }
+        if (gesture.state == UIGestureRecognizerStateBegan) {
+            _points[_count++] = CGPointMake(-999, -999);
+        }
+        _points[_count++] = [gesture locationInView:self];
+        [self setNeedsDisplay];
     }
-    if (gesture.state == UIGestureRecognizerStateBegan) {
-        _points[_count++] = CGPointMake(-999, -999);
-    }
-    _points[_count++] = [gesture locationInView:self];
-    [self setNeedsDisplay];
     
     return YES;
 }
 
 - (BOOL)gestureTap:(UIGestureRecognizer *)gesture
 {
-    if (_count >= 198) {
-        for (int i = 20; i < _count; i++)
-            _points[i - 20] = _points[i];
-        _count -= 20;
+    if (gesture.state != UIGestureRecognizerStatePossible) {
+        if (_count >= 198) {
+            for (int i = 20; i < _count; i++)
+                _points[i - 20] = _points[i];
+            _count -= 20;
+        }
+        _points[_count++] = CGPointMake(-999, -999);
+        _points[_count++] = [gesture locationInView:self];
+        [self setNeedsDisplay];
     }
-    _points[_count++] = CGPointMake(-999, -999);
-    _points[_count++] = [gesture locationInView:self];
-    [self setNeedsDisplay];
     
     return YES;
 }
@@ -80,6 +84,54 @@
     [self setNeedsDisplay];
     
     return YES;
+}
+
+@end
+
+@implementation TestDragView
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        _count = 4;
+        for (int i = 0; i < _count; i++) {
+            _points[i] = CGPointMake(30 + i * 40, 50 + i * 10);
+        }
+    }
+    return self;
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSetFillColorWithColor(context, [UIColor redColor].CGColor);
+    for (int i = 0; i < _count; i++) {
+        CGRect rect = CGRectMake(_points[i].x - 20, _points[i].y - 20, 40, 40);
+        CGContextFillEllipseInRect(context, rect);
+    }
+}
+
+- (BOOL)gesturePan:(UIPanGestureRecognizer *)gesture
+{
+    CGPoint pt = [gesture locationInView:self];
+    
+    if (gesture.state == UIGestureRecognizerStatePossible) {
+        _index = -1;
+        for (int i = 0; i < _count; i++) {
+            if (hypotf(pt.x - _points[i].x, pt.y - _points[i].y) < 30) {
+                _index = i;
+                break;
+            }
+        }
+    }
+    else if (_index >= 0 && CGRectContainsPoint(self.bounds, pt)) {
+        _points[_index] = pt;
+        [self setNeedsDisplay];
+    }
+    
+    return _index >= 0;
 }
 
 @end
