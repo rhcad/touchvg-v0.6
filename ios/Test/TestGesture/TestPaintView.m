@@ -44,7 +44,7 @@
     }
 }
 
-- (id)oneFingerPan:(UIPanGestureRecognizer *)gesture
+- (BOOL)gesturePan:(UIPanGestureRecognizer *)gesture
 {
     if (_count >= 198) {
         for (int i = 20; i < _count; i++)
@@ -57,10 +57,10 @@
     _points[_count++] = [gesture locationInView:self];
     [self setNeedsDisplay];
     
-    return self;
+    return YES;
 }
 
-- (id)oneFingerOneTap:(UIGestureRecognizer *)gesture
+- (BOOL)gestureTap:(UIGestureRecognizer *)gesture
 {
     if (_count >= 198) {
         for (int i = 20; i < _count; i++)
@@ -71,15 +71,15 @@
     _points[_count++] = [gesture locationInView:self];
     [self setNeedsDisplay];
     
-    return self;
+    return YES;
 }
 
-- (id)twoFingersTwoTaps:(UIGestureRecognizer *)gesture
+- (BOOL)gestureTwoDblTaps:(UIGestureRecognizer *)gesture
 {
     _count = 0;
     [self setNeedsDisplay];
     
-    return self;
+    return YES;
 }
 
 @end

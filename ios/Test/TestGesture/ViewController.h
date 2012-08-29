@@ -14,11 +14,12 @@
 - (IBAction)switchPinchGesture:(id)sender;
 - (IBAction)switchRotationGesture:(id)sender;
 - (IBAction)switchPan2Gesture:(id)sender;
-- (IBAction)switchTwoTaps2Gesture:(id)sender;
+- (IBAction)switchTap2Gesture:(id)sender;
+- (IBAction)switchDblTaps2Gesture:(id)sender;
 
 - (IBAction)switchPan1Gesture:(id)sender;
 - (IBAction)switchTap1Gesture:(id)sender;
-- (IBAction)switchTwoTaps1Gesture:(id)sender;
+- (IBAction)switchDblTaps1Gesture:(id)sender;
 - (IBAction)switchLongPressGesture:(id)sender;
 
 - (IBAction)switchSwipeRightGesture:(id)sender;
