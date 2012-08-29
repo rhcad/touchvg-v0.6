@@ -47,6 +47,11 @@ typedef enum {
 @protocol UIGestureHandler
 @optional
 
+//! 任何手势开始，可记忆坐标
+- (BOOL)gestureBegan:(UITouch *)touch;
+//! 检查手势能否开始
+- (BOOL)gestureShouldBegin:(UIGestureRecognizer *)gesture :(SEL)action;
+
 //! 响应放缩手势
 - (BOOL)gesturePinch:(UIPinchGestureRecognizer *)gesture;
 //! 响应旋转手势
@@ -58,8 +63,6 @@ typedef enum {
 //! 响应双指双击手势
 - (BOOL)gestureTwoDblTaps:(UIGestureRecognizer *)gesture;
 
-//! 任何手势开始，可记忆坐标
-- (BOOL)gestureBegan:(UITouch *)touch;
 //! 响应单指拖动手势
 - (BOOL)gesturePan:(UIPanGestureRecognizer *)gesture;
 //! 响应点击手势

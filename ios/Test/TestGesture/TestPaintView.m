@@ -46,34 +46,30 @@
 
 - (BOOL)gesturePan:(UIPanGestureRecognizer *)gesture
 {
-    if (gesture.state != UIGestureRecognizerStatePossible) {
-        if (_count >= 198) {
-            for (int i = 20; i < _count; i++)
-                _points[i - 20] = _points[i];
-            _count -= 20;
-        }
-        if (gesture.state == UIGestureRecognizerStateBegan) {
-            _points[_count++] = CGPointMake(-999, -999);
-        }
-        _points[_count++] = [gesture locationInView:self];
-        [self setNeedsDisplay];
+    if (_count >= 198) {
+        for (int i = 20; i < _count; i++)
+            _points[i - 20] = _points[i];
+        _count -= 20;
     }
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        _points[_count++] = CGPointMake(-999, -999);
+    }
+    _points[_count++] = [gesture locationInView:self];
+    [self setNeedsDisplay];
     
     return YES;
 }
 
 - (BOOL)gestureTap:(UIGestureRecognizer *)gesture
 {
-    if (gesture.state != UIGestureRecognizerStatePossible) {
-        if (_count >= 198) {
-            for (int i = 20; i < _count; i++)
-                _points[i - 20] = _points[i];
-            _count -= 20;
-        }
-        _points[_count++] = CGPointMake(-999, -999);
-        _points[_count++] = [gesture locationInView:self];
-        [self setNeedsDisplay];
+    if (_count >= 198) {
+        for (int i = 20; i < _count; i++)
+            _points[i - 20] = _points[i];
+        _count -= 20;
     }
+    _points[_count++] = CGPointMake(-999, -999);
+    _points[_count++] = [gesture locationInView:self];
+    [self setNeedsDisplay];
     
     return YES;
 }
@@ -116,33 +112,38 @@
     }
 }
 
-- (BOOL)gestureFreeDrag:(UIGestureRecognizer *)gesture
+- (BOOL)gestureShouldBegin:(UIGestureRecognizer *)gesture :(SEL)action
 {
-    if (gesture.state == UIGestureRecognizerStatePossible) {
-        _index[0] = -1;
-        _index[1] = -1;
-        _touchCount = [gesture numberOfTouches];
-        
-        if (_touchCount > 0) {
-            CGPoint pt = [gesture locationOfTouch:0 inView:self];
-            for (int i = 0; i < _count; i++) {
-                if (hypotf(pt.x - _points[i].x, pt.y - _points[i].y) < 30) {
-                    _index[0] = i;
-                    break;
-                }
-            }
-        }
-        if (_touchCount > 1) {
-            CGPoint pt = [gesture locationOfTouch:1 inView:self];
-            for (int i = 0; i < _count; i++) {
-                if (hypotf(pt.x - _points[i].x, pt.y - _points[i].y) < 30) {
-                    _index[1] = i;
-                    break;
-                }
+    _index[0] = -1;
+    _index[1] = -1;
+    _touchCount = [gesture numberOfTouches];
+    
+    if (_touchCount > 0) {
+        CGPoint pt = [gesture locationOfTouch:0 inView:self];
+        for (int i = 0; i < _count; i++) {
+            if (hypotf(pt.x - _points[i].x, pt.y - _points[i].y) < 30) {
+                _index[0] = i;
+                break;
             }
         }
     }
-    else if ([gesture numberOfTouches] == _touchCount) {
+    if (_touchCount > 1) {
+        CGPoint pt = [gesture locationOfTouch:1 inView:self];
+        for (int i = 0; i < _count; i++) {
+            if (hypotf(pt.x - _points[i].x, pt.y - _points[i].y) < 30) {
+                _index[1] = i;
+                break;
+            }
+        }
+    }
+    
+    return _index[0] >= 0 || _index[1] >= 0;
+}
+
+- (BOOL)gestureFreeDrag:(UIGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateChanged
+        && [gesture numberOfTouches] == _touchCount) {
         CGPoint pt = [gesture locationOfTouch:0 inView:self];
         if (_index[0] >= 0 && CGRectContainsPoint(self.bounds, pt)) {
             _points[_index[0]] = pt;

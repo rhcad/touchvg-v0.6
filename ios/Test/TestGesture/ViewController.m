@@ -16,7 +16,7 @@ static int s_viewCount = 0;
 @interface ViewController ()
 
 - (void)addGestureRecognizers:(GestureView *)target;
-- (BOOL)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture
+- (BOOL)dispatchGesture:(SEL)action :(UIGestureRecognizer *)gesture
                      :(int)type :(UIView *)pview;
 - (UIGestureRecognizer *)findRecognizers:(id)aview :(int)type;
 - (int)getRecognizerType:(UIGestureRecognizer *)gesture;
@@ -400,53 +400,47 @@ static int s_viewCount = 0;
             break;
     }
     
+    _lockedHandler = nil;
     return action && [self dispatchGesture:action :gestureRecognizer :type :self.view];
 }
 
-- (BOOL)dispatchGesture:(SEL)aSelector :(UIGestureRecognizer *)gesture
-                     :(int)type :(UIView *)pview
+- (BOOL)gestureShouldBegin:(SEL)action :(UIGestureRecognizer *)gesture
+                          :(int)type :(id)target
+{
+    BOOL ret = NO;
+    
+    if ([target respondsToSelector:action]) {
+        _lockedHandler = target;
+        ret = (![target respondsToSelector:@selector(gestureShouldBegin::)]
+               || [target performSelector:@selector(gestureShouldBegin::)
+                               withObject:gesture withObject:(id)action]);
+    }
+    
+    return ret;
+}
+
+- (BOOL)dispatchGesture:(SEL)action :(UIGestureRecognizer *)gesture
+                       :(int)type :(UIView *)pview
 {
     BOOL handled = NO;
-    BOOL click = (type == kGestureTwoDblTaps
-                  || type == kGestureTap
-                  || type == kGestureDblTaps
-                  || type >= kGestureSwipeRight);
     
-    if (!_lockedHandler
-        || gesture.state <= UIGestureRecognizerStateBegan
-        || (gesture.state == UIGestureRecognizerStateEnded && click)) {
-        _lockedHandler = nil;
-        
+    if (!_lockedHandler) {
         for (UIView *aview in pview.subviews) {
             if (!CGRectContainsPoint(aview.frame, [gesture locationInView:aview.superview]))
                 continue;
-            handled = [self dispatchGesture:aSelector :gesture :type :aview];
-            if (handled) {
-                break;
-            }
-            if ([aview respondsToSelector:aSelector]) {
-                handled = !![aview performSelector:aSelector withObject:gesture];
-                if (handled) {
-                    _lockedHandler = aview;
-                    break;
-                }
-            }
             UIResponder* controller = [aview nextResponder];
-            if ([controller isKindOfClass:[UIViewController class]]
-                && [controller respondsToSelector:aSelector]) {
-                handled = !![controller performSelector:aSelector withObject:gesture];
-                if (handled) {
-                    _lockedHandler = controller;
-                    break;
-                }
-            }
+            handled = ([self dispatchGesture:action :gesture :type :aview]
+                       || [self gestureShouldBegin:action :gesture :type :aview]
+                       || ([controller isKindOfClass:[UIViewController class]]
+                           && [self gestureShouldBegin:action :gesture :type :controller]));
+            if (handled || _lockedHandler)
+                break;
         }
     }
-    else if ([_lockedHandler respondsToSelector:aSelector]) {
-        handled = !![_lockedHandler performSelector:aSelector withObject:gesture];
+    else if ([_lockedHandler respondsToSelector:action]) {
+        handled = !![_lockedHandler performSelector:action withObject:gesture];
     }
-    if (gesture.state == UIGestureRecognizerStateEnded
-        || gesture.state == UIGestureRecognizerStateCancelled) {
+    if (gesture.state >= UIGestureRecognizerStateEnded) {
         //_lockedHandler = nil;
     }
     
@@ -577,7 +571,7 @@ static int s_viewCount = 0;
 {
     [self showGesture:sender :@"gestureSwipeLeft" :nil];
     
-    if (![self dispatchGesture:@selector(gestureSwipeLeft:) 
+    if (![self dispatchGesture:@selector(gestureSwipeLeft:)
                               :sender :kGestureSwipeLeft :self.view]) {
         if (CGRectContainsPoint(_gestureLabel.frame, [sender locationInView:sender.view])
             && !_buttonsView.hidden) {
@@ -597,14 +591,16 @@ static int s_viewCount = 0;
 {
     [self showGesture:sender :@"gestureSwipeDown" :nil];
     
-    [self dispatchGesture:@selector(gestureSwipeDown:) :sender :kGestureSwipeDown :self.view];
+    [self dispatchGesture:@selector(gestureSwipeDown:)
+                         :sender :kGestureSwipeDown :self.view];
 }
 
 - (void)swipeUpGesture:(UIGestureRecognizer *)sender
 {
     [self showGesture:sender :@"gestureSwipeUp" :nil];
     
-    [self dispatchGesture:@selector(gestureSwipeUp:) :sender :kGestureSwipeUp :self.view];
+    [self dispatchGesture:@selector(gestureSwipeUp:)
+                         :sender :kGestureSwipeUp :self.view];
 }
 
 @end
