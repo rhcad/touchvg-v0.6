@@ -13,6 +13,7 @@
 @interface TestDragView : UIView<UIGestureHandler> {
     CGPoint     _points[5];
     int         _count;
-    int         _index;
+    int         _index[2];
+    int         _touchCount;
 }
 @end
