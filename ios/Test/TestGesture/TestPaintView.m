@@ -105,10 +105,14 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextSetFillColorWithColor(context, [UIColor redColor].CGColor);
+    
     for (int i = 0; i < _count; i++) {
-        float r = (i == _index[0] || i == _index[1]) ? 30 : 20;
-        CGRect rect = CGRectMake(_points[i].x - r, _points[i].y - r, 2 * r, 2 * r);
+        CGRect rect = CGRectMake(_points[i].x - 20, _points[i].y - 20, 40, 40);
         CGContextFillEllipseInRect(context, rect);
+        if (i == _index[0] || i == _index[1]) {
+            rect = CGRectMake(_points[i].x - 40, _points[i].y - 40, 80, 80);
+            CGContextStrokeEllipseInRect(context, rect);
+        }
     }
 }
 
@@ -121,7 +125,7 @@
     if (_touchCount > 0) {
         CGPoint pt = [gesture locationOfTouch:0 inView:self];
         for (int i = 0; i < _count; i++) {
-            if (hypotf(pt.x - _points[i].x, pt.y - _points[i].y) < 30) {
+            if (hypotf(pt.x - _points[i].x, pt.y - _points[i].y) < 40) {
                 _index[0] = i;
                 break;
             }
@@ -130,8 +134,8 @@
     if (_touchCount > 1) {
         CGPoint pt = [gesture locationOfTouch:1 inView:self];
         for (int i = 0; i < _count; i++) {
-            if (hypotf(pt.x - _points[i].x, pt.y - _points[i].y) < 30) {
-                _index[1] = i;
+            if (hypotf(pt.x - _points[i].x, pt.y - _points[i].y) < 40) {
+                _index[1] = _index[0] != i ? i : -1;
                 break;
             }
         }
@@ -150,7 +154,7 @@
             [self setNeedsDisplay];
         }
         pt = _touchCount > 1 ? [gesture locationOfTouch:1 inView:self] : pt;
-        if (_touchCount > 1 && _index[1] >= 0 && CGRectContainsPoint(self.bounds, pt)) {
+        if (_index[1] >= 0 && CGRectContainsPoint(self.bounds, pt)) {
             _points[_index[1]] = pt;
             [self setNeedsDisplay];
         }

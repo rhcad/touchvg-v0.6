@@ -201,7 +201,6 @@ static int s_viewCount = 0;
     [contentView release];
     s_views[s_viewCount].view = contentView;
     [self addGestureRecognizers:&s_views[s_viewCount++]];
-    s_views[0].recognizers[kGesturePinch].enabled = NO;
     [_testView.panGestureRecognizer requireGestureRecognizerToFail:s_views[0].recognizers[kGesturePan]];
     
     TestDragView *viewD = [[TestDragView alloc]initWithFrame:CGRectMake(x, y, (w + diff) * 3 - diff, h * 2 + diff)];
@@ -294,13 +293,12 @@ static int s_viewCount = 0;
     // 单指拖动手势
     UIPanGestureRecognizer *oneFingerPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
-    oneFingerPan.maximumNumberOfTouches = 1;    // 最多一指，避免和双指拖动混淆
+    //oneFingerPan.maximumNumberOfTouches = 1;    // 最多一指，避免和双指拖动混淆
     target->recognizers[kGesturePan] = oneFingerPan;
     
     // 单指点击手势
     UITapGestureRecognizer *oneFingerOneTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerOneTap:)];
-    oneFingerOneTap.delaysTouchesBegan = YES;
     target->recognizers[kGestureTap] = oneFingerOneTap;
     
     // 单指双击手势
@@ -400,8 +398,8 @@ static int s_viewCount = 0;
             break;
     }
     
-    _lockedHandler = nil;
-    return action && [self dispatchGesture:action :gestureRecognizer :type :self.view];
+    return (action && !_lockedHandler
+            && [self dispatchGesture:action :gestureRecognizer :type :self.view]);
 }
 
 - (BOOL)gestureShouldBegin:(SEL)action :(UIGestureRecognizer *)gesture
@@ -410,10 +408,12 @@ static int s_viewCount = 0;
     BOOL ret = NO;
     
     if ([target respondsToSelector:action]) {
-        _lockedHandler = target;
         ret = (![target respondsToSelector:@selector(gestureShouldBegin::)]
                || [target performSelector:@selector(gestureShouldBegin::)
                                withObject:gesture withObject:(id)action]);
+        if (ret) {
+            _lockedHandler = target;
+        }
     }
     
     return ret;
@@ -441,7 +441,7 @@ static int s_viewCount = 0;
         handled = !![_lockedHandler performSelector:action withObject:gesture];
     }
     if (gesture.state >= UIGestureRecognizerStateEnded) {
-        //_lockedHandler = nil;
+        _lockedHandler = nil;
     }
     
     return handled;
