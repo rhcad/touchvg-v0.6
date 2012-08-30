@@ -195,20 +195,20 @@ static int s_viewCount = 0;
     UIColor *bkColors[] = { [UIColor whiteColor], [UIColor greenColor],
         [UIColor purpleColor], [UIColor brownColor], [UIColor grayColor] };
     
+    // 在滚动视图上覆盖透明视图，并在该透明视图上识别手势
     UIView *contentView = [[UIView alloc]initWithFrame:
                            CGRectMake(0, 0, (w + diff) * 3 - diff, (h + diff) * 5 - diff)];
     [_testView addSubview:contentView];
     [contentView release];
     s_views[s_viewCount].view = contentView;
     [self addGestureRecognizers:&s_views[s_viewCount++]];
-    [_testView.panGestureRecognizer requireGestureRecognizerToFail:s_views[0].recognizers[kGesturePan]];
     
     TestDragView *viewD = [[TestDragView alloc]initWithFrame:CGRectMake(x, y, (w + diff) * 3 - diff, h * 2 + diff)];
     [contentView addSubview:viewD];
     viewD.backgroundColor = [UIColor clearColor];
     [viewD release];
-    s_views[s_viewCount].view = viewD;
-    [self addGestureRecognizers:&s_views[s_viewCount++]];
+    //s_views[s_viewCount].view = viewD;
+    //[self addGestureRecognizers:&s_views[s_viewCount++]];
         
     for (int i = 0; i < 12; i++) {
         TestPaintView *view1 = [[TestPaintView alloc]initWithFrame:CGRectMake(x, y, w, h)];
@@ -218,8 +218,8 @@ static int s_viewCount = 0;
         view1.alpha = 0.4f;
         [view1 release];
         
-        s_views[s_viewCount].view = view1;
-        [self addGestureRecognizers:&s_views[s_viewCount++]];
+        //s_views[s_viewCount].view = view1;
+        //[self addGestureRecognizers:&s_views[s_viewCount++]];
         
         x += w + diff;
         if (i % 3 == 2) {
@@ -232,8 +232,8 @@ static int s_viewCount = 0;
     [contentView addSubview:view2];
     view2.backgroundColor = [UIColor darkGrayColor];
     [view2 release];
-    s_views[s_viewCount].view = view2;
-    [self addGestureRecognizers:&s_views[s_viewCount++]];
+    //s_views[s_viewCount].view = view2;
+    //[self addGestureRecognizers:&s_views[s_viewCount++]];
     
     _testView.contentSize = contentView.frame.size;
     _testView.contentInset = UIEdgeInsetsMake(diff, diff, diff, diff);
@@ -293,7 +293,7 @@ static int s_viewCount = 0;
     // 单指拖动手势
     UIPanGestureRecognizer *oneFingerPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPan:)];
-    //oneFingerPan.maximumNumberOfTouches = 1;    // 最多一指，避免和双指拖动混淆
+    oneFingerPan.maximumNumberOfTouches = 1;    // 最多一指，避免双指拖动识别为该手势
     target->recognizers[kGesturePan] = oneFingerPan;
     
     // 单指点击手势

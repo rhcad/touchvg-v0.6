@@ -4481,7 +4481,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					</object>
 					<object class="IBUIView" id="674610150">
 						<reference key="NSNextResponder" ref="774585933"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">-2147483356</int>
 						<array class="NSMutableArray" key="NSSubviews">
 							<object class="IBUISwitch" id="476133494">
 								<reference key="NSNextResponder" ref="674610150"/>
@@ -4635,6 +4635,7 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 								<string key="NSFrame">{{191, 183}, {94, 27}}</string>
 								<reference key="NSSuperview" ref="674610150"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentHorizontalAlignment">0</int>
@@ -5303,6 +5304,8 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 					<string key="className">ViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="switchDblTaps1Gesture:">id</string>
+						<string key="switchDblTaps2Gesture:">id</string>
 						<string key="switchLongPressGesture:">id</string>
 						<string key="switchPan1Gesture:">id</string>
 						<string key="switchPan2Gesture:">id</string>
@@ -5313,10 +5316,17 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 						<string key="switchSwipeRightGesture:">id</string>
 						<string key="switchSwipeUpGesture:">id</string>
 						<string key="switchTap1Gesture:">id</string>
-						<string key="switchTwoTaps1Gesture:">id</string>
-						<string key="switchTwoTaps2Gesture:">id</string>
+						<string key="switchTap2Gesture:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="switchDblTaps1Gesture:">
+							<string key="name">switchDblTaps1Gesture:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="switchDblTaps2Gesture:">
+							<string key="name">switchDblTaps2Gesture:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="switchLongPressGesture:">
 							<string key="name">switchLongPressGesture:</string>
 							<string key="candidateClassName">id</string>
@@ -5357,12 +5367,8 @@ AAgAAAAIAAIACAACAAAAAgAAAAEAAQABAAE</bytes>
 							<string key="name">switchTap1Gesture:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="switchTwoTaps1Gesture:">
-							<string key="name">switchTwoTaps1Gesture:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="switchTwoTaps2Gesture:">
-							<string key="name">switchTwoTaps2Gesture:</string>
+						<object class="IBActionInfo" key="switchTap2Gesture:">
+							<string key="name">switchTap2Gesture:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>
