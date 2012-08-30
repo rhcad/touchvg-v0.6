@@ -6,6 +6,7 @@
 
 @interface ViewController : UIViewController<UIGestureRecognizerDelegate,UIScrollViewDelegate> {
     id                  _lockedHandler;
+    UIGestureRecognizer *_recognizers[kGestureMax];
     IBOutlet UIScrollView   *_testView;
     IBOutlet UILabel    *_gestureLabel;
     IBOutlet UIView     *_buttonsView;
