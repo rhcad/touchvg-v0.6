@@ -10,11 +10,12 @@ public:
         v = _sz > 0 ? new T[_sz] : NULL;
         sz = _sz;
     }
-    mgvector(const T *_v, int _sz) {
+    template<class T2>
+    mgvector(const T2 *_v, int _sz) {
         v = _sz > 0 ? new T[_sz] : NULL;
         sz = _sz;
         for (int i = 0; i < sz; i++)
-            v[i] = _v[i];
+            v[i] = (T)_v[i];
     }
     ~mgvector() {
         delete[] v;

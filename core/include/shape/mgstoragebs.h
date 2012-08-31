@@ -8,6 +8,7 @@
 
 #ifndef SWIG
 #include "mgstorage.h"
+#include <wchar.h>
 #endif
 #include "mgvector.h"
 
@@ -23,9 +24,9 @@ public:
     virtual bool readNode(const char* name, int index, bool ended) {
         return name && index && ended; }
     
-    virtual int readInt(const char* name, int defvalue = 0) { return name && defvalue; }
+    virtual int readInt(const char* name, int defvalue) { return name && defvalue; }
     virtual bool readBool(const char* name, bool defvalue) { return name && defvalue; }
-    virtual float readFloat(const char* name, float defvalue = 0) { return name && defvalue; }
+    virtual float readFloat(const char* name, float defvalue) { return name && defvalue; }
     
     virtual bool writeNode(const char* name, int index, bool ended) {
         return name && index && ended; }
@@ -39,32 +40,33 @@ public:
     virtual void writeFloatArray(const char* name, const mgvector<float>& values) {
         name=values.count() ? name:NULL; }
     
-    virtual int readString(const char* name, mgvector<wchar_t>& value) {
+    virtual int readString(const char* name, mgvector<short>& value) {
         return name && value.count(); }
-    virtual void writeString(const char* name, const mgvector<wchar_t>& value) {
+    virtual void writeString(const char* name, const mgvector<short>& value) {
         if (value.count()) name=NULL; }
 
 private:
     virtual int readFloatArray(const char* name, float* values, int count) {
         mgvector<float> arr(values, count);
         int n = readFloatArray(name, arr);
-        for (int i = 0; i < n; i++)
+        for (int i = (n < count ? n : count) - 1; i >= 0; i--)
             values[i] = arr.get(i);
         return n;
     }
-    
-    virtual void writeString(const char* name, const wchar_t* value) { if (name) value=NULL; }
-    
     virtual int readString(const char* name, wchar_t* value, int count) {
-        mgvector<wchar_t> arr(value, count);
+        mgvector<short> arr(value, count);
         int n = readString(name, arr);
-        for (int i = 0; i < n; i++)
-            value[i] = arr.get(i);
+        for (int i = (n < count ? n : count) - 1; i >= 0; i--)
+            value[i] = (wchar_t)arr.get(i);
         return n;
     }
     virtual void writeFloatArray(const char* name, const float* values, int count) {
         mgvector<float> arr(values, count);
         writeFloatArray(name, arr);
+    }
+    virtual void writeString(const char* name, const wchar_t* value) {
+        mgvector<short> arr(value, wcslen(value));
+        writeString(name, arr);
     }
 };
 

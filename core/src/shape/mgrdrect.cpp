@@ -97,7 +97,7 @@ bool MgRoundRect::_save(MgStorage* s) const
 bool MgRoundRect::_load(MgStorage* s)
 {
     bool ret = __super::_load(s);
-    _rx = s->readFloat("rx");
-    _ry = s->readFloat("ry");
+    _rx = s->readFloat("rx", 0);
+    _ry = s->readFloat("ry", 0);
     return ret;
 }

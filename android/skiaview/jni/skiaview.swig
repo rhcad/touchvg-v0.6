@@ -18,7 +18,7 @@
 
 %include "mgvector.h"
 %template(Floats) mgvector<float>;
-%template(Chars) mgvector<char>;
+%template(Chars) mgvector<short>;
 
 %feature("director") GiCanvasBase;
 %include "GiCanvasBase.h"

@@ -1,3 +1,5 @@
 #!/bin/sh
 make skiaview
-$NDK/ndk-build -C android/skiaview/jni
+ndk-build -C android/skiaview/jni
+cd android/skiaview
+sh toapp.sh

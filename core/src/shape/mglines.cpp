@@ -212,7 +212,7 @@ bool MgBaseLines::_load(MgStorage* s)
 {
     _closed = s->readBool("closed", _closed);
     
-    UInt32 n = s->readUInt32("count");
+    UInt32 n = s->readUInt32("count", 0);
     if (n < 1 || n > 9999)
         return false;
     

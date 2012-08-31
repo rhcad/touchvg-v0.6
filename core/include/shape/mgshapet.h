@@ -162,15 +162,15 @@ public:
         UInt32 c;
         
         _tag = s->readUInt32("tag", _tag);
-        _context.setLineStyle((kLineStyle)s->readUInt8("lineStyle"));
-        _context.setLineWidth(s->readFloat("lineWidth"));
+        _context.setLineStyle((kLineStyle)s->readUInt8("lineStyle", 0));
+        _context.setLineWidth(s->readFloat("lineWidth", 0));
         
-        c = s->readUInt32("lineColor");
+        c = s->readUInt32("lineColor", -1);
         _context.setLineColor(GiColor((UInt8)(c & 0xFF), 
                                       (UInt8)((c >> 8 ) & 0xFF), 
                                       (UInt8)((c >> 16) & 0xFF), 
                                       (UInt8)((c >> 24) & 0xFF)));
-        c = s->readUInt32("fillColor");
+        c = s->readUInt32("fillColor", 0);
         _context.setFillColor(GiColor((UInt8)(c & 0xFF), 
                                       (UInt8)((c >> 8 ) & 0xFF), 
                                       (UInt8)((c >> 16) & 0xFF), 

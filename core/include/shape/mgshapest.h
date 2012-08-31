@@ -297,20 +297,20 @@ public:
             _scale = s->readFloat("scale", _scale);
             s->readFloatArray("center", &_centerW.x, 2);
             s->readFloatArray("extent", &rect.xmin, 4);
-            s->readUInt32("count");
+            s->readUInt32("count", 0);
         }
         
         if (s->readNode("shapes", _context ? 0 : -1, false)) {
             ret = true;
             s->readFloatArray("extent", &rect.xmin, 4);
-            s->readUInt32("count");
+            s->readUInt32("count", 0);
             
             if (!addOnly)
                 clear();
             
             while (ret && s->readNode("shape", index, false)) {
-                UInt32 type = s->readUInt32("type");
-                UInt32 id = s->readUInt32("id");
+                UInt32 type = s->readUInt32("type", 0);
+                UInt32 id = s->readUInt32("id", 0);
                 MgShape* shape = mgCreateShape(type);
                 
                 s->readFloatArray("extent", &rect.xmin, 4);

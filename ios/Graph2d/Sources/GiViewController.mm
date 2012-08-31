@@ -299,7 +299,7 @@
     
     if (locker.locked() && s->readNode("record", -1, false))
     {            
-        int mode = s->readInt32("mode");                // 录制的标记
+        int mode = s->readInt32("mode", 0);             // 录制的标记
         bool addOnly = (MgShapesLock::Add == mode);
         UInt32 oldCount = sp->getShapeCount();          // 原来的图形数
         

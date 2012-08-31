@@ -52,7 +52,7 @@ public:
     //! 启动指定名称的命令
     bool setCommandName(const char* name);
     
-    enum kGestureType {         //!< 手势类型
+    typedef enum {              //!< 手势类型
         kGestureUnknown,        //!< 未知的手势
         kSinglePan = 1,         //!< 单指滑动
         kSingleTap,             //!< 单指单击
@@ -60,13 +60,15 @@ public:
         kLongPress,             //!< 长按
         kZoomRotatePan,         //!< 双指移动
         kTwoFingersDblClick,    //!< 双指双击
-    };
-    enum kGestureState {        //!< 手势状态
+    } kGestureType;
+    
+    typedef enum { //!< 手势状态
         kGestureCancel = 0,     //!< 取消
         kGestureBegan,          //!< 开始
         kGestureMoved,          //!< 改变
         kGestureEnded,          //!< 结束
-    };
+    } kGestureState;
+    
     //! 传递触摸手势消息
     /**
      * \param gestureType 手势类型, kGestureType

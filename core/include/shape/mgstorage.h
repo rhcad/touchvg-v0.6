@@ -24,28 +24,28 @@ struct MgStorage
     virtual bool readNode(const char* name, int index, bool ended) = 0;
     
     //! 给定字段名称，取出一个单字节整数
-    virtual Int8  readInt8(const char* name, Int8 defvalue = 0) {
+    virtual Int8  readInt8(const char* name, Int8 defvalue) {
         return (Int8)readInt(name, defvalue); }
     //! 给定字段名称，取出一个双字节整数
-    virtual Int16 readInt16(const char* name, Int16 defvalue = 0) {
+    virtual Int16 readInt16(const char* name, Int16 defvalue) {
         return (Int16)readInt(name, defvalue); }
     //! 给定字段名称，取出一个长整数
-    virtual Int32 readInt32(const char* name, Int32 defvalue = 0) {
+    virtual Int32 readInt32(const char* name, Int32 defvalue) {
         return readInt(name, defvalue); }
     //! 给定字段名称，取出一个单字节整数
-    virtual UInt8  readUInt8(const char* name, UInt8 defvalue = 0) {
+    virtual UInt8  readUInt8(const char* name, UInt8 defvalue) {
         return (UInt8)readInt(name, defvalue); }
     //! 给定字段名称，取出一个双字节整数
-    virtual UInt16 readUInt16(const char* name, UInt16 defvalue = 0) {
+    virtual UInt16 readUInt16(const char* name, UInt16 defvalue) {
         return (UInt16)readInt(name, defvalue); }
     //! 给定字段名称，取出一个长整数
-    virtual UInt32 readUInt32(const char* name, UInt32 defvalue = 0) {
+    virtual UInt32 readUInt32(const char* name, UInt32 defvalue) {
         return readInt(name, defvalue); }
     
     //! 给定字段名称，取出一个布尔值
     virtual bool readBool(const char* name, bool defvalue) = 0;
     //! 给定字段名称，取出一个浮点数
-    virtual float readFloat(const char* name, float defvalue = 0) = 0;
+    virtual float readFloat(const char* name, float defvalue) = 0;
     
     //! 给定字段名称，取出浮点数数组. 传入缓冲为空时返回所需个数
     virtual int readFloatArray(const char* name, float* values, int count) = 0;
@@ -86,7 +86,7 @@ struct MgStorage
 
 protected:
     //! 给定字段名称，取出一个整数
-    virtual int readInt(const char* name, int defvalue = 0) { return name ? defvalue : defvalue; }
+    virtual int readInt(const char* name, int defvalue) { return name ? defvalue : defvalue; }
     //! 添加一个给定字段名称的单字节整数
     virtual void writeInt(const char* name, int value) { if (name) value = 0; }
 };

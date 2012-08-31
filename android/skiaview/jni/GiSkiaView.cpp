@@ -176,6 +176,8 @@ bool GiSkiaView::onGesture(kGestureType gestureType, kGestureState gestureState,
                 ret = switchZoom(_view->_motion.point);
             }
             break;
+        default:
+            break;
     }
 
     return ret;
