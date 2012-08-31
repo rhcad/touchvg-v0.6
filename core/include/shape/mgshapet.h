@@ -165,7 +165,7 @@ public:
         _context.setLineStyle((kLineStyle)s->readUInt8("lineStyle", 0));
         _context.setLineWidth(s->readFloat("lineWidth", 0));
         
-        c = s->readUInt32("lineColor", -1);
+        c = s->readUInt32("lineColor", 0xFF000000);
         _context.setLineColor(GiColor((UInt8)(c & 0xFF), 
                                       (UInt8)((c >> 8 ) & 0xFF), 
                                       (UInt8)((c >> 16) & 0xFF), 
