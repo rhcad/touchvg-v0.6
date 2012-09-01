@@ -23,7 +23,7 @@ public:
     long        drawRefcnt;         //!< 绘图锁定计数
     bool        isPrint;            //!< 是否打印或打印预览
     int         drawColors;         //!< 绘图DC颜色数
-    int         colorMode;          //!< 颜色模式, enum kColorMode
+    GiColorMode    colorMode;      //!< 颜色模式
     RECT_2D     clipBox0;           //!< 开始绘图时的剪裁框(LP)
 
     RECT_2D     clipBox;            //!< 剪裁框(LP)
@@ -37,7 +37,7 @@ public:
     {
         drawRefcnt = 0;
         drawColors = 0;
-        colorMode = GiGraphics::kColorReal;
+        colorMode = kGiColorReal;
         isPrint = false;
         maxPenWidth = 100;
         minPenWidth = 1;

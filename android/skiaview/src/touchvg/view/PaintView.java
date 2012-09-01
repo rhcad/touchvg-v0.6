@@ -1,8 +1,8 @@
 package touchvg.view;
 
 import touchvg.skiaview.GiSkiaView;
-import touchvg.skiaview.GiSkiaView.kGestureState;
-import touchvg.skiaview.GiSkiaView.kGestureType;
+import touchvg.skiaview.GiGestureState;
+import touchvg.skiaview.GiGestureType;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,8 +17,8 @@ public class PaintView extends View {
     private GiCanvasEx mCanvas;
     private Context mContext;
     private GestureDetector mDetector;
-    private kGestureState gestureState;
-    private kGestureType gestureType;
+    private GiGestureState gestureState;
+    private GiGestureType gestureType;
     private int fingerCount;
     private float lastX = 1;
     private float lastY = 1;
@@ -70,13 +70,13 @@ public class PaintView extends View {
                         lastY = event.getY(0);
                         lastX1 = event.getX(1);
                         lastY1 = event.getY(1);
-                        gestureState = kGestureState.kGestureBegan;
+                        gestureState = GiGestureState.kGestureBegan;
                     }
-                    if (gestureState == kGestureState.kGestureBegan) {
-                        gestureType = fingerCount > 1 ? kGestureType.kZoomRotatePan : kGestureType.kSinglePan;
+                    if (gestureState == GiGestureState.kGestureBegan) {
+                        gestureType = fingerCount > 1 ? GiGestureType.kZoomRotatePan : GiGestureType.kSinglePan;
                         mCore.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
                     }
-                    gestureState = kGestureState.kGestureMoved;
+                    gestureState = GiGestureState.kGestureMoved;
                     isMoving = true;
                     lastX = event.getX(0);
                     lastY = event.getY(0);
@@ -94,9 +94,9 @@ public class PaintView extends View {
                     if (isMoving)
                     {
                         isMoving = false;
-                        gestureState = kGestureState.kGestureEnded;
+                        gestureState = GiGestureState.kGestureEnded;
                         mCore.onGesture(gestureType, gestureState, fingerCount, lastX, lastY, lastX1, lastY1);
-                        gestureType = kGestureType.kGestureUnknown;
+                        gestureType = GiGestureType.kGestureUnknown;
                         fingerCount = 0;
                     }
                     break;
@@ -128,8 +128,8 @@ public class PaintView extends View {
     public void setGestureEnable(boolean enable) {
         mGestureEnable = enable;
         
-        if (!enable && gestureState == kGestureState.kGestureMoved) {
-            gestureState = kGestureState.kGestureCancel;
+        if (!enable && gestureState == GiGestureState.kGestureMoved) {
+            gestureState = GiGestureState.kGestureCancel;
             mCore.onGesture(gestureType, gestureState, 0, 0, 0, 0, 0);
         }
     }
@@ -138,18 +138,18 @@ public class PaintView extends View {
     {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-            mCore.onGesture(kGestureType.kSingleTap, kGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
+            mCore.onGesture(GiGestureType.kSingleTap, GiGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
             return false;
         }
         
         @Override
         public void onLongPress(MotionEvent e) {
-            mCore.onGesture(kGestureType.kLongPress, kGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
+            mCore.onGesture(GiGestureType.kLongPress, GiGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
         }
 
         @Override
         public boolean onDown(MotionEvent e) {
-            gestureState = kGestureState.kGestureBegan;
+            gestureState = GiGestureState.kGestureBegan;
             fingerCount = e.getPointerCount();
             lastX = e.getX(0);
             lastY = e.getY(0);
@@ -162,14 +162,14 @@ public class PaintView extends View {
         
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            mCore.onGesture(kGestureType.kDoubleTap, kGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
+            mCore.onGesture(GiGestureType.kDoubleTap, GiGestureState.kGestureBegan, 1, e.getX(), e.getY(), 0, 0);
             return false;
         }
         
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float dx, float dy) {
             if (e2.getAction() == MotionEvent.ACTION_CANCEL) {
-                gestureState = kGestureState.kGestureCancel;
+                gestureState = GiGestureState.kGestureCancel;
                 mCore.onGesture(gestureType, gestureState, 0, 0, 0, 0, 0);
             }
             return false;

@@ -36,7 +36,7 @@ struct MgView {
         return !!shape; }
     virtual void shapeMoved(MgShape* shape, int segment) {  //!< 通知图形已拖动
         if (shape) segment=1; }
-    virtual bool longPressSelection(int selState) {     //!< 选择状态下长按, MgSelection::kSelState
+    virtual bool longPressSelection(int selState) {     //!< 选择状态下长按, MgSelState
         return selState==-1; }
     virtual bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) {  //!< 显示控制点
         return gs && pnt != pnt && hotdot; }

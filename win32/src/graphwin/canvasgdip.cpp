@@ -81,7 +81,7 @@ struct GdipDrawImplBase
                     if (pNotSmoothing != NULL)
                     {
                         *pNotSmoothing = (width <= 1
-                            && ctx->getLineStyle() != kLineSolid);
+                            && ctx->getLineStyle() != kGiLineSolid);
                     }
                 }
             }

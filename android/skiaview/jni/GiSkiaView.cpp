@@ -114,7 +114,7 @@ bool GiSkiaView::setCommandName(const char* name)
     return mgGetCommandManager()->setCommand(&_view->_motion, name);
 }
 
-bool GiSkiaView::onGesture(kGestureType gestureType, kGestureState gestureState, int,
+bool GiSkiaView::onGesture(GiGestureType gestureType, GiGestureState gestureState, int,
                            float x1, float y1, float x2, float y2)
 {
     bool ret = false;

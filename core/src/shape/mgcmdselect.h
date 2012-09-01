@@ -26,7 +26,7 @@ public:
     
 public:
     virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false);
-    virtual kSelState getSelectState(MgView* view);
+    virtual MgSelState getSelectState(MgView* view);
     virtual bool selectAll(MgView* view);
     virtual bool deleteSelection(MgView* view);
     virtual bool cloneSelection(MgView* view);

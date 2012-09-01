@@ -45,7 +45,7 @@ private:
 
     bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot)
     {
-        GiContext ctx(0, GiColor::Black(), kLineSolid, 
+        GiContext ctx(0, GiColor::Black(), kGiLineSolid, 
             GiColor(240, 240, 240, hotdot ? 200 : 128));
         bool old = gs->setAntiAliasMode(false);
         gs->drawRect(&ctx, Box2d(pnt, gs->xf().displayToModel(hotdot ? 3.f : 1.6f, true), 0));

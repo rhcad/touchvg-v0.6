@@ -34,7 +34,7 @@ bool MgCmdDrawSplines::undo(bool &enableRecall, const MgMotion* sender)
 bool MgCmdDrawSplines::draw(const MgMotion* sender, GiGraphics* gs)
 {
     if (m_step > 0 && !m_freehand) {
-        GiContext ctx(0, GiColor(64, 128, 64, 172), kLineSolid, GiColor(0, 64, 64, 128));
+        GiContext ctx(0, GiColor(64, 128, 64, 172), kGiLineSolid, GiColor(0, 64, 64, 128));
         float radius = gs->xf().displayToModel(4);
         
         for (UInt32 i = 1, n = dynshape()->shape()->getPointCount(); i < 6 && n >= i; i++) {

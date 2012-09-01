@@ -245,13 +245,12 @@ GEOMAPI bool mgClipLine(Point2d& pt1, Point2d& pt2, const Box2d& box);
 
 //! mgPtInArea 的返回值枚举定义
 //! \see mgPtInArea
-enum kPtInAreaRet
-{
-    kPtInArea,          //!< 在多边形内
-    kPtOutArea,         //!< 在多边形外
-    kPtOnEdge,          //!< 在第order边上
-    kPtAtVertex,        //!< 与第order顶点重合
-};
+typedef enum {
+    kMgPtInArea,          //!< 在多边形内
+    kMgPtOutArea,         //!< 在多边形外
+    kMgPtOnEdge,          //!< 在第order边上
+    kMgPtAtVertex,        //!< 与第order顶点重合
+} MgPtInAreaRet;
 
 //! 判断一点是否在一多边形范围内
 /*!
@@ -259,13 +258,12 @@ enum kPtInAreaRet
     \param[in] pt 给定的测试点
     \param[in] count 多边形的顶点数
     \param[in] vertexs 多边形的顶点数组
-    \param[out] order 返回 kPtAtVertex 时，输出顶点号[0, count-1]；\n
-        返回 kPtOnEdge 时，输出边号[0, count-1]；\n为NULL则忽略该参数
+    \param[out] order 返回 kMgPtAtVertex 时，输出顶点号[0, count-1]；\n
+        返回 kMgPtOnEdge 时，输出边号[0, count-1]；\n为NULL则忽略该参数
     \param[in] tol 容差
-    \return 为枚举定义 kPtInAreaRet 的各种值
-    \see kPtInAreaRet
+    \return 为枚举定义 MgPtInAreaRet 的各种值
 */
-GEOMAPI int mgPtInArea(
+GEOMAPI MgPtInAreaRet mgPtInArea(
     const Point2d& pt, Int32 count, const Point2d* vertexs, 
     Int32& order, const Tol& tol = Tol::gTol());
 

@@ -33,7 +33,7 @@ bool MgCmdDrawLines::undo(bool &enableRecall, const MgMotion* sender)
 bool MgCmdDrawLines::draw(const MgMotion* sender, GiGraphics* gs)
 {
     /*if (m_step > 1) {
-        GiContext ctxaux(0, GiColor(64, 64, 64, 128), kLineSolid, GiColor(0, 64, 64, 168));
+        GiContext ctxaux(0, GiColor(64, 64, 64, 128), kGiLineSolid, GiColor(0, 64, 64, 168));
         float radius = gs->xf().displayToModel(3);
         
         for (UInt32 i = 0; i < dynshape()->shape()->getPointCount(); i++) {

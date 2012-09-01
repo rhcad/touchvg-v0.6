@@ -172,12 +172,12 @@ bool GiGraphics::setAntiAliasMode(bool antiAlias)
     return old;
 }
 
-int GiGraphics::getColorMode() const
+GiColorMode GiGraphics::getColorMode() const
 {
     return m_impl->colorMode;
 }
 
-void GiGraphics::setColorMode(int mode)
+void GiGraphics::setColorMode(GiColorMode mode)
 {
     m_impl->colorMode = mode;
 }
@@ -186,14 +186,14 @@ GiColor GiGraphics::calcPenColor(const GiColor& color) const
 {
     GiColor ret = color;
 
-    if (kColorMono == m_impl->colorMode)
+    if (kGiColorMono == m_impl->colorMode)
     {
         const GiColor& bk = getBkColor();
         if (color != bk)
             ret.set(~bk.r, ~bk.g, ~bk.b);
     }
     if (m_impl->drawColors == 2           // 黑白
-        || kColorGray == m_impl->colorMode)
+        || kGiColorGray == m_impl->colorMode)
     {
         unsigned char by = (unsigned char)(
             (77 * ret.r + 151 * ret.g + 28 * ret.b + 128) / 256);

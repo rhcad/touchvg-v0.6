@@ -178,14 +178,16 @@ GEOMAPI bool mgGaussJordan(Int32 n, float *mat, Vector2d *vs);
 
 //! 三次参数样条曲线的端点条件
 //! \see mgCubicSplines
-enum kCubicSplinesFlags
-{
-    kCubicTan1 = 1,         //!< 起始夹持端
-    kCubicArm1 = 2,         //!< 起始悬臂端
-    kCubicTan2 = 4,         //!< 终止夹持端
-    kCubicArm2 = 8,         //!< 终止悬臂端
-    kCubicLoop = 16,        //!< 闭合, 有该值时忽略其他组合值
-};
+typedef enum {
+    kMgCubicTan1 = 1,         //!< 起始夹持端
+    kMgCubicArm1 = 2,         //!< 起始悬臂端
+    kMgCubicTan2 = 4,         //!< 终止夹持端
+    kMgCubicArm2 = 8,         //!< 终止悬臂端
+    kMgCubicLoop = 16,        //!< 闭合, 有该值时忽略其他组合值
+} MgCubicSplineFlag;
+
+//! 由 MgCubicSplineFlag 各种值按位组成的端点条件
+typedef UInt32 kMgCubicSplineFlags;
 
 //! 计算三次参数样条曲线的型值点的切矢量
 /*! 三次参数样条曲线的分段曲线方程为：\n
@@ -198,17 +200,17 @@ enum kCubicSplinesFlags
     \param[in] n 型值点的点数
     \param[in] knots 型值点坐标数组，元素个数为n
     \param[out] knotvs 型值点的切矢量数组，元素个数为n，由外界分配内存
-    \param[in] flag 曲线边界条件，由 kCubicSplinesFlags 各种值组合而成。\n
-        指定 kCubicTan1 时, knotvs[0]必须指定有效的切矢量；\n
-        指定 kCubicTan2 时, knotvs[n-1]必须指定有效的切矢量。\n
-        指定 kCubicLoop 时，knots的首末型值点不必重合，计算中将首末型值点视为任意两点。
+    \param[in] flag 曲线边界条件，由 MgCubicSplineFlag 各种值组合而成。\n
+        指定 kMgCubicTan1 时, knotvs[0]必须指定有效的切矢量；\n
+        指定 kMgCubicTan2 时, knotvs[n-1]必须指定有效的切矢量。\n
+        指定 kMgCubicLoop 时，knots的首末型值点不必重合，计算中将首末型值点视为任意两点。
     \param[in] tension 张力系数，0≤coeff≤1, 为1时C2阶连续, 为0时成折线
     \return 是否计算成功
-    \see kCubicSplinesFlags, mgFitCubicSpline, mgCubicSplinesBox
+    \see MgCubicSplineFlag, mgFitCubicSpline, mgCubicSplinesBox
 */
 GEOMAPI bool mgCubicSplines(
     Int32 n, const Point2d* knots, Vector2d* knotvs,
-    UInt32 flag = 0, float tension = 1);
+    kMgCubicSplineFlags flag = 0, float tension = 1);
 
 //! 在三次样条曲线的一条弦上插值得到拟和点坐标
 /*!

@@ -13,6 +13,23 @@ struct MgShapes;
 class MgViewProxy;
 class GiContext;
 
+typedef enum {                //!< 手势类型
+    kGestureUnknown,          //!< 未知的手势
+    kSinglePan = 1,           //!< 单指滑动
+    kSingleTap,               //!< 单指单击
+    kDoubleTap,               //!< 单指双击
+    kLongPress,               //!< 长按
+    kZoomRotatePan,           //!< 双指移动
+    kTwoFingersDblClick,      //!< 双指双击
+} GiGestureType;
+
+typedef enum { //!< 手势状态
+    kGestureCancel = 0,       //!< 取消
+    kGestureBegan,            //!< 开始
+    kGestureMoved,            //!< 改变
+    kGestureEnded,            //!< 结束
+} GiGestureState;
+
 //! 支持Android平台的图形视图类
 /*! \ingroup GRAPH_SKIA
  */
@@ -52,27 +69,10 @@ public:
     //! 启动指定名称的命令
     bool setCommandName(const char* name);
     
-    typedef enum {              //!< 手势类型
-        kGestureUnknown,        //!< 未知的手势
-        kSinglePan = 1,         //!< 单指滑动
-        kSingleTap,             //!< 单指单击
-        kDoubleTap,             //!< 单指双击
-        kLongPress,             //!< 长按
-        kZoomRotatePan,         //!< 双指移动
-        kTwoFingersDblClick,    //!< 双指双击
-    } kGestureType;
-    
-    typedef enum { //!< 手势状态
-        kGestureCancel = 0,     //!< 取消
-        kGestureBegan,          //!< 开始
-        kGestureMoved,          //!< 改变
-        kGestureEnded,          //!< 结束
-    } kGestureState;
-    
     //! 传递触摸手势消息
     /**
-     * \param gestureType 手势类型, kGestureType
-     * \param gestureState 手势状态, kGestureState, gestureType为 kSinglePan 或 kZoomRotatePan 时有效
+     * \param gestureType 手势类型, GiGestureType
+     * \param gestureState 手势状态, GiGestureState, gestureType为 kSinglePan 或 kZoomRotatePan 时有效
      * \param fingerCount 触点个数
      * \param x1 第一个触点的X坐标，fingerCount小于1时忽略
      * \param y1 第一个触点的Y坐标，fingerCount小于1时忽略
@@ -80,7 +80,7 @@ public:
      * \param y2 第二个触点的Y坐标，fingerCount小于2时忽略
      * \return 内部是否响应了此手势
      */
-    bool onGesture(kGestureType gestureType, kGestureState gestureState, int fingerCount,
+    bool onGesture(GiGestureType gestureType, GiGestureState gestureState, int fingerCount,
                    float x1, float y1, float x2, float y2);
     
     //! 返回当前绘图属性
@@ -93,7 +93,7 @@ public:
     //! 绘图属性改变后提交更新
     /** 在 getCurrentContext(true) 后调用本函数。
      * \param ctx 绘图属性
-     * \param mask 需要应用哪些属性，-1表示全部属性，0则不修改，按位组合值见 GiContext 的 kContextBits
+     * \param mask 需要应用哪些属性，-1表示全部属性，0则不修改，按位组合值见 GiContext 的 GiContextBits
      * \param apply 0表示还要继续动态修改属性，1表示结束动态修改并提交，-1表示结束动态修改并放弃改动
      */
     void applyContext(const GiContext& ctx, int mask, int apply);

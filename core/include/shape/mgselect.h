@@ -11,18 +11,24 @@
 struct MgView;
 struct MgMotion;
 
+//! 选择状态
+typedef enum {
+    kMgSelNone,
+    kMgSelOneShape,
+    kMgSelMultiShapes,
+    kMgSelVertex
+} MgSelState;
+
 //! 选择集接口
 /*! \ingroup GEOM_SHAPE
     \interface MgSelection
 */
 struct MgSelection {
-    enum kSelState { kSelNone, kSelOneShape, kSelMultiShapes, kSelVertex };
-    
     //! 得到当前选择的图形
     virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false) = 0;
     
     //! 返回选择状态
-    virtual kSelState getSelectState(MgView* view) = 0;
+    virtual MgSelState getSelectState(MgView* view) = 0;
     
     //! 选中所有图形
     virtual bool selectAll(MgView* view) = 0;

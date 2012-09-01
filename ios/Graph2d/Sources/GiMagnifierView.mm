@@ -228,7 +228,7 @@
     gs->setAntiAliasMode(false);
     
     if (_scale < 1) {
-        GiContext ctx(0, GiColor(64, 64, 64, 172), kLineDot);
+        GiContext ctx(0, GiColor(64, 64, 64, 172), kGiLineDot);
         UIView *v = [_gview ownerView];
         Box2d rect(Box2d(0, 0, v.bounds.size.width, v.bounds.size.height)
                    * [_gview xform]->displayToWorld());

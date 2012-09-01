@@ -11,8 +11,7 @@
 #include <objidl.h>
 
 //! 打开文件错误类型
-enum kOpenImageError
-{
+typedef enum {
     kOpenImage_OK,              //!< 成功
     kOpenImage_NullString,      //!< 文件名为空
     kOpenImage_FileNotExist,    //!< 文件不存在
@@ -21,7 +20,7 @@ enum kOpenImageError
     kOpenImage_TooLarge,        //!< 文件太大, 超过16M
     kOpenImage_NoMemory,        //!< 内存不足
     kOpenImage_NotPicture,      //!< 不能识别图像格式
-};
+} kOpenImageError;
 
 //! 图像文件打开和显示的辅助类
 /*!

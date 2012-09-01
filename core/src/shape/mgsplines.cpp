@@ -31,7 +31,7 @@ void MgSplines::_update()
         _knotvs = new Vector2d[_bzcount];
     }
 
-    mgCubicSplines(_count, _points, _knotvs, _closed ? kCubicLoop : 0);
+    mgCubicSplines(_count, _points, _knotvs, _closed ? kMgCubicLoop : 0);
     mgCubicSplinesBox(_extent, _count, _points, _knotvs);
 }
 
@@ -86,7 +86,7 @@ void MgSplines::smooth(float tol)
             points[n + j] = _points[i + j];
         
         // 新曲线：indexMap[0], indexMap[1], ..., indexMap[n], i+1, i+2, ..., _count-1
-        mgCubicSplines(n + _count - i, points, knotvs, _closed ? kCubicLoop : 0);
+        mgCubicSplines(n + _count - i, points, knotvs, _closed ? kMgCubicLoop : 0);
         dist = mgCubicSplinesHit(n + _count - i, points, knotvs, _closed, _points[i],
                                  tol * 2, nearpt, segment); // 检查第i点到新曲线的距离
         

@@ -9,17 +9,17 @@
 #include "gicolor.h"
 
 //! 线型
-enum kLineStyle {
-    kLineSolid = 0,     //!< ----------
-    kLineDash,          //!< － － － －
-    kLineDot,           //!< ..........
-    kLineDashDot,       //!< _._._._._
-    kLineDashDotdot,    //!< _.._.._.._
-    kLineNull           //!< Not draw.
-};
+typedef enum {
+    kGiLineSolid = 0,     //!< ----------
+    kGiLineDash,          //!< － － － －
+    kGiLineDot,           //!< ..........
+    kGiLineDashDot,       //!< _._._._._
+    kGiLineDashDotdot,    //!< _.._.._.._
+    kGiLineNull           //!< Not draw.
+} GiLineStyle;
 
 //! 设置属性的位掩码类型
-enum kContextBits {
+typedef enum {
     kContextLineRGB   = 0x01,   //!< 设置线色的RGB分量
     kContextLineAlpha = 0x02,   //!< 设置线色的透明度分量
     kContextLineColor = 0x03,   //!< 设置线色的所有分量
@@ -29,12 +29,12 @@ enum kContextBits {
     kContextFillAlpha = 0x20,   //!< 设置填充色的透明度分量
     kContextFillColor = 0x30,   //!< 设置填充色的所有分量
     kContextCopyAll   = 0xFF,   //!< 设置所有属性
-};
+} GiContextBits;
 
 //! 绘图参数上下文类
 /*! 用于在图形系统的绘图函数中传入绘图参数
     \ingroup GRAPH_INTERFACE
-    \see kLineStyle, GiColor
+    \see GiLineStyle, GiColor
 */
 class GiContext
 {
@@ -42,7 +42,7 @@ public:
     //! 默认构造函数
     /*! 绘图参数为1像素宽的黑实线、不填充
     */
-    GiContext() : m_type(0), m_lineStyle(kLineSolid), m_lineWidth(0)
+    GiContext() : m_type(0), m_lineStyle(kGiLineSolid), m_lineWidth(0)
         , m_lineColor(GiColor::Black()), m_fillColor(GiColor::Invalid())
     {
     }
@@ -51,11 +51,11 @@ public:
     /*! 填充参数为不填充
         \param width 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
         \param color 线条颜色， GiColor::Invalid() 表示不画线条
-        \param style 线型, kLineStyle, 取值为 kLineSolid 等
+        \param style 线型, GiLineStyle, 取值为 kGiLineSolid 等
         \param fillcr 填充颜色， GiColor::Invalid() 表示不填充
     */
     GiContext(float width, GiColor color = GiColor::Black(), 
-              int style = kLineSolid, const GiColor& fillcr = GiColor::Invalid())
+              int style = kGiLineSolid, const GiColor& fillcr = GiColor::Invalid())
         : m_type(0), m_lineStyle(style), m_lineWidth(width)
         , m_lineColor(color), m_fillColor(fillcr)
     {
@@ -70,7 +70,7 @@ public:
         m_fillColor = src.m_fillColor;
     }
 
-    //! 赋值函数, kContextBits 按位设置
+    //! 赋值函数, GiContextBits 按位设置
     GiContext& copy(const GiContext& src, int mask = -1)
     {
         if (this != &src)
@@ -128,13 +128,13 @@ public:
     }
 #endif // SWIG
     
-    //! 返回线型, kLineStyle
+    //! 返回线型, GiLineStyle
     int getLineStyle() const
     {
-        return m_lineColor.isInvalid() ? kLineNull : m_lineStyle;
+        return m_lineColor.isInvalid() ? kGiLineNull : m_lineStyle;
     }
     
-    //! 设置线型, kLineStyle
+    //! 设置线型, GiLineStyle
     void setLineStyle(int style)
     {
         m_lineStyle = style;
@@ -160,15 +160,15 @@ public:
     //! 返回是否为空线，即不画线
     bool isNullLine() const
     {
-        return m_lineStyle == kLineNull || m_lineColor.isInvalid();
+        return m_lineStyle == kGiLineNull || m_lineColor.isInvalid();
     }
     
     //! 设置为空线，即不画线
-    /*! 如果要恢复成普通画线状态，可调setLineStyle(kLineSolid)
+    /*! 如果要恢复成普通画线状态，可调setLineStyle(kGiLineSolid)
     */
     void setNullLine()
     {
-        m_lineStyle = kLineNull;
+        m_lineStyle = kGiLineNull;
     }
     
     //! 返回线条颜色
@@ -278,7 +278,7 @@ public:
 protected:
     int         m_type;            //!< 派生类可指定其他值来表示不同类型
 private:
-    int         m_lineStyle;       //!< 线型, kLineStyle
+    int         m_lineStyle;       //!< 线型, GiLineStyle
     float       m_lineWidth;       //!< 线宽, >0: 0.01mm, =0: 1px, <0:px
     GiColor     m_lineColor;
     GiColor     m_fillColor;

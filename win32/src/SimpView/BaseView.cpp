@@ -146,15 +146,15 @@ void CBaseView::OnZoomExtent()
 
 void CBaseView::OnViewGray() 
 {
-	m_graph->gs.setColorMode(GiGraphics::kColorGray == m_graph->gs.getColorMode()
-        ? GiGraphics::kColorReal : GiGraphics::kColorGray);
+	m_graph->gs.setColorMode(kGiColorGray == m_graph->gs.getColorMode()
+        ? kGiColorReal : kGiColorGray);
     m_graph->canvas->clearCachedBitmap();
     Invalidate();
 }
 
 void CBaseView::OnUpdateViewGray(CCmdUI* pCmdUI) 
 {
-	pCmdUI->SetCheck(GiGraphics::kColorGray == m_graph->gs.getColorMode() ? 1 : 0);
+	pCmdUI->SetCheck(kGiColorGray == m_graph->gs.getColorMode() ? 1 : 0);
 }
 
 void CBaseView::OnUpdateViewGdip(CCmdUI* pCmdUI) 

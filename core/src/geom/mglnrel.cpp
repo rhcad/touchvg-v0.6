@@ -407,7 +407,7 @@ static bool PtInArea_Edge(int &odd, const Point2d& pt, const Point2d& p1,
 }
 
 // 功能: 判断一点是否在一多边形范围内
-GEOMAPI int mgPtInArea(
+GEOMAPI MgPtInAreaRet mgPtInArea(
     const Point2d& pt, Int32 count, const Point2d* vertexs, 
     Int32& order, const Tol& tol)
 {
@@ -416,11 +416,11 @@ GEOMAPI int mgPtInArea(
     
     for (i = 0; i < count; i++)
     {
-        // P与某顶点重合. 返回 kPtAtVertex, order = 顶点号 [0, count-1]
+        // P与某顶点重合. 返回 kMgPtAtVertex, order = 顶点号 [0, count-1]
         if (pt.isEqualTo(vertexs[i], tol))
         {
             order = i;
-            return kPtAtVertex;
+            return kMgPtAtVertex;
         }
     }
     
@@ -429,11 +429,11 @@ GEOMAPI int mgPtInArea(
         const Point2d& p1 = vertexs[i];
         const Point2d& p2 = (i+1 < count) ? vertexs[i+1] : vertexs[0];
         
-        // P在某条边上. 返回 kPtOnEdge, order = 边号 [0, count-1]
+        // P在某条边上. 返回 kMgPtOnEdge, order = 边号 [0, count-1]
         if (mgIsBetweenLine2(p1, p2, pt, tol))
         {
             order = i;
-            return kPtOnEdge;
+            return kMgPtOnEdge;
         }
 
         if (!PtInArea_Edge(odd, pt, p1, p2, 
@@ -441,9 +441,9 @@ GEOMAPI int mgPtInArea(
             continue;
     }
 
-    // 如果射线和多边形的交点数为偶数, 则 p==1, P在区外, 返回 kPtOutArea
-    // 为奇数则p==0, P在区内, 返回 kPtInArea
-    return 0 == odd ? kPtInArea : kPtOutArea;
+    // 如果射线和多边形的交点数为偶数, 则 p==1, P在区外, 返回 kMgPtOutArea
+    // 为奇数则p==0, P在区内, 返回 kMgPtInArea
+    return 0 == odd ? kMgPtInArea : kMgPtOutArea;
 }
 
 // 判断多边形是否为凸多边形

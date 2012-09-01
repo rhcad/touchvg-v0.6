@@ -37,9 +37,6 @@ public:
 
     //! 返回是否打印或打印预览
     bool isPrint() const;
-    
-    //! 返回当前绘图画布对象
-    GiCanvas* getCanvas();
 
 public:
     //! 返回剪裁框，模型坐标
@@ -49,17 +46,12 @@ public:
     Box2d getClipWorld() const;
 
     //! 得到剪裁框，逻辑坐标
-    /*!
-        \param[out] rc 填充逻辑坐标矩形
-        \return rc
-    */
     RECT_2D& getClipBox(RECT_2D& rc) const;
 
     //! 设置剪裁框，逻辑坐标
     /*! 只有正处于绘图状态时，该函数的返回值才有效。
         失败时不改变图形系统内部变量和设备描述表的剪裁框，
         因此在失败时不要进行相应绘图操作，否则处于错误的剪裁框中。
-
         \param[in] rc 逻辑坐标矩形
         \return 是否成功设置剪裁框，没有处于绘图状态中或计算出的剪裁框为空时失败
     */
@@ -70,32 +62,16 @@ public:
         失败时不改变图形系统内部变量和设备描述表的剪裁框，
         因此在失败时不要进行相应绘图操作，否则处于错误的剪裁框中。\n
         只有正处于绘图状态时，该函数的返回值才有效。
-
         \param[in] rectWorld 世界坐标矩形
         \return 是否成功设置剪裁框，没有处于绘图状态中或计算出的剪裁框为空时失败
     */
     bool setClipWorld(const Box2d& rectWorld);
-    
 
-    //! 颜色模式定义
-    enum kColorMode {
-        kColorReal,     //!< 真彩
-        kColorGray,     //!< 灰度，256级
-        kColorMono      //!< 单色，背景色和反色
-    };
     //! 返回颜色模式
-    /*!
-        \return 颜色模式，见 kColorMode 定义
-        \see kColorMode
-    */
-    int getColorMode() const;
+    GiColorMode getColorMode() const;
 
     //! 设置颜色模式
-    /*!
-        \param mode 颜色模式，见 kColorMode 定义
-        \see kColorMode
-    */
-    void setColorMode(int mode);
+    void setColorMode(GiColorMode mode);
 
     //! 计算画笔颜色
     /*! 根据颜色模式和设备属性调整显示颜色。\n
@@ -309,7 +285,7 @@ public:
         \param ctx 绘图参数，为NULL时取为上一个绘图参数
         \param count 点数，points和types的元素个数
         \param points 端点和控制点的数组
-        \param types points中每一点的含义，由 kGiPathNode 值组成
+        \param types points中每一点的含义，由 GiPathNode 值组成
         \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
         \see GiPath::getPoints
@@ -317,7 +293,10 @@ public:
     bool drawPath(const GiContext* ctx, int count, 
         const Point2d* points, const UInt8* types, bool modelUnit = true);
 
-public:
+#ifndef SWIG
+    //! 返回当前绘图画布对象
+    GiCanvas* getCanvas();
+    
     //! 返回坐标系管理对象
     GiTransform& _xf();
     
@@ -329,6 +308,7 @@ public:
 
     //! 在显示适配类的 endPaint() 中调用
     void _endPaint();
+#endif
 
 public:
     void clearCachedBitmap(bool clearAll = false);

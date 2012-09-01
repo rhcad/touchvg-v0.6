@@ -18,6 +18,7 @@
 %include <mgpnt.h>
 %include <mgmat.h>
 %include <mgbox.h>
+%include <gidef.h>
 %include <gicolor.h>
 %include <gicontxt.h>
 %include <gixform.h>
@@ -27,6 +28,7 @@
 %include "mgvector.h"
 %template(Floats) mgvector<float>;
 %template(Chars) mgvector<short>;
+%template(Bytes) mgvector<char>;
 
 %feature("director") GiCanvasBase;
 %include "GiCanvasBase.h"

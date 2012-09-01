@@ -32,7 +32,7 @@ void RandomParam::setShapeProp(GiContext* context)
 {
     context->setLineColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(32, 255)));
     context->setLineWidth((Int16)RandInt(-10, 100));
-    context->setLineStyle((kLineStyle)(randomLineStyle ? RandInt(kLineSolid, kLineDashDotdot) : kLineSolid));
+    context->setLineStyle((GiLineStyle)(randomLineStyle ? RandInt(kGiLineSolid, kGiLineDashDotdot) : kGiLineSolid));
     context->setFillColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(32, 240)));
 }
 

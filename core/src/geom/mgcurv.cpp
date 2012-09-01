@@ -484,16 +484,16 @@ static bool CalcCubicClosed(
 }
 
 static bool CalcCubicUnclosed(
-    UInt32 flag, Int32 n, const Point2d* knots, 
+    kMgCubicSplineFlags flag, Int32 n, const Point2d* knots, 
     float* a, float* b, float* c, Vector2d* vecs)
 {
-    if (flag & kCubicTan1)          // 起始夹持端
+    if (flag & kMgCubicTan1)          // 起始夹持端
     {
         b[0] = 1.0;
         c[0] = 0.0;
         //vecs[0] = xp0;            // vecs[0]必须指定切矢量
     }
-    else if (flag & kCubicArm1)     // 起始悬臂端
+    else if (flag & kMgCubicArm1)     // 起始悬臂端
     {
         b[0] = 1.0;
         c[0] = 1.0;
@@ -508,13 +508,13 @@ static bool CalcCubicUnclosed(
         vecs[0].y = 1.5f * (knots[1].y-knots[0].y);
     }
     
-    if (flag & kCubicTan2)          // 终止夹持端
+    if (flag & kMgCubicTan2)          // 终止夹持端
     {
         a[n - 2] = 0.0;
         b[n - 1] = 1.0;
         //vecs[n - 1] = xpn;        // vecs[n-1]必须指定切矢量
     }
-    else if (flag & kCubicArm2)     // 终止悬臂端
+    else if (flag & kMgCubicArm2)     // 终止悬臂端
     {
         a[n - 2] = 1.0;
         b[n - 1] = 1.0;
@@ -543,14 +543,14 @@ static bool CalcCubicUnclosed(
 
 GEOMAPI bool mgCubicSplines(
     Int32 n, const Point2d* knots, Vector2d* knotvs,
-    UInt32 flag, float tension)
+    kMgCubicSplineFlags flag, float tension)
 {
     bool ret = false;
     
     if (!knots || !knotvs || n < 2)
         return false;
     
-    if ((flag & kCubicLoop) && n <= 512)    // 闭合
+    if ((flag & kMgCubicLoop) && n <= 512)    // 闭合
     {
         float* a = new float[n * n];
         ret = a && CalcCubicClosed(n, a, knotvs, knots);

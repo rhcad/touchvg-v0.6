@@ -29,7 +29,7 @@ public:
     /*!
         \param count 节点个数
         \param points 节点坐标数组，元素个数为count
-        \param types 节点类型数组，元素个数为count，由 kGiPathNode 值组成
+        \param types 节点类型数组，元素个数为count，由 GiPathNode 值组成
     */
     GiPath(int count, const Point2d* points, const UInt8* types);
 
@@ -59,7 +59,7 @@ public:
     //! 返回节点坐标数组
     const Point2d* getPoints() const;
 
-    //! 返回节点类型数组，由 kGiPathNode 值组成
+    //! 返回节点类型数组，由 GiPathNode 值组成
     const UInt8* getTypes() const;
     
 

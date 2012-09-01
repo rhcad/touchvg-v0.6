@@ -148,7 +148,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     const std::vector<MgShape*>& shapes = m_cloneShapes.empty() ? selection : m_cloneShapes;
     std::vector<MgShape*>::const_iterator it;
     Point2d pnt;
-    GiContext ctxhd(-2, GiColor(128, 128, 64, 200), kLineSolid, GiColor(172, 172, 172, 128));
+    GiContext ctxhd(-2, GiColor(128, 128, 64, 200), kGiLineSolid, GiColor(172, 172, 172, 128));
     float radius = mgDisplayMmToModel(1.2f, gs);
     float r2x = mgDisplayMmToModel(2, gs);
     bool rorate = (m_handleIndex == 0 && m_boxHandle >= 8 && m_boxHandle < 12);
@@ -170,7 +170,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
             (*it)->draw(*gs, &ctxbk);               // 用背景色擦掉原图形
         
         if (m_showSel && !rorate) {                 // 拖动提示的参考线
-            GiContext ctxshap(-1.05f, GiColor(0, 0, 255, 128), kLineDash);
+            GiContext ctxshap(-1.05f, GiColor(0, 0, 255, 128), kGiLineDash);
             gs->drawLine(&ctxshap, sender->startPointM, m_ptSnap);
         }
     }
@@ -191,7 +191,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     
     if (m_boxsel) {                                 // 显示框选半透明蓝色边框
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
-                          isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 32));
+                          isIntersectMode(sender) ? kGiLineDash : kGiLineSolid, GiColor(0, 0, 255, 32));
         
         bool antiAlias = gs->setAntiAliasMode(false);
         gs->drawRect(&ctxshap, Box2d(sender->startPointM, sender->pointM));
@@ -201,7 +201,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         Box2d selbox(getDragRect(sender));
         
         if (m_cloneShapes.empty() && !selbox.isEmpty()) {
-            GiContext ctxshap(0, GiColor(0, 0, 255, 128), kLineDash);
+            GiContext ctxshap(0, GiColor(0, 0, 255, 128), kGiLineDash);
             
             bool antiAlias = gs->setAntiAliasMode(false);
             gs->drawRect(&ctxshap, selbox);
@@ -220,7 +220,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
                 float w = -1.5f * gs->xf().getWorldToDisplayY(false);
                 float r = pnt.distanceTo(selbox.center());
                 float sangle = mgMin(30.f, mgMax(10.f, mgRad2Deg(12.f / r)));
-                GiContext ctxarc(w, GiColor(0, 255, 0, 128), j ? kLineSolid : kLineDot);
+                GiContext ctxarc(w, GiColor(0, 255, 0, 128), j ? kGiLineSolid : kGiLineDot);
                 gs->drawArc(&ctxarc, selbox.center(), r, r,
                             j ? -mgDeg2Rad(sangle) : mgDeg2Rad(180.f - sangle), 
                             mgDeg2Rad(2.f * sangle));
@@ -233,7 +233,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
             if (rorate) {               // 旋转提示的参考线
                 if (!sender->view->drawHandle(gs, selbox.center(), false))
                     gs->drawEllipse(&ctxhd, selbox.center(), radius);
-                GiContext ctxshap(0, GiColor(0, 0, 255, 128), kLineDash);
+                GiContext ctxshap(0, GiColor(0, 0, 255, 128), kGiLineDash);
                 gs->drawLine(&ctxshap, selbox.center(), m_ptSnap);
             }
             else {
@@ -280,7 +280,7 @@ void MgCommandSelect::gatherShapes(const MgMotion* sender, MgShapes* shapes)
         MgShapeT<MgRect> shape;
         
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
-                          isIntersectMode(sender) ? kLineDash : kLineSolid, GiColor(0, 0, 255, 32));
+                          isIntersectMode(sender) ? kGiLineDash : kGiLineSolid, GiColor(0, 0, 255, 32));
         *shape.context() = ctxshap;
         ((MgRect*)shape.shape())->setRect(Box2d(sender->startPointM, sender->pointM));
         shapes->addShape(shape);
@@ -424,7 +424,7 @@ bool MgCommandSelect::longPress(const MgMotion* sender)
     if (m_selIds.empty()) {
         ret = click(sender);
     }
-    if (sender->view->longPressSelection((kSelState)getSelectState(sender->view))) {
+    if (sender->view->longPressSelection((MgSelState)getSelectState(sender->view))) {
         ret = true;
     }
     
@@ -720,17 +720,17 @@ bool MgCommandSelect::applyCloneShapes(MgView* view, bool apply, bool addNewShap
     return changed || cloned;
 }
 
-MgCommandSelect::kSelState MgCommandSelect::getSelectState(MgView* view)
+MgSelState MgCommandSelect::getSelectState(MgView* view)
 {
-    kSelState state = kSelNone;
+    MgSelState state = kMgSelNone;
     
     if (m_handleIndex > 0) {
         MgShape* shape = view->shapes()->findShape(m_id);
         state = shape && shape->shape()->isKindOf(MgBaseLines::Type()) ?
-        kSelVertex : kSelOneShape;
+        kMgSelVertex : kMgSelOneShape;
     }
     else if (!m_selIds.empty()) {
-        state = m_selIds.size() > 1 ? kSelMultiShapes : kSelOneShape;
+        state = m_selIds.size() > 1 ? kMgSelMultiShapes : kMgSelOneShape;
     }
     
     return state;

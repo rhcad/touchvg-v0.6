@@ -164,19 +164,19 @@ static long s_cmdRef = 0;
         return false;
     
     switch (selState) {
-        case MgSelection::kSelNone:
+        case kMgSelNone:
             items[0] = [[UIMenuItem alloc] initWithTitle:@"全选" action:@selector(menuClickSelAll:)];
             items[1] = [[UIMenuItem alloc] initWithTitle:@"绘图" action:@selector(menuClickDraw:)];
             break;
             
-        case MgSelection::kSelOneShape:
-        case MgSelection::kSelMultiShapes:
+        case kMgSelOneShape:
+        case kMgSelMultiShapes:
             items[0] = [[UIMenuItem alloc] initWithTitle:@"删除" action:@selector(menuClickDelete:)];
             items[1] = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(menuClickClone:)];
             items[2] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
             break;
             
-        case MgSelection::kSelVertex:
+        case kMgSelVertex:
             items[0] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
             items[1] = [[UIMenuItem alloc] initWithTitle:@"加点" action:@selector(menuClickAddNode:)];
             items[2] = [[UIMenuItem alloc] initWithTitle:@"删点" action:@selector(menuClickDelNode:)];
@@ -306,12 +306,12 @@ static long s_cmdRef = 0;
     
     if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
         for (UInt32 i = 0; i < n; i++) {
-            shapes[i]->context()->setLineStyle((kLineStyle)style);
+            shapes[i]->context()->setLineStyle((GiLineStyle)style);
         }
         _motion->view->redraw(false);
     }
     else {
-        _mgview->context()->setLineStyle((kLineStyle)style);
+        _mgview->context()->setLineStyle((GiLineStyle)style);
     }
 }
 

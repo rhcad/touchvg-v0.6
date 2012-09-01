@@ -25,11 +25,18 @@ inline long giInterlockedDecrement(volatile long *p) { return InterlockedDecreme
 //! 矢量路径节点类型
 /*! \see GiPath
 */
-enum kGiPathNode {
+typedef enum {
     kGiCloseFigure = 1,
     kGiLineTo = 2,
     kGiBeziersTo = 4,
     kGiMoveTo = 6,
-};
+} GiPathNode;
+
+//! 颜色模式定义
+typedef enum {
+    kGiColorReal,       //!< 真彩
+    kGiColorGray,       //!< 灰度，256级
+    kGiColorMono        //!< 单色，背景色和反色
+} GiColorMode;
 
 #endif // __GEOMETRY_GIDEF_H_
