@@ -15,9 +15,8 @@ extern UInt32 g_newShapeID;
 
 UInt32 MgCommandSelect::getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange)
 {
-    if (forChange && m_cloneShapes.empty()) {
+    if (forChange && m_cloneShapes.empty())
         cloneShapes(view);
-    }
     
     UInt32 ret = 0;
     UInt32 maxCount = m_cloneShapes.empty() ? m_selIds.size() : m_cloneShapes.size();
@@ -191,8 +190,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     
     if (m_boxsel) {                                 // 显示框选半透明蓝色边框
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
-                          isIntersectMode(sender) ? kGiLineDash : kGiLineSolid, GiColor(0, 0, 255, 32));
-        
+                          isIntersectMode(sender) ? kGiLineDash : kGiLineSolid,
+                          GiColor(0, 0, 255, 32));
         bool antiAlias = gs->setAntiAliasMode(false);
         gs->drawRect(&ctxshap, Box2d(sender->startPointM, sender->pointM));
         gs->setAntiAliasMode(antiAlias);
@@ -395,9 +394,8 @@ bool MgCommandSelect::click(const MgMotion* sender)
             || (shape && shape->getID() != m_id);
 
         m_selIds.clear();                   // 清除选择集
-        if (shape) {
+        if (shape)
             m_selIds.push_back(shape->getID()); // 选中新图形
-        }
         m_id = shape ? shape->getID() : 0;
         
         m_ptNear = nearpt;
@@ -454,9 +452,8 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
         m_handleIndex = hitTestHandles(shape, m_ptNear, sender);
     }
     
-    if (m_cloneShapes.empty()) {
+    if (m_cloneShapes.empty())
         m_boxsel = true;
-    }
     m_boxHandle = 99;
     
     sender->view->redraw(m_cloneShapes.size() < 2);
@@ -491,11 +488,6 @@ Box2d MgCommandSelect::getDragRect(const MgMotion* sender)
     
     rcview.deflate(mgDisplayMmToModel(12, sender));
     selbox.intersectWith(rcview);
-    
-//     if (selbox.width() < mgDisplayMmToModel(2, sender)
-//         && selbox.height() < mgDisplayMmToModel(2, sender)) {
-//         selbox.empty();
-//     }
     
     return selbox;
 }
@@ -727,7 +719,7 @@ MgSelState MgCommandSelect::getSelectState(MgView* view)
     if (m_handleIndex > 0) {
         MgShape* shape = view->shapes()->findShape(m_id);
         state = shape && shape->shape()->isKindOf(MgBaseLines::Type()) ?
-        kMgSelVertex : kMgSelOneShape;
+            kMgSelVertex : kMgSelOneShape;
     }
     else if (!m_selIds.empty()) {
         state = m_selIds.size() > 1 ? kMgSelMultiShapes : kMgSelOneShape;
@@ -754,8 +746,9 @@ bool MgCommandSelect::selectAll(MgView* view)
     view->shapes()->freeIterator(it);
     view->redraw(false);
 
-    if (oldn != m_selIds.size() || !m_selIds.empty())
+    if (oldn != m_selIds.size() || !m_selIds.empty()) {
         view->selChanged();
+    }
     
     return oldn != m_selIds.size();
 }

@@ -6,74 +6,47 @@
 #include "mgcurv.h"
 #include "mglnrel.h"
 
+static Box2d computeCubicBox(const Point2d& pt1, const Point2d& pt2, 
+                             const Point2d& pt3, const Point2d& pt4);
+
+static inline Box2d computeCubicBox(const Point2d points[4])
+{
+    return computeCubicBox(points[0], points[1], points[2], points[3]);
+}
+
 GEOMAPI void mgBeziersBox(
     Box2d& box, Int32 count, const Point2d* points, bool closed)
 {
-    const int SPLITN = 8;
-    Point2d fits[SPLITN + 1];
-
     box.empty();
-    for (Int32 i = 0; i + 3 < count; i += 3)
-    {
-        for (int j = 1; j < SPLITN; j++)
-            mgFitBezier(points + i, 1.f / SPLITN * j, fits[j]);
-        fits[0] = points[i];
-        fits[SPLITN] = points[i+3];
-        box.unionWith(Box2d(SPLITN + 1, fits));
+
+    for (Int32 i = 0; i + 3 < count; i += 3) {
+        box.unionWith(computeCubicBox(points + i));
     }
     if (closed && count > 3) {
-        Point2d pts[4] = {
-            points[count - 1],
+        box.unionWith(computeCubicBox(points[count - 1],
             points[count - 1] * 2 - points[count - 2].asVector(),
-            points[0] * 2 - points[1].asVector(),
-            points[0]
-        };
-        for (int j = 1; j < SPLITN; j++)
-            mgFitBezier(pts, 1.f / SPLITN * j, fits[j]);
-        fits[0] = pts[0];
-        fits[SPLITN] = pts[3];
-        box.unionWith(Box2d(SPLITN + 1, fits));
+            points[0] * 2 - points[1].asVector(), points[0]));
     }
 }
 
 GEOMAPI bool mgBeziersIntersectBox(
     const Box2d& box, Int32 count, const Point2d* points, bool closed)
 {
-    const int SPLITN = 32;
-    Point2d fits[SPLITN + 1];
-    
-    for (Int32 i = 0; i + 3 < count; i += 3)
-    {
-        for (int j = 1; j < SPLITN; j++)
-            mgFitBezier(points + i, 1.f / SPLITN * j, fits[j]);
-        fits[0] = points[i];
-        fits[SPLITN] = points[i+3];
-        if (box.isIntersect(Box2d(SPLITN + 1, fits)))
+    for (Int32 i = 0; i + 3 < count; i += 3) {
+        if (box.isIntersect(computeCubicBox(points + i))) {
             return true;
+        }
     }
     if (closed && count > 3) {
-        Point2d pts[4] = {
-            points[count - 1],
+        if (box.isIntersect(computeCubicBox(points[count - 1],
             points[count - 1] * 2 - points[count - 2].asVector(),
-            points[0] * 2 - points[1].asVector(),
-            points[0]
-        };
-        for (int j = 1; j < SPLITN; j++)
-            mgFitBezier(pts, 1.f / SPLITN * j, fits[j]);
-        fits[0] = pts[0];
-        fits[SPLITN] = pts[3];
-        if (box.isIntersect(Box2d(SPLITN + 1, fits)))
+            points[0] * 2 - points[1].asVector(), points[0])))
+        {
             return true;
+        }
     }
     
     return false;
-}
-
-static Box2d mgBeziersBox2(const Point2d* points, Int32 count = 4)
-{
-    Box2d box;
-    mgBeziersBox(box, count, points);
-    return box;
 }
 
 GEOMAPI void mgCubicSplinesBox(
@@ -85,11 +58,10 @@ GEOMAPI void mgCubicSplinesBox(
     box.empty();
     for (Int32 i = 0; i + 1 < n2; i++)
     {
-        Point2d pts[4] = { knots[i], 
+        box.unionWith(computeCubicBox(knots[i], 
             knots[i] + knotvs[i] / 3.f, 
             knots[(i + 1) % n] - knotvs[(i + 1) % n] / 3.f, 
-            knots[(i + 1) % n] };
-        box.unionWith(mgBeziersBox2(pts));
+            knots[(i + 1) % n]));
     }
 }
 
@@ -126,7 +98,7 @@ GEOMAPI float mgCubicSplinesHit(
     for (Int32 i = 0; i + 1 < n2; i++)
     {
         mgCubicSplineToBezier(n, knots, knotvs, i, pts);
-        if (rect.isIntersect(mgBeziersBox2(pts)))
+        if (rect.isIntersect(computeCubicBox(pts)))
         {
             mgNearestOnBezier(pt, pts, ptTemp);
             dDist = pt.distanceTo(ptTemp);
@@ -355,4 +327,60 @@ GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 index, const Point2d& pt)
     {
         rect.set(pts[3].x, pts[2].y, pts[1].x, pts[0].y);
     }
+}
+
+// computeCubicBaseValue, computeCubicFirstDerivativeRoots, computeCubicBox
+// © 2011 Mike "Pomax" Kamermans of nihongoresources.com
+// http://processingjs.nihongoresources.com/bezierinfo/#bounds
+
+// compute the value for the cubic bezier function at time=t
+static float computeCubicBaseValue(float t, float a, float b, float c, float d) {
+    float v = 1-t, v2 = v*v, t2 = t*t;
+    return v2*v*a + 3*v2*t*b + 3*v*t2*c + t2*t*d;
+}
+
+// compute the value for the first derivative of the cubic bezier function at time=t
+static Point2d computeCubicFirstDerivativeRoots(float a, float b, float c, float d) {
+    Point2d ret (-1, -1);
+    float tl = -a+2*b-c;
+    float tr = -(float)sqrt(-a*(c-d) + b*b - b*(c+d) +c*c);
+    float dn = -a+3*b-3*c+d;
+    if (dn != 0) {
+        ret.x = (tl+tr)/dn;
+        ret.y = (tl-tr)/dn;
+    }
+    return ret;
+}
+
+// Compute the bounding box based on the straightened curve, for best fit
+Box2d computeCubicBox(const Point2d& pt1, const Point2d& pt2, 
+                      const Point2d& pt3, const Point2d& pt4)
+{
+    Box2d bbox(pt1, pt4);
+
+    // find the zero point for x and y in the derivatives
+    Point2d ts = computeCubicFirstDerivativeRoots(pt1.x, pt2.x, pt3.x, pt4.x);
+    if (ts.x>=0 && ts.x<=1) {
+        float x = computeCubicBaseValue(ts.x, pt1.x, pt2.x, pt3.x, pt4.x);
+        if (x < bbox.xmin) bbox.xmin = x;
+        if (x > bbox.xmax) bbox.xmax = x;
+    }
+    if (ts.y>=0 && ts.y<=1) {
+        float x = computeCubicBaseValue(ts.y, pt1.x, pt2.x, pt3.x, pt4.x);
+        if (x < bbox.xmin) bbox.xmin = x;
+        if (x > bbox.xmax) bbox.xmax = x;
+    }
+    ts = computeCubicFirstDerivativeRoots(pt1.y, pt2.y, pt3.y, pt4.y);
+    if (ts.x>=0 && ts.x<=1) {
+        float y = computeCubicBaseValue(ts.x, pt1.y, pt2.y, pt3.y, pt4.y);
+        if (y < bbox.ymin) bbox.ymin = y;
+        if (y > bbox.ymax) bbox.ymax = y;
+    }
+    if (ts.y>=0 && ts.y<=1) {
+        float y = computeCubicBaseValue(ts.y, pt1.y, pt2.y, pt3.y, pt4.y);
+        if (y < bbox.ymin) bbox.ymin = y;
+        if (y > bbox.ymax) bbox.ymax = y;
+    }
+
+    return bbox;
 }
