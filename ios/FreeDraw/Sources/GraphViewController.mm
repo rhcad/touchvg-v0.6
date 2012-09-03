@@ -56,6 +56,15 @@ void registerTransformCmd();
 #endif
 }
 
+- (BOOL)shapeCanTransform {
+    return NO;
+}
+
+- (BOOL)shapeCanMoveVertex {
+    GiMagnifierView *magnifierView = (GiMagnifierView*)self.magnifierView;
+    return !(magnifierView.lockRedraw);
+}
+
 @end
 
 @implementation GraphViewController
