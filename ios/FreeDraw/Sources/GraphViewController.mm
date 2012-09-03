@@ -264,7 +264,9 @@ void registerTransformCmd();
     [super viewDidLoad];
     [self colorBtnPress:yellowbtn];
     
+#ifdef ADD_TRANSFORM_COMMAND
     registerTransformCmd();
+#endif
 }
 
 - (IBAction)lockMagnifier:(id)sender
@@ -366,19 +368,24 @@ void registerTransformCmd();
             [redBtn setImage:[UIImage imageNamed:@"redbrush1.png"] forState: UIControlStateNormal]; // 切换至红色画笔
             _graphc.commandName = "lines";
             _graphc.lineColor = [UIColor redColor];
+#ifdef ADD_TRANSFORM_COMMAND
             _graphc.commandName = "xfdemo";     // transform demo command
+#endif
+            _graphc.commandName = "line";
 			break;
 		case kBlueTag:
 		    [self showUnlightButtons];
             [blueBtn setImage:[UIImage imageNamed:@"bluebrush1.png"] forState: UIControlStateNormal]; // 切换至蓝色画笔
             _graphc.commandName = "splines";
             _graphc.lineColor = [UIColor blueColor];
+            _graphc.commandName = "rect";
 			break;
         case kYellowTag:
 		    [self showUnlightButtons];
             [yellowbtn setImage:[UIImage imageNamed:@"yellowbrush1.png"] forState: UIControlStateNormal]; // 切换至黄色画笔
             _graphc.commandName = "splines";
             _graphc.lineColor = [UIColor yellowColor];
+            _graphc.commandName = "triangle";
 			break;
 		case kLineTag:              // 画直线
             _graphc.lineStyle = 0;

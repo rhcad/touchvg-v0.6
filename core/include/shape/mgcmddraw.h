@@ -50,6 +50,7 @@ protected:
 protected:
     UInt32 getStep() { return m_step; }
     MgShape* dynshape() { return m_shape; }
+    Point2d autoAlignPoint(const MgMotion* sender);
     
 protected:
     UInt32      m_step;

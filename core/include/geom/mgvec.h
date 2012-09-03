@@ -182,17 +182,14 @@ public:
     }
 #endif // SWIG
     
-    //! 矢量角度, 与X轴的夹角, [0, PI)
-    /*!
-        从+X轴方向逆时针旋转到本矢量所在方向时为正，顺时针为负
-    */
+    //! 矢量与X轴的夹角, [0, PI)
     float angle() const
     {
         float len = mgHypot(x, y);
         return len < _MGZERO ? 0 : acos(x / len);
     }
     
-    //! 矢量角度, 从X轴逆时针方向为正, [-PI, PI)
+    //! 矢量角度, [-PI, PI), 从X轴逆时针方向为正, 顺时针为负
     float angle2() const
     {
         return (mgIsZero(x) && mgIsZero(y)) ? 0 : atan2(y, x);
