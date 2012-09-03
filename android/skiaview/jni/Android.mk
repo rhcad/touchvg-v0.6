@@ -42,6 +42,7 @@ LOCAL_SRC_FILES  := GiSkiaView.cpp \
                     $(SRC_PATH)/shape/mgdrawlines.cpp \
                     $(SRC_PATH)/shape/mgdrawrect.cpp \
                     $(SRC_PATH)/shape/mgdrawsplines.cpp \
+                    $(SRC_PATH)/shape/mgdrawtriang.cpp \
                     $(SRC_PATH)/shape/mgellipse.cpp \
                     $(SRC_PATH)/shape/mgline.cpp \
                     $(SRC_PATH)/shape/mglines.cpp \

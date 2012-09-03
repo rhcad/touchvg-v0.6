@@ -75,6 +75,8 @@
 		AE6FDB8D1586D8AD0006DB27 /* mgdrawline.h in Headers */ = {isa = PBXBuildFile; fileRef = AE6FDB8B1586D8AD0006DB27 /* mgdrawline.h */; };
 		AEA2259815B3BC7600A5173F /* mgcmddraw.h in Headers */ = {isa = PBXBuildFile; fileRef = AEA2259715B3BC7600A5173F /* mgcmddraw.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AEE676E515772A9600375ABD /* GiZoom.h in Headers */ = {isa = PBXBuildFile; fileRef = AEE676E415772A9600375ABD /* GiZoom.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AEE9B63B15F48AA500F0EC7B /* mgdrawtriang.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AEE9B63915F48AA500F0EC7B /* mgdrawtriang.cpp */; };
+		AEE9B63C15F48AA500F0EC7B /* mgdrawtriang.h in Headers */ = {isa = PBXBuildFile; fileRef = AEE9B63A15F48AA500F0EC7B /* mgdrawtriang.h */; };
 		C9A7F8C2146B30C300597DF0 /* ioscanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A7F8C1146B30C300597DF0 /* ioscanvas.cpp */; };
 		C9A7F8C5146B30E300597DF0 /* ioscanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C4146B30E200597DF0 /* ioscanvas.h */; settings = {ATTRIBUTES = (); }; };
 		C9A7F8C7146B320E00597DF0 /* gigraph_.h in Headers */ = {isa = PBXBuildFile; fileRef = C9A7F8C6146B320E00597DF0 /* gigraph_.h */; };
@@ -179,6 +181,8 @@
 		AE6FDB8B1586D8AD0006DB27 /* mgdrawline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgdrawline.h; path = ../../core/src/shape/mgdrawline.h; sourceTree = "<group>"; };
 		AEA2259715B3BC7600A5173F /* mgcmddraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgcmddraw.h; path = ../../core/include/shape/mgcmddraw.h; sourceTree = "<group>"; };
 		AEE676E415772A9600375ABD /* GiZoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiZoom.h; path = Headers/GiZoom.h; sourceTree = "<group>"; };
+		AEE9B63915F48AA500F0EC7B /* mgdrawtriang.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgdrawtriang.cpp; path = ../../core/src/shape/mgdrawtriang.cpp; sourceTree = "<group>"; };
+		AEE9B63A15F48AA500F0EC7B /* mgdrawtriang.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgdrawtriang.h; path = ../../core/src/shape/mgdrawtriang.h; sourceTree = "<group>"; };
 		C9A7F8C1146B30C300597DF0 /* ioscanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ioscanvas.cpp; path = Sources/ioscanvas.cpp; sourceTree = "<group>"; };
 		C9A7F8C4146B30E200597DF0 /* ioscanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioscanvas.h; path = Headers/ioscanvas.h; sourceTree = "<group>"; };
 		C9A7F8C6146B320E00597DF0 /* gigraph_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gigraph_.h; path = ../../core/include/graph/gigraph_.h; sourceTree = "<group>"; };
@@ -425,6 +429,8 @@
 		C9D632431450CAC300A3CC75 /* shape */ = {
 			isa = PBXGroup;
 			children = (
+				AEE9B63915F48AA500F0EC7B /* mgdrawtriang.cpp */,
+				AEE9B63A15F48AA500F0EC7B /* mgdrawtriang.h */,
 				9DB0D91015242EE500326A5E /* mgcmderase.cpp */,
 				9DB0D91115242EE600326A5E /* mgcmderase.h */,
 				9DF6A484151C02CC001C1468 /* mgcmddraw.cpp */,
@@ -506,6 +512,7 @@
 				7E8F78E4147DC5C30045A730 /* iosgraph.h in Headers */,
 				2752EE8F1559172400F0CCDD /* GiCmdController.h in Headers */,
 				AE6FDB8D1586D8AD0006DB27 /* mgdrawline.h in Headers */,
+				AEE9B63C15F48AA500F0EC7B /* mgdrawtriang.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,6 +646,7 @@
 				2752EE921559172400F0CCDD /* GiMagnifierView.mm in Sources */,
 				2752EE931559172400F0CCDD /* GiViewController.mm in Sources */,
 				AE6FDB8C1586D8AD0006DB27 /* mgdrawline.cpp in Sources */,
+				AEE9B63B15F48AA500F0EC7B /* mgdrawtriang.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

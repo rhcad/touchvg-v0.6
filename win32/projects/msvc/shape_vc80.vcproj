@@ -183,6 +183,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\src\shape\mgdrawtriang.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\src\shape\mgellipse.cpp"
 				>
 			</File>
@@ -253,6 +257,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\src\shape\mgdrawsplines.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\src\shape\mgdrawtriang.h"
 				>
 			</File>
 			<File

@@ -79,6 +79,7 @@ private:
     Int32                   m_segment;          // 点中的是图行上的哪部分
     UInt32                  m_handleIndex;      // 点中的是哪个控制点
     UInt32                  m_boxHandle;        // 选中框的活动控制点序号
+    bool                    m_handleMode;       // 控制点修改模式
     bool                    m_insertPoint;      // 是否可插入新点
     bool                    m_showSel;          // 是否亮显选中的图形
     bool                    m_boxsel;           // 是否开始框选

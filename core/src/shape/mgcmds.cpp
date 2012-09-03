@@ -10,6 +10,7 @@
 #include "mgdrawline.h"
 #include "mgdrawlines.h"
 #include "mgdrawsplines.h"
+#include "mgdrawtriang.h"
 #include <mgbasicsp.h>
 #include <mgshapet.h>
 
@@ -193,6 +194,7 @@ MgCommand* mgCreateCommand(const char* name)
         { MgCmdDrawLine::Name(), MgCmdDrawLine::Create },
         { MgCmdDrawLines::Name(), MgCmdDrawLines::Create },
         { MgCmdDrawSplines::Name(), MgCmdDrawSplines::Create },
+        { MgCmdDrawTriangle::Name(), MgCmdDrawTriangle::Create },
     };
 
     for (unsigned i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++)
