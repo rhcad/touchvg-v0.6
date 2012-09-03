@@ -72,7 +72,7 @@ private:
     
 private:
     std::vector<UInt32>     m_selIds;           // 选中的图形的ID
-    std::vector<MgShape*>   m_cloneShapes;      // 选中图形的复制对象
+    std::vector<MgShape*>   m_clones;           // 选中图形的复制对象
     UInt32                  m_id;               // 选中图形的ID
     Point2d                 m_ptNear;           // 图形上的最近点
     Point2d                 m_ptSnap;           // 捕捉点
@@ -80,7 +80,7 @@ private:
     UInt32                  m_handleIndex;      // 点中的是哪个控制点
     UInt32                  m_boxHandle;        // 选中框的活动控制点序号
     bool                    m_handleMode;       // 控制点修改模式
-    bool                    m_insertPoint;      // 是否可插入新点
+    bool                    m_insertPt;         // 是否可插入新点
     bool                    m_showSel;          // 是否亮显选中的图形
     bool                    m_boxsel;           // 是否开始框选
 };

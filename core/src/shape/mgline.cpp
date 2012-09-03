@@ -91,30 +91,6 @@ bool MgLine::_draw(GiGraphics& gs, const GiContext& ctx) const
     return __super::_draw(gs, ctx) || ret;
 }
 
-UInt32 MgLine::_getHandleCount() const
-{
-    return 3;
-}
-
-Point2d MgLine::_getHandlePoint(UInt32 index) const
-{
-    return 1 == index ? center() : _points[index ? 1 : 0];
-}
-
-bool MgLine::_setHandlePoint(UInt32 index, const Point2d& pt, float)
-{
-    if (1 == index) {
-        Vector2d off(pt - center());
-        _points[0] += off;
-        _points[1] += off;
-    }
-    else {
-        _points[index ? 1 : 0] = pt;
-    }
-    update();
-    return true;
-}
-
 bool MgLine::_save(MgStorage* s) const
 {
     s->writeFloatArray("points", &(_points[0].x), 4);

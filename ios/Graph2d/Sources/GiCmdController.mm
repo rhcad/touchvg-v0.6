@@ -28,9 +28,11 @@ private:
     
 public:
     BOOL            _dynChanged;
+    BOOL            _lockVertex;
     
     MgViewProxy(id owner, UIView** views) : _owner(owner)
-        , _curview(Nil), _mainview(Nil), _auxviews(views), _dynChanged(NO)
+        , _curview(Nil), _mainview(Nil), _auxviews(views)
+        , _dynChanged(NO), _lockVertex(false)
     {
         _pointImages[0] = nil;
         _pointImages[1] = nil;
@@ -46,17 +48,40 @@ public:
     
     void setView(id<GiView> gv) {
         _curview = gv;
-        if (!_mainview)
+        if (!_mainview) {
             _mainview = gv;
+        }
     }
     
 private:
     MgShapes* shapes() { return [_curview shapes]; }
     GiTransform* xform() { return [_curview xform]; }
     GiGraphics* graph() { return [_curview graph]; }
-    bool shapeWillAdded(MgShape* shape) { return true; }
-    bool shapeWillDeleted(MgShape* shape) { return true; }
-    bool shapeCanRotated(MgShape*) { return true; }
+    bool shapeWillAdded(MgShape* shape) {
+        NSObject* obj = _mainview.ownerView.nextResponder;
+        return (![obj respondsToSelector:@selector(shapeWillAdded)]
+                || [obj performSelector:@selector(shapeWillAdded)]);
+    }
+    bool shapeWillDeleted(MgShape* shape) {
+        NSObject* obj = _mainview.ownerView.nextResponder;
+        return (![obj respondsToSelector:@selector(shapeWillDeleted)]
+                || [obj performSelector:@selector(shapeWillDeleted)]);
+    }
+    bool shapeCanRotated(MgShape*) {
+        NSObject* obj = _mainview.ownerView.nextResponder;
+        return (![obj respondsToSelector:@selector(shapeCanRotated)]
+                || [obj performSelector:@selector(shapeCanRotated)]);
+    }
+    bool shapeCanTransform(MgShape*) {
+        NSObject* obj = _mainview.ownerView.nextResponder;
+        return (![obj respondsToSelector:@selector(shapeCanTransform)]
+                || [obj performSelector:@selector(shapeCanTransform)]);
+    }
+    bool shapeCanMoveVertex(MgShape*, UInt32) {
+        NSObject* obj = _mainview.ownerView.nextResponder;
+        return (![obj respondsToSelector:@selector(shapeCanMoveVertex)]
+                || [obj performSelector:@selector(shapeCanMoveVertex)]);
+    }
     
     void regen() {
         [_mainview regen];
@@ -87,6 +112,10 @@ private:
                 id<GiView> gv = (id<GiView>)_auxviews[i];
                 [gv shapeAdded:shape];
             }
+        }
+        NSObject* obj = _mainview.ownerView.nextResponder;
+        if ([obj respondsToSelector:@selector(shapeAdded)]) {
+            [obj performSelector:@selector(shapeAdded)];
         }
     }
     

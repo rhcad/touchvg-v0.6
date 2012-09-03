@@ -26,6 +26,7 @@ struct MgView {
         return shapes()->context(); }
     virtual bool useFinger() { return true; }   //!< 使用手指或鼠标交互
     virtual void selChanged() {}                //!< 选择集改变的通知
+    
     virtual bool shapeWillAdded(MgShape* shape) {       //!< 通知将添加图形
         return !!shape; }
     virtual void shapeAdded(MgShape* shape) {           //!< 通知已添加图形，由视图重新构建显示
@@ -34,8 +35,13 @@ struct MgView {
         return !!shape; }
     virtual bool shapeCanRotated(MgShape* shape) {      //!< 通知是否能旋转图形
         return !!shape; }
+    virtual bool shapeCanTransform(MgShape* shape) {    //!< 通知是否能对图形变形
+        return !!shape; }
+    virtual bool shapeCanMoveVertex(MgShape* shape, UInt32 index) { //!< 通知是否能移动图形顶点
+        return !!shape && index<999; }
     virtual void shapeMoved(MgShape* shape, int segment) {  //!< 通知图形已拖动
         if (shape) segment=1; }
+    
     virtual bool longPressSelection(int selState) {     //!< 选择状态下长按, MgSelState
         return selState==-1; }
     virtual bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) {  //!< 显示控制点
