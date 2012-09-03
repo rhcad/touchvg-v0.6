@@ -55,3 +55,13 @@ bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
 
     return _touchEnded(sender);
 }
+
+bool MgCmdDrawEllipse::initialize(const MgMotion* sender)
+{
+    return _initialize(MgShapeT<MgEllipse>::create, sender);
+}
+
+bool MgCmdDrawDiamond::initialize(const MgMotion* sender)
+{
+    return _initialize(MgShapeT<MgDiamond>::create, sender);
+}

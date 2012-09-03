@@ -33,4 +33,32 @@ private:
     virtual bool touchEnded(const MgMotion* sender);
 };
 
+//! 椭圆绘图命令类
+/*! \ingroup GEOM_SHAPE
+    \see MgEllipse
+*/
+class MgCmdDrawEllipse : public MgCmdDrawRect
+{
+public:
+    static const char* Name() { return "ellipse"; }
+    static MgCommand* Create() { return new MgCmdDrawEllipse; }
+    
+private:
+    virtual bool initialize(const MgMotion* sender);
+};
+
+//! 菱形绘图命令类
+/*! \ingroup GEOM_SHAPE
+    \see MgDiamond
+*/
+class MgCmdDrawDiamond : public MgCmdDrawRect
+{
+public:
+    static const char* Name() { return "diamond"; }
+    static MgCommand* Create() { return new MgCmdDrawDiamond; }
+    
+private:
+    virtual bool initialize(const MgMotion* sender);
+};
+
 #endif // __GEOMETRY_MGCOMMAND_DRAW_RECT_H_

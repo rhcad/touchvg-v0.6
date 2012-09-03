@@ -27,12 +27,15 @@
 #define ID_INDICATOR_X                  32801
 #define ID_INDICATOR_Y                  32802
 #define ID_INDICATOR_VIEWSCALE          32803
-#define ID_CMD_SELECT                   32811
+#define ID_CMD_SELECT                   32810
+#define ID_CMD_ERASE                    32811
 #define ID_CMD_LINE                     32812
 #define ID_CMD_RECT                     32813
 #define ID_CMD_ELLIPSE                  32814
-#define ID_CMD_LINES                    32815
-#define ID_CMD_SPLINES                  32816
+#define ID_CMD_TRIANGLE                 32815
+#define ID_CMD_DIAMOND                  32816
+#define ID_CMD_LINES                    32817
+#define ID_CMD_SPLINES                  32818
 
 // Next default values for new objects
 // 

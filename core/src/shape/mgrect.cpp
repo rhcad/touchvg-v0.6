@@ -214,3 +214,68 @@ bool MgRect::_draw(GiGraphics& gs, const GiContext& ctx) const
     bool ret = gs.drawPolygon(&ctx, 4, _points);
     return __super::_draw(gs, ctx) || ret;
 }
+
+// MgDiamond
+//
+
+MG_IMPLEMENT_CREATE(MgDiamond)
+
+MgDiamond::MgDiamond()
+{
+}
+
+MgDiamond::~MgDiamond()
+{
+}
+
+Point2d MgDiamond::_getPoint(UInt32 index) const
+{
+    return MgBaseRect::_getHandlePoint(4 + index % 4);
+}
+
+void MgDiamond::_setPoint(UInt32 index, const Point2d& pt)
+{
+    MgBaseRect::_setHandlePoint(4 + index, pt, _MGZERO);
+}
+
+UInt32 MgDiamond::_getHandleCount() const
+{
+    return 4;
+}
+
+Point2d MgDiamond::_getHandlePoint(UInt32 index) const
+{
+    return MgBaseShape::_getHandlePoint(index);
+}
+
+bool MgDiamond::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
+{
+    return MgBaseShape::_setHandlePoint(index, pt, tol);
+}
+
+float MgDiamond::_hitTest(const Point2d& pt, float tol, 
+                          Point2d& nearpt, Int32& segment) const
+{
+    Point2d pts[] = { _getPoint(0), _getPoint(1), _getPoint(2), _getPoint(3) };
+    return mgLinesHit(4, pts, true, pt, tol, nearpt, segment);
+}
+
+bool MgDiamond::_hitTestBox(const Box2d& rect) const
+{
+    if (!__super::_hitTestBox(rect))
+        return false;
+    
+    for (int i = 0; i < 3; i++) {
+        if (Box2d(_getPoint(i), _getPoint(i + 1)).isIntersect(rect))
+            return true;
+    }
+    
+    return false;
+}
+
+bool MgDiamond::_draw(GiGraphics& gs, const GiContext& ctx) const
+{
+    Point2d pts[] = { _getPoint(0), _getPoint(1), _getPoint(2), _getPoint(3) };
+    bool ret = gs.drawPolygon(&ctx, 4, pts);
+    return __super::_draw(gs, ctx) || ret;
+}

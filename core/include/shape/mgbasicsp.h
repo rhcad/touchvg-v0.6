@@ -168,6 +168,22 @@ protected:
     float      _ry;
 };
 
+//! 菱形图形类
+/*! \ingroup GEOM_SHAPE
+*/
+class MgDiamond : public MgBaseRect
+{
+    MG_INHERIT_CREATE(MgDiamond, MgBaseRect, 14)
+protected:
+    Point2d _getPoint(UInt32 index) const;
+    void _setPoint(UInt32 index, const Point2d& pt);
+    UInt32 _getHandleCount() const;
+    Point2d _getHandlePoint(UInt32 index) const;
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
+    bool _hitTestBox(const Box2d& rect) const;
+};
+
 //! 折线基类
 /*! \ingroup GEOM_SHAPE
 */

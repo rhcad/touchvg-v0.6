@@ -82,6 +82,8 @@ const char* CDrawShapeView::getCmdName(UINT nID) const
 {
     if (nID == ID_CMD_SELECT)
         return "select";
+    if (nID == ID_CMD_ERASE)
+        return "erase";
     if (nID == ID_CMD_LINE)
         return "line";
     if (nID == ID_CMD_RECT)
@@ -92,6 +94,10 @@ const char* CDrawShapeView::getCmdName(UINT nID) const
         return "lines";
     if (nID == ID_CMD_SPLINES)
         return "splines";
+    if (nID == ID_CMD_TRIANGLE)
+        return "triangle";
+    if (nID == ID_CMD_DIAMOND)
+        return "diamond";
     return "";
 }
 

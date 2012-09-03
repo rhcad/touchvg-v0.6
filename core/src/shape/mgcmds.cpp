@@ -191,6 +191,8 @@ MgCommand* mgCreateCommand(const char* name)
         { MgCommandSelect::Name(), MgCommandSelect::Create },
         { MgCommandErase::Name(), MgCommandErase::Create },
         { MgCmdDrawRect::Name(), MgCmdDrawRect::Create },
+        { MgCmdDrawEllipse::Name(), MgCmdDrawEllipse::Create },
+        { MgCmdDrawDiamond::Name(), MgCmdDrawDiamond::Create },
         { MgCmdDrawLine::Name(), MgCmdDrawLine::Create },
         { MgCmdDrawLines::Name(), MgCmdDrawLines::Create },
         { MgCmdDrawSplines::Name(), MgCmdDrawSplines::Create },
