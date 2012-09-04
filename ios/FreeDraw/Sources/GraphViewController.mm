@@ -105,7 +105,7 @@ void registerTransformCmd();
     viewFrame.size.height -= BAR_HEIGHT;            // 减去底部按钮栏高度
     
 #ifdef USE_MAGNIFIER
-    CGRect magFrame = CGRectMake(10, 10, 250, 200);
+    CGRect magFrame = CGRectMake(10, 10, 260, 200);
 #ifdef MAG_AT_BOTTOM
     viewFrame.size.height -= magFrame.size.height;  // 放大镜单独占一横条
     barFrame.origin.y += magFrame.size.height;      // 底部按钮栏往下移
@@ -124,7 +124,7 @@ void registerTransformCmd();
     // 创建容纳放大镜视图的容器视图
 #ifdef USE_MAGNIFIER
     UIView *magView = [[UIView alloc]initWithFrame:magFrame];
-    magView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.6f alpha:0.7f];
+    magView.backgroundColor = [UIColor colorWithRed:0.6f green:0.7f blue:0.8f alpha:0.7f];
     [self.view addSubview:magView];
 #ifdef MAG_AT_BOTTOM
     magView.autoresizingMask = (UIViewAutoresizingFlexibleWidth
@@ -273,9 +273,8 @@ void registerTransformCmd();
     [super viewDidLoad];
     [self colorBtnPress:yellowbtn];
     
-#ifdef ADD_TRANSFORM_COMMAND
     registerTransformCmd();
-#endif
+    _graphc.commandName = "splines";
 }
 
 - (IBAction)lockMagnifier:(id)sender
@@ -375,36 +374,74 @@ void registerTransformCmd();
 		case kRedTag:
 			[self showUnlightButtons];
             [redBtn setImage:[UIImage imageNamed:@"redbrush1.png"] forState: UIControlStateNormal]; // 切换至红色画笔
-            _graphc.commandName = "lines";
+            _graphc.commandName = "splines";
             _graphc.lineColor = [UIColor redColor];
-#ifdef ADD_TRANSFORM_COMMAND
-            _graphc.commandName = "xfdemo";     // transform demo command
-#endif
-            _graphc.commandName = "line";
+            [self selectCommand:sender];
 			break;
 		case kBlueTag:
 		    [self showUnlightButtons];
             [blueBtn setImage:[UIImage imageNamed:@"bluebrush1.png"] forState: UIControlStateNormal]; // 切换至蓝色画笔
-            _graphc.commandName = "splines";
             _graphc.lineColor = [UIColor blueColor];
-            _graphc.commandName = "rect";
 			break;
         case kYellowTag:
 		    [self showUnlightButtons];
             [yellowbtn setImage:[UIImage imageNamed:@"yellowbrush1.png"] forState: UIControlStateNormal]; // 切换至黄色画笔
-            _graphc.commandName = "splines";
             _graphc.lineColor = [UIColor yellowColor];
-            _graphc.commandName = "triangle";
 			break;
 		case kLineTag:              // 画直线
             _graphc.lineStyle = 0;
 			break;
 		case kDashLineTag:          // 画虚线
-            _graphc.lineStyle = 1;
+            _graphc.lineStyle++;
+            if (_graphc.lineStyle > 4)
+                _graphc.lineStyle = 1;
 			break;
 		default:
 			break;
 	}
+}
+
+- (IBAction)selectCommand:(id)sender    // 选择绘图命令
+{
+    CGRect viewrect = CGRectMake(0, 0, 136, 376);
+    viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
+    viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _graphc.downview.frame.size.height - 20;
+    
+	SCCalloutView *calloutView = [[SCCalloutView alloc]initWithFrame:viewrect];
+    [self.view addSubview:calloutView];
+    [calloutView release];
+    calloutView.backgroundColor = [UIColor darkGrayColor];
+    
+    struct { NSString* caption; NSString* name; } cmds[] = {
+        { @"直线段",   @"line" }, 
+        { @"矩形",    @"rect" },
+        { @"正方形",   @"square" },
+        { @"椭圆",    @"ellipse" },
+        { @"圆",     @"circle" },
+        { @"三角形",   @"triangle" },
+        { @"棱形",    @"diamond" },
+        { @"折线",    @"lines" },
+        { @"曲线",    @"splines" },
+        { @"坐标系演示", @"xfdemo" },
+    };
+    const int count = sizeof(cmds) / sizeof(cmds[0]);
+    
+    float x = 8, y = 8, w = 120, h = 32;
+    for (int i = 0; i < count; i++, y += h + 4) {
+        UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(x, y, w, h)];
+        [btn setTitle:cmds[i].caption forState: UIControlStateNormal];
+        [btn setTitle:cmds[i].name forState: UIControlStateHighlighted];
+        [btn addTarget:self action:@selector(commandSelected:) forControlEvents:UIControlEventTouchUpInside];
+        [calloutView addSubview:btn];
+        [btn release];
+    }
+}
+
+- (IBAction)commandSelected:(id)sender  // 绘图命令已选择
+{
+    UIButton* btn = (UIButton*)sender;
+    _graphc.commandName = [btn titleForState:UIControlStateHighlighted].UTF8String;
+    [btn.superview removeFromSuperview];
 }
 
 - (IBAction)lineWidthChange:(id)sender // 线条宽度调整
@@ -414,7 +451,7 @@ void registerTransformCmd();
     _graphc.strokeWidth = slider.value * 20;
 #else
     _graphc.lineWidth = 500.0f * slider.value;
-#endif 
+#endif
 }
 
 - (IBAction)alphaChange:(id)sender  // 透明度调整

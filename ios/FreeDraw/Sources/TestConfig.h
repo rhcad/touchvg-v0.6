@@ -17,6 +17,3 @@
 
 // 定义AUTO_HIDE_CMDBAR时在触摸时自动隐藏命令按钮
 #define AUTO_HIDE_CMDBAR
-
-// 定义ADD_TRANSFORM_COMMAND时将添加坐标系测试命令
-//#define ADD_TRANSFORM_COMMAND

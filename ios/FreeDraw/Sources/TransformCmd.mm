@@ -5,7 +5,6 @@
 //
 
 #include <mgcmd.h>
-#ifdef ADD_TRANSFORM_COMMAND
 
 class TransformCmd : public MgBaseCommand
 {
@@ -172,5 +171,3 @@ bool TransformCmd::longPress(const MgMotion* sender)
 {
     return _lastCmd && _lastCmd->longPress(sender);
 }
-
-#endif // ADD_TRANSFORM_COMMAND
