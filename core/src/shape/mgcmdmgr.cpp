@@ -7,6 +7,7 @@
 
 static MgCmdManagerImpl s_cmds;
 MgCommand* mgCreateCommand(const char* name);
+float mgDisplayMmToModel(float mm, const MgMotion* sender);
 
 MgCommandManager* mgGetCommandManager()
 {
@@ -106,4 +107,40 @@ MgSelection* MgCmdManagerImpl::getSelection(MgView* view)
 {
     return view && _cmdname == MgCommandSelect::Name()
         ? (MgCommandSelect*)getCommand() : NULL;
+}
+
+int MgCmdManagerImpl::snapHandlePoint(MgMotion* sender, float mm)
+{
+    if (!sender || !sender->view)
+        return -1;
+    
+    Box2d snapbox(Box2d(sender->point, 2 * mm, 0) * sender->view->xform()->displayToModel());
+    void* it = NULL;
+    float mindist = snapbox.width();
+    MgShape* spfound = NULL;
+    MgShape* exceptsp = NULL;
+    
+    for (MgShape* sp = sender->view->shapes()->getFirstShape(it);
+         sp; sp = sender->view->shapes()->getNextShape(it)) {
+        
+        if (sp != exceptsp && sp->shape()->getExtent().isIntersect(snapbox)) {
+            UInt32 n = sp->shape()->getHandleCount();
+            for (UInt32 i = 0; i < n; i++) {
+                Point2d pnt(sp->shape()->getHandlePoint(i));
+                float dist = pnt.distanceTo(snapbox.center());
+                if (mindist > dist) {
+                    mindist = dist;
+                    spfound = sp;
+                    sender->pointM = pnt;
+                }
+            }
+        }
+    }
+    sender->view->shapes()->freeIterator(it);
+    
+    if (spfound) {
+        sender->point = sender->pointM * sender->view->xform()->modelToDisplay();
+    }
+    
+    return spfound ? 1 : -1;
 }

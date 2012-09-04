@@ -84,6 +84,8 @@ struct MgCommand {
     virtual bool touchMoved(const MgMotion* sender) = 0;    //!< 正在滑动
     virtual bool touchEnded(const MgMotion* sender) = 0;    //!< 滑动结束
     virtual bool mouseHover(const MgMotion*) { return false; }; //!< 鼠标掠过
+protected:
+    virtual MgShape* getCurrentShape(const MgMotion*) { return NULL; }; //!< 获得当前图形
 };
 
 //! 命令接口的默认实现，可以以此派生新命令类
@@ -140,6 +142,9 @@ struct MgCommandManager {
     
     //! 返回选择集对象
     virtual MgSelection* getSelection(MgView* view) = 0;
+    
+    //! 捕捉图形特征点
+    virtual int snapHandlePoint(MgMotion* sender, float mm) = 0;
 };
 
 //! 返回命令管理器

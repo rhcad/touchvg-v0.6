@@ -29,10 +29,11 @@ private:
 public:
     BOOL            _dynChanged;
     BOOL            _lockVertex;
+    int             _snappedType;
     
     MgViewProxy(id owner, UIView** views) : _owner(owner)
         , _curview(Nil), _mainview(Nil), _auxviews(views)
-        , _dynChanged(NO), _lockVertex(false)
+        , _dynChanged(NO), _lockVertex(false), _snappedType(-1)
     {
         _pointImages[0] = nil;
         _pointImages[1] = nil;
@@ -155,6 +156,7 @@ static long s_cmdRef = 0;
 {
     _motion->point = Point2d(pt.x, pt.y);
     _motion->pointM = Point2d(pt.x, pt.y) * _motion->view->xform()->displayToModel();
+    _mgview->_snappedType = mgGetCommandManager()->snapHandlePoint(_motion, 5.f);
 }
 
 - (BOOL)getPointForPressDrag:(UIGestureRecognizer *)sender :(CGPoint*)point
@@ -358,6 +360,10 @@ static long s_cmdRef = 0;
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     if (cmd && _mgview->getView()) {
         cmd->draw(_motion, gs);
+    }
+    if (_mgview->_snappedType >= 0) {
+        GiContext ctx(0, GiColor(128, 128, 64, 200), kGiLineDot);
+        gs->drawEllipse(&ctx, _motion->pointM, gs->xf().displayToModel(5.f, true));
     }
     return YES;
 }

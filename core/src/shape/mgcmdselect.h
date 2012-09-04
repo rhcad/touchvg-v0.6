@@ -53,6 +53,7 @@ private:
     virtual bool touchEnded(const MgMotion* sender);
 
 private:
+    MgShape* getCurrentShape(const MgMotion* sender) { return getShape(m_id, sender); }
     UInt32 getStep() { return 0; }
     MgShape* hitTestAll(const MgMotion* sender, Point2d &nearpt, Int32 &segment);
     MgShape* getSelectedShape(const MgMotion* sender);

@@ -48,6 +48,7 @@ protected:
     virtual bool mouseHover(const MgMotion* sender);
     
 protected:
+    MgShape* getCurrentShape(const MgMotion*) { return m_shape; }
     UInt32 getStep() { return m_step; }
     MgShape* dynshape() { return m_shape; }
     Point2d autoAlignPoint(const MgMotion* sender);

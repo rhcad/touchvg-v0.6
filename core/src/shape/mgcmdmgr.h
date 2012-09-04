@@ -29,6 +29,7 @@ private:
     virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false);
     virtual bool dynamicChangeEnded(MgView* view, bool apply);
     virtual MgSelection* getSelection(MgView* view);
+    virtual int snapHandlePoint(MgMotion* sender, float mm);
 
 private:
     typedef std::map<std::string, MgCommand*> CMDS;
