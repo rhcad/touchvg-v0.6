@@ -74,13 +74,19 @@ public:
     bool isOrtho() const;
 
     //! 设置矩形
-    void setRect(const Box2d& rect, float angle = 0.0);
+    void setRect(const Point2d& pt1, const Point2d& pt2, float angle = 0.0);
 
     //! 设置四个角点
     void setRect(const Point2d points[4]);
 
     //! 设置中心点
     void setCenter(const Point2d& pt);
+    
+    //! 返回是否为方形
+    bool isSquare() const { return _square; }
+    
+    //! 设置是否为方形
+    void setSquare(bool square);
 
 protected:
     MgBaseRect();
@@ -104,6 +110,7 @@ protected:
 
 protected:
     Point2d     _points[4]; // 从左上角起顺时针的四个角点
+    bool        _square;    // 是否长宽相同
 };
 
 //! 矩形图形类

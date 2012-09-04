@@ -133,11 +133,12 @@ public:
         \param ctx 绘图参数，忽略填充参数，为NULL时取为上一个绘图参数
         \param count 点的个数，至少为4，必须为3的倍数加1
         \param points 控制点和端点的数组，点数为count
+        \param closed 是否闭合
         \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
         \return 是否显示成功。失败原因为参数错误或超出剪裁区域
     */
-    bool drawBeziers(const GiContext* ctx, 
-        int count, const Point2d* points, bool modelUnit = true);
+    bool drawBeziers(const GiContext* ctx, int count, const Point2d* points,
+                     bool closed = false, bool modelUnit = true);
 
     //! 绘制椭圆弧，模型坐标或世界坐标
     /*!

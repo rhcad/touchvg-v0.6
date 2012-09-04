@@ -34,7 +34,8 @@ void MgEllipse::setRadius(float rx, float ry)
     if (ry < _MGZERO)
         ry = rx;
 
-    setRect(Box2d(getCenter(), rx * 2, ry * 2), getAngle());
+    Box2d rect(getCenter(), rx * 2, ry * 2);
+    setRect(rect.leftTop(), rect.rightBottom(), getAngle());
 }
 
 void MgEllipse::_update()
@@ -94,7 +95,7 @@ bool MgEllipse::_draw(GiGraphics& gs, const GiContext& ctx) const
     }
     else
     {
-        ret = gs.drawBeziers(&ctx, 13, _bzpts);
+        ret = gs.drawBeziers(&ctx, 13, _bzpts, true);
     }
 
     return __super::_draw(gs, ctx) || ret;

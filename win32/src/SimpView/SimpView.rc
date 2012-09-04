@@ -106,7 +106,9 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "线段",                        ID_CMD_LINE
         MENUITEM "矩形",                        ID_CMD_RECT
+        MENUITEM "正方形",                      ID_CMD_SQUARE
         MENUITEM "椭圆",                        ID_CMD_ELLIPSE
+        MENUITEM "圆",                          ID_CMD_CIRCLE
         MENUITEM "菱形",                        ID_CMD_DIAMOND
         MENUITEM "三角形",                      ID_CMD_TRIANGLE
         MENUITEM "折线",                        ID_CMD_LINES
@@ -389,7 +391,9 @@ BEGIN
     ID_CMD_SELECT           "取消绘图命令，开始选择图形\n选择"
     ID_CMD_LINE             "绘制直线段\n线段"
     ID_CMD_RECT             "绘制矩形图形\n矩形"
+    ID_CMD_SQUARE           "绘制正方形图形\n正方形"
     ID_CMD_ELLIPSE          "绘制椭圆图形\n椭圆"
+    ID_CMD_CIRCLE           "绘制圆图形\n圆"
     ID_CMD_DIAMOND          "绘制菱形图形\n菱形"
     ID_CMD_TRIANGLE         "绘制三角形图形\n三角形"
     ID_CMD_LINES            "绘制折线图形\n折线"

@@ -51,11 +51,39 @@ private:
 /*! \ingroup GEOM_SHAPE
     \see MgDiamond
 */
-class MgCmdDrawDiamond : public MgCmdDrawRect
+class MgCmdDrawDiamond : public MgCmdDrawEllipse
 {
 public:
     static const char* Name() { return "diamond"; }
     static MgCommand* Create() { return new MgCmdDrawDiamond; }
+    
+private:
+    virtual bool initialize(const MgMotion* sender);
+};
+
+//! 椭圆绘图命令类
+/*! \ingroup GEOM_SHAPE
+    \see MgRect
+*/
+class MgCmdDrawSquare : public MgCmdDrawRect
+{
+public:
+    static const char* Name() { return "square"; }
+    static MgCommand* Create() { return new MgCmdDrawSquare; }
+    
+private:
+    virtual bool initialize(const MgMotion* sender);
+};
+
+//! 椭圆绘图命令类
+/*! \ingroup GEOM_SHAPE
+    \see MgEllipse
+*/
+class MgCmdDrawCircle : public MgCmdDrawEllipse
+{
+public:
+    static const char* Name() { return "circle"; }
+    static MgCommand* Create() { return new MgCmdDrawCircle; }
     
 private:
     virtual bool initialize(const MgMotion* sender);

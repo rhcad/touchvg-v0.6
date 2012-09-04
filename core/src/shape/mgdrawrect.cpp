@@ -27,7 +27,7 @@ bool MgCmdDrawRect::undo(bool &, const MgMotion* sender)
 bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
 {
     m_step = 1;
-    ((MgBaseRect*)dynshape()->shape())->setRect(Box2d(sender->pointM, sender->pointM));
+    ((MgBaseRect*)dynshape()->shape())->setRect(sender->pointM, sender->pointM);
     dynshape()->shape()->update();
 
     return _touchBegan(sender);
@@ -35,7 +35,7 @@ bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
 
 bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
 {
-    ((MgBaseRect*)dynshape()->shape())->setRect(Box2d(sender->startPointM, sender->pointM));
+    ((MgBaseRect*)dynshape()->shape())->setRect(sender->startPointM, sender->pointM);
     dynshape()->shape()->update();
 
     return _touchMoved(sender);
@@ -43,7 +43,7 @@ bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
 
 bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
 {
-    ((MgBaseRect*)dynshape()->shape())->setRect(Box2d(sender->startPointM, sender->pointM));
+    ((MgBaseRect*)dynshape()->shape())->setRect(sender->startPointM, sender->pointM);
     dynshape()->shape()->update();
 
     float minDist = mgDisplayMmToModel(1, sender);
@@ -64,4 +64,24 @@ bool MgCmdDrawEllipse::initialize(const MgMotion* sender)
 bool MgCmdDrawDiamond::initialize(const MgMotion* sender)
 {
     return _initialize(MgShapeT<MgDiamond>::create, sender);
+}
+
+bool MgCmdDrawSquare::initialize(const MgMotion* sender)
+{
+    bool ret = _initialize(MgShapeT<MgRect>::create, sender);
+    
+    MgBaseRect* rect = (MgBaseRect*)dynshape()->shape();
+    rect->setSquare(true);
+    
+    return ret;
+}
+
+bool MgCmdDrawCircle::initialize(const MgMotion* sender)
+{
+    bool ret = _initialize(MgShapeT<MgEllipse>::create, sender);
+    
+    MgBaseRect* rect = (MgBaseRect*)dynshape()->shape();
+    rect->setSquare(true);
+    
+    return ret;
 }

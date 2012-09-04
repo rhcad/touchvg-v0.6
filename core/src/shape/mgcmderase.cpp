@@ -78,7 +78,7 @@ void MgCommandErase::gatherShapes(const MgMotion* sender, MgShapes* shapes)
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
                           isIntersectMode(sender) ? kGiLineDash : kGiLineSolid, GiColor(0, 0, 255, 32));
         *shape.context() = ctxshap;
-        ((MgRect*)shape.shape())->setRect(Box2d(sender->startPointM, sender->pointM));
+        ((MgRect*)shape.shape())->setRect(sender->startPointM, sender->pointM);
         shapes->addShape(shape);
     }
 }

@@ -32,10 +32,12 @@
 #define ID_CMD_LINE                     32812
 #define ID_CMD_RECT                     32813
 #define ID_CMD_ELLIPSE                  32814
-#define ID_CMD_TRIANGLE                 32815
-#define ID_CMD_DIAMOND                  32816
-#define ID_CMD_LINES                    32817
-#define ID_CMD_SPLINES                  32818
+#define ID_CMD_SQUARE                   32815
+#define ID_CMD_CIRCLE                   32816
+#define ID_CMD_TRIANGLE                 32817
+#define ID_CMD_DIAMOND                  32818
+#define ID_CMD_LINES                    32819
+#define ID_CMD_SPLINES                  32820
 
 // Next default values for new objects
 // 

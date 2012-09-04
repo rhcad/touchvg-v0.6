@@ -420,7 +420,7 @@ bool GiGraphics::drawLines(const GiContext* ctx, int count,
 }
 
 bool GiGraphics::drawBeziers(const GiContext* ctx, int count, 
-                             const Point2d* points, bool modelUnit)
+                             const Point2d* points, bool closed, bool modelUnit)
 {
     if (m_impl->drawRefcnt == 0 || count < 4 || points == NULL)
         return false;
@@ -439,8 +439,22 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
     const Box2d extent (count, points);                 // 模型坐标范围
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
-
-    if (DRAW_MAXR(m_impl, modelUnit).contains(extent))  // 全部在显示区域内
+    
+    if (closed) {
+        pxpoints.resize(count);
+        pxs = &pxpoints.front();
+        for (i = 0; i < count; i++)
+            pxs[i] = points[i] * matD;
+        ret = rawBeginPath();
+        if (ret)
+        {
+            ret = rawMoveTo(pxs[0].x, pxs[0].y);
+            ret = rawBezierTo(pxs + 1, count - 1);
+            ret = rawClosePath();
+            ret = rawEndPath(ctx, true);
+        }
+    }
+    else if (DRAW_MAXR(m_impl, modelUnit).contains(extent))  // 全部在显示区域内
     {
         pxpoints.resize(count);
         pxs = &pxpoints.front();
