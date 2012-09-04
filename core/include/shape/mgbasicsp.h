@@ -74,7 +74,11 @@ public:
     bool isOrtho() const;
 
     //! 设置矩形
-    void setRect(const Point2d& pt1, const Point2d& pt2, float angle = 0.0);
+    void setRect(const Point2d& pt1, const Point2d& pt2);
+    
+    //! 设置倾斜矩形
+    void setRect(const Point2d& pt1, const Point2d& pt2,
+                 float angle, const Point2d& basept);
 
     //! 设置四个角点
     void setRect(const Point2d points[4]);
@@ -182,11 +186,10 @@ class MgDiamond : public MgBaseRect
 {
     MG_INHERIT_CREATE(MgDiamond, MgBaseRect, 14)
 protected:
-    Point2d _getPoint(UInt32 index) const;
-    void _setPoint(UInt32 index, const Point2d& pt);
     UInt32 _getHandleCount() const;
     Point2d _getHandlePoint(UInt32 index) const;
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
+    void _update();
     float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
 };

@@ -35,7 +35,7 @@ void MgEllipse::setRadius(float rx, float ry)
         ry = rx;
 
     Box2d rect(getCenter(), rx * 2, ry * 2);
-    setRect(rect.leftTop(), rect.rightBottom(), getAngle());
+    setRect(rect.leftTop(), rect.rightBottom(), getAngle(), getCenter());
 }
 
 void MgEllipse::_update()

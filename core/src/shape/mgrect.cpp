@@ -115,7 +115,13 @@ bool MgBaseRect::isOrtho() const
     return mgIsZero(_points[1].y - _points[0].y);
 }
 
-void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2, float angle)
+void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2)
+{
+    setRect(pt1, pt2, 0, Point2d::kOrigin());
+}
+
+void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2,
+                         float angle, const Point2d& basept)
 {
     Box2d rect(pt1, pt2);
     
@@ -132,7 +138,7 @@ void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2, float angle)
 
     if (!mgIsZero(angle))
     {
-        Matrix2d mat(Matrix2d::rotation(angle, rect.center()));
+        Matrix2d mat(Matrix2d::rotation(angle, basept));
         for (int i = 0; i < 4; i++)
             _points[i] *= mat;
     }
@@ -190,12 +196,13 @@ Point2d MgBaseRect::_getHandlePoint(UInt32 index) const
 
 bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 {
-    Point2d pt2(pt * Matrix2d::rotation(-getAngle(), getCenter()));
-    
     if (index < 4) {        // 从左上角起顺时针的四个角点
-        setRect(_getHandlePoint((index + 2) % 4), pt2, getAngle());
+        Point2d basept(_getHandlePoint((index + 2) % 4));
+        Point2d pt2(pt * Matrix2d::rotation(-getAngle(), basept));
+        setRect(basept, pt2, getAngle(), basept);
     }
     else if (index < 8) {   // 顶右底左的中点
+        Point2d pt2(pt * Matrix2d::rotation(-getAngle(), getCenter()));
         Box2d rect(getRect());
         mgMoveRectHandle(rect, index, pt2);
         if (_square && (4 == index || 6 == index)) {
@@ -204,7 +211,7 @@ bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
         else if (_square) {
             rect = Box2d(rect.center(), rect.width(), rect.width());
         }
-        setRect(rect.leftTop(), rect.rightBottom(), getAngle());
+        setRect(rect.leftTop(), rect.rightBottom(), getAngle(), getCenter());
     }
     update();
     return true;
@@ -256,16 +263,6 @@ MgDiamond::~MgDiamond()
 {
 }
 
-Point2d MgDiamond::_getPoint(UInt32 index) const
-{
-    return MgBaseRect::_getHandlePoint(4 + index % 4);
-}
-
-void MgDiamond::_setPoint(UInt32 index, const Point2d& pt)
-{
-    MgBaseRect::_setHandlePoint(4 + index, pt, _MGZERO);
-}
-
 UInt32 MgDiamond::_getHandleCount() const
 {
     return 4;
@@ -273,18 +270,27 @@ UInt32 MgDiamond::_getHandleCount() const
 
 Point2d MgDiamond::_getHandlePoint(UInt32 index) const
 {
-    return MgBaseShape::_getHandlePoint(index);
+    return MgBaseRect::_getHandlePoint(4 + index % 4);
 }
 
 bool MgDiamond::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
 {
-    return MgBaseShape::_setHandlePoint(index, pt, tol);
+    return MgBaseRect::_setHandlePoint(4 + index % 4, pt, tol);
+}
+
+void MgDiamond::_update()
+{
+    __super::_update();
+    Point2d pts[] = { _getHandlePoint(0), _getHandlePoint(1),
+        _getHandlePoint(2), _getHandlePoint(3) };
+    _extent.set(4, pts);
 }
 
 float MgDiamond::_hitTest(const Point2d& pt, float tol, 
                           Point2d& nearpt, Int32& segment) const
 {
-    Point2d pts[] = { _getPoint(0), _getPoint(1), _getPoint(2), _getPoint(3) };
+    Point2d pts[] = { _getHandlePoint(0), _getHandlePoint(1),
+        _getHandlePoint(2), _getHandlePoint(3) };
     return mgLinesHit(4, pts, true, pt, tol, nearpt, segment);
 }
 
@@ -294,7 +300,7 @@ bool MgDiamond::_hitTestBox(const Box2d& rect) const
         return false;
     
     for (int i = 0; i < 3; i++) {
-        if (Box2d(_getPoint(i), _getPoint(i + 1)).isIntersect(rect))
+        if (Box2d(_getHandlePoint(i), _getHandlePoint(i + 1)).isIntersect(rect))
             return true;
     }
     
@@ -303,7 +309,8 @@ bool MgDiamond::_hitTestBox(const Box2d& rect) const
 
 bool MgDiamond::_draw(GiGraphics& gs, const GiContext& ctx) const
 {
-    Point2d pts[] = { _getPoint(0), _getPoint(1), _getPoint(2), _getPoint(3) };
+    Point2d pts[] = { _getHandlePoint(0), _getHandlePoint(1),
+        _getHandlePoint(2), _getHandlePoint(3) };
     bool ret = gs.drawPolygon(&ctx, 4, pts);
     return __super::_draw(gs, ctx) || ret;
 }
