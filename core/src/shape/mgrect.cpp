@@ -198,10 +198,10 @@ bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
     else if (index < 8) {   // 顶右底左的中点
         Box2d rect(getRect());
         mgMoveRectHandle(rect, index, pt2);
-        if (4 == index || 6 == index) {
+        if (_square && (4 == index || 6 == index)) {
             rect = Box2d(rect.center(), rect.height(), rect.height());
         }
-        else {
+        else if (_square) {
             rect = Box2d(rect.center(), rect.width(), rect.width());
         }
         setRect(rect.leftTop(), rect.rightBottom(), getAngle());

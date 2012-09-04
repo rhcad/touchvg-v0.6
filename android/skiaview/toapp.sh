@@ -1,4 +1,4 @@
-cd src/touchvg/view; javac -cp ../../../libs/skiaview.jar *.java;
+cd src/touchvg/view; javac -cp ../../../libs/skiaview.jar:$ANDROID_SDK_HOME/platforms/android-8/android.jar *.java;
 cd ../..; jar -cfv paintview.jar touchvg/view/*.class;
 cd ..; mv -v src/*.jar libs;
 rm -rf src/touchvg/view/*.class;
