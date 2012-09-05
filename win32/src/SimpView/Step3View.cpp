@@ -98,6 +98,8 @@ const char* CDrawShapeView::getCmdName(UINT nID) const
         return "triangle";
     if (nID == ID_CMD_DIAMOND)
         return "diamond";
+    if (nID == ID_CMD_PARALLELOGRAM)
+        return "parallelogram";
     if (nID == ID_CMD_SQUARE)
         return "square";
     if (nID == ID_CMD_CIRCLE)

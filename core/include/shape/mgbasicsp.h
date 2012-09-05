@@ -34,6 +34,9 @@ public:
     void setEndPoint(const Point2d& pt)  { _points[1] = pt; }
     
 protected:
+    UInt32 _getHandleCount() const;
+    Point2d _getHandlePoint(UInt32 index) const;
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
@@ -275,6 +278,41 @@ protected:
 protected:
     Vector2d*   _knotvs;
     UInt32      _bzcount;
+};
+
+//! 矩形图形基类
+/*! \ingroup GEOM_SHAPE
+*/
+class MgParallelogram : public MgBaseShape
+{
+    MG_INHERIT_CREATE(MgParallelogram, MgBaseShape, 17)
+public:
+    //! 返回中心点
+    Point2d getCenter() const { return (_points[0] + _points[2]) / 2; }
+
+    //! 返回矩形框，是本对象未旋转时的形状
+    Box2d getRect() const { return Box2d(getCenter(), getWidth(), getHeight()); }
+
+    //! 返回宽度
+    float getWidth() const { return _points[0].distanceTo(_points[1]); }
+
+    //! 返回高度
+    float getHeight() const { return _points[2].distanceTo(_points[1]); }
+
+    //! 返回是否为空矩形
+    bool isEmpty(float minDist) const {
+        return getWidth() <= minDist || getHeight() <= minDist; }
+
+protected:
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
+    bool _offset(const Vector2d& vec, Int32 segment);
+    bool _hitTestBox(const Box2d& rect) const;
+    bool _save(MgStorage* s) const;
+    bool _load(MgStorage* s);
+
+protected:
+    Point2d     _points[4]; // 从左上角起顺时针的四个角点
+    bool        _fixlen;    // 是否边长固定
 };
 
 #endif // __GEOMETRY_BASICSHAPE_H_

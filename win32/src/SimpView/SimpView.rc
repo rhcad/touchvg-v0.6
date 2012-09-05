@@ -110,6 +110,7 @@ BEGIN
         MENUITEM "椭圆",                        ID_CMD_ELLIPSE
         MENUITEM "圆",                          ID_CMD_CIRCLE
         MENUITEM "菱形",                        ID_CMD_DIAMOND
+        MENUITEM "平行四边形",                  ID_CMD_PARALLELOGRAM
         MENUITEM "三角形",                      ID_CMD_TRIANGLE
         MENUITEM "折线",                        ID_CMD_LINES
         MENUITEM "曲线",                        ID_CMD_SPLINES
@@ -395,6 +396,7 @@ BEGIN
     ID_CMD_ELLIPSE          "绘制椭圆图形\n椭圆"
     ID_CMD_CIRCLE           "绘制圆图形\n圆"
     ID_CMD_DIAMOND          "绘制菱形图形\n菱形"
+    ID_CMD_PARALLELOGRAM    "绘制平行四边形图形\n平行四边形"
     ID_CMD_TRIANGLE         "绘制三角形图形\n三角形"
     ID_CMD_LINES            "绘制折线图形\n折线"
     ID_CMD_SPLINES          "绘制曲线图形\n曲线"

@@ -403,7 +403,7 @@ void registerTransformCmd();
 
 - (IBAction)selectCommand:(id)sender    // 选择绘图命令
 {
-    CGRect viewrect = CGRectMake(0, 0, 136, 376);
+    CGRect viewrect = CGRectMake(0, 0, 136, 416);
     viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
     viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _graphc.downview.frame.size.height - 20;
     
@@ -413,15 +413,16 @@ void registerTransformCmd();
     calloutView.backgroundColor = [UIColor darkGrayColor];
     
     struct { NSString* caption; NSString* name; } cmds[] = {
-        { @"直线段",   @"line" }, 
+        { @"直线段",  @"line" }, 
         { @"矩形",    @"rect" },
-        { @"正方形",   @"square" },
+        { @"正方形",  @"square" },
         { @"椭圆",    @"ellipse" },
-        { @"圆",     @"circle" },
-        { @"三角形",   @"triangle" },
+        { @"圆",      @"circle" },
+        { @"三角形",  @"triangle" },
         { @"棱形",    @"diamond" },
         { @"折线",    @"lines" },
         { @"曲线",    @"splines" },
+        { @"平行四边形", @"parallelogram" },
         { @"坐标系演示", @"xfdemo" },
     };
     const int count = sizeof(cmds) / sizeof(cmds[0]);

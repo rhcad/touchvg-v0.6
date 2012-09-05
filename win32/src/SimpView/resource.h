@@ -36,8 +36,9 @@
 #define ID_CMD_CIRCLE                   32816
 #define ID_CMD_TRIANGLE                 32817
 #define ID_CMD_DIAMOND                  32818
-#define ID_CMD_LINES                    32819
-#define ID_CMD_SPLINES                  32820
+#define ID_CMD_PARALLELOGRAM            32819
+#define ID_CMD_LINES                    32820
+#define ID_CMD_SPLINES                  32821
 
 // Next default values for new objects
 // 
