@@ -196,18 +196,14 @@ bool MgParallelogram::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 {
     index = index % 4;
     if (_fixlen) {
-        Point2d& basept = _points[index > 0 ? index - 1 : index + 1];
+        Point2d& basept = _points[(index - 1) % 4];
         _points[index] = basept.rulerPoint(pt, _points[index].distanceTo(basept), 0);
     }
     else {
         _points[index] = pt;
     }
-    switch (index) {
-        case 0: _points[3] = _points[0] + _points[2] + (- _points[1]); break;
-        case 1: _points[2] = _points[1] + _points[3] + (- _points[0]); break;
-        case 2: _points[3] = _points[2] + _points[0] + (- _points[1]); break;
-        case 3: _points[0] = _points[3] + _points[1] + (- _points[2]); break;
-    }
+    _points[(index + 1) % 4] = (_points[index] + _points[(index + 2) % 4]
+                                + (- _points[(index + 3) % 4]));
     update();
     return true;
 }

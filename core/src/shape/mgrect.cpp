@@ -275,7 +275,30 @@ Point2d MgDiamond::_getHandlePoint(UInt32 index) const
 
 bool MgDiamond::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
 {
-    return MgBaseRect::_setHandlePoint(4 + index % 4, pt, tol);
+    if (!_fixlen) {
+        return MgBaseRect::_setHandlePoint(4 + index % 4, pt, tol);
+    }
+    
+    Point2d cen(getCenter());
+    Point2d pnt, ptup, ptside;
+    
+    pnt = pt * Matrix2d::rotation(-getAngle(), cen);
+    mgGetRectHandle(getRect(), 4 + (index + 2) % 4, ptup);
+    mgGetRectHandle(getRect(), 4 + (index + 1) % 4, ptside);
+    
+    float len = ptup.distanceTo(ptside);
+    float dy = index % 2 == 0 ? pnt.y - ptup.y : pnt.x - ptup.x;
+    float ry = mgMin(len, (float)fabs(dy) / 2);
+    float rx = (float)sqrt(len * len - ry * ry);
+    Box2d rect(cen, rx * 2, ry * 2);
+    setRect(rect.leftTop(), rect.rightBottom(), getAngle(), cen);
+    
+    return true;
+}
+
+bool MgDiamond::_rotateHandlePoint(UInt32, const Point2d&)
+{
+    return false;
 }
 
 void MgDiamond::_update()

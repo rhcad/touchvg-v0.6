@@ -629,6 +629,11 @@
     [_cmdctl menuClickDelNode:sender];
 }
 
+- (IBAction)menuClickFixedLength:(id)sender
+{
+    [_cmdctl menuClickFixedLength:sender];
+}
+
 #pragma mark - View motion
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -703,8 +708,12 @@
     BOOL allow = YES;
     NSTimeInterval seconds = [[NSProcessInfo processInfo]systemUptime] - _timeBegan;
     
+    if ([UIMenuController sharedMenuController].menuVisible) {
+        [UIMenuController sharedMenuController].menuVisible = NO;
+        allow = NO;
+    }
     // 长按手势: 当前命令响应长按操作时手势才生效
-    if (gestureRecognizer == _recognizers[0][kLongPressGesture]
+    else if (gestureRecognizer == _recognizers[0][kLongPressGesture]
         || gestureRecognizer == _recognizers[1][kLongPressGesture]) {
         allow = [[self getCommand:@selector(longPressGesture:)] longPressGesture:gestureRecognizer];
     }

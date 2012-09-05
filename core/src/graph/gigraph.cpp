@@ -687,8 +687,8 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center,
     if (mgIsZero(matD.m12) && mgIsZero(matD.m21))
     {
         Point2d cen (center * matD);
-        rx *= matD.m11;
-        ry *= matD.m22;
+        rx *= (float)fabs(matD.m11);
+        ry *= (float)fabs(matD.m22);
 
         ret = rawEllipse(ctx, cen.x - rx, cen.y - ry, 2 * rx, 2 * ry);
     }

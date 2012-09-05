@@ -8,6 +8,35 @@
 
 #include "mgcmddraw.h"
 
+//! 自由折线绘图命令类
+/*! \ingroup GEOM_SHAPE
+    \see MgLines
+*/
+class MgCmdDrawFreeLines : public MgCommandDraw
+{
+protected:
+    MgCmdDrawFreeLines();
+    virtual ~MgCmdDrawFreeLines();
+    
+public:
+    static const char* Name() { return "freelines"; }
+    static MgCommand* Create() { return new MgCmdDrawFreeLines; }
+    
+private:
+    virtual const char* getName() const { return Name(); }
+    virtual void release() { delete this; }
+    
+    virtual bool initialize(const MgMotion* sender);
+    virtual bool undo(bool &enableRecall, const MgMotion* sender);
+    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
+    virtual bool touchBegan(const MgMotion* sender);
+    virtual bool touchMoved(const MgMotion* sender);
+    virtual bool touchEnded(const MgMotion* sender);
+    
+private:
+    bool canAddPoint(const MgMotion* sender, bool ended);
+};
+
 //! 折线绘图命令类
 /*! \ingroup GEOM_SHAPE
     \see MgLines
@@ -28,13 +57,11 @@ private:
     
     virtual bool initialize(const MgMotion* sender);
     virtual bool undo(bool &enableRecall, const MgMotion* sender);
-    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);
-    
-private:
-    bool canAddPoint(const MgMotion* sender, bool ended);
+    virtual bool click(const MgMotion* sender);
+    virtual bool doubleClick(const MgMotion* sender);
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_LINES_H_

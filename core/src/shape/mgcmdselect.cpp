@@ -423,6 +423,10 @@ bool MgCommandSelect::click(const MgMotion* sender)
     }
     sender->view->redraw(false);
     
+    if (!sender->pressDrag) {
+        sender->view->longPressSelection((MgSelState)getSelectState(sender->view));
+    }
+    
     return true;
 }
 
@@ -738,8 +742,8 @@ MgSelState MgCommandSelect::getSelectState(MgView* view)
     
     if (m_handleMode) {
         MgShape* shape = view->shapes()->findShape(m_id);
-        state = shape && shape->shape()->isKindOf(MgBaseLines::Type()) ?
-            kMgSelVertex : kMgSelOneShape;
+        state = m_handleIndex > 0 && shape && shape->shape()->isKindOf(MgBaseLines::Type()) ?
+            kMgSelVertex : kMgSelVertexes;
     }
     else if (!m_selIds.empty()) {
         state = m_selIds.size() > 1 ? kMgSelMultiShapes : kMgSelOneShape;

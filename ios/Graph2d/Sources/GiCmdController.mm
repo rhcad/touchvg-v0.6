@@ -202,11 +202,17 @@ static long s_cmdRef = 0;
             items[2] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
             break;
             
-        case kMgSelVertex:
+        case kMgSelVertexes:
             items[0] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
             items[1] = [[UIMenuItem alloc] initWithTitle:@"加点" action:@selector(menuClickAddNode:)];
-            items[2] = [[UIMenuItem alloc] initWithTitle:@"删点" action:@selector(menuClickDelNode:)];
+            items[2] = [[UIMenuItem alloc] initWithTitle:@"边长固定" action:@selector(menuClickFixedLength:)];
             items[3] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
+            break;
+            
+        case kMgSelVertex:
+            items[0] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
+            items[1] = [[UIMenuItem alloc] initWithTitle:@"删点" action:@selector(menuClickDelNode:)];
+            items[2] = [[UIMenuItem alloc] initWithTitle:@"边长固定" action:@selector(menuClickFixedLength:)];
             break;
             
         default:
@@ -433,7 +439,6 @@ static long s_cmdRef = 0;
     if (!_moved && cmd) {
         _moved = YES;
         ret = cmd->touchBegan(_motion);
-        [UIMenuController sharedMenuController].menuVisible = NO;
     }
     if (cmd) {
         [self setView:view];
@@ -668,6 +673,14 @@ static long s_cmdRef = 0;
     MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
     if (sel) {
         sel->deleteVertext(_motion);
+    }
+}
+
+- (IBAction)menuClickFixedLength:(id)sender
+{
+    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
+    if (sel) {
+        sel->setFixedLength(_mgview, !sel->isFixedLength(_mgview));
     }
 }
 

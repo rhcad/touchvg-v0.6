@@ -195,6 +195,7 @@ protected:
     void _update();
     float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
+    bool _rotateHandlePoint(UInt32 index, const Point2d& pt);
 };
 
 //! 折线基类

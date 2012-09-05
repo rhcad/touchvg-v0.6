@@ -197,6 +197,7 @@ MgCommand* mgCreateCommand(const char* name)
         { MgCmdDrawDiamond::Name(), MgCmdDrawDiamond::Create },
         { MgCmdDrawLine::Name(), MgCmdDrawLine::Create },
         { MgCmdDrawLines::Name(), MgCmdDrawLines::Create },
+        { MgCmdDrawFreeLines::Name(), MgCmdDrawFreeLines::Create },
         { MgCmdDrawSplines::Name(), MgCmdDrawSplines::Create },
         { MgCmdDrawTriangle::Name(), MgCmdDrawTriangle::Create },
         { MgCmdParallelogram::Name(), MgCmdParallelogram::Create },

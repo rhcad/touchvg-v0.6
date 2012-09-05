@@ -273,8 +273,12 @@ void registerTransformCmd();
 
 - (IBAction)lockMagnifier:(id)sender
 {
+    UIButton* btn = (UIButton*)sender;
     GiMagnifierView *magnifierView = (GiMagnifierView*)_graphc.magnifierView;
+    
     magnifierView.lockRedraw = !magnifierView.lockRedraw;
+    [btn setTitle:magnifierView.lockRedraw ? @"ULok" : @"Lock" forState: UIControlStateNormal];
+    
     _graphc.currentShapeFixedLength = magnifierView.lockRedraw;
 }
 
