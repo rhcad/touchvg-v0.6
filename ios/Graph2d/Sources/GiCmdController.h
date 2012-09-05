@@ -24,6 +24,7 @@ class MgViewProxy;
 }
 
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称
+@property (nonatomic)   BOOL            currentShapeFixedLength;    //!< 当前选中图形是否固定边长
 
 //! 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
 @property (nonatomic)   float           lineWidth;

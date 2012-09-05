@@ -78,11 +78,6 @@ private:
         return (![obj respondsToSelector:@selector(shapeCanTransform)]
                 || [obj performSelector:@selector(shapeCanTransform)]);
     }
-    bool shapeCanMoveVertex(MgShape*, UInt32) {
-        NSObject* obj = _mainview.ownerView.nextResponder;
-        return (![obj respondsToSelector:@selector(shapeCanMoveVertex)]
-                || [obj performSelector:@selector(shapeCanMoveVertex)]);
-    }
     
     void regen() {
         [_mainview regen];
@@ -235,6 +230,7 @@ static long s_cmdRef = 0;
 @implementation GiCommandController
 
 @synthesize commandName;
+@synthesize currentShapeFixedLength;
 @synthesize lineWidth;
 @synthesize lineStyle;
 @synthesize lineColor;
@@ -349,6 +345,18 @@ static long s_cmdRef = 0;
 - (BOOL)dynamicChangeEnded:(BOOL)apply
 {
     return mgGetCommandManager()->dynamicChangeEnded(_mgview, apply);
+}
+
+- (BOOL)currentShapeFixedLength
+{
+    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
+    return sel && sel->isFixedLength(_mgview);
+}
+
+- (void)setCurrentShapeFixedLength:(BOOL)fixed
+{
+    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
+    if (sel && sel->setFixedLength(_mgview, !!fixed)) {}
 }
 
 - (CGPoint)getPointModel {

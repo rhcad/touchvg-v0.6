@@ -23,6 +23,8 @@
     bool Cls::_isKindOf(UInt32 type) const                      \
         { return type == Type() || __super::_isKindOf(type); }  \
     Box2d Cls::getExtent() const { return _getExtent(); }       \
+    bool Cls::isFixedLength() const { return _isFixedLength(); }     \
+    void Cls::setFixedLength(bool fixed) { _setFixedLength(fixed); } \
     void Cls::update() { _update(); }                           \
     void Cls::transform(const Matrix2d& mat) { _transform(mat); } \
     void Cls::clear() { _clear(); }                             \
@@ -42,7 +44,7 @@
     Point2d Cls::getHandlePoint(UInt32 index) const             \
         { return _getHandlePoint(index); }                      \
     bool Cls::setHandlePoint(UInt32 index, const Point2d& pt, float tol)   \
-        { return _setHandlePoint(index, pt, tol); }             \
+        { return _rotateHandlePoint(index, pt) || _setHandlePoint(index, pt, tol); } \
     bool Cls::offset(const Vector2d& vec, Int32 segment)   \
         { return _offset(vec, segment); }
 

@@ -173,7 +173,7 @@ bool MgParallelogram::_equals(const MgParallelogram& src) const
 
 void MgParallelogram::_update()
 {
-    _points[3] = _points[0] + _points[2] - _points[1];
+    _points[3] = _points[0] + _points[2] + (- _points[1]);
     _extent.set(4, _points);
     __super::_update();
 }
@@ -203,10 +203,10 @@ bool MgParallelogram::_setHandlePoint(UInt32 index, const Point2d& pt, float)
         _points[index] = pt;
     }
     switch (index) {
-        case 0: _points[3] = _points[0] + _points[2] - _points[1]; break;
-        case 1: _points[2] = _points[1] + _points[3] - _points[0]; break;
-        case 2: _points[3] = _points[2] + _points[0] - _points[1]; break;
-        case 3: _points[0] = _points[3] + _points[1] - _points[2]; break;
+        case 0: _points[3] = _points[0] + _points[2] + (- _points[1]); break;
+        case 1: _points[2] = _points[1] + _points[3] + (- _points[0]); break;
+        case 2: _points[3] = _points[2] + _points[0] + (- _points[1]); break;
+        case 3: _points[0] = _points[3] + _points[1] + (- _points[2]); break;
     }
     update();
     return true;
@@ -217,6 +217,11 @@ bool MgParallelogram::_offset(const Vector2d& vec, Int32 segment)
     if (segment < 0)
         return __super::_offset(vec, segment);
     return _setHandlePoint(segment, _points[segment] + vec, 0);
+}
+
+bool MgParallelogram::_rotateHandlePoint(UInt32, const Point2d&)
+{
+    return false;
 }
 
 float MgParallelogram::_hitTest(const Point2d& pt, float tol, 

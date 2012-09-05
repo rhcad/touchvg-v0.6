@@ -80,6 +80,12 @@ public:
 public:
     //! 返回图形模型坐标范围
     virtual Box2d getExtent() const = 0;
+    
+    //! 返回边长是否固定
+    virtual bool isFixedLength() const = 0;
+    
+    //! 设置边长是否固定
+    virtual void setFixedLength(bool fixed) = 0;
 
     //! 参数改变后重新计算坐标
     virtual void update() = 0;
@@ -139,12 +145,15 @@ public:
 
 protected:
     Box2d   _extent;
+    bool    _fixlen;
 
 protected:
     void _copy(const MgBaseShape& src);
     bool _equals(const MgBaseShape& src) const;
     bool _isKindOf(UInt32 type) const;
-    Box2d _getExtent() const;
+    Box2d _getExtent() const { return _extent; }
+    bool _isFixedLength() const { return _fixlen; }
+    void _setFixedLength(bool fixed) { _fixlen = fixed; }
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
@@ -154,6 +163,7 @@ protected:
     Point2d _getHandlePoint(UInt32 index) const;
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     bool _offset(const Vector2d& vec, Int32 segment);
+    bool _rotateHandlePoint(UInt32 index, const Point2d& pt);
 };
 
 #if !defined(_MSC_VER) || _MSC_VER <= 1200
@@ -182,6 +192,8 @@ private:                                                        \
     virtual UInt32 getType() const { return Type(); }           \
     virtual bool isKindOf(UInt32 type) const { return _isKindOf(type); } \
     virtual Box2d getExtent() const;                            \
+    virtual bool isFixedLength() const;                         \
+    virtual void setFixedLength(bool fixed);                    \
     virtual void update();                                      \
     virtual void transform(const Matrix2d& mat);                \
     virtual void clear();                                       \

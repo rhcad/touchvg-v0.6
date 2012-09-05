@@ -3,8 +3,9 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgshape.h"
+#include <gigraph.h>
 
-MgBaseShape::MgBaseShape()
+MgBaseShape::MgBaseShape() : _fixlen(false)
 {
 }
 
@@ -15,21 +16,17 @@ MgBaseShape::~MgBaseShape()
 void MgBaseShape::_copy(const MgBaseShape& src)
 {
     _extent = src._extent;
+    _fixlen = src._fixlen;
 }
 
-bool MgBaseShape::_equals(const MgBaseShape&) const
+bool MgBaseShape::_equals(const MgBaseShape& src) const
 {
-    return true;
+    return _fixlen == src._fixlen;
 }
 
 bool MgBaseShape::_isKindOf(UInt32 type) const
 {
     return type == Type();
-}
-
-Box2d MgBaseShape::_getExtent() const
-{
-    return _extent;
 }
 
 void MgBaseShape::_update()
@@ -67,6 +64,18 @@ UInt32 MgBaseShape::_getHandleCount() const
 Point2d MgBaseShape::_getHandlePoint(UInt32 index) const
 {
     return getPoint(index);
+}
+
+bool MgBaseShape::_rotateHandlePoint(UInt32 index, const Point2d& pt)
+{
+    if (_fixlen) {
+        Point2d basept(getHandlePoint(index > 0 ? index - 1 : getHandleCount() - 1));
+        float a1 = (pt - basept).angle2();
+        float a2 = (getHandlePoint(index) - basept).angle2();
+        
+        transform(Matrix2d::rotation(a1 - a2, basept));
+    }
+    return _fixlen;
 }
 
 bool MgBaseShape::_setHandlePoint(UInt32 index, const Point2d& pt, float)

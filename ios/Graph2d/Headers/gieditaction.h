@@ -27,7 +27,6 @@
 - (BOOL)shapeWillDeleted;                   //!< 通知将删除图形
 - (BOOL)shapeCanRotated;                    //!< 通知是否能旋转图形
 - (BOOL)shapeCanTransform;                  //!< 通知是否能对图形变形
-- (BOOL)shapeCanMoveVertex;                 //!< 通知是否能移动图形顶点
 - (void)shapeMoved;                         //!< 通知图形已拖动
 - (BOOL)longPressSelection;                 //!< 选择状态下长按, MgSelState
 

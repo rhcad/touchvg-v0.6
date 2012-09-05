@@ -285,7 +285,7 @@ protected:
 */
 class MgParallelogram : public MgBaseShape
 {
-    MG_INHERIT_CREATE(MgParallelogram, MgBaseShape, 17)
+    MG_DECLARE_CREATE(MgParallelogram, MgBaseShape, 17)
 public:
     //! 返回中心点
     Point2d getCenter() const { return (_points[0] + _points[2]) / 2; }
@@ -306,13 +306,13 @@ public:
 protected:
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     bool _offset(const Vector2d& vec, Int32 segment);
+    bool _rotateHandlePoint(UInt32 index, const Point2d& pt);
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
 
 protected:
     Point2d     _points[4]; // 从左上角起顺时针的四个角点
-    bool        _fixlen;    // 是否边长固定
 };
 
 #endif // __GEOMETRY_BASICSHAPE_H_

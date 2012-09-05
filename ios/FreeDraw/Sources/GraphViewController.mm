@@ -60,11 +60,6 @@ void registerTransformCmd();
     return NO;
 }
 
-- (BOOL)shapeCanMoveVertex {
-    GiMagnifierView *magnifierView = (GiMagnifierView*)self.magnifierView;
-    return !(magnifierView.lockRedraw);
-}
-
 @end
 
 @implementation GraphViewController
@@ -280,6 +275,7 @@ void registerTransformCmd();
 {
     GiMagnifierView *magnifierView = (GiMagnifierView*)_graphc.magnifierView;
     magnifierView.lockRedraw = !magnifierView.lockRedraw;
+    _graphc.currentShapeFixedLength = magnifierView.lockRedraw;
 }
 
 - (IBAction)resizeMagnifier:(id)sender

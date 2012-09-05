@@ -592,18 +592,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
             MgBaseLines* lines = (MgBaseLines*)shape;
             lines->insertPoint(m_segment, m_ptNear);
         }
-        if (m_handleIndex > 0
-            && !sender->view->shapeCanMoveVertex(m_clones[i], m_handleIndex - 1)) {
-            if (sender->view->shapeCanRotated(m_clones[i])) {
-                UInt32 b = m_handleIndex>1 ? m_handleIndex-2 : shape->getHandleCount()-1;
-                Point2d basept(shape->getHandlePoint(b));
-                float a1 = (pointM - basept).angle2();
-                float a2 = (shape->getHandlePoint(m_handleIndex-1) - basept).angle2();
-                
-                shape->transform(Matrix2d::rotation(a1 - a2, basept));
-            }
-        }
-        else if (m_handleIndex > 0) {
+        if (m_handleIndex > 0) {
             float tol = mgDisplayMmToModel(5, sender);
             shape->setHandlePoint(m_handleIndex - 1, pointM, tol);
         }
@@ -917,4 +906,29 @@ bool MgCommandSelect::switchClosed(MgView* view)
     }
     
     return ret;
+}
+
+bool MgCommandSelect::isFixedLength(MgView* view)
+{
+    MgShape* shape = view->shapes()->findShape(m_id);
+    return shape && shape->shape()->isFixedLength();
+}
+
+bool MgCommandSelect::setFixedLength(MgView* view, bool fixed)
+{
+    MgShapesLock locker(view->shapes(), MgShapesLock::Edit);
+    int count = 0;
+    
+    for (sel_iterator it = m_selIds.begin(); it != m_selIds.end(); ++it) {
+        MgShape* shape = view->shapes()->findShape(*it);
+        if (shape) {
+            shape->shape()->setFixedLength(fixed);
+            count++;
+        }
+    }
+    if (count > 0) {
+        view->regen();
+    }
+    
+    return count > 0;
 }

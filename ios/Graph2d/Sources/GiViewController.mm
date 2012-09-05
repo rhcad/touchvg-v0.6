@@ -34,6 +34,7 @@
 @synthesize gestureRecognizerUsed = _gestureRecognizerUsed;
 @synthesize magnifierView;
 @synthesize activeView = _activeView;
+@synthesize currentShapeFixedLength;
 @synthesize lineWidth;
 @synthesize strokeWidth;
 @synthesize lineColor;
@@ -478,6 +479,18 @@
     GiGraphView *gview = (GiGraphView *)self.view;
     [gview getPlayShapes:YES];
     [self setDynamicShapes:NULL];
+}
+
+- (BOOL)currentShapeFixedLength
+{
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    return cmd.currentShapeFixedLength;
+}
+
+- (void)setCurrentShapeFixedLength:(BOOL)fixed
+{
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    [cmd setCurrentShapeFixedLength:fixed];
 }
 
 - (float)lineWidth {

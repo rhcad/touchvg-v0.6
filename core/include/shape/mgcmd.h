@@ -37,8 +37,6 @@ struct MgView {
         return !!shape; }
     virtual bool shapeCanTransform(MgShape* shape) {    //!< 通知是否能对图形变形
         return !!shape; }
-    virtual bool shapeCanMoveVertex(MgShape* shape, UInt32 index) { //!< 通知是否能移动图形顶点
-        return !!shape && index<999; }
     virtual void shapeMoved(MgShape* shape, int segment) {  //!< 通知图形已拖动
         if (shape) segment=1; }
     

@@ -36,6 +36,9 @@
 //! 当前命令名称
 @property (nonatomic)         const char*   commandName;
 
+//! 当前选中图形是否固定边长
+@property (nonatomic)         BOOL      currentShapeFixedLength;
+
 //! 是否使用手势识别器处理触摸消息
 @property (nonatomic)         BOOL      gestureRecognizerUsed;
 

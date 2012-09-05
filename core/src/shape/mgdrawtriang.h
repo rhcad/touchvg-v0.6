@@ -44,7 +44,7 @@ protected:
     virtual ~MgCmdParallelogram();
     
 public:
-    static const char* Name() { return "diamond"; }
+    static const char* Name() { return "parallelogram"; }
     static MgCommand* Create() { return new MgCmdParallelogram; }
     
 private:

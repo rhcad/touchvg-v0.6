@@ -35,6 +35,8 @@ public:
     virtual bool deleteVertext(const MgMotion* sender);
     virtual bool insertVertext(const MgMotion* sender);
     virtual bool switchClosed(MgView* view);
+    virtual bool isFixedLength(MgView* view);
+    virtual bool setFixedLength(MgView* view, bool fixed);
     
 private:
     virtual const char* getName() const { return Name(); }

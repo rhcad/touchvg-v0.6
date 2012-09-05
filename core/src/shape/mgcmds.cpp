@@ -199,6 +199,7 @@ MgCommand* mgCreateCommand(const char* name)
         { MgCmdDrawLines::Name(), MgCmdDrawLines::Create },
         { MgCmdDrawSplines::Name(), MgCmdDrawSplines::Create },
         { MgCmdDrawTriangle::Name(), MgCmdDrawTriangle::Create },
+        { MgCmdParallelogram::Name(), MgCmdParallelogram::Create },
     };
 
     for (unsigned i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++)
