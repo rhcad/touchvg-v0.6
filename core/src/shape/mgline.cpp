@@ -8,6 +8,8 @@
 #include <mglnrel.h>
 #include <mgstorage.h>
 
+extern bool g_enableRotate;
+
 MG_IMPLEMENT_CREATE(MgLine)
 
 MgLine::MgLine()
@@ -95,7 +97,7 @@ bool MgLine::_rotateHandlePoint(UInt32 index, const Point2d& pt)
     if (index == 0) {
         return offset(pt - center(), -1);
     }
-    else if (_fixlen) {
+    else if (_fixlen && g_enableRotate) {
         Point2d basept(getHandlePoint(index > 1 ? 1 : 2));
         float a1 = (pt - basept).angle2();
         float a2 = (getHandlePoint(index) - basept).angle2();

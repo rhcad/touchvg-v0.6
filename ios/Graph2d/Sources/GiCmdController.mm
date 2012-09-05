@@ -412,6 +412,9 @@ static long s_cmdRef = 0;
 
 - (void)touchesBegan:(CGPoint)point view:(UIView*)view count:(int)count
 {
+    if ([UIMenuController sharedMenuController].menuVisible) {
+        [UIMenuController sharedMenuController].menuVisible = NO;
+    }
     if (_touchCount <= count) {
         _touchCount = count;
         

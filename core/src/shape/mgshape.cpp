@@ -5,6 +5,8 @@
 #include "mgshape.h"
 #include <gigraph.h>
 
+bool g_enableRotate = true;
+
 MgBaseShape::MgBaseShape() : _fixlen(false)
 {
 }
@@ -69,11 +71,16 @@ Point2d MgBaseShape::_getHandlePoint(UInt32 index) const
 bool MgBaseShape::_rotateHandlePoint(UInt32 index, const Point2d& pt)
 {
     if (_fixlen) {
-        Point2d basept(getHandlePoint(index > 0 ? index - 1 : getHandleCount() - 1));
-        float a1 = (pt - basept).angle2();
-        float a2 = (getHandlePoint(index) - basept).angle2();
-        
-        transform(Matrix2d::rotation(a1 - a2, basept));
+        if (g_enableRotate) {
+            Point2d basept(getHandlePoint(index > 0 ? index - 1 : getHandleCount() - 1));
+            float a1 = (pt - basept).angle2();
+            float a2 = (getHandlePoint(index) - basept).angle2();
+            
+            transform(Matrix2d::rotation(a1 - a2, basept));
+        }
+        else {
+            offset(pt - getHandlePoint(index), -1);
+        }
     }
     return _fixlen;
 }
