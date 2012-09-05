@@ -150,7 +150,9 @@ Point2d MgCommandDraw::autoAlignPoint(const MgMotion* sender)
     float angle = (newPt - lastPt).angle();
     const float limitAngle = _M_D2R * 5.f;
     
-    if ((float)fabs(angle - _M_PI_2) < limitAngle) {
+    if (sender->snappedType >= 0) {
+    }
+    else if ((float)fabs(angle - _M_PI_2) < limitAngle) {
         angle = _M_PI_2;
         newPt.x = lastPt.x;
     }

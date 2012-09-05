@@ -4,6 +4,7 @@
 
 #include "mgcmdmgr.h"
 #include "mgcmdselect.h"
+#include <mgbasicsp.h>
 
 static MgCmdManagerImpl s_cmds;
 MgCommand* mgCreateCommand(const char* name);
@@ -111,21 +112,26 @@ MgSelection* MgCmdManagerImpl::getSelection(MgView* view)
 
 int MgCmdManagerImpl::snapHandlePoint(MgMotion* sender, float mm)
 {
-    if (!sender || !sender->view)
+    MgCommand* cmd = getCommand();
+    if (!sender || !sender->view || !cmd)
         return -1;
     
     Box2d snapbox(Box2d(sender->point, 2 * mm, 0) * sender->view->xform()->displayToModel());
     void* it = NULL;
     float mindist = snapbox.width();
     MgShape* spfound = NULL;
-    MgShape* exceptsp = NULL;
+    MgShape* exceptsp = sender->point != sender->startPoint ? cmd->getCurrentShape(sender) : NULL;
     
     for (MgShape* sp = sender->view->shapes()->getFirstShape(it);
          sp; sp = sender->view->shapes()->getNextShape(it)) {
         
         if (sp != exceptsp && sp->shape()->getExtent().isIntersect(snapbox)) {
             UInt32 n = sp->shape()->getHandleCount();
+            bool curve = sp->shape()->isKindOf(MgSplines::Type());
+            
             for (UInt32 i = 0; i < n; i++) {
+                if (curve && i > 0 && i + 1 < n)
+                    continue;
                 Point2d pnt(sp->shape()->getHandlePoint(i));
                 float dist = pnt.distanceTo(snapbox.center());
                 if (mindist > dist) {

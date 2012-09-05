@@ -78,16 +78,32 @@ UInt32 MgLine::_getHandleCount() const
 
 Point2d MgLine::_getHandlePoint(UInt32 index) const
 {
-    return index < 2 ? _getPoint(index) : center();
+    return index > 0 ? _getPoint(index - 1) : center();
 }
 
 bool MgLine::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 {
-    if (index < 2)
-        _setPoint(index, pt);
+    if (index > 0)
+        _setPoint(index - 1, pt);
     else
         offset(pt - center(), -1);
     return true;
+}
+
+bool MgLine::_rotateHandlePoint(UInt32 index, const Point2d& pt)
+{
+    if (index == 0) {
+        return offset(pt - center(), -1);
+    }
+    else if (_fixlen) {
+        Point2d basept(getHandlePoint(index > 1 ? 1 : 2));
+        float a1 = (pt - basept).angle2();
+        float a2 = (getHandlePoint(index) - basept).angle2();
+        
+        transform(Matrix2d::rotation(a1 - a2, basept));
+        return true;
+    }
+    return __super::_rotateHandlePoint(index, pt);
 }
 
 float MgLine::_hitTest(const Point2d& pt, float tol, 

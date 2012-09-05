@@ -29,11 +29,10 @@ private:
 public:
     BOOL            _dynChanged;
     BOOL            _lockVertex;
-    int             _snappedType;
     
     MgViewProxy(id owner, UIView** views) : _owner(owner)
         , _curview(Nil), _mainview(Nil), _auxviews(views)
-        , _dynChanged(NO), _lockVertex(false), _snappedType(-1)
+        , _dynChanged(NO), _lockVertex(false)
     {
         _pointImages[0] = nil;
         _pointImages[1] = nil;
@@ -151,7 +150,7 @@ static long s_cmdRef = 0;
 {
     _motion->point = Point2d(pt.x, pt.y);
     _motion->pointM = Point2d(pt.x, pt.y) * _motion->view->xform()->displayToModel();
-    _mgview->_snappedType = mgGetCommandManager()->snapHandlePoint(_motion, 5.f);
+    _motion->snappedType = mgGetCommandManager()->snapHandlePoint(_motion, 5.f);
 }
 
 - (BOOL)getPointForPressDrag:(UIGestureRecognizer *)sender :(CGPoint*)point
@@ -375,9 +374,9 @@ static long s_cmdRef = 0;
     if (cmd && _mgview->getView()) {
         cmd->draw(_motion, gs);
     }
-    if (_mgview->_snappedType >= 0) {
-        GiContext ctx(0, GiColor(128, 128, 64, 200), kGiLineDot);
-        gs->drawEllipse(&ctx, _motion->pointM, gs->xf().displayToModel(5.f, true));
+    if (_motion->snappedType >= 0) {
+        GiContext ctx(0, GiColor(128, 128, 128, 200));
+        gs->drawEllipse(&ctx, _motion->pointM, gs->xf().displayToModel(8.f, true));
     }
     return YES;
 }
@@ -475,6 +474,7 @@ static long s_cmdRef = 0;
         ret = cmd->touchEnded(_motion);
         _motion->pressDrag = false;
         _touchCount = 0;
+        _motion->snappedType = -1;
     }
     
     return ret;
@@ -510,10 +510,12 @@ static long s_cmdRef = 0;
             }
             ret = cmd->touchEnded(_motion);
             _touchCount = 0;
+            _motion->snappedType = -1;
         }
         else {
             ret = cmd->cancel(_motion);
             _touchCount = 0;
+            _motion->snappedType = -1;
         }
         ret = YES;
     }
@@ -549,10 +551,12 @@ static long s_cmdRef = 0;
             }
             ret = cmd->touchEnded(_motion);
             _touchCount = 0;
+            _motion->snappedType = -1;
         }
         else {
             ret = cmd->cancel(_motion);
             _touchCount = 0;
+            _motion->snappedType = -1;
         }
         ret = YES;
     }
@@ -611,6 +615,7 @@ static long s_cmdRef = 0;
         _touchCount = 0;
     }
     _clickFingers = 0;
+    _motion->snappedType = -1;
     
     return ret;
 }

@@ -59,7 +59,8 @@ struct MgMotion {
     Point2d     lastPointM;                     //!< 上次点，模型坐标
     Point2d     point;                          //!< 当前点，视图坐标
     Point2d     pointM;                         //!< 当前点，模型坐标
-    MgMotion() : view(NULL), velocity(0), pressDrag(false) {}
+    int         snappedType;                    //!< 捕捉特征点的类型
+    MgMotion() : view(NULL), velocity(0), pressDrag(false), snappedType(-1) {}
 };
 
 //! 命令接口
@@ -82,7 +83,7 @@ struct MgCommand {
     virtual bool touchMoved(const MgMotion* sender) = 0;    //!< 正在滑动
     virtual bool touchEnded(const MgMotion* sender) = 0;    //!< 滑动结束
     virtual bool mouseHover(const MgMotion*) { return false; }; //!< 鼠标掠过
-protected:
+
     virtual MgShape* getCurrentShape(const MgMotion*) { return NULL; }; //!< 获得当前图形
 };
 

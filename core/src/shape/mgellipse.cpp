@@ -51,6 +51,22 @@ void MgEllipse::_update()
     mgBeziersBox(_extent, 13, _bzpts, true);
 }
 
+UInt32 MgEllipse::_getHandleCount() const
+{
+    return 1 + MgBaseRect::_getHandleCount();
+}
+
+Point2d MgEllipse::_getHandlePoint(UInt32 index) const
+{
+    return index > 0 ? MgBaseRect::_getHandlePoint(index - 1) : getCenter();
+}
+
+bool MgEllipse::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
+{
+    return (index > 0 ? MgBaseRect::_setHandlePoint(index - 1, pt, tol)
+            : offset(pt - getCenter(), -1));
+}
+
 float MgEllipse::_hitTest(const Point2d& pt, float tol, 
                           Point2d& nearpt, Int32& segment) const
 {

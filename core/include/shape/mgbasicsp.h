@@ -37,6 +37,7 @@ protected:
     UInt32 _getHandleCount() const;
     Point2d _getHandlePoint(UInt32 index) const;
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
+    bool _rotateHandlePoint(UInt32 index, const Point2d& pt);
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
@@ -146,6 +147,9 @@ public:
 
 protected:
     void _update();
+    UInt32 _getHandleCount() const;
+    Point2d _getHandlePoint(UInt32 index) const;
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
 
