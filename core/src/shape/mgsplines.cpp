@@ -31,14 +31,14 @@ void MgSplines::_update()
         _knotvs = new Vector2d[_bzcount];
     }
 
-    mgCubicSplines(_count, _points, _knotvs, _closed ? kMgCubicLoop : 0);
+    mgCubicSplines(_count, _points, _knotvs, isClosed() ? kMgCubicLoop : 0);
     mgCubicSplinesBox(_extent, _count, _points, _knotvs);
 }
 
 float MgSplines::_hitTest(const Point2d& pt, float tol, 
                           Point2d& nearpt, Int32& segment) const
 {
-    return mgCubicSplinesHit(_count, _points, _knotvs, _closed, 
+    return mgCubicSplinesHit(_count, _points, _knotvs, isClosed(), 
         pt, tol, nearpt, segment);
 }
 
@@ -46,7 +46,7 @@ bool MgSplines::_hitTestBox(const Box2d& rect) const
 {
     if (!__super::_hitTestBox(rect))
         return false;
-    return mgCubicSplinesIntersectBox(rect, _count, _points, _knotvs, _closed);
+    return mgCubicSplinesIntersectBox(rect, _count, _points, _knotvs, isClosed());
 }
 
 bool MgSplines::_draw(GiGraphics& gs, const GiContext& ctx) const
@@ -55,7 +55,7 @@ bool MgSplines::_draw(GiGraphics& gs, const GiContext& ctx) const
 
     if (_count == 2)
         ret = gs.drawLine(&ctx, _points[0], _points[1]);
-    else if (_closed)
+    else if (isClosed())
         ret = gs.drawClosedSplines(&ctx, _count, _points, _knotvs);
     else
         ret = gs.drawSplines(&ctx, _count, _points, _knotvs);
@@ -86,8 +86,8 @@ void MgSplines::smooth(float tol)
             points[n + j] = _points[i + j];
         
         // 新曲线：indexMap[0], indexMap[1], ..., indexMap[n], i+1, i+2, ..., _count-1
-        mgCubicSplines(n + _count - i, points, knotvs, _closed ? kMgCubicLoop : 0);
-        dist = mgCubicSplinesHit(n + _count - i, points, knotvs, _closed, _points[i],
+        mgCubicSplines(n + _count - i, points, knotvs, isClosed() ? kMgCubicLoop : 0);
+        dist = mgCubicSplinesHit(n + _count - i, points, knotvs, isClosed(), _points[i],
                                  tol * 2, nearpt, segment); // 检查第i点到新曲线的距离
         
         bool removed = true;

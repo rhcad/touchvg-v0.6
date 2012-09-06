@@ -23,8 +23,6 @@
     bool Cls::_isKindOf(UInt32 type) const                      \
         { return type == Type() || __super::_isKindOf(type); }  \
     Box2d Cls::getExtent() const { return _getExtent(); }       \
-    bool Cls::isFixedLength() const { return _isFixedLength(); }     \
-    void Cls::setFixedLength(bool fixed) { _setFixedLength(fixed); } \
     void Cls::update() { _update(); }                           \
     void Cls::transform(const Matrix2d& mat) { _transform(mat); } \
     void Cls::clear() { _clear(); }                             \

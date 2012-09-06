@@ -8,8 +8,6 @@
 #include <mglnrel.h>
 #include <mgstorage.h>
 
-extern bool g_enableRotate;
-
 MG_IMPLEMENT_CREATE(MgLine)
 
 MgLine::MgLine()
@@ -33,11 +31,6 @@ Point2d MgLine::_getPoint(UInt32 index) const
 void MgLine::_setPoint(UInt32 index, const Point2d& pt)
 {
     _points[index ? 1 : 0] = pt;
-}
-
-bool MgLine::_isClosed() const
-{
-    return false;
 }
 
 void MgLine::_copy(const MgLine& src)
@@ -97,7 +90,7 @@ bool MgLine::_rotateHandlePoint(UInt32 index, const Point2d& pt)
     if (index == 0) {
         return offset(pt - center(), -1);
     }
-    else if (_fixlen && g_enableRotate) {
+    else if (isFixedLength() && !isRotateDisnable()) {
         Point2d basept(getHandlePoint(index > 1 ? 1 : 2));
         float a1 = (pt - basept).angle2();
         float a2 = (getHandlePoint(index) - basept).angle2();
@@ -130,13 +123,15 @@ bool MgLine::_draw(GiGraphics& gs, const GiContext& ctx) const
 
 bool MgLine::_save(MgStorage* s) const
 {
+    bool ret = __super::_save(s);
     s->writeFloatArray("points", &(_points[0].x), 4);
-    return true;
+    return ret;
 }
 
 bool MgLine::_load(MgStorage* s)
 {
-    return s->readFloatArray("points", &(_points[0].x), 4) == 4;
+    bool ret = __super::_load(s);
+    return s->readFloatArray("points", &(_points[0].x), 4) == 4 && ret;
 }
 
 // MgParallelogram
@@ -167,16 +162,10 @@ void MgParallelogram::_setPoint(UInt32 index, const Point2d& pt)
     _points[index] = pt;
 }
 
-bool MgParallelogram::_isClosed() const
-{
-    return true;
-}
-
 void MgParallelogram::_copy(const MgParallelogram& src)
 {
     for (int i = 0; i < 4; i++)
         _points[i] = src._points[i];
-    _fixlen = src._fixlen;
     __super::_copy(src);
 }
 
@@ -186,7 +175,7 @@ bool MgParallelogram::_equals(const MgParallelogram& src) const
         if (_points[i] != src._points[i])
             return false;
     }
-    return _fixlen == src._fixlen && __super::_equals(src);
+    return __super::_equals(src);
 }
 
 void MgParallelogram::_update()
@@ -213,7 +202,7 @@ void MgParallelogram::_clear()
 bool MgParallelogram::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 {
     index = index % 4;
-    if (_fixlen) {
+    if (isFixedLength()) {
         Point2d& basept = _points[(index - 1) % 4];
         _points[index] = basept.rulerPoint(pt, _points[index].distanceTo(basept), 0);
     }
@@ -265,13 +254,13 @@ bool MgParallelogram::_draw(GiGraphics& gs, const GiContext& ctx) const
 
 bool MgParallelogram::_save(MgStorage* s) const
 {
-    s->writeBool("fixlen", _fixlen);
+    bool ret = __super::_save(s);
     s->writeFloatArray("points", &(_points[0].x), 8);
-    return true;
+    return ret;
 }
 
 bool MgParallelogram::_load(MgStorage* s)
 {
-    _fixlen = s->readBool("fixlen", _fixlen);
-    return s->readFloatArray("points", &(_points[0].x), 8) == 8;
+    bool ret = __super::_load(s);
+    return s->readFloatArray("points", &(_points[0].x), 8) == 8 && ret;
 }

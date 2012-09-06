@@ -80,12 +80,6 @@ public:
 public:
     //! 返回图形模型坐标范围
     virtual Box2d getExtent() const = 0;
-    
-    //! 返回边长是否固定
-    virtual bool isFixedLength() const = 0;
-    
-    //! 设置边长是否固定
-    virtual void setFixedLength(bool fixed) = 0;
 
     //! 参数改变后重新计算坐标
     virtual void update() = 0;
@@ -143,17 +137,31 @@ public:
     //! 移动图形, segment 由 hitTest() 得到
     virtual bool offset(const Vector2d& vec, Int32 segment) = 0;
 
-protected:
-    Box2d   _extent;
-    bool    _fixlen;
+    //! 返回边长是否固定
+    bool isFixedLength() const { return _getFlag(2); }
+    
+    //! 设置边长是否固定
+    void setFixedLength(bool fixed) { _setFlag(2, fixed); }
+
+    //! 返回是否不能旋转
+    bool isRotateDisnable() const { return _getFlag(3); }
+    
+    //! 设置是否不能旋转
+    void setRotateDisnable(bool disnable) { _setFlag(3, disnable); }
 
 protected:
+    Box2d   _extent;
+    UInt32  _flags;
+
+protected:
+    bool _getFlag(int bit) const { return (_flags & (1 << bit)) != 0; }
+    void _setFlag(int bit, bool on) { _flags = on ? _flags | (1 << bit) : _flags & ~(1 << bit); }
+    bool _isClosed() const { return _getFlag(1); }
+    void _setClosed(bool closed) { _setFlag(1, closed); }
     void _copy(const MgBaseShape& src);
     bool _equals(const MgBaseShape& src) const;
     bool _isKindOf(UInt32 type) const;
     Box2d _getExtent() const { return _extent; }
-    bool _isFixedLength() const { return _fixlen; }
-    void _setFixedLength(bool fixed) { _fixlen = fixed; }
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
@@ -164,6 +172,8 @@ protected:
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     bool _offset(const Vector2d& vec, Int32 segment);
     bool _rotateHandlePoint(UInt32 index, const Point2d& pt);
+    bool _save(MgStorage* s) const;
+    bool _load(MgStorage* s);
 };
 
 #if !defined(_MSC_VER) || _MSC_VER <= 1200
@@ -192,8 +202,6 @@ private:                                                        \
     virtual UInt32 getType() const { return Type(); }           \
     virtual bool isKindOf(UInt32 type) const { return _isKindOf(type); } \
     virtual Box2d getExtent() const;                            \
-    virtual bool isFixedLength() const;                         \
-    virtual void setFixedLength(bool fixed);                    \
     virtual void update();                                      \
     virtual void transform(const Matrix2d& mat);                \
     virtual void clear();                                       \
@@ -226,6 +234,5 @@ protected:                                                      \
     UInt32 _getPointCount() const;                              \
     Point2d _getPoint(UInt32 index) const;                      \
     void _setPoint(UInt32 index, const Point2d& pt);            \
-    bool _isClosed() const;                                     \
 
 #endif // __GEOMETRY_MGSHAPE_H_

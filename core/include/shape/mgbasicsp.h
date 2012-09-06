@@ -101,13 +101,13 @@ protected:
     UInt32 _getPointCount() const;
     Point2d _getPoint(UInt32 index) const;
     void _setPoint(UInt32 index, const Point2d& pt);
-    bool _isClosed() const;
     void _copy(const MgBaseRect& src);
     bool _equals(const MgBaseRect& src) const;
     bool _isKindOf(UInt32 type) const;
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
+    bool _isClosed() const { return true; }
     float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
     UInt32 _getHandleCount() const;
     Point2d _getHandlePoint(UInt32 index) const;
@@ -213,7 +213,7 @@ public:
     static UInt32 Type() { return 5; }
 
     //! 设置是否闭合
-    bool setClosed(bool closed);
+    void setClosed(bool closed) { _setClosed(closed); }
 
     //! 返回终点
     Point2d endPoint() const;
@@ -236,7 +236,6 @@ protected:
     UInt32 _getPointCount() const;
     Point2d _getPoint(UInt32 index) const;
     void _setPoint(UInt32 index, const Point2d& pt);
-    bool _isClosed() const;
     void _copy(const MgBaseLines& src);
     bool _equals(const MgBaseLines& src) const;
     bool _isKindOf(UInt32 type) const;
@@ -253,7 +252,6 @@ protected:
     Point2d*    _points;
     UInt32      _maxCount;
     UInt32      _count;
-    bool        _closed;
 };
 
 //! 折线图形类
@@ -309,6 +307,7 @@ public:
         return getWidth() <= minDist || getHeight() <= minDist; }
 
 protected:
+    bool _isClosed() const { return true; }
     bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
     bool _offset(const Vector2d& vec, Int32 segment);
     bool _rotateHandlePoint(UInt32 index, const Point2d& pt);

@@ -29,11 +29,6 @@ void MgBaseRect::_setPoint(UInt32 index, const Point2d& pt)
     _points[index] = pt;
 }
 
-bool MgBaseRect::_isClosed() const
-{
-    return true;
-}
-
 void MgBaseRect::_copy(const MgBaseRect& src)
 {
     for (int i = 0; i < 4; i++)
@@ -219,14 +214,16 @@ bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 
 bool MgBaseRect::_save(MgStorage* s) const
 {
+    bool ret = __super::_save(s);
     s->writeFloatArray("points", &(_points[0].x), 8);
     s->writeBool("square", _square);
-    return true;
+    return ret;
 }
 
 bool MgBaseRect::_load(MgStorage* s)
 {
-    bool ret = s->readFloatArray("points", &(_points[0].x), 8) == 8;
+    bool ret = __super::_load(s)
+        && s->readFloatArray("points", &(_points[0].x), 8) == 8;
     _square = s->readBool("square", _square);
     return ret;
 }
@@ -275,7 +272,7 @@ Point2d MgDiamond::_getHandlePoint(UInt32 index) const
 
 bool MgDiamond::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
 {
-    if (!_fixlen) {
+    if (!isFixedLength()) {
         return MgBaseRect::_setHandlePoint(4 + index % 4, pt, tol);
     }
     

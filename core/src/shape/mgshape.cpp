@@ -4,10 +4,9 @@
 
 #include "mgshape.h"
 #include <gigraph.h>
+#include <mgstorage.h>
 
-bool g_enableRotate = true;
-
-MgBaseShape::MgBaseShape() : _fixlen(false)
+MgBaseShape::MgBaseShape() : _flags(0)
 {
 }
 
@@ -18,12 +17,12 @@ MgBaseShape::~MgBaseShape()
 void MgBaseShape::_copy(const MgBaseShape& src)
 {
     _extent = src._extent;
-    _fixlen = src._fixlen;
+    _flags = src._flags;
 }
 
 bool MgBaseShape::_equals(const MgBaseShape& src) const
 {
-    return _fixlen == src._fixlen;
+    return _flags == src._flags;
 }
 
 bool MgBaseShape::_isKindOf(UInt32 type) const
@@ -70,19 +69,21 @@ Point2d MgBaseShape::_getHandlePoint(UInt32 index) const
 
 bool MgBaseShape::_rotateHandlePoint(UInt32 index, const Point2d& pt)
 {
-    if (_fixlen) {
-        if (g_enableRotate) {
+    if (isFixedLength()) {
+        if (isRotateDisnable()) {
+            offset(pt - getHandlePoint(index), -1);
+        }
+        else {
             Point2d basept(getHandlePoint(index > 0 ? index - 1 : getHandleCount() - 1));
             float a1 = (pt - basept).angle2();
             float a2 = (getHandlePoint(index) - basept).angle2();
             
             transform(Matrix2d::rotation(a1 - a2, basept));
         }
-        else {
-            offset(pt - getHandlePoint(index), -1);
-        }
+        return true;
     }
-    return _fixlen;
+
+    return false;
 }
 
 bool MgBaseShape::_setHandlePoint(UInt32 index, const Point2d& pt, float)
@@ -104,4 +105,17 @@ bool MgBaseShape::_offset(const Vector2d& vec, Int32)
 bool MgBaseShape::_hitTestBox(const Box2d& rect) const
 {
     return getExtent().isIntersect(rect);
+}
+
+bool MgBaseShape::_save(MgStorage* s) const
+{
+    s->writeUInt32("flags", _flags);
+    return true;
+}
+
+bool MgBaseShape::_load(MgStorage* s)
+{
+    _flags = s->readUInt32("flags", _flags);
+    _setFlag(1, isClosed());
+    return true;
 }

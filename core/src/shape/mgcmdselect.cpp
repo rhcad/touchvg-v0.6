@@ -902,11 +902,10 @@ bool MgCommandSelect::switchClosed(MgView* view)
         MgShapesLock locker(view->shapes(), MgShapesLock::Edit);
         MgBaseLines *lines = (MgBaseLines *)shape->shape();
         
-        ret = lines->setClosed(!lines->isClosed());
-        if (ret) {
-            shape->shape()->update();
-            view->regen();
-        }
+        lines->setClosed(!lines->isClosed());
+        shape->shape()->update();
+        view->regen();
+        ret = true;
     }
     
     return ret;
