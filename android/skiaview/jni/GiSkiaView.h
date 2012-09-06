@@ -45,6 +45,9 @@ public:
     //! 加载图形列表，s为NULL则清空
     bool loadShapes(MgStorageBase* s);
     
+    //! 得到图形内容改变计数，可用于觉得是否需要调用 saveShapes
+	int getChangeCount();
+
     //! 添加测试图形
     int addTestingShapes();
     

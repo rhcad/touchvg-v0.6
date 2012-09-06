@@ -77,6 +77,10 @@ bool GiSkiaView::loadShapes(MgStorageBase* s)
     return ret;
 }
 
+int GiSkiaView::getChangeCount()
+{
+	return _view->_shapes ? _view->_shapes->getChangeCount() : 0;
+}
 
 int GiSkiaView::getWidth() const
 {
