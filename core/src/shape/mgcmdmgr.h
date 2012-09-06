@@ -20,7 +20,6 @@ public:
     virtual ~MgCmdManagerImpl();
     
 private:
-    virtual void release();
     virtual const char* getCommandName();
     virtual MgCommand* getCommand();
     virtual bool setCommand(const MgMotion* sender, const char* name);

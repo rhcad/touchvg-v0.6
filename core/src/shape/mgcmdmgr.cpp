@@ -6,12 +6,12 @@
 #include "mgcmdselect.h"
 #include <mgbasicsp.h>
 
-MgCommand* mgCreateCommand(const char* name);
+MgCommand* mgCreateCoreCommand(const char* name);
 float mgDisplayMmToModel(float mm, const MgMotion* sender);
 
 typedef std::map<std::string, MgCommand* (*)()> Factories;
 static Factories    _factories;
-static MgCmdManagerImpl* s_cmds = NULL;
+static MgCmdManagerImpl* s_manager = NULL;
 static MgCmdManagerImpl s_tmpmgr(true);
 
 void mgRegisterCommand(const char* name, MgCommand* (*factory)())
@@ -24,37 +24,22 @@ void mgRegisterCommand(const char* name, MgCommand* (*factory)())
     }
 }
 
-MgCommandManager* mgGetCommandManager(MgView* view)
+MgCommandManager* mgGetCommandManager()
 {
-    MgCommandManager* ret = view ? view->getCommandManager() : NULL;
-    if (!ret) {
-        ret = s_cmds ? s_cmds : &s_tmpmgr;
-    }
-    return ret;
-}
-
-MgCommandManager* mgCreateCommandManager(MgView* view)
-{
-    return view ? new MgCmdManagerImpl() : NULL;
-}
-
-void MgCmdManagerImpl::release()
-{
-    if (this && this != &s_tmpmgr)
-        delete this;
+    return s_manager ? s_manager : &s_tmpmgr;
 }
 
 MgCmdManagerImpl::MgCmdManagerImpl(bool tmpobj)
 {
-    if (!s_cmds && !tmpobj)
-        s_cmds = this;
+    if (!s_manager && !tmpobj)
+        s_manager = this;
 }
 
 MgCmdManagerImpl::~MgCmdManagerImpl()
 {
     unloadCommands();
-    if (s_cmds == this)
-        s_cmds = NULL;
+    if (s_manager == this)
+        s_manager = NULL;
 }
 
 void MgCmdManagerImpl::unloadCommands()
@@ -90,7 +75,7 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
             cmd = itf->second ? (itf->second)() : NULL;
         }
         if (!cmd) {
-            cmd = mgCreateCommand(name);
+            cmd = mgCreateCoreCommand(name);
         }
         if (cmd) {
             _cmds[name] = cmd;

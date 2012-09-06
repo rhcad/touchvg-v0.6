@@ -177,10 +177,10 @@ bool MgDynShapeLock::lockedForWrite()
     return s_dynLock.lockedForWrite();
 }
 
-// mgCreateCommand, mgRegisterShapeCreator, mgCreateShape
+// mgCreateCoreCommand, mgRegisterShapeCreator, mgCreateShape
 //
 
-MgCommand* mgCreateCommand(const char* name)
+MgCommand* mgCreateCoreCommand(const char* name)
 {
     typedef MgCommand* (*FCreate)();
     struct Cmd {
@@ -220,6 +220,8 @@ static void registerCoreCreators()
     s_shapeCreators[MgShapeT<MgRect>::Type() % 10000] = MgShapeT<MgRect>::create;
     s_shapeCreators[MgShapeT<MgEllipse>::Type() % 10000] = MgShapeT<MgEllipse>::create;
     s_shapeCreators[MgShapeT<MgRoundRect>::Type() % 10000] = MgShapeT<MgRoundRect>::create;
+    s_shapeCreators[MgShapeT<MgDiamond>::Type() % 10000] = MgShapeT<MgDiamond>::create;
+    s_shapeCreators[MgShapeT<MgParallelogram>::Type() % 10000] = MgShapeT<MgParallelogram>::create;
     s_shapeCreators[MgShapeT<MgLines>::Type() % 10000] = MgShapeT<MgLines>::create;
     s_shapeCreators[MgShapeT<MgSplines>::Type() % 10000] = MgShapeT<MgSplines>::create;
 }

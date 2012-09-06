@@ -19,7 +19,7 @@ struct MgCommandManager;
 //! 返回命令管理器
 /*! \ingroup GEOM_SHAPE
 */
-MgCommandManager* mgGetCommandManager(MgView* view = NULL);
+MgCommandManager* mgGetCommandManager();
 
 //! 注册外部命令
 /*! \ingroup GEOM_SHAPE
@@ -46,7 +46,6 @@ struct MgView {
     virtual void regen() = 0;                   //!< 标记视图待重新构建显示
     virtual void redraw(bool fast) = 0;         //!< 标记视图待更新显示
     
-    virtual MgCommandManager* getCommandManager() { return NULL; }  //!< 对于多视图程序返回命令管理器
     virtual GiContext* context() {              //!< 得到当前绘图属性
         return shapes()->context(); }
     virtual bool useFinger() { return true; }   //!< 使用手指或鼠标交互
@@ -151,7 +150,6 @@ struct MgCommandManager {
     virtual bool setCommand(const MgMotion* sender, const char* name) = 0;  //!< 启动命令
     virtual bool cancel(const MgMotion* sender) = 0;        //!< 取消当前命令
     virtual void unloadCommands() = 0;                      //!< 退出时卸载命令
-    virtual void release() = 0;                             //!< 销毁本对象，对于多视图程序有效
     
     //! 得到当前选择的图形
     /*!
@@ -172,7 +170,5 @@ struct MgCommandManager {
     //! 捕捉图形特征点
     virtual int snapHandlePoint(MgMotion* sender, float mm) = 0;
 };
-
-MgCommandManager* mgCreateCommandManager(MgView* view); //!< 创建多视图程序的命令管理器
 
 #endif // __GEOMETRY_MGCOMMAND_H_
