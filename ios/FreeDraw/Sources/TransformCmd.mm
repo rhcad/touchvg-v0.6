@@ -45,7 +45,7 @@ private:
 
 void registerTransformCmd()
 {
-    mgGetCommandManager()->registerCommand(TransformCmd::Name(), TransformCmd::Create);
+    mgRegisterCommand(TransformCmd::Name(), TransformCmd::Create);
 }
 
 TransformCmd::TransformCmd() : _lastCmd(NULL), _ptIndex(-1)

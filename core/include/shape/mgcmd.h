@@ -10,6 +10,30 @@
 #include <mgshapes.h>
 
 struct MgSelection;
+struct MgView;
+struct MgMotion;
+struct MgCommand;
+class MgBaseCommand;
+struct MgCommandManager;
+
+//! 返回命令管理器
+/*! \ingroup GEOM_SHAPE
+*/
+MgCommandManager* mgGetCommandManager(MgView* view = NULL);
+
+//! 注册外部命令
+/*! \ingroup GEOM_SHAPE
+    \param name 命令名称，例如 YourCmd::Name()
+    \param factory 命令类的创建函数，例如 YourCmd::Create, 为NULL则取消注册
+*/
+void mgRegisterCommand(const char* name, MgCommand* (*factory)());
+
+//! 注册图形实体类型
+/*! \ingroup GEOM_SHAPE
+    \param type MgBaseShape 派生图形类的 Type()，或 MgShapeT(图形类)的 Type()
+    \param factory 图形类的创建函数，例如 MgShapeT(图形类)的 create, 为NULL则取消注册
+*/
+void mgRegisterShapeCreator(UInt32 type, MgShape* (*factory)());
 
 //! 图形视图接口
 /*! \ingroup GEOM_SHAPE
@@ -22,6 +46,7 @@ struct MgView {
     virtual void regen() = 0;                   //!< 标记视图待重新构建显示
     virtual void redraw(bool fast) = 0;         //!< 标记视图待更新显示
     
+    virtual MgCommandManager* getCommandManager() { return NULL; }  //!< 对于多视图程序返回命令管理器
     virtual GiContext* context() {              //!< 得到当前绘图属性
         return shapes()->context(); }
     virtual bool useFinger() { return true; }   //!< 使用手指或鼠标交互
@@ -66,16 +91,20 @@ struct MgMotion {
 //! 命令接口
 /*! \ingroup GEOM_SHAPE
     \interface MgCommand
-    \see mgGetCommandManager, MgBaseCommand
+    \see mgGetCommandManager, mgRegisterCommand, MgBaseCommand
 */
 struct MgCommand {
     virtual const char* getName() const = 0;                //!< 返回命令名称
     virtual void release() = 0;                             //!< 销毁对象
+    
     virtual bool cancel(const MgMotion* sender) = 0;        //!< 取消命令
     virtual bool initialize(const MgMotion* sender) = 0;    //!< 开始命令
     virtual bool undo(bool &enableRecall, const MgMotion* sender) = 0;  //!< 回退一步
+    
     virtual bool draw(const MgMotion* sender, GiGraphics* gs) = 0;  //!< 显示动态图形
     virtual void gatherShapes(const MgMotion* sender, MgShapes* shapes) = 0;   //!< 得到动态图形
+    virtual MgShape* getCurrentShape(const MgMotion*) { return NULL; }; //!< 获得当前图形
+    
     virtual bool click(const MgMotion* sender) = 0;         //!< 点击
     virtual bool doubleClick(const MgMotion* sender) = 0;   //!< 双击
     virtual bool longPress(const MgMotion* sender) = 0;     //!< 长按
@@ -83,12 +112,10 @@ struct MgCommand {
     virtual bool touchMoved(const MgMotion* sender) = 0;    //!< 正在滑动
     virtual bool touchEnded(const MgMotion* sender) = 0;    //!< 滑动结束
     virtual bool mouseHover(const MgMotion*) { return false; }; //!< 鼠标掠过
-
-    virtual MgShape* getCurrentShape(const MgMotion*) { return NULL; }; //!< 获得当前图形
 };
 
 //! 命令接口的默认实现，可以以此派生新命令类
-/*! example: mgGetCommandManager()->registerCommand(YourCmd::Name(), YourCmd::Create);
+/*! example: mgRegisterCommand(YourCmd::Name(), YourCmd::Create);
     \ingroup GEOM_SHAPE
     \see MgCommandDraw
 */
@@ -124,7 +151,7 @@ struct MgCommandManager {
     virtual bool setCommand(const MgMotion* sender, const char* name) = 0;  //!< 启动命令
     virtual bool cancel(const MgMotion* sender) = 0;        //!< 取消当前命令
     virtual void unloadCommands() = 0;                      //!< 退出时卸载命令
-    virtual void registerCommand(const char* name, MgCommand* (*factory)()) = 0;    //! 注册外部命令
+    virtual void release() = 0;                             //!< 销毁本对象，对于多视图程序有效
     
     //! 得到当前选择的图形
     /*!
@@ -146,16 +173,6 @@ struct MgCommandManager {
     virtual int snapHandlePoint(MgMotion* sender, float mm) = 0;
 };
 
-//! 返回命令管理器
-/*! \ingroup GEOM_SHAPE
-*/
-MgCommandManager* mgGetCommandManager();
-
-//! 注册图形实体类型
-/*! \ingroup GEOM_SHAPE
-    \param type MgBaseShape 派生图形类的 Type()，或 MgShapeT(图形类)的 Type()
-    \param factory 图形类的创建函数，例如 MgShapeT(图形类)的 create, 为NULL则取消注册
-*/
-void mgRegisterShapeCreator(UInt32 type, MgShape* (*factory)());
+MgCommandManager* mgCreateCommandManager(MgView* view); //!< 创建多视图程序的命令管理器
 
 #endif // __GEOMETRY_MGCOMMAND_H_

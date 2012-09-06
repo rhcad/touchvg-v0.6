@@ -17,7 +17,7 @@ float mgDisplayMmToModel(float mm, GiGraphics* gs);
 float mgDisplayMmToModel(float mm, const MgMotion* sender);
 
 //! 绘图命令基类
-/*! example: mgGetCommandManager()->registerCommand(YourCmd::Name(), YourCmd::Create);
+/*! example: mgRegisterCommand(YourCmd::Name(), YourCmd::Create);
     \ingroup GEOM_SHAPE
     \see mgLineHalfWidthModel, mgDisplayMmToModel, MgBaseCommand
  */

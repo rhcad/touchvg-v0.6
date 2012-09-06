@@ -16,16 +16,16 @@
 class MgCmdManagerImpl : public MgCommandManager
 {
 public:
-    MgCmdManagerImpl();
+    MgCmdManagerImpl(bool tmpobj = false);
     virtual ~MgCmdManagerImpl();
     
 private:
+    virtual void release();
     virtual const char* getCommandName();
     virtual MgCommand* getCommand();
     virtual bool setCommand(const MgMotion* sender, const char* name);
     virtual bool cancel(const MgMotion* sender);
     virtual void unloadCommands();
-    virtual void registerCommand(const char* name, MgCommand* (*factory)());
     virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false);
     virtual bool dynamicChangeEnded(MgView* view, bool apply);
     virtual MgSelection* getSelection(MgView* view);
@@ -33,9 +33,7 @@ private:
 
 private:
     typedef std::map<std::string, MgCommand*> CMDS;
-    typedef std::map<std::string, MgCommand* (*)()> Factories;
     CMDS            _cmds;
-    Factories       _factories;
     std::string     _cmdname;
 };
 
