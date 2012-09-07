@@ -43,7 +43,6 @@ public:
         [_pointImages[1] release];
     }
     
-    GiContext* context() { return shapes() ? shapes()->context() : NULL; }
     id<GiView> getView() { return _curview; }
     
     void setView(id<GiView> gv) {
@@ -57,6 +56,7 @@ private:
     MgShapes* shapes() { return [_curview shapes]; }
     GiTransform* xform() { return [_curview xform]; }
     GiGraphics* graph() { return [_curview graph]; }
+    
     bool shapeWillAdded(MgShape* shape) {
         NSObject* obj = _mainview.ownerView.nextResponder;
         return (![obj respondsToSelector:@selector(shapeWillAdded)]
@@ -197,21 +197,21 @@ static long s_cmdRef = 0;
         case kMgSelOneShape:
         case kMgSelMultiShapes:
             items[0] = [[UIMenuItem alloc] initWithTitle:@"删除" action:@selector(menuClickDelete:)];
-            items[1] = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(menuClickClone:)];
+            items[1] = [[UIMenuItem alloc] initWithTitle:@"克隆" action:@selector(menuClickClone:)];
             items[2] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
             break;
             
         case kMgSelVertexes:
             items[0] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
             items[1] = [[UIMenuItem alloc] initWithTitle:@"加点" action:@selector(menuClickAddNode:)];
-            items[2] = [[UIMenuItem alloc] initWithTitle:@"边长固定" action:@selector(menuClickFixedLength:)];
+            items[2] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
             items[3] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
             break;
             
         case kMgSelVertex:
             items[0] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
             items[1] = [[UIMenuItem alloc] initWithTitle:@"删点" action:@selector(menuClickDelNode:)];
-            items[2] = [[UIMenuItem alloc] initWithTitle:@"边长固定" action:@selector(menuClickFixedLength:)];
+            items[2] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
             break;
             
         default:

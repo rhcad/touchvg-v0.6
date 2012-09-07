@@ -52,11 +52,13 @@ bool MgCmdDrawLines::touchBegan(const MgMotion* sender)
 bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
 {
     Point2d pnt(autoAlignPoint(sender));
-    float distmin = mgDisplayMmToModel(2.f, sender);
-    bool closed = m_step > 2 && pnt.distanceTo(dynshape()->shape()->getPoint(0)) < distmin;
-    
     dynshape()->shape()->setPoint(m_step, pnt);
-    ((MgBaseLines*)dynshape()->shape())->setClosed(closed);
+    
+    if (needCheckClosed()) {
+        float distmin = mgDisplayMmToModel(2.f, sender);
+        bool closed = m_step > 2 && pnt.distanceTo(dynshape()->shape()->getPoint(0)) < distmin;
+        ((MgBaseLines*)dynshape()->shape())->setClosed(closed);
+    }
     
     dynshape()->shape()->update();
     
@@ -67,16 +69,22 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
 {
     Point2d pnt(autoAlignPoint(sender));
     float distmin = mgDisplayMmToModel(2.f, sender);
-    bool closed = m_step > 2 && pnt.distanceTo(dynshape()->shape()->getPoint(0)) < distmin;
+    bool closed = false;
     
     dynshape()->shape()->setPoint(m_step, pnt);
-    ((MgBaseLines*)dynshape()->shape())->setClosed(closed);
+    
+    if (needCheckClosed()) {
+        closed = m_step > 2 && pnt.distanceTo(dynshape()->shape()->getPoint(0)) < distmin;
+        ((MgBaseLines*)dynshape()->shape())->setClosed(closed);
+    }
     
     dynshape()->shape()->update();
     
     if (pnt.distanceTo(dynshape()->shape()->getPoint(m_step - 1)) > distmin) {
-        if (closed) {
-            ((MgBaseLines*)dynshape()->shape())->removePoint(m_step);
+        if (closed || needEnded()) {
+            if (closed) {
+                ((MgBaseLines*)dynshape()->shape())->removePoint(m_step);
+            }
             _addshape(sender);
             _delayClear();
             m_step = 0;
@@ -97,11 +105,27 @@ bool MgCmdDrawLines::click(const MgMotion* sender)
 bool MgCmdDrawLines::doubleClick(const MgMotion* sender)
 {
     if (m_step > 1) {
+        while (m_step > 1 && mgDisplayMmToModel(3.f, sender) >
+            sender->pointM.distanceTo(dynshape()->shape()->getPoint(m_step))) {
+            ((MgBaseLines*)dynshape()->shape())->removePoint(m_step--);
+        }
         _addshape(sender);
         _delayClear();
         m_step = 0;
     }
     return true;
+}
+
+// MgCmdDrawPolygon
+//
+
+bool MgCmdDrawPolygon::initialize(const MgMotion* sender)
+{
+    bool ret = _initialize(MgShapeT<MgLines>::create, sender);
+    if (ret) {
+        ((MgBaseLines*)dynshape()->shape())->setClosed(true);
+    }
+    return ret;
 }
 
 // MgCmdDrawFreeLines

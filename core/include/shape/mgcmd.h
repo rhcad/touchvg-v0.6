@@ -47,7 +47,7 @@ struct MgView {
     virtual void redraw(bool fast) = 0;         //!< 标记视图待更新显示
     
     virtual GiContext* context() {              //!< 得到当前绘图属性
-        return shapes()->context(); }
+        return shapes() ? shapes()->context() : NULL; }
     virtual bool useFinger() { return true; }   //!< 使用手指或鼠标交互
     virtual void selChanged() {}                //!< 选择集改变的通知
     

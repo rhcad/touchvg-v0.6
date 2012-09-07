@@ -14,6 +14,41 @@
 #include <mgbasicsp.h>
 #include <mgshapet.h>
 
+MgCommand* mgCreateCoreCommand(const char* name)
+{
+    typedef MgCommand* (*FCreate)();
+    struct Cmd {
+        const char* name;
+        FCreate creator;
+    };
+    const Cmd cmds[] = {
+        { MgCommandSelect::Name(), MgCommandSelect::Create },
+        { MgCommandErase::Name(), MgCommandErase::Create },
+        { MgCmdDrawRect::Name(), MgCmdDrawRect::Create },
+        { MgCmdDrawSquare::Name(), MgCmdDrawSquare::Create },
+        { MgCmdDrawEllipse::Name(), MgCmdDrawEllipse::Create },
+        { MgCmdDrawCircle::Name(), MgCmdDrawCircle::Create },
+        { MgCmdDrawDiamond::Name(), MgCmdDrawDiamond::Create },
+        { MgCmdDrawLine::Name(), MgCmdDrawLine::Create },
+        { MgCmdDrawFixedLine::Name(), MgCmdDrawFixedLine::Create },
+        { MgCmdDrawPolygon::Name(), MgCmdDrawPolygon::Create },
+        { MgCmdDrawQuadrangle::Name(), MgCmdDrawQuadrangle::Create },
+        { MgCmdDrawLines::Name(), MgCmdDrawLines::Create },
+        { MgCmdDrawFreeLines::Name(), MgCmdDrawFreeLines::Create },
+        { MgCmdDrawSplines::Name(), MgCmdDrawSplines::Create },
+        { MgCmdDrawTriangle::Name(), MgCmdDrawTriangle::Create },
+        { MgCmdParallelogram::Name(), MgCmdParallelogram::Create },
+    };
+    
+    for (unsigned i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++)
+    {
+        if (strcmp(cmds[i].name, name) == 0)
+            return (cmds[i].creator)();
+    }
+    
+    return NULL;
+}
+
 typedef std::pair<MgShapesLock::ShapesLocked, void*> ShapeObserver;
 static std::vector<ShapeObserver>  s_shapeObservers;
 static MgLockRW s_dynLock;
@@ -177,40 +212,8 @@ bool MgDynShapeLock::lockedForWrite()
     return s_dynLock.lockedForWrite();
 }
 
-// mgCreateCoreCommand, mgRegisterShapeCreator, mgCreateShape
+// mgRegisterShapeCreator, mgCreateShape
 //
-
-MgCommand* mgCreateCoreCommand(const char* name)
-{
-    typedef MgCommand* (*FCreate)();
-    struct Cmd {
-        const char* name;
-        FCreate creator;
-    };
-    const Cmd cmds[] = {
-        { MgCommandSelect::Name(), MgCommandSelect::Create },
-        { MgCommandErase::Name(), MgCommandErase::Create },
-        { MgCmdDrawRect::Name(), MgCmdDrawRect::Create },
-        { MgCmdDrawSquare::Name(), MgCmdDrawSquare::Create },
-        { MgCmdDrawEllipse::Name(), MgCmdDrawEllipse::Create },
-        { MgCmdDrawCircle::Name(), MgCmdDrawCircle::Create },
-        { MgCmdDrawDiamond::Name(), MgCmdDrawDiamond::Create },
-        { MgCmdDrawLine::Name(), MgCmdDrawLine::Create },
-        { MgCmdDrawLines::Name(), MgCmdDrawLines::Create },
-        { MgCmdDrawFreeLines::Name(), MgCmdDrawFreeLines::Create },
-        { MgCmdDrawSplines::Name(), MgCmdDrawSplines::Create },
-        { MgCmdDrawTriangle::Name(), MgCmdDrawTriangle::Create },
-        { MgCmdParallelogram::Name(), MgCmdParallelogram::Create },
-    };
-
-    for (unsigned i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++)
-    {
-        if (strcmp(cmds[i].name, name) == 0)
-            return (cmds[i].creator)();
-    }
-
-    return NULL;
-}
 
 static std::map<UInt32, MgShape* (*)()>   s_shapeCreators;
 

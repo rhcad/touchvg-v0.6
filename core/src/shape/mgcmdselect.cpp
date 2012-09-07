@@ -213,8 +213,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
             gs->drawRect(&ctxshap, selbox);
             gs->setAntiAliasMode(antiAlias);
             
-            for (int i = sender->view->shapeCanTransform(shapes.front()) ? 7 : -1;
-                 i >= 0; i--) {
+            for (int i = canTransform(shapes.front(), sender) ? 7 : -1; i >= 0; i--) {
                 mgGetRectHandle(selbox, i, pnt);
                 if (!sender->view->drawHandle(gs, pnt, false))
                     gs->drawEllipse(&ctxhd, pnt, radius);
@@ -513,6 +512,11 @@ Box2d MgCommandSelect::getDragRect(const MgMotion* sender)
     return selbox;
 }
 
+bool MgCommandSelect::canTransform(MgShape* shape, const MgMotion* sender)
+{
+    return !shape->shape()->isFixedLength() && sender->view->shapeCanTransform(shape);
+}
+
 bool MgCommandSelect::isDragRectCorner(const MgMotion* sender, Matrix2d& mat)
 {
     m_boxHandle = 99;
@@ -529,8 +533,7 @@ bool MgCommandSelect::isDragRectCorner(const MgMotion* sender, Matrix2d& mat)
     int i;
     float mindist = mgDisplayMmToModel(5, sender);
     
-    for (i = sender->view->shapeCanTransform(getShape(m_selIds[0], sender)) ? 7 : -1;
-         i >= 0; i--) {
+    for (i = canTransform(getShape(m_selIds[0], sender), sender) ? 7 : -1; i >= 0; i--) {
         mgGetRectHandle(selbox, i, pnt);
         float addlen = i < 4 ? 0.f : mgDisplayMmToModel(1, sender); // 边中点优先1毫米
         if (mindist > sender->startPointM.distanceTo(pnt) - addlen) {

@@ -33,4 +33,20 @@ private:
     virtual bool touchEnded(const MgMotion* sender);
 };
 
+//! 固定长度直线段绘图命令
+/*! \ingroup GEOM_SHAPE
+    \see MgEllipse
+*/
+class MgCmdDrawFixedLine : public MgCmdDrawLine
+{
+public:
+    static const char* Name() { return "fixedline"; }
+    static MgCommand* Create() { return new MgCmdDrawFixedLine; }
+    
+private:
+    virtual const char* getName() const { return Name(); }
+    virtual void release() { delete this; }
+    virtual bool initialize(const MgMotion* sender);
+};
+
 #endif // __GEOMETRY_MGCOMMAND_DRAW_LINE_H_

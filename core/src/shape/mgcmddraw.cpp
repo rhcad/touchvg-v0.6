@@ -77,14 +77,18 @@ bool MgCommandDraw::_undo(const MgMotion* sender)
     return false;
 }
 
-bool MgCommandDraw::draw(const MgMotion* /*sender*/, GiGraphics* gs)
+bool MgCommandDraw::draw(const MgMotion* sender, GiGraphics* gs)
 {
     if (m_needClear) {
         m_needClear = false;
         m_step = 0;
         m_shape->shape()->clear();
     }
-    return m_step > 0 && m_shape->draw(*gs);
+    bool ret = m_step > 0 && m_shape->draw(*gs);
+    if (m_step > 0) {
+        sender->view->drawHandle(gs, sender->pointM, true);
+    }
+    return ret;
 }
 
 void MgCommandDraw::gatherShapes(const MgMotion* /*sender*/, MgShapes* shapes)

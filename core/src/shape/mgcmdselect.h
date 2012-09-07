@@ -72,6 +72,7 @@ private:
     bool isCloneDrag(const MgMotion* sender);
     void cloneShapes(MgView* view);
     bool applyCloneShapes(MgView* view, bool apply, bool addNewShapes = false);
+    bool canTransform(MgShape* shape, const MgMotion* sender);
     
 private:
     std::vector<UInt32>     m_selIds;           // 选中的图形的ID

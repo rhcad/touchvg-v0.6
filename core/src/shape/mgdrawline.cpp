@@ -55,3 +55,12 @@ bool MgCmdDrawLine::touchEnded(const MgMotion* sender)
 
     return _touchEnded(sender);
 }
+
+bool MgCmdDrawFixedLine::initialize(const MgMotion* sender)
+{
+    bool ret = _initialize(MgShapeT<MgLine>::create, sender);
+    if (ret) {
+        dynshape()->shape()->setFixedLength(true);
+    }
+    return ret;
+}

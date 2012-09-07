@@ -44,6 +44,8 @@ public:
     static MgCommand* Create() { return new MgCmdDrawEllipse; }
     
 private:
+    virtual const char* getName() const { return Name(); }
+    virtual void release() { delete this; }
     virtual bool initialize(const MgMotion* sender);
 };
 
@@ -58,6 +60,8 @@ public:
     static MgCommand* Create() { return new MgCmdDrawDiamond; }
     
 private:
+    virtual const char* getName() const { return Name(); }
+    virtual void release() { delete this; }
     virtual bool initialize(const MgMotion* sender);
 };
 
@@ -72,6 +76,8 @@ public:
     static MgCommand* Create() { return new MgCmdDrawSquare; }
     
 private:
+    virtual const char* getName() const { return Name(); }
+    virtual void release() { delete this; }
     virtual bool initialize(const MgMotion* sender);
 };
 
@@ -86,6 +92,8 @@ public:
     static MgCommand* Create() { return new MgCmdDrawCircle; }
     
 private:
+    virtual const char* getName() const { return Name(); }
+    virtual void release() { delete this; }
     virtual bool initialize(const MgMotion* sender);
 };
 

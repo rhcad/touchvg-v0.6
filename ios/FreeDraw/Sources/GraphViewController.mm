@@ -58,10 +58,6 @@ void registerTransformCmd();
 #endif
 }
 
-- (BOOL)shapeCanTransform {
-    return NO;
-}
-
 @end
 
 @implementation GraphViewController
@@ -280,8 +276,6 @@ void registerTransformCmd();
     
     magnifierView.lockRedraw = !magnifierView.lockRedraw;
     [btn setTitle:magnifierView.lockRedraw ? @"ULok" : @"Lock" forState: UIControlStateNormal];
-    
-    _graphc.currentShapeFixedLength = magnifierView.lockRedraw;
 }
 
 - (IBAction)resizeMagnifier:(id)sender
@@ -405,7 +399,7 @@ void registerTransformCmd();
 
 - (IBAction)selectCommand:(id)sender    // 选择绘图命令
 {
-    CGRect viewrect = CGRectMake(0, 0, 136, 416);
+    CGRect viewrect = CGRectMake(0, 0, 264, 264);
     viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
     viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _graphc.downview.frame.size.height - 20;
     
@@ -416,12 +410,15 @@ void registerTransformCmd();
     
     struct { NSString* caption; NSString* name; } cmds[] = {
         { @"直线段",  @"line" }, 
+        { @"定长线段",  @"fixedline" },        
         { @"矩形",    @"rect" },
         { @"正方形",  @"square" },
         { @"椭圆",    @"ellipse" },
         { @"圆",      @"circle" },
         { @"三角形",  @"triangle" },
         { @"棱形",    @"diamond" },
+        { @"多边形",  @"polygon" },
+        { @"四边形",  @"quadrangle" },
         { @"折线",    @"lines" },
         { @"曲线",    @"splines" },
         { @"平行四边形", @"parallelogram" },
@@ -430,13 +427,19 @@ void registerTransformCmd();
     const int count = sizeof(cmds) / sizeof(cmds[0]);
     
     float x = 8, y = 8, w = 120, h = 32;
-    for (int i = 0; i < count; i++, y += h + 4) {
+    for (int i = 0; i < count; i++) {
         UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(x, y, w, h)];
         [btn setTitle:cmds[i].caption forState: UIControlStateNormal];
         [btn setTitle:cmds[i].name forState: UIControlStateHighlighted];
         [btn addTarget:self action:@selector(commandSelected:) forControlEvents:UIControlEventTouchUpInside];
         [calloutView addSubview:btn];
         [btn release];
+        
+        y += h + 4;
+        if (y + h > calloutView.bounds.size.height) {
+            y = 8;
+            x += w + 8;
+        }
     }
 }
 
