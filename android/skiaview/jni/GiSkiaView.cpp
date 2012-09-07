@@ -77,6 +77,11 @@ bool GiSkiaView::loadShapes(MgStorageBase* s)
     return ret;
 }
 
+int GiSkiaView::getShapeCount()
+{
+	return _view->_shapes ? _view->_shapes->getShapeCount() : 0;
+}
+
 int GiSkiaView::getChangeCount()
 {
 	return _view->_shapes ? _view->_shapes->getChangeCount() : 0;
