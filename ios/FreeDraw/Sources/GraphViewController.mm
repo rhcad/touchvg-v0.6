@@ -23,7 +23,9 @@
 
 #import "SCCalloutView.h"
 #import <GiGraphView.h>
+#ifdef USE_RANDOMSHAPE
 #include "../../../core/include/testgraph/RandomShape.cpp"
+#endif
 
 static const NSUInteger kRedTag         = 0;
 static const NSUInteger kBlueTag        = 1;
@@ -548,6 +550,7 @@ void registerTransformCmd();
 
 - (IBAction)addTestShapes:(id)sender
 {
+#ifdef USE_RANDOMSHAPE
     RandomParam::init();
     
     RandomParam param;
@@ -559,6 +562,7 @@ void registerTransformCmd();
     
     param.initShapes((MgShapes*)_graphc.shapes);
     [_graphc regen];
+#endif
 }
 
 - (void)showUnlightButtons          // 显示全部非高亮钮

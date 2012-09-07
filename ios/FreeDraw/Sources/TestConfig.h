@@ -6,6 +6,9 @@
 // 定义TESTMODE_SIMPLEVIEW时使用简单视图控制器，注释掉时使用带按钮面板的复杂视图
 //#define TESTMODE_SIMPLEVIEW
 
+// 是否使用 RandomShape.cpp
+//#define USE_RANDOMSHAPE
+
 // 定义USE_MAGNIFIER时使用放大镜视图，未定义TESTMODE_SIMPLEVIEW时有效
 #define USE_MAGNIFIER
 

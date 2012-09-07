@@ -6,7 +6,9 @@
 #ifdef TESTMODE_SIMPLEVIEW
 #include <mgshapest.h>
 #include <vector>
+#ifdef USE_RANDOMSHAPE
 #include "../../../core/include/testgraph/RandomShape.cpp"
+#endif
 
 @implementation TestGraphView
 
@@ -26,6 +28,7 @@
         self.backgroundColor = [UIColor colorWithRed:0.9 green:0.95 blue:0.9 alpha:1.0];//clearColor
         _shapes = new MgShapesT<std::vector<MgShape*> >;
         
+#ifdef USE_RANDOMSHAPE
         RandomParam::init();
         
         RandomParam param;
@@ -38,12 +41,14 @@
         
         [self xform]->zoomTo(_shapes->getExtent() * [self xform]->modelToWorld());
         [self xform]->zoomByFactor(4.0);
+#endif
     }
     return self;
 }
 
 - (void)reset
 {
+#ifdef USE_RANDOMSHAPE
     RandomParam param;
     param.lineCount = RandomParam::RandInt(0, 200);
     param.arcCount = RandomParam::RandInt(0, 100);
@@ -53,6 +58,7 @@
     _shapes->clear();
     param.initShapes(_shapes);
     [self setShapes:_shapes];
+#endif
 }
 
 - (BOOL)undoMotion
