@@ -147,7 +147,8 @@ bool MgCommandDraw::mouseHover(const MgMotion* sender)
     return true;
 }
 
-Point2d MgCommandDraw::snapPoint(const MgMotion* sender)
+Point2d MgCommandDraw::snapPoint(const MgMotion* sender, bool firstStep)
 {
-    return mgGetCommandManager()->getSnap()->snapPoint(sender, m_shape, m_step);
+    return mgGetCommandManager()->getSnap()->snapPoint(
+        sender, firstStep ? NULL : m_shape, m_step);
 }

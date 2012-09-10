@@ -51,7 +51,7 @@ protected:
     MgShape* getCurrentShape(const MgMotion*) { return m_shape; }
     UInt32 getStep() { return m_step; }
     MgShape* dynshape() { return m_shape; }
-    Point2d snapPoint(const MgMotion* sender);
+    Point2d snapPoint(const MgMotion* sender, bool firstStep = false);
     
 protected:
     UInt32      m_step;

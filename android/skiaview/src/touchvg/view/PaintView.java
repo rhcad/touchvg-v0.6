@@ -113,6 +113,8 @@ public class PaintView extends View {
     
     public void setBkColor(int argb) {
         mBkColor = argb;
+        this.setBackgroundColor(argb);
+        
 		GiColor color = new GiColor();
         color.setARGB(mBkColor);
         mCanvas.setBkColor(color);

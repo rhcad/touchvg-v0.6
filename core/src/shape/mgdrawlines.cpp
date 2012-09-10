@@ -37,9 +37,10 @@ bool MgCmdDrawLines::touchBegan(const MgMotion* sender)
 {
     if (0 == m_step) {
         m_step = 1;
+        Point2d pnt(snapPoint(sender, true));
         ((MgBaseLines*)dynshape()->shape())->resize(2);
-        dynshape()->shape()->setPoint(0, sender->startPointM);
-        dynshape()->shape()->setPoint(1, sender->pointM);
+        dynshape()->shape()->setPoint(0, pnt);
+        dynshape()->shape()->setPoint(1, pnt);
     }
     else {
         dynshape()->shape()->setPoint(m_step, snapPoint(sender));

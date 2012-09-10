@@ -33,8 +33,9 @@ bool MgCmdDrawTriangle::touchBegan(const MgMotion* sender)
         m_step = 1;
         lines->setClosed(true);
         lines->resize(3);
+        Point2d pnt(snapPoint(sender, true));
         for (int i = 0; i < 3; i++) {
-            dynshape()->shape()->setPoint(i, sender->pointM);
+            dynshape()->shape()->setPoint(i, pnt);
         }
     }
     else {

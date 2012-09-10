@@ -27,7 +27,8 @@ bool MgCmdDrawRect::undo(bool &, const MgMotion* sender)
 bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
 {
     m_step = 1;
-    ((MgBaseRect*)dynshape()->shape())->setRect(sender->pointM, sender->pointM);
+    Point2d pnt(snapPoint(sender, true));
+    ((MgBaseRect*)dynshape()->shape())->setRect(pnt, pnt);
     dynshape()->shape()->update();
 
     return _touchBegan(sender);

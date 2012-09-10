@@ -28,8 +28,10 @@ bool MgCmdDrawLine::undo(bool &, const MgMotion* sender)
 bool MgCmdDrawLine::touchBegan(const MgMotion* sender)
 {
     m_step = 1;
-    dynshape()->shape()->setPoint(0, sender->pointM);
-    dynshape()->shape()->setPoint(1, sender->pointM);
+
+    Point2d pnt(snapPoint(sender, true));
+    dynshape()->shape()->setPoint(0, pnt);
+    dynshape()->shape()->setPoint(1, pnt);
     dynshape()->shape()->update();
 
     return _touchBegan(sender);

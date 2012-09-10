@@ -288,6 +288,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\include\shape\mgsnap.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\include\shape\mgstorage.h"
 				>
 			</File>
