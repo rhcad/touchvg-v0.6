@@ -1,5 +1,5 @@
 //! \file mgselect.h
-//! \brief 定义选择集接口
+//! \brief 定义选择集接口 MgSelection
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchvg
 

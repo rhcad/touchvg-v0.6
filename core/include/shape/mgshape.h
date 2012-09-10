@@ -148,14 +148,15 @@ public:
     
     //! 设置是否不能旋转
     void setRotateDisnable(bool disnable) { _setFlag(3, disnable); }
+    
+    bool _getFlag(int bit) const { return (_flags & (1 << bit)) != 0; }
+    void _setFlag(int bit, bool on) { _flags = on ? _flags | (1 << bit) : _flags & ~(1 << bit); }
 
 protected:
     Box2d   _extent;
     UInt32  _flags;
 
 protected:
-    bool _getFlag(int bit) const { return (_flags & (1 << bit)) != 0; }
-    void _setFlag(int bit, bool on) { _flags = on ? _flags | (1 << bit) : _flags & ~(1 << bit); }
     bool _isClosed() const { return _getFlag(1); }
     void _setClosed(bool closed) { _setFlag(1, closed); }
     void _copy(const MgBaseShape& src);

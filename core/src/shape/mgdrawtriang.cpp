@@ -38,7 +38,7 @@ bool MgCmdDrawTriangle::touchBegan(const MgMotion* sender)
         }
     }
     else {
-        dynshape()->shape()->setPoint(m_step, autoAlignPoint(sender));
+        dynshape()->shape()->setPoint(m_step, snapPoint(sender));
     }
     
     dynshape()->shape()->update();
@@ -48,7 +48,7 @@ bool MgCmdDrawTriangle::touchBegan(const MgMotion* sender)
 
 bool MgCmdDrawTriangle::touchMoved(const MgMotion* sender)
 {
-    dynshape()->shape()->setPoint(m_step, autoAlignPoint(sender));
+    dynshape()->shape()->setPoint(m_step, snapPoint(sender));
     dynshape()->shape()->update();
 
     return _touchMoved(sender);
@@ -56,7 +56,7 @@ bool MgCmdDrawTriangle::touchMoved(const MgMotion* sender)
 
 bool MgCmdDrawTriangle::touchEnded(const MgMotion* sender)
 {
-    Point2d pnt(autoAlignPoint(sender));
+    Point2d pnt(snapPoint(sender));
     float distmin = mgDisplayMmToModel(2.f, sender);
     
     dynshape()->shape()->setPoint(m_step, pnt);
@@ -109,7 +109,7 @@ bool MgCmdParallelogram::touchBegan(const MgMotion* sender)
         }
     }
     else {
-        dynshape()->shape()->setHandlePoint(m_step, autoAlignPoint(sender), 0);
+        dynshape()->shape()->setHandlePoint(m_step, snapPoint(sender), 0);
     }
     dynshape()->shape()->update();
 
@@ -118,7 +118,7 @@ bool MgCmdParallelogram::touchBegan(const MgMotion* sender)
 
 bool MgCmdParallelogram::touchMoved(const MgMotion* sender)
 {
-    dynshape()->shape()->setHandlePoint(m_step, autoAlignPoint(sender), 0);
+    dynshape()->shape()->setHandlePoint(m_step, snapPoint(sender), 0);
     dynshape()->shape()->update();
 
     return _touchMoved(sender);
@@ -126,7 +126,7 @@ bool MgCmdParallelogram::touchMoved(const MgMotion* sender)
 
 bool MgCmdParallelogram::touchEnded(const MgMotion* sender)
 {
-    Point2d pnt(autoAlignPoint(sender));
+    Point2d pnt(snapPoint(sender));
     float distmin = mgDisplayMmToModel(2.f, sender);
     
     dynshape()->shape()->setHandlePoint(m_step, pnt, 0);

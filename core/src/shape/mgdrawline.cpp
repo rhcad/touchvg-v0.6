@@ -37,7 +37,7 @@ bool MgCmdDrawLine::touchBegan(const MgMotion* sender)
 
 bool MgCmdDrawLine::touchMoved(const MgMotion* sender)
 {
-    dynshape()->shape()->setPoint(1, autoAlignPoint(sender));
+    dynshape()->shape()->setPoint(1, snapPoint(sender));
     dynshape()->shape()->update();
 
     return _touchMoved(sender);
@@ -45,7 +45,7 @@ bool MgCmdDrawLine::touchMoved(const MgMotion* sender)
 
 bool MgCmdDrawLine::touchEnded(const MgMotion* sender)
 {
-    dynshape()->shape()->setPoint(1, autoAlignPoint(sender));
+    dynshape()->shape()->setPoint(1, snapPoint(sender));
     dynshape()->shape()->update();
 
     if ( ((MgLine*)dynshape()->shape())->length() > mgDisplayMmToModel(2, sender)) {

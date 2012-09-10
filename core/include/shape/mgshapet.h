@@ -79,12 +79,7 @@ public:
     MgObject* clone() const
     {
         ThisClass *p = new ThisClass;
-        
-        p->shape()->copy(_shape);
-        p->shape()->update();
-        p->_context = _context;
-        p->_tag = _tag;
-        
+        p->copy(*this);
         return p;
     }
     
@@ -95,10 +90,15 @@ public:
             shape()->copy(_src._shape);
             _context = _src._context;
             _tag = _src._tag;
+            if (!_parent && 0 == _id) {
+                _parent = _src._parent;
+                _id = _src._id;
+            }
         }
         else if (src.isKindOf(ShapeT::Type())) {
             shape()->copy((const ShapeT&)src);
         }
+        shape()->update();
     }
     
     bool equals(const MgObject& src) const

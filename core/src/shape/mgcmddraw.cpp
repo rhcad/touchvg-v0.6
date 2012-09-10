@@ -3,6 +3,7 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgcmddraw.h"
+#include <mgsnap.h>
 
 UInt32      g_newShapeID = 0;
 
@@ -88,7 +89,7 @@ bool MgCommandDraw::draw(const MgMotion* sender, GiGraphics* gs)
     if (m_step > 0) {
         sender->view->drawHandle(gs, sender->pointM, true);
     }
-    return ret;
+    return mgGetCommandManager()->getSnap()->draw(sender, gs) || ret;
 }
 
 void MgCommandDraw::gatherShapes(const MgMotion* /*sender*/, MgShapes* shapes)
@@ -146,28 +147,7 @@ bool MgCommandDraw::mouseHover(const MgMotion* sender)
     return true;
 }
 
-Point2d MgCommandDraw::autoAlignPoint(const MgMotion* sender)
+Point2d MgCommandDraw::snapPoint(const MgMotion* sender)
 {
-    Point2d lastPt (dynshape()->shape()->getPoint(m_step - 1)
-                    * sender->view->xform()->modelToDisplay());
-    Point2d newPt (sender->point);
-    float angle = (newPt - lastPt).angle();
-    const float limitAngle = _M_D2R * 5.f;
-    
-    if (sender->snappedType >= 0) {
-    }
-    else if ((float)fabs(angle - _M_PI_2) < limitAngle) {
-        angle = _M_PI_2;
-        newPt.x = lastPt.x;
-    }
-    else if (angle < limitAngle) {
-        angle = 0.f;
-        newPt.y = lastPt.y;
-    }
-    else if (_M_PI - angle < limitAngle) {
-        angle = _M_PI;
-        newPt.y = lastPt.y;
-    }
-    
-    return newPt * sender->view->xform()->displayToModel();
+    return mgGetCommandManager()->getSnap()->snapPoint(sender, m_shape, m_step);
 }

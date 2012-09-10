@@ -10,6 +10,7 @@
 #include <mgshapet.h>
 #include <mgnear.h>
 #include <mgbase.h>
+#include <mgsnap.h>
 
 extern UInt32 g_newShapeID;
 
@@ -168,6 +169,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         m_selIds.clear();
         sender->view->selChanged();
     }
+    
+    mgGetCommandManager()->getSnap()->draw(sender, gs);
     
     if (!m_showSel || (!m_clones.empty() && !isCloneDrag(sender))) {
         GiContext ctxbk(-1, gs->getBkColor());
@@ -366,6 +369,15 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const Point2d& pointM,
     }
     
     return handleIndex;
+}
+
+Point2d MgCommandSelect::snapPoint(const MgMotion* sender)
+{
+    MgShape* shape = !m_clones.empty() ? m_clones[0] : NULL;
+    Point2d pnt(mgGetCommandManager()->getSnap()->snapPoint(sender, shape, m_handleIndex - 1));
+    //int type = mgGetCommandManager()->getSnap()->getSnappedType();
+    
+    return pnt;
 }
 
 bool MgCommandSelect::click(const MgMotion* sender)
@@ -608,6 +620,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
         }
         else {
             shape->offset(pointM - sender->startPointM, m_segment);
+            shape->offset(snapPoint(sender) - pointM, m_segment);
             sender->view->shapeMoved(m_clones[i], m_segment);
         }
         shape->update();

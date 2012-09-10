@@ -42,7 +42,7 @@ bool MgCmdDrawLines::touchBegan(const MgMotion* sender)
         dynshape()->shape()->setPoint(1, sender->pointM);
     }
     else {
-        dynshape()->shape()->setPoint(m_step, autoAlignPoint(sender));
+        dynshape()->shape()->setPoint(m_step, snapPoint(sender));
     }
     dynshape()->shape()->update();
     
@@ -51,7 +51,7 @@ bool MgCmdDrawLines::touchBegan(const MgMotion* sender)
 
 bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
 {
-    Point2d pnt(autoAlignPoint(sender));
+    Point2d pnt(snapPoint(sender));
     dynshape()->shape()->setPoint(m_step, pnt);
     
     if (needCheckClosed()) {
@@ -67,7 +67,7 @@ bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
 
 bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
 {
-    Point2d pnt(autoAlignPoint(sender));
+    Point2d pnt(snapPoint(sender));
     float distmin = mgDisplayMmToModel(2.f, sender);
     bool closed = false;
     

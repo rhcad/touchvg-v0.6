@@ -150,7 +150,6 @@ static long s_cmdRef = 0;
 {
     _motion->point = Point2d(pt.x, pt.y);
     _motion->pointM = Point2d(pt.x, pt.y) * _motion->view->xform()->displayToModel();
-    _motion->snappedType = mgGetCommandManager()->snapHandlePoint(_motion, 5.f);
 }
 
 - (BOOL)getPointForPressDrag:(UIGestureRecognizer *)sender :(CGPoint*)point
@@ -374,10 +373,6 @@ static long s_cmdRef = 0;
     if (cmd && _mgview->getView()) {
         cmd->draw(_motion, gs);
     }
-    if (_motion->snappedType >= 0) {
-        GiContext ctx(0, GiColor(128, 128, 128, 200));
-        gs->drawEllipse(&ctx, _motion->pointM, gs->xf().displayToModel(8.f, true));
-    }
     return YES;
 }
 
@@ -400,6 +395,7 @@ static long s_cmdRef = 0;
 - (BOOL)cancel
 {
     _motion->pressDrag = false;
+    _motion->dragging = false;
     return _mgview->getView() && mgGetCommandManager()->cancel(_motion);
 }
 
@@ -457,6 +453,7 @@ static long s_cmdRef = 0;
             
             ret = cmd->touchMoved(_motion);
             _undoFired = false;                             // 允许再触发Undo操作
+            _motion->dragging = true;
             _motion->lastPoint = _motion->point;
             _motion->lastPointM = _motion->pointM;
         }
@@ -477,7 +474,7 @@ static long s_cmdRef = 0;
         ret = cmd->touchEnded(_motion);
         _motion->pressDrag = false;
         _touchCount = 0;
-        _motion->snappedType = -1;
+        _motion->dragging = false;
     }
     
     return ret;
@@ -513,12 +510,12 @@ static long s_cmdRef = 0;
             }
             ret = cmd->touchEnded(_motion);
             _touchCount = 0;
-            _motion->snappedType = -1;
+            _motion->dragging = false;
         }
         else {
             ret = cmd->cancel(_motion);
             _touchCount = 0;
-            _motion->snappedType = -1;
+            _motion->dragging = false;
         }
         ret = YES;
     }
@@ -554,12 +551,12 @@ static long s_cmdRef = 0;
             }
             ret = cmd->touchEnded(_motion);
             _touchCount = 0;
-            _motion->snappedType = -1;
+            _motion->dragging = false;
         }
         else {
             ret = cmd->cancel(_motion);
             _touchCount = 0;
-            _motion->snappedType = -1;
+            _motion->dragging = false;
         }
         ret = YES;
     }
@@ -585,7 +582,7 @@ static long s_cmdRef = 0;
         _motion->startPointM = _motion->pointM;
         _motion->lastPoint = _motion->point;
         _motion->lastPointM = _motion->pointM;
-        _motion->pressDrag = YES;       // 设置长按标记
+        _motion->pressDrag = true;      // 设置长按标记
         
         ret = cmd->longPress(_motion);
     }
@@ -618,7 +615,7 @@ static long s_cmdRef = 0;
         _touchCount = 0;
     }
     _clickFingers = 0;
-    _motion->snappedType = -1;
+    _motion->dragging = false;
     
     return ret;
 }

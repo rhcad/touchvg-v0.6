@@ -15,6 +15,7 @@ struct MgMotion;
 struct MgCommand;
 class MgBaseCommand;
 struct MgCommandManager;
+struct MgSnap;
 
 //! 返回命令管理器
 /*! \ingroup GEOM_SHAPE
@@ -76,6 +77,7 @@ struct MgView {
 struct MgMotion {
     MgView*     view;                           //!< 图形视图
     float       velocity;                       //!< 移动速度，像素每秒
+    bool        dragging;                       //!< 是否正按下拖动
     bool        pressDrag;                      //!< 是否为一指按住并另一手指拖动
     Point2d     startPoint;                     //!< 开始点，视图坐标
     Point2d     startPointM;                    //!< 开始点，模型坐标
@@ -83,8 +85,7 @@ struct MgMotion {
     Point2d     lastPointM;                     //!< 上次点，模型坐标
     Point2d     point;                          //!< 当前点，视图坐标
     Point2d     pointM;                         //!< 当前点，模型坐标
-    int         snappedType;                    //!< 捕捉特征点的类型
-    MgMotion() : view(NULL), velocity(0), pressDrag(false), snappedType(-1) {}
+    MgMotion() : view(NULL), velocity(0), dragging(false), pressDrag(false) {}
 };
 
 //! 命令接口
@@ -167,8 +168,8 @@ struct MgCommandManager {
     //! 返回选择集对象
     virtual MgSelection* getSelection(MgView* view) = 0;
     
-    //! 捕捉图形特征点
-    virtual int snapHandlePoint(MgMotion* sender, float mm) = 0;
+    //! 返回图形特征点捕捉器
+    virtual MgSnap* getSnap() = 0;
 };
 
 #endif // __GEOMETRY_MGCOMMAND_H_

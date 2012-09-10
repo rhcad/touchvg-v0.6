@@ -62,6 +62,7 @@ private:
     bool canSelect(MgShape* shape, const MgMotion* sender);
     Int32 hitTestHandles(MgShape* shape, const Point2d& pointM, const MgMotion* sender);
     bool isIntersectMode(const MgMotion* sender);
+    Point2d snapPoint(const MgMotion* sender);
     
     typedef std::vector<UInt32>::iterator sel_iterator;
     sel_iterator getSelectedPostion(MgShape* shape);
