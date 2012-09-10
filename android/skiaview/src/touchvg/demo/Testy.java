@@ -1,8 +1,9 @@
-package touchvg.demo;
+ï»¿package touchvg.demo;
 
 import touchvg.skiaview.GiContext;
 import touchvg.skiaview.GiSkiaView;
 import touchvg.view.PaintView;
+import android.R.color;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,29 +11,31 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class Testy extends Activity {
-    private PaintView mView;        //×é¼şÀà
-    private GiSkiaView mCoreView;   //ÄÚºË×é¼şÀà
-    private Button buttonSelect;    //Ñ¡ÔñÍ¼ĞÎ°´Å¥
-    private Button buttonClear;     //Çå³ıÍ¼ĞÎ°´Å¥
-    private Button buttonRed;       //ºìÉ«»­±Ê°´Å¥
-    private Button buttonBlue;      //À¶É«»­±Ê°´Å¥
-    private Button buttonThickPen;  //»­±Ê±äÏ¸°´Å¥
-    private Button buttonBoldPen;   //»­±Ê±ä´Ö°´Å¥
-    private Button buttonYellow;    //»ÆÉ«»­±Ê°´Å¥
-    private Button buttonEraser;    //ÏğÆ¤°´Å¥
-    private Button buttonStyle;     //ÏßĞÍ°´Å¥
-    private final Testy mHandler = this;  //ÊÓÍ¼ÀàÊµÀı
+    private PaintView mView;        //ç»„ä»¶ç±»
+    private GiSkiaView mCoreView;   //å†…æ ¸ç»„ä»¶ç±»
+    private Button buttonSelect;    //é€‰æ‹©å›¾å½¢æŒ‰é’®
+    private Button buttonClear;     //æ¸…é™¤å›¾å½¢æŒ‰é’®
+    private Button buttonRed;       //çº¢è‰²ç”»ç¬”æŒ‰é’®
+    private Button buttonBlue;      //è“è‰²ç”»ç¬”æŒ‰é’®
+    private Button buttonThickPen;  //ç”»ç¬”å˜ç»†æŒ‰é’®
+    private Button buttonBoldPen;   //ç”»ç¬”å˜ç²—æŒ‰é’®
+    private Button buttonYellow;    //é»„è‰²ç”»ç¬”æŒ‰é’®
+    private Button buttonEraser;    //æ©¡çš®æŒ‰é’®
+    private Button buttonStyle;     //çº¿å‹æŒ‰é’®
+    private Button buttonShape;    	//å½¢çŠ¶æŒ‰é’®
+    private String commandName = "splines";
+    private final Testy mHandler = this;  //è§†å›¾ç±»å®ä¾‹
     
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        this.initComponent();   //³õÊ¼»¯°´Å¥ÊµÀı
-        this.bindEvent();       //Îª°´Å¥°ó¶¨·½·¨
+        this.initComponent();   //åˆå§‹åŒ–æŒ‰é’®å®ä¾‹
+        this.bindEvent();       //ä¸ºæŒ‰é’®ç»‘å®šæ–¹æ³•
     }
     
-    //ÊÂ¼ş¼àÌıÆ÷·½·¨
+    //äº‹ä»¶ç›‘å¬å™¨æ–¹æ³•
     private void bindEvent()
     {
         buttonSelect.setOnClickListener(new OnClickListener() {
@@ -88,10 +91,16 @@ public class Testy extends Activity {
                 mHandler.onPenStyle();
             }
         });
+        
+        buttonShape.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                mHandler.onShapeType();
+            }
+        });
     }
 
     private void onPenYellow() {
-        mCoreView.setCommandName("splines");
+        mCoreView.setCommandName(commandName);
         GiContext ctx = mCoreView.getCurrentContext(false);
         ctx.setLineColor(255, 255, 0);
         mCoreView.applyContext(ctx, 1, 1);
@@ -99,7 +108,7 @@ public class Testy extends Activity {
     }
     
     private void onPenBlue() {
-        mCoreView.setCommandName("splines");
+        mCoreView.setCommandName(commandName);
         GiContext ctx = mCoreView.getCurrentContext(false);
         ctx.setLineColor(0, 0, 255);
         mCoreView.applyContext(ctx, 1, 1);
@@ -107,7 +116,7 @@ public class Testy extends Activity {
     }
     
     private void onPenRed() {
-        mCoreView.setCommandName("splines");
+        mCoreView.setCommandName(commandName);
         GiContext ctx = mCoreView.getCurrentContext(false);
         ctx.setLineColor(255, 0, 0);
         mCoreView.applyContext(ctx, 1, 1);
@@ -120,7 +129,7 @@ public class Testy extends Activity {
     
     private void onClearShapes() {
         mCoreView.loadShapes(null);
-        mCoreView.setCommandName("splines");
+        mCoreView.setCommandName(commandName);
     }
     
     private void onPenBold() {
@@ -149,10 +158,29 @@ public class Testy extends Activity {
     private void onEraser() {
         mCoreView.setCommandName("erase");
     }
+    
+    private void onShapeType() {
+    	String[] names = { "line", "fixedline", "rect", "square", "ellipse", "circle", 
+    			"triangle", "diamond", "polygon", "quadrangle", "parallelogram", 
+    			"lines", "splines", null };
+    	String cmd = mCoreView.getCommandName();
+    	
+    	int i = 0;
+    	for (; names[i] != null && !cmd.equals(names[i]); i++) ;
+    	if (names[i] != null) i++;
+    	if (names[i] == null) i = 0;
+        
+        if (mCoreView.setCommandName(names[i])) {
+        	buttonShape.setText(names[i]);
+        	commandName = names[i];
+        }
+    }
 
     private void initComponent()
     {
         mView = (PaintView) this.findViewById(R.id.paintView);
+        mView.setBkColor(color.white);
+        
         mCoreView = mView.getCoreView();
         buttonSelect  = (Button) this.findViewById(R.id.selectshapes_button);
         buttonClear = (Button) this.findViewById(R.id.clearshapes_button);
@@ -163,5 +191,6 @@ public class Testy extends Activity {
         buttonThickPen = (Button) this.findViewById(R.id.thickPen_button);
         buttonEraser = (Button) this.findViewById(R.id.eraser_button);
         buttonStyle = (Button) this.findViewById(R.id.stylePen_button);
+        buttonShape = (Button) this.findViewById(R.id.shapeType_button);
     }
 }

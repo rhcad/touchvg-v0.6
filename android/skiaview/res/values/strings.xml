@@ -7,8 +7,8 @@
     <string name="redPen">红笔</string>
     <string name="yellowPen">黄笔</string>
     <string name="bluePen">蓝笔</string>
-    <string name="thickPen">变细</string>
-    <string name="boldPen">变粗</string>
+    <string name="thickPen">细</string>
+    <string name="boldPen">粗</string>
     <string name="stylePen">线型</string>
-    
+    <string name="shapeType">形状</string>
 </resources>

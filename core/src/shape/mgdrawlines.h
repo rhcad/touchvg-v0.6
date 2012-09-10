@@ -82,7 +82,7 @@ public:
     
 private:
     virtual bool needCheckClosed() { return false; }
-    virtual bool needEnded() { return m_step >= _maxEdges - 1; }
+    virtual bool needEnded() { return (int)m_step >= _maxEdges - 1; }
     
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }

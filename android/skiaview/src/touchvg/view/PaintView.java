@@ -1,5 +1,6 @@
 package touchvg.view;
 
+import touchvg.skiaview.GiColor;
 import touchvg.skiaview.GiSkiaView;
 import touchvg.skiaview.GiGestureState;
 import touchvg.skiaview.GiGestureType;
@@ -112,6 +113,9 @@ public class PaintView extends View {
     
     public void setBkColor(int argb) {
         mBkColor = argb;
+		GiColor color = new GiColor();
+        color.setARGB(mBkColor);
+        mCanvas.setBkColor(color);
     }
     
     protected void onDraw(Canvas canvas) {

@@ -216,7 +216,7 @@ static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], 
 
 Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int hotHandle)
 {
-    if (shape && hotHandle >= shape->shape()->getHandleCount()) {
+    if (shape && hotHandle >= (int)shape->shape()->getHandleCount()) {
         hotHandle = -1;
     }
     _ptSnap = sender->pointM;
