@@ -136,15 +136,18 @@ float mgLineHalfWidthModel(const MgShape* shape, const MgMotion* sender)
     return mgLineHalfWidthModel(shape, sender->view->graph());
 }
 
+static bool s_useFinger = true;
+
 float mgDisplayMmToModel(float mm, GiGraphics* gs)
 {
-    return gs->xf().displayToModel(mm, true);
+    return gs->xf().displayToModel(s_useFinger ? mm : 2 * mm, s_useFinger);
 }
 
 float mgDisplayMmToModel(float mm, const MgMotion* sender)
 {
-    return sender->view->xform()->displayToModel(
-        sender->view->useFinger() ? mm : 2 * mm, sender->view->useFinger());
+	if (s_useFinger != sender->view->useFinger())
+		s_useFinger = sender->view->useFinger();
+    return sender->view->xform()->displayToModel(s_useFinger ? mm : 2 * mm, s_useFinger);
 }
 
 bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)

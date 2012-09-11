@@ -7,6 +7,7 @@
 #include <mgbasicsp.h>
 
 MgCommand* mgCreateCoreCommand(const char* name);
+float mgDisplayMmToModel(float mm, GiGraphics* gs);
 float mgDisplayMmToModel(float mm, const MgMotion* sender);
 
 typedef std::map<std::string, MgCommand* (*)()> Factories;
@@ -272,17 +273,18 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
     if (sender->dragging) {
         if (_snapType[0] >= 5) {
             GiContext ctx(-2, GiColor(0, 255, 0, 200), kGiLineDash);
-            ret = gs->drawEllipse(&ctx, _ptSnap, gs->xf().displayToModel(8.f, true));
+            ret = gs->drawEllipse(&ctx, _ptSnap, mgDisplayMmToModel(8.f, gs));
         }
         else {
             GiContext ctx(0, GiColor(0, 255, 0, 200), kGiLineDash);
             if (_snapType[0] >= 0) {
                 ret = gs->drawLine(&ctx, _snapBase[0], _ptSnap);
-                gs->drawEllipse(&ctx, _snapBase[0], gs->xf().displayToModel(3.f, true));
+                gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(3.f, gs));
+                gs->drawEllipse(&ctx, _snapBase[0], (3.f, true));
             }
             if (_snapType[1] >= 0) {
                 ret = gs->drawLine(&ctx, _snapBase[1], _ptSnap);
-                gs->drawEllipse(&ctx, _snapBase[1], gs->xf().displayToModel(3.f, true));
+                gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(3.f, gs));
             }
         }
     }
