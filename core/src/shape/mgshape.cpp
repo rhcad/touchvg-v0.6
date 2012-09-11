@@ -74,7 +74,10 @@ bool MgBaseShape::_rotateHandlePoint(UInt32 index, const Point2d& pt)
             offset(pt - getHandlePoint(index), -1);
         }
         else {
-            Point2d basept(getHandlePoint(index > 0 ? index - 1 : getHandleCount() - 1));
+            Point2d basept(_extent.center());
+            if (!isSquare()) {
+                basept = (getHandlePoint(index > 0 ? index - 1 : getHandleCount() - 1));
+            }
             float a1 = (pt - basept).angle2();
             float a2 = (getHandlePoint(index) - basept).angle2();
             

@@ -192,9 +192,8 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
             (*it)->draw(*gs);
         }
     }
-    else if (m_clones.empty()) {   // 选中时比原图形宽4像素
-        GiContext ctxshape(sender->view->useFinger() ? -4.f : 0, 
-                           GiColor(0, 0, 255, 128));
+    else if (m_clones.empty()) {
+        GiContext ctxshape(0, GiColor(0, 0, 255, 128));
         for (it = shapes.begin(); it != shapes.end(); ++it) {
             GiContext ctx(ctxshape);
             (*it)->draw(*gs, &ctx);
@@ -230,7 +229,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
                 pnt = pnt.rulerPoint(selbox.center(),
                                      -mgDisplayMmToModel(10, sender), 0);
                 
-                float w = -1.5f * gs->xf().getWorldToDisplayY(false);
+                float w = -1.f * gs->xf().getWorldToDisplayY(false);
                 float r = pnt.distanceTo(selbox.center());
                 float sangle = mgMin(30.f, mgMax(10.f, mgRad2Deg(12.f / r)));
                 GiContext ctxarc(w, GiColor(0, 255, 0, 128),

@@ -237,11 +237,10 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
     }
     _ptSnap = sender->pointM;
     
-    float dist = mgDisplayMmToModel(3.f, sender);
     SnapItem arr[3] = {
-        { _ptSnap, _ptSnap, dist, -1 },   // XY
-        { _ptSnap, _ptSnap, dist, -1 },   // X,Vert
-        { _ptSnap, _ptSnap, dist, -1 },   // Y,Horz
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), -1 },   // XY
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(1.f, sender), -1 },   // X,Vert
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(1.f, sender), -1 },   // Y,Horz
     };
     
     if (shape && shape->getID() == 0 && hotHandle > 0) {

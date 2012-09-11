@@ -27,8 +27,8 @@ bool MgCmdDrawRect::undo(bool &, const MgMotion* sender)
 bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
 {
     m_step = 1;
-    Point2d pnt(snapPoint(sender, true));
-    ((MgBaseRect*)dynshape()->shape())->setRect(pnt, pnt);
+    m_startPt = snapPoint(sender, true);
+    ((MgBaseRect*)dynshape()->shape())->setRect(m_startPt, m_startPt);
     dynshape()->shape()->update();
 
     return _touchBegan(sender);
@@ -36,7 +36,16 @@ bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
 
 bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
 {
-    ((MgBaseRect*)dynshape()->shape())->setRect(sender->startPointM, sender->pointM);
+    Point2d pt1(m_startPt);
+    Point2d pt2(snapPoint(sender));
+    
+    if ( ((MgBaseRect*)dynshape()->shape())->isSquare() ) {
+        float len = (float)mgMax(pt2.x - pt1.x, pt2.y - pt1.y);
+        Box2d rect(m_startPt, 2.f * len, 0);
+        pt1 = rect.leftTop();
+        pt2 = rect.rightBottom();
+    }
+    ((MgBaseRect*)dynshape()->shape())->setRect(pt1, pt2);
     dynshape()->shape()->update();
 
     return _touchMoved(sender);
@@ -44,10 +53,19 @@ bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
 
 bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
 {
-    ((MgBaseRect*)dynshape()->shape())->setRect(sender->startPointM, sender->pointM);
+    Point2d pt1(m_startPt);
+    Point2d pt2(snapPoint(sender));
+    
+    if ( ((MgBaseRect*)dynshape()->shape())->isSquare() ) {
+        float len = (float)mgMax(pt2.x - pt1.x, pt2.y - pt1.y);
+        Box2d rect(m_startPt, 2.f * len, 0);
+        pt1 = rect.leftTop();
+        pt2 = rect.rightBottom();
+    }
+    ((MgBaseRect*)dynshape()->shape())->setRect(pt1, pt2);
     dynshape()->shape()->update();
 
-    float minDist = mgDisplayMmToModel(1, sender);
+    float minDist = mgDisplayMmToModel(5, sender);
 
     if (! ((MgBaseRect*)dynshape()->shape())->isEmpty(minDist)) {
         _addshape(sender);
@@ -60,6 +78,17 @@ bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
 bool MgCmdDrawEllipse::initialize(const MgMotion* sender)
 {
     return _initialize(MgShapeT<MgEllipse>::create, sender);
+}
+
+bool MgCmdDrawEllipse::draw(const MgMotion* sender, GiGraphics* gs)
+{
+    if (m_step > 0) {
+        GiContext ctxshap(0, GiColor(0, 0, 255, 128), kGiLineDash);
+        bool antiAlias = gs->setAntiAliasMode(false);
+        gs->drawRect(&ctxshap, dynshape()->shape()->getExtent());
+        gs->setAntiAliasMode(antiAlias);
+    }
+    return MgCmdDrawRect::draw(sender, gs);
 }
 
 bool MgCmdDrawDiamond::initialize(const MgMotion* sender)

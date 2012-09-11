@@ -399,7 +399,7 @@ void registerTransformCmd();
 
 - (IBAction)selectCommand:(id)sender    // 选择绘图命令
 {
-    CGRect viewrect = CGRectMake(0, 0, 264, 264);
+    CGRect viewrect = CGRectMake(0, 0, 240, 280);
     viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
     viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _graphc.downview.frame.size.height - 20;
     
@@ -426,7 +426,7 @@ void registerTransformCmd();
     };
     const int count = sizeof(cmds) / sizeof(cmds[0]);
     
-    float x = 8, y = 8, w = 120, h = 32;
+    float x = 0, y = 0, w = 120, h = 40;
     for (int i = 0; i < count; i++) {
         UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(x, y, w, h)];
         [btn setTitle:cmds[i].caption forState: UIControlStateNormal];
@@ -435,10 +435,10 @@ void registerTransformCmd();
         [calloutView addSubview:btn];
         [btn release];
         
-        y += h + 4;
+        y += h;
         if (y + h > calloutView.bounds.size.height) {
-            y = 8;
-            x += w + 8;
+            y = 0;
+            x += w;
         }
     }
 }

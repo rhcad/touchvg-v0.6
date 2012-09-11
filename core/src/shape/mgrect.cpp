@@ -10,7 +10,7 @@
 // MgBaseRect
 //
 
-MgBaseRect::MgBaseRect() : _square(false)
+MgBaseRect::MgBaseRect()
 {
 }
 
@@ -33,7 +33,6 @@ void MgBaseRect::_copy(const MgBaseRect& src)
 {
     for (int i = 0; i < 4; i++)
         _points[i] = src._points[i];
-    _square = src._square;
     __super::_copy(src);
 }
 
@@ -43,7 +42,7 @@ bool MgBaseRect::_equals(const MgBaseRect& src) const
         if (_points[i] != src._points[i])
             return false;
     }
-    return _square == src._square && __super::_equals(src);
+    return __super::_equals(src);
 }
 
 bool MgBaseRect::_isKindOf(UInt32 type) const
@@ -64,6 +63,8 @@ void MgBaseRect::_transform(const Matrix2d& mat)
 {
     for (int i = 0; i < 4; i++)
         _points[i] *= mat;
+    Box2d rect(getRect());
+    setRect(rect.leftTop(), rect.rightBottom(), getAngle(), rect.center());
     __super::_transform(mat);
 }
 
@@ -112,7 +113,7 @@ bool MgBaseRect::isOrtho() const
 
 void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2)
 {
-    setRect(pt1, pt2, 0, Point2d::kOrigin());
+    setRect(pt1, pt2, 0, (pt1 + pt2) / 2);
 }
 
 void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2,
@@ -120,10 +121,9 @@ void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2,
 {
     Box2d rect(pt1, pt2);
     
-    if (_square) {
+    if (isSquare()) {
         float len = (float)sqrt(fabs((pt2.x - pt1.x) * (pt2.y - pt1.y)));
-        rect.set(pt1, Point2d(pt1.x + (pt2.x > pt1.x ? len : -len),
-                              pt1.y + (pt2.y > pt1.y ? len : -len)));
+        rect.set(basept, len, 0);
     }
     
     _points[0] = rect.leftTop();
@@ -150,11 +150,6 @@ void MgBaseRect::setCenter(const Point2d& pt)
     Point2d old = getCenter();
     for (int i = 0; i < 4; i++)
         _points[i].offset(pt.x - old.x, pt.y - old.y);
-}
-
-void MgBaseRect::setSquare(bool square)
-{
-    _square = square;
 }
 
 float MgBaseRect::_hitTest(const Point2d& pt, float tol, 
@@ -192,18 +187,25 @@ Point2d MgBaseRect::_getHandlePoint(UInt32 index) const
 bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 {
     if (index < 4) {        // 从左上角起顺时针的四个角点
-        Point2d basept(_getHandlePoint((index + 2) % 4));
-        Point2d pt2(pt * Matrix2d::rotation(-getAngle(), basept));
-        setRect(basept, pt2, getAngle(), basept);
+        if (isSquare()) {
+            Point2d basept(getCenter());
+            Point2d pt2(pt * Matrix2d::rotation(-getAngle(), basept));
+            setRect(basept * 2.f - pt2.asVector(), pt2, getAngle(), basept);
+        }
+        else {
+            Point2d basept(_getHandlePoint((index + 2) % 4));
+            Point2d pt2(pt * Matrix2d::rotation(-getAngle(), basept));
+            setRect(basept, pt2, getAngle(), basept);
+        }
     }
     else if (index < 8) {   // 顶右底左的中点
         Point2d pt2(pt * Matrix2d::rotation(-getAngle(), getCenter()));
         Box2d rect(getRect());
         mgMoveRectHandle(rect, index, pt2);
-        if (_square && (4 == index || 6 == index)) {
+        if (isSquare() && (4 == index || 6 == index)) {
             rect = Box2d(rect.center(), rect.height(), rect.height());
         }
-        else if (_square) {
+        else if (isSquare()) {
             rect = Box2d(rect.center(), rect.width(), rect.width());
         }
         setRect(rect.leftTop(), rect.rightBottom(), getAngle(), getCenter());
@@ -216,16 +218,12 @@ bool MgBaseRect::_save(MgStorage* s) const
 {
     bool ret = __super::_save(s);
     s->writeFloatArray("points", &(_points[0].x), 8);
-    s->writeBool("square", _square);
     return ret;
 }
 
 bool MgBaseRect::_load(MgStorage* s)
 {
-    bool ret = __super::_load(s)
-        && s->readFloatArray("points", &(_points[0].x), 8) == 8;
-    _square = s->readBool("square", _square);
-    return ret;
+    return __super::_load(s) && s->readFloatArray("points", &(_points[0].x), 8) == 8;
 }
 
 // MgRect

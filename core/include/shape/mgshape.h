@@ -136,6 +136,9 @@ public:
     
     //! 移动图形, segment 由 hitTest() 得到
     virtual bool offset(const Vector2d& vec, Int32 segment) = 0;
+    
+    //! 返回是否为方形
+    bool isSquare() const { return _getFlag(0); }
 
     //! 返回边长是否固定
     bool isFixedLength() const { return _getFlag(2); }

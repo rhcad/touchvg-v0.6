@@ -77,7 +77,7 @@
         
         GiCommandController* cmd = (GiCommandController*)_cmdctl;
         [cmd touchesBegan:CGPointZero view:_activeView count:0];    // 传入View
-        cmd.lineWidth = 50;                                 // 默认画笔0.5mm
+        cmd.lineWidth = 20;                                 // 默认画笔0.2mm
         cmd.lineColor = GiColor(0, 0, 0, 128);              // 默认黑色画笔，50%透明
         cmd.fillColor = GiColor(0, 128, 0, 64);
     }
