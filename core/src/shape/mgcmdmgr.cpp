@@ -228,15 +228,15 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
         { _ptSnap, _ptSnap, dist, -1 },   // Y,Horz
     };
     
-    if (shape && !shape->getParent() && hotHandle > 0) {
+    if (shape && shape->getID() == 0 && hotHandle > 0) {
         Point2d pt (sender->pointM);
-        int type = snapHV(shape->shape()->getHandlePoint(hotHandle - 1), pt, arr);
+        int type = snapHV(shape->shape()->getPoint(hotHandle - 1), pt, arr);
         if (type > 0 && type <= 2) {
             arr[type].type = type;
         }
     }
     Point2d pnt(-1e10f, -1e10f);
-    bool matchpt = shape && shape->getParent() && hotHandle < 0;
+    bool matchpt = shape && shape->getID() != 0 && hotHandle < 0;
     
     snapPoints(sender, shape, arr, matchpt ? &pnt : NULL);
     
@@ -278,9 +278,11 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
             GiContext ctx(0, GiColor(0, 255, 0, 200), kGiLineDash);
             if (_snapType[0] >= 0) {
                 ret = gs->drawLine(&ctx, _snapBase[0], _ptSnap);
+                gs->drawEllipse(&ctx, _snapBase[0], gs->xf().displayToModel(3.f, true));
             }
             if (_snapType[1] >= 0) {
                 ret = gs->drawLine(&ctx, _snapBase[1], _ptSnap);
+                gs->drawEllipse(&ctx, _snapBase[1], gs->xf().displayToModel(3.f, true));
             }
         }
     }
