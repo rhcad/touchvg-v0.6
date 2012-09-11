@@ -173,12 +173,12 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     mgGetCommandManager()->getSnap()->draw(sender, gs);
     
     if (!m_showSel || (!m_clones.empty() && !isCloneDrag(sender))) {
-        GiContext ctxbk(-1, gs->getBkColor());
+        GiContext ctxbk(1, gs->getBkColor(), kGiLineDash);
         for (it = selection.begin(); it != selection.end(); ++it)
             (*it)->draw(*gs, &ctxbk);               // 用背景色擦掉原图形
         
         if (m_showSel && !rorate) {                 // 拖动提示的参考线
-            GiContext ctxshap(-1.05f, GiColor(0, 0, 255, 128), kGiLineDash);
+            GiContext ctxshap(-1.05f, GiColor(0, 0, 255, 32), kGiLineDash);
             gs->drawLine(&ctxshap, sender->startPointM, m_ptSnap);
         }
     }
@@ -374,10 +374,7 @@ Int32 MgCommandSelect::hitTestHandles(MgShape* shape, const Point2d& pointM,
 Point2d MgCommandSelect::snapPoint(const MgMotion* sender)
 {
     MgShape* shape = !m_clones.empty() ? m_clones[0] : NULL;
-    Point2d pnt(mgGetCommandManager()->getSnap()->snapPoint(sender, shape, m_handleIndex - 1));
-    //int type = mgGetCommandManager()->getSnap()->getSnappedType();
-    
-    return pnt;
+    return mgGetCommandManager()->getSnap()->snapPoint(sender, shape, m_handleIndex - 1);
 }
 
 bool MgCommandSelect::click(const MgMotion* sender)
@@ -389,7 +386,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
     Point2d nearpt;
     Int32   segment = -1;
     UInt32  handleIndex = 0;
-    MgShape* shape;
+    MgShape *shape, *tmpsp = NULL;
     bool    canSelAgain;
     
     if (!m_showSel) {                   // 上次是禁止亮显
@@ -410,16 +407,17 @@ bool MgCommandSelect::click(const MgMotion* sender)
             m_handleIndex = handleIndex;
         }
     }
-    else if (shape && m_handleMode) {       // 上次是热点状态，在该图形外的较远处点击
-        m_handleIndex = 0;                  // 恢复到整体选中状态
+    else if (shape && m_handleMode      // 上次是热点状态，在该图形外的较远处点击
+             && (tmpsp = hitTestAll(sender, nearpt, segment)) == NULL) {
+        m_handleIndex = 0;              // 恢复到整体选中状态
         m_handleMode = false;
     }
-    else {                                  // 上次是整体选中状态或没有选中
-        shape = hitTestAll(sender, nearpt, segment);
+    else {                              // 上次是整体选中状态或没有选中
+        shape = tmpsp ? tmpsp : hitTestAll(sender, nearpt, segment);
         bool changed = ((int)m_selIds.size() != (shape ? 1 : 0))
             || (shape && shape->getID() != m_id);
 
-        m_selIds.clear();                   // 清除选择集
+        m_selIds.clear();               // 清除选择集
         if (shape)
             m_selIds.push_back(shape->getID()); // 选中新图形
         m_id = shape ? shape->getID() : 0;
@@ -427,7 +425,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
         m_ptNear = nearpt;
         m_segment = segment;
         m_handleIndex = 0;
-        m_handleMode = false;
+        //m_handleMode = false;
 
         if (changed)
             sender->view->selChanged();
@@ -613,7 +611,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
         }
         if (m_handleIndex > 0) {
             float tol = mgDisplayMmToModel(5, sender);
-            shape->setHandlePoint(m_handleIndex - 1, pointM, tol);
+            shape->setHandlePoint(m_handleIndex - 1, snapPoint(sender), tol);
         }
         else if (dragCorner) {
             shape->transform(mat);

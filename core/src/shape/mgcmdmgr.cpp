@@ -221,16 +221,16 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
     }
     _ptSnap = sender->pointM;
     
-    GiTransform* xf = sender->view->xform();
+    float dist = mgDisplayMmToModel(3.f, sender);
     SnapItem arr[3] = {
-        { _ptSnap, _ptSnap, xf->displayToModel(5, true), -1 },   // XY
-        { _ptSnap, _ptSnap, xf->displayToModel(5, true), -1 },   // X,Vert
-        { _ptSnap, _ptSnap, xf->displayToModel(5, true), -1 },   // Y,Horz
+        { _ptSnap, _ptSnap, dist, -1 },   // XY
+        { _ptSnap, _ptSnap, dist, -1 },   // X,Vert
+        { _ptSnap, _ptSnap, dist, -1 },   // Y,Horz
     };
     
-    if (shape && hotHandle > 0) {
+    if (shape && !shape->getParent() && hotHandle > 0) {
         Point2d pt (sender->pointM);
-        int type = snapHV(shape->shape()->getPoint(hotHandle - 1), pt, arr);
+        int type = snapHV(shape->shape()->getHandlePoint(hotHandle - 1), pt, arr);
         if (type > 0 && type <= 2) {
             arr[type].type = type;
         }
@@ -252,7 +252,7 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
         }
         _snapType[1] = arr[2].type;
         if (arr[2].type > 0) {
-            _ptSnap.y = arr[1].pt.y;
+            _ptSnap.y = arr[2].pt.y;
             _snapBase[1] = arr[2].base;
         }
     }
@@ -271,15 +271,15 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
     
     if (sender->dragging) {
         if (_snapType[0] >= 5) {
-            GiContext ctx(-2, GiColor(128, 128, 128, 200), kGiLineDash);
+            GiContext ctx(-2, GiColor(0, 255, 0, 200), kGiLineDash);
             ret = gs->drawEllipse(&ctx, _ptSnap, gs->xf().displayToModel(8.f, true));
         }
         else {
-            GiContext ctx(0, GiColor(128, 128, 128, 200), kGiLineDash);
-            if (_snapType[0] == 3) {
+            GiContext ctx(0, GiColor(0, 255, 0, 200), kGiLineDash);
+            if (_snapType[0] >= 0) {
                 ret = gs->drawLine(&ctx, _snapBase[0], _ptSnap);
             }
-            if (_snapType[1] == 4) {
+            if (_snapType[1] >= 0) {
                 ret = gs->drawLine(&ctx, _snapBase[1], _ptSnap);
             }
         }
