@@ -65,7 +65,7 @@ private:
     virtual bool initialize(const MgMotion* sender);
 };
 
-//! 椭圆绘图命令类
+//! 正方形绘图命令类
 /*! \ingroup GEOM_SHAPE
     \see MgRect
 */
@@ -81,7 +81,7 @@ private:
     virtual bool initialize(const MgMotion* sender);
 };
 
-//! 椭圆绘图命令类
+//! 圆绘图命令类
 /*! \ingroup GEOM_SHAPE
     \see MgEllipse
 */
@@ -90,6 +90,22 @@ class MgCmdDrawCircle : public MgCmdDrawEllipse
 public:
     static const char* Name() { return "circle"; }
     static MgCommand* Create() { return new MgCmdDrawCircle; }
+    
+private:
+    virtual const char* getName() const { return Name(); }
+    virtual void release() { delete this; }
+    virtual bool initialize(const MgMotion* sender);
+};
+
+//! 网格绘图命令类
+/*! \ingroup GEOM_SHAPE
+    \see MgGrid
+*/
+class MgCmdDrawGrid : public MgCmdDrawRect
+{
+public:
+    static const char* Name() { return "grid"; }
+    static MgCommand* Create() { return new MgCmdDrawGrid; }
     
 private:
     virtual const char* getName() const { return Name(); }

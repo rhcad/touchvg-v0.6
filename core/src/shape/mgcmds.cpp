@@ -13,6 +13,7 @@
 #include "mgdrawtriang.h"
 #include <mgbasicsp.h>
 #include <mgshapet.h>
+#include "mggrid.h"
 
 MgCommand* mgCreateCoreCommand(const char* name)
 {
@@ -38,6 +39,7 @@ MgCommand* mgCreateCoreCommand(const char* name)
         { MgCmdDrawSplines::Name(), MgCmdDrawSplines::Create },
         { MgCmdDrawTriangle::Name(), MgCmdDrawTriangle::Create },
         { MgCmdParallelogram::Name(), MgCmdParallelogram::Create },
+        { MgCmdDrawGrid::Name(), MgCmdDrawGrid::Create },
     };
     
     for (unsigned i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++)
@@ -227,6 +229,7 @@ static void registerCoreCreators()
     s_shapeCreators[MgShapeT<MgParallelogram>::Type() % 10000] = MgShapeT<MgParallelogram>::create;
     s_shapeCreators[MgShapeT<MgLines>::Type() % 10000] = MgShapeT<MgLines>::create;
     s_shapeCreators[MgShapeT<MgSplines>::Type() % 10000] = MgShapeT<MgSplines>::create;
+    s_shapeCreators[MgShapeT<MgGrid>::Type() % 10000] = MgShapeT<MgGrid>::create;
 }
 
 void mgRegisterShapeCreator(UInt32 type, MgShape* (*factory)())

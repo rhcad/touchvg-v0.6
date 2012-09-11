@@ -48,6 +48,7 @@ LOCAL_SRC_FILES  := GiSkiaView.cpp \
                     $(SRC_PATH)/shape/mglines.cpp \
                     $(SRC_PATH)/shape/mgrdrect.cpp \
                     $(SRC_PATH)/shape/mgrect.cpp \
+                    $(SRC_PATH)/shape/mggrid.cpp \
                     $(SRC_PATH)/shape/mgshape.cpp \
                     $(SRC_PATH)/shape/mgsplines.cpp
 

@@ -6,6 +6,7 @@
 #include <mgselect.h>
 #include <vector>
 #include <ioscanvas.h>
+#include <mgbasicsp.h>
 
 @interface GiCommandController(Internal)
 
@@ -13,7 +14,7 @@
 - (void)convertPoint:(CGPoint)pt;
 - (BOOL)getPointForPressDrag:(UIGestureRecognizer *)sender :(CGPoint*)point;
 - (GiContext*)currentContext;
-- (bool)longPressSelection:(int)selState;
+- (bool)longPressSelection:(int)selState shape:(MgShape*)shape;
 
 @end
 
@@ -114,8 +115,8 @@ private:
         }
     }
     
-    bool longPressSelection(int selState) {
-        return [_owner longPressSelection:selState];
+    bool longPressSelection(int selState, MgShape* shape) {
+        return [_owner longPressSelection:selState shape:shape];
     }
     
     bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) {
@@ -178,39 +179,49 @@ static long s_cmdRef = 0;
     return shape ? shape->context() : _mgview->context();
 }
 
-- (bool)longPressSelection:(int)selState
+- (bool)longPressSelection:(int)selState shape:(MgShape*)shape
 {
     UIView *view = [_mgview->getView() ownerView];
     UIMenuController *menuController = [UIMenuController sharedMenuController];
-    UIMenuItem *items[5] = { nil, nil, nil, nil, nil };
+    UIMenuItem *items[6] = { nil, nil, nil, nil, nil, nil };
+    int n = 0;
+    bool islines = shape && shape->shape()->isKindOf(MgBaseLines::Type());
     
-    if (menuController.menuVisible)
+    if (menuController.menuVisible && _motion->pressDrag)
         return false;
     
     switch (selState) {
         case kMgSelNone:
-            items[0] = [[UIMenuItem alloc] initWithTitle:@"全选" action:@selector(menuClickSelAll:)];
-            items[1] = [[UIMenuItem alloc] initWithTitle:@"绘图" action:@selector(menuClickDraw:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"全选" action:@selector(menuClickSelAll:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"绘图" action:@selector(menuClickDraw:)];
             break;
             
         case kMgSelOneShape:
         case kMgSelMultiShapes:
-            items[0] = [[UIMenuItem alloc] initWithTitle:@"删除" action:@selector(menuClickDelete:)];
-            items[1] = [[UIMenuItem alloc] initWithTitle:@"克隆" action:@selector(menuClickClone:)];
-            items[2] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"删除" action:@selector(menuClickDelete:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"克隆" action:@selector(menuClickClone:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"锁定" action:@selector(menuClickLocked:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
             break;
             
         case kMgSelVertexes:
-            items[0] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
-            items[1] = [[UIMenuItem alloc] initWithTitle:@"加点" action:@selector(menuClickAddNode:)];
-            items[2] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
-            items[3] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
+            if (islines) {
+                items[n++] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
+                items[n++] = [[UIMenuItem alloc] initWithTitle:@"加点" action:@selector(menuClickAddNode:)];
+            }
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"锁定" action:@selector(menuClickLocked:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
             break;
             
         case kMgSelVertex:
-            items[0] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
-            items[1] = [[UIMenuItem alloc] initWithTitle:@"删点" action:@selector(menuClickDelNode:)];
-            items[2] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
+            if (islines) {
+                items[n++] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
+                items[n++] = [[UIMenuItem alloc] initWithTitle:@"删点" action:@selector(menuClickDelNode:)];
+            }
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"锁定" action:@selector(menuClickLocked:)];
             break;
             
         default:
@@ -218,8 +229,8 @@ static long s_cmdRef = 0;
             break;
     }
     
-    menuController.menuItems = [NSArray arrayWithObjects: items[0], items[1], items[2], items[3], items[4], nil];
-    [menuController setTargetRect:CGRectMake(_motion->point.x - 25, _motion->point.y - 25, 50, 50) inView:view];
+    menuController.menuItems = [NSArray arrayWithObjects: items[0], items[1], items[2], items[3], items[4], items[5], nil];
+    [menuController setTargetRect:CGRectMake(_motion->point.x - 25, _motion->point.y - 50, 50, 50) inView:view];
     [menuController setMenuVisible:YES animated:YES];
     
     for (NSUInteger i = 0; i < [menuController.menuItems count]; i++) {
@@ -686,6 +697,14 @@ static long s_cmdRef = 0;
     MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
     if (sel) {
         sel->setFixedLength(_mgview, !sel->isFixedLength(_mgview));
+    }
+}
+
+- (IBAction)menuClickLocked:(id)sender
+{
+    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
+    if (sel) {
+        sel->setLocked(_mgview, !sel->isLocked(_mgview));
     }
 }
 

@@ -86,3 +86,10 @@ bool MgCmdDrawCircle::initialize(const MgMotion* sender)
     
     return ret;
 }
+
+#include "mggrid.h"
+
+bool MgCmdDrawGrid::initialize(const MgMotion* sender)
+{
+    return _initialize(MgShapeT<MgGrid>::create, sender);
+}

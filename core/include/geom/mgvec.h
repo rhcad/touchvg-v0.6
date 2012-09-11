@@ -313,6 +313,13 @@ public:
         return set(len * cos(angle), len * sin(angle));
     }
     
+    //! 设置矢量的长度
+    Vector2d& setLength(float len)
+    {
+        float angle = angle2();
+        return set(len * cos(angle), len * sin(angle));
+    }
+    
     //! 得到四舍五入后的整数大小
     /*! 利用该函数可以将矢量转换为SIZE、CSize值
         \param[out] cx 四舍五入后的X坐标分量

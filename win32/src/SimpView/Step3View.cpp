@@ -38,10 +38,6 @@ private:
     }
     bool useFingle() { return false; }
     void shapeAdded(MgShape* shape) { view->shapeAdded(shape); }
-    bool shapeWillAdded(MgShape*) { return true; }
-    bool shapeWillDeleted(MgShape*) { return true; }
-    bool shapeCanRotated(MgShape*) { return true; }
-    bool longPressSelection(int) { return false; }
 
     bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot)
     {

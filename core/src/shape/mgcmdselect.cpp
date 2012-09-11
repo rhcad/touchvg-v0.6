@@ -224,7 +224,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
                 if (!sender->view->drawHandle(gs, pnt, false))
                     gs->drawEllipse(&ctxhd, pnt, radius);
             }
-            for (int j = sender->view->shapeCanRotated(shapes.front()) ? 1 : -1;
+            for (int j = canRotate(shapes.front(), sender) ? 1 : -1;
                 j >= 0; j--) {
                 mgGetRectHandle(selbox, j == 0 ? 7 : 5, pnt);
                 pnt = pnt.rulerPoint(selbox.center(),
@@ -389,8 +389,9 @@ bool MgCommandSelect::click(const MgMotion* sender)
     Point2d nearpt;
     Int32   segment = -1;
     UInt32  handleIndex = 0;
-    MgShape *shape, *tmpsp = NULL;
+    MgShape *shape, *tmpsp;
     bool    canSelAgain;
+    bool    changed = false;
     
     if (!m_showSel) {                   // 上次是禁止亮显
         m_showSel = true;               // 恢复亮显选中的图形
@@ -399,6 +400,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
     
     m_insertPt = false;                 // 默认不是插入点，在hitTestHandles中设置
     shape = getSelectedShape(sender);   // 取上次选中的图形
+    tmpsp = shape;
     canSelAgain = (m_selIds.size() == 1 // 多选时不进入热点状态
                    && (m_handleMode || shape->getID() == m_id)
                    && canSelect(shape, sender));    // 仅检查这个图形能否选中
@@ -410,14 +412,16 @@ bool MgCommandSelect::click(const MgMotion* sender)
             m_handleIndex = handleIndex;
         }
     }
-    else if (shape && m_handleMode      // 上次是热点状态，在该图形外的较远处点击
-             && (tmpsp = hitTestAll(sender, nearpt, segment)) == NULL) {
-        m_handleIndex = 0;              // 恢复到整体选中状态
-        m_handleMode = false;
+    else if (shape && m_handleMode) {   // 上次是热点状态，在该图形外的较远处点击
+        tmpsp = hitTestAll(sender, nearpt, segment);
+        if (tmpsp == NULL) {
+            m_handleIndex = 0;          // 恢复到整体选中状态
+            m_handleMode = false;
+        }
     }
-    else {                              // 上次是整体选中状态或没有选中
-        shape = tmpsp ? tmpsp : hitTestAll(sender, nearpt, segment);
-        bool changed = ((int)m_selIds.size() != (shape ? 1 : 0))
+    if (tmpsp == shape || tmpsp) {      // 没有选中或点中其他图形
+        shape = (tmpsp == shape) ? hitTestAll(sender, nearpt, segment) : tmpsp;
+        changed = ((int)m_selIds.size() != (shape ? 1 : 0))
             || (shape && shape->getID() != m_id);
 
         m_selIds.clear();               // 清除选择集
@@ -428,15 +432,14 @@ bool MgCommandSelect::click(const MgMotion* sender)
         m_ptNear = nearpt;
         m_segment = segment;
         m_handleIndex = 0;
-        //m_handleMode = false;
 
         if (changed)
             sender->view->selChanged();
     }
     sender->view->redraw(false);
     
-    if (!sender->pressDrag) {
-        sender->view->longPressSelection((MgSelState)getSelectState(sender->view));
+    if (!sender->pressDrag && !changed) {
+        sender->view->longPressSelection(getSelectState(sender->view), shape);
     }
     
     return true;
@@ -454,7 +457,8 @@ bool MgCommandSelect::longPress(const MgMotion* sender)
     if (m_selIds.empty()) {
         ret = click(sender);
     }
-    if (sender->view->longPressSelection((MgSelState)getSelectState(sender->view))) {
+    if (sender->view->longPressSelection(getSelectState(sender->view),
+                                         getSelectedShape(sender))) {
         ret = true;
     }
     
@@ -527,7 +531,16 @@ Box2d MgCommandSelect::getDragRect(const MgMotion* sender)
 
 bool MgCommandSelect::canTransform(MgShape* shape, const MgMotion* sender)
 {
-    return !shape->shape()->isFixedLength() && sender->view->shapeCanTransform(shape);
+    return (!shape->shape()->isFixedLength()
+            && !shape->shape()->isLocked()
+            && sender->view->shapeCanTransform(shape));
+}
+
+bool MgCommandSelect::canRotate(MgShape* shape, const MgMotion* sender)
+{
+    return (!shape->shape()->isRotateDisnable()
+            && !shape->shape()->isLocked()
+            && sender->view->shapeCanRotated(shape));
 }
 
 bool MgCommandSelect::isDragRectCorner(const MgMotion* sender, Matrix2d& mat)
@@ -555,7 +568,7 @@ bool MgCommandSelect::isDragRectCorner(const MgMotion* sender, Matrix2d& mat)
         }
     }
 
-    for (i = sender->view->shapeCanRotated(getShape(m_selIds[0], sender)) ? 1 : -1;
+    for (i = canRotate(getShape(m_selIds[0], sender), sender) ? 1 : -1;
         i >= 0; i--) {
         mgGetRectHandle(selbox, i == 0 ? 7 : 5, pnt);
         pnt = pnt.rulerPoint(selbox.center(), -mgDisplayMmToModel(10, sender), 0);
@@ -605,9 +618,9 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
         MgBaseShape* shape = m_clones[i]->shape();
         MgShape* basesp = getShape(m_selIds[i], sender);
         
-        if (basesp) {
-            shape->copy(*basesp->shape());
-        }
+        if (!basesp || shape->isLocked())
+            continue;
+        shape->copy(*basesp->shape());
         if (m_insertPt && shape->isKindOf(MgBaseLines::Type())) {
             MgBaseLines* lines = (MgBaseLines*)shape;
             lines->insertPoint(m_segment, m_ptNear);
@@ -941,8 +954,33 @@ bool MgCommandSelect::setFixedLength(MgView* view, bool fixed)
     
     for (sel_iterator it = m_selIds.begin(); it != m_selIds.end(); ++it) {
         MgShape* shape = view->shapes()->findShape(*it);
-        if (shape) {
+        if (shape && shape->shape()->isFixedLength() != fixed) {
             shape->shape()->setFixedLength(fixed);
+            count++;
+        }
+    }
+    if (count > 0) {
+        view->regen();
+    }
+    
+    return count > 0;
+}
+
+bool MgCommandSelect::isLocked(MgView* view)
+{
+    MgShape* shape = view->shapes()->findShape(m_id);
+    return shape && shape->shape()->isLocked();
+}
+
+bool MgCommandSelect::setLocked(MgView* view, bool locked)
+{
+    MgShapesLock locker(view->shapes(), MgShapesLock::Edit);
+    int count = 0;
+    
+    for (sel_iterator it = m_selIds.begin(); it != m_selIds.end(); ++it) {
+        MgShape* shape = view->shapes()->findShape(*it);
+        if (shape && shape->shape()->isLocked() != locked) {
+            shape->shape()->setLocked(locked);
             count++;
         }
     }

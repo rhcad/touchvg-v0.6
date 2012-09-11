@@ -207,6 +207,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\src\shape\mggrid.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\src\shape\mgshape.cpp"
 				>
 			</File>
@@ -289,6 +293,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\shape\mgsnap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\include\shape\mggrid.h"
 				>
 			</File>
 			<File

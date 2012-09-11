@@ -634,6 +634,11 @@
     [_cmdctl menuClickFixedLength:sender];
 }
 
+- (IBAction)menuClickLocked:(id)sender
+{
+    [_cmdctl menuClickLocked:sender];
+}
+
 #pragma mark - View motion
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

@@ -69,6 +69,8 @@
 		9DF6A497151C02CC001C1468 /* mgdrawrect.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DF6A48C151C02CC001C1468 /* mgdrawrect.h */; };
 		9DF6A498151C02CC001C1468 /* mgdrawsplines.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DF6A48D151C02CC001C1468 /* mgdrawsplines.cpp */; };
 		9DF6A499151C02CC001C1468 /* mgdrawsplines.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DF6A48E151C02CC001C1468 /* mgdrawsplines.h */; };
+		AE58B2AD15FEF6E600BD2A88 /* mggrid.h in Headers */ = {isa = PBXBuildFile; fileRef = AE58B2AC15FEF6E600BD2A88 /* mggrid.h */; };
+		AE58B2B015FEF7AB00BD2A88 /* mggrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE58B2AF15FEF7AB00BD2A88 /* mggrid.cpp */; };
 		AE6F82C81573568200845336 /* mgselect.h in Headers */ = {isa = PBXBuildFile; fileRef = AE6F82C71573568200845336 /* mgselect.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AE6F82CF1573890800845336 /* GiEditAction.h in Headers */ = {isa = PBXBuildFile; fileRef = AE6F82CE1573890800845336 /* GiEditAction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AE6FDB8C1586D8AD0006DB27 /* mgdrawline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE6FDB8A1586D8AD0006DB27 /* mgdrawline.cpp */; };
@@ -176,6 +178,8 @@
 		9DF6A48C151C02CC001C1468 /* mgdrawrect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgdrawrect.h; path = ../../core/src/shape/mgdrawrect.h; sourceTree = "<group>"; };
 		9DF6A48D151C02CC001C1468 /* mgdrawsplines.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgdrawsplines.cpp; path = ../../core/src/shape/mgdrawsplines.cpp; sourceTree = "<group>"; };
 		9DF6A48E151C02CC001C1468 /* mgdrawsplines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgdrawsplines.h; path = ../../core/src/shape/mgdrawsplines.h; sourceTree = "<group>"; };
+		AE58B2AC15FEF6E600BD2A88 /* mggrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mggrid.h; path = ../../core/include/shape/mggrid.h; sourceTree = "<group>"; };
+		AE58B2AF15FEF7AB00BD2A88 /* mggrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mggrid.cpp; path = ../../core/src/shape/mggrid.cpp; sourceTree = "<group>"; };
 		AE6F82C71573568200845336 /* mgselect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgselect.h; path = ../../core/include/shape/mgselect.h; sourceTree = "<group>"; };
 		AE6F82CE1573890800845336 /* GiEditAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiEditAction.h; path = Headers/GiEditAction.h; sourceTree = "<group>"; };
 		AE6FDB8A1586D8AD0006DB27 /* mgdrawline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgdrawline.cpp; path = ../../core/src/shape/mgdrawline.cpp; sourceTree = "<group>"; };
@@ -414,6 +418,7 @@
 		C9D632421450CABC00A3CC75 /* shape */ = {
 			isa = PBXGroup;
 			children = (
+				AE58B2AC15FEF6E600BD2A88 /* mggrid.h */,
 				AEB0BE5715FD898A00C6E98D /* mgsnap.h */,
 				AEA2259715B3BC7600A5173F /* mgcmddraw.h */,
 				AE6F82C71573568200845336 /* mgselect.h */,
@@ -432,6 +437,7 @@
 		C9D632431450CAC300A3CC75 /* shape */ = {
 			isa = PBXGroup;
 			children = (
+				AE58B2AF15FEF7AB00BD2A88 /* mggrid.cpp */,
 				AEE9B63915F48AA500F0EC7B /* mgdrawtriang.cpp */,
 				AEE9B63A15F48AA500F0EC7B /* mgdrawtriang.h */,
 				9DB0D91015242EE500326A5E /* mgcmderase.cpp */,
@@ -517,6 +523,7 @@
 				AE6FDB8D1586D8AD0006DB27 /* mgdrawline.h in Headers */,
 				AEE9B63C15F48AA500F0EC7B /* mgdrawtriang.h in Headers */,
 				AEB0BE5815FD898A00C6E98D /* mgsnap.h in Headers */,
+				AE58B2AD15FEF6E600BD2A88 /* mggrid.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,6 +658,7 @@
 				2752EE931559172400F0CCDD /* GiViewController.mm in Sources */,
 				AE6FDB8C1586D8AD0006DB27 /* mgdrawline.cpp in Sources */,
 				AEE9B63B15F48AA500F0EC7B /* mgdrawtriang.cpp in Sources */,
+				AE58B2B015FEF7AB00BD2A88 /* mggrid.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

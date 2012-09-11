@@ -422,7 +422,7 @@ void registerTransformCmd();
         { @"折线",    @"lines" },
         { @"曲线",    @"splines" },
         { @"平行四边形", @"parallelogram" },
-        { @"坐标系演示", @"xfdemo" },
+        { @"网格",    @"grid" },
     };
     const int count = sizeof(cmds) / sizeof(cmds[0]);
     

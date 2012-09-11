@@ -4,7 +4,7 @@
 
 #include "mgcmdmgr.h"
 #include "mgcmdselect.h"
-#include <mgbasicsp.h>
+#include <mggrid.h>
 
 MgCommand* mgCreateCoreCommand(const char* name);
 float mgDisplayMmToModel(float mm, GiGraphics* gs);
@@ -138,8 +138,8 @@ typedef struct {
 
 static int snapHV(const Point2d& basePt, Point2d& newPt, SnapItem arr[3])
 {
-    int type = -1;
-    float diff = arr[1].dist;
+    int ret = 0;
+    float diff;
     
     diff = arr[1].dist - fabs(newPt.x - basePt.x);
     if (diff > _MGZERO || (diff > - _MGZERO
@@ -148,7 +148,8 @@ static int snapHV(const Point2d& basePt, Point2d& newPt, SnapItem arr[3])
         arr[1].base = basePt;
         newPt.x = basePt.x;
         arr[1].pt = newPt;
-        type = 1;
+        arr[1].type = 1;
+        ret |= 1;
     }
     diff = arr[2].dist - fabs(newPt.y - basePt.y);
     if (diff > _MGZERO || (diff > - _MGZERO
@@ -157,10 +158,11 @@ static int snapHV(const Point2d& basePt, Point2d& newPt, SnapItem arr[3])
         arr[2].base = basePt;
         newPt.y = basePt.y;
         arr[2].pt = newPt;
-        type = 2;
+        arr[2].type = 2;
+        ret |= 2;
     }
     
-    return type;
+    return ret;
 }
 
 static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], Point2d* matchpt)
@@ -193,10 +195,7 @@ static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], 
                 }
                 if (wndbox.contains(pnt)) {
                     Point2d newPt (sender->pointM);
-                    int type = snapHV(pnt, newPt, arr);
-                    if (type > 0 && type <= 2) {
-                        arr[type].type = type + 2;
-                    }
+                    snapHV(pnt, newPt, arr);
                 }
                 int d = matchpt && shape ? (int)shape->shape()->getHandleCount() - 1 : -1;
                 for (; d >= 0; d--) {
@@ -208,6 +207,22 @@ static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], 
                         arr[0].type = 5;
                         *matchpt = sender->pointM + (pnt - ptd);
                     }
+                }
+            }
+            
+            if (allOnBox && sp->shape()->isKindOf(MgGrid::Type())) {
+                Point2d newPt (sender->pointM);
+                MgGrid* grid = (MgGrid*)(sp->shape());
+                int type = grid->snap(newPt, arr[1].dist, arr[2].dist);
+                if (type & 1) {
+                    arr[1].base = newPt;
+                    arr[1].pt = newPt;
+                    arr[1].type = 3;
+                }
+                if (type & 2) {
+                    arr[2].base = newPt;
+                    arr[2].pt = newPt;
+                    arr[2].type = 4;
                 }
             }
         }
@@ -231,10 +246,7 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
     
     if (shape && shape->getID() == 0 && hotHandle > 0) {
         Point2d pt (sender->pointM);
-        int type = snapHV(shape->shape()->getPoint(hotHandle - 1), pt, arr);
-        if (type > 0 && type <= 2) {
-            arr[type].type = type;
-        }
+        snapHV(shape->shape()->getPoint(hotHandle - 1), pt, arr);
     }
     Point2d pnt(-1e10f, -1e10f);
     bool matchpt = shape && shape->getID() != 0 && hotHandle < 0;

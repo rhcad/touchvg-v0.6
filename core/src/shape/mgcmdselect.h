@@ -37,6 +37,8 @@ public:
     virtual bool switchClosed(MgView* view);
     virtual bool isFixedLength(MgView* view);
     virtual bool setFixedLength(MgView* view, bool fixed);
+    virtual bool isLocked(MgView* view);
+    virtual bool setLocked(MgView* view, bool locked);
     
 private:
     virtual const char* getName() const { return Name(); }
@@ -74,6 +76,7 @@ private:
     void cloneShapes(MgView* view);
     bool applyCloneShapes(MgView* view, bool apply, bool addNewShapes = false);
     bool canTransform(MgShape* shape, const MgMotion* sender);
+    bool canRotate(MgShape* shape, const MgMotion* sender);
     
 private:
     std::vector<UInt32>     m_selIds;           // 选中的图形的ID

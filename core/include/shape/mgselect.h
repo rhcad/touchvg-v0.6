@@ -17,7 +17,7 @@ typedef enum {
     kMgSelOneShape,     //!< 选择了一个图形
     kMgSelMultiShapes,  //!< 选择了多个图形
     kMgSelVertexes,     //!< 显示图形的多个节点
-    kMgSelVertex     //!< 选择了一个图形的节点
+    kMgSelVertex        //!< 选择了一个图形的节点
 } MgSelState;
 
 //! 选择集接口
@@ -60,6 +60,12 @@ struct MgSelection {
     
     //! 设置当前选中图形是否固定边长
     virtual bool setFixedLength(MgView* view, bool fixed) = 0;
+    
+    //! 返回当前选中图形是否锁定形状
+    virtual bool isLocked(MgView* view) = 0;
+    
+    //! 设置当前选中图形是否锁定形状
+    virtual bool setLocked(MgView* view, bool locked) = 0;
 };
 
 #endif // __GEOMETRY_MGSELECTION_H_

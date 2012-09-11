@@ -141,13 +141,19 @@ public:
     bool isFixedLength() const { return _getFlag(2); }
     
     //! 设置边长是否固定
-    void setFixedLength(bool fixed) { _setFlag(2, fixed); }
+    virtual void setFixedLength(bool fixed) { _setFlag(2, fixed); }
+    
+    //! 返回是否锁定形状
+    bool isLocked() const { return _getFlag(3); }
+    
+    //! 设置是否锁定形状
+    virtual void setLocked(bool locked) { _setFlag(3, locked); }
 
     //! 返回是否不能旋转
-    bool isRotateDisnable() const { return _getFlag(3); }
+    bool isRotateDisnable() const { return _getFlag(4); }
     
     //! 设置是否不能旋转
-    void setRotateDisnable(bool disnable) { _setFlag(3, disnable); }
+    virtual void setRotateDisnable(bool disnable) { _setFlag(4, disnable); }
 
 protected:
     Box2d   _extent;
