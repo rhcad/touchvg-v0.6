@@ -34,6 +34,7 @@ private:
     virtual bool touchEnded(const MgMotion* sender);
     virtual bool click(const MgMotion* sender);
     virtual bool doubleClick(const MgMotion* sender);
+    virtual bool cancel(const MgMotion* sender);
     
 private:
     bool canAddPoint(const MgMotion* sender, bool ended);

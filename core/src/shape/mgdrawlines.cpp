@@ -117,6 +117,12 @@ bool MgCmdDrawLines::doubleClick(const MgMotion* sender)
     return true;
 }
 
+bool MgCmdDrawLines::cancel(const MgMotion* sender)
+{
+    doubleClick(sender);
+    return MgCommandDraw::cancel(sender);
+}
+
 // MgCmdDrawPolygon
 //
 

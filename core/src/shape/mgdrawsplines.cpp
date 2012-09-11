@@ -115,6 +115,14 @@ bool MgCmdDrawSplines::doubleClick(const MgMotion* sender)
     return click(sender);
 }
 
+bool MgCmdDrawSplines::cancel(const MgMotion* sender)
+{
+    if (!m_freehand && m_step > 1) {
+        _addshape(sender);
+    }
+    return MgCommandDraw::cancel(sender);
+}
+
 bool MgCmdDrawSplines::canAddPoint(const MgMotion* sender, bool ended)
 {
     if (!m_freehand && !ended)
