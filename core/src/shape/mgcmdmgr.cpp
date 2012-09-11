@@ -280,7 +280,7 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
             if (_snapType[0] >= 0) {
                 ret = gs->drawLine(&ctx, _snapBase[0], _ptSnap);
                 gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(3.f, gs));
-                gs->drawEllipse(&ctx, _snapBase[0], (3.f, true));
+                gs->drawEllipse(&ctx, _snapBase[0], mgDisplayMmToModel(3.f, gs));
             }
             if (_snapType[1] >= 0) {
                 ret = gs->drawLine(&ctx, _snapBase[1], _ptSnap);
