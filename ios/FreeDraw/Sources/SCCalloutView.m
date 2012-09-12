@@ -44,6 +44,16 @@ extern void giIgnoreTouchesBegan(UIView* sender, CGPoint point);
     return self;
 }
 
+- (id)initWithFrame:(CGRect)frame graphc:(GiViewController*)g
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        _graphc = g;
+        [_graphc retain];
+    }
+    return self;
+}
+
 - (void)dealloc
 {
     [_graphc dynamicChangeEnded:YES];

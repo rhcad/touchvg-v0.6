@@ -186,19 +186,12 @@ Point2d MgBaseRect::_getHandlePoint(UInt32 index) const
 
 bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 {
-    if (index < 4) {        // 从左上角起顺时针的四个角点
-        if (getFlag(kMgSquare)) {
-            Point2d basept(getCenter());
-            Point2d pt2(pt * Matrix2d::rotation(-getAngle(), basept));
-            setRect(basept * 2.f - pt2.asVector(), pt2, getAngle(), basept);
-        }
-        else {
-            Point2d basept(_getHandlePoint((index + 2) % 4));
-            Point2d pt2(pt * Matrix2d::rotation(-getAngle(), basept));
-            setRect(basept, pt2, getAngle(), basept);
-        }
+    if (index < 4 && getFlag(kMgSquare)) {
+        Point2d basept(getCenter());
+        Point2d pt2(pt * Matrix2d::rotation(-getAngle(), basept));
+        setRect(basept * 2.f - pt2.asVector(), pt2, getAngle(), basept);
     }
-    else if (index < 8) {   // 顶右底左的中点
+    else {
         Point2d pt2(pt * Matrix2d::rotation(-getAngle(), getCenter()));
         Box2d rect(getRect());
         mgMoveRectHandle(rect, index, pt2);

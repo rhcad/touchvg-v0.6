@@ -243,7 +243,8 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
         { _ptSnap, _ptSnap, mgDisplayMmToModel(1.f, sender), -1 },   // Y,Horz
     };
     
-    if (shape && shape->getID() == 0 && hotHandle > 0) {
+    if (shape && shape->getID() == 0 && hotHandle > 0
+        && !shape->shape()->isKindOf(MgBaseRect::Type())) {
         Point2d pt (sender->pointM);
         snapHV(shape->shape()->getPoint(hotHandle - 1), pt, arr);
     }
@@ -290,7 +291,6 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
             GiContext ctx(0, GiColor(0, 255, 0, 200), kGiLineDash);
             if (_snapType[0] >= 0) {
                 ret = gs->drawLine(&ctx, _snapBase[0], _ptSnap);
-                gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(3.f, gs));
                 gs->drawEllipse(&ctx, _snapBase[0], mgDisplayMmToModel(3.f, gs));
             }
             if (_snapType[1] >= 0) {

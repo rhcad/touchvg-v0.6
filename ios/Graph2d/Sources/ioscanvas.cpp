@@ -236,7 +236,7 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
     CGContextSetShouldAntialias(context, antiAlias);
     CGContextSetFlatness(context, fast ? 20 : 1);
 
-    CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetLineCap(context, kCGLineCapButt);
     CGContextSetLineJoin(context, kCGLineJoinRound);
     if (owner())        // 设置最小线宽为0.5像素，使用屏幕放大倍数以便得到实际像素值
         owner()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);

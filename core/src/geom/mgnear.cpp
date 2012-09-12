@@ -301,7 +301,8 @@ GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 index, Point2d& pt)
     }
 }
 
-GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 index, const Point2d& pt)
+GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 index, 
+                              const Point2d& pt, bool lockCornerScale)
 {
     Point2d pts[4];
 
@@ -311,15 +312,30 @@ GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 index, const Point2d& pt)
 
     if (index >= 0 && index < 4)
     {
+        Point2d pt1(pt);
+        
+        if (lockCornerScale && !rect.isEmpty()) {
+            Point2d& pt2 = pts[(index + 2) % 4];
+            float w = (float)fabs(pt2.x - pt.x);
+            float h = (float)fabs(pt2.y - pt.y);
+            
+            if (w * rect.height() > h * rect.width())
+                h = w * rect.height() / rect.width();
+            else
+                w = h * rect.width() / rect.height();
+            
+            pt1.x = pt2.x + w * (pt2.x > pt.x ? -1.f : 1.f);
+            pt1.y = pt2.y + h * (pt2.y > pt.y ? -1.f : 1.f);
+        }
         if (index % 2 == 0)
         {
-            pts[(index + 1) % 4].y = pt.y;
-            pts[(index + 3) % 4].x = pt.x;
+            pts[(index + 1) % 4].y = pt1.y;
+            pts[(index + 3) % 4].x = pt1.x;
         }
         else
         {
-            pts[(index + 1) % 4].x = pt.x;
-            pts[(index + 3) % 4].y = pt.y;
+            pts[(index + 1) % 4].x = pt1.x;
+            pts[(index + 3) % 4].y = pt1.y;
         }
         rect.set(4, pts);
     }

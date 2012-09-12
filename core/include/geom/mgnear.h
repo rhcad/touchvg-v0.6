@@ -140,7 +140,9 @@ GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 index, Point2d& pt);
     \param[in] index 控制手柄的序号，0到7，
         0到3为从左上角起顺时针的四个角点；4到7为顶右底左的中点；其余为中心点
     \param[in] pt 控制手柄的新坐标
+    \param[in] lockCornerScale 当index为0到3时，是否保持宽高比例不变
 */
-GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 index, const Point2d& pt);
+GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 index, 
+                              const Point2d& pt, bool lockCornerScale = true);
 
 #endif // __GEOMETRY_CURVENEAR_H_

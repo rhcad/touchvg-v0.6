@@ -16,4 +16,6 @@
 
 @property (nonatomic,readonly)  GiViewController *graphc;
 
+- (id)initWithFrame:(CGRect)frame graphc:(GiViewController*)g;
+
 @end

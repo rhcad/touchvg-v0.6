@@ -316,7 +316,7 @@ void registerTransformCmd();
     viewrect.origin.x = btnrect.origin.x + btnrect.size.width / 2 - viewrect.size.width / 2;
     viewrect.origin.y = btnrect.origin.y - viewrect.size.height;
     
-	SCCalloutView *calloutView = [[SCCalloutView alloc]initWithFrame:viewrect];
+	SCCalloutView *calloutView = [[SCCalloutGraphView alloc]initWithFrame:viewrect graphc:_graphc];
     [calloutView setImage:[UIImage imageNamed:@"brushoption.png"] forState: UIControlStateNormal];
     [self.view addSubview:calloutView];
     [calloutView release];
@@ -389,7 +389,7 @@ void registerTransformCmd();
 			break;
 		case kDashLineTag:          // 画虚线
             _graphc.lineStyle++;
-            if (_graphc.lineStyle > 4)
+            if (_graphc.lineStyle > 5)
                 _graphc.lineStyle = 1;
 			break;
 		default:
