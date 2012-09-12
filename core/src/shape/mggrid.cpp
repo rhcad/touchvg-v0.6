@@ -10,7 +10,7 @@ MG_IMPLEMENT_CREATE(MgGrid)
 
 MgGrid::MgGrid()
 {
-    __super::setRotateDisnable(true);
+    setFlag(kMgRotateDisnable, true);
 }
 
 MgGrid::~MgGrid()
@@ -32,9 +32,9 @@ void MgGrid::_clear()
     __super::_clear();
 }
 
-void MgGrid::setRotateDisnable(bool)
+void MgGrid::setFlag(MgShapeBit bit, bool on)
 {
-    __super::setRotateDisnable(true);
+    __super::setFlag(bit, bit == kMgRotateDisnable || on);
 }
 
 bool MgGrid::_draw(GiGraphics& gs, const GiContext& ctx) const

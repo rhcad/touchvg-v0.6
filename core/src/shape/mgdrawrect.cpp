@@ -39,7 +39,7 @@ bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
     Point2d pt1(m_startPt);
     Point2d pt2(snapPoint(sender));
     
-    if ( ((MgBaseRect*)dynshape()->shape())->isSquare() ) {
+    if ( ((MgBaseRect*)dynshape()->shape())->getFlag(kMgSquare) ) {
         float len = (float)mgMax(pt2.x - pt1.x, pt2.y - pt1.y);
         Box2d rect(m_startPt, 2.f * len, 0);
         pt1 = rect.leftTop();
@@ -57,7 +57,7 @@ bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
     Point2d pt2(snapPoint(sender));
     MgBaseRect* shape = (MgBaseRect*)dynshape()->shape();
     
-    if (shape->isSquare()) {
+    if (shape->getFlag(kMgSquare)) {
         float len = (float)mgMax(pt2.x - pt1.x, pt2.y - pt1.y);
         Box2d rect(m_startPt, 2.f * len, 0);
         pt1 = rect.leftTop();

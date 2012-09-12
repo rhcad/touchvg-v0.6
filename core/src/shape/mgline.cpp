@@ -90,7 +90,7 @@ bool MgLine::_rotateHandlePoint(UInt32 index, const Point2d& pt)
     if (index == 0) {
         return offset(pt - center(), -1);
     }
-    else if (isFixedLength() && !isRotateDisnable()) {
+    else if (getFlag(kMgFixedLength) && !getFlag(kMgRotateDisnable)) {
         Point2d basept(getHandlePoint(index > 1 ? 1 : 2));
         float a1 = (pt - basept).angle2();
         float a2 = (getHandlePoint(index) - basept).angle2();
@@ -202,7 +202,7 @@ void MgParallelogram::_clear()
 bool MgParallelogram::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 {
     index = index % 4;
-    if (isFixedLength()) {
+    if (getFlag(kMgFixedLength)) {
         Point2d& basept = _points[(index - 1) % 4];
         _points[index] = basept.rulerPoint(pt, _points[index].distanceTo(basept), 0);
     }

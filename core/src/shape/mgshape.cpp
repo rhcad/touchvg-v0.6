@@ -69,13 +69,13 @@ Point2d MgBaseShape::_getHandlePoint(UInt32 index) const
 
 bool MgBaseShape::_rotateHandlePoint(UInt32 index, const Point2d& pt)
 {
-    if (isFixedLength()) {
-        if (isRotateDisnable()) {
+    if (getFlag(kMgFixedLength)) {
+        if (getFlag(kMgRotateDisnable)) {
             offset(pt - getHandlePoint(index), -1);
         }
         else {
             Point2d basept(_extent.center());
-            if (!isSquare()) {
+            if (!getFlag(kMgSquare)) {
                 basept = (getHandlePoint(index > 0 ? index - 1 : getHandleCount() - 1));
             }
             float a1 = (pt - basept).angle2();
@@ -119,6 +119,16 @@ bool MgBaseShape::_save(MgStorage* s) const
 bool MgBaseShape::_load(MgStorage* s)
 {
     _flags = s->readUInt32("flags", _flags);
-    _setFlag(1, isClosed());
+    setFlag(kMgClosed, isClosed());
     return true;
+}
+
+bool MgBaseShape::getFlag(MgShapeBit bit) const
+{
+    return (_flags & (1 << bit)) != 0;
+}
+
+void MgBaseShape::setFlag(MgShapeBit bit, bool on)
+{
+    _flags = on ? _flags | (1 << bit) : _flags & ~(1 << bit);
 }

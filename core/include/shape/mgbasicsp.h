@@ -91,7 +91,7 @@ public:
     void setCenter(const Point2d& pt);
     
     //! 设置是否为方形
-    void setSquare(bool square) { _setFlag(0, square); }
+    void setSquare(bool square) { setFlag(kMgSquare, square); }
 
 protected:
     MgBaseRect();
@@ -209,7 +209,7 @@ public:
     static UInt32 Type() { return 5; }
 
     //! 设置是否闭合
-    void setClosed(bool closed) { _setClosed(closed); }
+    void setClosed(bool closed) { setFlag(kMgClosed, closed); }
 
     //! 返回终点
     Point2d endPoint() const;

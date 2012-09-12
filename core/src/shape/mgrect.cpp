@@ -121,7 +121,7 @@ void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2,
 {
     Box2d rect(pt1, pt2);
     
-    if (isSquare()) {
+    if (getFlag(kMgSquare)) {
         float len = (float)sqrt(fabs((pt2.x - pt1.x) * (pt2.y - pt1.y)));
         rect.set(basept, len, 0);
     }
@@ -187,7 +187,7 @@ Point2d MgBaseRect::_getHandlePoint(UInt32 index) const
 bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
 {
     if (index < 4) {        // 从左上角起顺时针的四个角点
-        if (isSquare()) {
+        if (getFlag(kMgSquare)) {
             Point2d basept(getCenter());
             Point2d pt2(pt * Matrix2d::rotation(-getAngle(), basept));
             setRect(basept * 2.f - pt2.asVector(), pt2, getAngle(), basept);
@@ -202,10 +202,10 @@ bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
         Point2d pt2(pt * Matrix2d::rotation(-getAngle(), getCenter()));
         Box2d rect(getRect());
         mgMoveRectHandle(rect, index, pt2);
-        if (isSquare() && (4 == index || 6 == index)) {
+        if (getFlag(kMgSquare) && (4 == index || 6 == index)) {
             rect = Box2d(rect.center(), rect.height(), rect.height());
         }
-        else if (isSquare()) {
+        else if (getFlag(kMgSquare)) {
             rect = Box2d(rect.center(), rect.width(), rect.width());
         }
         setRect(rect.leftTop(), rect.rightBottom(), getAngle(), getCenter());
@@ -270,7 +270,7 @@ Point2d MgDiamond::_getHandlePoint(UInt32 index) const
 
 bool MgDiamond::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
 {
-    if (!isFixedLength()) {
+    if (!getFlag(kMgFixedLength)) {
         return MgBaseRect::_setHandlePoint(4 + index % 4, pt, tol);
     }
     

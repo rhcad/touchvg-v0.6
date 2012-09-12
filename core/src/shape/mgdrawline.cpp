@@ -62,7 +62,7 @@ bool MgCmdDrawFixedLine::initialize(const MgMotion* sender)
 {
     bool ret = _initialize(MgShapeT<MgLine>::create, sender);
     if (ret) {
-        dynshape()->shape()->setFixedLength(true);
+        dynshape()->shape()->setFlag(kMgFixedLength, true);
     }
     return ret;
 }

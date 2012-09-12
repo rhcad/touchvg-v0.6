@@ -64,6 +64,15 @@ struct MgShape : public MgObject
     virtual void setTag(UInt32 tag) = 0;
 };
 
+//! 图形特征标志位
+typedef enum {
+    kMgSquare,          //!< 方形
+    kMgClosed,          //!< 闭合
+    kMgFixedLength,     //!< 边长固定
+    kMgShapeLocked,     //!< 锁定形状
+    kMgRotateDisnable,  //!< 不能旋转
+} MgShapeBit;
+
 //! 矢量图形基类
 /*! \ingroup GEOM_SHAPE
 */
@@ -137,36 +146,17 @@ public:
     //! 移动图形, segment 由 hitTest() 得到
     virtual bool offset(const Vector2d& vec, Int32 segment) = 0;
     
-    //! 返回是否为方形
-    bool isSquare() const { return _getFlag(0); }
-
-    //! 返回边长是否固定
-    bool isFixedLength() const { return _getFlag(2); }
+    //! 得到图形特征标志位
+    bool getFlag(MgShapeBit bit) const;
     
-    //! 设置边长是否固定
-    virtual void setFixedLength(bool fixed) { _setFlag(2, fixed); }
+    //! 设置图形特征标志位
+    virtual void setFlag(MgShapeBit bit, bool on);
     
-    //! 返回是否锁定形状
-    bool isLocked() const { return _getFlag(3); }
-    
-    //! 设置是否锁定形状
-    virtual void setLocked(bool locked) { _setFlag(3, locked); }
-
-    //! 返回是否不能旋转
-    bool isRotateDisnable() const { return _getFlag(4); }
-    
-    //! 设置是否不能旋转
-    virtual void setRotateDisnable(bool disnable) { _setFlag(4, disnable); }
-
 protected:
     Box2d   _extent;
     UInt32  _flags;
 
 protected:
-    bool _getFlag(int bit) const { return (_flags & (1 << bit)) != 0; }
-    void _setFlag(int bit, bool on) { _flags = on ? _flags | (1 << bit) : _flags & ~(1 << bit); }
-    bool _isClosed() const { return _getFlag(1); }
-    void _setClosed(bool closed) { _setFlag(1, closed); }
     void _copy(const MgBaseShape& src);
     bool _equals(const MgBaseShape& src) const;
     bool _isKindOf(UInt32 type) const;

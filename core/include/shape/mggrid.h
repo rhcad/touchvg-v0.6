@@ -16,9 +16,9 @@ class MgGrid : public MgBaseRect
     MG_INHERIT_CREATE(MgGrid, MgBaseRect, 20)
 public:
     virtual int snap(Point2d& pnt, float& distx, float& disty);
-    virtual void setRotateDisnable(bool disnable);
 
 protected:
+    virtual void setFlag(MgShapeBit bit, bool on);
     void _copy(const MgGrid& src);
     bool _equals(const MgGrid& src) const;
     void _clear();

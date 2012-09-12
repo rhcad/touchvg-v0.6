@@ -530,15 +530,15 @@ Box2d MgCommandSelect::getDragRect(const MgMotion* sender)
 
 bool MgCommandSelect::canTransform(MgShape* shape, const MgMotion* sender)
 {
-    return (!shape->shape()->isFixedLength()
-            && !shape->shape()->isLocked()
+    return (!shape->shape()->getFlag(kMgFixedLength)
+            && !shape->shape()->getFlag(kMgShapeLocked)
             && sender->view->shapeCanTransform(shape));
 }
 
 bool MgCommandSelect::canRotate(MgShape* shape, const MgMotion* sender)
 {
-    return (!shape->shape()->isRotateDisnable()
-            && !shape->shape()->isLocked()
+    return (!shape->shape()->getFlag(kMgRotateDisnable)
+            && !shape->shape()->getFlag(kMgShapeLocked)
             && sender->view->shapeCanRotated(shape));
 }
 
@@ -617,7 +617,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
         MgBaseShape* shape = m_clones[i]->shape();
         MgShape* basesp = getShape(m_selIds[i], sender);
         
-        if (!basesp || shape->isLocked())
+        if (!basesp || shape->getFlag(kMgShapeLocked))
             continue;
         shape->copy(*basesp->shape());
         if (m_insertPt && shape->isKindOf(MgBaseLines::Type())) {
@@ -943,7 +943,7 @@ bool MgCommandSelect::switchClosed(MgView* view)
 bool MgCommandSelect::isFixedLength(MgView* view)
 {
     MgShape* shape = view->shapes()->findShape(m_id);
-    return shape && shape->shape()->isFixedLength();
+    return shape && shape->shape()->getFlag(kMgFixedLength);
 }
 
 bool MgCommandSelect::setFixedLength(MgView* view, bool fixed)
@@ -953,8 +953,8 @@ bool MgCommandSelect::setFixedLength(MgView* view, bool fixed)
     
     for (sel_iterator it = m_selIds.begin(); it != m_selIds.end(); ++it) {
         MgShape* shape = view->shapes()->findShape(*it);
-        if (shape && shape->shape()->isFixedLength() != fixed) {
-            shape->shape()->setFixedLength(fixed);
+        if (shape && shape->shape()->getFlag(kMgFixedLength) != fixed) {
+            shape->shape()->setFlag(kMgFixedLength, fixed);
             count++;
         }
     }
@@ -968,7 +968,7 @@ bool MgCommandSelect::setFixedLength(MgView* view, bool fixed)
 bool MgCommandSelect::isLocked(MgView* view)
 {
     MgShape* shape = view->shapes()->findShape(m_id);
-    return shape && shape->shape()->isLocked();
+    return shape && shape->shape()->getFlag(kMgShapeLocked);
 }
 
 bool MgCommandSelect::setLocked(MgView* view, bool locked)
@@ -978,8 +978,8 @@ bool MgCommandSelect::setLocked(MgView* view, bool locked)
     
     for (sel_iterator it = m_selIds.begin(); it != m_selIds.end(); ++it) {
         MgShape* shape = view->shapes()->findShape(*it);
-        if (shape && shape->shape()->isLocked() != locked) {
-            shape->shape()->setLocked(locked);
+        if (shape && shape->shape()->getFlag(kMgShapeLocked) != locked) {
+            shape->shape()->setFlag(kMgShapeLocked, locked);
             count++;
         }
     }
