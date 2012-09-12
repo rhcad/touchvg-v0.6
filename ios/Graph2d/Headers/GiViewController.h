@@ -54,7 +54,7 @@
 //! 线条透明度, 0-1
 @property (nonatomic)         float     lineAlpha;
 
-//! 填充颜色，忽略透明度分量（即总是1），clearColor 表示不填充
+//! 填充颜色，忽略透明度分量（即总是1），clearColor 表示不填充，nil表示随线条颜色
 @property (nonatomic,assign)  UIColor   *fillColor;
 
 //! 填充透明度, 0-1

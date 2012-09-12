@@ -79,7 +79,7 @@
         [cmd touchesBegan:CGPointZero view:_activeView count:0];    // 传入View
         cmd.lineWidth = 20;                                 // 默认画笔0.2mm
         cmd.lineColor = GiColor(0, 0, 0, 128);              // 默认黑色画笔，50%透明
-        cmd.fillColor = GiColor(0, 128, 0, 64);
+        cmd.autoFillColor = YES;
     }
 }
 
@@ -541,10 +541,13 @@
 
 - (void)setFillColor:(UIColor*)c {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
-    GiColor color(giFromUIColor(c));
-    if (color.a > 0.01f && cmd.fillColor.a > 0)     // 只要不是完全透明
-        color.a = cmd.fillColor.a;                  // 就不改变透明度
-    [cmd setFillColor:color];
+    [cmd setAutoFillColor:c == nil];
+    if (c) {
+        GiColor color(giFromUIColor(c));
+        if (color.a > 0.01f && cmd.fillColor.a > 0)     // 只要不是完全透明
+            color.a = cmd.fillColor.a;                  // 就不改变透明度
+        [cmd setFillColor:color];
+    }
 }
 
 - (float)lineAlpha {

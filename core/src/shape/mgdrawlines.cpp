@@ -119,7 +119,11 @@ bool MgCmdDrawLines::doubleClick(const MgMotion* sender)
 
 bool MgCmdDrawLines::cancel(const MgMotion* sender)
 {
-    doubleClick(sender);
+    if (m_step > 1) {
+        _addshape(sender);
+        _delayClear();
+        m_step = 0;
+    }
     return MgCommandDraw::cancel(sender);
 }
 

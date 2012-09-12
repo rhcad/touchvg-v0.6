@@ -153,6 +153,7 @@ public:
         s->writeUInt32("lineColor", c.r | (c.g << 8) | (c.b << 16) | (c.a << 24));
         c = _context.getFillColor();
         s->writeUInt32("fillColor", c.r | (c.g << 8) | (c.b << 16) | (c.a << 24));
+        s->writeBool("autoFillColor", _context.isAutoFillColor());
         
         return shapec()->save(s);
     }
@@ -175,6 +176,7 @@ public:
                                       (UInt8)((c >> 8 ) & 0xFF), 
                                       (UInt8)((c >> 16) & 0xFF), 
                                       (UInt8)((c >> 24) & 0xFF)));
+        _context.setAutoFillColor(s->readBool("autoFillColor", _context.isAutoFillColor()));
         
         bool ret = shape()->load(s);
         if (ret) {

@@ -250,6 +250,7 @@ static long s_cmdRef = 0;
 @synthesize lineStyle;
 @synthesize lineColor;
 @synthesize fillColor;
+@synthesize autoFillColor;
 
 - (id)initWithViews:(UIView**)auxviews
 {
@@ -354,6 +355,25 @@ static long s_cmdRef = 0;
     }
     else {
         _mgview->context()->setLineStyle((GiLineStyle)style);
+    }
+}
+
+- (BOOL)autoFillColor {
+    return [self currentContext]->isAutoFillColor();
+}
+
+- (void)setAutoFillColor:(BOOL)value {
+    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
+    std::vector<MgShape*> shapes(n, NULL);
+    
+    if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
+        for (UInt32 i = 0; i < n; i++) {
+            shapes[i]->context()->setAutoFillColor(value);
+        }
+        _motion->view->redraw(false);
+    }
+    else {
+        _mgview->context()->setAutoFillColor(value);
     }
 }
 

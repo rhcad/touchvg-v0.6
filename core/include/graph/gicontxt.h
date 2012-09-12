@@ -43,7 +43,7 @@ public:
     /*! 绘图参数为1像素宽的黑实线、不填充
     */
     GiContext() : m_type(0), m_lineStyle(kGiLineSolid), m_lineWidth(0)
-        , m_lineColor(GiColor::Black()), m_fillColor(GiColor::Invalid())
+        , m_lineColor(GiColor::Black()), m_fillColor(GiColor::Invalid()), m_autoFillColor(false)
     {
     }
     
@@ -57,7 +57,7 @@ public:
     GiContext(float width, GiColor color = GiColor::Black(), 
               int style = kGiLineSolid, const GiColor& fillcr = GiColor::Invalid())
         : m_type(0), m_lineStyle(style), m_lineWidth(width)
-        , m_lineColor(color), m_fillColor(fillcr)
+        , m_lineColor(color), m_fillColor(fillcr), m_autoFillColor(false)
     {
     }
     
@@ -91,9 +91,11 @@ public:
             if (mask & 0x10) {
                 GiColor c = src.m_fillColor;
                 m_fillColor.set(c.r, c.g, c.b);
+                m_autoFillColor = src.m_autoFillColor;
             }
             if (mask & 0x20) {
                 m_fillColor.a = src.m_fillColor.a;
+                m_autoFillColor = src.m_autoFillColor;
             }
         }
         return *this;
@@ -105,7 +107,8 @@ public:
         return m_lineStyle == src.m_lineStyle
             && m_lineWidth == src.m_lineWidth
             && m_lineColor == src.m_lineColor
-            && m_fillColor == src.m_fillColor;
+            && m_fillColor == src.m_fillColor
+            && m_autoFillColor == src.m_autoFillColor;
     }
     
 #ifndef SWIG
@@ -181,12 +184,16 @@ public:
     void setLineColor(const GiColor& color)
     {
         m_lineColor = color;
+        if (m_autoFillColor) {
+            m_fillColor = m_lineColor;
+            m_fillColor.a /= 4;
+        }
     }
     
     //! 设置线条颜色
     void setLineColor(int r, int g, int b)
     {
-        m_lineColor.set((UInt8)r, (UInt8)g, (UInt8)b);
+        setLineColor(GiColor((UInt8)r, (UInt8)g, (UInt8)b));
     }
 
     //! 返回线条ARGB颜色
@@ -199,6 +206,7 @@ public:
     void setLineARGB(int argb)
     {
         m_lineColor.setARGB(argb);
+        setLineColor(m_lineColor);
     }
     
     //! 返回线条透明度
@@ -211,6 +219,9 @@ public:
     void setLineAlpha(int alpha)
     {
         m_lineColor.a = (unsigned char)alpha;
+        if (m_autoFillColor) {
+            m_fillColor.a = m_lineColor.a / 4;
+        }
     }
     
     //! 返回是否填充
@@ -267,6 +278,22 @@ public:
         m_fillColor.a = (unsigned char)alpha;
     }
     
+    //! 返回填充颜色是否随线条颜色自动变化
+    bool isAutoFillColor() const
+    {
+        return m_autoFillColor;
+    }
+    
+    //! 设置填充颜色是否随线条颜色自动变化
+    void setAutoFillColor(bool value)
+    {
+        m_autoFillColor = value;
+        if (m_autoFillColor) {
+            m_fillColor = m_lineColor;
+            m_fillColor.a /= 4;
+        }
+    }
+    
     //! 返回绘图环境类型，供派生类用
     /*! 本类始终返回1，派生类可设置 m_type 为其他值
     */
@@ -276,12 +303,13 @@ public:
     }
     
 protected:
-    int         m_type;            //!< 派生类可指定其他值来表示不同类型
+    int         m_type;             //!< 派生类可指定其他值来表示不同类型
 private:
-    int         m_lineStyle;       //!< 线型, GiLineStyle
-    float       m_lineWidth;       //!< 线宽, >0: 0.01mm, =0: 1px, <0:px
+    int         m_lineStyle;        //!< 线型, GiLineStyle
+    float       m_lineWidth;        //!< 线宽, >0: 0.01mm, =0: 1px, <0:px
     GiColor     m_lineColor;
     GiColor     m_fillColor;
+    bool        m_autoFillColor;    //!< 填充颜色随线条颜色自动变化
 };
 
 #endif // __GEOMETRY_DRAWCONTEXT_H_
