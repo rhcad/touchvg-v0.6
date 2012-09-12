@@ -238,9 +238,9 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
     _ptSnap = sender->pointM;
     
     SnapItem arr[3] = {
-        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), -1 },   // XY
-        { _ptSnap, _ptSnap, mgDisplayMmToModel(1.f, sender), -1 },   // X,Vert
-        { _ptSnap, _ptSnap, mgDisplayMmToModel(1.f, sender), -1 },   // Y,Horz
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(5.f, sender), -1 },   // XY
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), -1 },   // X,Vert
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), -1 },   // Y,Horz
     };
     
     if (shape && shape->getID() == 0 && hotHandle > 0
@@ -284,18 +284,32 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
     
     if (sender->dragging) {
         if (_snapType[0] >= 5) {
-            GiContext ctx(-2, GiColor(0, 255, 0, 200), kGiLineDash);
+            GiContext ctx(-2, GiColor(0, 255, 0, 200), kGiLineDash, GiColor(0, 255, 0, 64));
             ret = gs->drawEllipse(&ctx, _ptSnap, mgDisplayMmToModel(8.f, gs));
         }
         else {
-            GiContext ctx(0, GiColor(0, 255, 0, 200), kGiLineDash);
+            GiContext ctx(0, GiColor(0, 255, 0, 200), kGiLineDash, GiColor(0, 255, 0, 64));
+            GiContext ctx2(-2, GiColor(0, 255, 0, 200));
+            
             if (_snapType[0] >= 0) {
-                ret = gs->drawLine(&ctx, _snapBase[0], _ptSnap);
-                gs->drawEllipse(&ctx, _snapBase[0], mgDisplayMmToModel(3.f, gs));
+                if (_snapBase[0] == _ptSnap) {
+                    Vector2d vec(0, mgDisplayMmToModel(15.f, gs));
+                    ret = gs->drawLine(&ctx2, _ptSnap - vec, _ptSnap + vec);
+                }
+                else {
+                    ret = gs->drawLine(&ctx, _snapBase[0], _ptSnap);
+                }
+                gs->drawEllipse(&ctx, _snapBase[0], mgDisplayMmToModel(4.f, gs));
             }
             if (_snapType[1] >= 0) {
-                ret = gs->drawLine(&ctx, _snapBase[1], _ptSnap);
-                gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(3.f, gs));
+                if (_snapBase[1] == _ptSnap) {
+                    Vector2d vec(mgDisplayMmToModel(15.f, gs), 0);
+                    ret = gs->drawLine(&ctx2, _ptSnap - vec, _ptSnap + vec);
+                }
+                else {
+                    ret = gs->drawLine(&ctx, _snapBase[1], _ptSnap);
+                }
+                gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(4.f, gs));
             }
         }
     }
