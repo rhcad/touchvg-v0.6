@@ -101,17 +101,10 @@ bool MgCommandSelect::undo(bool &, const MgMotion* sender)
         sender->view->redraw(false);
         return true;
     }
-    if (m_id != 0 && m_handleMode) {                // 控制点修改状态
-        m_handleIndex = 0;                          // 回退到图形整体选中状态
-        m_handleMode = false;
-        sender->view->redraw(false);
-        return true;
-    }
     if (!m_selIds.empty()) {                        // 图形整体选中状态
         m_id = 0;
         m_segment = -1;
         m_handleIndex = 0;
-        m_handleMode = false;
         m_selIds.clear();
         sender->view->redraw(false);
         sender->view->selChanged();
@@ -328,7 +321,7 @@ bool MgCommandSelect::isSelected(MgShape* shape)
 MgShape* MgCommandSelect::hitTestAll(const MgMotion* sender, 
                                      Point2d &nearpt, Int32 &segment)
 {
-    Box2d limits(sender->pointM, mgDisplayMmToModel(6, sender), 0);
+    Box2d limits(sender->pointM, mgDisplayMmToModel(10, sender), 0);
     return sender->view->shapes()->hitTest(limits, nearpt, segment);
 }
 
@@ -387,8 +380,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
     
     Point2d nearpt;
     Int32   segment = -1;
-    UInt32  handleIndex = 0;
-    MgShape *shape, *tmpsp;
+    MgShape *shape;
     bool    canSelAgain;
     bool    changed = false;
     
@@ -399,27 +391,12 @@ bool MgCommandSelect::click(const MgMotion* sender)
     
     m_insertPt = false;                 // 默认不是插入点，在hitTestHandles中设置
     shape = getSelectedShape(sender);   // 取上次选中的图形
-    tmpsp = shape;
     canSelAgain = (m_selIds.size() == 1 // 多选时不进入热点状态
                    && (m_handleMode || shape->getID() == m_id)
                    && canSelect(shape, sender));    // 仅检查这个图形能否选中
     
-    if (canSelAgain) {                  // 可再次选中同一图形，不论其他图形能否选中
-        m_handleMode = true;
-        handleIndex = hitTestHandles(shape, sender->pointM, sender);    // 检查是否切换热点
-        if (m_handleIndex != handleIndex || m_insertPt) {
-            m_handleIndex = handleIndex;
-        }
-    }
-    else if (shape && m_handleMode) {   // 上次是热点状态，在该图形外的较远处点击
-        tmpsp = hitTestAll(sender, nearpt, segment);
-        if (tmpsp == NULL) {
-            m_handleIndex = 0;          // 恢复到整体选中状态
-            m_handleMode = false;
-        }
-    }
-    if (tmpsp == shape || tmpsp) {      // 没有选中或点中其他图形
-        shape = (tmpsp == shape) ? hitTestAll(sender, nearpt, segment) : tmpsp;
+    if (!canSelAgain) {                 // 没有选中或点中其他图形
+        shape = hitTestAll(sender, nearpt, segment);
         changed = ((int)m_selIds.size() != (shape ? 1 : 0))
             || (shape && shape->getID() != m_id);
 

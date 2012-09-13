@@ -186,8 +186,8 @@ public:
             {
                 Point2d tmpNear;
                 Int32   tmpSegment;
-                float  tol = !(*it)->context()->hasFillColor() ?
-                    limits.width() / 2 : mgMax(extent.width(), extent.height());
+                float  tol = (!hasFillColor(*it) ? limits.width() / 2
+                              : mgMin(extent.width(), extent.height()));
                 float  dist = shape->hitTest(limits.center(), tol, tmpNear, tmpSegment);
 
                 if (distMin > dist) {
@@ -198,8 +198,7 @@ public:
                 }
             }
         }
-        if (retshape && distMin > limits.width()
-            && !retshape->context()->hasFillColor())
+        if (retshape && distMin > limits.width() && !hasFillColor(retshape))
         {
             retshape = NULL;
         }
@@ -378,6 +377,11 @@ private:
                 nID++;
         }
         return nID;
+    }
+    
+    bool hasFillColor(const MgShape* shape) const
+    {
+        return shape->contextc()->hasFillColor() && shape->shapec()->isClosed();
     }
 
 protected:
