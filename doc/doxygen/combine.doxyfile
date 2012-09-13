@@ -690,7 +690,7 @@ INPUT_ENCODING         = UTF-8
 # *.hxx *.hpp *.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm *.dox *.py 
 # *.f90 *.f *.for *.vhd *.vhdl
 
-FILE_PATTERNS          = *.h *.cpp *.mm *.m
+FILE_PATTERNS          = *.h *.cpp *.mm *.m *.java
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories 
 # should be searched for input files as well. Possible values are YES and NO. 
@@ -878,7 +878,7 @@ GENERATE_HTML          = YES
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
 # put in front of it. If left blank `html' will be used as the default path.
 
-HTML_OUTPUT            = htmlall
+HTML_OUTPUT            = _htmlall
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for 
 # each generated HTML page (for example: .htm,.php,.asp). If it is left blank 
@@ -1017,7 +1017,7 @@ GENERATE_HTMLHELP      = YES
 # can add a path in front of the file if the result should not be 
 # written to the html output directory.
 
-CHM_FILE               = ../TouchVGAll.chm
+CHM_FILE               = TouchVGAll.chm
 
 # If the GENERATE_HTMLHELP tag is set to YES, the HHC_LOCATION tag can 
 # be used to specify the location (absolute path including file name) of 

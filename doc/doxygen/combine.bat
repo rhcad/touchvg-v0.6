@@ -29,3 +29,5 @@ xcopy ..\..\ios\FreeDraw\Sources\*.* %destpath%\iosApp\ /Y
 
 mkdir %destpath%\AndroidView
 xcopy ..\..\android\skiaview\jni\*.* %destpath%\AndroidView\ /Y
+xcopy ..\..\android\skiaview\src\touchvg\view\*.* %destpath%\AndroidView\ /Y
+xcopy ..\..\android\skiaview\src\touchvg\demo\*.* %destpath%\AndroidApp\ /Y

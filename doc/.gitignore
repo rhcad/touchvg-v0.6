@@ -1,5 +1,4 @@
 *.chm
 *.tmp
 *.chw
-html
-htmlall
+_html*

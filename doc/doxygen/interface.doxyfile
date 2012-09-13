@@ -674,6 +674,7 @@ INPUT                  = ../../core/include \
                          ../../win32/include \
                          ../../ios/Graph2d/Headers \
                          ../../android/skiaview/jni \
+                         ../../android/skiaview/src/touchvg/view \
                          MainPage.txt
 
 # This tag can be used to specify the character encoding of the source files 
@@ -881,7 +882,7 @@ GENERATE_HTML          = YES
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
 # put in front of it. If left blank `html' will be used as the default path.
 
-HTML_OUTPUT            = html
+HTML_OUTPUT            = _html
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for 
 # each generated HTML page (for example: .htm,.php,.asp). If it is left blank 
@@ -1020,7 +1021,7 @@ GENERATE_HTMLHELP      = YES
 # can add a path in front of the file if the result should not be 
 # written to the html output directory.
 
-CHM_FILE               = ../TouchVG.chm
+CHM_FILE               = TouchVG.chm
 
 # If the GENERATE_HTMLHELP tag is set to YES, the HHC_LOCATION tag can 
 # be used to specify the location (absolute path including file name) of 

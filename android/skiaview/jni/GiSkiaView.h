@@ -1,5 +1,5 @@
 //! \file GiSkiaView.h
-//! \brief å®šä¹‰æ”¯æŒAndroidå¹³å°çš„å›¾å½¢è§†å›¾ç±» GiSkiaView
+//! \brief ¶¨ÒåÖ§³ÖAndroidÆ½Ì¨µÄÍ¼ĞÎÊÓÍ¼Àà GiSkiaView
 // Copyright (c) 2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchvg
 
@@ -13,24 +13,24 @@ struct MgShapes;
 class MgViewProxy;
 class GiContext;
 
-typedef enum {                //!< æ‰‹åŠ¿ç±»å‹
-    kGestureUnknown,          //!< æœªçŸ¥çš„æ‰‹åŠ¿
-    kSinglePan = 1,           //!< å•æŒ‡æ»‘åŠ¨
-    kSingleTap,               //!< å•æŒ‡å•å‡»
-    kDoubleTap,               //!< å•æŒ‡åŒå‡»
-    kLongPress,               //!< é•¿æŒ‰
-    kZoomRotatePan,           //!< åŒæŒ‡ç§»åŠ¨
-    kTwoFingersDblClick,      //!< åŒæŒ‡åŒå‡»
+typedef enum {                //!< ÊÖÊÆÀàĞÍ
+    kGestureUnknown,          //!< Î´ÖªµÄÊÖÊÆ
+    kSinglePan = 1,           //!< µ¥Ö¸»¬¶¯
+    kSingleTap,               //!< µ¥Ö¸µ¥»÷
+    kDoubleTap,               //!< µ¥Ö¸Ë«»÷
+    kLongPress,               //!< ³¤°´
+    kZoomRotatePan,           //!< Ë«Ö¸ÒÆ¶¯
+    kTwoFingersDblClick,      //!< Ë«Ö¸Ë«»÷
 } GiGestureType;
 
-typedef enum { //!< æ‰‹åŠ¿çŠ¶æ€
-    kGestureCancel = 0,       //!< å–æ¶ˆ
-    kGestureBegan,            //!< å¼€å§‹
-    kGestureMoved,            //!< æ”¹å˜
-    kGestureEnded,            //!< ç»“æŸ
+typedef enum { //!< ÊÖÊÆ×´Ì¬
+    kGestureCancel = 0,       //!< È¡Ïû
+    kGestureBegan,            //!< ¿ªÊ¼
+    kGestureMoved,            //!< ¸Ä±ä
+    kGestureEnded,            //!< ½áÊø
 } GiGestureState;
 
-//! æ”¯æŒAndroidå¹³å°çš„å›¾å½¢è§†å›¾ç±»
+//! Ö§³ÖAndroidÆ½Ì¨µÄÍ¼ĞÎÊÓÍ¼Àà
 /*! \ingroup GRAPH_SKIA
  */
 class GiSkiaView
@@ -39,72 +39,72 @@ public:
     GiSkiaView(GiCanvasBase* canvas);
     virtual ~GiSkiaView();
     
-    //! ä¿å­˜å›¾å½¢åˆ—è¡¨
+    //! ±£´æÍ¼ĞÎÁĞ±í
     bool saveShapes(MgStorageBase* s);
     
-    //! åŠ è½½å›¾å½¢åˆ—è¡¨ï¼Œsä¸ºNULLåˆ™æ¸…ç©º
+    //! ¼ÓÔØÍ¼ĞÎÁĞ±í£¬sÎªNULLÔòÇå¿Õ
     bool loadShapes(MgStorageBase* s);
 
-    //! å¾—åˆ°å›¾å½¢ä¸ªæ•°
+    //! µÃµ½Í¼ĞÎ¸öÊı
 	int getShapeCount();
     
-    //! å¾—åˆ°å›¾å½¢å†…å®¹æ”¹å˜è®¡æ•°ï¼Œå¯ç”¨äºè§‰å¾—æ˜¯å¦éœ€è¦è°ƒç”¨ saveShapes
+    //! µÃµ½Í¼ĞÎÄÚÈİ¸Ä±ä¼ÆÊı£¬¿ÉÓÃÓÚ¾õµÃÊÇ·ñĞèÒªµ÷ÓÃ saveShapes
 	int getChangeCount();
 
-    //! æ·»åŠ æµ‹è¯•å›¾å½¢
+    //! Ìí¼Ó²âÊÔÍ¼ĞÎ
     int addTestingShapes();
     
-    //! è¿”å›è§†å›¾å®½åº¦ï¼Œåƒç´ 
+    //! ·µ»ØÊÓÍ¼¿í¶È£¬ÏñËØ
     int getWidth() const;
     
-    //! è¿”å›è§†å›¾é«˜åº¦ï¼Œåƒç´ 
+    //! ·µ»ØÊÓÍ¼¸ß¶È£¬ÏñËØ
     int getHeight() const;
     
-    //! è®¾ç½®è§†å›¾å®½é«˜ï¼Œåƒç´ 
+    //! ÉèÖÃÊÓÍ¼¿í¸ß£¬ÏñËØ
     void onSize(int width, int height);
     
-    //! æ˜¾ç¤ºæ­£å¼å›¾å½¢
+    //! ÏÔÊ¾ÕıÊ½Í¼ĞÎ
     bool onDraw(GiCanvasBase& canvas);
     
-    //! æ˜¾ç¤ºä¸´æ—¶åŠ¨æ€å›¾å½¢
+    //! ÏÔÊ¾ÁÙÊ±¶¯Ì¬Í¼ĞÎ
     bool onDynDraw(GiCanvasBase& canvas);
     
-    //! è¿”å›å½“å‰å‘½ä»¤åç§°
+    //! ·µ»Øµ±Ç°ÃüÁîÃû³Æ
     const char* getCommandName() const;
     
-    //! å¯åŠ¨æŒ‡å®šåç§°çš„å‘½ä»¤
+    //! Æô¶¯Ö¸¶¨Ãû³ÆµÄÃüÁî
     bool setCommandName(const char* name);
     
-    //! ä¼ é€’è§¦æ‘¸æ‰‹åŠ¿æ¶ˆæ¯
+    //! ´«µİ´¥ÃşÊÖÊÆÏûÏ¢
     /**
-     * \param gestureType æ‰‹åŠ¿ç±»å‹, GiGestureType
-     * \param gestureState æ‰‹åŠ¿çŠ¶æ€, GiGestureState, gestureTypeä¸º kSinglePan æˆ– kZoomRotatePan æ—¶æœ‰æ•ˆ
-     * \param fingerCount è§¦ç‚¹ä¸ªæ•°
-     * \param x1 ç¬¬ä¸€ä¸ªè§¦ç‚¹çš„Xåæ ‡ï¼ŒfingerCountå°äº1æ—¶å¿½ç•¥
-     * \param y1 ç¬¬ä¸€ä¸ªè§¦ç‚¹çš„Yåæ ‡ï¼ŒfingerCountå°äº1æ—¶å¿½ç•¥
-     * \param x2 ç¬¬äºŒä¸ªè§¦ç‚¹çš„Xåæ ‡ï¼ŒfingerCountå°äº2æ—¶å¿½ç•¥
-     * \param y2 ç¬¬äºŒä¸ªè§¦ç‚¹çš„Yåæ ‡ï¼ŒfingerCountå°äº2æ—¶å¿½ç•¥
-     * \return å†…éƒ¨æ˜¯å¦å“åº”äº†æ­¤æ‰‹åŠ¿
+     * \param gestureType ÊÖÊÆÀàĞÍ, GiGestureType
+     * \param gestureState ÊÖÊÆ×´Ì¬, GiGestureState, gestureTypeÎª kSinglePan »ò kZoomRotatePan Ê±ÓĞĞ§
+     * \param fingerCount ´¥µã¸öÊı
+     * \param x1 µÚÒ»¸ö´¥µãµÄX×ø±ê£¬fingerCountĞ¡ÓÚ1Ê±ºöÂÔ
+     * \param y1 µÚÒ»¸ö´¥µãµÄY×ø±ê£¬fingerCountĞ¡ÓÚ1Ê±ºöÂÔ
+     * \param x2 µÚ¶ş¸ö´¥µãµÄX×ø±ê£¬fingerCountĞ¡ÓÚ2Ê±ºöÂÔ
+     * \param y2 µÚ¶ş¸ö´¥µãµÄY×ø±ê£¬fingerCountĞ¡ÓÚ2Ê±ºöÂÔ
+     * \return ÄÚ²¿ÊÇ·ñÏìÓ¦ÁË´ËÊÖÊÆ
      */
     bool onGesture(GiGestureType gestureType, GiGestureState gestureState, int fingerCount,
                    float x1, float y1, float x2, float y2);
     
-    //! è¿”å›å½“å‰ç»˜å›¾å±æ€§
+    //! ·µ»Øµ±Ç°»æÍ¼ÊôĞÔ
     /**
-     * \param forChange æ˜¯å¦ç”¨äºæ”¹åŠ¨ç»˜å›¾å±æ€§
-     * \return å½“å‰ç»˜å›¾å±æ€§ï¼Œå¦‚æœé€‰ä¸­äº†å›¾å½¢åˆ™ä¸ºæ‰€é€‰å›¾å½¢çš„å±æ€§
+     * \param forChange ÊÇ·ñÓÃÓÚ¸Ä¶¯»æÍ¼ÊôĞÔ
+     * \return µ±Ç°»æÍ¼ÊôĞÔ£¬Èç¹ûÑ¡ÖĞÁËÍ¼ĞÎÔòÎªËùÑ¡Í¼ĞÎµÄÊôĞÔ
      */
     GiContext& getCurrentContext(bool forChange);
     
-    //! ç»˜å›¾å±æ€§æ”¹å˜åæäº¤æ›´æ–°
-    /** åœ¨ getCurrentContext(true) åè°ƒç”¨æœ¬å‡½æ•°ã€‚
-     * \param ctx ç»˜å›¾å±æ€§
-     * \param mask éœ€è¦åº”ç”¨å“ªäº›å±æ€§ï¼Œ-1è¡¨ç¤ºå…¨éƒ¨å±æ€§ï¼Œ0åˆ™ä¸ä¿®æ”¹ï¼ŒæŒ‰ä½ç»„åˆå€¼è§ GiContext çš„ GiContextBits
-     * \param apply 0è¡¨ç¤ºè¿˜è¦ç»§ç»­åŠ¨æ€ä¿®æ”¹å±æ€§ï¼Œ1è¡¨ç¤ºç»“æŸåŠ¨æ€ä¿®æ”¹å¹¶æäº¤ï¼Œ-1è¡¨ç¤ºç»“æŸåŠ¨æ€ä¿®æ”¹å¹¶æ”¾å¼ƒæ”¹åŠ¨
+    //! »æÍ¼ÊôĞÔ¸Ä±äºóÌá½»¸üĞÂ
+    /** ÔÚ getCurrentContext(true) ºóµ÷ÓÃ±¾º¯Êı¡£
+     * \param ctx »æÍ¼ÊôĞÔ
+     * \param mask ĞèÒªÓ¦ÓÃÄÄĞ©ÊôĞÔ£¬-1±íÊ¾È«²¿ÊôĞÔ£¬0Ôò²»ĞŞ¸Ä£¬°´Î»×éºÏÖµ¼û GiContext µÄ GiContextBits
+     * \param apply 0±íÊ¾»¹Òª¼ÌĞø¶¯Ì¬ĞŞ¸ÄÊôĞÔ£¬1±íÊ¾½áÊø¶¯Ì¬ĞŞ¸Ä²¢Ìá½»£¬-1±íÊ¾½áÊø¶¯Ì¬ĞŞ¸Ä²¢·ÅÆú¸Ä¶¯
      */
     void applyContext(const GiContext& ctx, int mask, int apply);
     
-    //! è®¾ç½®å…è®¸çš„æ”¾ç¼©ç±»å‹: 0-ç¦æ­¢, 1-å¹³ç§», 2-ç¼©æ”¾, 4-å±€éƒ¨æ”¾å¤§å’Œè¿˜åŸ, 7-å…¨éƒ¨
+    //! ÉèÖÃÔÊĞíµÄ·ÅËõÀàĞÍ: 0-½ûÖ¹, 1-Æ½ÒÆ, 2-Ëõ·Å, 4-¾Ö²¿·Å´óºÍ»¹Ô­, 7-È«²¿
     void setZoomFeature(int mask);
     
 private:

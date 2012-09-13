@@ -24,7 +24,7 @@ public class GiCanvasEx extends GiCanvasBase{
     private static final float dashDotdot[]   = { 20, 2, 2, 2, 2, 2 };
     private PathEffect mEffects = null;
     
-    public GiCanvasEx(View view)
+	public GiCanvasEx(View view)
     {
         mView = view;
     }
@@ -93,11 +93,15 @@ public class GiCanvasEx extends GiCanvasBase{
         else
             this.mEffects = null;
         mPen.setPathEffect(this.mEffects);
+        context.delete();
+        context = null;
     }
     
     @Override
     public void brushChanged(GiContext context) {
         mBrush.setColor(context.getFillARGB());
+        context.delete();
+        context = null;
     }
 
     @Override
@@ -124,6 +128,8 @@ public class GiCanvasEx extends GiCanvasBase{
             mPath.cubicTo(pxs.get(i), pxs.get(i+1), pxs.get(i+2), 
                     pxs.get(i+3), pxs.get(i+4), pxs.get(i+5));
         }
+        pxs.delete();
+        pxs = null;
         return true;
     }
     
@@ -155,7 +161,8 @@ public class GiCanvasEx extends GiCanvasBase{
             }
             mCanvas.drawPath(p, mPen);
         }
-        
+        pxs.delete();
+        pxs=null;
         return ret;
     }
     
@@ -192,6 +199,8 @@ public class GiCanvasEx extends GiCanvasBase{
             f[i] = pxs.get(i);
         }
         mCanvas.drawLines(f, mPen);
+        pxs.delete();
+        pxs=null;
         return true;
     }
 
@@ -212,7 +221,8 @@ public class GiCanvasEx extends GiCanvasBase{
             if (stroke)
                 mCanvas.drawPath(p, mPen);
         }
-        
+        pxs.delete();
+        pxs=null;
         return ret;
     }
     

@@ -27,5 +27,6 @@ def utf8togbk(dir):
 
 if __name__=="__main__":
     utf8togbk(os.path.abspath('../../android'))
-    utf8togbk(os.path.abspath('../html'))
-    utf8togbk(os.path.abspath('../htmlall'))
+    utf8togbk(os.path.abspath('../_html'))
+    utf8togbk(os.path.abspath('../_htmlall'))
+    utf8togbk(os.path.abspath('../_htmlsrc'))
