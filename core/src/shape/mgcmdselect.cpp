@@ -392,7 +392,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
     m_insertPt = false;                 // 默认不是插入点，在hitTestHandles中设置
     shape = getSelectedShape(sender);   // 取上次选中的图形
     canSelAgain = (m_selIds.size() == 1 // 多选时不进入热点状态
-                   && (m_handleMode || shape->getID() == m_id)
+                   && m_handleMode
                    && canSelect(shape, sender));    // 仅检查这个图形能否选中
     
     if (!canSelAgain) {                 // 没有选中或点中其他图形
@@ -666,6 +666,8 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
     }
     if (m_boxsel) {
         m_boxsel = false;
+        if (m_selIds.size() > 1)
+            m_handleMode = false;
         if (!m_selIds.empty())
             sender->view->selChanged();
     }
