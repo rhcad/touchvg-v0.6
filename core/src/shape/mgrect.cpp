@@ -12,6 +12,7 @@
 
 MgBaseRect::MgBaseRect()
 {
+    setFlag(kMgClosed, true);
 }
 
 UInt32 MgBaseRect::_getPointCount() const

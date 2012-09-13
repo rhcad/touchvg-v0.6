@@ -107,12 +107,15 @@ bool MgGrid::_draw(GiGraphics& gs, const GiContext& ctx) const
 bool MgGrid::_save(MgStorage* s) const
 {
     bool ret = __super::_save(s);
+    s->writeFloat("cellw", m_cell.x);
+    s->writeFloat("celly", m_cell.y);
     return ret;
 }
 
 bool MgGrid::_load(MgStorage* s)
 {
     bool ret = __super::_load(s);
+    m_cell.set(s->readFloat("cellw", m_cell.x), s->readFloat("celly", m_cell.y));
     return ret;
 }
 

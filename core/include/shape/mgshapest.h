@@ -187,7 +187,7 @@ public:
                 Point2d tmpNear;
                 Int32   tmpSegment;
                 float  tol = (!hasFillColor(*it) ? limits.width() / 2
-                              : mgMin(extent.width(), extent.height()));
+                              : mgMax(extent.width(), extent.height()));
                 float  dist = shape->hitTest(limits.center(), tol, tmpNear, tmpSegment);
 
                 if (distMin > dist) {
