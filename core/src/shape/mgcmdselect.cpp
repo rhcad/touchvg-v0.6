@@ -625,7 +625,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
             lines->insertPoint(m_segment, m_ptNear);
         }
         if (m_handleIndex > 0) {
-            float tol = mgDisplayMmToModel(5, sender);
+            float tol = mgDisplayMmToModel(3, sender);
             shape->setHandlePoint(m_handleIndex - 1, snapPoint(sender), tol);
         }
         else if (dragCorner) {

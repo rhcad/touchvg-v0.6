@@ -289,27 +289,33 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
         }
         else {
             GiContext ctx(0, GiColor(0, 255, 0, 200), kGiLineDash, GiColor(0, 255, 0, 64));
-            GiContext ctx2(-2, GiColor(0, 255, 0, 200));
+            GiContext ctxcross(-2, GiColor(0, 255, 0, 200));
             
             if (_snapType[0] >= 0) {
                 if (_snapBase[0] == _ptSnap) {
-                    Vector2d vec(0, mgDisplayMmToModel(15.f, gs));
-                    ret = gs->drawLine(&ctx2, _ptSnap - vec, _ptSnap + vec);
+                    if (_snapType[0] == 3) {
+                        Vector2d vec(0, mgDisplayMmToModel(20.f, gs));
+                        ret = gs->drawLine(&ctxcross, _ptSnap - vec, _ptSnap + vec);
+                        gs->drawEllipse(&ctx, _snapBase[0], mgDisplayMmToModel(6.f, gs));
+                    }
                 }
                 else {
                     ret = gs->drawLine(&ctx, _snapBase[0], _ptSnap);
+                    gs->drawEllipse(&ctx, _snapBase[0], mgDisplayMmToModel(4.f, gs));
                 }
-                gs->drawEllipse(&ctx, _snapBase[0], mgDisplayMmToModel(4.f, gs));
             }
             if (_snapType[1] >= 0) {
                 if (_snapBase[1] == _ptSnap) {
-                    Vector2d vec(mgDisplayMmToModel(15.f, gs), 0);
-                    ret = gs->drawLine(&ctx2, _ptSnap - vec, _ptSnap + vec);
+                    if (_snapType[1] == 4) {
+                        Vector2d vec(mgDisplayMmToModel(20.f, gs), 0);
+                        ret = gs->drawLine(&ctxcross, _ptSnap - vec, _ptSnap + vec);
+                        gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(6.f, gs));
+                    }
                 }
                 else {
                     ret = gs->drawLine(&ctx, _snapBase[1], _ptSnap);
+                    gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(4.f, gs));
                 }
-                gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(4.f, gs));
             }
         }
     }

@@ -68,6 +68,7 @@ public:
         m_lineWidth = src.m_lineWidth;
         m_lineColor = src.m_lineColor;
         m_fillColor = src.m_fillColor;
+        m_autoFillColor = src.m_autoFillColor;
     }
 
     //! 赋值函数, GiContextBits 按位设置
@@ -186,7 +187,7 @@ public:
         m_lineColor = color;
         if (m_autoFillColor) {
             m_fillColor = m_lineColor;
-            m_fillColor.a /= 4;
+            m_fillColor.a /= 3;
         }
     }
     
@@ -220,7 +221,7 @@ public:
     {
         m_lineColor.a = (unsigned char)alpha;
         if (m_autoFillColor) {
-            m_fillColor.a = m_lineColor.a / 4;
+            m_fillColor.a = m_lineColor.a / 3;
         }
     }
     
@@ -290,7 +291,7 @@ public:
         m_autoFillColor = value;
         if (m_autoFillColor) {
             m_fillColor = m_lineColor;
-            m_fillColor.a /= 4;
+            m_fillColor.a /= 3;
         }
     }
     
@@ -307,8 +308,8 @@ protected:
 private:
     int         m_lineStyle;        //!< 线型, GiLineStyle
     float       m_lineWidth;        //!< 线宽, >0: 0.01mm, =0: 1px, <0:px
-    GiColor     m_lineColor;
-    GiColor     m_fillColor;
+    GiColor     m_lineColor;        //!< 线条颜色
+    GiColor     m_fillColor;        //!< 填充颜色
     bool        m_autoFillColor;    //!< 填充颜色随线条颜色自动变化
 };
 

@@ -24,9 +24,12 @@ protected:
     void _clear();
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
-    UInt32 _getHandleCount() const { return 4; }
+    UInt32 _getHandleCount() const;
+    Point2d _getHandlePoint(UInt32 index) const;
+    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
 
 protected:
+    Vector2d    m_cell;
 };
 
 #endif // __GEOMETRY_GRIDSHAPE_H_
