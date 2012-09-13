@@ -66,6 +66,12 @@ struct MgSelection {
     
     //! 设置当前选中图形是否锁定形状
     virtual bool setLocked(MgView* view, bool locked) = 0;
+    
+    //! 返回当前是否处于顶点编辑状态
+    virtual bool isVertexMode(MgView* view) = 0;
+    
+    //! 设置当前是否处于顶点编辑状态
+    virtual void setVertexMode(MgView* view, bool vertexMode) = 0;
 };
 
 #endif // __GEOMETRY_MGSELECTION_H_

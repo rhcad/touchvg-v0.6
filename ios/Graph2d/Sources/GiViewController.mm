@@ -642,6 +642,11 @@
     [_cmdctl menuClickLocked:sender];
 }
 
+- (IBAction)menuClickOutVertexMode:(id)sender
+{
+    [_cmdctl menuClickOutVertexMode:sender];
+}
+
 #pragma mark - View motion
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

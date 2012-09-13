@@ -989,3 +989,14 @@ bool MgCommandSelect::setLocked(MgView* view, bool locked)
     
     return count > 0;
 }
+
+bool MgCommandSelect::isVertexMode(MgView*)
+{
+    return m_handleMode;
+}
+
+void MgCommandSelect::setVertexMode(MgView* view, bool vertexMode)
+{
+    m_handleMode = vertexMode;
+    view->redraw(true);
+}

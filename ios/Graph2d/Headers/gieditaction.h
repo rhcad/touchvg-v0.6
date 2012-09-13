@@ -22,6 +22,7 @@
 - (IBAction)menuClickDelNode:(id)sender;
 - (IBAction)menuClickFixedLength:(id)sender;
 - (IBAction)menuClickLocked:(id)sender;
+- (IBAction)menuClickOutVertexMode:(id)sender;
 
 - (void)shapeSelChanged;                    //!< 选择集改变的通知
 - (BOOL)shapeWillAdded;                     //!< 通知将添加图形

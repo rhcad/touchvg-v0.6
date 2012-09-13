@@ -41,7 +41,7 @@ void MgGrid::setFlag(MgShapeBit bit, bool on)
 
 UInt32 MgGrid::_getHandleCount() const
 {
-    return 5;
+    return (getFlag(kMgFixedLength) || getFlag(kMgShapeLocked)) ? 4 : 5;
 }
 
 Point2d MgGrid::_getHandlePoint(UInt32 index) const
@@ -59,6 +59,7 @@ bool MgGrid::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
     float cx = (float)fabs(pt.x - getPoint(3).x);
     float cy = (float)fabs(pt.y - getPoint(3).y);
     cx = mgMax(mgMax(cx, tol / 3.f), cy);
+    cx = (float)( (int)(cx * 100) / 10 ) * 0.1f;
     m_cell.set(cx, cx);
     
     return true;
@@ -66,21 +67,26 @@ bool MgGrid::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
 
 bool MgGrid::_draw(GiGraphics& gs, const GiContext& ctx) const
 {
-    Vector2d cell(m_cell == Vector2d() ? Vector2d(getWidth()/4, getHeight()/4) : m_cell);
+    Vector2d cell(m_cell == Vector2d() ? Vector2d(getWidth()/4, getHeight()/4) : m_cell / 2);
+    if (cell.x < _MGZERO || cell.y < _MGZERO) {
+        return __super::_draw(gs, ctx);
+    }
+    
     int nx = (int)(getWidth() / cell.x + _MGZERO);
     int ny = (int)(getHeight() / cell.y + _MGZERO);
     Box2d rect(getPoint(3), getPoint(3) + Vector2d((float)(cell.x * nx), (float)(cell.y * ny)));
     
-    GiContext ctxgrid(0, ctx.getLineColor());
-    int ret = 0;
-    bool switchx = (nx >= 10 && cell.x < gs.xf().displayToModel(8, true));
-    bool switchy = (ny >= 10 && cell.y < gs.xf().displayToModel(8, true));
+    float w = gs.calcPenWidth(ctx.getLineWidth()) / -2.f;
+    GiContext ctxgrid(w, ctx.getLineColor());
+    
+    int ret = gs.drawRect(&ctxgrid, rect) ? 1 : 0;
+    
+    bool switchx = (nx >= 10 && cell.x < gs.xf().displayToModel(20, true));
+    bool switchy = (ny >= 10 && cell.y < gs.xf().displayToModel(20, true));
     Point2d pts[2] = { rect.leftTop(), rect.leftBottom() };
     
-    for (int i = 0; i <= nx; i++) {
-        if (switchx) {
-            ctxgrid.setLineStyle(i % 5 == 0 ? kGiLineSolid : kGiLineDot);
-        }
+    for (int i = 0; i < nx; i++) {
+        ctxgrid.setLineWidth(!switchx || i%5 > 0 ? w/2 : w);
         ret += gs.drawLine(&ctxgrid, pts[0], pts[1]) ? 1 : 0;
         pts[0].x += cell.x;
         pts[1].x += cell.x;
@@ -88,11 +94,8 @@ bool MgGrid::_draw(GiGraphics& gs, const GiContext& ctx) const
     
     pts[0] = rect.leftBottom();
     pts[1] = rect.rightBottom();
-    ctxgrid.setLineStyle(kGiLineSolid);
-    for (int j = 0; j <= ny; j++) {
-        if (switchy) {
-            ctxgrid.setLineStyle(j % 5 == 0 ? kGiLineSolid : kGiLineDot);
-        }
+    for (int j = 0; j < ny; j++) {
+        ctxgrid.setLineWidth(!switchy || j%5 > 0 ? w/2 : w);
         ret += gs.drawLine(&ctxgrid, pts[0], pts[1]) ? 1 : 0;
         pts[0].y += cell.y;
         pts[1].y += cell.y;
@@ -118,7 +121,10 @@ int MgGrid::snap(Point2d& pnt, float& distx, float& disty)
     int ret = 0;
     Point2d newpt(pnt);
     Point2d org(getPoint(3));
-    Vector2d cell(m_cell == Vector2d() ? Vector2d(getWidth()/4, getHeight()/4) : m_cell);
+    Vector2d cell(m_cell == Vector2d() ? Vector2d(getWidth()/4, getHeight()/4) : m_cell / 2);
+    
+    if (cell.x < _MGZERO || cell.y < _MGZERO)
+        return ret;
     
     distx *= 3;
     disty *= 3;

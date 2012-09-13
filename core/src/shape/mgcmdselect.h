@@ -39,6 +39,8 @@ public:
     virtual bool setFixedLength(MgView* view, bool fixed);
     virtual bool isLocked(MgView* view);
     virtual bool setLocked(MgView* view, bool locked);
+    virtual bool isVertexMode(MgView* view);
+    virtual void setVertexMode(MgView* view, bool vertexMode);
     
 private:
     virtual const char* getName() const { return Name(); }

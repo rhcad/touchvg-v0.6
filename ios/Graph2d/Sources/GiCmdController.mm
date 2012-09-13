@@ -183,7 +183,7 @@ static long s_cmdRef = 0;
 {
     UIView *view = [_mgview->getView() ownerView];
     UIMenuController *menuController = [UIMenuController sharedMenuController];
-    UIMenuItem *items[6] = { nil, nil, nil, nil, nil, nil };
+    UIMenuItem *items[8] = { nil, nil, nil, nil, nil, nil, nil, nil };
     int n = 0;
     bool islines = shape && shape->shape()->isKindOf(MgBaseLines::Type());
     
@@ -203,6 +203,9 @@ static long s_cmdRef = 0;
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"锁定" action:@selector(menuClickLocked:)];
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
+            if (selState == kMgSelOneShape) {
+                items[n++] = [[UIMenuItem alloc] initWithTitle:@"编辑顶点" action:@selector(menuClickOutVertexMode:)];
+            }
             break;
             
         case kMgSelVertexes:
@@ -213,6 +216,7 @@ static long s_cmdRef = 0;
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"锁定" action:@selector(menuClickLocked:)];
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"隐藏顶点" action:@selector(menuClickOutVertexMode:)];
             break;
             
         case kMgSelVertex:
@@ -222,6 +226,7 @@ static long s_cmdRef = 0;
             }
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"锁定" action:@selector(menuClickLocked:)];
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"隐藏顶点" action:@selector(menuClickOutVertexMode:)];
             break;
             
         default:
@@ -229,7 +234,7 @@ static long s_cmdRef = 0;
             break;
     }
     
-    menuController.menuItems = [NSArray arrayWithObjects: items[0], items[1], items[2], items[3], items[4], items[5], nil];
+    menuController.menuItems = [NSArray arrayWithObjects: items[0], items[1], items[2], items[3], items[4], items[5], items[6], items[7], nil];
     [menuController setTargetRect:CGRectMake(_motion->point.x - 25, _motion->point.y - 50, 50, 50) inView:view];
     [menuController setMenuVisible:YES animated:YES];
     
@@ -725,6 +730,14 @@ static long s_cmdRef = 0;
     MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
     if (sel) {
         sel->setLocked(_mgview, !sel->isLocked(_mgview));
+    }
+}
+
+- (IBAction)menuClickOutVertexMode:(id)sender
+{
+    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
+    if (sel) {
+        sel->setVertexMode(_mgview, !sel->isVertexMode(_mgview));
     }
 }
 
