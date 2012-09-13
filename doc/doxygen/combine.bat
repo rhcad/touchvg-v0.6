@@ -28,6 +28,8 @@ xcopy ..\..\ios\FreeDraw\Headers\*.h %destpath%\iosApp\ /Y
 xcopy ..\..\ios\FreeDraw\Sources\*.* %destpath%\iosApp\ /Y
 
 mkdir %destpath%\AndroidView
+mkdir %destpath%\AndroidJNI
 xcopy ..\..\android\skiaview\jni\*.* %destpath%\AndroidView\ /Y
+xcopy ..\..\android\skiaview\jni\._java\touchvg\skiaview\*.java %destpath%\AndroidJNI\ /Y
 xcopy ..\..\android\skiaview\src\touchvg\view\*.* %destpath%\AndroidView\ /Y
 xcopy ..\..\android\skiaview\src\touchvg\demo\*.* %destpath%\AndroidApp\ /Y
