@@ -22,7 +22,7 @@ public:
     static const char* Name() { return "rect"; }
     static MgCommand* Create() { return new MgCmdDrawRect; }
     
-private:
+protected:
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
 
@@ -31,6 +31,8 @@ private:
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);
+    
+    virtual void addRectShape(const MgMotion* sender);
     
 protected:
     Point2d     m_startPt;
@@ -115,6 +117,13 @@ private:
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
     virtual bool initialize(const MgMotion* sender);
+    virtual bool cancel(const MgMotion* sender);
+    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
+    virtual bool touchBegan(const MgMotion* sender);
+    virtual bool touchMoved(const MgMotion* sender);
+    virtual bool touchEnded(const MgMotion* sender);
+    
+    virtual void addRectShape(const MgMotion* sender);
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_RECT_H_

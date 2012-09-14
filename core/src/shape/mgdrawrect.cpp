@@ -69,11 +69,16 @@ bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
     float minDist = mgDisplayMmToModel(5, sender);
 
     if (shape->getWidth() > minDist && shape->getHeight() > minDist) {
-        _addshape(sender);
+        addRectShape(sender);
     }
-    _delayClear();
 
     return _touchEnded(sender);
+}
+
+void MgCmdDrawRect::addRectShape(const MgMotion* sender)
+{
+    _addshape(sender);
+    _delayClear();
 }
 
 bool MgCmdDrawEllipse::initialize(const MgMotion* sender)
@@ -122,4 +127,60 @@ bool MgCmdDrawCircle::initialize(const MgMotion* sender)
 bool MgCmdDrawGrid::initialize(const MgMotion* sender)
 {
     return _initialize(MgShapeT<MgGrid>::create, sender);
+}
+
+bool MgCmdDrawGrid::cancel(const MgMotion* sender)
+{
+    if (m_step > 1) {
+        _addshape(sender);
+        _delayClear();
+    }
+    return MgCmdDrawRect::cancel(sender);
+}
+
+bool MgCmdDrawGrid::draw(const MgMotion* sender, GiGraphics* gs)
+{
+    if (m_step == 2) {
+        sender->view->drawHandle(gs, dynshape()->shape()->getHandlePoint(4), false);
+    }
+    return MgCmdDrawRect::draw(sender, gs);
+}
+
+bool MgCmdDrawGrid::touchBegan(const MgMotion* sender)
+{
+    if (m_step == 0) {
+        return MgCmdDrawRect::touchBegan(sender);
+    }
+    m_step = 3;
+    return _touchBegan(sender);
+}
+
+bool MgCmdDrawGrid::touchMoved(const MgMotion* sender)
+{
+    if (m_step == 1) {
+        return MgCmdDrawRect::touchMoved(sender);
+    }
+    
+    dynshape()->shape()->setHandlePoint(4, snapPoint(sender), 0);
+    dynshape()->shape()->update();
+    
+    return _touchMoved(sender);
+}
+
+bool MgCmdDrawGrid::touchEnded(const MgMotion* sender)
+{
+    if (m_step == 1) {
+        return MgCmdDrawRect::touchEnded(sender);
+    }
+    
+    _addshape(sender);
+    _delayClear();
+    
+    return _touchEnded(sender);
+}
+
+void MgCmdDrawGrid::addRectShape(const MgMotion* sender)
+{
+    m_step = 2;
+    sender->view->redraw(false);
 }

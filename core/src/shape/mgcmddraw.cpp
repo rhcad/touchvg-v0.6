@@ -86,7 +86,7 @@ bool MgCommandDraw::draw(const MgMotion* sender, GiGraphics* gs)
         m_shape->shape()->clear();
     }
     bool ret = m_step > 0 && m_shape->draw(*gs);
-    if (m_step > 0) {
+    if (m_step > 0 && sender->dragging) {
         sender->view->drawHandle(gs, sender->pointM, true);
     }
     return mgGetCommandManager()->getSnap()->draw(sender, gs) || ret;
