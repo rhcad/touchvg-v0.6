@@ -414,6 +414,7 @@ GEOMAPI MgPtInAreaRet mgPtInArea(
     Int32 i;
     int odd = 1;    // 1: 交点数为偶数, 0: 交点数为奇数
     
+    order = -1;
     for (i = 0; i < count; i++)
     {
         // P与某顶点重合. 返回 kMgPtAtVertex, order = 顶点号 [0, count-1]

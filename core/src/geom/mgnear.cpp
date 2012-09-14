@@ -176,7 +176,7 @@ GEOMAPI float mgLinesHit(
         if (closed || rect.isIntersect(Box2d(points[i], pt2)))
         {
             dDist = mgPtToLine(points[i], pt2, pt, ptTemp);
-            if ((closed || dDist <= tol) && dDist < dDistMin)
+            if (dDist <= tol && dDist < dDistMin)
             {
                 dDistMin = dDist;
                 nearpt = ptTemp;
