@@ -1,4 +1,4 @@
-﻿// GiSkiaView.cpp
+// GiSkiaView.cpp
 // Copyright (c) 2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchvg
 
@@ -10,6 +10,9 @@
 #include <vector>
 
 //! 绘图视图代理类
+/*! \ingroup GRAPH_SKIA
+    \see GiSkiaView
+ */
 class MgViewProxy : public MgView
 {
 public:
