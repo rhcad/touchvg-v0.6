@@ -29,7 +29,7 @@
     UInt32 Cls::getPointCount() const { return _getPointCount(); } \
     Point2d Cls::getPoint(UInt32 index) const { return _getPoint(index); }  \
     void Cls::setPoint(UInt32 index, const Point2d& pt) { _setPoint(index, pt); }  \
-    bool Cls::isClosed() const { return getFlag(kMgClosed); }   \
+    bool Cls::isClosed() const { return _isClosed(); }   \
     float Cls::hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const \
         { return _hitTest(pt, tol, nearpt, segment); }          \
     bool Cls::hitTestBox(const Box2d& rect) const               \

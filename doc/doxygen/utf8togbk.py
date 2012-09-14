@@ -9,7 +9,7 @@ def utf8togbk(dir):
         if os.path.isdir(sfile):
             utf8togbk(sfile)
             continue
-        if '.h' in fn:
+        if '.htm' in fn:
             try:
                 text = open(sfile,'r',-1,'utf-8').read()
             except UnicodeDecodeError:
@@ -21,12 +21,10 @@ def utf8togbk(dir):
                     text = u.encode('gbk')
                 except UnicodeDecodeError:
                     continue
-            text = text.replace('html;charset=UTF-8', 'html;charset=gbk')
-            open(sfile, 'w').write(text)
-            print(sfile)
+            newtext = text.replace('html;charset=UTF-8', 'html;charset=gbk')
+            if (newtext != text):
+                open(sfile, 'w').write(newtext)
+                print(sfile)
 
 if __name__=="__main__":
-    utf8togbk(os.path.abspath('../../android'))
-    utf8togbk(os.path.abspath('../_html'))
-    utf8togbk(os.path.abspath('../_htmlall'))
-    utf8togbk(os.path.abspath('../_htmlsrc'))
+    utf8togbk(os.path.abspath('..'))

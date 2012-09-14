@@ -152,15 +152,31 @@ GEOMAPI float mgLinesHit(
     float dDist, dDistMin = _FLT_MAX;
     const Box2d rect (pt, 2 * tol, 2 * tol);
     Int32 n2 = (closed && n > 1) ? n + 1 : n;
-
-    segment = -1;
+    
+    MgPtInAreaRet inArea = closed ? mgPtInArea(pt, n, points, segment) : kMgPtInArea;
+    
+    if (closed) {
+        if (inArea == kMgPtOutArea) {
+            return dDistMin;
+        }
+        if (inArea == kMgPtAtVertex) {
+            nearpt = points[segment];
+            dDistMin = nearpt.distanceTo(pt);
+            return dDistMin;
+        }
+        if (inArea == kMgPtOnEdge) {
+            dDistMin = mgPtToLine(points[segment], points[(segment+1)%n], pt, nearpt);
+            return dDistMin;
+        }
+    }
+    
     for (Int32 i = 0; i + 1 < n2; i++)
     {
         const Point2d& pt2 = points[(i + 1) % n];
-        if (rect.isIntersect(Box2d(points[i], pt2)))
+        if (closed || rect.isIntersect(Box2d(points[i], pt2)))
         {
             dDist = mgPtToLine(points[i], pt2, pt, ptTemp);
-            if (dDist <= tol && dDist < dDistMin)
+            if ((closed || dDist <= tol) && dDist < dDistMin)
             {
                 dDistMin = dDist;
                 nearpt = ptTemp;

@@ -162,7 +162,7 @@ public class Testy extends Activity {
     private void onShapeType() {
     	String[] names = { "line", "fixedline", "rect", "square", "ellipse", "circle", 
     			"triangle", "diamond", "polygon", "quadrangle", "parallelogram", 
-    			"lines", "splines", null };
+    			"lines", "splines", "grid", null };
     	String cmd = mCoreView.getCommandName();
     	
     	int i = 0;

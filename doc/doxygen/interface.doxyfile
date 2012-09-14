@@ -693,7 +693,7 @@ INPUT_ENCODING         = UTF-8
 # *.hxx *.hpp *.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm *.dox *.py 
 # *.f90 *.f *.for *.vhd *.vhdl
 
-FILE_PATTERNS          = *.h
+FILE_PATTERNS          = *.h *.java
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories 
 # should be searched for input files as well. Possible values are YES and NO. 
@@ -708,6 +708,7 @@ RECURSIVE              = YES
 # run.
 
 EXCLUDE                = ../../core/include/testgraph \
+                         ../../android/skiaview/jni/._java \
                          ../../win32/src/SimpView
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or 

@@ -157,6 +157,7 @@ protected:
     UInt32  _flags;
 
 protected:
+    bool _isClosed() const { return getFlag(kMgClosed); }
     void _copy(const MgBaseShape& src);
     bool _equals(const MgBaseShape& src) const;
     bool _isKindOf(UInt32 type) const;

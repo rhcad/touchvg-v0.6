@@ -7,7 +7,7 @@
 #include <CoreGraphics/CGBitmapContext.h>
 
 static const CGFloat patDash[]      = { 5, 5 };
-static const CGFloat patDot[]       = { 1, 3 };
+static const CGFloat patDot[]       = { 1, 2 };
 static const CGFloat patDashDot[]   = { 10, 2, 2, 2 };
 static const CGFloat dashDotdot[]   = { 20, 2, 2, 2, 2, 2 };
 

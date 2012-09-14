@@ -18,6 +18,7 @@ void MgBaseShape::_copy(const MgBaseShape& src)
 {
     _extent = src._extent;
     _flags = src._flags;
+    setFlag(kMgClosed, isClosed());
 }
 
 bool MgBaseShape::_equals(const MgBaseShape& src) const

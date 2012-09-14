@@ -19,7 +19,7 @@ public class GiCanvasEx extends GiCanvasBase{
     private Canvas mCanvas = null;
     private View mView = null;
     private static final float patDash[]      = { 5, 5 };
-    private static final float patDot[]       = { 1, 3 };
+    private static final float patDot[]       = { 1, 2 };
     private static final float patDashDot[]   = { 10, 2, 2, 2 };
     private static final float dashDotdot[]   = { 20, 2, 2, 2, 2, 2 };
     private PathEffect mEffects = null;
