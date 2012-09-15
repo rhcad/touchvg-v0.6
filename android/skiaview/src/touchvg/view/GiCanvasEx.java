@@ -45,7 +45,7 @@ public class GiCanvasEx extends GiCanvasBase{
         mPen.setDither(true);
         mPen.setStyle(Paint.Style.STROKE);
         mPen.setStrokeJoin(Paint.Join.ROUND);
-        mPen.setStrokeCap(Paint.Cap.ROUND);
+        mPen.setStrokeCap(Paint.Cap.BUTT);
         mBrush.setStyle(Paint.Style.FILL);
         
         return true;
@@ -125,7 +125,8 @@ public class GiCanvasEx extends GiCanvasBase{
     
     @Override
     public boolean pathBezierTo(Floats pxs) {
-        for (int i = 0; i+5 < pxs.count(); i += 6) {
+    	int n = pxs.count();
+        for (int i = 0; i+5 < n; i += 6) {
             mPath.cubicTo(pxs.get(i), pxs.get(i+1), pxs.get(i+2), 
                     pxs.get(i+3), pxs.get(i+4), pxs.get(i+5));
         }
@@ -151,12 +152,13 @@ public class GiCanvasEx extends GiCanvasBase{
 
     @Override
     public boolean drawBeziers(Floats pxs) {
-        boolean ret = pxs.count() >= 8;
+    	int n = pxs.count();
+        boolean ret = n >= 8;
         Path p = new Path();
         
         if (ret) {
             p.moveTo(pxs.get(0), pxs.get(1));
-            for (int i = 2; i+5 < pxs.count(); i += 6) {
+            for (int i = 2; i+5 < n; i += 6) {
                 p.cubicTo(pxs.get(i), pxs.get(i+1), pxs.get(i+2), 
                         pxs.get(i+3), pxs.get(i+4), pxs.get(i+5));
             }
@@ -164,6 +166,7 @@ public class GiCanvasEx extends GiCanvasBase{
         }
         pxs.delete();
         pxs=null;
+        
         return ret;
     }
     
@@ -195,24 +198,32 @@ public class GiCanvasEx extends GiCanvasBase{
 
     @Override
     public boolean drawLines(Floats pxs) {
-        float []f = new float[pxs.count()];
-        for (int i = 0; i < pxs.count(); i++) {
-            f[i] = pxs.get(i);
-        }
-        mCanvas.drawLines(f, mPen);
-        pxs.delete();
-        pxs=null;
-        return true;
-    }
-
-    @Override
-    public boolean drawPolygon(Floats pxs, boolean stroke, boolean fill) {
-        boolean ret = pxs.count() >= 4;
+    	int n = pxs.count();
+        boolean ret = n >= 4;
         Path p = new Path();
         
         if (ret) {
             p.moveTo(pxs.get(0), pxs.get(1));
-            for (int i = 2; i + 1 < pxs.count(); i += 2) {
+            for (int i = 2; i + 1 < n; i += 2) {
+                p.lineTo(pxs.get(i), pxs.get(i+1));
+            }
+            mCanvas.drawPath(p, mPen);
+        }
+        pxs.delete();
+        pxs=null;
+        
+        return ret;
+    }
+
+    @Override
+    public boolean drawPolygon(Floats pxs, boolean stroke, boolean fill) {
+    	int n = pxs.count();
+        boolean ret = n >= 4;
+        Path p = new Path();
+        
+        if (ret) {
+            p.moveTo(pxs.get(0), pxs.get(1));
+            for (int i = 2; i + 1 < n; i += 2) {
                 p.lineTo(pxs.get(i), pxs.get(i+1));
             }
             p.close();
@@ -224,6 +235,7 @@ public class GiCanvasEx extends GiCanvasBase{
         }
         pxs.delete();
         pxs=null;
+        
         return ret;
     }
     
