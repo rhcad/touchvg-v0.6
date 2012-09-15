@@ -33,7 +33,7 @@ bool MgCmdDrawSplines::undo(bool &enableRecall, const MgMotion* sender)
 
 bool MgCmdDrawSplines::draw(const MgMotion* sender, GiGraphics* gs)
 {
-    if (m_step > 0 && !m_freehand) {
+    if (m_step > 0 && !m_freehand && sender->dragging) {
         GiContext ctx(0, GiColor(64, 128, 64, 172), kGiLineSolid, GiColor(0, 64, 64, 128));
         float radius = gs->xf().displayToModel(4);
         

@@ -79,6 +79,7 @@ public class GiCanvasEx extends GiCanvasBase{
     public void penChanged(GiContext context, float penWidth) {
         mPen.setColor(context.getLineARGB());
         mPen.setStrokeWidth(penWidth);
+        mPen.setAlpha(penWidth < 0.9f ? mPen.getAlpha() / 2 : mPen.getAlpha());
         
         int lineStyle = context.getLineStyle();
         

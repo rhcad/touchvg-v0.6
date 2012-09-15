@@ -92,6 +92,8 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
 
 bool MgCmdManagerImpl::cancel(const MgMotion* sender)
 {
+    clearSnap();
+
     CMDS::iterator it = _cmds.find(_cmdname);
     if (it != _cmds.end()) {
         return it->second->cancel(sender);
@@ -276,6 +278,12 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
 int MgCmdManagerImpl::getSnappedType()
 {
     return _snapType[0] >= 5 ? _snapType[0] : -1;
+}
+
+void MgCmdManagerImpl::clearSnap()
+{
+    _snapType[0] = -1;
+    _snapType[1] = -1;
 }
 
 bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)

@@ -134,7 +134,7 @@ public class Testy extends Activity {
     
     private void onPenBold() {
         GiContext ctx = mCoreView.getCurrentContext(true);
-        ctx.setLineWidth(ctx.getLineWidth() < 0 ? ctx.getLineWidth() - 1 : -1);
+        ctx.setLineWidth(ctx.getLineWidth() < 0 ? ctx.getLineWidth() - 1 : -2);
         mCoreView.applyContext(ctx, 4, 1);
         ctx.delete();
     }

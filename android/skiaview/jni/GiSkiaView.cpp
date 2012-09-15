@@ -135,6 +135,8 @@ bool GiSkiaView::onGesture(GiGestureType gestureType, GiGestureState gestureStat
     if (!cmd) {
         return false;
     }
+    _view->_motion.dragging = ((kSinglePan == gestureType || kZoomRotatePan == gestureType)
+    		&& gestureState == kGestureMoved);
     if (gestureState == kGestureCancel
         && (kSinglePan == gestureType || kZoomRotatePan == gestureType)) {
         return cmd->cancel(&_view->_motion);

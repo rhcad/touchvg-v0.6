@@ -89,7 +89,7 @@ bool MgCmdDrawEllipse::initialize(const MgMotion* sender)
 
 bool MgCmdDrawEllipse::draw(const MgMotion* sender, GiGraphics* gs)
 {
-    if (m_step > 0) {
+    if (m_step > 0 && sender->dragging) {
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), kGiLineDash);
         bool antiAlias = gs->setAntiAliasMode(false);
         gs->drawRect(&ctxshap, dynshape()->shape()->getExtent());
