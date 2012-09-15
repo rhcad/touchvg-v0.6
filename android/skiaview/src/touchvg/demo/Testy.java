@@ -5,6 +5,7 @@ import touchvg.skiaview.GiSkiaView;
 import touchvg.view.PaintView;
 import android.R.color;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -179,7 +180,7 @@ public class Testy extends Activity {
     private void initComponent()
     {
         mView = (PaintView) this.findViewById(R.id.paintView);
-        mView.setBkColor(color.white);
+        mView.setBkColor(Color.GRAY);
         
         mCoreView = mView.getCoreView();
         buttonSelect  = (Button) this.findViewById(R.id.selectshapes_button);
