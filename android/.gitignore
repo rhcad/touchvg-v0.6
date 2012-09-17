@@ -1,6 +1,7 @@
 .metadata
 bin
 gen
+obj
 assets
 *.db
 *.so

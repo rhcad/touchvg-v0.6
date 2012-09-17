@@ -63,7 +63,7 @@ struct MgView {
     virtual bool shapeCanTransform(MgShape* shape) {    //!< 通知是否能对图形变形
         return !!shape; }
     virtual void shapeMoved(MgShape* shape, int segment) {  //!< 通知图形已拖动
-        if (shape) segment=1; }
+        if (shape && segment) segment=1; }
     
     virtual bool longPressSelection(int selState, MgShape* shape) { //!< 选择状态下长按
         return selState<0 && shape; }

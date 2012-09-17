@@ -52,7 +52,7 @@ struct TmpJOBJ {
     TmpJOBJ(JNIEnv* e, T* v) : env(e), jo((jobject*)v) { }
     ~TmpJOBJ() { if (*jo) { env->DeleteLocalRef(*jo); *jo = 0; } }
 };
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *ajvm, void *reserved) {
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* /*ajvm*/, void* /*reserved*/) {
     return JNI_VERSION_1_6;
 }
 %}

@@ -31,9 +31,9 @@ public:
     virtual bool writeNode(const char* name, int index, bool ended) {
         return name && index && ended; }
     
-    virtual void writeInt(const char* name, int value) { if (name) value=0; }
-    virtual void writeBool(const char* name, bool value) { if (name) value=false; }
-    virtual void writeFloat(const char* name, float value) { if (name) value=0; }
+    virtual void writeInt(const char* name, int value) { if (name && value) value=0; }
+    virtual void writeBool(const char* name, bool value) { if (name && value) value=false; }
+    virtual void writeFloat(const char* name, float value) { if (name && value) value=0; }
     
     virtual int readFloatArray(const char* name, mgvector<float>& values) {
         return name && values.count(); }
@@ -43,7 +43,7 @@ public:
     virtual int readString(const char* name, mgvector<short>& value) {
         return name && value.count(); }
     virtual void writeString(const char* name, const mgvector<short>& value) {
-        if (value.count()) name=NULL; }
+        if (name && value.count()) name=NULL; }
 
 private:
     virtual int readFloatArray(const char* name, float* values, int count) {

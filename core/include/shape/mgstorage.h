@@ -88,7 +88,7 @@ protected:
     //! 给定字段名称，取出一个整数
     virtual int readInt(const char* name, int defvalue) { return name ? defvalue : defvalue; }
     //! 添加一个给定字段名称的单字节整数
-    virtual void writeInt(const char* name, int value) { if (name) value = 0; }
+    virtual void writeInt(const char* name, int value) { if (name && value) value = 0; }
 };
 
 #endif // __GEOMETRY_MGSTORAGE_H_

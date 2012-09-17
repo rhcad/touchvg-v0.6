@@ -7,7 +7,12 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := skiaview
 LOCAL_SHARED_LIBRARIES := libcutils libdl libstlport
 LOCAL_PRELINK_MODULE   := false
-LOCAL_CFLAGS           := -frtti -Wall -g
+LOCAL_CFLAGS           := -frtti -g  -Wall -Wextra
+
+ifeq ($(TARGET_ARCH),arm)
+# Ignore "note: the mangling of 'va_list' has changed in GCC 4.4"
+LOCAL_CFLAGS += -Wno-psabi
+endif
 
 ifndef NDK_ROOT
 include external/stlport/libstlport.mk
