@@ -48,10 +48,6 @@ struct GiCanvasDrawing
     //! 绘制椭圆的原语函数，像素坐标，不剪裁
     virtual bool rawEllipse(const GiContext* ctx, float x, float y, float w, float h) = 0;
 
-    //! 绘制多样线的原语函数，像素坐标，不剪裁
-    virtual bool rawPath(const GiContext* ctx, 
-        int count, const Point2d* pxs, const UInt8* types) = 0;
-
     //! 开始一个路径的原语函数
     virtual bool rawBeginPath() = 0;
 
@@ -65,7 +61,7 @@ struct GiCanvasDrawing
     virtual bool rawLineTo(float x, float y) = 0;
 
     //! 在当前路径中添加画贝塞尔曲线指令的原语函数
-    virtual bool rawBezierTo(const Point2d* pxs, int count) = 0;
+    virtual bool rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y) = 0;
 
     //! 在当前路径中添加闭合指令的原语函数
     virtual bool rawClosePath() = 0;

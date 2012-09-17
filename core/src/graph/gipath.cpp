@@ -353,3 +353,51 @@ bool GiPath::genericRoundLines(int count, const Point2d* points,
 
     return true;
 }
+
+#include <gigraph.h>
+
+bool GiPath::draw(GiGraphics& gs, const GiContext* ctx, bool fill)
+{
+    Matrix2d matD(gs.xf().modelToDisplay());
+    Point2d a, b, c;
+
+    if (m_data->points.empty() || m_data->points.size() != m_data->types.size())
+        return false;
+
+    gs.rawBeginPath();
+
+    for (size_t i = 0; i < m_data->points.size(); i++)
+    {
+        switch (m_data->types[i] & ~kGiCloseFigure)
+       {
+       case kGiMoveTo:
+           a = m_data->points[i] * matD;
+           gs.rawMoveTo(a.x, a.y);
+           break;
+
+       case kGiLineTo:
+           a = m_data->points[i] * matD;
+           gs.rawLineTo(a.x, a.y);
+           break;
+
+       case kGiBeziersTo:
+           if (i + 2 >= m_data->points.size())
+               return false;
+           a = m_data->points[i] * matD;
+           b = m_data->points[i+1] * matD;
+           c = m_data->points[i+2] * matD;
+           gs.rawBezierTo(a.x, a.y, b.x, b.y, c.x, c.y);
+           i += 2;
+           break;
+
+       default:
+           return false;
+       }
+       if (m_data->types[i] & kGiCloseFigure)
+           gs.rawClosePath();
+   }
+
+    gs.rawEndPath(ctx, fill);
+
+    return true;
+}

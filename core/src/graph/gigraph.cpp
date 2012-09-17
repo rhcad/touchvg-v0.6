@@ -449,7 +449,10 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
         if (ret)
         {
             ret = rawMoveTo(pxs[0].x, pxs[0].y);
-            ret = rawBezierTo(pxs + 1, count - 1);
+            for (i = 1; i + 2 < getSize(pxpoints) - 1; i += 3) {
+                ret = rawBezierTo(pxs[i].x, pxs[i].y,
+                    pxs[i+1].x, pxs[i+1].y, pxs[i+2].x, pxs[i+2].y);
+            }
             ret = rawClosePath();
             ret = rawEndPath(ctx, true);
         }
@@ -694,15 +697,18 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center,
     }
     else
     {
-        Point2d points[13];
-        mgEllipseToBezier(points, center, rx, ry);
-        matD.TransformPoints(13, points);
+        Point2d pxs[13];
+        mgEllipseToBezier(pxs, center, rx, ry);
+        matD.TransformPoints(13, pxs);
 
         ret = rawBeginPath();
         if (ret)
         {
-            ret = rawMoveTo(points[0].x, points[0].y);
-            ret = rawBezierTo(points + 1, 12);
+            ret = rawMoveTo(pxs[0].x, pxs[0].y);
+            for (int i = 1; i + 2 < 12; i += 3) {
+                ret = rawBezierTo(pxs[i].x, pxs[i].y,
+                    pxs[i+1].x, pxs[i+1].y, pxs[i+2].x, pxs[i+2].y);
+            }
             ret = rawClosePath();
             ret = rawEndPath(ctx, true);
         }
@@ -727,20 +733,23 @@ bool GiGraphics::drawPie(const GiContext* ctx,
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
         return false;
 
-    Point2d points[16];
-    int count = mgAngleArcToBezier(points, center,
+    Point2d pxs[16];
+    int count = mgAngleArcToBezier(pxs, center,
         rx, ry, startAngle, sweepAngle);
     if (count < 4)
         return false;
-    S2D(xf(), modelUnit).TransformPoints(count, points);
+    S2D(xf(), modelUnit).TransformPoints(count, pxs);
     Point2d cen(center * S2D(xf(), modelUnit));
 
     bool ret = rawBeginPath();
     if (ret)
     {
         ret = rawMoveTo(cen.x, cen.y);
-        ret = rawLineTo(points[0].x, points[0].y);
-        ret = rawBezierTo(points + 1, count - 1);
+        ret = rawLineTo(pxs[0].x, pxs[0].y);
+        for (int i = 1; i + 2 < 12; i += 3) {
+            ret = rawBezierTo(pxs[i].x, pxs[i].y,
+                pxs[i+1].x, pxs[i+1].y, pxs[i+2].x, pxs[i+2].y);
+        }
         ret = rawClosePath();
         ret = rawEndPath(ctx, true);
     }
@@ -783,25 +792,25 @@ bool GiGraphics::drawRoundRect(const GiContext* ctx,
     }
     else
     {
-        Point2d points[16];
+        Point2d pxs[16];
 
-        mgRoundRectToBeziers(points, rect, rx, ry);
-        S2D(xf(), modelUnit).TransformPoints(16, points);
+        mgRoundRectToBeziers(pxs, rect, rx, ry);
+        S2D(xf(), modelUnit).TransformPoints(16, pxs);
 
         ret = rawBeginPath();
         if (ret)
         {
-            ret = rawMoveTo(points[0].x, points[0].y);
-            ret = rawBezierTo(&points[1], 3);
+            ret = rawMoveTo(pxs[0].x, pxs[0].y);
+            ret = rawBezierTo(pxs[1].x, pxs[1].y, pxs[2].x, pxs[2].y, pxs[3].x, pxs[3].y);
 
-            ret = rawLineTo(points[4].x, points[4].y);
-            ret = rawBezierTo(&points[5], 3);
+            ret = rawLineTo(pxs[4].x, pxs[4].y);
+            ret = rawBezierTo(pxs[5].x, pxs[5].y, pxs[6].x, pxs[6].y, pxs[7].x, pxs[7].y);
 
-            ret = rawLineTo(points[8].x, points[8].y);
-            ret = rawBezierTo(&points[9], 3);
+            ret = rawLineTo(pxs[8].x, pxs[8].y);
+            ret = rawBezierTo(pxs[9].x, pxs[9].y, pxs[10].x, pxs[10].y, pxs[11].x, pxs[11].y);
 
-            ret = rawLineTo(points[12].x, points[12].y);
-            ret = rawBezierTo(&points[13], 3);
+            ret = rawLineTo(pxs[12].x, pxs[12].y);
+            ret = rawBezierTo(pxs[13].x, pxs[13].y, pxs[14].x, pxs[14].y, pxs[15].x, pxs[15].y);
 
             ret = rawClosePath();
             ret = rawEndPath(ctx, true);
@@ -888,7 +897,10 @@ bool GiGraphics::drawClosedSplines(const GiContext* ctx, int count,
     if (ret)
     {
         ret = rawMoveTo(pxs[0].x, pxs[0].y);
-        ret = rawBezierTo(pxs + 1, getSize(pxpoints) - 1);
+        for (i = 1; i + 2 < getSize(pxpoints) - 1; i += 3) {
+            ret = rawBezierTo(pxs[i].x, pxs[i].y,
+                pxs[i+1].x, pxs[i+1].y, pxs[i+2].x, pxs[i+2].y);
+        }
         ret = rawClosePath();
         ret = rawEndPath(ctx, true);
     }
@@ -996,39 +1008,15 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
     {
         pxs = &pxpoints.front();
         ret = rawMoveTo(pxs[0].x, pxs[0].y);
-        ret = rawBezierTo(pxs + 1, getSize(pxpoints) - 1);
+        for (i = 1; i + 2 < getSize(pxpoints) - 1; i += 3) {
+            ret = rawBezierTo(pxs[i].x, pxs[i].y,
+                pxs[i+1].x, pxs[i+1].y, pxs[i+2].x, pxs[i+2].y);
+        }
         ret = rawClosePath();
         ret = rawEndPath(ctx, true);
     }
 
     return ret;
-}
-
-bool GiGraphics::drawPath(const GiContext* ctx, int count, 
-                          const Point2d* points, const UInt8* types, 
-                          bool modelUnit)
-{
-    if (m_impl->drawRefcnt == 0 || count < 2 
-        || points == NULL || types == NULL)
-        return false;
-    GiLock lock (&m_impl->drawRefcnt);
-    if (count > 0x2000)
-        count = 0x2000;
-
-    Matrix2d matD(S2D(xf(), modelUnit));
-
-    const Box2d extent (count, points);                     // 模型坐标范围
-    if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外
-        return false;
-
-    vector<Point2d> pxpoints;
-    pxpoints.resize(count);
-    Point2d *pxs = &pxpoints.front();
-
-    for (int i = 0; i < count; i++)
-        pxs[i] = points[i] * matD;
-
-    return rawPath(ctx, count, pxs, types);
 }
 
 void GiGraphics::clearCachedBitmap(bool clearAll)
@@ -1082,12 +1070,6 @@ bool GiGraphics::rawEllipse(const GiContext* ctx, float x, float y, float w, flo
     return m_impl->canvas && m_impl->canvas->rawEllipse(ctx, x, y, w, h);
 }
 
-bool GiGraphics::rawPath(const GiContext* ctx, int count, 
-                         const Point2d* pxs, const UInt8* types)
-{
-    return m_impl->canvas && m_impl->canvas->rawPath(ctx, count, pxs, types);
-}
-
 bool GiGraphics::rawBeginPath()
 {
     return m_impl->canvas && m_impl->canvas->rawBeginPath();
@@ -1108,9 +1090,9 @@ bool GiGraphics::rawLineTo(float x, float y)
     return m_impl->canvas && m_impl->canvas->rawLineTo(x, y);
 }
 
-bool GiGraphics::rawBezierTo(const Point2d* pxs, int count)
+bool GiGraphics::rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y)
 {
-    return m_impl->canvas && m_impl->canvas->rawBezierTo(pxs, count);
+    return m_impl->canvas && m_impl->canvas->rawBezierTo(c1x, c1y, c2x, c2y, x, y);
 }
 
 bool GiGraphics::rawClosePath()

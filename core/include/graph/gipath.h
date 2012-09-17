@@ -10,11 +10,12 @@
 #include "gidef.h"
 
 class GiPathImpl;
+class GiGraphics;
+class GiContext;
 
 //! 矢量路径类
 /*!
     \ingroup GRAPH_INTERFACE
-    \see GiGraphics::drawPath, GiCanvas::rawPath
 */
 class GiPath
 {
@@ -125,6 +126,9 @@ public:
         \return 是否正确添加
     */
     bool closeFigure();
+
+    //! 绘制路径
+    bool draw(GiGraphics& gs, const GiContext* ctx, bool fill);
 
 private:
     GiPathImpl*   m_data;

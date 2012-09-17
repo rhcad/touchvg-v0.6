@@ -7,32 +7,6 @@
 #include <gdiobj.h>
 #include <vector>
 
-// 判断是否是Windows NT4/2000及以后
-static bool giIsNT()
-{
-    static int flag = 0;
-    if (flag == 1)
-        return true;
-    else if (flag == -1)
-        return false;
-
-    OSVERSIONINFO ver;
-    ZeroMemory(&ver, sizeof(ver));
-    ver.dwOSVersionInfoSize = sizeof(ver);
-    ::GetVersionEx(&ver);
-    if (ver.dwPlatformId == VER_PLATFORM_WIN32_NT
-        && ver.dwMajorVersion >= 4)
-    {
-        flag = 1;
-        return true;
-    }
-    else
-    {
-        flag = -1;
-        return false;
-    }
-}
-
 //! DrawImpl类的基本数据
 struct GdiDrawImplBase
 {
@@ -597,113 +571,17 @@ bool GiCanvasGdi::rawLineTo(float x, float y)
     return ::LineTo(m_draw->getDrawDC(), mgRound(x), mgRound(y)) ? true : false;
 }
 
-bool GiCanvasGdi::rawBezierTo(const Point2d* pxs, int count)
+bool GiCanvasGdi::rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y)
 {
-    bool ret = false;
+    POINT pxs[3] = { mgRound(c1x), mgRound(c1y), 
+        mgRound(c2x), mgRound(c2y), mgRound(x), mgRound(y) };
 
-    if (count > 0)
-    {
-        std::vector<POINT> pts;
-        pts.resize(count);
-        for (int i = 0; i < count; i++)
-            pxs[i].get(pts[i].x, pts[i].y);
-        ret = !!PolyBezierTo(m_draw->getDrawDC(), &pts.front(), count);
-    }
-
-    return ret;
+    return !!PolyBezierTo(m_draw->getDrawDC(), pxs, 3);
 }
 
 bool GiCanvasGdi::rawClosePath()
 {
     return ::CloseFigure(m_draw->getDrawDC()) ? true : false;
-}
-
-static BOOL PolyDraw98(HDC hdc, const Point2d *pxs, const BYTE *types, int n)
-{
-    POINT pts[3];
-
-    for (int i = 0; i < n; i++)
-    {
-        switch (types[i] & ~kGiCloseFigure)
-        {
-        case kGiMoveTo:
-            ::MoveToEx(hdc, mgRound(pxs[i].x), mgRound(pxs[i].y), NULL);
-            break;
-
-        case kGiLineTo:
-            ::LineTo(hdc, mgRound(pxs[i].x), mgRound(pxs[i].y));
-            break;
-
-        case kGiBeziersTo:
-            if (i + 2 >= n)
-                return FALSE;
-            for (int j = 0; j < 3; j++)
-                pxs[i+j].get(pts[j].x, pts[j].y);
-            ::PolyBezierTo(hdc, pts, 3);
-            i += 2;
-            break;
-
-        default:
-            return FALSE;
-        }
-        if (types[i] & kGiCloseFigure)
-            ::CloseFigure(hdc);
-    }
-
-    return TRUE;
-}
-
-bool GiCanvasGdi::rawPath(const GiContext* ctx, int count, 
-                          const Point2d* pxs, const UInt8* types)
-{
-    HDC hdc = m_draw->getDrawDC();
-    KGDIObject pen (hdc, m_draw->createPen(ctx), false);
-    KGDIObject brush (hdc, m_draw->createBrush(ctx), false);
-    BOOL ret = FALSE;
-
-    if (NULL == ctx)
-        ctx = getCurrentContext();
-
-    if (giIsNT())
-    {
-        std::vector<POINT> pts;
-
-        if (ctx->hasFillColor())
-        {
-            ret = ::BeginPath(hdc);
-            if (ret)
-            {
-                pts.resize(count);
-                for (int i = 0; i < count; i++)
-                    pxs[i].get(pts[i].x, pts[i].y);
-                ret = ::PolyDraw(hdc, &pts.front(), types, count);
-                ret = ::EndPath(hdc);
-                ret = ::StrokeAndFillPath(hdc);
-            }
-        }
-        else
-        {
-            pts.resize(count);
-            for (int i = 0; i < count; i++)
-                pxs[i].get(pts[i].x, pts[i].y);
-            ret = ::PolyDraw(hdc, &pts.front(), types, count);
-        }
-    }
-    else
-    {
-        ret = ::BeginPath(hdc);
-        if (ret)
-        {
-            ret = PolyDraw98(hdc, pxs, types, count);
-            ret = ::EndPath(hdc);
-            if (ctx->hasFillColor())
-                ret = ::StrokeAndFillPath(hdc);
-            else
-                ret = ::StrokePath(hdc);
-        }
-    }
-
-    return ret ? true : false;
 }
 
 bool GiCanvasGdi::drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap, 

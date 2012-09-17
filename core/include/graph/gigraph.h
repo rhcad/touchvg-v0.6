@@ -281,19 +281,6 @@ public:
     bool drawClosedBSplines(const GiContext* ctx, 
         int count, const Point2d* ctlpts, bool modelUnit = true);
 
-    //! 绘制路径，模型坐标或世界坐标
-    /*! 
-        \param ctx 绘图参数，为NULL时取为上一个绘图参数
-        \param count 点数，points和types的元素个数
-        \param points 端点和控制点的数组
-        \param types points中每一点的含义，由 GiPathNode 值组成
-        \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
-        \return 是否显示成功。失败原因为参数错误或超出剪裁区域
-        \see GiPath::getPoints
-    */
-    bool drawPath(const GiContext* ctx, int count, 
-        const Point2d* points, const UInt8* types, bool modelUnit = true);
-
 #ifndef SWIG
     //! 返回当前绘图画布对象
     GiCanvas* getCanvas();
@@ -322,13 +309,11 @@ public:
     bool rawPolygon(const GiContext* ctx, const Point2d* pxs, int count);
     bool rawRect(const GiContext* ctx, float x, float y, float w, float h);
     bool rawEllipse(const GiContext* ctx, float x, float y, float w, float h);
-    bool rawPath(const GiContext* ctx, 
-        int count, const Point2d* pxs, const UInt8* types);
     bool rawBeginPath();
     bool rawEndPath(const GiContext* ctx, bool fill);
     bool rawMoveTo(float x, float y);
     bool rawLineTo(float x, float y);
-    bool rawBezierTo(const Point2d* pxs, int count);
+    bool rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y);
     bool rawClosePath();
 
 private:

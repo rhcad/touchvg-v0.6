@@ -20,11 +20,10 @@ bool GiCanvasBase::drawBeziers(const mgvector<float>&) { return false; }
 bool GiCanvasBase::drawPolygon(const mgvector<float>&, bool, bool) { return false; }
 bool GiCanvasBase::drawRect(float, float, float, float, bool, bool) { return false; }
 bool GiCanvasBase::drawEllipse(float, float, float, float, bool, bool) { return false; }
-bool GiCanvasBase::drawPath(const mgvector<float>&, const mgvector<char>&, bool, bool) { return false; }
 
-bool GiCanvasBase::pathMoveTo(float, float) { return false; }
-bool GiCanvasBase::pathLineTo(float, float) { return false; }
-bool GiCanvasBase::pathBezierTo(const mgvector<float>&) { return false; }
+bool GiCanvasBase::moveTo(float, float) { return false; }
+bool GiCanvasBase::lineTo(float, float) { return false; }
+bool GiCanvasBase::bezierTo(float,float,float,float,float,float) { return false; }
 bool GiCanvasBase::endPath(bool, bool) { return false; }
 
 void GiCanvasBase::clearCachedBitmap(bool) {}
@@ -34,8 +33,8 @@ bool GiCanvasBase::hasCachedBitmap(bool) const { return false; }
 void GiCanvasBase::clipBoxChanged(float, float, float, float) {}
 void GiCanvasBase::antiAliasModeChanged(bool) {}
 bool GiCanvasBase::drawCachedBitmap2(const GiCanvas*, float, float, bool) { return false; }
-void GiCanvasBase::penChanged(const GiContext&, float) {}
-void GiCanvasBase::brushChanged(const GiContext&) {}
+void GiCanvasBase::penChanged(int, float, int) {}
+void GiCanvasBase::brushChanged(int) {}
 void GiCanvasBase::setNeedRedraw() {}
 
 bool GiCanvasBase::rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2)
@@ -100,29 +99,9 @@ bool GiCanvasBase::rawEndPath(const GiContext* ctx, bool fill)
     return (stroke || fill) && endPath(stroke, fill);
 }
 
-bool GiCanvasBase::rawBezierTo(const Point2d* pxs, int count)
+bool GiCanvasBase::rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y)
 {
-    bool ret = pxs && count > 0;
-    if (ret) {
-        mgvector<float> arr(&pxs[0].x, 2 * count);
-        ret = pathBezierTo(arr);
-    }
-    return ret;
-}
-
-bool GiCanvasBase::rawPath(const GiContext* ctx, int count, const Point2d* pxs, const UInt8* types)
-{
-    bool stroke = checkStroke(ctx);
-    bool fill = checkFill(ctx);
-    bool ret = (stroke || fill) && pxs && count > 0;
-
-    if (ret) {
-        mgvector<float> arr(&pxs[0].x, 2 * count);
-        mgvector<char> arr2((const char*)types, count);
-        ret = drawPath(arr, arr2, stroke, fill);
-    }
-
-    return ret;
+    return bezierTo(c1x, c1y, c2x, c2y, x, y);
 }
 
 void GiCanvasBase::_clipBoxChanged(const RECT_2D& clipBox)
@@ -159,7 +138,7 @@ bool GiCanvasBase::checkStroke(const GiContext* ctx)
     if (!ctx->isNullLine() && changed)
     {
         _ctxstatus |= 1;
-        penChanged(*ctx, _gs.calcPenWidth(ctx->getLineWidth()));
+        penChanged(ctx->getLineARGB(), _gs.calcPenWidth(ctx->getLineWidth()), ctx->getLineStyle());
     }
 
     return !ctx->isNullLine();
@@ -180,7 +159,7 @@ bool GiCanvasBase::checkFill(const GiContext* ctx)
     if (ctx->hasFillColor() && changed)
     {
         _ctxstatus |= 2;
-        brushChanged(*ctx);
+        brushChanged(ctx->getFillARGB());
     }
 
     return ctx->hasFillColor();

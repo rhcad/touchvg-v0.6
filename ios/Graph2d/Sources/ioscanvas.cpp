@@ -657,52 +657,6 @@ bool GiCanvasIos::rawEllipse(const GiContext* ctx, float x, float y, float w, fl
     return ret;
 }
 
-bool GiCanvasIos::rawPath(const GiContext* ctx, 
-                          int count, const Point2d* pxs, const UInt8* types)
-{
-    CGContextBeginPath(m_draw->getContext());
-    
-    for (int i = 0; i < count; i++)
-    {
-        switch (types[i] & ~kGiCloseFigure)
-        {
-        case kGiMoveTo:
-            CGContextMoveToPoint(m_draw->getContext(), pxs[i].x, pxs[i].y);
-            break;
-
-        case kGiLineTo:
-            CGContextAddLineToPoint(m_draw->getContext(), pxs[i].x, pxs[i].y);
-            break;
-
-        case kGiBeziersTo:
-            if (i + 2 >= count)
-                return false;
-            CGContextAddCurveToPoint(m_draw->getContext(), 
-                pxs[i+0].x, pxs[i+0].y,
-                pxs[i+1].x, pxs[i+1].y,
-                pxs[i+2].x, pxs[i+2].y);
-            i += 2;
-            break;
-
-        default:
-            return false;
-        }
-        if (types[i] & kGiCloseFigure)
-            CGContextClosePath(m_draw->getContext());
-    }
-
-    bool usepen = m_draw->setPen(ctx);
-    bool usebrush = m_draw->setBrush(ctx);
-    bool ret = count > 1 && (usepen || usebrush);
-    
-    if (ret) {
-        CGContextDrawPath(m_draw->getContext(), usepen && usebrush ? kCGPathFillStroke
-                          : usepen ? kCGPathStroke : kCGPathFill);
-    }
-
-    return ret;
-}
-
 bool GiCanvasIos::rawBeginPath()
 {
     CGContextBeginPath(m_draw->getContext());
@@ -734,19 +688,10 @@ bool GiCanvasIos::rawLineTo(float x, float y)
     return true;
 }
 
-bool GiCanvasIos::rawBezierTo(const Point2d* pxs, int count)
+bool GiCanvasIos::rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y)
 {
-    bool ret = pxs && count > 2;
-
-    for (int i = 0; i + 2 < count; i += 3)
-    {
-        CGContextAddCurveToPoint(m_draw->getContext(), 
-            pxs[i+0].x, pxs[i+0].y,
-            pxs[i+1].x, pxs[i+1].y,
-            pxs[i+2].x, pxs[i+2].y);
-    }
-
-    return ret;
+    CGContextAddCurveToPoint(m_draw->getContext(), c1x, c1y, c2x, c2y, x, y);
+    return true;
 }
 
 bool GiCanvasIos::rawClosePath()

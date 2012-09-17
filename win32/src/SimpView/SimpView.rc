@@ -114,6 +114,7 @@ BEGIN
         MENUITEM "三角形",                      ID_CMD_TRIANGLE
         MENUITEM "折线",                        ID_CMD_LINES
         MENUITEM "曲线",                        ID_CMD_SPLINES
+        MENUITEM "网格",                        ID_CMD_GRID
     END
     POPUP "查看(&V)"
     BEGIN
@@ -400,6 +401,7 @@ BEGIN
     ID_CMD_TRIANGLE         "绘制三角形图形\n三角形"
     ID_CMD_LINES            "绘制折线图形\n折线"
     ID_CMD_SPLINES          "绘制曲线图形\n曲线"
+    ID_CMD_GRID             "绘制网格图形\n网格"
 END
 
 #endif    // Chinese (P.R.C.) resources

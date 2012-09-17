@@ -10,10 +10,9 @@ import android.graphics.PathEffect;
 import android.graphics.RectF;
 import touchvg.skiaview.Floats;
 import touchvg.skiaview.GiCanvasBase;
-import touchvg.skiaview.GiContext;
 
 public class GiCanvasEx extends GiCanvasBase{
-    private Path mPath = new Path();
+    private Path mPath = null;
     private Paint mPen = new Paint();
     private Paint mBrush = new Paint();
     private Canvas mCanvas = null;
@@ -62,8 +61,8 @@ public class GiCanvasEx extends GiCanvasBase{
     }
     
     @Override
-    public void antiAliasModeChanged(boolean alias) {
-        mPen.setAntiAlias(alias);
+    public void antiAliasModeChanged(boolean antiAlias) {
+        mPen.setAntiAlias(antiAlias);
     }
     
     private void makeLinePattern(float arr[], float penWidth)
@@ -76,13 +75,11 @@ public class GiCanvasEx extends GiCanvasBase{
     }
 
     @Override
-    public void penChanged(GiContext context, float penWidth) {
-        mPen.setColor(context.getLineARGB());
+    public void penChanged(int argb, float penWidth, int lineStyle) {
+    	mPen.setColor(argb);
         mPen.setStrokeWidth(penWidth);
         mPen.setAlpha(penWidth < 0.9f ? mPen.getAlpha() / 2 : mPen.getAlpha());
-        
-        int lineStyle = context.getLineStyle();
-        
+                
         if (lineStyle == 1)
             this.makeLinePattern(patDash, penWidth);
         else if (lineStyle == 2)
@@ -94,44 +91,37 @@ public class GiCanvasEx extends GiCanvasBase{
         else
             this.mEffects = null;
         mPen.setPathEffect(this.mEffects);
-        context.delete();
-        context = null;
     }
     
     @Override
-    public void brushChanged(GiContext context) {
-        mBrush.setColor(context.getFillARGB());
-        context.delete();
-        context = null;
+    public void brushChanged(int argb) {
+    	mBrush.setColor(argb);
     }
 
     @Override
     public boolean beginPath() {
-        mPath.reset();
+    	if (mPath == null)
+    		mPath = new Path();
+    	else
+    		mPath.reset();
         return true;
     }
     
     @Override
-    public boolean pathMoveTo(float x, float y) {
+    public boolean moveTo(float x, float y) {
         mPath.moveTo(x, y);
         return true;
     }
     
     @Override
-    public boolean pathLineTo(float x, float y) {
+    public boolean lineTo(float x, float y) {
         mPath.lineTo(x, y);
         return true;
     }
     
     @Override
-    public boolean pathBezierTo(Floats pxs) {
-    	int n = pxs.count();
-        for (int i = 0; i+5 < n; i += 6) {
-            mPath.cubicTo(pxs.get(i), pxs.get(i+1), pxs.get(i+2), 
-                    pxs.get(i+3), pxs.get(i+4), pxs.get(i+5));
-        }
-        pxs.delete();
-        pxs = null;
+    public boolean bezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y) {
+    	mPath.cubicTo(c1x, c1y, c2x, c2y, x, y);
         return true;
     }
     

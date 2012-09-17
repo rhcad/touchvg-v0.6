@@ -52,14 +52,12 @@ public:
     virtual bool rawPolygon(const GiContext* ctx, const Point2d* pxs, int count);
     virtual bool rawRect(const GiContext* ctx, float x, float y, float w, float h);
     virtual bool rawEllipse(const GiContext* ctx, float x, float y, float w, float h);
-    virtual bool rawPath(const GiContext* ctx, 
-        int count, const Point2d* pxs, const UInt8* types);
     
     virtual bool rawBeginPath();
     virtual bool rawEndPath(const GiContext* ctx, bool fill);
     virtual bool rawMoveTo(float x, float y);
     virtual bool rawLineTo(float x, float y);
-    virtual bool rawBezierTo(const Point2d* pxs, int count);
+    virtual bool rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y);
     virtual bool rawClosePath();
     
     virtual bool drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap, 

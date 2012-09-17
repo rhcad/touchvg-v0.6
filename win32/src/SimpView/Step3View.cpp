@@ -100,6 +100,8 @@ const char* CDrawShapeView::getCmdName(UINT nID) const
         return "square";
     if (nID == ID_CMD_CIRCLE)
         return "circle";
+    if (nID == ID_CMD_GRID)
+        return "grid";
     return "";
 }
 

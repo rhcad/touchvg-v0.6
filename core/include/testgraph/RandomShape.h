@@ -13,7 +13,7 @@ struct RandomParam
     
     static void init();
 
-    RandomParam() : lineCount(10), rectCount(10), arcCount(10), curveCount(10), randomLineStyle(true) {}
+    RandomParam() : lineCount(10), rectCount(0), arcCount(10), curveCount(10), randomLineStyle(true) {}
 
     long getShapeCount() const { return lineCount + rectCount + arcCount + curveCount; }
     void initShapes(MgShapes* shapes);

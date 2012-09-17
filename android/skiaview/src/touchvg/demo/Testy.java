@@ -3,7 +3,6 @@
 import touchvg.skiaview.GiContext;
 import touchvg.skiaview.GiSkiaView;
 import touchvg.view.PaintView;
-import android.R.color;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;

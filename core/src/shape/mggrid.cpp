@@ -79,27 +79,34 @@ bool MgGrid::_draw(GiGraphics& gs, const GiContext& ctx) const
     float w = gs.calcPenWidth(ctx.getLineWidth()) / -2.f;
     GiContext ctxgrid(w, ctx.getLineColor());
     
+    bool antiAlias = gs.setAntiAliasMode(false);
     int ret = gs.drawRect(&ctxgrid, rect) ? 1 : 0;
     
     bool switchx = (nx >= 10 && cell.x < gs.xf().displayToModel(20, true));
     bool switchy = (ny >= 10 && cell.y < gs.xf().displayToModel(20, true));
     Point2d pts[2] = { rect.leftTop(), rect.leftBottom() };
     
-    for (int i = 0; i < nx; i++) {
-        ctxgrid.setLineWidth(!switchx || i%5 > 0 ? w/2 : w);
-        ret += gs.drawLine(&ctxgrid, pts[0], pts[1]) ? 1 : 0;
+    for (int i = 1; i < nx; i++) {
         pts[0].x += cell.x;
         pts[1].x += cell.x;
+        ctxgrid.setLineWidth(!switchx || i%5 > 0 ? w/2 : w);
+        ctxgrid.setLineAlpha(-w < 0.9f && (!switchx || i%5 > 0) ?
+            ctx.getLineAlpha() / 2 : ctx.getLineAlpha());
+        ret += gs.drawLine(&ctxgrid, pts[0], pts[1]) ? 1 : 0;
     }
     
     pts[0] = rect.leftBottom();
     pts[1] = rect.rightBottom();
-    for (int j = 0; j < ny; j++) {
-        ctxgrid.setLineWidth(!switchy || j%5 > 0 ? w/2 : w);
-        ret += gs.drawLine(&ctxgrid, pts[0], pts[1]) ? 1 : 0;
+    for (int j = 1; j < ny; j++) {
         pts[0].y += cell.y;
         pts[1].y += cell.y;
+        ctxgrid.setLineWidth(!switchy || j%5 > 0 ? w/2 : w);
+        ctxgrid.setLineAlpha(-w < 0.9f && (!switchy || j%5 > 0) ?
+            ctx.getLineAlpha() / 2 : ctx.getLineAlpha());
+        ret += gs.drawLine(&ctxgrid, pts[0], pts[1]) ? 1 : 0;
     }
+
+    gs.setAntiAliasMode(antiAlias);
     
     return __super::_draw(gs, ctx) || ret > 0;
 }

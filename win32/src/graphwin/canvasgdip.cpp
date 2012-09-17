@@ -191,8 +191,6 @@ public:
     }
 
     bool drawImage(G::Bitmap* pBmp, const Box2d& rectW, bool fast);
-    bool addPolyToPath(G::GraphicsPath* pPath, int count, 
-        const Point2d* pxs, const UInt8* types);
 };
 
 long        GiCanvasGdipImpl::c_graphCount = 0;
@@ -745,28 +743,15 @@ bool GiCanvasGdip::rawLineTo(float x, float y)
     return ret;
 }
 
-bool GiCanvasGdip::rawBezierTo(const Point2d* pxs, int count)
+bool GiCanvasGdip::rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y)
 {
-    bool ret = false;
-    G::PointF pts[4];
-
-    if (m_draw->m_path != NULL)
-    {
-        ret = (G::Ok == m_draw->m_path->GetLastPoint(&pts[0]));
-        for (int i = 0; i + 2 < count; i += 3)
-        {
-            pts[1].X = pxs[i].x;
-            pts[1].Y = pxs[i].y;
-            pts[2].X = pxs[i+1].x;
-            pts[2].Y = pxs[i+1].y;
-            pts[3].X = pxs[i+2].x;
-            pts[3].Y = pxs[i+2].y;
-            ret = (G::Ok == m_draw->m_path->AddBezier(
-                pts[0], pts[1], pts[2], pts[3]));
-            pts[0] = pts[3];
-        }
+    bool ret = !!m_draw->m_path;
+    if (ret) {
+        G::PointF pt;
+        ret = G::Ok == m_draw->m_path->GetLastPoint(&pt)
+            && G::Ok == m_draw->m_path->AddBezier(
+            pt.X, pt.Y, c1x, c1y, c2x, c2y, x, y);
     }
-
     return ret;
 }
 
@@ -776,92 +761,6 @@ bool GiCanvasGdip::rawClosePath()
     if (m_draw->m_path != NULL)
     {
         ret = (G::Ok == m_draw->m_path->CloseFigure());
-    }
-
-    return ret;
-}
-
-bool GiCanvasGdip::rawPath(const GiContext* ctx, int count, 
-                           const Point2d* pxs, const UInt8* types)
-{
-    bool ret = false;
-    G::GraphicsPath* pPath = NULL;
-
-    if (pxs != NULL && types != NULL && count > 1
-        && (pPath = new G::GraphicsPath) != NULL)
-    {
-        if (NULL == ctx)
-            ctx = getCurrentContext();
-
-        ret = m_draw->addPolyToPath(pPath, count, pxs, types);
-        if (ret)
-        {
-            if (ctx->hasFillColor())
-            {
-                G::Brush* pBrush = m_draw->createBrush(ctx);
-                if (pBrush != NULL)
-                {
-                    ret = (G::Ok == m_draw->getDrawGs()->FillPath(pBrush, pPath));
-                }
-            }
-            TempGdipPen pPen(m_draw, ctx);
-            if (pPen != NULL)
-            {
-                ret = (G::Ok == m_draw->getDrawGs()->DrawPath(pPen, pPath));
-            }
-        }
-    }
-
-    if (pPath != NULL)
-        delete pPath;
-
-    return ret;
-}
-
-bool GiCanvasGdipImpl::addPolyToPath(G::GraphicsPath* pPath, int count, 
-                                     const Point2d* pxs, const UInt8* types)
-{
-    Point2d pt;
-    bool ret = true;
-
-    for (int i = 0; i < count && ret; i++)
-    {
-        if (kGiMoveTo == types[i])
-        {
-            if (pPath->GetPointCount() > 0)
-                ret = (G::Ok == pPath->StartFigure());
-            pt = pxs[i];
-            ret = (G::Ok == pPath->AddLine(pt.x, pt.y, pt.x, pt.y));
-        }
-        else if (kGiLineTo == (types[i] & (kGiLineTo | kGiBeziersTo)))
-        {
-            ret = (G::Ok == pPath->AddLine(pt.x, pt.y, pxs[i].x, pxs[i].y));
-            pt = pxs[i];
-        }
-        else if (kGiBeziersTo == (types[i] & (kGiLineTo | kGiBeziersTo)))
-        {
-            if (i + 2 >= count
-                || kGiBeziersTo != (types[i+1] & (kGiLineTo | kGiBeziersTo))
-                || kGiBeziersTo != (types[i+2] & (kGiLineTo | kGiBeziersTo)))
-            {
-                ret = false;
-            }
-            else
-            {
-                ret = (G::Ok == pPath->AddBezier(
-                    pt.x, pt.y, 
-                    pxs[i].x, pxs[i].y, 
-                    pxs[i+1].x, pxs[i+1].y, 
-                    pxs[i+2].x, pxs[i+2].y));
-                i += 2;
-                pt = pxs[i];
-            }
-        }
-
-        if (kGiCloseFigure == (types[i] & kGiCloseFigure))
-        {
-            ret = (G::Ok == pPath->CloseFigure());
-        }
     }
 
     return ret;

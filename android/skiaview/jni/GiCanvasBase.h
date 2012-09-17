@@ -30,8 +30,8 @@ public:
     bool beginPaint();
     void endPaint();
     virtual void setNeedRedraw();
-    virtual void penChanged(const GiContext& ctx, float penWidth);
-    virtual void brushChanged(const GiContext& ctx);
+    virtual void penChanged(int argb, float penWidth, int lineStyle);
+    virtual void brushChanged(int argb);
     
     virtual bool drawLine(float x1, float y1, float x2, float y2);
     virtual bool drawLines(const mgvector<float>& pxs);
@@ -39,12 +39,11 @@ public:
     virtual bool drawPolygon(const mgvector<float>& pxs, bool stroke, bool fill);
     virtual bool drawRect(float x, float y, float w, float h, bool stroke, bool fill);
     virtual bool drawEllipse(float x, float y, float w, float h, bool stroke, bool fill);
-    virtual bool drawPath(const mgvector<float>& pxs, const mgvector<char>& types, bool stroke, bool fill);
     
     virtual bool beginPath() { return false; }
-    virtual bool pathMoveTo(float x, float y);
-    virtual bool pathLineTo(float x, float y);
-    virtual bool pathBezierTo(const mgvector<float>& pxs);
+    virtual bool moveTo(float x, float y);
+    virtual bool lineTo(float x, float y);
+    virtual bool bezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y);
     virtual bool closePath() { return false; }
     virtual bool endPath(bool stroke, bool fill);
     
@@ -77,11 +76,10 @@ private:
     virtual bool rawRect(const GiContext* ctx, float x, float y, float w, float h);
     virtual bool rawEllipse(const GiContext* ctx, float x, float y, float w, float h);
     virtual bool rawEndPath(const GiContext* ctx, bool fill);
-    virtual bool rawBezierTo(const Point2d* pxs, int count);
-    virtual bool rawPath(const GiContext* ctx, int count, const Point2d* pxs, const UInt8* types);
     virtual bool rawBeginPath() { return beginPath(); }
-    virtual bool rawMoveTo(float x, float y) { return pathMoveTo(x, y); }
-    virtual bool rawLineTo(float x, float y) { return pathLineTo(x, y); }
+    virtual bool rawMoveTo(float x, float y) { return moveTo(x, y); }
+    virtual bool rawLineTo(float x, float y) { return lineTo(x, y); }
+    virtual bool rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y);
     virtual bool rawClosePath() { return closePath(); }
     
 private:
