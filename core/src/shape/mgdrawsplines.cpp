@@ -60,7 +60,7 @@ bool MgCmdDrawSplines::touchBegan(const MgMotion* sender)
     }
     else {
         lines->resize(2);
-        m_freehand = !sender->pressDrag;
+        //m_freehand = !sender->pressDrag;
         m_step = 1;
         dynshape()->shape()->setPoint(0, sender->startPointM);
         dynshape()->shape()->setPoint(1, sender->pointM);
