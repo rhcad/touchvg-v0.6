@@ -7,3 +7,4 @@ assets
 *.so
 *.jar
 skiaview_java_wrap.cpp
+libs

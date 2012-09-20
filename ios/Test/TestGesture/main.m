@@ -2,7 +2,7 @@
 //  main.m
 //  TestGesture
 //
-//  Created by Yungui Zhang on 12-8-23.
+//  Created by Zhang Yungui on 12-8-23.
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 //
 

@@ -24,7 +24,7 @@
         _shapeAdded = NULL;
         _cachedDraw = YES;
         _scale = 3;
-        _lockRedraw = YES;
+        _lockRedraw = NO;
         _zooming = NO;
         
         self.contentMode = UIViewContentModeRedraw;

@@ -88,7 +88,7 @@ void registerTransformCmd();
     // 创建占满窗口的总视图
     UIView *mainview = [[UIView alloc]initWithFrame:rect];
     self.view = mainview;
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    self.view.backgroundColor = [UIColor underPageBackgroundColor];
     [mainview release];
     rect.origin.y = 0;
     
