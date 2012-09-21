@@ -296,15 +296,17 @@
         if (sender.state == UIGestureRecognizerStateBegan) {
             _lastPt = [sender locationInView:sender.view];
         }
-        else {
+        else if (sender.scale > _MGZERO) {
             CGPoint pt = [sender locationInView:sender.view];
+            float newscale = _scale / sender.scale;
             _zooming = (sender.state == UIGestureRecognizerStateChanged);
             
             if (_zooming && fabs(sender.scale - 1) < 1e-2) {
                 [self zoomPan:CGPointMake(_lastPt.x - pt.x, _lastPt.y - pt.y)];
             }
-            else if (_zooming && (_scale > 1.f) == (_scale * sender.scale > 1.f)) {
-                _scale /= sender.scale;
+            else if (_zooming && (_scale > 1.f) == (newscale > 1.f)
+                     && newscale > 0.1f && newscale < 10.f) {
+                _scale = newscale;
                 sender.scale = 1.f;
                 
                 [self updateTransform];

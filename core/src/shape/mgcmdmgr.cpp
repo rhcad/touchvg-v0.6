@@ -178,14 +178,21 @@ static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], 
          sp; sp = sender->view->shapes()->getNextShape(it)) {
         if (shape && shape->getID() == sp->getID())
             continue;
-        bool allOnBox = !matchpt && sp->shape()->getExtent().isIntersect(snapbox);
-        if (allOnBox || sp->shape()->getExtent().isIntersect(wndbox)) {
+        
+        Box2d extent(sp->shape()->getExtent());
+        if (extent.width() < xf->displayToModel(2)
+            && extent.height() < xf->displayToModel(2)) {
+            continue;
+        }
+        bool allOnBox = !matchpt && extent.isIntersect(snapbox);
+        if (allOnBox || extent.isIntersect(wndbox)) {
             UInt32 n = sp->shape()->getHandleCount();
             bool curve = sp->shape()->isKindOf(MgSplines::Type());
             
             for (UInt32 i = 0; i < n; i++) {
-                if (curve && i > 0 && i + 1 < n)
+                if (curve && ((i > 0 && i + 1 < n) || sp->shape()->isClosed())) {
                     continue;
+                }
                 Point2d pnt(sp->shape()->getHandlePoint(i));
                 if (allOnBox) {
                     float dist = pnt.distanceTo(sender->pointM);
@@ -195,7 +202,7 @@ static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], 
                         arr[0].type = 5;
                     }
                 }
-                if (wndbox.contains(pnt)) {
+                if (!curve && wndbox.contains(pnt)) {
                     Point2d newPt (sender->pointM);
                     snapHV(pnt, newPt, arr);
                 }
