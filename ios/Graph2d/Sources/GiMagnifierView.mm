@@ -303,7 +303,7 @@
             if (_zooming && fabs(sender.scale - 1) < 1e-2) {
                 [self zoomPan:CGPointMake(pt.x - _lastPt.x, pt.y - _lastPt.y)];
             }
-            else if (_zooming) {
+            else if (_zooming && (_scale > 1.f) == (_scale * sender.scale > 1.f)) {
                 _scale *= sender.scale;
                 sender.scale = 1.f;
                 
