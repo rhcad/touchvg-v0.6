@@ -301,10 +301,10 @@
             _zooming = (sender.state == UIGestureRecognizerStateChanged);
             
             if (_zooming && fabs(sender.scale - 1) < 1e-2) {
-                [self zoomPan:CGPointMake(pt.x - _lastPt.x, pt.y - _lastPt.y)];
+                [self zoomPan:CGPointMake(_lastPt.x - pt.x, _lastPt.y - pt.y)];
             }
             else if (_zooming && (_scale > 1.f) == (_scale * sender.scale > 1.f)) {
-                _scale *= sender.scale;
+                _scale /= sender.scale;
                 sender.scale = 1.f;
                 
                 [self updateTransform];
@@ -331,7 +331,8 @@
     if (sender.view == self) {
         _zooming = (sender.state == UIGestureRecognizerStateChanged);
         if (sender.state > UIGestureRecognizerStateBegan) {
-            [self zoomPan:[sender translationInView:sender.view]];
+            CGPoint t = [sender translationInView:sender.view];
+            [self zoomPan:CGPointMake(-t.x, -t.y)];
             [sender setTranslation:CGPointZero inView:sender.view];
         }
     }
