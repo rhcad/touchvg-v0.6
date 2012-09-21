@@ -6,6 +6,15 @@
 #include <iosgraph.h>
 #include <mgshapes.h>
 
+@interface GiMagnifierView ()
+
+- (BOOL)draw:(GiGraphics*)gs;                           //!< 显示全部图形内部调用
+- (BOOL)dynDraw:(GiGraphics*)gs;                        //!< 动态显示时内部调用
+- (BOOL)isActiveView;                                   //!< 返回本视图是否为当前交互视图
+- (void)updateTransform;
+
+@end
+
 @implementation GiMagnifierView
 
 @synthesize pointW = _pointW;
@@ -50,20 +59,27 @@
 
 - (void)setPointW:(CGPoint)ptw {
     _pointW = ptw;
-    if (!_lockRedraw || [self isActiveView])
-        [self setPointWandRedraw:ptw];
+    if (!_lockRedraw || [self isActiveView]) {
+        Point2d ptd = Point2d(ptw.x, ptw.y) * _graph->xf.worldToDisplay();
+        BOOL inside = CGRectContainsPoint(CGRectInset(self.bounds, 10, 10), 
+                                          CGPointMake(ptd.x, ptd.y));
+        if (!inside) {
+            _graph->xf.zoom(Point2d(ptw.x, ptw.y), _graph->xf.getViewScale());
+        }
+        _cachedDraw = YES;
+        [self setNeedsDisplay];
+    }
 }
 
-- (void)setPointWandRedraw:(CGPoint)ptw
+- (void)setPointWandRedraw:(CGPoint)ptw :(BOOL)fromClick
 {
-    _pointW = ptw;
-    Point2d ptd = Point2d(ptw.x, ptw.y) * _graph->xf.worldToDisplay();
-    BOOL inside = CGRectContainsPoint(CGRectInset(self.bounds, 10, 10), 
-                                      CGPointMake(ptd.x, ptd.y));
-    
-    if (!inside) {
-        _graph->xf.zoom(Point2d(ptw.x, ptw.y), _graph->xf.getViewScale());
+    _zoomCenter = ptw;
+    if (fromClick) {
+        float off = (self.bounds.size.width - 10) / _graph->xf.getWorldToDisplayX();
+        ptw.x += off / 2.f;
     }
+    _pointW = ptw;
+    _graph->xf.zoom(Point2d(ptw.x, ptw.y), _graph->xf.getViewScale());
     _cachedDraw = YES;
     [self setNeedsDisplay];
 }
@@ -71,9 +87,16 @@
 - (void)zoomPan:(CGPoint)translation
 {
     if (_graph->xf.zoomPan(translation.x, translation.y)) {
+        BOOL savept = CGPointEqualToPoint(_zoomCenter, _pointW);
         _pointW = CGPointMake(_graph->xf.getCenterW().x, _graph->xf.getCenterW().y);
+        _zoomCenter = _pointW;
+        if (!savept) {
+            float off = (self.bounds.size.width - 10) / _graph->xf.getWorldToDisplayX();
+            _zoomCenter.x -= off / 2.f;
+        }
         _cachedDraw = YES;
         [self setNeedsDisplay];
+        [[_gview ownerView] setNeedsDisplay];
     }
 }
 
@@ -116,13 +139,17 @@
 - (void)redraw:(bool)fast {
     _cachedDraw = !fast;
     [self setNeedsDisplay];
+    
+    if (!_lockRedraw && [self isActiveView]) {
+        [_gview redraw:fast];
+    }
 }
 
 - (BOOL)isZooming {
     return _zooming || [_gview isZooming];
 }
 
-- (void)drawRect:(CGRect)rect
+- (void)updateTransform
 {
     GiTransform& xf = _graph->xf;
     
@@ -151,6 +178,11 @@
     if (![_gview isZooming]) {                      // 同步显示比例，动态放缩时除外
         xf.zoom(xf.getCenterW(), [_gview xform]->getViewScale() * _scale);
     }
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    [self updateTransform];
     
     GiCanvasIos &cv = _graph->canvas;
     GiGraphics &gs = _graph->gs;
@@ -234,9 +266,9 @@
                    * [_gview xform]->displayToWorld());
         gs->drawRect(&ctx, rect, false);
     }
-    else if (inactive) {
+    else if (inactive || !CGPointEqualToPoint(_zoomCenter, _pointW)) {
         GiContext ctx(0, GiColor(64, 64, 64, 172));
-        Point2d ptd(Point2d(_pointW.x, _pointW.y) * _graph->xf.worldToDisplay());
+        Point2d ptd(Point2d(_zoomCenter.x, _zoomCenter.y) * _graph->xf.worldToDisplay());
         gs->rawLine(&ctx, ptd.x - 20, ptd.y, ptd.x + 20, ptd.y);
         gs->rawLine(&ctx, ptd.x, ptd.y - 20, ptd.x, ptd.y + 20);
     }
@@ -258,19 +290,49 @@
     [super touchesCancelled:touches withEvent:event];
 }
 
-- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender
+- (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
     if (sender.view == self) {
         if (sender.state == UIGestureRecognizerStateBegan) {
-            _zooming = YES;
-        }
-        else if (sender.state == UIGestureRecognizerStateChanged) {
-            [self zoomPan:[sender translationInView:sender.view]];
-            [sender setTranslation:CGPointZero inView:sender.view];
+            _lastPt = [sender locationInView:sender.view];
         }
         else {
-            _zooming = NO;
-            [self redraw:NO];
+            CGPoint pt = [sender locationInView:sender.view];
+            _zooming = (sender.state == UIGestureRecognizerStateChanged);
+            
+            if (_zooming && fabs(sender.scale - 1) < 1e-2) {
+                [self zoomPan:CGPointMake(pt.x - _lastPt.x, pt.y - _lastPt.y)];
+            }
+            else if (_zooming) {
+                _scale *= sender.scale;
+                sender.scale = 1.f;
+                
+                [self updateTransform];
+                _scale = _graph->xf.getViewScale() / [_gview xform]->getViewScale();
+                
+                if (!CGPointEqualToPoint(_zoomCenter, _pointW)) {
+                    float off = (self.bounds.size.width - 10) / _graph->xf.getWorldToDisplayX();
+                    _pointW.x = _zoomCenter.x + off / 2.f;
+                    _graph->xf.zoom(Point2d(_pointW.x, _pointW.y), _graph->xf.getViewScale());
+                }
+                
+                [self regen];
+                [[_gview ownerView] setNeedsDisplay];
+            }
+            _lastPt = pt;
+        }
+    }
+    
+    return sender.view == self;
+}
+
+- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender
+{
+    if (sender.view == self) {
+        _zooming = (sender.state == UIGestureRecognizerStateChanged);
+        if (sender.state > UIGestureRecognizerStateBegan) {
+            [self zoomPan:[sender translationInView:sender.view]];
+            [sender setTranslation:CGPointZero inView:sender.view];
         }
     }
     
@@ -280,25 +342,27 @@
 - (BOOL)automoveSuperview:(CGPoint)point fromView:(UIView*)view
 {
     CGPoint ptzoom = [self.superview convertPoint:point fromView:view];
-    CGRect mainBounds = [view convertRect:view.bounds toView:self.superview.superview];
+    CGRect myframe = [self convertRect:self.bounds toView:view];
+    BOOL intersected = CGRectContainsRect(view.bounds, CGRectInset(myframe, 10, 10));
     BOOL moved = NO;
     
-    if (CGRectContainsRect(mainBounds, self.superview.frame)    // 放大镜视图在实际绘图视图内
-        && CGRectContainsPoint(CGRectInset(self.superview.bounds, -30, -30), ptzoom)) // 进入放大镜视图
+    // 放大镜视图在实际绘图视图内 且 进入放大镜视图
+    if (intersected
+        && CGRectContainsPoint(CGRectInset(self.superview.bounds, -30, -30), ptzoom))
     {
         CGPoint cen;        // 本视图的上级视图的中心点，为view的视图坐标系
         
         if (point.x < view.bounds.size.width / 2) {             // 移到view的右侧
-            cen.x = view.bounds.size.width - self.superview.frame.size.width / 2 - 10;
+            cen.x = view.bounds.size.width - self.superview.frame.size.width / 2;
         }
         else {
-            cen.x = self.superview.frame.size.width / 2 + 10;   // 移到view的左侧
+            cen.x = self.superview.frame.size.width / 2;   // 移到view的左侧
         }
         if (point.y < view.bounds.size.height / 2) {            // 移到view的下侧
-            cen.y = view.bounds.size.height - self.superview.frame.size.height / 2 - 10;
+            cen.y = view.bounds.size.height - self.superview.frame.size.height / 2;
         }
         else {
-            cen.y = self.superview.frame.size.height / 2 + 10;  // 移到view的上侧
+            cen.y = self.superview.frame.size.height / 2;  // 移到view的上侧
         }
         
         moved = YES;

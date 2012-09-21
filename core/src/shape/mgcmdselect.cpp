@@ -655,6 +655,7 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
     }
     
     applyCloneShapes(sender->view, true, isCloneDrag(sender));
+    mgGetCommandManager()->getSnap()->clearSnap();
     
     m_insertPt = false;
     m_ptNear = sender->pointM;

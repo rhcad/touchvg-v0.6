@@ -45,6 +45,7 @@ public:
     }
     
     id<GiView> getView() { return _curview; }
+    id<GiView> getMainView() { return _mainview; }
     
     void setView(id<GiView> gv) {
         _curview = gv;
@@ -53,10 +54,15 @@ public:
         }
     }
     
-private:
+    bool isMagnifierVisible() {
+        return _auxviews[0] && !_auxviews[0].hidden && !_auxviews[0].superview.hidden;
+    }
+    
     MgShapes* shapes() { return [_curview shapes]; }
     GiTransform* xform() { return [_curview xform]; }
     GiGraphics* graph() { return [_curview graph]; }
+    
+private:
     
     bool shapeWillAdded(MgShape* shape) {
         NSObject* obj = _mainview.ownerView.nextResponder;
@@ -399,8 +405,9 @@ static long s_cmdRef = 0;
     if (sel && sel->setFixedLength(_mgview, !!fixed)) {}
 }
 
-- (CGPoint)getPointModel {
-    return CGPointMake(_motion->pointM.x, _motion->pointM.y);
+- (CGPoint)getPointW {
+    Point2d pt(_motion->pointM * _mgview->xform()->modelToWorld());
+    return CGPointMake(pt.x, pt.y);
 }
 
 - (BOOL)dynDraw:(GiGraphics*)gs
@@ -640,15 +647,22 @@ static long s_cmdRef = 0;
     if (cmd && _clickFingers > 0) {
         [self setView:view];
         [self convertPoint:point];
-        
-        if (1 == _clickFingers) {
-            ret = cmd->click(_motion);
-        }
-        else if (2 == _clickFingers) {
-            ret = cmd->doubleClick(_motion);
-        }
         _motion->pressDrag = false;
         _touchCount = 0;
+        
+        if (strcmp(cmd->getName(), "select") != 0
+            && strcmp(cmd->getName(), "erase") != 0
+            && _mgview->isMagnifierVisible()
+            && view == [_mgview->getMainView() ownerView]) {
+            [_mgview->getView() redraw:true];
+        }
+        else if (1 == _clickFingers) {
+            cmd->click(_motion);
+        }
+        else if (2 == _clickFingers) {
+            cmd->doubleClick(_motion);
+        }
+        ret = YES;
     }
     _clickFingers = 0;
     _motion->dragging = false;

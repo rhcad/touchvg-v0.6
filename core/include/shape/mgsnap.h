@@ -24,6 +24,9 @@ struct MgSnap {
     
     //! 返回捕捉到的特征点类型
     virtual int getSnappedType() = 0;
+    
+    //! 清除捕捉结果
+    virtual void clearSnap() = 0;
 };
 
 #endif // __GEOMETRY_MGSNAP_H_

@@ -50,8 +50,8 @@ class MgViewProxy;
 //! 延迟检测点击事件
 - (BOOL)delayTap:(CGPoint)point view:(UIView*)view;
 
-//! 返回当前点，模型坐标
-- (CGPoint)getPointModel;
+//! 返回当前点，世界坐标
+- (CGPoint)getPointW;
 
 //! 退出动态修改模式，应用修改结果
 - (BOOL)dynamicChangeEnded:(BOOL)apply;

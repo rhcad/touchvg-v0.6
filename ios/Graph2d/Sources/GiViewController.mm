@@ -451,6 +451,17 @@
         }
         
         [cmd dynDraw: gs];
+        
+        if (sender == self.view && _magViews[0]
+            && !_magViews[0].hidden && !_magViews[0].superview.hidden) {
+            GiMagnifierView *aview = (GiMagnifierView *)_magViews[0];
+            Box2d rect(0, 0, aview.bounds.size.width, aview.bounds.size.height);
+            bool fromMag = (_activeView == _magViews[0]);
+            GiContext ctx(fromMag ? -2 : 0, 
+                          GiColor(0, 200, 200, fromMag ? 160 : 64), kGiLineDot, 
+                          GiColor(0, 200, 0, fromMag ? 32 : 16));
+            gs->drawRect(&ctx, rect * [aview xform]->displayToModel());
+        }
     }
     
     return sender;
@@ -791,7 +802,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
     twoFingersPan.maximumNumberOfTouches = 2;
     twoFingersPan.minimumNumberOfTouches = 2;
-    [twoFingersPan requireGestureRecognizerToFail:twoFingersPinch]; // 捏合优先
+    //[twoFingersPinch requireGestureRecognizerToFail:twoFingersPan]; // 捏合优先
     _recognizers[t][n++] = twoFingersPan;
     
     // 单指滑动手势
@@ -916,7 +927,9 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     if (touch) {            // oneFingerOneTap不直接处理是为了检测是点击还是短划动
         CGPoint point = [touch locationInView:touch.view];
         GiCommandController* cmd = (GiCommandController*)_cmdctl;
-        [cmd delayTap:point view:touch.view];           // 看是否有点击待处理
+        if ([cmd delayTap:point view:touch.view]) { // 看是否有点击待处理
+            [self updateMagnifierCenter:nil];
+        }
     }
     _timeBegan = 0;
     
@@ -951,7 +964,11 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     if (![self gestureCheck:sender])
         return;
     
-    if (![[self getCommand:@selector(twoFingersPinch:)] twoFingersPinch:sender]
+    if (sender.view == _magViews[0]) {
+        GiMagnifierView *zview = (GiMagnifierView *)_magViews[0];
+        [zview twoFingersPinch:sender];
+    }
+    else if (![[self getCommand:@selector(twoFingersPinch:)] twoFingersPinch:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(twoFingersPinch:)] twoFingersPinch:sender];
     }
@@ -1040,18 +1057,27 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 
 - (void)updateMagnifierCenter:(UIGestureRecognizer *)sender
 {
-    if (!_magViews[0] || sender.view != self.view)
+    UIView* senderView = sender ? sender.view : _activeView;
+    if (!_magViews[0] || senderView != self.view)
         return;
     
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiMagnifierView *zview = (GiMagnifierView *)_magViews[0];
     
-    if ([sender numberOfTouches] > 0) {
-        [zview automoveSuperview:[sender locationInView:sender.view] fromView:self.view];
+    if (sender && [sender numberOfTouches] > 0) {
+        [zview automoveSuperview:[sender locationInView:senderView] fromView:self.view];
     }
     
-    [zview setPointW:[cmd getPointModel]];
-    //if (sender.state == UIGestureRecognizerStateEnded) [zview setPointWandRedraw
+    if (!sender) {
+        [zview setPointWandRedraw:[cmd getPointW] : ![self isCommand:"select"]];
+    }
+    else if (sender.state == UIGestureRecognizerStateBegan
+        || sender.state == UIGestureRecognizerStateEnded) {
+        [zview setPointWandRedraw:[cmd getPointW] :NO];
+    }
+    else {
+        [zview setPointW:[cmd getPointW]];
+    }
 }
 
 @end

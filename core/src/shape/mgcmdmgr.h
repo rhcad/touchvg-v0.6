@@ -35,7 +35,7 @@ private:
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual Point2d snapPoint(const MgMotion* sender, MgShape* hotShape, int hotHandle);
     virtual int getSnappedType();
-    void clearSnap();
+    virtual void clearSnap();
 
 private:
     typedef std::map<std::string, MgCommand*> CMDS;

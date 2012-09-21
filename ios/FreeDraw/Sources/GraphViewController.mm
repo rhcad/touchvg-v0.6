@@ -156,7 +156,6 @@ void registerTransformCmd();
                                      | UIViewAutoresizingFlexibleHeight
                                      | UIViewAutoresizingFlexibleRightMargin
                                      | UIViewAutoresizingFlexibleBottomMargin);
-    [self lockMagnifier:nil];
     
     // 创建缩小显示的放大镜视图
 #ifdef MAG_AT_BOTTOM
@@ -399,7 +398,7 @@ void registerTransformCmd();
 
 - (IBAction)selectCommand:(id)sender    // 选择绘图命令
 {
-    CGRect viewrect = CGRectMake(0, 0, 240, 280);
+    CGRect viewrect = CGRectMake(0, 0, 360, 240);
     viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
     viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _graphc.downview.frame.size.height - 20;
     
@@ -423,6 +422,8 @@ void registerTransformCmd();
         { @"曲线",    @"splines" },
         { @"平行四边形", @"parallelogram" },
         { @"网格",    @"grid" },
+        { @"撤销",    @"undo" },
+        { @"重做",    @"redo" },
     };
     const int count = sizeof(cmds) / sizeof(cmds[0]);
     
