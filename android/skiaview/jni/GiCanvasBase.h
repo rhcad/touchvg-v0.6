@@ -30,6 +30,7 @@ public:
     bool beginPaint();
     void endPaint();
     virtual void setNeedRedraw();
+    virtual bool drawHandle(float x, float y, int type);
     virtual void penChanged(int argb, float penWidth, int lineStyle);
     virtual void brushChanged(int argb);
     

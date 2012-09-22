@@ -4,6 +4,7 @@ import touchvg.view.MyPaintView;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,6 +22,7 @@ public class Testy extends Activity {
     private Button buttonStyle;     //线型按钮
     private Button buttonSave;      //保存按钮
     private Button buttonShape;    	//形状按钮
+    private static final String mPath = "/vgfile/vg";
     
     /// Called when the activity is first created.
     @Override
@@ -29,6 +31,7 @@ public class Testy extends Activity {
         setContentView(R.layout.main);
         this.initComponent();
         this.bindEvent();
+        mView.readFromFile(Environment.getExternalStorageDirectory() + mPath);
     }
     
     /// 事件监听器方法，为按钮绑定方法
@@ -90,6 +93,7 @@ public class Testy extends Activity {
         
         buttonSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				mView.saveAsFile(Environment.getExternalStorageDirectory() + mPath);
 			}
 		});
         
@@ -104,6 +108,7 @@ public class Testy extends Activity {
     {
     	mView = new MyPaintView(this.findViewById(R.id.paintView));
         mView.setBkColor(Color.GRAY);
+        mView.setBitmapIDs(R.drawable.vgdot1, R.drawable.vgdot2);
         
         buttonSelect  = (Button) this.findViewById(R.id.selectshapes_button);
         buttonClear = (Button) this.findViewById(R.id.clearshapes_button);

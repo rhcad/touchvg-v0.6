@@ -1,7 +1,6 @@
 package touchvg.view;
 
-
-import android.view.View;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
@@ -16,14 +15,14 @@ public class GiCanvasEx extends GiCanvasBase{
     private Paint mPen = new Paint();
     private Paint mBrush = new Paint();
     private Canvas mCanvas = null;
-    private View mView = null;
+    private PaintView mView = null;
     private static final float patDash[]      = { 5, 5 };
     private static final float patDot[]       = { 1, 2 };
     private static final float patDashDot[]   = { 10, 2, 2, 2 };
     private static final float dashDotdot[]   = { 20, 2, 2, 2, 2, 2 };
     private PathEffect mEffects = null;
     
-	public GiCanvasEx(View view)
+	public GiCanvasEx(PaintView view)
     {
         mView = view;
     }
@@ -58,6 +57,15 @@ public class GiCanvasEx extends GiCanvasBase{
     @Override
     public void setNeedRedraw() {
         mView.invalidate();
+    }
+    
+    @Override
+    public boolean drawHandle(float x, float y, int type) {
+    	Bitmap bmp = mView.getBitmap(type);
+    	if (bmp != null) {
+    		mCanvas.drawBitmap(bmp, x - bmp.getWidth() / 2, y - bmp.getHeight() / 2, null);
+    	}
+    	return bmp != null;
     }
     
     @Override

@@ -1,4 +1,4 @@
-package touchvg.view;
+锘縫ackage touchvg.view;
 
 import java.io.ByteArrayOutputStream;
 import touchvg.skiaview.GiColor;
@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
@@ -30,6 +31,8 @@ public class PaintView extends View {
     private boolean isMoving = false;
     private boolean mGestureEnable = true;
     private int mBkColor = Color.TRANSPARENT;
+    private int mBmpIds[] = { 0, 0, 0, 0, 0 };
+    private Bitmap mBmps[] = { null, null, null, null, null };
     private final PaintView mView = this;
     
     static {
@@ -57,7 +60,7 @@ public class PaintView extends View {
         mCore = new GiSkiaView(mCanvas);
         mDetector = new GestureDetector(mContext, new PaintGestureDetector());
         
-        setDrawingCacheEnabled(true);   // 打开图形缓存，这样才能getDrawingCache
+        setDrawingCacheEnabled(true);   // 鎵撳紑鍥惧舰缂撳瓨锛岃繖鏍锋墠鑳絞etDrawingCache
         
         this.setOnTouchListener(new OnTouchListener() {
             
@@ -193,7 +196,23 @@ public class PaintView extends View {
     	    return null; 
     	}
     	final ByteArrayOutputStream os = new ByteArrayOutputStream();
-    	bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);    // 将Bitmap压缩成PNG编码，质量为100%存储
+    	bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);    // 灏咮itmap鍘嬬缉鎴怭NG缂栫爜锛岃川閲忎负100%瀛樺偍
     	return os.toByteArray();
+    }
+    
+    public void setBitmapIDs(int vgdot1, int vgdot2) {
+    	mBmpIds[0] = vgdot1;
+    	mBmpIds[1] = vgdot2;
+    }
+    
+    public Bitmap getBitmap(int index) {
+    	int id = index < mBmpIds.length ? mBmpIds[index] : 0;
+    	if (id != 0) {
+    		if (mBmps[index] == null) {
+    			mBmps[index] = ((BitmapDrawable)mView.getResources().getDrawable(id)).getBitmap();
+    		}
+    		return mBmps[index];
+    	}
+    	return null;
     }
 }

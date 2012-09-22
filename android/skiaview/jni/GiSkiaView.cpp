@@ -49,6 +49,10 @@ public:
     virtual void redraw(bool) {
         _canvas->setNeedRedraw();
     }
+    virtual bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) {
+    	Point2d ptd(pnt * gs->xf().modelToDisplay());
+    	return _canvas->drawHandle(ptd.x, ptd.y, hotdot ? 1 : 0);
+    }
 };
 
 GiSkiaView::GiSkiaView(GiCanvasBase* canvas) : _zoomMask(7)

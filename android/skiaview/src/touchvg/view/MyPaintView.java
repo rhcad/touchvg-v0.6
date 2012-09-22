@@ -135,4 +135,8 @@ public class MyPaintView extends Object {
 		}
 		return ret;
 	}
+	
+	public void setBitmapIDs(int vgdot1, int vgdot2) {
+		mView.setBitmapIDs(vgdot1, vgdot2);
+	}
 }
