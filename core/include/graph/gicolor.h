@@ -39,7 +39,7 @@ struct GiColor
 
     int getARGB() const
     {
-        return ((int)a) << 24 | ((int)r) << 16 | ((int)g) << 8 | b;
+        return ((unsigned int)a) << 24 | ((unsigned int)r) << 16 | ((unsigned int)g) << 8 | b;
     }
 
     void setARGB(int value)
@@ -77,6 +77,12 @@ struct GiColor
     }
 
 #ifndef SWIG
+    GiColor& operator=(const GiColor& src)
+    {
+        r = src.r; g = src.g; b = src.b; a = src.a;
+        return *this;
+    }
+    
     bool operator==(const GiColor& src) const
     {
         return equals(src);

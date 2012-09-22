@@ -26,6 +26,7 @@ public:
         _shapes = new MgShapesT<std::list<MgShape*> >;
         _motion.view = this;
         _shapes->context()->setLineAlpha(140);  // 默认55%透明度
+        _shapes->context()->setAutoFillColor(true);
     }
     virtual ~MgViewProxy() {
         mgGetCommandManager()->unloadCommands();

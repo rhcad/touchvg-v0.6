@@ -79,7 +79,7 @@ public class GiCanvasEx extends GiCanvasBase{
     	mPen.setColor(argb);
         mPen.setStrokeWidth(penWidth);
         mPen.setAlpha(penWidth < 0.9f ? mPen.getAlpha() / 2 : mPen.getAlpha());
-                
+        
         if (lineStyle == 1)
             this.makeLinePattern(patDash, penWidth);
         else if (lineStyle == 2)

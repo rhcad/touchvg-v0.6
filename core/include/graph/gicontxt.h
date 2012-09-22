@@ -79,9 +79,16 @@ public:
             if (mask & 0x01) {
                 GiColor c = src.m_lineColor;
                 m_lineColor.set(c.r, c.g, c.b);
+                if (m_autoFillColor) {
+                    m_fillColor = m_lineColor;
+                    m_fillColor.a /= 3;
+                }
             }
             if (mask & 0x02) {
                 m_lineColor.a = src.m_lineColor.a;
+                if (m_autoFillColor) {
+                    m_fillColor.a = m_lineColor.a / 3;
+                }
             }
             if (mask & 0x04) {
                 m_lineWidth = src.m_lineWidth;
@@ -95,7 +102,7 @@ public:
                 m_autoFillColor = src.m_autoFillColor;
             }
             if (mask & 0x20) {
-                m_fillColor.a = src.m_fillColor.a;
+                m_fillColor.a = src.m_autoFillColor ? src.m_fillColor.a / 3 : src.m_fillColor.a;
                 m_autoFillColor = src.m_autoFillColor;
             }
         }

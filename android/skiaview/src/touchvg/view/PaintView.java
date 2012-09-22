@@ -1,10 +1,12 @@
 package touchvg.view;
 
+import java.io.ByteArrayOutputStream;
 import touchvg.skiaview.GiColor;
 import touchvg.skiaview.GiSkiaView;
 import touchvg.skiaview.GiGestureState;
 import touchvg.skiaview.GiGestureType;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -54,6 +56,8 @@ public class PaintView extends View {
         mCanvas = new GiCanvasEx(this);
         mCore = new GiSkiaView(mCanvas);
         mDetector = new GestureDetector(mContext, new PaintGestureDetector());
+        
+        setDrawingCacheEnabled(true);   // 打开图形缓存，这样才能getDrawingCache
         
         this.setOnTouchListener(new OnTouchListener() {
             
@@ -182,4 +186,14 @@ public class PaintView extends View {
         }
     }
     
+    public byte[] getCanvasBitmap()
+    {
+    	Bitmap bitmap = getDrawingCache(true);
+    	if (bitmap == null) {
+    	    return null; 
+    	}
+    	final ByteArrayOutputStream os = new ByteArrayOutputStream();
+    	bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);    // 将Bitmap压缩成PNG编码，质量为100%存储
+    	return os.toByteArray();
+    }
 }

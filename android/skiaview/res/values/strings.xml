@@ -10,5 +10,6 @@
     <string name="thickPen">细</string>
     <string name="boldPen">粗</string>
     <string name="stylePen">线型</string>
+    <string name="save">保存</string>
     <string name="shapeType">形状</string>
 </resources>
