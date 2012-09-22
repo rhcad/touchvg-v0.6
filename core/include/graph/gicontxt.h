@@ -102,7 +102,7 @@ public:
                 m_autoFillColor = src.m_autoFillColor;
             }
             if (mask & 0x20) {
-                m_fillColor.a = src.m_autoFillColor ? src.m_fillColor.a / 3 : src.m_fillColor.a;
+                m_fillColor.a = src.m_autoFillColor ? src.m_lineColor.a / 3 : src.m_fillColor.a;
                 m_autoFillColor = src.m_autoFillColor;
             }
         }
