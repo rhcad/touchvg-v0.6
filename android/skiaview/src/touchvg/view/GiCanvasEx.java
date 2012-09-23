@@ -43,7 +43,7 @@ public class GiCanvasEx extends GiCanvasBase{
         mPen.setDither(true);
         mPen.setStyle(Paint.Style.STROKE);
         mPen.setStrokeJoin(Paint.Join.ROUND);
-        mPen.setStrokeCap(Paint.Cap.BUTT);
+        mPen.setStrokeCap(Paint.Cap.ROUND);
         mBrush.setStyle(Paint.Style.FILL);
         
         return true;
