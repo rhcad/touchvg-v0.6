@@ -72,13 +72,16 @@ bool GiSkiaView::saveShapes(MgStorageBase* s)
 
 bool GiSkiaView::loadShapes(MgStorageBase* s)
 {
-    bool ret = true;
+    bool ret = false;
     
     if (_view->_shapes && !s) {
+        MgShapesLock locker(_view->_shapes, MgShapesLock::Remove);
         _view->_shapes->clear();
+        ret = true;
     }
-    else {
-        ret = _view->_shapes && s && _view->_shapes->load(s);
+    else if (_view->_shapes) {
+        MgShapesLock locker(_view->_shapes, MgShapesLock::Load);
+        ret = locker.locked() && _view->_shapes->load(s);
     }
     _view->regen();
     

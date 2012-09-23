@@ -103,6 +103,8 @@ BEGIN
     BEGIN
         MENUITEM "选择",                        ID_CMD_SELECT
         MENUITEM "删除",                        ID_CMD_ERASE
+        MENUITEM "撤销\tCtrl+Z",                ID_EDIT_UNDO
+        MENUITEM "重做\tCtrl+Y",                ID_EDIT_REDO
         MENUITEM SEPARATOR
         MENUITEM "线段",                        ID_CMD_LINE
         MENUITEM "矩形",                        ID_CMD_RECT
@@ -171,6 +173,7 @@ BEGIN
     VK_UP,          ID_PAN_UP,              VIRTKEY, NOINVERT
     "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
     "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+    "Y",            ID_EDIT_REDO,           VIRTKEY, CONTROL, NOINVERT
 END
 
 

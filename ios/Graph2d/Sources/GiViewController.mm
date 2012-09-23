@@ -229,7 +229,7 @@
 
 - (void)removeShapes
 {
-    MgShapesLock locker([[self gview] shapes], MgShapesLock::Edit);
+    MgShapesLock locker([[self gview] shapes], MgShapesLock::Remove);
     [[self gview] shapes]->clear();
     [self regen];
     
@@ -242,7 +242,7 @@
 - (BOOL)loadShapes:(void*)mgstorage
 {
     MgShapes* sp = [[self gview] shapes];
-    MgShapesLock locker(sp, MgShapesLock::Edit);
+    MgShapesLock locker(sp, MgShapesLock::Load);
     BOOL ret = (locker.locked() && mgstorage
                 && sp->load((MgStorage*)mgstorage));
     [self regen];

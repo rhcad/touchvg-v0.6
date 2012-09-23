@@ -789,7 +789,7 @@ bool MgCommandSelect::selectAll(MgView* view)
 
 bool MgCommandSelect::deleteSelection(MgView* view)
 {
-    MgShapesLock locker(view->shapes(), MgShapesLock::Edit);
+    MgShapesLock locker(view->shapes(), MgShapesLock::Remove);
     int count = 0;
     
     applyCloneShapes(view, false);

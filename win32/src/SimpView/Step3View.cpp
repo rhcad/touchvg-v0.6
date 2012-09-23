@@ -66,6 +66,7 @@ BEGIN_MESSAGE_MAP(CDrawShapeView, CScrollShapeView)
 	//{{AFX_MSG_MAP(CDrawShapeView)
     ON_UPDATE_COMMAND_UI_RANGE(ID_CMD_SELECT, ID_CMD_SPLINES, OnUpdateCmds)
     ON_COMMAND_RANGE(ID_CMD_SELECT, ID_CMD_SPLINES, OnCmds)
+    ON_COMMAND_RANGE(ID_EDIT_UNDO, ID_EDIT_REDO, OnCmds)
     ON_WM_MOUSEMOVE()
     ON_WM_LBUTTONDOWN()
     ON_WM_LBUTTONUP()
@@ -102,6 +103,11 @@ const char* CDrawShapeView::getCmdName(UINT nID) const
         return "circle";
     if (nID == ID_CMD_GRID)
         return "grid";
+    if (nID == ID_EDIT_UNDO)
+        return "undo";
+    if (nID == ID_EDIT_REDO)
+        return "redo";
+
     return "";
 }
 
@@ -112,8 +118,9 @@ void CDrawShapeView::OnUpdateCmds(CCmdUI* pCmdUI)
 
 void CDrawShapeView::OnCmds(UINT nID)
 {
-    m_cmdID = nID;
-    mgGetCommandManager()->setCommand(&m_proxy->motion, getCmdName(nID));
+    if (mgGetCommandManager()->setCommand(&m_proxy->motion, getCmdName(nID))) {
+        m_cmdID = nID;
+    }
 }
 
 void CDrawShapeView::OnDynDraw(GiGraphics* gs)

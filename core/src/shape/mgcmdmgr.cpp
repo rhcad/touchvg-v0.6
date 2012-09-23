@@ -53,7 +53,8 @@ void MgCmdManagerImpl::unloadCommands()
 
 const char* MgCmdManagerImpl::getCommandName()
 {
-    return _cmdname.c_str();
+    MgCommand* cmd = getCommand();
+    return cmd ? cmd->getName() : "";
 }
 
 MgCommand* MgCmdManagerImpl::getCommand()
@@ -85,7 +86,9 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
     }
     
     bool ret = (it != _cmds.end() && it->second->initialize(sender));
-    _cmdname = ret ? name : "";     // change it at end of initialization
+    if (ret) {
+        _cmdname = name;  // change it at end of initialization
+    }
 
     return ret;
 }
@@ -337,26 +340,3 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
     
     return ret;
 }
-
-
-#include <mgstorage.h>
-
-class MgStorageUndo : public MgStorage
-{
-public:
-    MgStorageUndo() {}
-    virtual ~MgStorageUndo() {}
-    
-    virtual bool readNode(const char* name, int index, bool ended);
-    virtual int readInt(const char* name, int defvalue);
-    virtual bool readBool(const char* name, bool defvalue);
-    virtual float readFloat(const char* name, float defvalue);
-    virtual bool writeNode(const char* name, int index, bool ended);
-    virtual void writeInt(const char* name, int value);
-    virtual void writeBool(const char* name, bool value);
-    virtual void writeFloat(const char* name, float value);
-    virtual int readFloatArray(const char* name, float* values, int count);
-    virtual int readString(const char* name, wchar_t* value, int count);
-    virtual void writeFloatArray(const char* name, const float* values, int count);
-    virtual void writeString(const char* name, const wchar_t* value);
-};

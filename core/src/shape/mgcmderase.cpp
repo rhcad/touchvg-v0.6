@@ -96,7 +96,7 @@ bool MgCommandErase::click(const MgMotion* sender)
 {
     MgShape* shape = hitTest(sender);
     if (shape) {
-        MgShapesLock locker(sender->view->shapes(), MgShapesLock::Edit);
+        MgShapesLock locker(sender->view->shapes(), MgShapesLock::Remove);
         shape = sender->view->shapes()->removeShape(shape->getID());
         shape->release();
         sender->view->regen();
@@ -150,7 +150,7 @@ bool MgCommandErase::touchMoved(const MgMotion* sender)
 bool MgCommandErase::touchEnded(const MgMotion* sender)
 {
     if (!m_delIds.empty()) {
-        MgShapesLock locker(sender->view->shapes(), MgShapesLock::Edit);
+        MgShapesLock locker(sender->view->shapes(), MgShapesLock::Remove);
         
         for (std::vector<UInt32>::iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
             MgShape* shape = sender->view->shapes()->findShape(*it);

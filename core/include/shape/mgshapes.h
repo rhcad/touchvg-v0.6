@@ -98,7 +98,7 @@ class MgShapesLock
     int         m_mode;
 public:
     MgShapes*   shapes;
-    enum { ReadOnly = 0, Add = 0x1, Edit = 0x3, Unknown = 99 };
+    enum { ReadOnly = 0, Add = 0x1, Remove = 0x2, Edit = 0x4, Load = 0x8, Unknown = 99 };
     MgShapesLock(MgShapes* sp, int flags, int timeout = 200);
     ~MgShapesLock();
     

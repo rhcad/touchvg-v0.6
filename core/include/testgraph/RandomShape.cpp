@@ -38,7 +38,7 @@ void RandomParam::setShapeProp(GiContext* context)
 
 void RandomParam::initShapes(MgShapes* shapes)
 {
-    MgShapesLock locker(shapes, MgShapesLock::Edit);
+    MgShapesLock locker(shapes, MgShapesLock::Load);
     
     for (long n = getShapeCount(); n > 0; n--)
     {
