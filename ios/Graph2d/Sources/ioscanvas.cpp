@@ -136,6 +136,7 @@ public:
                 else {
                     CGContextSetLineDash(getContext(), 0, NULL, 0);
                 }
+                CGContextSetLineCap(getContext(), style > 0 ? kCGLineCapButt : kCGLineCapRound);
             }
         }
 

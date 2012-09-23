@@ -42,6 +42,7 @@ public class GiCanvasEx extends GiCanvasBase{
         mPen.setAntiAlias(true);
         mPen.setDither(true);
         mPen.setStyle(Paint.Style.STROKE);
+        mPen.setPathEffect(null);
         mPen.setStrokeJoin(Paint.Join.ROUND);
         mPen.setStrokeCap(Paint.Cap.ROUND);
         mBrush.setStyle(Paint.Style.FILL);
@@ -99,6 +100,7 @@ public class GiCanvasEx extends GiCanvasBase{
         else
             this.mEffects = null;
         mPen.setPathEffect(this.mEffects);
+        mPen.setStrokeCap(this.mEffects != null ? Paint.Cap.BUTT : Paint.Cap.ROUND);
     }
     
     @Override
