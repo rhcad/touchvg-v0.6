@@ -35,6 +35,8 @@ class MgViewProxy;
 @property (nonatomic)   GiColor         fillColor;      //!< 填充颜色，clearColor 表示不填充
 @property (nonatomic)   BOOL            autoFillColor;  //!< 填充颜色随线条颜色自动变化
 
+@property (nonatomic,readonly)   BOOL   dragging;       //!< 返回是否正拖动
+
 //! 给定辅助视图初始化本对象，auxviews是以Nil结束的多个视图
 - (id)initWithViews:(UIView**)auxviews;
 

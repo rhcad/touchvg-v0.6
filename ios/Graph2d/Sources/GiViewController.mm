@@ -452,7 +452,8 @@
         
         [cmd dynDraw: gs];
         
-        if (sender == self.view && _magViews[0]
+        if ((_activeView != self.view || !cmd.dragging)
+            && sender == self.view && _magViews[0]
             && !_magViews[0].hidden && !_magViews[0].superview.hidden) {
             GiMagnifierView *aview = (GiMagnifierView *)_magViews[0];
             Box2d rect(0, 0, aview.bounds.size.width, aview.bounds.size.height);

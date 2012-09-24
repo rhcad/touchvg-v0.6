@@ -262,6 +262,7 @@ static long s_cmdRef = 0;
 @synthesize lineColor;
 @synthesize fillColor;
 @synthesize autoFillColor;
+@synthesize dragging;
 
 - (id)initWithViews:(UIView**)auxviews
 {
@@ -291,6 +292,10 @@ static long s_cmdRef = 0;
 
 - (void)setCommandName:(const char*)name {
     mgGetCommandManager()->setCommand(_motion, name);
+}
+
+- (BOOL)dragging {
+    return _motion->dragging;
 }
 
 - (float)lineWidth {
