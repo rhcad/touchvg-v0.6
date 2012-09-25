@@ -680,8 +680,10 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center,
     bool ret = false;
     Matrix2d matD(S2D(xf(), modelUnit));
 
-    if (ry < _MGZERO)
-        ry = rx;
+    if (ry < _MGZERO) {
+        ry = (Vector2d(rx, rx) * matD).x;
+        ry = (Vector2d(ry, ry) * matD.inverse()).y;
+    }
 
     const Box2d extent (center, rx*2.f, ry*2.f);            // 模型坐标范围
     if (!DRAW_RECT(m_impl, modelUnit).isIntersect(extent))  // 全部在显示区域外

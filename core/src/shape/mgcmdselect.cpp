@@ -49,6 +49,7 @@ bool MgCommandSelect::dynamicChangeEnded(MgView* view, bool apply)
 
 MgCommandSelect::MgCommandSelect()
 {
+    m_handleMode = true;
 }
 
 MgCommandSelect::~MgCommandSelect()
@@ -69,7 +70,7 @@ bool MgCommandSelect::initialize(const MgMotion* sender)
     m_id = 0;
     m_segment = -1;
     m_handleIndex = 0;
-    m_handleMode = false;
+    
     m_showSel = true;
     m_selIds.clear();
     
@@ -129,18 +130,19 @@ float mgLineHalfWidthModel(const MgShape* shape, const MgMotion* sender)
     return mgLineHalfWidthModel(shape, sender->view->graph());
 }
 
-static bool s_useFinger = true;
+static int s_useFinger = -1;
 
 float mgDisplayMmToModel(float mm, GiGraphics* gs)
 {
-    return gs->xf().displayToModel(s_useFinger ? mm : 2 * mm, s_useFinger);
+    return gs->xf().displayToModel(s_useFinger ? mm : mm / 2.f, true);
 }
 
 float mgDisplayMmToModel(float mm, const MgMotion* sender)
 {
-	if (s_useFinger != sender->view->useFinger())
-		s_useFinger = sender->view->useFinger();
-    return sender->view->xform()->displayToModel(s_useFinger ? mm : 2 * mm, s_useFinger);
+    if (s_useFinger < 0) {
+        s_useFinger = sender->view->useFinger() ? 1 : 0;
+    }
+    return sender->view->xform()->displayToModel(s_useFinger ? mm : mm / 2.f, true);
 }
 
 bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
@@ -153,7 +155,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
                     kGiLineSolid, GiColor(172, 172, 172, 128));
     float radius = mgDisplayMmToModel(1.2f, gs);
     float r2x = mgDisplayMmToModel(2, gs);
-    bool rorate = (!m_handleMode && m_boxHandle >= 8 && m_boxHandle < 12);
+    bool rorate = (!isVertexMode(NULL) && m_boxHandle >= 8 && m_boxHandle < 12);
     
     // 从 m_selIds 得到临时图形数组 selection
     for (sel_iterator its = m_selIds.begin(); its != m_selIds.end(); ++its) {
@@ -201,7 +203,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         gs->drawRect(&ctxshap, Box2d(sender->startPointM, sender->pointM));
         gs->setAntiAliasMode(antiAlias);
     }
-    else if (!selection.empty() && !m_handleMode && m_showSel) {
+    else if (!selection.empty() && !isVertexMode(NULL) && m_showSel) {
         Box2d selbox(getDragRect(sender));
         
         if (m_clones.empty() && !selbox.isEmpty()) {
@@ -252,7 +254,7 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     }
     
     // 下面显示控制点. 此时仅选中一个图形、有活动控制点
-    if (shapes.size() == 1 && m_handleMode && m_showSel) {
+    if (shapes.size() == 1 && isVertexMode(NULL) && m_showSel) {
         const MgShape* shape = shapes.front();
         
         for (UInt32 i = 0; i < shape->shapec()->getHandleCount(); i++) {
@@ -392,7 +394,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
     m_insertPt = false;                 // 默认不是插入点，在hitTestHandles中设置
     shape = getSelectedShape(sender);   // 取上次选中的图形
     canSelAgain = (m_selIds.size() == 1 // 多选时不进入热点状态
-                   && m_handleMode
+                   && isVertexMode(NULL)
                    && canSelect(shape, sender));    // 仅检查这个图形能否选中
     
     if (!canSelAgain) {                 // 没有选中或点中其他图形
@@ -454,7 +456,7 @@ bool MgCommandSelect::touchBegan(const MgMotion* sender)
     m_insertPt = false;                          // setted in hitTestHandles
     if (m_clones.size() == 1)
         canSelect(shape, sender);   // calc m_ptNear
-    m_handleIndex = (m_clones.size() == 1 && m_handleMode)
+    m_handleIndex = (m_clones.size() == 1 && isVertexMode(NULL))
     ? hitTestHandles(shape, sender->pointM, sender) : 0;
     
     if (m_insertPt && shape->shape()->isKindOf(MgBaseLines::Type())) {
@@ -524,7 +526,7 @@ bool MgCommandSelect::isDragRectCorner(const MgMotion* sender, Matrix2d& mat)
     m_boxHandle = 99;
     m_ptSnap = sender->pointM;
     
-    if (m_handleMode || m_selIds.empty() || m_boxsel)
+    if (isVertexMode(NULL) || m_selIds.empty() || m_boxsel)
         return false;
     
     Box2d selbox(getDragRect(sender));
@@ -641,7 +643,7 @@ bool MgCommandSelect::touchMoved(const MgMotion* sender)
 bool MgCommandSelect::isCloneDrag(const MgMotion* sender)
 {
     float dist = sender->pointM.distanceTo(sender->startPointM);
-    return (!m_handleMode && m_boxHandle > 16 && sender->pressDrag
+    return (!isVertexMode(NULL) && m_boxHandle > 16 && sender->pressDrag
             && dist > mgDisplayMmToModel(5, sender));
 }
 
@@ -661,14 +663,12 @@ bool MgCommandSelect::touchEnded(const MgMotion* sender)
     m_ptNear = sender->pointM;
     m_boxHandle = 99;
     
-    if (m_handleMode) {
+    if (isVertexMode(NULL)) {
         m_handleIndex = hitTestHandles(getShape(m_selIds[0], sender), sender->pointM, sender);
         sender->view->redraw(true);
     }
     if (m_boxsel) {
         m_boxsel = false;
-        if (m_selIds.size() > 1)
-            m_handleMode = false;
         if (!m_selIds.empty())
             sender->view->selChanged();
     }
@@ -749,7 +749,7 @@ MgSelState MgCommandSelect::getSelectState(MgView* view)
 {
     MgSelState state = kMgSelNone;
     
-    if (m_handleMode) {
+    if (isVertexMode(NULL)) {
         MgShape* shape = view->shapes()->findShape(m_id);
         state = m_handleIndex > 0 && shape && shape->shape()->isKindOf(MgBaseLines::Type()) ?
             kMgSelVertex : kMgSelVertexes;
@@ -768,7 +768,6 @@ bool MgCommandSelect::selectAll(MgView* view)
     
     m_selIds.clear();
     m_handleIndex = 0;
-    m_handleMode = false;
     m_insertPt = false;
     m_boxsel = false;
     
@@ -803,7 +802,6 @@ bool MgCommandSelect::deleteSelection(MgView* view)
     m_selIds.clear();
     m_id = 0;
     m_handleIndex = 0;
-    m_handleMode = false;
     
     if (count > 0) {
         view->regen();
@@ -832,7 +830,6 @@ void MgCommandSelect::resetSelection(MgView* view)
     m_selIds.clear();
     m_id = 0;
     m_handleIndex = 0;
-    m_handleMode = false;
     if (has) {
         view->selChanged();
     }
@@ -881,7 +878,7 @@ bool MgCommandSelect::insertVertext(const MgMotion* sender)
     MgShape* shape = getSelectedShape(sender);
     bool ret = false;
     
-    if (shape && m_handleMode
+    if (shape && isVertexMode(NULL)
         && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
         MgShapesLock locker(sender->view->shapes(), MgShapesLock::Edit);
@@ -972,7 +969,7 @@ bool MgCommandSelect::setLocked(MgView* view, bool locked)
 
 bool MgCommandSelect::isVertexMode(MgView*)
 {
-    return m_handleMode;
+    return m_handleMode && m_selIds.size() == 1;
 }
 
 void MgCommandSelect::setVertexMode(MgView* view, bool vertexMode)
