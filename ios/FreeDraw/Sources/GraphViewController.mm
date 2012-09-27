@@ -479,9 +479,23 @@ void registerTransformCmd();
 	SCCalloutGraphView *calloutView = [[SCCalloutGraphView alloc]initWithFrame:viewrect];
     [self.view addSubview:calloutView];
     [calloutView release];
-    calloutView.backgroundColor = [UIColor darkGrayColor];
+    calloutView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
     
-    [calloutView.graphc createSubGraphView:calloutView frame:calloutView.bounds
+    CGRect imgRect = viewrect;
+    imgRect.origin = CGPointZero;
+    imgRect.size.height = 100;
+    
+    UIImage *image = [_graphc createThumbnail:imgRect.size shapes:NULL];
+    UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
+    imageView.backgroundColor = [UIColor whiteColor];
+    [imageView setFrame:imgRect];
+    [calloutView addSubview:imageView];
+    [imageView release];
+    [image release];
+    
+    imgRect.origin.y = imgRect.size.height;
+    imgRect.size.height = viewrect.size.height - imgRect.size.height;
+    [calloutView.graphc createSubGraphView:calloutView frame:imgRect
                                     shapes:_graphc.shapes backgroundColor:nil];
     calloutView.graphc.commandName = "splines";
 }

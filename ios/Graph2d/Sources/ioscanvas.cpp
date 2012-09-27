@@ -352,10 +352,15 @@ bool GiCanvasIosImpl::createBufferBitmap(float width, float height)
                                      colorSpace, kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(colorSpace);
     
+    CGContextClearRect(_buffctx, CGRectMake(0, 0, width, height));
+    
     // 坐标系改为Y朝下，原点在左上角，这样除了放大倍数为1外，其余就与 _context 坐标系一致
-    if (_buffctx) {
+    if (_buffctx && _context) {
         CGContextTranslateCTM(_buffctx, 0, height);
         CGContextScaleCTM(_buffctx, _scale, - _scale);
+    }
+    else if (_buffctx) {
+        CGContextScaleCTM(_buffctx, _scale, _scale);
     }
     
     return !!_buffctx;

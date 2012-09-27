@@ -51,14 +51,11 @@ struct MgShapes : public MgObject
     //! 模型变换矩阵
     virtual Matrix2d& modelTransform() = 0;
     
-    //! 得到视图显示比例
-    virtual float getViewScale() const = 0;
+    //! 得到页面范围的世界坐标
+    virtual Box2d getZoomRectW() const = 0;
     
-    //! 得到视图中心的世界坐标
-    virtual Point2d getViewCenterW() const = 0;
-    
-    //! 设置视图放缩比例和位置
-    virtual void setZoomState(float scale, const Point2d& centerW) = 0;
+    //! 设置页面范围的世界坐标
+    virtual void setZoomRectW(const Box2d& rectW) = 0;
     
     //! 得到锁定数据对象以便读写锁定
     virtual MgLockRW* getLockData() = 0;

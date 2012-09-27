@@ -96,8 +96,8 @@ void RandomParam::initShapes(MgShapes* shapes)
         {
             MgShapeT<MgRect> shape;
             
-            shape._shape.setRect(Point2d(RandF(-1000, 1000), RandF(-1000, 1000)),
-                                 Point2d(RandF(10, 200), RandF(10, 200)) );
+            Box2d rect(Point2d(RandF(-1000, 1000), RandF(-1000, 1000)), RandF(1, 200), 0);
+            shape._shape.setRect(rect.leftTop(), rect.rightBottom());
             sp = shapes->addShape(shape);
             rectCount--;
             

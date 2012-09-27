@@ -25,7 +25,7 @@ class MgShapesT : public MgShapes
     typedef typename Container::iterator iterator;
 public:
     MgShapesT(bool hasContext = true) : _context(hasContext ? new ContextT() : NULL)
-        , _scale(1), _changeCount(0)
+        , _changeCount(0)
     {
     }
 
@@ -51,7 +51,7 @@ public:
     MgObject* clone() const
     {
         ThisClass *p = new ThisClass(_context != NULL);
-        *p->_context = *_context;
+        p->copy(*this);
         return p;
     }
 
@@ -60,6 +60,9 @@ public:
         if (src.isKindOf(Type())) {
             const ThisClass& _src = (const ThisClass&)src;
             if (&_src != this) {
+                _context = _src._context;
+                _xf = _src._xf;
+                _rectW = _src._rectW;
             }
         }
     }
@@ -243,8 +246,7 @@ public:
                 return false;
             
             s->writeFloatArray("transform", &_xf.m11, 6);
-            s->writeFloat("scale", _scale);
-            s->writeFloatArray("center", &_centerW.x, 2);
+            s->writeFloatArray("zoomExtent", &_rectW.xmin, 4);
             rect = getExtent();
             s->writeFloatArray("extent", &rect.xmin, 4);
             s->writeUInt32("count", 1);
@@ -293,8 +295,7 @@ public:
                 return false;
             
             s->readFloatArray("transform", &_xf.m11, 6);
-            _scale = s->readFloat("scale", _scale);
-            s->readFloatArray("center", &_centerW.x, 2);
+            s->readFloatArray("zoomExtent", &_rectW.xmin, 4);
             s->readFloatArray("extent", &rect.xmin, 4);
             s->readUInt32("count", 0);
         }
@@ -345,20 +346,14 @@ public:
         return _xf;
     }
     
-    float getViewScale() const
+    Box2d getZoomRectW() const
     {
-        return _scale;
+        return _rectW;
     }
     
-    Point2d getViewCenterW() const
+    void setZoomRectW(const Box2d& rectW)
     {
-        return _centerW;
-    }
-    
-    void setZoomState(float scale, const Point2d& centerW)
-    {
-        _scale = scale;
-        _centerW = centerW;
+        _rectW = rectW;
     }
     
     virtual MgLockRW* getLockData()
@@ -388,8 +383,7 @@ protected:
     Container               _shapes;
     ContextT*               _context;
     Matrix2d                _xf;
-    float                   _scale;
-    Point2d                 _centerW;
+    Box2d                   _rectW;
     long                    _changeCount;
     MgLockRW                _lock;
 };

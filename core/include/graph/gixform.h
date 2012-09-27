@@ -139,6 +139,9 @@ public:
         \param mat 模型坐标系到世界坐标系的变换矩阵，必须可逆
     */
     void setModelTransform(const Matrix2d& mat);
+    
+    //! 返回显示窗口的世界坐标范围
+    Box2d getWndRectW() const;
 
     //! 返回最小显示比例
     float getMinViewScale() const;

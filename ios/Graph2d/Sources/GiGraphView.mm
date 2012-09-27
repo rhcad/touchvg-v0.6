@@ -78,8 +78,8 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (void)afterCreated
 {
-	CGFloat scrw = CGRectGetWidth([UIScreen mainScreen].bounds);
-    GiCanvasIos::setScreenDpi(scrw > 700 ? 132 : 163, [UIScreen mainScreen].scale);
+    BOOL iPad = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+    GiCanvasIos::setScreenDpi(iPad ? 132 : 163, [UIScreen mainScreen].scale);
     
     if (!_graph) {
         _graph = new GiGraphIos();
@@ -123,7 +123,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     if (_shapes && !_scaleReaded) {
         _scaleReaded = YES;
         _graph->xf.setModelTransform(_shapes->modelTransform());
-        _graph->xf.zoom(_shapes->getViewCenterW(), _shapes->getViewScale());
+        _graph->xf.zoomTo(_shapes->getZoomRectW());
     }
     
     if (cv.beginPaint(UIGraphicsGetCurrentContext(), // 在当前画布上准备绘图
@@ -326,7 +326,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     fromrc *= _graph->xf.modelToWorld();
     _graph->xf.zoomTo(fromrc, &torc);
     if (save) {
-        _shapes->setZoomState(_graph->xf.getViewScale(), _graph->xf.getCenterW());
+        _shapes->setZoomRectW(_graph->xf.getWndRectW());
         _scaleReaded = YES;
     }
 }

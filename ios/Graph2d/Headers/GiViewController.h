@@ -82,6 +82,9 @@
 - (BOOL)getDynamicShapes:(void*)mgstorage;  //!< 保存临时动态图形到 MgStorage 对象
 - (BOOL)setDynamicShapes:(void*)mgstorage;  //!< 从 MgStorage 对象加载临时动态图形，传空值则清除
 
+//! 创建缩略图，由调用者释放
+- (UIImage *)createThumbnail:(CGSize)size shapes:(void*)mgstorage;
+
 - (id)dynDraw:(id)sender;                   //!< 供图形视图动态显示时调用
 - (void)afterZoomed:(id)sender;             //!< 供图形视图在动态放缩后通知
 - (void)afterShapeChanged;                  //!< 图形列表改变后的通知

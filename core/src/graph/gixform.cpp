@@ -217,6 +217,11 @@ void GiTransform::setResolution(float dpiX, float dpiY)
     }
 }
 
+Box2d GiTransform::getWndRectW() const
+{
+    return Box2d(0, 0, (float)getWidth(), (float)getHeight()) * displayToWorld();
+}
+
 void GiTransform::setViewScaleRange(float minScale, float maxScale)
 {
     if (minScale > maxScale)

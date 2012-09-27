@@ -8,6 +8,7 @@
 #import "GiCmdController.h"
 #import "GiGraphView.h"
 #include <string.h>
+#include <iosgraph.h>
 
 @interface GiViewController(GestureRecognizer)
 
@@ -63,6 +64,9 @@
                 _recognizers[t][i] = Nil;
         }
         _gestureRecognizerUsed = YES;
+        
+        BOOL iPad = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+        GiCanvasIos::setScreenDpi(iPad ? 132 : 163, [UIScreen mainScreen].scale);
     }
     return self;
 }
@@ -221,6 +225,46 @@
 {
     GiGraphView *aview = (GiGraphView *)self.view;
     return [aview cachedBitmap:invert];
+}
+
+- (UIImage *)createThumbnail:(CGSize)size shapes:(void*)mgstorage
+{
+    MgShapes *sp = NULL;
+    GiGraphIos graph;
+    UIImage *image = nil;
+    Box2d rectW;
+    
+    if (mgstorage) {
+        sp = new MgShapesT<std::list<MgShape*> >;
+        if (!sp->load((MgStorage*)mgstorage)) {
+            return nil;
+        }
+        graph.xf.setModelTransform(sp->modelTransform());
+        rectW = sp->getZoomRectW();
+        rectW = rectW.isEmpty() ? sp->getExtent() * sp->modelTransform() : rectW;
+    }
+    else {
+        GiGraphView *aview = (GiGraphView *)self.view;
+        sp = [aview shapes];
+        graph.xf.setModelTransform([aview xform]->modelToWorld());
+        graph.xf.setWndSize(size.width, size.height);
+        rectW = [aview xform]->getWndRectW();
+    }
+    graph.xf.zoomTo(rectW);
+    
+    if (graph.canvas.beginPaintBuffered(false)) {
+        sp->draw(graph.gs);
+        
+        graph.canvas.saveCachedBitmap();
+        graph.canvas.endPaint();
+    }
+    image = [[UIImage alloc]initWithCGImage:graph.canvas.cachedBitmap()];
+    
+    if (mgstorage && sp) {
+        sp->release();
+    }
+    
+    return image;
 }
 
 - (UIView*)magnifierView {
