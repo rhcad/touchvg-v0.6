@@ -126,7 +126,7 @@ bool GiCanvasBase::checkStroke(const GiContext* ctx)
             changed = true;
         }
         if (_gictx.getLineWidth() != ctx->getLineWidth()) {
-            _gictx.setLineWidth(ctx->getLineWidth());
+            _gictx.setLineWidth(ctx->getLineWidth(), ctx->isAutoScale());
             changed = true;
         }
         if (_gictx.getLineStyle() != ctx->getLineStyle()) {
@@ -139,7 +139,9 @@ bool GiCanvasBase::checkStroke(const GiContext* ctx)
     if (!ctx->isNullLine() && changed)
     {
         _ctxstatus |= 1;
-        penChanged(ctx->getLineARGB(), _gs.calcPenWidth(ctx->getLineWidth()), ctx->getLineStyle());
+        penChanged(ctx->getLineARGB(), 
+            _gs.calcPenWidth(ctx->getLineWidth(), ctx->isAutoScale()), 
+            ctx->getLineStyle());
     }
 
     return !ctx->isNullLine();

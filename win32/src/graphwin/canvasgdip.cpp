@@ -60,7 +60,7 @@ struct GdipDrawImplBase
                 || m_context.getLineAlpha() != ctx->getLineAlpha())
             {
                 m_context.setLineStyle(ctx->getLineStyle());
-                m_context.setLineWidth(ctx->getLineWidth());
+                m_context.setLineWidth(ctx->getLineWidth(), ctx->isAutoScale());
                 m_context.setLineColor(ctx->getLineColor());
                 m_context.setLineAlpha(ctx->getLineAlpha());
 
@@ -70,7 +70,7 @@ struct GdipDrawImplBase
                     m_pen = NULL;
                 }
 
-                float width = gs()->calcPenWidth(ctx->getLineWidth());
+                float width = gs()->calcPenWidth(ctx->getLineWidth(), ctx->isAutoScale());
                 GiColor color = gs()->calcPenColor(ctx->getLineColor());
                 m_pen = new G::Pen(G::Color(ctx->getLineAlpha(), 
                     color.r, color.g, color.b), width);

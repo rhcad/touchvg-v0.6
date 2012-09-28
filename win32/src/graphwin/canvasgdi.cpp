@@ -97,7 +97,7 @@ public:
             || m_context.getLineAlpha() != ctx->getLineAlpha())
         {
             m_context.setLineStyle(ctx->getLineStyle());
-            m_context.setLineWidth(ctx->getLineWidth());
+            m_context.setLineWidth(ctx->getLineWidth(), ctx->isAutoScale());
             m_context.setLineColor(ctx->getLineColor());
             m_context.setLineAlpha(ctx->getLineAlpha());
 
@@ -108,7 +108,8 @@ public:
                 m_pen = ::GetStockObject(NULL_PEN);
             else
             {
-                int width = mgRound(m_this->gs()->calcPenWidth(ctx->getLineWidth()));
+                int width = mgRound(m_this->gs()->calcPenWidth(
+                    ctx->getLineWidth(), ctx->isAutoScale()));
                 GiColor color = m_this->gs()->calcPenColor(ctx->getLineColor());
                 COLORREF cr = RGB(color.r, color.g, color.b);
                 int lineStyle = ctx->getLineStyle();

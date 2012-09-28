@@ -34,7 +34,7 @@ void CRandomShapeView::OnDynDraw(GiGraphics* gs)
         GiContext context(-4, GiColor(0, 0, 255, 55));
         m_selection->draw(*gs, &context);
 
-        context.setLineWidth(0);
+        context.setLineWidth(0, false);
         gs->drawEllipse(&context, Box2d(m_ptNear, 1, 1));
         gs->drawLine(&context, m_ptNear, m_ptSnap);
     }
