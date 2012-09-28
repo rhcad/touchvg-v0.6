@@ -308,12 +308,12 @@ static long s_cmdRef = 0;
     
     if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
         for (UInt32 i = 0; i < n; i++) {
-            shapes[i]->context()->setLineWidth(w);
+            shapes[i]->context()->setLineWidth(w, true);
         }
         _motion->view->redraw(false);
     }
     else {
-        _mgview->context()->setLineWidth(w);
+        _mgview->context()->setLineWidth(w, true);
     }
 }
 

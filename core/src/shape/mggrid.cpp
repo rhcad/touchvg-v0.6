@@ -76,7 +76,7 @@ bool MgGrid::_draw(GiGraphics& gs, const GiContext& ctx) const
     int ny = (int)(getHeight() / cell.y + _MGZERO);
     Box2d rect(getPoint(3), getPoint(3) + Vector2d((float)(cell.x * nx), (float)(cell.y * ny)));
     
-    float w = gs.calcPenWidth(ctx.getLineWidth()) / -2.f;
+    float w = gs.calcPenWidth(ctx.getLineWidth(), ctx.isAutoScale()) / -2.f;
     GiContext ctxgrid(w, ctx.getLineColor());
     
     bool antiAlias = gs.setAntiAliasMode(false);
@@ -89,7 +89,7 @@ bool MgGrid::_draw(GiGraphics& gs, const GiContext& ctx) const
     for (int i = 1; i < nx; i++) {
         pts[0].x += cell.x;
         pts[1].x += cell.x;
-        ctxgrid.setLineWidth(!switchx || i%5 > 0 ? w/2 : w);
+        ctxgrid.setLineWidth(!switchx || i%5 > 0 ? w/2 : w, false);
         ctxgrid.setLineAlpha(-w < 0.9f && (!switchx || i%5 > 0) ?
             ctx.getLineAlpha() / 2 : ctx.getLineAlpha());
         ret += gs.drawLine(&ctxgrid, pts[0], pts[1]) ? 1 : 0;
@@ -100,7 +100,7 @@ bool MgGrid::_draw(GiGraphics& gs, const GiContext& ctx) const
     for (int j = 1; j < ny; j++) {
         pts[0].y += cell.y;
         pts[1].y += cell.y;
-        ctxgrid.setLineWidth(!switchy || j%5 > 0 ? w/2 : w);
+        ctxgrid.setLineWidth(!switchy || j%5 > 0 ? w/2 : w, false);
         ctxgrid.setLineAlpha(-w < 0.9f && (!switchy || j%5 > 0) ?
             ctx.getLineAlpha() / 2 : ctx.getLineAlpha());
         ret += gs.drawLine(&ctxgrid, pts[0], pts[1]) ? 1 : 0;

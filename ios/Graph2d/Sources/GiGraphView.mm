@@ -34,6 +34,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 @synthesize zooming = _zooming;
 @synthesize shapeAdded = _shapeAdded;
 @synthesize bufferEnabled;
+@synthesize initialScale = _initialScale;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -102,6 +103,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     _zooming = NO;
     _doubleZoomed = NO;
     _enableZoom = YES;
+    _initialScale = 1.f;
     
     MgShapesLock::registerObserver(onShapesLocked, self);
 }
@@ -124,10 +126,11 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
         _scaleReaded = YES;
         _graph->xf.setModelTransform(_shapes->modelTransform());
         _graph->xf.zoomTo(_shapes->getZoomRectW());
+        _initialScale = _graph->xf.getViewScale();
     }
     
-    if (cv.beginPaint(UIGraphicsGetCurrentContext(), // 在当前画布上准备绘图
-                      !!_zooming, buffered))          // iPad3上不用缓冲更快
+    if (cv.beginPaint(UIGraphicsGetCurrentContext(),    // 在当前画布上准备绘图
+                      !!_zooming, buffered))        // iPad3上不用缓冲更快
     {
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
             if ([self draw:&gs]) {                  // 不行则重新显示所有图形
@@ -327,6 +330,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     _graph->xf.zoomTo(fromrc, &torc);
     if (save) {
         _shapes->setZoomRectW(_graph->xf.getWndRectW());
+        _initialScale = _graph->xf.getViewScale();
         _scaleReaded = YES;
     }
 }

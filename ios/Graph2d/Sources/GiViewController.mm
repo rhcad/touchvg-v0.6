@@ -237,7 +237,7 @@
     if (mgstorage) {
         sp = new MgShapesT<std::list<MgShape*> >;
         if (!sp->load((MgStorage*)mgstorage)) {
-            return nil;
+            return image;
         }
         graph.xf.setModelTransform(sp->modelTransform());
         rectW = sp->getZoomRectW();
@@ -247,12 +247,25 @@
         GiGraphView *aview = (GiGraphView *)self.view;
         sp = [aview shapes];
         graph.xf.setModelTransform([aview xform]->modelToWorld());
-        graph.xf.setWndSize(size.width, size.height);
         rectW = [aview xform]->getWndRectW();
     }
+    
+    if (rectW.isEmpty()) {
+        if (mgstorage && sp) {
+            sp->release();
+        }
+        return image;
+    }
+    
+    if (size.width * rectW.height() > size.height * rectW.width())
+        size.width = rectW.width() / rectW.height() * size.height;
+    else
+        size.height = rectW.height() / rectW.width() * size.width;
+    
+    graph.xf.setWndSize(size.width, size.height);
     graph.xf.zoomTo(rectW);
     
-    if (graph.canvas.beginPaintBuffered(false)) {
+    if (graph.canvas.beginPaintBuffered(false, false)) {
         sp->draw(graph.gs);
         
         graph.canvas.saveCachedBitmap();
@@ -561,18 +574,17 @@
 
 - (float)strokeWidth {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
-    float w = cmd.lineWidth;
-    if (w < 0)                      // 表示单位为像素
-        w = -w;
-    else if (w > 0) {               // 单位为0.01mm
-        w = [[self gview]graph]->calcPenWidth(w);   // 转为当前显示比例下的像素宽
-    }
-    return w;
+    GiGraphView *gview = (GiGraphView *)self.view;
+    GiGraphics* gs = [gview graph];
+    
+    return gs->calcPenWidth(cmd.lineWidth, false) * gview.initialScale;
 }
 
 - (void)setStrokeWidth:(float)w {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
-    [cmd setLineWidth:-w];          // 传入正数像素宽，内部图形系统负数表示像素单位
+    GiGraphView *gview = (GiGraphView *)self.view;
+    
+    [cmd setLineWidth:-w / gview.initialScale];
 }
 
 - (UIColor*)lineColor {

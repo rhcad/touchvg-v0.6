@@ -88,7 +88,7 @@ void registerTransformCmd();
     // 创建占满窗口的总视图
     UIView *mainview = [[UIView alloc]initWithFrame:rect];
     self.view = mainview;
-    self.view.backgroundColor = [UIColor underPageBackgroundColor];
+    self.view.backgroundColor = [UIColor whiteColor];
     [mainview release];
     rect.origin.y = 0;
     
@@ -483,20 +483,28 @@ void registerTransformCmd();
     
     CGRect imgRect = viewrect;
     imgRect.origin = CGPointZero;
-    imgRect.size.height = 100;
+    imgRect.size.height = 120;
+    imgRect = CGRectInset(imgRect, 2, 2);
     
     UIImage *image = [_graphc createThumbnail:imgRect.size shapes:NULL];
-    UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
-    imageView.backgroundColor = [UIColor whiteColor];
-    [imageView setFrame:imgRect];
-    [calloutView addSubview:imageView];
-    [imageView release];
-    [image release];
+    if (image) {
+        imgRect.size = image.size;
+        UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
+        imageView.backgroundColor = [UIColor whiteColor];
+        [imageView setFrame:imgRect];
+        [calloutView addSubview:imageView];
+        [imageView release];
+        [image release];
+    } else {
+        imgRect.size = CGSizeZero;
+    }
     
-    imgRect.origin.y = imgRect.size.height;
-    imgRect.size.height = viewrect.size.height - imgRect.size.height;
-    [calloutView.graphc createSubGraphView:calloutView frame:imgRect
+    viewrect.origin = CGPointMake(0, imgRect.size.height + 2);
+    viewrect.size.height -= viewrect.origin.y;
+    viewrect = CGRectInset(viewrect, 2, 2);
+    UIView* gview = [calloutView.graphc createSubGraphView:calloutView frame:viewrect
                                     shapes:_graphc.shapes backgroundColor:nil];
+    gview.backgroundColor = [UIColor lightGrayColor];
     calloutView.graphc.commandName = "splines";
 }
 

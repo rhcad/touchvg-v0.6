@@ -34,12 +34,14 @@ class GiGraphIos;
     BOOL            _doubleZoomed;          //!< 是否为局部放大状态
     float           _scaleBeforeDbl;        //!< 局部放大前的显示比例
     CGPoint         _centerBeforeDbl;       //!< 局部放大前的视图中心世界坐标
+    float           _initialScale;          //!< 初始显示放缩比例
 }
 
 @property (nonatomic)          BOOL         enableZoom; //!< 是否允许放缩或平移
 @property (nonatomic,readonly) BOOL         zooming;    //!< 是否正在动态放缩或平移
 @property (nonatomic,readonly) MgShape*     shapeAdded; //!< 待添加显示的图形
 @property (nonatomic)          BOOL         bufferEnabled;  //!< 是否允许缓冲绘图
+@property (nonatomic,readonly) float        initialScale;   //!< 初始显示放缩比例
 
 - (CGImageRef)cachedBitmap:(BOOL)invert;    //!< 当前缓存位图，上下翻转时由调用者释放
 - (MgShapes*)getPlayShapes:(BOOL)clear;     //!< 设置临时播放的图形列表

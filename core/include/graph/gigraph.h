@@ -84,10 +84,10 @@ public:
     //! 计算画笔宽度
     /*! 打印时会自动调整以像素为单位的线宽，使得不致太细
         \param lineWidth 线宽。正数单位为0.01毫米，负数单位为像素，0表示1像素
-        \param useViewScale 是否使用显示比例来计算
+        \param useViewScale lineWidth<0时是否使用放缩比例计算线宽
         \return 画笔宽度，非负数，像素
     */
-    float calcPenWidth(float lineWidth, bool useViewScale = true) const;
+    float calcPenWidth(float lineWidth, bool useViewScale) const;
 
     //! 设置最大画笔宽度，像素
     /*! 只需要按屏幕显示来设置，打印时会自动调整

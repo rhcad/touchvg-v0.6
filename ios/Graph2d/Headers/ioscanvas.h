@@ -51,7 +51,7 @@ public:
     bool beginPaint(CGContextRef context, bool fast = false, bool buffered = true);
     
     //! Ready to draw shapes on a buffered bitmap.
-    bool beginPaintBuffered(bool fast);
+    bool beginPaintBuffered(bool fast, bool autoscale);
     
     //! End to draw shapes and output to the view.
     void endPaint(bool draw = true);

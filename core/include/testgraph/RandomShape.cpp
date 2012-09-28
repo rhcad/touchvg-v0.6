@@ -31,7 +31,7 @@ UInt8 RandomParam::RandUInt8(long nMin, long nMax)
 void RandomParam::setShapeProp(GiContext* context)
 {
     context->setLineColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(32, 255)));
-    context->setLineWidth((Int16)RandInt(-10, 100));
+    context->setLineWidth((Int16)RandInt(-10, 100), true);
     context->setLineStyle((randomLineStyle ? (GiLineStyle)RandInt(kGiLineSolid, kGiLineDashDotdot) : kGiLineSolid));
     context->setFillColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(32, 240)));
 }

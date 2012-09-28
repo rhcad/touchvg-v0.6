@@ -118,7 +118,7 @@ float mgLineHalfWidthModel(const MgShape* shape, GiGraphics* gs)
 {
     float w = shape->contextc()->getLineWidth();
     
-    w = w > 0 ? - gs->calcPenWidth(w) : w;
+    w = w > 0 ? - gs->calcPenWidth(w, shape->contextc()->isAutoScale()) : w;
     w = mgMax(1.f, -0.5f * w);
     w = gs->xf().displayToModel(w);
     

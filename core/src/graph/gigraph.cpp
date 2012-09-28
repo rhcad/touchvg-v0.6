@@ -211,23 +211,20 @@ GiColor GiGraphics::calcPenColor(const GiColor& color) const
 float GiGraphics::calcPenWidth(float lineWidth, bool useViewScale) const
 {
     float w = 1;
-    float px;
 
     if (m_impl->maxPenWidth <= 1)
         lineWidth = 0;
 
-    if (lineWidth > 0)      // 单位：0.01mm
-    {
-        px = lineWidth / 2540.f * xf().getDpiY();
+    if (lineWidth > 0) {        // 单位：0.01mm
+        w = lineWidth / 2540.f * xf().getDpiY();
+        w *= xf().getViewScale();
+    }
+    else if (lineWidth < 0) {   // 单位：像素
+        w = -lineWidth;
         if (useViewScale)
-            px *= xf().getViewScale();
-        w = mgMin(px, m_impl->maxPenWidth);
+            w *= xf().getViewScale();
     }
-    else if (lineWidth < 0) // 单位：像素
-    {
-        w = mgMin(-lineWidth, m_impl->maxPenWidth);
-    }
-    
+    w = mgMin(w, m_impl->maxPenWidth);
     w = mgMax(w, m_impl->minPenWidth);
     if (lineWidth <= 0 && xf().getDpiY() > getScreenDpi()) {
         w = w * xf().getDpiY() / getScreenDpi();

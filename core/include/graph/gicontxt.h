@@ -43,7 +43,8 @@ public:
     /*! 绘图参数为1像素宽的黑实线、不填充
     */
     GiContext() : m_type(0), m_lineStyle(kGiLineSolid), m_lineWidth(0)
-        , m_lineColor(GiColor::Black()), m_fillColor(GiColor::Invalid()), m_autoFillColor(false)
+        , m_lineColor(GiColor::Black()), m_fillColor(GiColor::Invalid())
+        , m_autoFillColor(false), m_autoScale(false)
     {
     }
     
@@ -53,11 +54,12 @@ public:
         \param color 线条颜色， GiColor::Invalid() 表示不画线条
         \param style 线型, GiLineStyle, 取值为 kGiLineSolid 等
         \param fillcr 填充颜色， GiColor::Invalid() 表示不填充
+        \param autoScale 像素单位线宽(width<0时)是否自动缩放
     */
-    GiContext(float width, GiColor color = GiColor::Black(), 
-              int style = kGiLineSolid, const GiColor& fillcr = GiColor::Invalid())
+    GiContext(float width, GiColor color = GiColor::Black(), int style = kGiLineSolid,
+              const GiColor& fillcr = GiColor::Invalid(), bool autoScale = false)
         : m_type(0), m_lineStyle(style), m_lineWidth(width)
-        , m_lineColor(color), m_fillColor(fillcr), m_autoFillColor(false)
+        , m_lineColor(color), m_fillColor(fillcr), m_autoFillColor(false), m_autoScale(autoScale)
     {
     }
     
@@ -69,6 +71,7 @@ public:
         m_lineColor = src.m_lineColor;
         m_fillColor = src.m_fillColor;
         m_autoFillColor = src.m_autoFillColor;
+        m_autoScale = src.m_autoScale;
     }
 
     //! 赋值函数, GiContextBits 按位设置
@@ -92,6 +95,7 @@ public:
             }
             if (mask & 0x04) {
                 m_lineWidth = src.m_lineWidth;
+                m_autoScale = src.m_autoScale;
             }
             if (mask & 0x08) {
                 m_lineStyle = src.m_lineStyle;
@@ -114,6 +118,7 @@ public:
     {
         return m_lineStyle == src.m_lineStyle
             && m_lineWidth == src.m_lineWidth
+            && m_autoScale == src.m_autoScale
             && m_lineColor == src.m_lineColor
             && m_fillColor == src.m_fillColor
             && m_autoFillColor == src.m_autoFillColor;
@@ -159,13 +164,21 @@ public:
         return m_lineWidth;
     }
     
+    //! 返回像素单位线宽是否自动缩放
+    bool isAutoScale() const
+    {
+        return m_autoScale || m_lineWidth > 0;
+    }
+    
     //! 设置线宽
     /*!
         \param width 线宽，正数表示单位为0.01mm，零表示1像素宽，负数时表示单位为像素
+        \param autoScale 像素单位线宽(width<0时)是否自动缩放
     */
-    void setLineWidth(float width)
+    void setLineWidth(float width, bool autoScale)
     {
         m_lineWidth = width;
+        m_autoScale = autoScale;
     }
     
     //! 返回是否为空线，即不画线
@@ -318,6 +331,7 @@ private:
     GiColor     m_lineColor;        //!< 线条颜色
     GiColor     m_fillColor;        //!< 填充颜色
     bool        m_autoFillColor;    //!< 填充颜色随线条颜色自动变化
+    bool        m_autoScale;        //!< 像素单位线宽是否自动缩放
 };
 
 #endif // __GEOMETRY_DRAWCONTEXT_H_

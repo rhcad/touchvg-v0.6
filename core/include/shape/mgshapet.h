@@ -164,7 +164,7 @@ public:
         
         _tag = s->readUInt32("tag", _tag);
         _context.setLineStyle((GiLineStyle)s->readUInt8("lineStyle", 0));
-        _context.setLineWidth(s->readFloat("lineWidth", 0));
+        _context.setLineWidth(s->readFloat("lineWidth", 0), true);
         
         c = s->readUInt32("lineColor", 0xFF000000);
         _context.setLineColor(GiColor((UInt8)(c & 0xFF), 
@@ -195,11 +195,11 @@ protected:
             float addw  = ctx->getLineWidth();
             float width = tmpctx.getLineWidth();
             
-            width = -gs.calcPenWidth(width);        // 像素宽度，负数
+            width = -gs.calcPenWidth(width, tmpctx.isAutoScale());  // 像素宽度，负数
             if (addw <= 0)
-                tmpctx.setLineWidth(width + addw);  // 像素宽度加宽
+                tmpctx.setLineWidth(width + addw, false);       // 像素宽度加宽
             else
-                tmpctx.setLineWidth(-addw);         // 换成新的像素宽度
+                tmpctx.setLineWidth(-addw, ctx->isAutoScale()); // 换成新的像素宽度
         }
         
         if (ctx && !ctx->isNullLine())

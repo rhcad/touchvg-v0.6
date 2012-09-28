@@ -100,7 +100,7 @@ public:
                 changed = true;
             }
             if (_gictx.getLineWidth() != ctx->getLineWidth()) {
-                _gictx.setLineWidth(ctx->getLineWidth());
+                _gictx.setLineWidth(ctx->getLineWidth(), ctx->isAutoScale());
                 changed = true;
             }
             if (_gictx.getLineStyle() != ctx->getLineStyle()) {
@@ -122,7 +122,7 @@ public:
                                        toFloat(color.b), toFloat(color.a));
             
             float w = ctx->getLineWidth();
-            w = gs() ? gs()->calcPenWidth(w) : (w < 0 ? -w : 1);
+            w = gs() ? gs()->calcPenWidth(w, ctx->isAutoScale()) : (w < 0 ? -w : 1);
             CGContextSetLineWidth(getContext(), _fast && w > 1 ? w - 1 : w); // 不是反走样就细一点
             
             int style = ctx->getLineStyle();
@@ -170,7 +170,7 @@ public:
         return ctx->hasFillColor();
     }
     
-    bool createBufferBitmap(float width, float height);
+    bool createBufferBitmap(float width, float height, float scale);
 };
 
 float GiCanvasIosImpl::_dpi = 132;
@@ -228,7 +228,7 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
     m_draw->_ctxused[1] = false;
     
     if (buffered && gs()) {
-        m_draw->createBufferBitmap(m_draw->width(), m_draw->height());
+        m_draw->createBufferBitmap(m_draw->width(), m_draw->height(), m_draw->_scale);
         context = m_draw->getContext();
     }
 
@@ -245,10 +245,11 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
     return true;
 }
 
-bool GiCanvasIos::beginPaintBuffered(bool fast)
+bool GiCanvasIos::beginPaintBuffered(bool fast, bool autoscale)
 {
     if (m_draw->getContext() || !gs()
-        || !m_draw->createBufferBitmap(m_draw->width(), m_draw->height())) {
+        || !m_draw->createBufferBitmap(m_draw->width(), m_draw->height(),
+                                       autoscale ? m_draw->_scale : 1.f)) {
         return false;
     }
     
@@ -338,10 +339,10 @@ CGImageRef GiCanvasIos::cachedBitmap(bool invert)
     return newimg;                          // 由调用者释放图像, CGImageRelease
 }
 
-bool GiCanvasIosImpl::createBufferBitmap(float width, float height)
+bool GiCanvasIosImpl::createBufferBitmap(float width, float height, float scale)
 {
-    width  *= _scale;                       // 点数宽度转为像素宽度
-    height *= _scale;
+    width  *= scale;                       // 点数宽度转为像素宽度
+    height *= scale;
     
     if (width < 4 || height < 4 || width > 2049 || height > 2049) {
         return false;
@@ -357,10 +358,10 @@ bool GiCanvasIosImpl::createBufferBitmap(float width, float height)
     // 坐标系改为Y朝下，原点在左上角，这样除了放大倍数为1外，其余就与 _context 坐标系一致
     if (_buffctx && _context) {
         CGContextTranslateCTM(_buffctx, 0, height);
-        CGContextScaleCTM(_buffctx, _scale, - _scale);
+        CGContextScaleCTM(_buffctx, scale, - scale);
     }
     else if (_buffctx) {
-        CGContextScaleCTM(_buffctx, _scale, _scale);
+        CGContextScaleCTM(_buffctx, scale, scale);
     }
     
     return !!_buffctx;
