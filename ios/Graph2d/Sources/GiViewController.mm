@@ -265,13 +265,15 @@
     graph.xf.setWndSize(size.width, size.height);
     graph.xf.zoomTo(rectW);
     
-    if (graph.canvas.beginPaintBuffered(false, false)) {
+    if (graph.canvas.beginPaintBuffered(false, true)) {
         sp->draw(graph.gs);
         
         graph.canvas.saveCachedBitmap();
         graph.canvas.endPaint();
     }
-    image = [[UIImage alloc]initWithCGImage:graph.canvas.cachedBitmap()];
+    image = [[UIImage alloc]initWithCGImage:graph.canvas.cachedBitmap()
+                                      scale:[UIScreen mainScreen].scale
+                                orientation:UIImageOrientationUp];
     
     if (mgstorage && sp) {
         sp->release();
