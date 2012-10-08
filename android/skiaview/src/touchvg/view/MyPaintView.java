@@ -68,7 +68,7 @@ public class MyPaintView extends Object {
 	
 	public float setPenBold() {
 		GiContext ctx = mCoreView.getCurrentContext(true);
-		ctx.setLineWidth(ctx.getLineWidth() < 0 ? ctx.getLineWidth() - 1 : -2);
+		ctx.setLineWidth(ctx.getLineWidth() < 0 ? ctx.getLineWidth() - 1 : -2, true);
         mCoreView.applyContext(ctx, 0x04, 1);	// 0x01: only LineWidth
         
         float w = ctx.getLineWidth();
@@ -78,7 +78,7 @@ public class MyPaintView extends Object {
 	
 	public float setPenThick() {
 		GiContext ctx = mCoreView.getCurrentContext(true);
-		ctx.setLineWidth(ctx.getLineWidth() < 0 ? ctx.getLineWidth() + 1 : -1);
+		ctx.setLineWidth(ctx.getLineWidth() < 0 ? ctx.getLineWidth() + 1 : -1, true);
         mCoreView.applyContext(ctx, 0x04, 1);	// 0x01: only LineWidth
         
         float w = ctx.getLineWidth();
