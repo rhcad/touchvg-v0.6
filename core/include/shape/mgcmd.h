@@ -58,6 +58,8 @@ struct MgView {
         if (shape) regen(); }
     virtual bool shapeWillDeleted(MgShape* shape) {     //!< 通知将删除图形
         return !!shape; }
+    virtual bool removeShape(MgShape* shape) {          //!< 删除图形
+        return !!shape->getParent()->removeShape(shape->getID()); }
     virtual bool shapeCanRotated(MgShape* shape) {      //!< 通知是否能旋转图形
         return !!shape; }
     virtual bool shapeCanTransform(MgShape* shape) {    //!< 通知是否能对图形变形

@@ -435,8 +435,13 @@ bool MgCommandSelect::longPress(const MgMotion* sender)
     if (m_selIds.empty()) {
         ret = click(sender);
     }
-    if (sender->view->longPressSelection(getSelectState(sender->view),
-                                         getSelectedShape(sender))) {
+    
+    bool handleMode = m_handleMode;
+    m_handleMode = false;
+    int selState = getSelectState(sender->view);
+    m_handleMode = handleMode;
+    
+    if (sender->view->longPressSelection(selState, getSelectedShape(sender))) {
         ret = true;
     }
     
@@ -749,7 +754,7 @@ MgSelState MgCommandSelect::getSelectState(MgView* view)
 {
     MgSelState state = kMgSelNone;
     
-    if (isVertexMode(NULL)) {
+    if (isVertexMode(view)) {
         MgShape* shape = view->shapes()->findShape(m_id);
         state = m_handleIndex > 0 && shape && shape->shape()->isKindOf(MgBaseLines::Type()) ?
             kMgSelVertex : kMgSelVertexes;
@@ -788,20 +793,25 @@ bool MgCommandSelect::selectAll(MgView* view)
 
 bool MgCommandSelect::deleteSelection(MgView* view)
 {
-    MgShapesLock locker(view->shapes(), MgShapesLock::Remove);
+    MgShape* shape = m_selIds.empty() ? NULL : view->shapes()->findShape(m_selIds.front());
     int count = 0;
     
-    applyCloneShapes(view, false);
-    for (sel_iterator it = m_selIds.begin(); it != m_selIds.end(); ++it) {
-        MgShape* shape = view->shapes()->removeShape(*it);
-        if (shape) {
-            shape->release();
-            count++;
+    if (shape && view->shapeWillDeleted(shape)) {
+        MgShapesLock locker(view->shapes(), MgShapesLock::Remove);
+        
+        applyCloneShapes(view, false);
+        for (sel_iterator it = m_selIds.begin(); it != m_selIds.end(); ++it) {
+            shape = view->shapes()->findShape(*it);
+            if (shape && view->removeShape(shape)) {
+                shape->release();
+                count++;
+            }
         }
+        
+        m_selIds.clear();
+        m_id = 0;
+        m_handleIndex = 0;
     }
-    m_selIds.clear();
-    m_id = 0;
-    m_handleIndex = 0;
     
     if (count > 0) {
         view->regen();

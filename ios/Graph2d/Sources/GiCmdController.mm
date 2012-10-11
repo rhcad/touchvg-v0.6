@@ -209,7 +209,7 @@ static long s_cmdRef = 0;
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"锁定" action:@selector(menuClickLocked:)];
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
-            if (selState == kMgSelOneShape) {
+            if (selState == kMgSelOneShape && !_motion->pressDrag) {
                 items[n++] = [[UIMenuItem alloc] initWithTitle:@"编辑顶点" action:@selector(menuClickOutVertexMode:)];
             }
             break;
@@ -444,6 +444,7 @@ static long s_cmdRef = 0;
 {
     _motion->pressDrag = false;
     _motion->dragging = false;
+    _motion->pressDrag = false;
     return _mgview->getView() && mgGetCommandManager()->cancel(_motion);
 }
 
@@ -523,6 +524,7 @@ static long s_cmdRef = 0;
         _motion->pressDrag = false;
         _touchCount = 0;
         _motion->dragging = false;
+        _motion->pressDrag = false;
     }
     
     return ret;
@@ -559,11 +561,13 @@ static long s_cmdRef = 0;
             ret = cmd->touchEnded(_motion);
             _touchCount = 0;
             _motion->dragging = false;
+            _motion->pressDrag = false;
         }
         else {
             ret = cmd->cancel(_motion);
             _touchCount = 0;
             _motion->dragging = false;
+            _motion->pressDrag = false;
         }
         ret = YES;
     }
@@ -600,11 +604,13 @@ static long s_cmdRef = 0;
             ret = cmd->touchEnded(_motion);
             _touchCount = 0;
             _motion->dragging = false;
+            _motion->pressDrag = false;
         }
         else {
             ret = cmd->cancel(_motion);
             _touchCount = 0;
             _motion->dragging = false;
+            _motion->pressDrag = false;
         }
         ret = YES;
     }
@@ -649,10 +655,9 @@ static long s_cmdRef = 0;
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     BOOL ret = NO;
     
-    if (cmd && _clickFingers > 0) {
+    if (cmd && _clickFingers > 0 && !_motion->pressDrag) {
         [self setView:view];
         [self convertPoint:point];
-        _motion->pressDrag = false;
         _touchCount = 0;
         
         if (strcmp(cmd->getName(), "select") != 0

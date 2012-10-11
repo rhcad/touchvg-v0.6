@@ -95,11 +95,12 @@ MgShape* MgCommandErase::hitTest(const MgMotion* sender)
 bool MgCommandErase::click(const MgMotion* sender)
 {
     MgShape* shape = hitTest(sender);
-    if (shape) {
+    if (shape && sender->view->shapeWillDeleted(shape)) {
         MgShapesLock locker(sender->view->shapes(), MgShapesLock::Remove);
-        shape = sender->view->shapes()->removeShape(shape->getID());
-        shape->release();
-        sender->view->regen();
+        if (sender->view->removeShape(shape)) {
+            shape->release();
+            sender->view->regen();
+        }
     }
     
     return true;
@@ -149,21 +150,26 @@ bool MgCommandErase::touchMoved(const MgMotion* sender)
 
 bool MgCommandErase::touchEnded(const MgMotion* sender)
 {
-    if (!m_delIds.empty()) {
-        MgShapesLock locker(sender->view->shapes(), MgShapesLock::Remove);
+    MgShapes* s = sender->view->shapes();
+    
+    if (!m_delIds.empty()
+        && sender->view->shapeWillDeleted(s->findShape(m_delIds.front()))) {
+        MgShapesLock locker(s, MgShapesLock::Remove);
+        int count = 0;
         
         for (std::vector<UInt32>::iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
-            MgShape* shape = sender->view->shapes()->findShape(*it);
-            if (shape) {
-                shape = sender->view->shapes()->removeShape(shape->getID());
+            MgShape* shape = s->findShape(*it);
+            if (shape && sender->view->removeShape(shape)) {
                 shape->release();
+                count++;
             }
         }
-        
-        sender->view->regen();
-        m_delIds.clear();
+        if (count > 0) {
+            sender->view->regen();
+        }
     }
     
+    m_delIds.clear();
     m_boxsel = false;
     sender->view->redraw(false);
     

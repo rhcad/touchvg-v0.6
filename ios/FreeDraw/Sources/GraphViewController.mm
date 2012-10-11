@@ -58,6 +58,11 @@ void registerTransformCmd();
 #endif
 }
 
+- (BOOL)shapeWillDeleted
+{
+    return YES; // ask
+}
+
 @end
 
 @implementation GraphViewController
@@ -563,8 +568,10 @@ void registerTransformCmd();
 
 - (IBAction)clearView:(id)sender    // 清屏
 {
-    [_graphc removeShapes];
-    _graphc.commandName = "splines";
+    if ([_graphc getShapeCount] > 0 && [_graphc shapeWillDeleted]) {
+        [_graphc removeShapes];
+        _graphc.commandName = "splines";
+    }
 }
 
 - (IBAction)backToView:(id)sender   // 退出自由绘图

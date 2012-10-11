@@ -286,6 +286,11 @@
     return _magViews[0];
 }
 
+- (NSUInteger)getShapeCount
+{
+    return [[self gview] shapes]->getShapeCount();
+}
+
 - (void)removeShapes
 {
     MgShapesLock locker([[self gview] shapes], MgShapesLock::Remove);
