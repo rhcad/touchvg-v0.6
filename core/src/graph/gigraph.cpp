@@ -446,7 +446,7 @@ bool GiGraphics::drawBeziers(const GiContext* ctx, int count,
         if (ret)
         {
             ret = rawMoveTo(pxs[0].x, pxs[0].y);
-            for (i = 1; i + 2 < getSize(pxpoints) - 1; i += 3) {
+            for (i = 1; i + 2 < getSize(pxpoints); i += 3) {
                 ret = rawBezierTo(pxs[i].x, pxs[i].y,
                     pxs[i+1].x, pxs[i+1].y, pxs[i+2].x, pxs[i+2].y);
             }
@@ -704,7 +704,7 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center,
         if (ret)
         {
             ret = rawMoveTo(pxs[0].x, pxs[0].y);
-            for (int i = 1; i + 2 < 12; i += 3) {
+            for (int i = 1; i + 2 < 13; i += 3) {
                 ret = rawBezierTo(pxs[i].x, pxs[i].y,
                     pxs[i+1].x, pxs[i+1].y, pxs[i+2].x, pxs[i+2].y);
             }
@@ -745,7 +745,7 @@ bool GiGraphics::drawPie(const GiContext* ctx,
     {
         ret = rawMoveTo(cen.x, cen.y);
         ret = rawLineTo(pxs[0].x, pxs[0].y);
-        for (int i = 1; i + 2 < 12; i += 3) {
+        for (int i = 1; i + 2 < count; i += 3) {
             ret = rawBezierTo(pxs[i].x, pxs[i].y,
                 pxs[i+1].x, pxs[i+1].y, pxs[i+2].x, pxs[i+2].y);
         }
@@ -896,7 +896,7 @@ bool GiGraphics::drawClosedSplines(const GiContext* ctx, int count,
     if (ret)
     {
         ret = rawMoveTo(pxs[0].x, pxs[0].y);
-        for (i = 1; i + 2 < getSize(pxpoints) - 1; i += 3) {
+        for (i = 1; i + 2 < getSize(pxpoints); i += 3) {
             ret = rawBezierTo(pxs[i].x, pxs[i].y,
                 pxs[i+1].x, pxs[i+1].y, pxs[i+2].x, pxs[i+2].y);
         }
@@ -1007,7 +1007,7 @@ bool GiGraphics::drawClosedBSplines(const GiContext* ctx,
     {
         pxs = &pxpoints.front();
         ret = rawMoveTo(pxs[0].x, pxs[0].y);
-        for (i = 1; i + 2 < getSize(pxpoints) - 1; i += 3) {
+        for (i = 1; i + 2 < getSize(pxpoints); i += 3) {
             ret = rawBezierTo(pxs[i].x, pxs[i].y,
                 pxs[i+1].x, pxs[i+1].y, pxs[i+2].x, pxs[i+2].y);
         }
