@@ -72,6 +72,10 @@ struct MgSelection {
     
     //! 设置当前是否处于顶点编辑状态
     virtual void setVertexMode(MgView* view, bool vertexMode) = 0;
+    
+    //! 响应双指触摸, state: 1-Began, 2-Moved, 3-Ended
+    virtual bool handleTwoFingers(const MgMotion* sender, int state,
+                                  const Point2d& pt1, const Point2d& pt2) = 0;
 };
 
 #endif // __GEOMETRY_MGSELECTION_H_

@@ -23,7 +23,7 @@
     long    _dynChangeCount[2];         //!< 动态图形改变计数
     UInt32  _recordIndex;               //!< 上一次录屏的图形数
     
-    enum { kPinchGesture = 0, kTwoFingersPan, kPanGesture, 
+    enum { kPinchGesture = 0, kRotateGesture, kTwoFingersPan, kPanGesture, 
         kTapGesture, TwoTapsGesture, kTwoFingersTwoTaps,
         kLongPressGesture, RECOGNIZER_COUNT };
     UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT]; //!< 手势识别器，主视图和放大镜视图的
@@ -72,6 +72,7 @@
 - (UIGestureRecognizer*) getGestureRecognizer:(int)index;   //!< 得到主视图的触摸手势识别器
 
 - (void)removeShapes;                       //!< 清除所有图形
+- (NSUInteger)getShapeCount;                //!< 得到图形个数
 - (BOOL)loadShapes:(void*)mgstorage;        //!< 从 MgStorage 对象加载图形列表
 - (BOOL)saveShapes:(void*)mgstorage;        //!< 保存图形列表到 MgStorage 对象
 

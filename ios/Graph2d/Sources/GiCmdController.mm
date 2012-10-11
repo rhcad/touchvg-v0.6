@@ -8,13 +8,14 @@
 #include <ioscanvas.h>
 #include <mgbasicsp.h>
 
-@interface GiCommandController(Internal)
+@interface GiCommandController()
 
 - (BOOL)setView:(UIView*)view;
 - (void)convertPoint:(CGPoint)pt;
 - (BOOL)getPointForPressDrag:(UIGestureRecognizer *)sender :(CGPoint*)point;
 - (GiContext*)currentContext;
 - (bool)longPressSelection:(int)selState shape:(MgShape*)shape;
+- (BOOL)handleSelectionTwoFingers:(UIGestureRecognizer *)sender;
 
 @end
 
@@ -144,7 +145,7 @@ private:
 static long s_cmdRef = 0;
 
 
-@implementation GiCommandController(Internal)
+@implementation GiCommandController
 
 - (BOOL)setView:(UIView*)view
 {
@@ -250,10 +251,6 @@ static long s_cmdRef = 0;
     
     return false;
 }
-
-@end
-
-@implementation GiCommandController
 
 @synthesize commandName;
 @synthesize currentShapeFixedLength;
@@ -445,6 +442,7 @@ static long s_cmdRef = 0;
     _motion->pressDrag = false;
     _motion->dragging = false;
     _motion->pressDrag = false;
+    _twoFingersHandled = NO;
     return _mgview->getView() && mgGetCommandManager()->cancel(_motion);
 }
 
@@ -474,6 +472,7 @@ static long s_cmdRef = 0;
             _moved = NO;
             _clickFingers = 0;
             _undoFired = NO;
+            _twoFingersHandled = NO;
         }
     }
 }
@@ -579,10 +578,10 @@ static long s_cmdRef = 0;
 {
     MgDynShapeLock locker;
     MgCommand* cmd = mgGetCommandManager()->getCommand();
-    BOOL ret = NO;
+    BOOL ret = [self handleSelectionTwoFingers:sender];
     CGPoint point;
     
-    if (_motion->pressDrag && cmd && locker.locked()) {
+    if (!ret && _motion->pressDrag && cmd && locker.locked()) {
         if (sender.state == UIGestureRecognizerStateBegan) {
             if (_touchCount > [sender numberOfTouches]) {
                 _touchCount = [sender numberOfTouches];
@@ -616,6 +615,43 @@ static long s_cmdRef = 0;
     }
     
     return ret;
+}
+
+- (BOOL)handleSelectionTwoFingers:(UIGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan || _twoFingersHandled) {
+        CGPoint pt1, pt2;
+        
+        if ([sender numberOfTouches] == 2) {
+            pt1 = [sender locationOfTouch:0 inView:sender.view];
+            pt2 = [sender locationOfTouch:1 inView:sender.view];
+        }
+        else if (sender.state == UIGestureRecognizerStateChanged) {
+            return _twoFingersHandled;
+        }
+        
+        MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
+        Point2d pnt1 = Point2d(pt1.x, pt1.y) * _mgview->xform()->displayToModel();
+        Point2d pnt2 = Point2d(pt2.x, pt2.y) * _mgview->xform()->displayToModel();
+        
+        if (sel && sel->handleTwoFingers(_motion, sender.state, pnt1, pnt2)) {
+            _twoFingersHandled = (sender.state < UIGestureRecognizerStateEnded);
+        }
+    }
+    
+    return _twoFingersHandled;
+}
+
+- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender
+{
+    MgDynShapeLock locker;
+    return [self handleSelectionTwoFingers:sender];
+}
+
+- (BOOL)twoFingersRotate:(UIRotationGestureRecognizer *)sender
+{
+    MgDynShapeLock locker;
+    return [self handleSelectionTwoFingers:sender];
 }
 
 - (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender

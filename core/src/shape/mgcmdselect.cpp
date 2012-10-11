@@ -987,3 +987,50 @@ void MgCommandSelect::setVertexMode(MgView* view, bool vertexMode)
     m_handleMode = vertexMode;
     view->redraw(true);
 }
+
+bool MgCommandSelect::handleTwoFingers(const MgMotion* sender, int state,
+                                       const Point2d& pt1, const Point2d& pt2)
+{
+    static Point2d _startPts[2];
+    
+    if (state <= 1) {
+        if (m_selIds.empty())
+            return false;
+        
+        _startPts[0] = pt1;
+        _startPts[1] = pt2;
+        cloneShapes(sender->view);
+        
+        return m_clones.size() == m_selIds.size() && pt1 != pt2;
+    }
+    else if (state == 2 && pt1 != pt2) {
+        for (size_t i = 0; i < m_clones.size(); i++) {
+            MgBaseShape* shape = m_clones[i]->shape();
+            MgShape* basesp = getShape(m_selIds[i], sender);
+            
+            if (!basesp || shape->getFlag(kMgShapeLocked))
+                continue;
+            shape->copy(*basesp->shape());
+            
+            float dist0 = _startPts[0].distanceTo(_startPts[1]);
+            float a0 = (_startPts[1] - _startPts[0]).angle2();
+            Matrix2d mat (Matrix2d::translation(pt1 - _startPts[0]));
+            
+            if (!shape->getFlag(kMgFixedLength)) {
+                mat *= Matrix2d::scaling(pt1.distanceTo(pt2) / dist0, pt1);
+            }
+            if (!shape->getFlag(kMgRotateDisnable)) {
+                mat *= Matrix2d::rotation((pt2 - pt1).angle2() - a0, pt1);
+            }
+            
+            shape->transform(mat);
+            shape->update();
+        }
+        sender->view->redraw(false);
+    }
+    else {
+        applyCloneShapes(sender->view, state == 3);
+    }
+    
+    return true;
+}

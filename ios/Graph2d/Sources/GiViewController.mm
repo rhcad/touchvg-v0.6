@@ -22,6 +22,7 @@
 - (BOOL)gestureCheck:(UIGestureRecognizer*)sender;
 
 - (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
+- (void)twoFingersRotate:(UIRotationGestureRecognizer *)sender;
 - (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
 - (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
 - (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender;
@@ -174,8 +175,6 @@
     }
     
     [self viewDidLoad];
-    _recognizers[0][kPinchGesture].enabled = NO;
-    _recognizers[0][kTwoFingersPan].enabled = NO;
     _recognizers[0][kTwoFingersTwoTaps].enabled = NO;
     
     [aview release];
@@ -861,6 +860,12 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     twoFingersPinch.delegate = self;                                // 用于检测长按
     _recognizers[t][n++] = twoFingersPinch;
     
+    // 双指旋转手势
+    UIRotationGestureRecognizer *twoFingersRotate =
+    [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersRotate:)];
+    twoFingersRotate.delegate = self;                               // 用于检测长按
+    _recognizers[t][n++] = twoFingersRotate;
+    
     // 双指滑动手势
     UIPanGestureRecognizer *twoFingersPan =
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
@@ -1035,6 +1040,18 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     else if (![[self getCommand:@selector(twoFingersPinch:)] twoFingersPinch:sender]
         && sender.view == self.view) {
         [[self motionView:@selector(twoFingersPinch:)] twoFingersPinch:sender];
+    }
+    [self updateMagnifierCenter:sender];
+}
+
+- (void)twoFingersRotate:(UIRotationGestureRecognizer *)sender
+{
+    if (![self gestureCheck:sender])
+        return;
+    
+    if (![[self getCommand:@selector(twoFingersRotate:)] twoFingersRotate:sender]
+             && sender.view == self.view) {
+        [[self motionView:@selector(twoFingersRotate:)] twoFingersRotate:sender];
     }
     [self updateMagnifierCenter:sender];
 }

@@ -21,6 +21,7 @@ class MgViewProxy;
     int         _clickFingers;      //!< 是否已触发单指点击或双击事件
     BOOL        _undoFired;         //!< 是否已触发Undo操作
     int         _touchCount;        //!< 开始触摸时的手指数
+    BOOL        _twoFingersHandled; //!< 选择状态下双指触摸模式
 }
 
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称

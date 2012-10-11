@@ -41,6 +41,8 @@ public:
     virtual bool setLocked(MgView* view, bool locked);
     virtual bool isVertexMode(MgView* view);
     virtual void setVertexMode(MgView* view, bool vertexMode);
+    virtual bool handleTwoFingers(const MgMotion* sender, int state,
+                                  const Point2d& pt1, const Point2d& pt2);
     
 private:
     virtual const char* getName() const { return Name(); }

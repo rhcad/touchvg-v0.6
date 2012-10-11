@@ -42,6 +42,7 @@ struct GiColor;
 - (BOOL)cancel;                         //!< 取消命令
 - (BOOL)undoMotion;                     //!< 晃动或撤销操作
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender; //!< 双指放缩手势
+- (BOOL)twoFingersRotate:(UIRotationGestureRecognizer *)sender; //!< 双指旋转手势
 - (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender;     //!< 双指滑动手势
 - (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender;      //!< 单指滑动手势
 - (BOOL)twoFingersTwoTaps:(UITapGestureRecognizer *)sender; //!< 双指双击手势
