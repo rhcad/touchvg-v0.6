@@ -85,6 +85,11 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
         }
     }
     
+    if (it == _cmds.end()) {
+        if (strcmp(name, "erasewnd") == 0)
+            eraseWnd(sender);
+    }
+    
     bool ret = (it != _cmds.end() && it->second->initialize(sender));
     if (ret) {
         _cmdname = name;  // change it at end of initialization
@@ -340,3 +345,32 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
     
     return ret;
 }
+
+void MgCmdManagerImpl::eraseWnd(const MgMotion* sender)
+{
+    Box2d snap(sender->view->xform()->getWndRectW() * sender->view->xform()->worldToModel());
+    std::vector<UInt32> delIds;
+    void *it = NULL;
+    MgShapes* s = sender->view->shapes();
+    
+    for (MgShape* shape = s->getFirstShape(it); shape; shape = s->getNextShape(it)) {
+        if (shape->shape()->hitTestBox(snap)) {
+            delIds.push_back(shape->getID());
+        }
+    }
+    s->freeIterator(it);
+    
+    if (!delIds.empty()
+        && sender->view->shapeWillDeleted(s->findShape(delIds.front()))) {
+        MgShapesLock locker(s, MgShapesLock::Remove);
+        
+        for (std::vector<UInt32>::iterator i = delIds.begin(); i != delIds.end(); ++i) {
+            MgShape* shape = s->findShape(*i);
+            if (shape && sender->view->removeShape(shape)) {
+                shape->release();
+            }
+        }
+        sender->view->regen();
+    }
+}
+

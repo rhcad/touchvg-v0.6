@@ -2,7 +2,9 @@ package touchvg.view;
 
 import java.io.File;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.view.View;
 import touchvg.skiaview.GiContext;
 import touchvg.skiaview.GiSkiaView;
 
@@ -11,13 +13,19 @@ public class MyPaintView extends Object {
 	private GiSkiaView mCoreView = null;
 	private String mShapeCommand = "splines";
 	
-	public MyPaintView(Object view) {
+	public MyPaintView(View view) {
 		this.mView = (PaintView)view;
 		this.mCoreView = this.mView.getCoreView();
 		setYellowPen();
     }
 	
-	public PaintView getView() {
+	public MyPaintView(Context context) {
+		this.mView = new PaintView(context);
+		this.mCoreView = this.mView.getCoreView();
+		setYellowPen();
+    }
+	
+	public View getView() {
 		return mView;
 	}
 	
@@ -61,6 +69,10 @@ public class MyPaintView extends Object {
 		setColorPen(Color.YELLOW);
 	}
 	
+	public void setGestureEnable(boolean enable) {
+	    mView.setGestureEnable(enable);
+	}
+	
 	public void clearShapes() {
 		mCoreView.loadShapes(null);
 		setCommandName(mShapeCommand);
@@ -76,6 +88,25 @@ public class MyPaintView extends Object {
         return w;
 	}
 	
+    public void penAlphaChanged(int alpha)
+    {
+    	GiContext ctx = mCoreView.getCurrentContext(true);
+    	ctx.setLineAlpha((char)alpha);
+    	mCoreView.applyContext(ctx, 0x02, 1);
+    	ctx.delete();
+    }
+	
+	public float penWidthChanged(int width)
+	{
+		GiContext ctx = mCoreView.getCurrentContext(true);
+		ctx.setLineWidth(ctx.getLineWidth() < 0 ? -width : -1, true);
+        mCoreView.applyContext(ctx, 0x04, 1);	// 0x01: only LineWidth
+        
+        float w = ctx.getLineWidth();
+        ctx.delete();
+        return w;
+	}
+	
 	public float setPenThick() {
 		GiContext ctx = mCoreView.getCurrentContext(true);
 		ctx.setLineWidth(ctx.getLineWidth() < 0 ? ctx.getLineWidth() + 1 : -1, true);
@@ -84,6 +115,12 @@ public class MyPaintView extends Object {
         float w = ctx.getLineWidth();
         ctx.delete();
         return w;
+	}
+	
+	public void penStyleChanged(int style) {
+		GiContext ctx = mCoreView.getCurrentContext(true);
+        ctx.setLineStyle(style);
+        mCoreView.applyContext(ctx, 8, 1);
 	}
 	
 	public int switchPenStyle() {
@@ -124,6 +161,20 @@ public class MyPaintView extends Object {
 	public boolean readFromFile(String filename) {
 		//boolean ret = s.readFile(filename);
 		//ret = mCoreView.loadShapes(ret ? s : null) && ret;
+		return false;;
+	}
+	
+	public boolean loadFromString(String content)
+	{
+		//s.setContent(content);
+		//return mCoreView.loadShapes(s);
+		return false;
+	}
+	
+	public String getSaveContent()
+	{
+		//mCoreView.saveShapes(s);
+		//return s.getContent();
 		return false;
 	}
 	
@@ -132,8 +183,13 @@ public class MyPaintView extends Object {
 		if (getShapeCount() == 0) {
 			ret = new File(filename).delete();
 		} else {
+			//ret = mCoreView.saveShapes(s) && s.writeFile(filename);
 		}
 		return ret;
+	}
+	
+	public byte[] getCanvasBitmap() {
+		return mView.getCanvasBitmap();
 	}
 	
 	public void setBitmapIDs(int vgdot1, int vgdot2) {

@@ -5,6 +5,8 @@
 {
 }
 
++ (id)currentView;
+
 @end
 
 @class GiViewController;
@@ -15,6 +17,7 @@
 }
 
 @property (nonatomic,readonly)  GiViewController *graphc;
+@property (nonatomic,assign)    id  regenobj;
 
 - (id)initWithFrame:(CGRect)frame graphc:(GiViewController*)g;
 

@@ -2,12 +2,30 @@
 #import <GiViewController.h>
 
 extern void giIgnoreTouchesBegan(UIView* sender, CGPoint point);
+static SCCalloutView* s_view = nil;
 
 @implementation SCCalloutView
 
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        if (s_view == nil)
+            s_view = self;
+    }
+    return self;
+}
+
 - (void)dealloc
 {
+    if (s_view == self)
+        s_view = nil;
     [super dealloc];
+}
+
++ (id)currentView
+{
+    return s_view;
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
@@ -34,6 +52,7 @@ extern void giIgnoreTouchesBegan(UIView* sender, CGPoint point);
 
 @implementation SCCalloutGraphView
 @synthesize graphc = _graphc;
+@synthesize regenobj;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -57,6 +76,11 @@ extern void giIgnoreTouchesBegan(UIView* sender, CGPoint point);
 - (void)dealloc
 {
     [_graphc dynamicChangeEnded:YES];
+    
+    if ([regenobj respondsToSelector:@selector(regen)]) {
+        [regenobj performSelector:@selector(regen)];
+    }
+    
     [_graphc release];
     [super dealloc];
 }

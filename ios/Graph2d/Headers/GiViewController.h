@@ -121,6 +121,9 @@
  */
 - (UIView*)createMagnifierView:(UIView*)parentView frame:(CGRect)frame scale:(CGFloat)scale;
 
+//! 让图形视图显示到指定的模型坐标区域，可用于写字视图
+- (void)zoomTo:(CGRect)modelRect;
+
 //! 点击导致来源视图消失时忽略本次触摸动作，直到触摸结束
 + (void)ignoreTouchesBegan:(CGPoint)point view:(UIView*)sender;
 

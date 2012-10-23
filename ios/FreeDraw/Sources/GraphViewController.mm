@@ -63,6 +63,17 @@ void registerTransformCmd();
     return YES; // ask
 }
 
+- (void)undoMotion
+{
+    if ([[SCCalloutView currentView] isKindOfClass:[SCCalloutGraphView class]]) {
+        SCCalloutGraphView* cv = (SCCalloutGraphView*)[SCCalloutView currentView];
+        cv.graphc.commandName = "erasewnd";
+    }
+    else {
+        [super undoMotion];
+    }
+}
+
 @end
 
 @implementation GraphViewController
@@ -82,6 +93,11 @@ void registerTransformCmd();
 - (void)clearCachedData
 {
     [_graphc clearCachedData];
+}
+
+- (void)regen
+{
+    [_graphc regen];
 }
 
 - (void)loadView
@@ -308,6 +324,27 @@ void registerTransformCmd();
     [_graphc undoMotion];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self becomeFirstResponder];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [self resignFirstResponder];
+    [super viewDidDisappear:animated];
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+    if (motion == UIEventSubtypeMotionShake) {
+        [self fireUndo:self];
+    }
+}
+
 - (IBAction)showPenView:(id)sender
 {
 	UIButton* btnsrc = (UIButton*)sender;
@@ -412,23 +449,23 @@ void registerTransformCmd();
     [calloutView release];
     calloutView.backgroundColor = [UIColor darkGrayColor];
     
-    struct { NSString* caption; NSString* name; } cmds[] = {
-        { @"直线段",  @"line" }, 
-        { @"定长线段",  @"fixedline" },        
-        { @"矩形",    @"rect" },
-        { @"正方形",  @"square" },
-        { @"椭圆",    @"ellipse" },
-        { @"圆",      @"circle" },
-        { @"三角形",  @"triangle" },
-        { @"棱形",    @"diamond" },
-        { @"多边形",  @"polygon" },
-        { @"四边形",  @"quadrangle" },
-        { @"折线",    @"lines" },
-        { @"曲线",    @"splines" },
-        { @"平行四边形", @"parallelogram" },
-        { @"网格",    @"grid" },
-        { @"撤销",    @"undo" },
-        { @"重做",    @"redo" },
+    struct { NSString* caption; NSString* name; SEL action; } cmds[] = {
+        { @"直线段",  @"line", nil }, 
+        { @"定长线段",  @"fixedline", nil },        
+        { @"矩形",    @"rect", nil },
+        { @"正方形",  @"square", nil },
+        { @"椭圆",    @"ellipse", nil },
+        { @"圆",      @"circle", nil },
+        { @"三角形",  @"triangle", nil },
+        { @"棱形",    @"diamond", nil },
+        { @"多边形",  @"polygon", nil },
+        { @"四边形",  @"quadrangle", nil },
+        { @"折线",    @"lines", nil },
+        { @"曲线",    @"splines", nil },
+        { @"平行四边形", @"parallelogram", nil },
+        { @"网格",    @"grid", nil },
+        { @"撤销",    @"undo", nil },
+        { @"重做",    @"redo", nil },
     };
     const int count = sizeof(cmds) / sizeof(cmds[0]);
     
@@ -437,7 +474,10 @@ void registerTransformCmd();
         UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(x, y, w, h)];
         [btn setTitle:cmds[i].caption forState: UIControlStateNormal];
         [btn setTitle:cmds[i].name forState: UIControlStateHighlighted];
-        [btn addTarget:self action:@selector(commandSelected:) forControlEvents:UIControlEventTouchUpInside];
+        [btn addTarget:self
+                action:cmds[i].action ? cmds[i].action : @selector(commandSelected:)
+      forControlEvents:UIControlEventTouchUpInside];
+        
         [calloutView addSubview:btn];
         [btn release];
         
@@ -456,7 +496,7 @@ void registerTransformCmd();
     [btn.superview removeFromSuperview];
 }
 
-- (IBAction)lineWidthChange:(id)sender // 线条宽度调整
+- (IBAction)lineWidthChange:(id)sender  // 线条宽度调整
 {
     UISlider *slider = (UISlider *)sender;
 #ifdef USE_STROKEWIDTH
@@ -485,6 +525,7 @@ void registerTransformCmd();
     [self.view addSubview:calloutView];
     [calloutView release];
     calloutView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+    calloutView.regenobj = self;
     
     CGRect imgRect = viewrect;
     imgRect.origin = CGPointZero;
@@ -568,10 +609,14 @@ void registerTransformCmd();
 
 - (IBAction)clearView:(id)sender    // 清屏
 {
+#if 0
     if ([_graphc getShapeCount] > 0 && [_graphc shapeWillDeleted]) {
         [_graphc removeShapes];
         _graphc.commandName = "splines";
     }
+#else
+    _graphc.commandName = "erasewnd";
+#endif
 }
 
 - (IBAction)backToView:(id)sender   // 退出自由绘图

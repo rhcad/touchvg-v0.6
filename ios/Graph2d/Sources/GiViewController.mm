@@ -82,9 +82,11 @@
         
         GiCommandController* cmd = (GiCommandController*)_cmdctl;
         [cmd touchesBegan:CGPointZero view:_activeView count:0];    // 传入View
-        cmd.lineWidth = 20;                                 // 默认画笔0.2mm
-        cmd.lineColor = GiColor(0, 0, 0, 128);              // 默认黑色画笔，50%透明
-        cmd.autoFillColor = YES;
+        if (cmd.lineWidth == 0) {
+            cmd.lineWidth = 20;                                 // 默认画笔0.2mm
+            cmd.lineColor = GiColor(0, 0, 0, 128);              // 默认黑色画笔，50%透明
+            cmd.autoFillColor = YES;
+        }
     }
 }
 
@@ -204,6 +206,19 @@
     
     [aview release];
     return aview;
+}
+
+- (void)zoomTo:(CGRect)modelRect
+{
+    GiGraphView* gview = (GiGraphView*)self.view;
+    Box2d rect(modelRect.origin.x, modelRect.origin.y,
+               modelRect.origin.x + modelRect.size.width,
+               modelRect.origin.y + modelRect.size.height);
+    
+    [gview xform]->zoomTo(rect * [gview xform]->modelToWorld());
+    if ([gview xform]->getViewScale() > 1.5f) {
+        [gview graph]->setMaxPenWidth(10);
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -750,9 +765,9 @@
     [super viewDidDisappear:animated];
 }
 
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
+//- (BOOL)canBecomeFirstResponder {
+//    return YES;
+//}
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {

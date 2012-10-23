@@ -36,6 +36,8 @@ private:
     virtual Point2d snapPoint(const MgMotion* sender, MgShape* hotShape, int hotHandle);
     virtual int getSnappedType();
     virtual void clearSnap();
+    
+    void eraseWnd(const MgMotion* sender);
 
 private:
     typedef std::map<std::string, MgCommand*> CMDS;

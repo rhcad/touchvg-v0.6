@@ -28,6 +28,7 @@
 }
 
 - (void)clearCachedData;                // 清除缓冲数据
+- (void)regen;                          // 标记视图待重新构建显示
 
 - (IBAction)showPenView:(id)sender;     // 显示画笔粗细，透明度选择，直线，虚线视图
 - (IBAction)colorBtnPress:(id)sender;   // 调节画笔的属性；红蓝黄，直线虚线，方法
