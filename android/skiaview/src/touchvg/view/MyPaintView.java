@@ -161,7 +161,7 @@ public class MyPaintView extends Object {
 	public boolean readFromFile(String filename) {
 		//boolean ret = s.readFile(filename);
 		//ret = mCoreView.loadShapes(ret ? s : null) && ret;
-		return false;;
+		return false;
 	}
 	
 	public boolean loadFromString(String content)
@@ -175,7 +175,7 @@ public class MyPaintView extends Object {
 	{
 		//mCoreView.saveShapes(s);
 		//return s.getContent();
-		return false;
+		return "";
 	}
 	
 	public boolean saveAsFile(String filename) {
