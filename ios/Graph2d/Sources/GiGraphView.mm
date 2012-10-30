@@ -365,6 +365,9 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (BOOL)dynZoom:(UIGestureRecognizer *)sender point:(CGPoint)point scale:(float)scale
 {
+    if (sender.state < UIGestureRecognizerStateBegan)
+        return YES;
+    
     if (sender.state == UIGestureRecognizerStateBegan) {
         [self saveZoomScale:point];
         _zooming = YES;
@@ -395,6 +398,9 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (BOOL)dynPanning:(UIPanGestureRecognizer *)sender
 {
+    if (sender.state < UIGestureRecognizerStateBegan)
+        return YES;
+    
     if (sender.state == UIGestureRecognizerStateBegan) {        // 开始时没有放缩
         _lastDistPan = 0;                                       // 待记录双指距离
         _lastScalePan = 1;
@@ -431,6 +437,9 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (BOOL)switchZoomed:(UIGestureRecognizer *)sender
 {
+    if (sender.state < UIGestureRecognizerStateBegan)
+        return YES;
+    
     CGPoint point = [sender locationInView:self];
     Point2d at (_firstPoint.x, _firstPoint.y );
     

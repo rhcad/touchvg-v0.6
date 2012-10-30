@@ -221,15 +221,15 @@ static std::map<UInt32, MgShape* (*)()>   s_shapeCreators;
 
 static void registerCoreCreators()
 {
-    s_shapeCreators[MgShapeT<MgLine>::Type() % 10000] = MgShapeT<MgLine>::create;
-    s_shapeCreators[MgShapeT<MgRect>::Type() % 10000] = MgShapeT<MgRect>::create;
-    s_shapeCreators[MgShapeT<MgEllipse>::Type() % 10000] = MgShapeT<MgEllipse>::create;
-    s_shapeCreators[MgShapeT<MgRoundRect>::Type() % 10000] = MgShapeT<MgRoundRect>::create;
-    s_shapeCreators[MgShapeT<MgDiamond>::Type() % 10000] = MgShapeT<MgDiamond>::create;
-    s_shapeCreators[MgShapeT<MgParallelogram>::Type() % 10000] = MgShapeT<MgParallelogram>::create;
-    s_shapeCreators[MgShapeT<MgLines>::Type() % 10000] = MgShapeT<MgLines>::create;
-    s_shapeCreators[MgShapeT<MgSplines>::Type() % 10000] = MgShapeT<MgSplines>::create;
-    s_shapeCreators[MgShapeT<MgGrid>::Type() % 10000] = MgShapeT<MgGrid>::create;
+    s_shapeCreators[MgShapeT<MgLine>::Type() & 0xFFFF] = MgShapeT<MgLine>::create;
+    s_shapeCreators[MgShapeT<MgRect>::Type() & 0xFFFF] = MgShapeT<MgRect>::create;
+    s_shapeCreators[MgShapeT<MgEllipse>::Type() & 0xFFFF] = MgShapeT<MgEllipse>::create;
+    s_shapeCreators[MgShapeT<MgRoundRect>::Type() & 0xFFFF] = MgShapeT<MgRoundRect>::create;
+    s_shapeCreators[MgShapeT<MgDiamond>::Type() & 0xFFFF] = MgShapeT<MgDiamond>::create;
+    s_shapeCreators[MgShapeT<MgParallelogram>::Type() & 0xFFFF] = MgShapeT<MgParallelogram>::create;
+    s_shapeCreators[MgShapeT<MgLines>::Type() & 0xFFFF] = MgShapeT<MgLines>::create;
+    s_shapeCreators[MgShapeT<MgSplines>::Type() & 0xFFFF] = MgShapeT<MgSplines>::create;
+    s_shapeCreators[MgShapeT<MgGrid>::Type() & 0xFFFF] = MgShapeT<MgGrid>::create;
 }
 
 void mgRegisterShapeCreator(UInt32 type, MgShape* (*factory)())
@@ -237,7 +237,7 @@ void mgRegisterShapeCreator(UInt32 type, MgShape* (*factory)())
     if (s_shapeCreators.empty()) {
         registerCoreCreators();
     }
-    type = type % 10000;
+    type = type & 0xFFFF;
     if (type > 20) {
         if (factory) {
             s_shapeCreators[type] = factory;
@@ -253,6 +253,6 @@ MgShape* mgCreateShape(UInt32 type)
     if (s_shapeCreators.empty())
         registerCoreCreators();
     
-    std::map<UInt32, MgShape* (*)()>::const_iterator it = s_shapeCreators.find(type % 10000);
+    std::map<UInt32, MgShape* (*)()>::const_iterator it = s_shapeCreators.find(type & 0xFFFF);
     return (it != s_shapeCreators.end()) ? (it->second)() : NULL;
 }

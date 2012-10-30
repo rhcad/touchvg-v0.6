@@ -28,6 +28,11 @@ public:
     {
     }
     
+    MgShapeT(const ContextT& ctx) : _id(0), _parent(NULL), _tag(0)
+    {
+        _context = ctx;
+    }
+    
     virtual ~MgShapeT()
     {
     }
@@ -63,7 +68,7 @@ public:
         return new ThisClass;
     }
     
-    static UInt32 Type() { return 10000 + ShapeT::Type(); }
+    static UInt32 Type() { return 0x10000 | ShapeT::Type(); }
     UInt32 getType() const { return Type(); }
     
     bool isKindOf(UInt32 type) const

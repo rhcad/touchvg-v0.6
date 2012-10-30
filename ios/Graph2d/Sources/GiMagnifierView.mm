@@ -188,7 +188,8 @@
     GiGraphics &gs = _graph->gs;
     bool nextDraw = false;
 
-    if (cv.beginPaint(UIGraphicsGetCurrentContext(), [self isZooming])) // 在当前画布上准备绘图
+    if (!self.hidden && !self.superview.hidden &&
+        cv.beginPaint(UIGraphicsGetCurrentContext(), [self isZooming])) // 在当前画布上准备绘图
     {
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
             MgShapesLock locker([_gview shapes], MgShapesLock::ReadOnly, 0);    // 锁定读取
@@ -292,7 +293,7 @@
 
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
-    if (sender.view == self) {
+    if (sender.view == self && sender.state >= UIGestureRecognizerStateBegan) {
         if (sender.state == UIGestureRecognizerStateBegan) {
             _lastPt = [sender locationInView:sender.view];
         }
@@ -330,7 +331,7 @@
 
 - (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
-    if (sender.view == self) {
+    if (sender.view == self && sender.state >= UIGestureRecognizerStateBegan) {
         _zooming = (sender.state == UIGestureRecognizerStateChanged);
         if (sender.state > UIGestureRecognizerStateBegan) {
             CGPoint t = [sender translationInView:sender.view];
@@ -344,28 +345,31 @@
 
 - (BOOL)automoveSuperview:(CGPoint)point fromView:(UIView*)view
 {
-    CGPoint ptzoom = [self.superview convertPoint:point fromView:view];
-    CGRect myframe = [self convertRect:self.bounds toView:view];
-    BOOL intersected = CGRectContainsRect(view.bounds, CGRectInset(myframe, 10, 10));
+    CGPoint ptzoom = [self.superview convertPoint:point fromView:view]; // 在容器视图的坐标
+    CGPoint cen = [self.superview.superview convertPoint:self.superview.center toView:view];
+    BOOL intersected = CGRectContainsPoint(view.bounds, cen);   // 放大镜容器中心位于绘图视图内
     BOOL moved = NO;
     
-    // 放大镜视图在实际绘图视图内 且 进入放大镜视图
-    if (intersected
+    if (intersected     // 放大镜视图在实际绘图视图内 且 进入放大镜视图
         && CGRectContainsPoint(CGRectInset(self.superview.bounds, -30, -30), ptzoom))
     {
-        CGPoint cen;        // 本视图的上级视图的中心点，为view的视图坐标系
+        CGRect limits = self.superview.superview.bounds;    // 放大镜容器视图的上级
+        CGRect superframe = self.superview.frame;
+        cen = self.superview.center;                        // 放大镜容器视图的中心点
         
-        if (point.x < view.bounds.size.width / 2) {             // 移到view的右侧
-            cen.x = view.bounds.size.width - self.superview.frame.size.width / 2;
+        if (cen.x < limits.size.width / 2) {                // 移到右侧
+            cen.x = limits.size.width - superframe.size.width / 2 - superframe.origin.x;
         }
         else {
-            cen.x = self.superview.frame.size.width / 2;   // 移到view的左侧
+            cen.x = (limits.size.width - superframe.origin.x - superframe.size.width
+                     + superframe.size.width / 2);          // 移到左侧，取右边距为左边距
         }
-        if (point.y < view.bounds.size.height / 2) {            // 移到view的下侧
-            cen.y = view.bounds.size.height - self.superview.frame.size.height / 2;
+        if (cen.y < limits.size.height / 2) {               // 移到下侧
+            cen.y = limits.size.height - superframe.size.height / 2 - superframe.origin.y;
         }
         else {
-            cen.y = self.superview.frame.size.height / 2;  // 移到view的上侧
+            cen.y = (limits.size.height - superframe.origin.y - superframe.size.height
+                     + superframe.size.height / 2);         // 移到上侧
         }
         
         moved = YES;
@@ -374,8 +378,7 @@
         [UIView setAnimationCurve:UIViewAnimationCurveLinear];
         [UIView setAnimationDuration:0.2];
         
-        self.superview.center = [self.superview.superview convertPoint:cen fromView:view];
-        
+        self.superview.center = cen;
         [UIView commitAnimations];
     }
     

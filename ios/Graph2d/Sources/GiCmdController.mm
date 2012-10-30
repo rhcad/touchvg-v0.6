@@ -538,6 +538,9 @@ static long s_cmdRef = 0;
     
     if (cmd && locker.locked())
     {
+        if (sender.state == UIGestureRecognizerStatePossible) {
+            return _motion->pressDrag || [sender numberOfTouches] == 1;
+        }
         if (sender.state == UIGestureRecognizerStateBegan) {
             if (_touchCount > [sender numberOfTouches]) {
                 _touchCount = [sender numberOfTouches];
@@ -562,7 +565,7 @@ static long s_cmdRef = 0;
             _motion->dragging = false;
             _motion->pressDrag = false;
         }
-        else {
+        else if (sender.state > UIGestureRecognizerStateEnded) {
             ret = cmd->cancel(_motion);
             _touchCount = 0;
             _motion->dragging = false;
@@ -605,7 +608,7 @@ static long s_cmdRef = 0;
             _motion->dragging = false;
             _motion->pressDrag = false;
         }
-        else {
+        else if (sender.state > UIGestureRecognizerStateEnded) {
             ret = cmd->cancel(_motion);
             _touchCount = 0;
             _motion->dragging = false;
@@ -619,7 +622,7 @@ static long s_cmdRef = 0;
 
 - (BOOL)handleSelectionTwoFingers:(UIGestureRecognizer *)sender
 {
-    if (sender.state == UIGestureRecognizerStateBegan || _twoFingersHandled) {
+    if (sender.state <= UIGestureRecognizerStateBegan || _twoFingersHandled) {
         CGPoint pt1, pt2;
         
         if ([sender numberOfTouches] == 2) {
@@ -666,15 +669,20 @@ static long s_cmdRef = 0;
     BOOL ret = NO;
     
     if (cmd) {
-        [self setView:sender.view];
-        [self convertPoint:[sender locationInView:sender.view]];
-        _motion->startPoint = _motion->point;
-        _motion->startPointM = _motion->pointM;
-        _motion->lastPoint = _motion->point;
-        _motion->lastPointM = _motion->pointM;
-        _motion->pressDrag = true;      // 设置长按标记
-        
-        ret = cmd->longPress(_motion);
+        if (sender.state < UIGestureRecognizerStateBegan) {
+            ret = YES;
+        }
+        else {
+            [self setView:sender.view];
+            [self convertPoint:[sender locationInView:sender.view]];
+            _motion->startPoint = _motion->point;
+            _motion->startPointM = _motion->pointM;
+            _motion->lastPoint = _motion->point;
+            _motion->lastPointM = _motion->pointM;
+            _motion->pressDrag = true;      // 设置长按标记
+            
+            ret = cmd->longPress(_motion);
+        }
     }
     
     return ret;

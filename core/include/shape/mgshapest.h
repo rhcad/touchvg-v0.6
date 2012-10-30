@@ -35,7 +35,7 @@ public:
         delete _context;
     }
 
-    static UInt32 Type() { return 8; }
+    static UInt32 Type() { return 0x10000 | MgShapes::Type(); }
     UInt32 getType() const { return Type(); }
 
     bool isKindOf(UInt32 type) const
@@ -60,7 +60,7 @@ public:
         if (src.isKindOf(Type())) {
             const ThisClass& _src = (const ThisClass&)src;
             if (&_src != this) {
-                _context = _src._context;
+                *_context = *_src._context;
                 _xf = _src._xf;
                 _rectW = _src._rectW;
             }
@@ -264,7 +264,7 @@ public:
                     continue;
                 ret = s->writeNode("shape", index - startIndex, false);
                 if (ret) {
-                    s->writeUInt32("type", (*it)->getType() % 10000);
+                    s->writeUInt32("type", (*it)->getType() & 0xFFFF);
                     s->writeUInt32("id", (*it)->getID());
                     
                     rect = (*it)->shape()->getExtent();

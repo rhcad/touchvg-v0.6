@@ -151,9 +151,9 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
     const std::vector<MgShape*>& shapes = m_clones.empty() ? selection : m_clones;
     std::vector<MgShape*>::const_iterator it;
     Point2d pnt;
-    GiContext ctxhd(-2, GiColor(128, 128, 64, 200), 
-                    kGiLineSolid, GiColor(172, 172, 172, 128));
-    float radius = mgDisplayMmToModel(1.2f, gs);
+    GiContext ctxhd(0, GiColor(128, 128, 64, 172), 
+                    kGiLineSolid, GiColor(172, 172, 172, 64));
+    float radius = mgDisplayMmToModel(0.8f, gs);
     float r2x = mgDisplayMmToModel(2, gs);
     bool rorate = (!isVertexMode(NULL) && m_boxHandle >= 8 && m_boxHandle < 12);
     
@@ -259,11 +259,11 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         
         for (UInt32 i = 0; i < shape->shapec()->getHandleCount(); i++) {
             pnt = shape->shapec()->getHandlePoint(i);
-            if (!sender->view->drawHandle(gs, pnt, false))
+            if (sender->dragging || !sender->view->drawHandle(gs, pnt, false))
                 gs->drawEllipse(&ctxhd, pnt, radius);
         }
         
-        if (m_handleIndex > 0                   // 不是(还未拖动但可插新点)，显示当前控制点
+        if (m_handleIndex > 0 && !sender->dragging  // 不是(还未拖动但可插新点)，显示当前控制点
             && (!m_clones.empty() || !m_insertPt)) {
             pnt = shape->shapec()->getHandlePoint(m_handleIndex - 1);
             if (!sender->view->drawHandle(gs, pnt, true))
@@ -993,7 +993,10 @@ bool MgCommandSelect::handleTwoFingers(const MgMotion* sender, int state,
 {
     static Point2d _startPts[2];
     
-    if (state <= 1) {
+    if (state == 0) {
+        return !m_selIds.empty() && pt1 != pt2;
+    }
+    else if (state <= 1) {
         if (m_selIds.empty())
             return false;
         

@@ -21,10 +21,10 @@
 - (void)setGestureRecognizerEnabled:(BOOL)enabled;
 - (BOOL)gestureCheck:(UIGestureRecognizer*)sender;
 
-- (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
-- (void)twoFingersRotate:(UIRotationGestureRecognizer *)sender;
-- (void)twoFingersPan:(UIPanGestureRecognizer *)sender;
-- (void)oneFingerPan:(UIPanGestureRecognizer *)sender;
+- (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
+- (BOOL)twoFingersRotate:(UIRotationGestureRecognizer *)sender;
+- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender;
+- (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender;
 - (void)twoFingersTwoTaps:(UITapGestureRecognizer *)sender;
 - (void)oneFingerTwoTaps:(UITapGestureRecognizer *)sender;
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender;
@@ -144,7 +144,7 @@
     [self viewDidLoad];
     
     [aview release];
-    return self.view;
+    return aview;
 }
 
 - (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame
@@ -180,7 +180,7 @@
     _recognizers[0][kTwoFingersTwoTaps].enabled = NO;
     
     [aview release];
-    return self.view;
+    return aview;
 }
 
 - (UIView*)createMagnifierView:(UIView*)parentView
@@ -260,8 +260,12 @@
     else {
         GiGraphView *aview = (GiGraphView *)self.view;
         sp = [aview shapes];
-        graph.xf.setModelTransform([aview xform]->modelToWorld());
-        rectW = [aview xform]->getWndRectW();
+        graph.xf.setModelTransform(sp->modelTransform());
+        rectW = sp->getZoomRectW();
+        if (rectW.isEmpty()) {
+            graph.xf.setModelTransform([aview xform]->modelToWorld());
+            rectW = [aview xform]->getWndRectW();
+        }
     }
     
     if (rectW.isEmpty()) {
@@ -276,18 +280,21 @@
     else
         size.height = rectW.height() / rectW.width() * size.width;
     
-    graph.xf.setWndSize(size.width, size.height);
+    graph.xf.setWndSize(mgRound(size.width), mgRound(size.height));
     graph.xf.zoomTo(rectW);
     
-    if (graph.canvas.beginPaintBuffered(false, true)) {
+    if (graph.canvas.beginPaintBuffered(false, false)) {
         sp->draw(graph.gs);
         
         graph.canvas.saveCachedBitmap();
         graph.canvas.endPaint();
     }
-    image = [[UIImage alloc]initWithCGImage:graph.canvas.cachedBitmap()
-                                      scale:[UIScreen mainScreen].scale
+    
+    CGImageRef cgimage = graph.canvas.cachedBitmap(true);
+    image = [[UIImage alloc]initWithCGImage:cgimage
+                                      scale:1 //[UIScreen mainScreen].scale
                                 orientation:UIImageOrientationUp];
+    CGImageRelease(cgimage);
     
     if (mgstorage && sp) {
         sp->release();
@@ -808,6 +815,23 @@
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
     BOOL allow = YES;
+    
+    if (gestureRecognizer == _recognizers[0][kPinchGesture]) {
+        allow = [self twoFingersPinch:(UIPinchGestureRecognizer *)gestureRecognizer];
+    }
+    else if (gestureRecognizer == _recognizers[0][kRotateGesture]) {
+        allow = [self twoFingersRotate:(UIRotationGestureRecognizer *)gestureRecognizer];
+    }
+    else if (gestureRecognizer == _recognizers[0][kTwoFingersPan]) {
+        allow = [self twoFingersPan:(UIPanGestureRecognizer *)gestureRecognizer];
+    }
+    else if (gestureRecognizer == _recognizers[0][kPanGesture]) {
+        allow = [self oneFingerPan:(UIPanGestureRecognizer *)gestureRecognizer];
+    }
+    if (!allow) {
+        return allow;
+    }
+    
     NSTimeInterval seconds = [[NSProcessInfo processInfo]systemUptime] - _timeBegan;
     
     // 长按手势: 当前命令响应长按操作时手势才生效
@@ -886,6 +910,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingersPan:)];
     twoFingersPan.maximumNumberOfTouches = 2;
     twoFingersPan.minimumNumberOfTouches = 2;
+    twoFingersPan.delegate = self;
     //[twoFingersPinch requireGestureRecognizerToFail:twoFingersPan]; // 捏合优先
     _recognizers[t][n++] = twoFingersPan;
     
@@ -1036,78 +1061,88 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
         MgDynShapeLock();                                       // 等待录屏复制完成
     }
     if (sender.state == UIGestureRecognizerStateBegan
-        || sender.state != UIGestureRecognizerStateChanged) {
+        || sender.state > UIGestureRecognizerStateChanged) {
         [self gestureStateChanged:sender];
     }
     
     return YES;
 }
 
-- (void)twoFingersPinch:(UIPinchGestureRecognizer *)sender
+- (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender
 {
     if (![self gestureCheck:sender])
-        return;
+        return NO;
     
     if (sender.view == _magViews[0]) {
         GiMagnifierView *zview = (GiMagnifierView *)_magViews[0];
-        [zview twoFingersPinch:sender];
+        return [zview twoFingersPinch:sender];
     }
-    else if (![[self getCommand:@selector(twoFingersPinch:)] twoFingersPinch:sender]
-        && sender.view == self.view) {
-        [[self motionView:@selector(twoFingersPinch:)] twoFingersPinch:sender];
+    
+    BOOL ret = [[self getCommand:@selector(twoFingersPinch:)] twoFingersPinch:sender];
+    if (!ret && sender.view == self.view) {
+        ret = [[self motionView:@selector(twoFingersPinch:)] twoFingersPinch:sender];
     }
     [self updateMagnifierCenter:sender];
+    
+    return ret;
 }
 
-- (void)twoFingersRotate:(UIRotationGestureRecognizer *)sender
+- (BOOL)twoFingersRotate:(UIRotationGestureRecognizer *)sender
 {
     if (![self gestureCheck:sender])
-        return;
+        return NO;
     
-    if (![[self getCommand:@selector(twoFingersRotate:)] twoFingersRotate:sender]
-             && sender.view == self.view) {
-        [[self motionView:@selector(twoFingersRotate:)] twoFingersRotate:sender];
+    BOOL ret = [[self getCommand:@selector(twoFingersRotate:)] twoFingersRotate:sender];
+    if (!ret && sender.view == self.view) {
+        ret = [[self motionView:@selector(twoFingersRotate:)] twoFingersRotate:sender];
     }
     [self updateMagnifierCenter:sender];
+    
+    return ret;
 }
 
-- (void)twoFingersPan:(UIPanGestureRecognizer *)sender
+- (BOOL)twoFingersPan:(UIPanGestureRecognizer *)sender
 {
     if (![self gestureCheck:sender])
-        return;
+        return NO;
     
-    if (sender.state == UIGestureRecognizerStateBegan) {
+    BOOL ret = NO;
+    if (sender.state <= UIGestureRecognizerStateBegan) {
         _touchCount = [sender numberOfTouches];
     }
     if (1 == _touchCount) {
+        ret = YES;
         [self oneFingerPan:sender];
     }
     else if (sender.view == _magViews[0]) {
         GiMagnifierView *zview = (GiMagnifierView *)_magViews[0];
-        [zview twoFingersPan:sender];
+        ret = [zview twoFingersPan:sender];
     }
     else if (sender.view == _magViews[1]) {
         GiMagnifierView *zview = (GiMagnifierView *)_magViews[1];
-        [zview twoFingersPan:sender];
+        ret = [zview twoFingersPan:sender];
     }
     else if (_touchCount > 1) {
-        if (![[self getCommand:@selector(twoFingersPan:)] twoFingersPan:sender]) {
-            [[self motionView:@selector(twoFingersPan:)] twoFingersPan:sender];
-        }
+        ret = ([[self getCommand:@selector(twoFingersPan:)] twoFingersPan:sender]
+               || [[self motionView:@selector(twoFingersPan:)] twoFingersPan:sender]);
         [self updateMagnifierCenter:sender];
     }
+    
+    return ret;
 }
 
-- (void)oneFingerPan:(UIPanGestureRecognizer *)sender
+- (BOOL)oneFingerPan:(UIPanGestureRecognizer *)sender
 {
     if (![self gestureCheck:sender])
-        return;
+        return NO;
     
-    if (![[self getCommand:@selector(oneFingerPan:)] oneFingerPan:sender]
-        && sender.view == self.view) {
-        [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
+    BOOL ret = [[self getCommand:@selector(oneFingerPan:)] oneFingerPan:sender];
+    if (!ret && sender.view == self.view) {
+        ret = [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
     }
     [self updateMagnifierCenter:sender];
+    
+    return ret;
 }
 
 - (void)oneFingerOneTap:(UITapGestureRecognizer *)sender
@@ -1154,14 +1189,16 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 - (void)updateMagnifierCenter:(UIGestureRecognizer *)sender
 {
     UIView* senderView = sender ? sender.view : _activeView;
-    if (!_magViews[0] || senderView != self.view)
+    if (!_magViews[0] || senderView != self.view
+        || sender.state < UIGestureRecognizerStateBegan) {
         return;
+    }
     
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     GiMagnifierView *zview = (GiMagnifierView *)_magViews[0];
     
     if (sender && [sender numberOfTouches] > 0) {
-        [zview automoveSuperview:[sender locationInView:senderView] fromView:self.view];
+        [zview automoveSuperview:[sender locationInView:senderView] fromView:sender.view];
     }
     
     if (!sender) {
