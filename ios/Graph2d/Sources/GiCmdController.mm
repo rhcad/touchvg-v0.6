@@ -236,6 +236,10 @@ static long s_cmdRef = 0;
             items[n++] = [[UIMenuItem alloc] initWithTitle:@"隐藏顶点" action:@selector(menuClickOutVertexMode:)];
             break;
             
+        case kMgSelDrawNew:
+            items[n++] = [[UIMenuItem alloc] initWithTitle:@"Test" action:@selector(menuClickDraw:)];
+            break;
+            
         default:
             return false;
             break;
@@ -245,8 +249,8 @@ static long s_cmdRef = 0;
     [menuController setTargetRect:CGRectMake(_motion->point.x - 25, _motion->point.y - 50, 50, 50) inView:view];
     [menuController setMenuVisible:YES animated:YES];
     
-    for (NSUInteger i = 0; i < [menuController.menuItems count]; i++) {
-        [[menuController.menuItems objectAtIndex:i] release];
+    for (int i = 0; i < n; i++) {
+        [items[i] release];
     }
     
     return false;
@@ -675,11 +679,18 @@ static long s_cmdRef = 0;
         else {
             [self setView:sender.view];
             [self convertPoint:[sender locationInView:sender.view]];
-            _motion->startPoint = _motion->point;
-            _motion->startPointM = _motion->pointM;
-            _motion->lastPoint = _motion->point;
-            _motion->lastPointM = _motion->pointM;
+            
             _motion->pressDrag = true;      // 设置长按标记
+            if (sender.state == UIGestureRecognizerStateBegan) {
+                _motion->startPoint = _motion->point;
+                _motion->startPointM = _motion->pointM;
+                _motion->lastPoint = _motion->point;
+                _motion->lastPointM = _motion->pointM;
+            }
+            else if (sender.state >= UIGestureRecognizerStateEnded
+                     && _motion->startPoint.distanceTo(_motion->point) < 10) {
+                return YES;
+            }
             
             ret = cmd->longPress(_motion);
         }
@@ -708,15 +719,19 @@ static long s_cmdRef = 0;
             && strcmp(cmd->getName(), "erase") != 0
             && _mgview->isMagnifierVisible()
             && view == [_mgview->getMainView() ownerView]) {
+            
             [_mgview->getView() redraw:true];
+            ret = YES;
+            if (strcmp(cmd->getName(), "splines") != 0 && 1 == _clickFingers) {
+                cmd->click(_motion);
+            }
         }
         else if (1 == _clickFingers) {
-            cmd->click(_motion);
+            ret = cmd->click(_motion);
         }
         else if (2 == _clickFingers) {
-            cmd->doubleClick(_motion);
+            ret = cmd->doubleClick(_motion);
         }
-        ret = YES;
     }
     _clickFingers = 0;
     _motion->dragging = false;

@@ -943,7 +943,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     
     // 单指长按手势
     UILongPressGestureRecognizer *longPressGesture =
-    [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture)];
+    [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGesture:)];
     longPressGesture.minimumPressDuration = 0.8;
     longPressGesture.delegate = self;                               // 用于检测长按
     _recognizers[t][n++] = longPressGesture;
@@ -1181,9 +1181,9 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     [self updateMagnifierCenter:sender];
 }
 
-- (void)longPressGesture
+- (void)longPressGesture:(UIGestureRecognizer *)sender
 {
-    // gestureRecognizerShouldBegin 已经处理了
+    [[self getCommand:@selector(longPressGesture:)] longPressGesture:sender];
 }
 
 - (void)updateMagnifierCenter:(UIGestureRecognizer *)sender

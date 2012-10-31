@@ -418,9 +418,10 @@ bool MgCommandSelect::click(const MgMotion* sender)
     
     if (!sender->pressDrag && !changed) {
         sender->view->longPressSelection(getSelectState(sender->view), shape);
+        return true;
     }
     
-    return true;
+    return m_id != 0;
 }
 
 bool MgCommandSelect::doubleClick(const MgMotion* /*sender*/)
