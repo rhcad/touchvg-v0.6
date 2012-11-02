@@ -7,6 +7,7 @@
 #include <functional>
 #include <mgshapet.h>
 #include <mgbasicsp.h>
+#include <mgaction.h>
 
 float mgDisplayMmToModel(float mm, const MgMotion* sender);
 
@@ -111,9 +112,17 @@ bool MgCommandErase::doubleClick(const MgMotion* /*sender*/)
     return false;
 }
 
-bool MgCommandErase::longPress(const MgMotion* /*sender*/)
+bool MgCommandErase::longPress(const MgMotion* sender)
 {
-    return false;
+    int actions[] = { 0 };
+    return sender->view->showContextActions(0, actions, Box2d(sender->pointM, 0, 0));
+}
+
+bool MgBaseCommand::longPress(const MgMotion* sender)
+{
+    int actions[] = { kMgActionCancel, 0 };
+    return sender->view->showContextActions(0, isFloatingCommand() ? actions : actions + 1,
+                                            Box2d(sender->pointM, 0, 0));
 }
 
 bool MgCommandErase::touchBegan(const MgMotion* sender)

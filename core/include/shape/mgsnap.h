@@ -10,6 +10,16 @@
 
 struct MgMotion;
 
+//! 特征点类型
+typedef enum {
+    kSnapNone,
+    kSnapSameX,
+    kSnapSameY,
+    kSnapGridX,
+    kSnapGridY,
+    kSnapPoint,
+} MgSnapType;
+
 //! 图形特征点捕捉器接口
 /*! \ingroup GEOM_SHAPE
     \interface MgSnap
@@ -22,7 +32,7 @@ struct MgSnap {
     //! 根据当前点捕捉新的坐标
     virtual Point2d snapPoint(const MgMotion* sender, MgShape* hotShape, int hotHandle) = 0;
     
-    //! 返回捕捉到的特征点类型
+    //! 返回捕捉到的特征点类型, >=kSnapPoint
     virtual int getSnappedType() = 0;
     
     //! 清除捕捉结果

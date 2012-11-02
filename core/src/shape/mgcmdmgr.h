@@ -8,13 +8,17 @@
 
 #include <mgcmd.h>
 #include <mgsnap.h>
+#include <mgaction.h>
 #include <map>
 #include <string>
 
 //! 命令管理器实现类
 /*! \ingroup GEOM_SHAPE
 */
-class MgCmdManagerImpl : public MgCommandManager, public MgSnap
+class MgCmdManagerImpl
+    : public MgCommandManager
+    , public MgSnap
+    , public MgActionDispatcher
 {
 public:
     MgCmdManagerImpl(bool tmpobj = false);
@@ -29,6 +33,8 @@ private:
     virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false);
     virtual bool dynamicChangeEnded(MgView* view, bool apply);
     virtual MgSelection* getSelection(MgView* view);
+    virtual MgActionDispatcher* getActionDispatcher();
+    virtual void doContextAction(const MgMotion* sender, int action);
     virtual MgSnap* getSnap();
     
 private:
@@ -37,12 +43,18 @@ private:
     virtual int getSnappedType();
     virtual void clearSnap();
     
+    virtual bool showInSelect(const MgMotion* sender, int selState, const MgShape* shape, const Box2d& selbox);
+    virtual bool showInDrawing(const MgMotion* sender, const MgShape* shape);
+    virtual void doAction(const MgMotion* sender, int action);
+    
+private:
     void eraseWnd(const MgMotion* sender);
 
 private:
     typedef std::map<std::string, MgCommand*> CMDS;
     CMDS            _cmds;
     std::string     _cmdname;
+    std::string     _drawcmd;
     
     Point2d         _ptSnap;
     Point2d         _snapBase[2];

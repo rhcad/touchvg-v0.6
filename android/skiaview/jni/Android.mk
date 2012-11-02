@@ -21,7 +21,8 @@ endif
 LOCAL_C_INCLUDES := $(VCORE_PATH)/include/geom \
                     $(VCORE_PATH)/include/graph \
                     $(VCORE_PATH)/include/shape \
-                    $(VCORE_PATH)/include
+                    $(VCORE_PATH)/include \
+                    $(VCORE_PATH)/src/shape
 
 LOCAL_SRC_FILES  := GiSkiaView.cpp \
                     GiCanvasBase.cpp \
@@ -43,6 +44,8 @@ LOCAL_SRC_FILES  := GiSkiaView.cpp \
                     $(SRC_PATH)/shape/mgcmdselect.cpp \
                     $(SRC_PATH)/shape/mgcmderase.cpp \
                     $(SRC_PATH)/shape/mgcmdmgr.cpp \
+                    $(SRC_PATH)/shape/mgactions.cpp \
+                    $(SRC_PATH)/shape/mgcmdbreak.cpp \
                     $(SRC_PATH)/shape/mgdrawline.cpp \
                     $(SRC_PATH)/shape/mgdrawlines.cpp \
                     $(SRC_PATH)/shape/mgdrawrect.cpp \

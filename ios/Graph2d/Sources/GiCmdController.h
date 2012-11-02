@@ -4,7 +4,6 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #import "GiMotionHandler.h"
-#import "GiEditAction.h"
 #include <mgcmd.h>
 
 struct MgMotion;
@@ -13,7 +12,7 @@ class MgViewProxy;
 //! 命令控制器类，代理调用内部命令(MgCommand)
 /*! \ingroup GRAPH_IOS
 */
-@interface GiCommandController : NSObject<GiMotionHandler, GiEditAction> {
+@interface GiCommandController : NSObject<GiMotionHandler> {
 @private
     MgMotion    *_motion;           //!< 当前命令参数
     MgViewProxy *_mgview;           //!< 命令所用视图
@@ -24,6 +23,7 @@ class MgViewProxy;
     BOOL        _twoFingersHandled; //!< 选择状态下双指触摸模式
 }
 
+@property (nonatomic,assign)  NSObject* editDelegate;   //!< 编辑代理,GiEditAction
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称
 @property (nonatomic)   BOOL            currentShapeFixedLength;    //!< 当前选中图形是否固定边长
 
@@ -64,5 +64,11 @@ class MgViewProxy;
 
 //! 判断是否新重绘过，可用于判断是否需要调用 getDynamicShapes
 - (BOOL)isDynamicChanged:(BOOL)reset;
+
+//! 隐藏上下文菜单
++ (void)hideContextActions;
+
+//! 执行默认的上下文动作
+- (void)doContextAction:(int)action;
 
 @end

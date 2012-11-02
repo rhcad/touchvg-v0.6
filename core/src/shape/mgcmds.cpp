@@ -14,6 +14,7 @@
 #include <mgbasicsp.h>
 #include <mgshapet.h>
 #include "mggrid.h"
+#include "mgcmdbreak.h"
 
 MgCommand* mgCreateCoreCommand(const char* name)
 {
@@ -40,6 +41,7 @@ MgCommand* mgCreateCoreCommand(const char* name)
         { MgCmdDrawTriangle::Name(), MgCmdDrawTriangle::Create },
         { MgCmdParallelogram::Name(), MgCmdParallelogram::Create },
         { MgCmdDrawGrid::Name(), MgCmdDrawGrid::Create },
+        { MgCommandBreak::Name(), MgCommandBreak::Create },
     };
     
     for (unsigned i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++)

@@ -5,6 +5,7 @@
 #include "mgcmddraw.h"
 #include <mgsnap.h>
 #include <mgselect.h>
+#include <mgaction.h>
 
 UInt32      g_newShapeID = 0;
 
@@ -102,6 +103,11 @@ void MgCommandDraw::gatherShapes(const MgMotion* /*sender*/, MgShapes* shapes)
 
 bool MgCommandDraw::click(const MgMotion* sender)
 {
+    return _click(sender);
+}
+
+bool MgCommandDraw::_click(const MgMotion* sender)
+{
     Box2d limits(sender->pointM, mgDisplayMmToModel(10, sender), 0);
     Point2d nearpt;
     Int32 segment;
@@ -122,7 +128,7 @@ bool MgCommandDraw::doubleClick(const MgMotion* /*sender*/)
 
 bool MgCommandDraw::longPress(const MgMotion* sender)
 {
-    return sender->view->longPressSelection(kMgSelDrawNew, m_shape);
+    return mgGetCommandManager()->getActionDispatcher()->showInDrawing(sender, m_shape);
 }
 
 bool MgCommandDraw::_touchBegan(const MgMotion* sender)

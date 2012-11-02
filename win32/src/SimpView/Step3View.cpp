@@ -17,10 +17,10 @@ static const UINT WM_DELAY_LBUTTONUP = WM_USER + 101;
 class MgViewEx : public MgView
 {
 public:
-    CBaseView*      view;
+    CDrawShapeView* view;
     MgMotion        motion;
 
-    MgViewEx(CBaseView* _view) : view(_view) {
+    MgViewEx(CDrawShapeView* _view) : view(_view) {
         motion.view = this;
     }
 private:
@@ -44,9 +44,19 @@ private:
         GiContext ctx(0, GiColor::Black(), kGiLineSolid, 
             GiColor(240, 240, 240, hotdot ? 200 : 128));
         bool old = gs->setAntiAliasMode(false);
-        gs->drawRect(&ctx, Box2d(pnt, gs->xf().displayToModel(hotdot ? 3.f : 1.6f, true), 0));
+        gs->drawRect(&ctx, Box2d(pnt, gs->xf().displayToModel(hotdot ? 3.f : 1.5f, true), 0));
         gs->setAntiAliasMode(old);
         return true;
+    }
+
+    bool isContextActionsVisible()
+    {
+        return view->GetLastActivePopup() != view;
+    }
+    
+    bool showContextActions(int, const int* actions, const Box2d&)
+    {
+        return view->showContextActions(actions);
     }
 };
 
@@ -72,6 +82,9 @@ BEGIN_MESSAGE_MAP(CDrawShapeView, CScrollShapeView)
     ON_WM_LBUTTONUP()
     ON_WM_LBUTTONDBLCLK()
     ON_MESSAGE(WM_DELAY_LBUTTONUP, OnDelayLButtonUp)
+    ON_WM_CONTEXTMENU()
+    ON_UPDATE_COMMAND_UI_RANGE(ID_DUMMY_1, ID_DUMMY_20, OnUpdateContextItems)
+    ON_COMMAND_RANGE(ID_DUMMY_1, ID_DUMMY_20, OnContextItems)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -103,6 +116,8 @@ const char* CDrawShapeView::getCmdName(UINT nID) const
         return "circle";
     if (nID == ID_CMD_GRID)
         return "grid";
+    if (nID == ID_CMD_BREAK)
+        return "break";
     if (nID == ID_EDIT_UNDO)
         return "undo";
     if (nID == ID_EDIT_REDO)
@@ -137,9 +152,9 @@ void CDrawShapeView::OnMouseMove(UINT nFlags, CPoint point)
 
     MgCommand* cmd = mgGetCommandManager()->getCommand();
 
-    if (!m_delayUp
-        && (nFlags & MK_LBUTTON)
-        && (m_downFlags & MK_LBUTTON))
+    m_proxy->motion.dragging = (!m_delayUp && (nFlags & MK_LBUTTON)
+        && (m_downFlags & MK_LBUTTON));
+    if (m_proxy->motion.dragging)
     {
         m_proxy->motion.point = Point2d((float)point.x, (float)point.y);
         m_proxy->motion.pointM = m_proxy->motion.point * m_graph->xf.displayToModel();
@@ -239,4 +254,80 @@ void CDrawShapeView::OnLButtonDblClk(UINT nFlags, CPoint point)
 
     MgCommand* cmd = mgGetCommandManager()->getCommand();
     if (cmd) cmd->doubleClick(&m_proxy->motion);
+}
+
+void CDrawShapeView::OnContextMenu(CWnd*, CPoint point)
+{
+    MgCommand* cmd = mgGetCommandManager()->getCommand();
+
+    if (point.x > 0 && point.y > 0)
+    {
+        ScreenToClient(&point);
+        m_proxy->motion.point = Point2d((float)point.x, (float)point.y);
+        m_proxy->motion.pointM = m_proxy->motion.point * m_graph->xf.displayToModel();
+    }
+
+    if (cmd)
+    {
+        cmd->longPress(&m_proxy->motion);
+    }
+    else
+    {
+        int actions[] = { 0 };
+        showContextActions(actions);
+    }
+}
+
+bool CDrawShapeView::showContextActions(const int* actions)
+{
+    CMenu menu;
+    CMenu* popupMenu = NULL;
+
+    if (actions && actions[0])
+    {
+        menu.LoadMenu(IDR_CONTEXTMENU);
+        popupMenu = menu.GetSubMenu(0);
+
+        int i, n = popupMenu->GetMenuItemCount();
+        for (i = 0; i < n && actions[i] > 0; i++) {
+            m_actions[i] = actions[i];
+        }
+        while (--n >= i) {
+            m_actions[i] = 0;
+            popupMenu->RemoveMenu(ID_DUMMY_1 + n, MF_BYCOMMAND);
+        }
+    }
+    else
+    {
+        menu.LoadMenu(IDR_STEP1_VIEW);
+        popupMenu = menu.GetSubMenu(1);
+    }
+
+    CPoint point(mgRound(m_proxy->motion.point.x), mgRound(m_proxy->motion.point.y));
+    ClientToScreen(&point);
+
+    return !!popupMenu->TrackPopupMenu(TPM_RIGHTBUTTON | TPM_LEFTALIGN,
+        point.x, point.y, GetParentFrame());
+}
+
+// see MgContextAction in mgaction.h
+static LPCWSTR const ACTION_NAMES[] = { NULL,
+    L"全选", L"重选", L"绘图", L"取消",
+    L"删除", L"克隆", L"剪开", L"定长", L"取消定长", L"锁定", L"解锁", 
+    L"编辑顶点", L"隐藏顶点", L"闭合", L"不闭合", L"加点", L"删点",
+};
+
+void CDrawShapeView::OnUpdateContextItems(CCmdUI* pCmdUI)
+{
+    int action = m_actions[pCmdUI->m_nID - ID_DUMMY_1];
+    bool enabled = action > 0 && action < sizeof(ACTION_NAMES)/sizeof(ACTION_NAMES[0]);
+
+    pCmdUI->Enable(enabled);
+    pCmdUI->SetText(enabled ? ACTION_NAMES[action] : NULL);
+}
+
+void CDrawShapeView::OnContextItems(UINT nID)
+{
+    int action = m_actions[nID - ID_DUMMY_1];
+    mgGetCommandManager()->doContextAction(&m_proxy->motion, action);
 }

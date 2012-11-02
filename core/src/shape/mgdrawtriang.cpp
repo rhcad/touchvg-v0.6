@@ -77,7 +77,8 @@ bool MgCmdDrawTriangle::touchEnded(const MgMotion* sender)
 
 bool MgCmdDrawTriangle::click(const MgMotion* sender)
 {
-    return touchBegan(sender) && touchEnded(sender);
+    return (m_step == 0 ? _click(sender)
+            : touchBegan(sender) && touchEnded(sender));
 }
 
 // MgCmdParallelogram
@@ -147,5 +148,6 @@ bool MgCmdParallelogram::touchEnded(const MgMotion* sender)
 
 bool MgCmdParallelogram::click(const MgMotion* sender)
 {
-    return touchBegan(sender) && touchEnded(sender);
+    return (m_step == 0 ? _click(sender)
+            : touchBegan(sender) && touchEnded(sender));
 }

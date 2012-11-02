@@ -23,6 +23,7 @@
 
 #import "SCCalloutView.h"
 #import <GiGraphView.h>
+#import <GiEditAction.h>
 #ifdef USE_RANDOMSHAPE
 #include "../../../core/include/testgraph/RandomShape.cpp"
 #endif
@@ -35,7 +36,7 @@ static const NSUInteger kDashLineTag    = 4;
 
 void registerTransformCmd();
 
-@interface GiViewControllerEx : GiViewController {
+@interface GiViewControllerEx : GiViewController<GiEditAction> {
     UIView              *downview;
 }
 @property (nonatomic,assign)  UIView* downview;   // 底部按钮栏
@@ -286,7 +287,7 @@ void registerTransformCmd();
     [super viewDidLoad];
     
     registerTransformCmd();
-    _graphc.commandName = "splines";
+    _graphc.commandName = "@draw";
 }
 
 - (IBAction)lockMagnifier:(id)sender
@@ -440,7 +441,7 @@ void registerTransformCmd();
 
 - (IBAction)selectCommand:(id)sender    // 选择绘图命令
 {
-    CGRect viewrect = CGRectMake(0, 0, 360, 240);
+    CGRect viewrect = CGRectMake(0, 0, 480, 240);
     viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
     viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _graphc.downview.frame.size.height - 20;
     
@@ -464,6 +465,7 @@ void registerTransformCmd();
         { @"曲线",    @"splines", nil },
         { @"平行四边形", @"parallelogram", nil },
         { @"网格",    @"grid", nil },
+        //{ @"写字",    nil, @selector(writeInBox:) },
         { @"撤销",    @"undo", nil },
         { @"重做",    @"redo", nil },
     };
@@ -551,7 +553,7 @@ void registerTransformCmd();
     UIView* gview = [calloutView.graphc createSubGraphView:calloutView frame:viewrect
                                     shapes:_graphc.shapes backgroundColor:nil];
     gview.backgroundColor = [UIColor lightGrayColor];
-    calloutView.graphc.commandName = "splines";
+    calloutView.graphc.commandName = "@draw";
 }
 
 - (IBAction)hideMagnifier:(id)sender    // 切换放大镜视图的可见性
@@ -578,8 +580,6 @@ void registerTransformCmd();
         _graphc.magnifierView.superview.frame = rect;
     }
 #endif
-    
-    _graphc.commandName = "rect";
 }
 
 - (IBAction)hideOverview:(id)sender;    // 切换缩小显示的视图的可见性
@@ -612,7 +612,7 @@ void registerTransformCmd();
 #if 0
     if ([_graphc getShapeCount] > 0 && [_graphc shapeWillDeleted]) {
         [_graphc removeShapes];
-        _graphc.commandName = "splines";
+        _graphc.commandName = "@draw";
     }
 #else
     _graphc.commandName = "erasewnd";

@@ -16,6 +16,7 @@ struct MgCommand;
 class MgBaseCommand;
 struct MgCommandManager;
 struct MgSnap;
+struct MgActionDispatcher;
 
 //! 返回命令管理器
 /*! \ingroup GEOM_SHAPE
@@ -67,8 +68,10 @@ struct MgView {
     virtual void shapeMoved(MgShape* shape, int segment) {  //!< 通知图形已拖动
         if (shape && segment) segment=1; }
     
-    virtual bool longPressSelection(int selState, MgShape* shape) { //!< 选择状态下长按
-        return selState<0 && shape; }
+    virtual bool isContextActionsVisible() { return false; }
+    virtual bool showContextActions(int selState, const int* actions,
+                                    const Box2d& selbox) { //!< 显示上下文菜单
+        return selState < 0 && actions && selbox.isEmpty(); }
     virtual bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) {  //!< 显示控制点
         return gs && pnt != pnt && hotdot; }
 };
@@ -105,7 +108,7 @@ struct MgCommand {
     
     virtual bool draw(const MgMotion* sender, GiGraphics* gs) = 0;  //!< 显示动态图形
     virtual void gatherShapes(const MgMotion* sender, MgShapes* shapes) = 0;   //!< 得到动态图形
-    virtual MgShape* getCurrentShape(const MgMotion*) { return NULL; }; //!< 获得当前图形
+    virtual MgShape* getCurrentShape(const MgMotion*) { return NULL; } //!< 获得当前图形
     
     virtual bool click(const MgMotion* sender) = 0;         //!< 点击
     virtual bool doubleClick(const MgMotion* sender) = 0;   //!< 双击
@@ -113,7 +116,10 @@ struct MgCommand {
     virtual bool touchBegan(const MgMotion* sender) = 0;    //!< 开始滑动
     virtual bool touchMoved(const MgMotion* sender) = 0;    //!< 正在滑动
     virtual bool touchEnded(const MgMotion* sender) = 0;    //!< 滑动结束
-    virtual bool mouseHover(const MgMotion*) { return false; }; //!< 鼠标掠过
+    virtual bool mouseHover(const MgMotion*) { return false; } //!< 鼠标掠过
+    
+    virtual bool isDrawingCommand() { return false; }       //!< 是否为绘图命令
+    virtual bool isFloatingCommand() { return false; }      //!< 是否可嵌套在其他命令中
 };
 
 //! 命令接口的默认实现，可以以此派生新命令类
@@ -134,9 +140,9 @@ protected:
     virtual bool undo(bool &, const MgMotion*) { return false; }
     virtual bool draw(const MgMotion*, GiGraphics*) { return false; }
     virtual void gatherShapes(const MgMotion*, MgShapes*) {}
-    virtual bool click(const MgMotion*) { return false; }
+    virtual bool click(const MgMotion* sender) { return longPress(sender); }
     virtual bool doubleClick(const MgMotion*) { return false; }
-    virtual bool longPress(const MgMotion*) { return false; }
+    virtual bool longPress(const MgMotion*);
     virtual bool touchBegan(const MgMotion*) { return false; }
     virtual bool touchMoved(const MgMotion*) { return false; }
     virtual bool touchEnded(const MgMotion*) { return false; }
@@ -169,6 +175,12 @@ struct MgCommandManager {
     
     //! 返回选择集对象
     virtual MgSelection* getSelection(MgView* view) = 0;
+    
+    //! 返回上下文动作分发对象
+    virtual MgActionDispatcher* getActionDispatcher() = 0;
+    
+    //! 执行默认的上下文动作
+    virtual void doContextAction(const MgMotion* sender, int action) = 0;
     
     //! 返回图形特征点捕捉器
     virtual MgSnap* getSnap() = 0;

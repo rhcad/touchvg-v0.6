@@ -3,13 +3,11 @@
 // Copyright (c) 2012, Zhang Yungui <rhcad@hotmail.com>
 // License: LGPL, https://github.com/rhcad/touchvg
 
-#import "GiEditAction.h"
-
 //! 图形视图控制器类
 /*! 使用此类管理图形视图和触摸手势。
     \ingroup GRAPH_IOS
 */
-@interface GiViewController : UIViewController<GiEditAction, UIGestureRecognizerDelegate> {
+@interface GiViewController : UIViewController<UIGestureRecognizerDelegate> {
 @private
     id      _cmdctl;                    //!< 绘图命令控制器, GiCommandController
     void*   _shapesCreated;             //!< 创建的图形列表, MgShapes*
@@ -24,14 +22,15 @@
     UInt32  _recordIndex;               //!< 上一次录屏的图形数
     
     enum { kPinchGesture = 0, kRotateGesture, kTwoFingersPan, kPanGesture, 
-        kTapGesture, TwoTapsGesture, kTwoFingersTwoTaps,
-        kLongPressGesture, RECOGNIZER_COUNT };
+        kTapGesture, TwoTapsGesture, kTwoFingersTwoTaps, kLongPressGesture,
+        RECOGNIZER_COUNT };
     UIGestureRecognizer* _recognizers[2][RECOGNIZER_COUNT]; //!< 手势识别器，主视图和放大镜视图的
 }
 
 @property (nonatomic,readonly)  void*   shapes;         //!< 图形列表, MgShapes*
 @property (nonatomic,readonly)  UIView* magnifierView;  //!< 第一个放大镜视图
 @property (nonatomic,readonly)  UIView* activeView;     //!< 当前的图形视图，主视图或第一个放大镜视图
+@property (nonatomic,assign)  NSObject* editDelegate;   //!< 编辑代理,GiEditAction
 
 //! 当前命令名称
 @property (nonatomic)         const char*   commandName;
@@ -69,6 +68,7 @@
 - (void)regen;                              //!< 标记视图待重新构建显示
 - (void)undoMotion;                         //!< 触发晃动或撤销操作
 - (BOOL)isCommand:(const char*)cmdname;     //!< 检查当前是否为指定的命令
+- (void)doContextAction:(int)action;        //!< 执行默认的上下文动作
 - (UIGestureRecognizer*) getGestureRecognizer:(int)index;   //!< 得到主视图的触摸手势识别器
 
 - (void)removeShapes;                       //!< 清除所有图形

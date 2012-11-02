@@ -100,7 +100,8 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
 
 bool MgCmdDrawLines::click(const MgMotion* sender)
 {
-    return touchBegan(sender) && touchEnded(sender);
+    return (m_step == 0 ? _click(sender)
+            : touchBegan(sender) && touchEnded(sender));
 }
 
 bool MgCmdDrawLines::doubleClick(const MgMotion* sender)

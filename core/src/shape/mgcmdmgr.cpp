@@ -66,6 +66,10 @@ MgCommand* MgCmdManagerImpl::getCommand()
 bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
 {
     cancel(sender);
+    
+    if (strcmp(name, "@draw") == 0) {
+        name = _drawcmd.empty() ? "splines" : _drawcmd.c_str();
+    }
 
     CMDS::iterator it = _cmds.find(name);
     if (it == _cmds.end())
@@ -92,7 +96,9 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
     
     bool ret = (it != _cmds.end() && it->second->initialize(sender));
     if (ret) {
-        _cmdname = name;  // change it at end of initialization
+        _cmdname = it->second->getName();  // change it at end of initialization
+        if (it->second->isDrawingCommand())
+            _drawcmd = _cmdname;
     }
 
     return ret;
@@ -134,6 +140,16 @@ MgSelection* MgCmdManagerImpl::getSelection(MgView* view)
         ? (MgCommandSelect*)getCommand() : NULL;
 }
 
+MgActionDispatcher* MgCmdManagerImpl::getActionDispatcher()
+{
+    return this;
+}
+
+void MgCmdManagerImpl::doContextAction(const MgMotion* sender, int action)
+{
+    doAction(sender, action);
+}
+
 MgSnap* MgCmdManagerImpl::getSnap()
 {
     return this;
@@ -158,7 +174,7 @@ static int snapHV(const Point2d& basePt, Point2d& newPt, SnapItem arr[3])
         arr[1].base = basePt;
         newPt.x = basePt.x;
         arr[1].pt = newPt;
-        arr[1].type = 1;
+        arr[1].type = kSnapSameX;
         ret |= 1;
     }
     diff = arr[2].dist - fabs(newPt.y - basePt.y);
@@ -168,7 +184,7 @@ static int snapHV(const Point2d& basePt, Point2d& newPt, SnapItem arr[3])
         arr[2].base = basePt;
         newPt.y = basePt.y;
         arr[2].pt = newPt;
-        arr[2].type = 2;
+        arr[2].type = kSnapSameY;
         ret |= 2;
     }
     
@@ -207,7 +223,7 @@ static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], 
                     if (arr[0].dist > dist) {
                         arr[0].dist = dist;
                         arr[0].pt = pnt;
-                        arr[0].type = 5;
+                        arr[0].type = kSnapPoint;
                     }
                 }
                 if (!curve && wndbox.contains(pnt)) {
@@ -221,7 +237,7 @@ static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], 
                     if (arr[0].dist > dist) {
                         arr[0].dist = dist;
                         arr[0].pt = pnt;
-                        arr[0].type = 5;
+                        arr[0].type = kSnapPoint;
                         *matchpt = sender->pointM + (pnt - ptd);
                     }
                 }
@@ -234,12 +250,12 @@ static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], 
                 if (type & 1) {
                     arr[1].base = newPt;
                     arr[1].pt = newPt;
-                    arr[1].type = 3;
+                    arr[1].type = kSnapGridX;
                 }
                 if (type & 2) {
                     arr[2].base = newPt;
                     arr[2].pt = newPt;
-                    arr[2].type = 4;
+                    arr[2].type = kSnapGridY;
                 }
             }
         }
@@ -255,9 +271,9 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
     _ptSnap = sender->pointM;
     
     SnapItem arr[3] = {
-        { _ptSnap, _ptSnap, mgDisplayMmToModel(5.f, sender), -1 },   // XY
-        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), -1 },   // X,Vert
-        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), -1 },   // Y,Horz
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(5.f, sender), 0 },   // XY
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), 0 },   // X,Vert
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), 0 },   // Y,Horz
     };
     
     if (shape && shape->getID() == 0 && hotHandle > 0
@@ -270,7 +286,7 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
     
     snapPoints(sender, shape, arr, matchpt ? &pnt : NULL);
     
-    if (arr[0].type >= 0) {
+    if (arr[0].type > 0) {
         _ptSnap = arr[0].pt;
         _snapType[0] = arr[0].type;
     }
@@ -292,13 +308,15 @@ Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int 
 
 int MgCmdManagerImpl::getSnappedType()
 {
-    return _snapType[0] >= 5 ? _snapType[0] : -1;
+    if (_snapType[0] >= kSnapPoint)
+        return _snapType[0];
+    return (_snapType[0] == kSnapGridX && _snapType[1] == kSnapGridY) ? kSnapPoint : 0;
 }
 
 void MgCmdManagerImpl::clearSnap()
 {
-    _snapType[0] = -1;
-    _snapType[1] = -1;
+    _snapType[0] = 0;
+    _snapType[1] = 0;
 }
 
 bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
@@ -306,7 +324,7 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
     bool ret = false;
     
     if (sender->dragging) {
-        if (_snapType[0] >= 5) {
+        if (_snapType[0] >= kSnapPoint) {
             GiContext ctx(-2, GiColor(0, 255, 0, 200), kGiLineDash, GiColor(0, 255, 0, 64));
             ret = gs->drawEllipse(&ctx, _ptSnap, mgDisplayMmToModel(6.f, gs));
         }
@@ -314,30 +332,30 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
             GiContext ctx(0, GiColor(0, 255, 0, 200), kGiLineDash, GiColor(0, 255, 0, 64));
             GiContext ctxcross(-2, GiColor(0, 255, 0, 200));
             
-            if (_snapType[0] >= 0) {
+            if (_snapType[0] > 0) {
                 if (_snapBase[0] == _ptSnap) {
-                    if (_snapType[0] == 3) {
+                    if (_snapType[0] == kSnapGridX) {
                         Vector2d vec(0, mgDisplayMmToModel(15.f, gs));
                         ret = gs->drawLine(&ctxcross, _ptSnap - vec, _ptSnap + vec);
                         gs->drawEllipse(&ctx, _snapBase[0], mgDisplayMmToModel(4.f, gs));
                     }
                 }
-                else {
+                else {  // kSnapSameX
                     ret = gs->drawLine(&ctx, _snapBase[0], _ptSnap);
-                    gs->drawEllipse(&ctx, _snapBase[0], mgDisplayMmToModel(4.f, gs));
+                    gs->drawEllipse(&ctx, _snapBase[0], mgDisplayMmToModel(2.5f, gs));
                 }
             }
-            if (_snapType[1] >= 0) {
+            if (_snapType[1] > 0) {
                 if (_snapBase[1] == _ptSnap) {
-                    if (_snapType[1] == 4) {
+                    if (_snapType[1] == kSnapGridY) {
                         Vector2d vec(mgDisplayMmToModel(15.f, gs), 0);
                         ret = gs->drawLine(&ctxcross, _ptSnap - vec, _ptSnap + vec);
                         gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(4.f, gs));
                     }
                 }
-                else {
+                else {  // kSnapSameY
                     ret = gs->drawLine(&ctx, _snapBase[1], _ptSnap);
-                    gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(4.f, gs));
+                    gs->drawEllipse(&ctx, _snapBase[1], mgDisplayMmToModel(2.5f, gs));
                 }
             }
         }
@@ -373,4 +391,3 @@ void MgCmdManagerImpl::eraseWnd(const MgMotion* sender)
         sender->view->regen();
     }
 }
-

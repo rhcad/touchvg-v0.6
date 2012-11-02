@@ -33,6 +33,7 @@
 
 @implementation GiViewController
 
+@synthesize editDelegate;
 @synthesize gestureRecognizerUsed = _gestureRecognizerUsed;
 @synthesize magnifierView;
 @synthesize activeView = _activeView;
@@ -578,6 +579,18 @@
     [self setDynamicShapes:NULL];
 }
 
+- (NSObject*)editDelegate
+{
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    return cmd.editDelegate;
+}
+
+- (void)setEditDelegate:(NSObject*)d
+{
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    cmd.editDelegate = d;
+}
+
 - (BOOL)currentShapeFixedLength
 {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
@@ -686,63 +699,6 @@
     return [cmd dynamicChangeEnded:apply];
 }
 
-#pragma mark - GiEditAction implement
-
-- (IBAction)menuClickDraw:(id)sender
-{
-    [_cmdctl menuClickDraw:sender];
-}
-
-- (IBAction)menuClickSelAll:(id)sender
-{
-    [_cmdctl menuClickSelAll:sender];
-}
-
-- (IBAction)menuClickReset:(id)sender
-{
-    [_cmdctl menuClickReset:sender];
-}
-
-- (IBAction)menuClickDelete:(id)sender
-{
-    [_cmdctl menuClickDelete:sender];
-}
-
-- (IBAction)menuClickClone:(id)sender
-{
-    [_cmdctl menuClickClone:sender];
-}
-
-- (IBAction)menuClickClosed:(id)sender
-{
-    [_cmdctl menuClickClosed:sender];
-}
-
-- (IBAction)menuClickAddNode:(id)sender
-{
-    [_cmdctl menuClickAddNode:sender];
-}
-
-- (IBAction)menuClickDelNode:(id)sender
-{
-    [_cmdctl menuClickDelNode:sender];
-}
-
-- (IBAction)menuClickFixedLength:(id)sender
-{
-    [_cmdctl menuClickFixedLength:sender];
-}
-
-- (IBAction)menuClickLocked:(id)sender
-{
-    [_cmdctl menuClickLocked:sender];
-}
-
-- (IBAction)menuClickOutVertexMode:(id)sender
-{
-    [_cmdctl menuClickOutVertexMode:sender];
-}
-
 #pragma mark - View motion
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -787,6 +743,12 @@
 {
     if (![[self getCommand:@selector(undoMotion)] undoMotion])
         [[self motionView:@selector(undoMotion)] undoMotion];
+}
+
+- (void)doContextAction:(int)action
+{
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    [cmd doContextAction:action];
 }
 
 - (void)regen
@@ -855,7 +817,10 @@
 static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐标
 
 + (void)ignoreTouchesBegan:(CGPoint)point view:(UIView*)sender {
-    _ignorepoint = [sender convertPoint:point toView:[sender window]];
+    if (_ignorepoint.x < 0 && _ignorepoint.y < 0 && point.x > 0) {
+        _ignorepoint = [sender convertPoint:point toView:[sender window]];
+    }
+    [GiCommandController hideContextActions];
 }
 
 - (void)gestureStateChanged:(UIGestureRecognizer*)sender {

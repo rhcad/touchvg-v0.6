@@ -18,6 +18,7 @@ public:
 
 // Operations
 public:
+    bool showContextActions(const int* actions);
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -36,6 +37,9 @@ protected:
     afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
     afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
     afx_msg LRESULT OnDelayLButtonUp(WPARAM wp, LPARAM lp);
+    afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+    afx_msg void OnUpdateContextItems(CCmdUI* pCmdUI);
+    afx_msg void OnContextItems(UINT nID);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -49,4 +53,5 @@ private:
     BOOL        m_delayUp;
     long        m_downTime;
     UINT        m_downFlags;
+    int         m_actions[20];
 };

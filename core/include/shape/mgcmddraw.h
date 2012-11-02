@@ -37,6 +37,7 @@ protected:
     bool _touchEnded(const MgMotion* sender);
     bool _addshape(const MgMotion* sender, MgShape* shape = NULL);
     bool _undo(const MgMotion* sender);
+    bool _click(const MgMotion* sender);
     void _delayClear();
     
     virtual bool cancel(const MgMotion* sender);
@@ -46,6 +47,8 @@ protected:
     virtual bool doubleClick(const MgMotion* sender);
     virtual bool longPress(const MgMotion* sender);
     virtual bool mouseHover(const MgMotion* sender);
+private:
+    virtual bool isDrawingCommand() { return true; }
     
 protected:
     MgShape* getCurrentShape(const MgMotion*) { return m_shape; }

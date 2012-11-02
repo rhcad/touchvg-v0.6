@@ -6,7 +6,6 @@
 	ProjectGUID="{71448894-4C03-46D6-A696-7A40B7D50DEB}"
 	RootNamespace="shape"
 	SccLocalPath="."
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -147,6 +146,14 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath="..\..\..\core\src\shape\mgactions.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\src\shape\mgcmdbreak.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\src\shape\mgcmddraw.cpp"
 				>
 			</File>
@@ -191,6 +198,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\src\shape\mggrid.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\src\shape\mgline.cpp"
 				>
 			</File>
@@ -207,10 +218,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\shape\mggrid.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\core\src\shape\mgshape.cpp"
 				>
 			</File>
@@ -224,11 +231,19 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
+				RelativePath="..\..\..\core\include\shape\mgaction.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\include\shape\mgbasicsp.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\shape\mgcmd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\src\shape\mgcmdbreak.h"
 				>
 			</File>
 			<File
@@ -268,6 +283,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\src\shape\mggrid.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\include\shape\mggrid.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\include\shape\mgselect.h"
 				>
 			</File>
@@ -293,10 +316,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\shape\mgsnap.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\shape\mggrid.h"
 				>
 			</File>
 			<File

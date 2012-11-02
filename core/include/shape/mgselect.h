@@ -18,7 +18,7 @@ typedef enum {
     kMgSelMultiShapes,  //!< 选择了多个图形
     kMgSelVertexes,     //!< 显示图形的多个节点
     kMgSelVertex,       //!< 选择了一个图形的节点
-    kMgSelDrawNew,      //!< 绘制新图形
+    kMgSelDraw,         //!< 在绘图命令中
 } MgSelState;
 
 //! 选择集接口

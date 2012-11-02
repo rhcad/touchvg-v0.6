@@ -11,6 +11,7 @@
 #include <mgnear.h>
 #include <mgbase.h>
 #include <mgsnap.h>
+#include <mgaction.h>
 
 extern UInt32 g_newShapeID;
 
@@ -203,6 +204,14 @@ bool MgCommandSelect::draw(const MgMotion* sender, GiGraphics* gs)
         gs->drawRect(&ctxshap, Box2d(sender->startPointM, sender->pointM));
         gs->setAntiAliasMode(antiAlias);
     }
+    else if (sender->view->isContextActionsVisible() && !selection.empty()) {
+        Box2d selbox(getDragRect(sender));
+        GiContext ctxshap(0, GiColor(0, 0, 255, 128), kGiLineDash);
+        
+        bool antiAlias = gs->setAntiAliasMode(false);
+        gs->drawRect(&ctxshap, selbox);
+        gs->setAntiAliasMode(antiAlias);
+    }
     else if (!selection.empty() && !isVertexMode(NULL) && m_showSel) {
         Box2d selbox(getDragRect(sender));
         
@@ -382,7 +391,7 @@ bool MgCommandSelect::click(const MgMotion* sender)
     
     Point2d nearpt;
     Int32   segment = -1;
-    MgShape *shape;
+    MgShape *shape = NULL;
     bool    canSelAgain;
     bool    changed = false;
     
@@ -414,19 +423,28 @@ bool MgCommandSelect::click(const MgMotion* sender)
         if (changed)
             sender->view->selChanged();
     }
+    else {
+        UInt32 handleIndex = m_handleIndex;
+        m_handleIndex = hitTestHandles(shape, sender->pointM, sender);
+        changed = (handleIndex != m_handleIndex);
+    }
     sender->view->redraw(false);
     
-    if (!sender->pressDrag && !changed) {
-        sender->view->longPressSelection(getSelectState(sender->view), shape);
+    if (!sender->pressDrag && changed) {
+        MgActionDispatcher* dispatcher = mgGetCommandManager()->getActionDispatcher();
+        dispatcher->showInSelect(sender, getSelectState(sender->view),
+                                 shape, getDragRect(sender));
         return true;
     }
     
     return m_id != 0;
 }
 
-bool MgCommandSelect::doubleClick(const MgMotion* /*sender*/)
+bool MgCommandSelect::doubleClick(const MgMotion* sender)
 {
-    return false;
+    MgActionDispatcher* dispatcher = mgGetCommandManager()->getActionDispatcher();
+    return dispatcher->showInSelect(sender, getSelectState(sender->view),
+                             getSelectedShape(sender), getDragRect(sender));
 }
 
 bool MgCommandSelect::longPress(const MgMotion* sender)
@@ -437,12 +455,11 @@ bool MgCommandSelect::longPress(const MgMotion* sender)
         ret = click(sender);
     }
     
-    bool handleMode = m_handleMode;
-    m_handleMode = false;
-    int selState = getSelectState(sender->view);
-    m_handleMode = handleMode;
+    int selState = getSelectState(sender->view);    
+    MgActionDispatcher* dispatcher = mgGetCommandManager()->getActionDispatcher();
     
-    if (sender->view->longPressSelection(selState, getSelectedShape(sender))) {
+    if (dispatcher->showInSelect(sender, selState, getSelectedShape(sender),
+                                 getDragRect(sender))) {
         ret = true;
     }
     

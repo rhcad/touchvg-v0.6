@@ -3,6 +3,8 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #import "GiCmdController.h"
+#import "GiEditAction.h"
+#import "GiViewController.h"
 #include <mgselect.h>
 #include <vector>
 #include <ioscanvas.h>
@@ -14,15 +16,18 @@
 - (void)convertPoint:(CGPoint)pt;
 - (BOOL)getPointForPressDrag:(UIGestureRecognizer *)sender :(CGPoint*)point;
 - (GiContext*)currentContext;
-- (bool)longPressSelection:(int)selState shape:(MgShape*)shape;
+- (bool)showActions:(int)selState :(const int*)actions :(const Box2d*)selbox;
+- (IBAction)onContextAction:(id)sender;
 - (BOOL)handleSelectionTwoFingers:(UIGestureRecognizer *)sender;
 
 @end
 
+static NSMutableArray* _buttons = nil;
+
 class MgViewProxy : public MgView
 {
 private:
-    id              _owner;
+    GiCommandController*    _owner;
     id<GiView>      _curview;
     id<GiView>      _mainview;
     UIView**        _auxviews;
@@ -32,7 +37,7 @@ public:
     BOOL            _dynChanged;
     BOOL            _lockVertex;
     
-    MgViewProxy(id owner, UIView** views) : _owner(owner)
+    MgViewProxy(GiCommandController* owner, UIView** views) : _owner(owner)
         , _curview(Nil), _mainview(Nil), _auxviews(views)
         , _dynChanged(NO), _lockVertex(false)
     {
@@ -43,6 +48,8 @@ public:
     ~MgViewProxy() {
         [_pointImages[0] release];
         [_pointImages[1] release];
+        [_buttons release];
+        _buttons = nil;
     }
     
     id<GiView> getView() { return _curview; }
@@ -66,24 +73,20 @@ public:
 private:
     
     bool shapeWillAdded(MgShape* shape) {
-        NSObject* obj = _mainview.ownerView.nextResponder;
-        return (![obj respondsToSelector:@selector(shapeWillAdded)]
-                || [obj performSelector:@selector(shapeWillAdded)]);
+        return (![_owner.editDelegate respondsToSelector:@selector(shapeWillAdded)]
+                || [_owner.editDelegate performSelector:@selector(shapeWillAdded)]);
     }
     bool shapeWillDeleted(MgShape* shape) {
-        NSObject* obj = _mainview.ownerView.nextResponder;
-        return (![obj respondsToSelector:@selector(shapeWillDeleted)]
-                || [obj performSelector:@selector(shapeWillDeleted)]);
+        return (![_owner.editDelegate respondsToSelector:@selector(shapeWillDeleted)]
+                || [_owner.editDelegate performSelector:@selector(shapeWillDeleted)]);
     }
     bool shapeCanRotated(MgShape*) {
-        NSObject* obj = _mainview.ownerView.nextResponder;
-        return (![obj respondsToSelector:@selector(shapeCanRotated)]
-                || [obj performSelector:@selector(shapeCanRotated)]);
+        return (![_owner.editDelegate respondsToSelector:@selector(shapeCanRotated)]
+                || [_owner.editDelegate performSelector:@selector(shapeCanRotated)]);
     }
     bool shapeCanTransform(MgShape*) {
-        NSObject* obj = _mainview.ownerView.nextResponder;
-        return (![obj respondsToSelector:@selector(shapeCanTransform)]
-                || [obj performSelector:@selector(shapeCanTransform)]);
+        return (![_owner.editDelegate respondsToSelector:@selector(shapeCanTransform)]
+                || [_owner.editDelegate performSelector:@selector(shapeCanTransform)]);
     }
     
     void regen() {
@@ -116,14 +119,17 @@ private:
                 [gv shapeAdded:shape];
             }
         }
-        NSObject* obj = _mainview.ownerView.nextResponder;
-        if ([obj respondsToSelector:@selector(shapeAdded)]) {
-            [obj performSelector:@selector(shapeAdded)];
+        if ([_owner.editDelegate respondsToSelector:@selector(shapeAdded)]) {
+            [_owner.editDelegate performSelector:@selector(shapeAdded)];
         }
     }
     
-    bool longPressSelection(int selState, MgShape* shape) {
-        return [_owner longPressSelection:selState shape:shape];
+    bool isContextActionsVisible() {
+        return _buttons && [_buttons count] > 0;
+    }
+    
+    bool showContextActions(int selState, const int* actions, const Box2d& selbox) {
+        return [_owner showActions:selState :actions :&selbox];
     }
     
     bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) {
@@ -144,6 +150,9 @@ private:
 
 static long s_cmdRef = 0;
 
+@implementation GiActionParams
+@synthesize selstate, actions, selbox, view, buttons;
+@end
 
 @implementation GiCommandController
 
@@ -186,76 +195,87 @@ static long s_cmdRef = 0;
     return shape ? shape->context() : _mgview->context();
 }
 
-- (bool)longPressSelection:(int)selState shape:(MgShape*)shape
++ (void)hideContextActions
 {
-    UIView *view = [_mgview->getView() ownerView];
-    UIMenuController *menuController = [UIMenuController sharedMenuController];
-    UIMenuItem *items[8] = { nil, nil, nil, nil, nil, nil, nil, nil };
-    int n = 0;
-    bool islines = shape && shape->shape()->isKindOf(MgBaseLines::Type());
-    
-    if (menuController.menuVisible && _motion->pressDrag)
-        return false;
-    
-    switch (selState) {
-        case kMgSelNone:
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"全选" action:@selector(menuClickSelAll:)];
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"绘图" action:@selector(menuClickDraw:)];
-            break;
-            
-        case kMgSelOneShape:
-        case kMgSelMultiShapes:
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"删除" action:@selector(menuClickDelete:)];
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"克隆" action:@selector(menuClickClone:)];
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"锁定" action:@selector(menuClickLocked:)];
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
-            if (selState == kMgSelOneShape && !_motion->pressDrag) {
-                items[n++] = [[UIMenuItem alloc] initWithTitle:@"编辑顶点" action:@selector(menuClickOutVertexMode:)];
-            }
-            break;
-            
-        case kMgSelVertexes:
-            if (islines) {
-                items[n++] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
-                items[n++] = [[UIMenuItem alloc] initWithTitle:@"加点" action:@selector(menuClickAddNode:)];
-            }
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"锁定" action:@selector(menuClickLocked:)];
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"重选" action:@selector(menuClickReset:)];
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"隐藏顶点" action:@selector(menuClickOutVertexMode:)];
-            break;
-            
-        case kMgSelVertex:
-            if (islines) {
-                items[n++] = [[UIMenuItem alloc] initWithTitle:@"闭合" action:@selector(menuClickClosed:)];
-                items[n++] = [[UIMenuItem alloc] initWithTitle:@"删点" action:@selector(menuClickDelNode:)];
-            }
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"定长" action:@selector(menuClickFixedLength:)];
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"锁定" action:@selector(menuClickLocked:)];
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"隐藏顶点" action:@selector(menuClickOutVertexMode:)];
-            break;
-            
-        case kMgSelDrawNew:
-            items[n++] = [[UIMenuItem alloc] initWithTitle:@"Test" action:@selector(menuClickDraw:)];
-            break;
-            
-        default:
-            return false;
-            break;
+    if (_buttons) {
+        for (UIView *button in _buttons) {
+            [button removeFromSuperview];
+        }
+        [_buttons removeAllObjects];
     }
-    
-    menuController.menuItems = [NSArray arrayWithObjects: items[0], items[1], items[2], items[3], items[4], items[5], items[6], items[7], nil];
-    [menuController setTargetRect:CGRectMake(_motion->point.x - 25, _motion->point.y - 50, 50, 50) inView:view];
-    [menuController setMenuVisible:YES animated:YES];
-    
-    for (int i = 0; i < n; i++) {
-        [items[i] release];
-    }
-    
-    return false;
 }
 
+- (void)doContextAction:(int)action
+{
+    mgGetCommandManager()->doContextAction(_motion, action);
+}
+
+- (IBAction)onContextAction:(id)sender
+{
+    UIView *btn = (UIView *)sender;
+    mgGetCommandManager()->doContextAction(_motion, btn.tag);
+    [GiCommandController hideContextActions];
+}
+
+- (bool)showActions:(int)selState :(const int*)actions :(const Box2d*)selbox
+{
+    if (!_buttons) {
+        _buttons = [[NSMutableArray alloc]init];
+    }
+    if (!actions) {
+        for (UIView *button in _buttons) {
+            [button removeFromSuperview];
+        }
+        [_buttons removeAllObjects];
+        return false;
+    }
+    if ([_buttons count] > 0 && _motion->pressDrag) {
+        return false;
+    }
+    
+    UIView *view = [_mgview->getView() ownerView];
+    bool handled = false;
+    
+    if ([editDelegate respondsToSelector:@selector(showContextActions:)]) {
+        GiActionParams *params = [[GiActionParams alloc]init];
+        params.selstate = selState;
+        params.actions = actions;
+        params.selbox = CGRectMake(selbox->xmin, selbox->ymin, selbox->width(), selbox->height());
+        params.view = view;
+        params.buttons = _buttons;        
+        handled = ![editDelegate performSelector:@selector(showContextActions:) withObject:params];
+        [params release];
+        if (handled)
+            return true;
+    }
+    
+    NSString* captions[] = { nil, @"全选", @"重选", @"绘图", @"取消",
+        @"删除", @"克隆", @"剪开", @"定长", @"取消定长", @"锁定", @"解锁", 
+        @"编辑顶点", @"隐藏顶点", @"闭合", @"不闭合", @"加点", @"删点" };
+    
+    CGPoint pt = CGPointMake(_motion->point.x - 40, _motion->point.y - 60);
+    
+    for (int i = 0; actions[i] > 0; i++) {
+        if (actions[i] > 0 && actions[i] < sizeof(captions)/sizeof(captions[0])) {
+            CGRect rect = CGRectMake(pt.x, pt.y, 80, 36);
+            UIButton *btn = [[UIButton alloc]initWithFrame:rect];
+            
+            btn.tag = actions[i];
+            btn.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.8];
+            [btn addTarget:self action:@selector(onContextAction:) forControlEvents:UIControlEventTouchUpInside];
+            [btn setTitle:captions[actions[i]] forState: UIControlStateNormal];
+            pt.y -= rect.size.height;
+            
+            [view addSubview:btn];
+            [_buttons addObject:btn];
+            [btn release];
+        }
+    }
+    
+    return [_buttons count] > 0;
+}
+
+@synthesize editDelegate;
 @synthesize commandName;
 @synthesize currentShapeFixedLength;
 @synthesize lineWidth;
@@ -459,9 +479,8 @@ static long s_cmdRef = 0;
 
 - (void)touchesBegan:(CGPoint)point view:(UIView*)view count:(int)count
 {
-    if ([UIMenuController sharedMenuController].menuVisible) {
-        [UIMenuController sharedMenuController].menuVisible = NO;
-    }
+    [GiCommandController hideContextActions];
+    
     if (_touchCount <= count) {
         _touchCount = count;
         
@@ -689,7 +708,7 @@ static long s_cmdRef = 0;
             }
             else if (sender.state >= UIGestureRecognizerStateEnded
                      && _motion->startPoint.distanceTo(_motion->point) < 10) {
-                return YES;
+                return YES;                 // 长按不动再松开时，忽略Ended消息
             }
             
             ret = cmd->longPress(_motion);
@@ -715,7 +734,8 @@ static long s_cmdRef = 0;
         [self convertPoint:point];
         _touchCount = 0;
         
-        if (strcmp(cmd->getName(), "select") != 0
+        // 当放大镜显示时，在主视图中点击将不向随手画命令传递点击事件，而是在主视图中显示放大镜位置虚框
+        if (strcmp(cmd->getName(), "select") != 0   // 选择和删除命令例外
             && strcmp(cmd->getName(), "erase") != 0
             && _mgview->isMagnifierVisible()
             && view == [_mgview->getMainView() ownerView]) {
@@ -723,7 +743,7 @@ static long s_cmdRef = 0;
             [_mgview->getView() redraw:true];
             ret = YES;
             if (strcmp(cmd->getName(), "splines") != 0 && 1 == _clickFingers) {
-                cmd->click(_motion);
+                cmd->click(_motion);                // 除了随手画命令外，将向命令传递点击事件
             }
         }
         else if (1 == _clickFingers) {
@@ -737,91 +757,6 @@ static long s_cmdRef = 0;
     _motion->dragging = false;
     
     return ret;
-}
-
-- (IBAction)menuClickDraw:(id)sender
-{
-    self.commandName = "splines";
-}
-
-- (IBAction)menuClickSelAll:(id)sender
-{
-    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
-    if (sel) {
-        sel->selectAll(_mgview);
-    }
-}
-
-- (IBAction)menuClickReset:(id)sender
-{
-    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
-    if (sel) {
-        sel->resetSelection(_mgview);
-    }
-}
-
-- (IBAction)menuClickDelete:(id)sender
-{
-    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
-    if (sel) {
-        sel->deleteSelection(_mgview);
-    }
-}
-
-- (IBAction)menuClickClone:(id)sender
-{
-    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
-    if (sel) {
-        sel->cloneSelection(_mgview);
-    }
-}
-
-- (IBAction)menuClickClosed:(id)sender
-{
-    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
-    if (sel) {
-        sel->switchClosed(_mgview);
-    }
-}
-
-- (IBAction)menuClickAddNode:(id)sender
-{
-    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
-    if (sel) {
-        sel->insertVertext(_motion);
-    }
-}
-
-- (IBAction)menuClickDelNode:(id)sender
-{
-    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
-    if (sel) {
-        sel->deleteVertext(_motion);
-    }
-}
-
-- (IBAction)menuClickFixedLength:(id)sender
-{
-    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
-    if (sel) {
-        sel->setFixedLength(_mgview, !sel->isFixedLength(_mgview));
-    }
-}
-
-- (IBAction)menuClickLocked:(id)sender
-{
-    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
-    if (sel) {
-        sel->setLocked(_mgview, !sel->isLocked(_mgview));
-    }
-}
-
-- (IBAction)menuClickOutVertexMode:(id)sender
-{
-    MgSelection *sel = mgGetCommandManager()->getSelection(_mgview);
-    if (sel) {
-        sel->setVertexMode(_mgview, !sel->isVertexMode(_mgview));
-    }
 }
 
 @end
