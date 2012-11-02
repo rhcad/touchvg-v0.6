@@ -226,7 +226,7 @@ STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "新建视图"
 FONT 9, "宋体", 0, 0, 0x0
 BEGIN
-    GROUPBOX        "随机图形最大数量",IDC_STATIC,7,7,87,69
+    GROUPBOX        "",IDC_STATIC,7,7,87,69
     LTEXT           "线段数:",IDC_STATIC,14,22,29,8
     EDITTEXT        IDC_NEW_LINECOUNT,47,19,40,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "圆弧数:",IDC_STATIC,14,40,29,8
@@ -239,6 +239,7 @@ BEGIN
     CONTROL         "绘图选择",IDC_NEW_WITHCMD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,109,47,48,10
     DEFPUSHBUTTON   "确定",IDOK,176,7,50,14
     PUSHBUTTON      "取消",IDCANCEL,176,24,50,14
+    CONTROL         "随机图形",IDC_NEW_USERAND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,7,48,10
 END
 
 
@@ -420,6 +421,7 @@ BEGIN
     ID_INDICATOR_X          "X: 0000.00"
     ID_INDICATOR_Y          "Y: 0000.00"
     ID_INDICATOR_VIEWSCALE  "100.00%"
+    ID_INDICATOR_DRAWTIME   "00.000 s"
     ID_CMD_SELECT           "取消绘图命令，开始选择图形\n选择"
     ID_CMD_ERASE            "选择并删除图形\n删除"
     ID_CMD_GRID             "绘制网格图形\n网格"

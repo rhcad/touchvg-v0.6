@@ -13,6 +13,7 @@
 #define IDC_NEW_RANDLNSTYLE             1003
 #define IDC_NEW_WITHCMD                 1004
 #define IDC_NEW_CURVE_COUNT             1005
+#define IDC_NEW_USERAND                 1006
 #define ID_VIEW_GRAY                    32770
 #define ID_VIEW_GDIP                    32771
 #define ID_VIEW_BKCOLOR                 32772
@@ -28,6 +29,7 @@
 #define ID_INDICATOR_X                  32801
 #define ID_INDICATOR_Y                  32802
 #define ID_INDICATOR_VIEWSCALE          32803
+#define ID_INDICATOR_DRAWTIME           32804
 #define ID_CMD_SELECT                   32809
 #define ID_CMD_ERASE                    32810
 #define ID_CMD_GRID                     32811
@@ -69,7 +71,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32807
-#define _APS_NEXT_CONTROL_VALUE         1004
+#define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

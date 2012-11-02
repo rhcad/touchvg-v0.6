@@ -75,9 +75,10 @@ CWnd* CreateChildView(UINT nFrameID)
 	if (IDR_STEP1_VIEW == nFrameID)
 	{
 		RandomParam param;
-		param.lineCount = dlg.m_nLineCount;
-		param.arcCount = dlg.m_nArcCount;
-        param.curveCount = dlg.m_nCurveCount;
+        param.lineCount = dlg.m_bUseRand ? dlg.m_nLineCount : 0;
+        param.rectCount = dlg.m_bUseRand ? param.rectCount : 0;
+		param.arcCount = dlg.m_bUseRand ? dlg.m_nArcCount : 0;
+        param.curveCount = dlg.m_bUseRand ? dlg.m_nCurveCount : 0;
 		param.randomLineStyle = !!dlg.m_bRandomLineStyle;
 
         if (dlg.m_bWithCmd)

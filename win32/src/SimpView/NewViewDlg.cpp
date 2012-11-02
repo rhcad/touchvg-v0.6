@@ -19,6 +19,7 @@ CNewViewDlg::CNewViewDlg(CWnd* pParent /*=NULL*/)
 	m_bScrollBar = TRUE;
 	m_bRandomLineStyle = TRUE;
     m_bWithCmd = TRUE;
+    m_bUseRand = TRUE;
 	//}}AFX_DATA_INIT
     m_nLineCount = RandomParam::RandInt(0, 1000);
 	m_nArcCount = RandomParam::RandInt(0, 600);
@@ -38,6 +39,7 @@ void CNewViewDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_NEW_SCROLLBAR, m_bScrollBar);
 	DDX_Check(pDX, IDC_NEW_RANDLNSTYLE, m_bRandomLineStyle);
     DDX_Check(pDX, IDC_NEW_WITHCMD, m_bWithCmd);
+    DDX_Check(pDX, IDC_NEW_USERAND, m_bUseRand);
 	//}}AFX_DATA_MAP
 }
 

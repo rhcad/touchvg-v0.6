@@ -24,6 +24,7 @@ CBaseView::CBaseView()
 
     m_pan.cx = m_pan.cy = 0;
     m_bkColor = GetSysColor(COLOR_WINDOW);
+    m_drawTick = 0;
 }
 
 CBaseView::~CBaseView()
@@ -46,6 +47,7 @@ BEGIN_MESSAGE_MAP(CBaseView, CWnd)
 	ON_COMMAND(ID_VIEW_ANTIALIAS, OnViewAntiAlias)
 	ON_COMMAND(ID_VIEW_BKCOLOR, OnViewBkColor)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_VIEWSCALE, OnUpdateViewScale)
+    ON_UPDATE_COMMAND_UI(ID_INDICATOR_DRAWTIME, OnUpdateDrawTime)
 	ON_COMMAND(ID_ZOOM_EXTENT, OnZoomExtent)
 	ON_COMMAND(ID_VIEW_ZOOMIN, OnZoomIn)
 	ON_COMMAND(ID_VIEW_ZOOMOUT, OnZoomOut)
@@ -80,6 +82,7 @@ void CBaseView::OnPaint()
 	CPaintDC dc(this);
     GiCanvasWin *cv = m_graph->canvas;
     GiGraphics  &gs = m_graph->gs;
+    long startTick = GetTickCount();
 
 	dc.SetBkColor(m_bkColor);				    // 在beginPaint()中应用背景色
 
@@ -106,6 +109,7 @@ void CBaseView::OnPaint()
 
 		cv->endPaint();                         // 提交绘图结果到窗口
 	}
+    m_drawTick = GetTickCount() - startTick;
 }
 
 void CBaseView::OnSize(UINT nType, int cx, int cy) 
@@ -223,6 +227,13 @@ void CBaseView::OnUpdateViewScale(CCmdUI* pCmdUI)
 {
 	CString str;
 	str.Format(_T("%.2lf%%"), m_graph->xf.getViewScale() * 100.0);
+	pCmdUI->SetText(str);
+}
+
+void CBaseView::OnUpdateDrawTime(CCmdUI* pCmdUI) 
+{
+	CString str;
+	str.Format(_T("%.3f s"), m_drawTick * 1e-3);
 	pCmdUI->SetText(str);
 }
 

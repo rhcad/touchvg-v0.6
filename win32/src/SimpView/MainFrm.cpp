@@ -25,6 +25,7 @@ static UINT indicators[] =
 	ID_INDICATOR_X,
 	ID_INDICATOR_Y,
 	ID_INDICATOR_VIEWSCALE,
+    ID_INDICATOR_DRAWTIME,
 };
 
 CMainFrame::CMainFrame()
