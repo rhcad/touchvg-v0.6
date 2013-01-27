@@ -10,14 +10,14 @@ public:
 
 // Dialog Data
 	//{{AFX_DATA(CNewViewDlg)
-    enum { IDD = IDD_NEW_VIEW };
-    long	m_nLineCount;
-    long	m_nArcCount;
+	enum { IDD = IDD_NEW_VIEW };
+	long	m_nLineCount;
+	long	m_nArcCount;
     long	m_nCurveCount;
-    BOOL	m_bScrollBar;
-    BOOL	m_bRandomLineStyle;
+	BOOL	m_bScrollBar;
+	BOOL	m_bRandomLineStyle;
     BOOL	m_bWithCmd;
-    BOOL    m_bUseRand;
+    BOOL    m_bAddShapes;
 	//}}AFX_DATA
 
 // Overrides

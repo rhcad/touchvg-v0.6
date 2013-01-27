@@ -36,7 +36,7 @@ void MgSplines::_update()
 }
 
 float MgSplines::_hitTest(const Point2d& pt, float tol, 
-                          Point2d& nearpt, Int32& segment) const
+                          Point2d& nearpt, int& segment) const
 {
     return mgCubicSplinesHit(_count, _points, _knotvs, isClosed(), 
         pt, tol, nearpt, segment);
@@ -49,7 +49,7 @@ bool MgSplines::_hitTestBox(const Box2d& rect) const
     return mgCubicSplinesIntersectBox(rect, _count, _points, _knotvs, isClosed());
 }
 
-bool MgSplines::_draw(GiGraphics& gs, const GiContext& ctx) const
+bool MgSplines::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
 {
     bool ret = false;
 
@@ -60,7 +60,7 @@ bool MgSplines::_draw(GiGraphics& gs, const GiContext& ctx) const
     else
         ret = gs.drawSplines(&ctx, _count, _points, _knotvs);
 
-    return __super::_draw(gs, ctx) || ret;
+    return __super::_draw(mode, gs, ctx) || ret;
 }
 
 void MgSplines::smooth(float tol)
@@ -70,11 +70,11 @@ void MgSplines::smooth(float tol)
     
     Point2d* points = new Point2d[_count];
     Vector2d* knotvs = new Vector2d[_count];
-    UInt32* indexMap = new UInt32[_count];
-    UInt32 n = 0;
-    UInt32 i, j;
+    int* indexMap = new int[_count];
+    int n = 0;
+    int i, j;
     Point2d nearpt;
-    Int32 segment;
+    int segment;
     float dist;
     
     points[0] = _points[0];                     // 第一个点不动
@@ -96,7 +96,7 @@ void MgSplines::smooth(float tol)
         }
         else {
             for (j = 0; j < n + _count - i; j++) {  // 切向变化超过45度时也保留点
-                UInt32 index = j > n ? i + j - n : indexMap[j];
+                int index = j > n ? i + j - n : indexMap[j];
                 if (_knotvs[index].angleTo(knotvs[j]) > _M_PI_4) {
                     removed = false;
                     break;

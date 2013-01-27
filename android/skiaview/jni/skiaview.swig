@@ -7,9 +7,12 @@
 
 %module(directors="1") skiaview
 %{
-#include "GiSkiaView.h"
+#include "GiCoreView.h"
 #include "GiCanvasBase.h"
+#include <mgshapes.h>
+#include <mgshape.h>
 #include <mgstoragebs.h>
+#include <mgjsonstorage.h>
 %}
 
 %include <mgtype.h>
@@ -27,16 +30,22 @@
 
 %include "mgvector.h"
 %template(Floats) mgvector<float>;
-%template(Chars) mgvector<short>;
-%template(Bytes) mgvector<char>;
+%template(Chars) mgvector<char>;
+%template(Ints) mgvector<int>;
 
 %feature("director") GiCanvasBase;
 %include "GiCanvasBase.h"
 
-%include "GiSkiaView.h"
+%include <mgobject.h>
+%include <mgshapes.h>
+%include <mgshape.h>
 
-%feature("director") MgStorageBase;
-%include <mgstoragebs.h>
+%include "GiCoreView.h"
+%include <mgjsonstorage.h>
+
+//%feature("director") MgStorageBase;
+%include <mgstorage.h>
+//%include <mgstoragebs.h>
 
 #ifdef SWIGJAVA
 %{

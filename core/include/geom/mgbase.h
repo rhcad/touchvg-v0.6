@@ -100,7 +100,7 @@ GEOMAPI float mgDiffAngle(float fromAngle, float toAngle);
     \param[in] y 第二个正整数
     \return 最大公约数，正整数
 */
-GEOMAPI long mgGcd(long x, long y);
+GEOMAPI int mgGcd(int x, int y);
 
 //! 四舍五入为浮点数
 /*! 例如 mgRoundReal(1.25, 1)=1.3

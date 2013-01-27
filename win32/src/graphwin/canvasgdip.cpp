@@ -72,8 +72,8 @@ struct GdipDrawImplBase
 
                 float width = gs()->calcPenWidth(ctx->getLineWidth(), ctx->isAutoScale());
                 GiColor color = gs()->calcPenColor(ctx->getLineColor());
-                m_pen = new G::Pen(G::Color(ctx->getLineAlpha(), 
-                    color.r, color.g, color.b), width);
+                m_pen = new G::Pen(G::Color((BYTE)ctx->getLineAlpha(), 
+                    (BYTE)color.r, (BYTE)color.g, (BYTE)color.b), width);
 
                 if (m_pen != NULL)
                 {
@@ -117,8 +117,8 @@ struct GdipDrawImplBase
 
                 GiColor color = gs()->calcPenColor(ctx->getFillColor());
                 m_brush = new G::SolidBrush(
-                    G::Color(ctx->getFillAlpha(), 
-                    color.r, color.g, color.b));
+                    G::Color((BYTE)ctx->getFillAlpha(), 
+                    (BYTE)color.r, (BYTE)color.g, (BYTE)color.b));
             }
             pBrush = m_brush;
         }

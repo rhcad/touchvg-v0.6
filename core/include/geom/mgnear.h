@@ -88,7 +88,7 @@ GEOMAPI bool mgCubicSplinesIntersectBox(
 */
 GEOMAPI float mgCubicSplinesHit(
     Int32 n, const Point2d* knots, const Vector2d* knotvs, bool closed, 
-    const Point2d& pt, float tol, Point2d& nearpt, Int32& segment);
+    const Point2d& pt, float tol, Point2d& nearpt, int& segment);
 
 //! 计算点到折线或多边形的最近距离
 /*!
@@ -104,7 +104,7 @@ GEOMAPI float mgCubicSplinesHit(
 */
 GEOMAPI float mgLinesHit(
     Int32 n, const Point2d* points, bool closed, 
-    const Point2d& pt, float tol, Point2d& nearpt, Int32& segment);
+    const Point2d& pt, float tol, Point2d& nearpt, int& segment);
 
 //! 计算点到圆角矩形的最近距离
 /*!
@@ -121,7 +121,7 @@ GEOMAPI float mgLinesHit(
 */
 GEOMAPI float mgRoundRectHit(
     const Box2d& rect, float rx, float ry, 
-    const Point2d& pt, float tol, Point2d& nearpt, Int32& segment);
+    const Point2d& pt, float tol, Point2d& nearpt, int& segment);
 
 //! 得到矩形的8个控制手柄坐标
 /*!

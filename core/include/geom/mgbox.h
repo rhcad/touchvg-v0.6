@@ -58,7 +58,7 @@ public:
     }
 
     //! 给定对角点整数坐标构造，默认不自动规范化
-    Box2d(long l, long t, long r, long b, bool normal = false)
+    Box2d(int l, int t, int r, int b, bool normal = false)
     {
         xmin = (float)l; ymin = (float)t;
         xmax = (float)r; ymax = (float)b;
@@ -90,6 +90,12 @@ public:
         set(center, width, height);
     }
     
+    //! 给定宽高构造(0, 0, w, h)
+    Box2d(float width, float height)
+    {
+        set(0.f, 0.f, width, height);
+    }
+    
     //! 得到两个对角点
     void get(Point2d& p1, Point2d& p2) const
     {
@@ -117,6 +123,7 @@ public:
     }
 #endif
     
+#ifndef SWIG
     //! 得到四舍五入后的矩形(RECT)，已上下对调
     /*! 如果本矩形为规范化矩形，则取出的RECT也符合Windows规范化矩形要求，
         即 CRect::NormalizeRect() 的结果。
@@ -130,6 +137,7 @@ public:
         l = mgRound(xmin); t = mgRound(ymin);
         r = mgRound(xmax); b = mgRound(ymax);
     }
+#endif
 
     //! 复制矩形，默认不自动规范化
     Box2d& set(const BOX_2D& src, bool normal = false);
@@ -673,10 +681,10 @@ public:
     //! 判断两个矩形框是否相等
     bool operator==(const Box2d& box) const
     {
-        return mgIsZero(xmin - box.xmin)
-            && mgIsZero(ymin - box.ymin)
-            && mgIsZero(xmax - box.xmax)
-            && mgIsZero(ymax - box.ymax);
+        return mgEquals(xmin, box.xmin)
+            && mgEquals(ymin, box.ymin)
+            && mgEquals(xmax, box.xmax)
+            && mgEquals(ymax, box.ymax);
     }
     
     //! 判断两个矩形框是否不相等

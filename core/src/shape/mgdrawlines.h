@@ -9,7 +9,7 @@
 #include "mgcmddraw.h"
 
 //! 自由折线绘图命令类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgLines
 */
 class MgCmdDrawFreeLines : public MgCommandDraw
@@ -38,7 +38,7 @@ private:
 };
 
 //! 折线绘图命令类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgLines
 */
 class MgCmdDrawLines : public MgCommandDraw
@@ -63,13 +63,12 @@ private:
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);
-    virtual bool click(const MgMotion* sender);
     virtual bool doubleClick(const MgMotion* sender);
     virtual bool cancel(const MgMotion* sender);
 };
 
 //! 多边形绘图命令类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgLines
 */
 class MgCmdDrawPolygon : public MgCmdDrawLines
@@ -93,7 +92,7 @@ private:
 };
 
 //! 四边形绘图命令类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgLines
 */
 class MgCmdDrawQuadrangle : public MgCmdDrawPolygon

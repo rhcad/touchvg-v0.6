@@ -29,14 +29,21 @@ def utf8togbk(dir):
                         continue
                     u = text[3:].decode('utf-8')
                     text = u.encode('gbk')
+                except UnicodeEncodeError:
+                    continue
                 except UnicodeDecodeError:
                     continue
-            os.rename(sfile, sfile + '.utf8')
-            open(sfile, 'wb').write(text.replace('\r','\n'))
-            resultfn += fn + ' '
+            try:
+                os.rename(sfile, sfile + '.utf8')
+                open(sfile, 'wb').write(text.replace('\r','\n'))
+                resultfn += fn + ' '
+                st = os.stat(sfile + '.utf8')
+                os.utime(sfile, (st.st_atime, st.st_mtime))
+            except:
+                print('except for %s' %(fn,))
     return resultfn
 
 if __name__=="__main__":
     resultfn = utf8togbk(os.path.abspath('core'))
-    resultfn += utf8togbk(os.path.abspath('android/skiaview/src/touchvg/view'))
+    resultfn += utf8togbk(os.path.abspath('android/skiaview/src/touchvg'))
     if resultfn != '': print('utf8->gbk: ' + resultfn)

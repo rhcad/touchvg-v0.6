@@ -18,7 +18,7 @@ float mgDisplayMmToModel(float mm, const MgMotion* sender);
 
 //! 绘图命令基类
 /*! example: mgRegisterCommand(YourCmd::Name(), YourCmd::Create);
-    \ingroup GEOM_SHAPE
+    \ingroup CORE_COMMAND
     \see mgLineHalfWidthModel, mgDisplayMmToModel, MgBaseCommand
  */
 class MgCommandDraw : public MgCommand
@@ -35,13 +35,21 @@ protected:
     bool _touchBegan(const MgMotion* sender);
     bool _touchMoved(const MgMotion* sender);
     bool _touchEnded(const MgMotion* sender);
-    bool _addshape(const MgMotion* sender, MgShape* shape = NULL);
+    MgShape* _addshape(const MgMotion* sender, MgShape* shape = NULL);
     bool _undo(const MgMotion* sender);
+    bool _draw(const MgMotion* sender, GiGraphics* gs);
     bool _click(const MgMotion* sender);
     void _delayClear();
+
+    bool _touchBegan2(const MgMotion* sender);
+    bool _touchMoved2(const MgMotion* sender);
+    bool _touchEnded2(const MgMotion* sender);
+    virtual int getMaxStep() { return 3; }
+    virtual void setStepPoint(int step, const Point2d& pt);
     
+    virtual bool undo(bool &, const MgMotion* sender) { return _undo(sender); }
     virtual bool cancel(const MgMotion* sender);
-    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
+    virtual bool draw(const MgMotion* sender, GiGraphics* gs) { return _draw(sender, gs); }
     virtual void gatherShapes(const MgMotion* sender, MgShapes* shapes);
     virtual bool click(const MgMotion* sender);
     virtual bool doubleClick(const MgMotion* sender);
@@ -52,12 +60,12 @@ private:
     
 protected:
     MgShape* getCurrentShape(const MgMotion*) { return m_shape; }
-    UInt32 getStep() { return m_step; }
+    int getStep() { return m_step; }
     MgShape* dynshape() { return m_shape; }
     Point2d snapPoint(const MgMotion* sender, bool firstStep = false);
     
 protected:
-    UInt32      m_step;
+    int      m_step;
 private:
     MgShape*    m_shape;
     bool        m_needClear;

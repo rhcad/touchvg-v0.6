@@ -107,7 +107,7 @@ GEOMAPI float mgMidAngle(float fromAngle, float toAngle)
 {
     fromAngle = mgTo0_2PI(fromAngle);
     toAngle = mgTo0_2PI(toAngle);
-    if (!mgIsZero(fromAngle - toAngle))
+    if (!mgEquals(fromAngle, toAngle))
     {
         if (toAngle < fromAngle)
             return mgTo0_2PI((fromAngle + toAngle + _M_2PI) / 2);
@@ -120,7 +120,7 @@ GEOMAPI float mgDiffAngle(float fromAngle, float toAngle)
 {
     fromAngle = mgTo0_2PI(fromAngle);
     toAngle = mgTo0_2PI(toAngle);
-    if (mgIsZero(fromAngle - toAngle))
+    if (mgEquals(fromAngle, toAngle))
         return 0.f;
     if (toAngle < fromAngle)
         toAngle += _M_2PI;
@@ -128,7 +128,7 @@ GEOMAPI float mgDiffAngle(float fromAngle, float toAngle)
 }
 
 // 计算最大公约数
-GEOMAPI long mgGcd(long x, long y)
+GEOMAPI int mgGcd(int x, int y)
 {
     while (x != y)
     {

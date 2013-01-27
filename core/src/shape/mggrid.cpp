@@ -39,20 +39,20 @@ void MgGrid::setFlag(MgShapeBit bit, bool on)
     __super::setFlag(bit, bit == kMgRotateDisnable || on);
 }
 
-UInt32 MgGrid::_getHandleCount() const
+int MgGrid::_getHandleCount() const
 {
-    return (getFlag(kMgFixedLength) || getFlag(kMgShapeLocked)) ? 4 : 5;
+    return (getFlag(kMgFixedLength) || getFlag(kMgShapeLocked)) ? 8 : 9;
 }
 
-Point2d MgGrid::_getHandlePoint(UInt32 index) const
+Point2d MgGrid::_getHandlePoint(int index) const
 {
-    return (index < 4 ? __super::_getHandlePoint(index) : getPoint(3) +
+    return (index < 8 ? __super::_getHandlePoint(index) : getPoint(3) +
             (m_cell == Vector2d() ? Vector2d(getWidth()/4, getHeight()/4) : m_cell));
 }
 
-bool MgGrid::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
+bool MgGrid::_setHandlePoint(int index, const Point2d& pt, float tol)
 {
-    if (index < 4) {
+    if (index < 8) {
         return __super::_setHandlePoint(index, pt, tol);
     }
     
@@ -65,16 +65,21 @@ bool MgGrid::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
     return true;
 }
 
-bool MgGrid::_draw(GiGraphics& gs, const GiContext& ctx) const
+bool MgGrid::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
 {
-    Vector2d cell(m_cell == Vector2d() ? Vector2d(getWidth()/4, getHeight()/4) : m_cell / 2);
+    Vector2d cell(m_cell / 2);
+    
     if (cell.x < _MGZERO || cell.y < _MGZERO) {
-        return __super::_draw(gs, ctx);
+        GiContext ctxedge(ctx);
+        ctxedge.setNoFillColor();
+        gs.drawRect(&ctxedge, getRect());
+        return __super::_draw(mode, gs, ctx);
     }
     
     int nx = (int)(getWidth() / cell.x + _MGZERO);
     int ny = (int)(getHeight() / cell.y + _MGZERO);
-    Box2d rect(getPoint(3), getPoint(3) + Vector2d((float)(cell.x * nx), (float)(cell.y * ny)));
+    Box2d rect(getPoint(3), getPoint(3)
+               + Vector2d((float)(cell.x * nx), (float)(cell.y * ny)));
     
     float w = gs.calcPenWidth(ctx.getLineWidth(), ctx.isAutoScale()) / -2.f;
     GiContext ctxgrid(w, ctx.getLineColor());
@@ -108,7 +113,7 @@ bool MgGrid::_draw(GiGraphics& gs, const GiContext& ctx) const
 
     gs.setAntiAliasMode(antiAlias);
     
-    return __super::_draw(gs, ctx) || ret > 0;
+    return __super::_draw(mode, gs, ctx) || ret > 0;
 }
 
 bool MgGrid::_save(MgStorage* s) const
@@ -126,7 +131,7 @@ bool MgGrid::_load(MgStorage* s)
     return ret;
 }
 
-int MgGrid::snap(Point2d& pnt, float& distx, float& disty)
+int MgGrid::snap(Point2d& pnt, float& distx, float& disty) const
 {
     int ret = 0;
     Point2d newpt(pnt);

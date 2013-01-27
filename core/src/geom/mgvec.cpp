@@ -176,15 +176,20 @@ float Vector2d::projectResolveVector(const Vector2d& xAxis,
 
 // 将本矢量在两个不共线的非零矢量上进行矢量分解, vec = u*uAxis+v*vAxis
 bool Vector2d::resolveVector(const Vector2d& uAxis, const Vector2d& vAxis, 
-                             float& u, float& v) const
+                             Vector2d& uv) const
 {
     float denom = uAxis.crossProduct(vAxis);
-    if (mgIsZero(denom))
-    {
-        u = 0.f; v = 0.f;
+    if (mgIsZero(denom)) {
+        uv.x = 0.f; uv.y = 0.f;
         return false;
     }
-    u = crossProduct(vAxis) / denom;
-    v = uAxis.crossProduct(*this) / denom;
+    float c = uAxis.crossProduct(*this);
+    uv.x = crossProduct(vAxis) / denom;
+    uv.y = c / denom;
     return true;
+}
+
+bool Vector2d::resolveVector(const Vector2d& uAxis, const Vector2d& vAxis)
+{
+    return resolveVector(uAxis, vAxis, *this);
 }

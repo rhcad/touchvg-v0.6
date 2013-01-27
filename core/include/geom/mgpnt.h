@@ -184,6 +184,12 @@ public:
         return mgHypot(x - pnt.x, y - pnt.y);
     }
     
+    //! 两点距离的平方
+    float distanceSquare(const Point2d& pnt) const
+    {
+        return mgSquare(x - pnt.x, y - pnt.y);
+    }
+    
 #ifndef SWIG
     //! 判断两个点是否相等
     bool operator==(const Point2d& pnt) const
@@ -215,6 +221,7 @@ public:
         x = xx; y = yy; return *this;
     }
     
+#ifndef SWIG
     //! 得到四舍五入后的坐标
     /*! 利用该函数可以将矢量转换为POINT、CPoint值
         \param[out] xx 四舍五入后的X坐标分量
@@ -224,6 +231,7 @@ public:
     {
         xx = mgRound(x); yy = mgRound(y);
     }
+#endif
     
     //! 极坐标法计算坐标
     /*! 

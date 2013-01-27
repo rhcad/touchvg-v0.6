@@ -101,9 +101,10 @@ public:
     /*!
         \param count 曲线控制点的点数，不含起点，必须为3的倍数
         \param points 曲线控制点的位置的数组，不含起点，元素个数为count
+        \param reverse 反序添加控制点
         \return 是否正确添加
     */
-    bool beziersTo(int count, const Point2d* points);
+    bool beziersTo(int count, const Point2d* points, bool reverse = false);
 
     //! 添加绘制切线圆弧到新位置的指令节点
     /*! 新圆弧的起点为图元的当前位置，起始切向方向为最末一段直线段的方向。\n

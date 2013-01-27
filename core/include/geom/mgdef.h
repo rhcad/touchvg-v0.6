@@ -21,7 +21,7 @@
 #pragma warning(disable: 4251)  // using non-exported as public in exported
 #endif
 
-const float _MGZERO    = 1e-7f;     //!< 定义可以视为零的极小数
+const float _MGZERO    = 1e-6f;     //!< 定义可以视为零的极小数
 
 // 定义常用的数学常数
 const float _M_E       = 2.71828182845904523536028747135266f;      //!< e
@@ -53,11 +53,21 @@ const float  _FLT_MAX  = 3.402823466e+38F;          //!< 单精度浮点数最�
 //! 判断一个浮点数是否可以认为是零
 /*! 判断两个浮点数是否相等不能直接比较相等，应该用mgIsZero(d1-d2)判断
     \ingroup GEOMAPI_BASIC
-    \see _MGZERO
+    \see _MGZERO, mgEquals
 */
 template<class _T> inline bool mgIsZero(_T v)
 {
     return fabs(v) < _MGZERO;
+}
+
+//! 判断两个浮点数是否相等
+/*!
+    \ingroup GEOMAPI_BASIC
+    \see mgIsZero
+*/
+template<class _T> inline bool mgEquals(_T v1, _T v2)
+{
+    return fabs(v1 - v2) < _MGZERO;
 }
 
 //! 返回两个同类型的数中较小的数的引用
@@ -113,9 +123,9 @@ inline float mgSquare(float x, float y)
     \ingroup GEOMAPI_BASIC
     \see mgRoundReal
 */
-inline long mgRound(float d)
+inline int mgRound(float d)
 {
-    return d < 0 ? -(long)(-d + 0.5f) : (long)(d + 0.5f);
+    return d < 0 ? -(int)(-d + 0.5f) : (int)(d + 0.5f);
 }
 
 #endif // __GEOMETRY_MGDEF_H_

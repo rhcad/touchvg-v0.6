@@ -9,7 +9,7 @@
 #include "mgcmddraw.h"
 
 //! 三角形绘图命令
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
 */
 class MgCmdDrawTriangle : public MgCommandDraw
 {
@@ -26,37 +26,69 @@ private:
     virtual void release() { delete this; }
 
     virtual bool initialize(const MgMotion* sender);
-    virtual bool undo(bool &enableRecall, const MgMotion* sender);
+    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);
-    virtual bool click(const MgMotion* sender);
 };
 
-//! 平行四边形绘图命令类
-/*! \ingroup GEOM_SHAPE
-    \see MgParallelogram
+//! 三点圆弧绘图命令类
+/*! \ingroup CORE_COMMAND
+    \see MgArc
 */
-class MgCmdParallelogram : public MgCommandDraw
+class MgCmdArc3P : public MgCommandDraw
 {
 protected:
-    MgCmdParallelogram();
-    virtual ~MgCmdParallelogram();
-    
+    MgCmdArc3P() {}
 public:
-    static const char* Name() { return "parallelogram"; }
-    static MgCommand* Create() { return new MgCmdParallelogram; }
-    
+    static const char* Name() { return "arc3p"; }
+    static MgCommand* Create() { return new MgCmdArc3P; }
 private:
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
-
     virtual bool initialize(const MgMotion* sender);
-    virtual bool undo(bool &enableRecall, const MgMotion* sender);
-    virtual bool touchBegan(const MgMotion* sender);
-    virtual bool touchMoved(const MgMotion* sender);
-    virtual bool touchEnded(const MgMotion* sender);
-    virtual bool click(const MgMotion* sender);
+    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
+    virtual bool touchBegan(const MgMotion* sender) { return _touchBegan2(sender); }
+    virtual bool touchMoved(const MgMotion* sender) { return _touchMoved2(sender); }
+    virtual bool touchEnded(const MgMotion* sender) { return _touchEnded2(sender); }
+    virtual void setStepPoint(int step, const Point2d& pt);
+
+protected:
+    Point2d _points[3];
+};
+
+//! 圆心+起点+终点圆弧绘图命令类
+/*! \ingroup CORE_COMMAND
+    \see MgArc
+*/
+class MgCmdArcCSE : public MgCmdArc3P
+{
+protected:
+    MgCmdArcCSE() {}
+public:
+    static const char* Name() { return "arc-cse"; }
+    static MgCommand* Create() { return new MgCmdArcCSE; }
+private:
+    virtual const char* getName() const { return Name(); }
+    virtual void release() { delete this; }
+    virtual void setStepPoint(int step, const Point2d& pt);
+};
+
+//! 切线圆弧绘图命令类
+/*! \ingroup CORE_COMMAND
+    \see MgArc
+*/
+class MgCmdArcTan : public MgCmdArc3P
+{
+protected:
+    MgCmdArcTan() {}
+public:
+    static const char* Name() { return "arc-tan"; }
+    static MgCommand* Create() { return new MgCmdArcTan; }
+private:
+    virtual const char* getName() const { return Name(); }
+    virtual void release() { delete this; }
+    virtual void setStepPoint(int step, const Point2d& pt);
 };
 
 #endif // __GEOMETRY_MGCOMMAND_DRAW_TRIANGLE_H_

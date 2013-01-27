@@ -9,7 +9,7 @@
 #include "mgcmddraw.h"
 
 //! 直线段绘图命令
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgLine
 */
 class MgCmdDrawLine : public MgCommandDraw
@@ -34,7 +34,7 @@ private:
 };
 
 //! 固定长度直线段绘图命令
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgEllipse
 */
 class MgCmdDrawFixedLine : public MgCmdDrawLine

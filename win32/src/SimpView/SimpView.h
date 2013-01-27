@@ -41,6 +41,7 @@ public:
 	//{{AFX_MSG(CSimpViewApp)
 	afx_msg void OnAppAbout();
 	afx_msg void OnFileNew();
+    afx_msg void OnFileOpen();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -98,12 +98,6 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
     return _touchEnded(sender);
 }
 
-bool MgCmdDrawLines::click(const MgMotion* sender)
-{
-    return (m_step == 0 ? _click(sender)
-            : touchBegan(sender) && touchEnded(sender));
-}
-
 bool MgCmdDrawLines::doubleClick(const MgMotion* sender)
 {
     if (m_step > 1) {
@@ -121,10 +115,13 @@ bool MgCmdDrawLines::doubleClick(const MgMotion* sender)
 bool MgCmdDrawLines::cancel(const MgMotion* sender)
 {
     if (m_step > 1) {
+        ((MgBaseLines*)dynshape()->shape())->removePoint(m_step--);
         _addshape(sender);
         _delayClear();
         m_step = 0;
+        return true;
     }
+    
     return MgCommandDraw::cancel(sender);
 }
 
@@ -172,7 +169,7 @@ bool MgCmdDrawFreeLines::draw(const MgMotion* sender, GiGraphics* gs)
         GiContext ctxaux(0, GiColor(64, 64, 64, 128), kGiLineSolid, GiColor(0, 64, 64, 168));
         float radius = gs->xf().displayToModel(3);
         
-        for (UInt32 i = 0; i < dynshape()->shape()->getPointCount(); i++) {
+        for (int i = 0; i < dynshape()->shape()->getPointCount(); i++) {
             gs->drawEllipse(&ctxaux, dynshape()->shape()->getPoint(i), radius);
         }
     }*/

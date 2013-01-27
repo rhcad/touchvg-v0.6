@@ -16,6 +16,7 @@ public:
     GiGraphWin*     m_graph;	        // 图形系统对象
     MgShape*        m_shapeAdded;
 
+    MgShapes* shapes() { return m_shapes; }
     void shapeAdded(MgShape* shape);
 
 // Overrides
@@ -35,7 +36,6 @@ protected:
 private:
     COLORREF        m_bkColor;	        // 窗口背景颜色
     bool            m_gdip;             // 是否使用GDI+显示
-    long            m_drawTick;         // 上次重绘用的时间
 
 // Generated message map functions
 protected:
@@ -51,7 +51,6 @@ protected:
 	afx_msg void OnViewAntiAlias();
 	afx_msg void OnViewBkColor();
 	afx_msg void OnUpdateViewScale(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateDrawTime(CCmdUI* pCmdUI);
 	afx_msg void OnZoomExtent();
 	afx_msg void OnZoomIn();
 	afx_msg void OnZoomOut();

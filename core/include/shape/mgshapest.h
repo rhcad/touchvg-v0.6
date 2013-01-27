@@ -7,10 +7,11 @@
 #define __GEOMETRY_MGSHAPES_TEMPL_H_
 
 #include <mgshapes.h>
+#include <mgshape.h>
 #include <mgstorage.h>
 #include <gigraph.h>
 
-MgShape* mgCreateShape(UInt32 type);
+MgShape* mgCreateShape(int type);
 
 //! 图形列表模板类
 /*! \ingroup GEOM_SHAPE
@@ -25,7 +26,7 @@ class MgShapesT : public MgShapes
     typedef typename Container::iterator iterator;
 public:
     MgShapesT(bool hasContext = true) : _context(hasContext ? new ContextT() : NULL)
-        , _changeCount(0)
+        , _viewScale(0), _changeCount(0)
     {
     }
 
@@ -35,10 +36,10 @@ public:
         delete _context;
     }
 
-    static UInt32 Type() { return 0x10000 | MgShapes::Type(); }
-    UInt32 getType() const { return Type(); }
+    static int Type() { return 0x10000 | MgShapes::Type(); }
+    int getType() const { return Type(); }
 
-    bool isKindOf(UInt32 type) const
+    bool isKindOf(int type) const
     {
         return type == Type() || type == MgShapes::Type();
     }
@@ -63,6 +64,7 @@ public:
                 *_context = *_src._context;
                 _xf = _src._xf;
                 _rectW = _src._rectW;
+                _viewScale = _src._viewScale;
             }
         }
     }
@@ -90,28 +92,43 @@ public:
     MgShape* addShape(const MgShape& src)
     {
         MgShape* p = (MgShape*)src.clone();
-        if (p)
-        {
+        if (p) {
             p->setParent(this, getNewID(src.getID()));
+            p->shape()->setFlag(kMgShapeLocked, false);
             _shapes.push_back(p);
         }
         return p;
     }
     
-    MgShape* removeShape(UInt32 nID)
+    MgShape* removeShape(int sid)
     {
-        for (iterator it = _shapes.begin(); it != _shapes.end(); ++it)
-        {
+        for (iterator it = _shapes.begin(); it != _shapes.end(); ++it) {
             MgShape* shape = *it;
-            if (shape->getID() == nID) {
+            if (shape->getID() == sid) {
+                if (shape->shapec()->getFlag(kMgShapeLocked)) {
+                    return NULL;
+                }
                 _shapes.erase(it);
                 return shape;
             }
         }
         return NULL;
     }
+    
+    bool bringToFront(int sid)
+    {
+        for (iterator it = _shapes.begin(); it != _shapes.end(); ++it) {
+            MgShape* shape = *it;
+            if (shape->getID() == sid) {
+                _shapes.erase(it);
+                _shapes.push_back(shape);
+                return true;
+            }
+        }
+        return false;
+    }
 
-    UInt32 getShapeCount() const
+    int getShapeCount() const
     {
         return _shapes.size();
     }
@@ -144,21 +161,28 @@ public:
         return _shapes.empty() ? NULL : _shapes.back();
     }
 
-    MgShape* findShape(UInt32 nID) const
+    MgShape* findShape(int sid) const
     {
-        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
-        {
-            if ((*it)->getID() == nID)
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it) {
+            if ((*it)->getID() == sid)
                 return *it;
         }
         return NULL;
     }
 
-    MgShape* findShapeByTag(UInt32 tag) const
+    MgShape* findShapeByTag(int tag) const
     {
-        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
-        {
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it) {
             if ((*it)->getTag() == tag)
+                return *it;
+        }
+        return NULL;
+    }
+    
+    MgShape* findShapeByType(int type) const
+    {
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it) {
+            if ((*it)->shapec()->getType() == type)
                 return *it;
         }
         return NULL;
@@ -167,42 +191,41 @@ public:
     Box2d getExtent() const
     {
         Box2d extent;
-        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
-        {
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it) {
             extent.unionWith((*it)->shape()->getExtent());
         }
 
         return extent;
     }
-
-    MgShape* hitTest(const Box2d& limits, Point2d& nearpt, Int32& segment) const
+    
+    MgShape* hitTest(const Box2d& limits, Point2d& nearpt, 
+                     int* segment = NULL, Filter filter = NULL) const
     {
         MgShape* retshape = NULL;
         float distMin = _FLT_MAX;
 
-        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
-        {
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it) {
             const MgBaseShape* shape = (*it)->shape();
             Box2d extent(shape->getExtent());
 
-            if (extent.isIntersect(limits))
-            {
+            if (extent.isIntersect(limits) && (!filter || filter(*it))) {
                 Point2d tmpNear;
-                Int32   tmpSegment;
+                int   tmpSegment;
                 float  tol = (!hasFillColor(*it) ? limits.width() / 2
                               : mgMax(extent.width(), extent.height()));
                 float  dist = shape->hitTest(limits.center(), tol, tmpNear, tmpSegment);
 
-                if (distMin > dist) {
+                if (distMin > dist - _MGZERO) {     // 让末尾图形优先选中
                     distMin = dist;
-                    segment = tmpSegment;
+                    if (segment) {
+                        *segment = tmpSegment;
+                    }
                     nearpt = tmpNear;
                     retshape = *it;
                 }
             }
         }
-        if (retshape && distMin > limits.width() && !hasFillColor(retshape))
-        {
+        if (retshape && distMin > limits.width() && !hasFillColor(retshape)) {
             retshape = NULL;
         }
 
@@ -214,10 +237,9 @@ public:
         Box2d clip(gs.getClipModel());
         int count = 0;
         
-        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it)
-        {
+        for (const_iterator it = _shapes.begin(); it != _shapes.end(); ++it) {
             if ((*it)->shape()->getExtent().isIntersect(clip)) {
-                if ((*it)->draw(gs, ctx))
+                if ((*it)->draw(0, gs, ctx))
                     count++;
             }
         }
@@ -225,9 +247,9 @@ public:
         return count;
     }
     
-    UInt32 getChangeCount()
+    int getChangeCount()
     {
-        return (UInt32)_changeCount;
+        return (int)_changeCount;
     }
     
     void afterChanged()
@@ -235,11 +257,11 @@ public:
         giInterlockedIncrement(&_changeCount);
     }
     
-    bool save(MgStorage* s, UInt32 startIndex = 0) const
+    bool save(MgStorage* s, int startIndex = 0) const
     {
         bool ret = false;
         Box2d rect;
-        UInt32 index = 0;
+        int index = 0;
         
         if (_context) {
             if (!s->writeNode("shapedoc", -1, false))
@@ -247,6 +269,7 @@ public:
             
             s->writeFloatArray("transform", &_xf.m11, 6);
             s->writeFloatArray("zoomExtent", &_rectW.xmin, 4);
+            s->writeFloat("viewScale", _viewScale);
             rect = getExtent();
             s->writeFloatArray("extent", &rect.xmin, 4);
             s->writeUInt32("count", 1);
@@ -257,7 +280,7 @@ public:
             rect = getExtent();
             s->writeFloatArray("extent", &rect.xmin, 4);
             
-            s->writeUInt32("count", _shapes.size() - (UInt32)startIndex);
+            s->writeUInt32("count", _shapes.size() - (int)startIndex);
             for (const_iterator it = _shapes.begin(); ret && it != _shapes.end(); ++it, ++index)
             {
                 if (index < startIndex)
@@ -296,6 +319,7 @@ public:
             
             s->readFloatArray("transform", &_xf.m11, 6);
             s->readFloatArray("zoomExtent", &_rectW.xmin, 4);
+            _viewScale = s->readFloat("viewScale", _viewScale);
             s->readFloatArray("extent", &rect.xmin, 4);
             s->readUInt32("count", 0);
         }
@@ -309,8 +333,8 @@ public:
                 clear();
             
             while (ret && s->readNode("shape", index, false)) {
-                UInt32 type = s->readUInt32("type", 0);
-                UInt32 id = s->readUInt32("id", 0);
+                int type = s->readUInt32("type", 0);
+                int id = s->readUInt32("id", 0);
                 MgShape* shape = mgCreateShape(type);
                 
                 s->readFloatArray("extent", &rect.xmin, 4);
@@ -350,10 +374,16 @@ public:
     {
         return _rectW;
     }
+
+    float getViewScale() const
+    {
+        return _viewScale;
+    }
     
-    void setZoomRectW(const Box2d& rectW)
+    void setZoomRectW(const Box2d& rectW, float viewScale)
     {
         _rectW = rectW;
+        _viewScale = viewScale;
     }
     
     virtual MgLockRW* getLockData()
@@ -362,16 +392,16 @@ public:
     }
 
 private:
-    UInt32 getNewID(UInt32 nID)
+    int getNewID(int sid)
     {
-        if (0 == nID || findShape(nID)) {
-            nID = 1;
+        if (0 == sid || findShape(sid)) {
+            sid = 1;
             if (!_shapes.empty())
-                nID = _shapes.back()->getID() + 1;
-            while (findShape(nID))
-                nID++;
+                sid = _shapes.back()->getID() + 1;
+            while (findShape(sid))
+                sid++;
         }
-        return nID;
+        return sid;
     }
     
     bool hasFillColor(const MgShape* shape) const
@@ -384,6 +414,7 @@ protected:
     ContextT*               _context;
     Matrix2d                _xf;
     Box2d                   _rectW;
+    float                   _viewScale;
     long                    _changeCount;
     MgLockRW                _lock;
 };

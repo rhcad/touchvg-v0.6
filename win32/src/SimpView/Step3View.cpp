@@ -4,7 +4,9 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "Step3View.h"
+#include <afxpriv.h>
 #include <mgcmd.h>
+#include <mgjsonstorage.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -14,13 +16,37 @@ static char THIS_FILE[] = __FILE__;
 
 static const UINT WM_DELAY_LBUTTONUP = WM_USER + 101;
 
-class MgViewEx : public MgView
+static struct {
+    LPCWSTR caption;
+    LPCSTR  name;
+} s_cmds[] = {
+    { L"选择",      "select" },
+    { L"删除",      "erase" },
+    { L"直线段",    "line" },
+    { L"矩形",      "rect" },
+    { L"正方形",    "square" },
+    { L"椭圆",      "ellipse" },
+    { L"圆",        "circle" },
+    { L"三角形",    "triangle" },
+    { L"多边形",    "polygon" },
+    { L"四边形",    "quadrangle" },
+    { L"折线",      "lines" },
+    { L"随手画",    "splines" },
+    { L"网格",      "grid" },
+    { L"三点圆弧",  "arc3p" },
+    { L"圆心圆弧",  "arc-cse" },
+    { L"切线圆弧",  "arc-tan" },
+};
+static const int s_cmdCount = sizeof(s_cmds)/sizeof(s_cmds[0]);
+
+class MgViewProxyMfc : public MgView
 {
 public:
     CDrawShapeView* view;
     MgMotion        motion;
+    BOOL            randomProp;
 
-    MgViewEx(CDrawShapeView* _view) : view(_view) {
+    MgViewProxyMfc(CDrawShapeView* _view) : view(_view), randomProp(FALSE) {
         motion.view = this;
     }
 private:
@@ -33,7 +59,9 @@ private:
         view->Invalidate();
     }
     GiContext* context() {
-        RandomParam().setShapeProp(view->m_shapes->context());
+        if (randomProp) {
+            RandomParam().setShapeProp(view->m_shapes->context());
+        }
         return view->m_shapes->context();
     }
     bool useFingle() { return false; }
@@ -54,17 +82,22 @@ private:
         return view->GetLastActivePopup() != view;
     }
     
-    bool showContextActions(int, const int* actions, const Box2d&)
+    bool showContextActions(int, const int* actions, const Box2d&, const MgShape*)
     {
         return view->showContextActions(actions);
     }
 };
 
+void CDrawShapeView::setRandomProp(BOOL randomProp)
+{
+    m_proxy->randomProp = randomProp;
+}
+
 CDrawShapeView::CDrawShapeView(RandomParam& param)
 	: CScrollShapeView(param), m_cmdID(0)
     , m_moved(FALSE), m_delayUp(FALSE), m_downTime(0), m_downFlags(0)
 {
-    m_proxy = new MgViewEx(this);
+    m_proxy = new MgViewProxyMfc(this);
 }
 
 CDrawShapeView::~CDrawShapeView()
@@ -74,9 +107,9 @@ CDrawShapeView::~CDrawShapeView()
 
 BEGIN_MESSAGE_MAP(CDrawShapeView, CScrollShapeView)
 	//{{AFX_MSG_MAP(CDrawShapeView)
-    ON_UPDATE_COMMAND_UI_RANGE(ID_CMD_SELECT, ID_CMD_SPLINES, OnUpdateCmds)
-    ON_COMMAND_RANGE(ID_CMD_SELECT, ID_CMD_SPLINES, OnCmds)
-    ON_COMMAND_RANGE(ID_EDIT_UNDO, ID_EDIT_REDO, OnCmds)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_CMD_FIRST, ID_CMD_LAST, OnUpdateCmds)
+    ON_COMMAND_RANGE(ID_CMD_FIRST, ID_CMD_LAST, OnCmds)
+    //ON_COMMAND_RANGE(ID_EDIT_UNDO, ID_EDIT_REDO, OnCmds)
     ON_WM_MOUSEMOVE()
     ON_WM_LBUTTONDOWN()
     ON_WM_LBUTTONUP()
@@ -85,56 +118,28 @@ BEGIN_MESSAGE_MAP(CDrawShapeView, CScrollShapeView)
     ON_WM_CONTEXTMENU()
     ON_UPDATE_COMMAND_UI_RANGE(ID_DUMMY_1, ID_DUMMY_20, OnUpdateContextItems)
     ON_COMMAND_RANGE(ID_DUMMY_1, ID_DUMMY_20, OnContextItems)
+    ON_COMMAND(ID_FILE_SAVE, OnFileSave)
+    ON_MESSAGE_VOID(WM_INITIALUPDATE, OnInitialUpdate)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-const char* CDrawShapeView::getCmdName(UINT nID) const
-{
-    if (nID == ID_CMD_SELECT)
-        return "select";
-    if (nID == ID_CMD_ERASE)
-        return "erase";
-    if (nID == ID_CMD_LINE)
-        return "line";
-    if (nID == ID_CMD_RECT)
-        return "rect";
-    if (nID == ID_CMD_ELLIPSE)
-        return "ellipse";
-    if (nID == ID_CMD_LINES)
-        return "lines";
-    if (nID == ID_CMD_SPLINES)
-        return "splines";
-    if (nID == ID_CMD_TRIANGLE)
-        return "triangle";
-    if (nID == ID_CMD_DIAMOND)
-        return "diamond";
-    if (nID == ID_CMD_PARALLELOGRAM)
-        return "parallelogram";
-    if (nID == ID_CMD_SQUARE)
-        return "square";
-    if (nID == ID_CMD_CIRCLE)
-        return "circle";
-    if (nID == ID_CMD_GRID)
-        return "grid";
-    if (nID == ID_CMD_BREAK)
-        return "break";
-    if (nID == ID_EDIT_UNDO)
-        return "undo";
-    if (nID == ID_EDIT_REDO)
-        return "redo";
-
-    return "";
-}
-
 void CDrawShapeView::OnUpdateCmds(CCmdUI* pCmdUI)
 {
+    int index = pCmdUI->m_nID - ID_CMD_FIRST;
+    if (index >= 0) {
+        pCmdUI->SetText(index < s_cmdCount ? s_cmds[index].caption : L"-");
+        pCmdUI->Enable(index < s_cmdCount);
+    }
     pCmdUI->SetCheck(m_cmdID == pCmdUI->m_nID ? 1 : 0);
 }
 
 void CDrawShapeView::OnCmds(UINT nID)
 {
-    if (mgGetCommandManager()->setCommand(&m_proxy->motion, getCmdName(nID))) {
-        m_cmdID = nID;
+    if (nID >= ID_CMD_FIRST && nID - ID_CMD_FIRST < s_cmdCount) {
+        if (mgGetCommandManager()->setCommand(&m_proxy->motion, 
+            s_cmds[nID - ID_CMD_FIRST].name)) {
+                m_cmdID = nID;
+        }
     }
 }
 
@@ -313,8 +318,9 @@ bool CDrawShapeView::showContextActions(const int* actions)
 // see MgContextAction in mgaction.h
 static LPCWSTR const ACTION_NAMES[] = { NULL,
     L"全选", L"重选", L"绘图", L"取消",
-    L"删除", L"克隆", L"剪开", L"定长", L"取消定长", L"锁定", L"解锁", 
-    L"编辑顶点", L"隐藏顶点", L"闭合", L"不闭合", L"加点", L"删点",
+    L"删除", L"克隆", L"剪开", L"角标", L"定长", L"不定长", L"锁定", L"解锁", 
+    L"编辑", L"取消", L"闭合", L"不闭合", L"加点", L"删点", L"成组", L"解组",
+    L"翻转", L"三视图", 
 };
 
 void CDrawShapeView::OnUpdateContextItems(CCmdUI* pCmdUI)
@@ -323,11 +329,50 @@ void CDrawShapeView::OnUpdateContextItems(CCmdUI* pCmdUI)
     bool enabled = action > 0 && action < sizeof(ACTION_NAMES)/sizeof(ACTION_NAMES[0]);
 
     pCmdUI->Enable(enabled);
-    pCmdUI->SetText(enabled ? ACTION_NAMES[action] : NULL);
+    pCmdUI->SetText(enabled ? ACTION_NAMES[action] : L"?");
 }
 
 void CDrawShapeView::OnContextItems(UINT nID)
 {
     int action = m_actions[nID - ID_DUMMY_1];
     mgGetCommandManager()->doContextAction(&m_proxy->motion, action);
+}
+
+void CDrawShapeView::OnInitialUpdate()
+{
+    if (!m_filename.IsEmpty()) {
+        m_graph->xf.setModelTransform(shapes()->modelTransform());
+        m_graph->xf.zoomTo(shapes()->getZoomRectW());
+        m_graph->xf.zoomScale(shapes()->getViewScale());
+        OnZoomed();
+    }
+}
+
+void CDrawShapeView::OnFileSave()
+{
+    if (m_filename.IsEmpty())
+    {
+        CFileDialog dlg(FALSE, L".vg", NULL, 
+            OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST,
+            L"Shape files (*.vg)|*.vg||", this);
+        if (dlg.DoModal() != IDOK)
+            return;
+        m_filename = dlg.GetPathName();
+    }
+    
+    MgJsonStorage s;
+
+    shapes()->setZoomRectW(m_graph->xf.getWndRectW(), m_graph->xf.getViewScale());
+    if (shapes()->save(s.storageForWrite()))
+    {
+        const char* content = s.stringify(true);
+        CFile file;
+        if (file.Open(m_filename, CFile::modeWrite | CFile::modeCreate)) {
+            file.Write(content, strlen(content));
+        }
+    }
+    else
+    {
+        AfxMessageBox(L"得到文件内容出错。");
+    }
 }

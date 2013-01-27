@@ -312,7 +312,7 @@ GEOMAPI bool mgArc3P(
 }
 
 GEOMAPI bool mgArcTan(
-    const Point2d& start, const Point2d& end, const Vector2d& tanv,
+    const Point2d& start, const Point2d& end, const Vector2d& startTan,
     Point2d& center, float& radius,
     float* startAngle, float* sweepAngle)
 {
@@ -324,8 +324,8 @@ GEOMAPI bool mgArcTan(
     c = -0.5f * (a*(end.x + start.x) + b*(end.y + start.y));
     
     // 求中垂线和切线的交点center
-    if (!mgCrossLineAbc(a, b, c, tanv.x, tanv.y, 
-        -tanv.x * start.x - tanv.y * start.y, center, Tol::gTol()))
+    if (!mgCrossLineAbc(a, b, c, startTan.x, startTan.y, 
+        -startTan.x * start.x - startTan.y * start.y, center, Tol::gTol()))
         return false;
     radius = mgHypot(center.x - start.x, center.y - start.y);
     
@@ -334,7 +334,7 @@ GEOMAPI bool mgArcTan(
         float sa = atan2(start.y - center.y, start.x - center.x);
         float ea = atan2(end.y - center.y, end.x - center.x);
         *startAngle = sa;
-        if (tanv.crossProduct(start - center) > 0.f)
+        if (startTan.crossProduct(start - center) > 0.f)
             *sweepAngle = -mgTo0_2PI(sa - ea);
         else
             *sweepAngle = mgTo0_2PI(ea - sa);
@@ -351,6 +351,97 @@ GEOMAPI bool mgArcBulge(
     Point2d point ((start.x + end.x)*0.5f, (start.y + end.y)*0.5f);
     point = point.rulerPoint(end, bulge);
     return mgArc3P(start, point, end, center, radius, startAngle, sweepAngle);
+}
+
+struct point_t {
+    double x, y;
+};
+
+static double distanceSquare(const point_t& a, const point_t& b)
+{
+    return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+}
+
+static double distance(const point_t& a, const point_t& b)
+{
+    return sqrt(distanceSquare(a, b));
+}
+
+static int _InsectTwoCircles(point_t& pt1, point_t& pt2,
+                             const point_t& c1, double r1,
+                             const point_t& c2, double r2)
+{
+    double d, a, b, c, p, q, r;
+    double cos_value[2], sin_value[2];
+    
+    if (mgEquals(c1.x, c2.x) && mgEquals(c1.y, c2.y) && mgEquals(r1, r2)) {
+        return -1;
+    }
+    
+    d = distance(c1, c2);
+    if (d > r1 + r2 || d < fabs(r1 - r2)) {
+        return 0;
+    }
+    
+    a = 2.0 * r1 * (c1.x - c2.x);
+    b = 2.0 * r1 * (c1.y - c2.y);
+    c = r2 * r2 - r1 * r1 - distanceSquare(c1, c2);
+    p = a * a + b * b;
+    q = -2.0 * a * c;
+    if (mgEquals(d, r1 + r2) || mgEquals(d, fabs(r1 - r2))) {
+        cos_value[0] = -q / p / 2.0;
+        sin_value[0] = sqrt(1 - cos_value[0] * cos_value[0]);
+        
+        pt1.x = r1 * cos_value[0] + c1.x;
+        pt1.y = r1 * sin_value[0] + c1.y;
+        
+        if (!mgEquals(distanceSquare(pt1, c2), r2 * r2)) {
+            pt1.y = c1.y - r1 * sin_value[0];
+        }
+        return 1;
+    }
+    
+    r = c * c - b * b;
+    cos_value[0] = (sqrt(q * q - 4.0 * p * r) - q) / p / 2.0;
+    cos_value[1] = (-sqrt(q * q - 4.0 * p * r) - q) / p / 2.0;
+    sin_value[0] = sqrt(1 - cos_value[0] * cos_value[0]);
+    sin_value[1] = sqrt(1 - cos_value[1] * cos_value[1]);
+    
+    pt1.x = r1 * cos_value[0] + c1.x;
+    pt2.x = r1 * cos_value[1] + c1.x;
+    pt1.y = r1 * sin_value[0] + c1.y;
+    pt2.y = r1 * sin_value[1] + c1.y;
+    
+    if (!mgEquals(distanceSquare(pt1, c2), r2 * r2)) {
+        pt1.y = c1.y - r1 * sin_value[0];
+    }
+    if (!mgEquals(distanceSquare(pt2, c2), r2 * r2)) {
+        pt2.y = c1.y - r1 * sin_value[1];
+    }
+    if (mgEquals(pt1.y, pt2.y) && mgEquals(pt1.x, pt2.x)) {
+        if (pt1.y > 0) {
+            pt2.y = -pt2.y;
+        } else {
+            pt1.y = -pt1.y;
+        }
+    }
+    return 2;
+}
+
+// http://blog.csdn.net/cyg0810/article/details/7765894
+GEOMAPI int mgInsectTwoCircles(Point2d& pt1, Point2d& pt2,
+                               const Point2d& c1, float r1, const Point2d& c2, float r2)
+{
+    point_t p1 = { 0, 0 }, p2 = { 0, 0 };
+    point_t ca = { c1.x, c1.y };
+    point_t cb = { c2.x, c2.y };
+    
+    int n = _InsectTwoCircles(p1, p2, ca, r1, cb, r2);
+    
+    pt1.set((float)p1.x, (float)p1.y);
+    pt2.set((float)p2.x, (float)p2.y);
+    
+    return n;
 }
 
 GEOMAPI bool mgTriEquations(
@@ -564,7 +655,7 @@ GEOMAPI bool mgCubicSplines(
         delete[] a;
     }
     
-    if (!mgIsZero(tension - 1.f))
+    if (!mgEquals(tension, 1.f))
     {
         for (int i = 0; i < n; i++)
         {

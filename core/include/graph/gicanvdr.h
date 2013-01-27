@@ -65,6 +65,16 @@ struct GiCanvasDrawing
 
     //! 在当前路径中添加闭合指令的原语函数
     virtual bool rawClosePath() = 0;
+    
+    //! 在指定点以指定的字体像素大小居中显示一行文字
+    virtual void rawTextCenter(const char* text, float x, float y, float h) {
+        if (text && x && y && h) text = NULL;
+    }
+    
+    // 在指定矩形区域显示图像
+    virtual bool drawImage(const char* name, float xc, float yc, float w, float h, float angle) {
+        return !name && xc && yc && w && h && angle;
+    }
 };
 
 #endif // __GEOMETRY_CANVAS_DRAWING_H_

@@ -108,9 +108,9 @@ public:
         const Point2d& p2 = getPoint(index+1);
         
         // 和剪裁边重合
-        if (mgIsZero(p1.x - p2.x) && (mgIsZero(p1.x - m_rect.xmin) || mgIsZero(p1.x - m_rect.xmax)))
+        if (mgEquals(p1.x, p2.x) && (mgEquals(p1.x, m_rect.xmin) || mgEquals(p1.x, m_rect.xmax)))
             return false;
-        if (mgIsZero(p1.y - p2.y) && (mgIsZero(p1.y - m_rect.ymin) || mgIsZero(p1.y - m_rect.ymax)))
+        if (mgEquals(p1.y, p2.y) && (mgEquals(p1.y, m_rect.ymin) || mgEquals(p1.y, m_rect.ymax)))
             return false;
 
         return true;

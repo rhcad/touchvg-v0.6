@@ -7,6 +7,7 @@
 #define __GEOMETRY_MGSHAPE_H_
 
 #include <mgbox.h>
+#include "mgobject.h"
 
 class Matrix2d;
 class GiGraphics;
@@ -16,52 +17,32 @@ struct MgShape;
 struct MgShapes;
 struct MgStorage;
 
-//! 图形对象基类
-/*! \ingroup GEOM_SHAPE
-    \interface MgObject
-*/
-struct MgObject
-{
-    //! 复制出一个新对象
-    virtual MgObject* clone() const = 0;
-
-    //! 复制对象数据
-    virtual void copy(const MgObject& src) = 0;
-
-    //! 销毁对象
-    virtual void release() = 0;
-
-    //! 比较与另一同类对象是否相同
-    virtual bool equals(const MgObject& src) const = 0;
-
-    //! 返回对象类型
-    virtual UInt32 getType() const = 0;
-
-    //! 返回是否能转化为指定类型的对象，即本类为指定类或其派生类
-    virtual bool isKindOf(UInt32 type) const = 0;
-};
-
 //! 矢量图形接口
 /*! \ingroup GEOM_SHAPE
     \interface MgShape
+    \see MgShapeType, MgBaseShape
 */
 struct MgShape : public MgObject
 {
-    static UInt32 Type() { return 2; }
+    //! 返回本对象的类型
+    static int Type() { return 2; }
+
+    //! 复制出一个新图形对象
+    MgShape* cloneShape() const { return (MgShape*)clone(); }
 
     virtual GiContext* context() = 0;
     virtual const GiContext* contextc() const = 0;
     virtual MgBaseShape* shape() = 0;
     virtual const MgBaseShape* shapec() const = 0;
-    virtual bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
+    virtual bool draw(int mode, GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
     virtual bool save(MgStorage* s) const = 0;
     virtual bool load(MgStorage* s) = 0;
 
-    virtual UInt32 getID() const = 0;
+    virtual int getID() const = 0;
     virtual MgShapes* getParent() const = 0;
-    virtual void setParent(MgShapes* p, UInt32 nID) = 0;
-    virtual UInt32 getTag() const = 0;
-    virtual void setTag(UInt32 tag) = 0;
+    virtual void setParent(MgShapes* p, int sid) = 0;
+    virtual int getTag() const = 0;
+    virtual void setTag(int tag) = 0;
 };
 
 //! 图形特征标志位
@@ -69,12 +50,14 @@ typedef enum {
     kMgSquare,          //!< 方形
     kMgClosed,          //!< 闭合
     kMgFixedLength,     //!< 边长固定
-    kMgShapeLocked,     //!< 锁定形状
+    kMgFixedSize,       //!< 大小固定，只能旋转和移动
     kMgRotateDisnable,  //!< 不能旋转
+    kMgShapeLocked,     //!< 锁定形状
 } MgShapeBit;
 
 //! 矢量图形基类
 /*! \ingroup GEOM_SHAPE
+    \see MgShapeType, MgShape
 */
 class MgBaseShape : public MgObject
 {
@@ -84,9 +67,14 @@ protected:
 
 public:
     //! 返回本对象的类型
-    static UInt32 Type() { return 3; }
+    static int Type() { return 3; }
 
-public:
+    //! 复制出一个新图形对象
+    MgBaseShape* cloneShape() const { return (MgBaseShape*)clone(); }
+    
+    //! 传入拥有者对象
+    virtual void setOwner(MgShape*) {}
+
     //! 返回图形模型坐标范围
     virtual Box2d getExtent() const = 0;
 
@@ -100,17 +88,21 @@ public:
     virtual void clear() = 0;
 
     //! 返回顶点个数
-    virtual UInt32 getPointCount() const = 0;
+    virtual int getPointCount() const = 0;
 
     //! 返回指定序号的顶点
-    virtual Point2d getPoint(UInt32 index) const = 0;
+    virtual Point2d getPoint(int index) const = 0;
 
     //! 设置指定序号的顶点坐标，需再调用 update()
-    virtual void setPoint(UInt32 index, const Point2d& pt) = 0;
+    virtual void setPoint(int index, const Point2d& pt) = 0;
 
     //! 返回是否闭合
     virtual bool isClosed() const = 0;
+    
+    //! 返回是否为曲线图形
+    virtual bool isCurve() const = 0;
 
+#ifndef SWIG
     //! 选中点击测试
     /*!
         \param[in] pt 外部点的模型坐标，将判断此点能否点中图形
@@ -120,13 +112,18 @@ public:
         \return 给定的外部点到最近点的距离，失败时为极大数
     */
     virtual float hitTest(const Point2d& pt, float tol, 
-       Point2d& nearpt, Int32& segment) const = 0;
+       Point2d& nearpt, int& segment) const = 0;
+#endif
+    //! 选中点击测试
+    float hitTest2(const Point2d& pt, float tol, Point2d& nearpt) const {
+        int segment; return hitTest(pt, tol, nearpt, segment);
+    }
     
     //! 框选检查
     virtual bool hitTestBox(const Box2d& rect) const = 0;
 
     //! 显示图形
-    virtual bool draw(GiGraphics& gs, const GiContext& ctx) const = 0;
+    virtual bool draw(int mode, GiGraphics& gs, const GiContext& ctx) const = 0;
     
     //! 保存图形
     virtual bool save(MgStorage* s) const = 0;
@@ -135,16 +132,19 @@ public:
     virtual bool load(MgStorage* s) = 0;
     
     //! 返回控制点个数
-    virtual UInt32 getHandleCount() const = 0;
+    virtual int getHandleCount() const = 0;
     
     //! 返回指定序号的控制点坐标
-    virtual Point2d getHandlePoint(UInt32 index) const = 0;
+    virtual Point2d getHandlePoint(int index) const = 0;
     
     //! 设置指定序号的控制点坐标，指定的容差用于比较重合点
-    virtual bool setHandlePoint(UInt32 index, const Point2d& pt, float tol) = 0;
+    virtual bool setHandlePoint(int index, const Point2d& pt, float tol) = 0;
+    
+    //! 返回指定序号的控制点是否不允许移动
+    virtual bool isHandleFixed(int index) const = 0;
     
     //! 移动图形, segment 由 hitTest() 得到
-    virtual bool offset(const Vector2d& vec, Int32 segment) = 0;
+    virtual bool offset(const Vector2d& vec, int segment) = 0;
     
     //! 得到图形特征标志位
     bool getFlag(MgShapeBit bit) const;
@@ -152,28 +152,35 @@ public:
     //! 设置图形特征标志位
     virtual void setFlag(MgShapeBit bit, bool on);
     
+#ifndef SWIG
+    //! 得到当前图形的各种度量尺寸
+    virtual int getDimensions(const Matrix2d& m2w, float* vars, char* types, int count) const = 0;
+#endif
+    
 protected:
     Box2d   _extent;
-    UInt32  _flags;
+    int  _flags;
 
 protected:
     bool _isClosed() const { return getFlag(kMgClosed); }
     void _copy(const MgBaseShape& src);
     bool _equals(const MgBaseShape& src) const;
-    bool _isKindOf(UInt32 type) const;
+    bool _isKindOf(int type) const;
     Box2d _getExtent() const { return _extent; }
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
-    bool _draw(GiGraphics& gs, const GiContext& ctx) const;
+    bool _draw(int mode, GiGraphics& gs, const GiContext& ctx) const;
     bool _hitTestBox(const Box2d& rect) const;
-    UInt32 _getHandleCount() const;
-    Point2d _getHandlePoint(UInt32 index) const;
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
-    bool _offset(const Vector2d& vec, Int32 segment);
-    bool _rotateHandlePoint(UInt32 index, const Point2d& pt);
+    int _getHandleCount() const;
+    Point2d _getHandlePoint(int index) const;
+    bool _setHandlePoint(int index, const Point2d& pt, float tol);
+    bool _isHandleFixed(int) const { return false; }
+    bool _offset(const Vector2d& vec, int segment);
+    bool _rotateHandlePoint(int index, const Point2d& pt);
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
+    int _getDimensions(const Matrix2d&, float*, char*, int) const { return 0; }
 };
 
 #if !defined(_MSC_VER) || _MSC_VER <= 1200
@@ -189,36 +196,38 @@ public:                                                         \
     Cls();                                                      \
     virtual ~Cls();                                             \
     static Cls* create();                                       \
-    static UInt32 Type() { return TypeNum; }                    \
+    static int Type() { return TypeNum; }                       \
 protected:                                                      \
-    bool _isKindOf(UInt32 type) const;                          \
+    bool _isKindOf(int type) const;                             \
 protected:                                                      \
-    bool _draw(GiGraphics& gs, const GiContext& ctx) const;     \
-private:                                                        \
+    bool _draw(int mode, GiGraphics& gs, const GiContext& ctx) const; \
+public:                                                         \
     virtual MgObject* clone() const;                            \
     virtual void copy(const MgObject& src);                     \
     virtual void release();                                     \
     virtual bool equals(const MgObject& src) const;             \
-    virtual UInt32 getType() const { return Type(); }           \
-    virtual bool isKindOf(UInt32 type) const { return _isKindOf(type); } \
+    virtual int getType() const { return Type(); }              \
+    virtual bool isKindOf(int type) const { return _isKindOf(type); } \
     virtual Box2d getExtent() const;                            \
     virtual void update();                                      \
     virtual void transform(const Matrix2d& mat);                \
     virtual void clear();                                       \
-    virtual UInt32 getPointCount() const;                       \
-    virtual Point2d getPoint(UInt32 index) const;               \
-    virtual void setPoint(UInt32 index, const Point2d& pt);     \
+    virtual int getPointCount() const;                          \
+    virtual Point2d getPoint(int index) const;                  \
+    virtual void setPoint(int index, const Point2d& pt);        \
     virtual bool isClosed() const;                              \
     virtual float hitTest(const Point2d& pt, float tol,         \
-       Point2d& nearpt, Int32& segment) const;                  \
+       Point2d& nearpt, int& segment) const;                    \
     virtual bool hitTestBox(const Box2d& rect) const;           \
-    virtual bool draw(GiGraphics& gs, const GiContext& ctx) const;  \
+    virtual bool draw(int mode, GiGraphics& gs, const GiContext& ctx) const;  \
     virtual bool save(MgStorage* s) const;                      \
     virtual bool load(MgStorage* s);                            \
-    virtual UInt32 getHandleCount() const;                      \
-    virtual Point2d getHandlePoint(UInt32 index) const;         \
-    virtual bool setHandlePoint(UInt32 index, const Point2d& pt, float tol);   \
-    virtual bool offset(const Vector2d& vec, Int32 segment);
+    virtual int getHandleCount() const;                         \
+    virtual Point2d getHandlePoint(int index) const;            \
+    virtual bool setHandlePoint(int index, const Point2d& pt, float tol);   \
+    virtual bool isHandleFixed(int index) const;                \
+    virtual bool offset(const Vector2d& vec, int segment);      \
+    virtual int getDimensions(const Matrix2d&, float*, char*, int) const;
 
 #define MG_DECLARE_CREATE(Cls, Base, TypeNum)                   \
     MG_INHERIT_CREATE(Cls, Base, TypeNum)                       \
@@ -230,9 +239,9 @@ protected:                                                      \
     void _transform(const Matrix2d& mat);                       \
     void _clear();                                              \
     float _hitTest(const Point2d& pt, float tol,                \
-       Point2d& nearpt, Int32& segment) const;                  \
-    UInt32 _getPointCount() const;                              \
-    Point2d _getPoint(UInt32 index) const;                      \
-    void _setPoint(UInt32 index, const Point2d& pt);            \
+       Point2d& nearpt, int& segment) const;                    \
+    int _getPointCount() const;                                 \
+    Point2d _getPoint(int index) const;                         \
+    void _setPoint(int index, const Point2d& pt);               \
 
 #endif // __GEOMETRY_MGSHAPE_H_

@@ -8,6 +8,8 @@
 #include "ChildFrm.h"
 #include "NewViewDlg.h"
 #include "Step3View.h"
+#include <mgjsonstorage.h>
+#include <string>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -22,6 +24,7 @@ BEGIN_MESSAGE_MAP(CSimpViewApp, CWinApp)
 	//{{AFX_MSG_MAP(CSimpViewApp)
 	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
 	ON_COMMAND(ID_FILE_NEW, OnFileNew)
+    ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -30,6 +33,7 @@ CSimpViewApp::CSimpViewApp()
 }
 
 CSimpViewApp theApp;
+static CDrawShapeView* s_pNewView = NULL;
 
 BOOL CSimpViewApp::InitInstance()
 {
@@ -67,26 +71,36 @@ int CSimpViewApp::ExitInstance()
 CWnd* CreateChildView(UINT nFrameID)
 {
 	CNewViewDlg dlg;
-	CBaseView* pView = NULL;
+	CBaseView* pView = s_pNewView;
 
+    if (s_pNewView)
+    {
+        s_pNewView = NULL;
+        return pView;
+    }
 	if (IDOK != dlg.DoModal())
 		return NULL;
 
 	if (IDR_STEP1_VIEW == nFrameID)
 	{
-		RandomParam param;
-        param.lineCount = dlg.m_bUseRand ? dlg.m_nLineCount : 0;
-        param.rectCount = dlg.m_bUseRand ? param.rectCount : 0;
-		param.arcCount = dlg.m_bUseRand ? dlg.m_nArcCount : 0;
-        param.curveCount = dlg.m_bUseRand ? dlg.m_nCurveCount : 0;
-		param.randomLineStyle = !!dlg.m_bRandomLineStyle;
+        RandomParam param;
 
-        if (dlg.m_bWithCmd)
-            pView = new CDrawShapeView(param);
-		else if (dlg.m_bScrollBar)
+        param.lineCount = dlg.m_bAddShapes ? dlg.m_nLineCount : 0;
+        param.arcCount = dlg.m_bAddShapes ? dlg.m_nArcCount : 0;
+        param.curveCount = dlg.m_bAddShapes ? dlg.m_nCurveCount : 0;
+        param.randomLineStyle = !!dlg.m_bRandomLineStyle;
+
+        if (dlg.m_bWithCmd) {
+            CDrawShapeView* p = new CDrawShapeView(param);
+            p->setRandomProp(param.randomLineStyle);
+            pView = p;
+        }
+        else if (dlg.m_bScrollBar) {
 			pView = new CScrollShapeView(param);
-		else
+        }
+        else {
 			pView = new CRandomShapeView(param);
+        }
 	}
 
 	return pView;
@@ -100,7 +114,6 @@ void CSimpViewApp::OnFileNew()
 	pFrame->CreateNewChild(
 		RUNTIME_CLASS(CChildFrame), IDR_STEP1_VIEW, m_hMDIMenu, m_hMDIAccel);
 }
-
 
 /////////////////////////////////////////////////////////////////////////////
 // CAboutDlg dialog used for App About
@@ -156,3 +169,41 @@ void CSimpViewApp::OnAppAbout()
 /////////////////////////////////////////////////////////////////////////////
 // CSimpViewApp message handlers
 
+void CSimpViewApp::OnFileOpen()
+{
+    CFileDialog dlg(TRUE, L".vg", NULL, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST,
+        L"Shape files (*.vg)|*.vg||", m_pMainWnd);
+    if (dlg.DoModal() != IDOK) {
+        return;
+    }
+
+    CFile file;
+
+    if (!file.Open(dlg.GetPathName(), CFile::modeRead)) {
+        return;
+    }
+
+    std::string content((UINT)file.GetLength() + 1, 0);
+    file.Read(&content[0], content.size());
+
+    RandomParam param;
+
+    param.lineCount = 0;
+    param.arcCount = 0;
+    param.curveCount = 0;
+
+    s_pNewView = new CDrawShapeView(param);
+    s_pNewView->m_filename = dlg.GetPathName();
+
+    MgJsonStorage s;
+    if (!s_pNewView->shapes()->load(s.storageForRead(&content[0])))
+    {
+        AfxMessageBox(L"读取文件内容出错。");
+    }
+    else
+    {
+        CMainFrame* pFrame = STATIC_DOWNCAST(CMainFrame, m_pMainWnd);
+        pFrame->CreateNewChild(
+            RUNTIME_CLASS(CChildFrame), IDR_STEP1_VIEW, m_hMDIMenu, m_hMDIAccel);
+    }
+}

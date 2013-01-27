@@ -77,8 +77,6 @@
 		AE8D39EC16413209008B04DC /* mgactions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE8D39EB16413209008B04DC /* mgactions.cpp */; };
 		AE8D3A0316421727008B04DC /* mggrid.h in Headers */ = {isa = PBXBuildFile; fileRef = AE8D3A0216421727008B04DC /* mggrid.h */; };
 		AE8D3A05164246EA008B04DC /* GiEditAction.h in Headers */ = {isa = PBXBuildFile; fileRef = AE8D3A04164246EA008B04DC /* GiEditAction.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AE8D3A3916434C3B008B04DC /* mgcmdbreak.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE8D3A3716434C3B008B04DC /* mgcmdbreak.cpp */; };
-		AE8D3A3A16434C3B008B04DC /* mgcmdbreak.h in Headers */ = {isa = PBXBuildFile; fileRef = AE8D3A3816434C3B008B04DC /* mgcmdbreak.h */; };
 		AEA2259815B3BC7600A5173F /* mgcmddraw.h in Headers */ = {isa = PBXBuildFile; fileRef = AEA2259715B3BC7600A5173F /* mgcmddraw.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AEB0BE5815FD898A00C6E98D /* mgsnap.h in Headers */ = {isa = PBXBuildFile; fileRef = AEB0BE5715FD898A00C6E98D /* mgsnap.h */; };
 		AEE676E515772A9600375ABD /* GiZoom.h in Headers */ = {isa = PBXBuildFile; fileRef = AEE676E415772A9600375ABD /* GiZoom.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -190,8 +188,6 @@
 		AE8D39EB16413209008B04DC /* mgactions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgactions.cpp; path = ../../core/src/shape/mgactions.cpp; sourceTree = "<group>"; };
 		AE8D3A0216421727008B04DC /* mggrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mggrid.h; path = ../../core/src/shape/mggrid.h; sourceTree = "<group>"; };
 		AE8D3A04164246EA008B04DC /* GiEditAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiEditAction.h; path = Headers/GiEditAction.h; sourceTree = "<group>"; };
-		AE8D3A3716434C3B008B04DC /* mgcmdbreak.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mgcmdbreak.cpp; path = ../../core/src/shape/mgcmdbreak.cpp; sourceTree = "<group>"; };
-		AE8D3A3816434C3B008B04DC /* mgcmdbreak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgcmdbreak.h; path = ../../core/src/shape/mgcmdbreak.h; sourceTree = "<group>"; };
 		AEA2259715B3BC7600A5173F /* mgcmddraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgcmddraw.h; path = ../../core/include/shape/mgcmddraw.h; sourceTree = "<group>"; };
 		AEB0BE5715FD898A00C6E98D /* mgsnap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgsnap.h; path = ../../core/include/shape/mgsnap.h; sourceTree = "<group>"; };
 		AEE676E415772A9600375ABD /* GiZoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiZoom.h; path = Headers/GiZoom.h; sourceTree = "<group>"; };
@@ -445,8 +441,6 @@
 		C9D632431450CAC300A3CC75 /* shape */ = {
 			isa = PBXGroup;
 			children = (
-				AE8D3A3716434C3B008B04DC /* mgcmdbreak.cpp */,
-				AE8D3A3816434C3B008B04DC /* mgcmdbreak.h */,
 				AE58B2AF15FEF7AB00BD2A88 /* mggrid.cpp */,
 				AE8D3A0216421727008B04DC /* mggrid.h */,
 				AEE9B63915F48AA500F0EC7B /* mgdrawtriang.cpp */,
@@ -537,7 +531,6 @@
 				AEE9B63C15F48AA500F0EC7B /* mgdrawtriang.h in Headers */,
 				AEB0BE5815FD898A00C6E98D /* mgsnap.h in Headers */,
 				AE8D3A0316421727008B04DC /* mggrid.h in Headers */,
-				AE8D3A3A16434C3B008B04DC /* mgcmdbreak.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,7 +667,6 @@
 				AEE9B63B15F48AA500F0EC7B /* mgdrawtriang.cpp in Sources */,
 				AE58B2B015FEF7AB00BD2A88 /* mggrid.cpp in Sources */,
 				AE8D39EC16413209008B04DC /* mgactions.cpp in Sources */,
-				AE8D3A3916434C3B008B04DC /* mgcmdbreak.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

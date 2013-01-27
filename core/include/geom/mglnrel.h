@@ -264,8 +264,8 @@ typedef enum {
     \return 为枚举定义 MgPtInAreaRet 的各种值
 */
 GEOMAPI MgPtInAreaRet mgPtInArea(
-    const Point2d& pt, Int32 count, const Point2d* vertexs, 
-    Int32& order, const Tol& tol = Tol::gTol());
+    const Point2d& pt, int count, const Point2d* vertexs, 
+    int& order, const Tol& tol = Tol::gTol());
 
 //! 判断多边形是否为凸多边形
 /*!
@@ -275,6 +275,6 @@ GEOMAPI MgPtInAreaRet mgPtInArea(
     \param[out] pACW 多边形是否为逆时针方向，为NULL则忽略该参数
     \return 是否为凸多边形
 */
-GEOMAPI bool mgIsConvex(Int32 count, const Point2d* vertexs, bool* pACW = NULL);
+GEOMAPI bool mgIsConvex(int count, const Point2d* vertexs, bool* pACW = NULL);
 
 #endif // __GEOMETRY_LINEREL_H_

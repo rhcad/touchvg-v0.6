@@ -6,6 +6,7 @@
 	ProjectGUID="{71448894-4C03-46D6-A696-7A40B7D50DEB}"
 	RootNamespace="shape"
 	SccLocalPath="."
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -150,10 +151,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\shape\mgcmdbreak.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\core\src\shape\mgcmddraw.cpp"
 				>
 			</File>
@@ -225,6 +222,10 @@
 				RelativePath="..\..\..\core\src\shape\mgsplines.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\core\src\shape\TransformCmd.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -240,10 +241,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\shape\mgcmd.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgcmdbreak.h"
 				>
 			</File>
 			<File
@@ -287,7 +284,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\shape\mggrid.h"
+				RelativePath="..\..\..\core\include\shape\mgobject.h"
 				>
 			</File>
 			<File

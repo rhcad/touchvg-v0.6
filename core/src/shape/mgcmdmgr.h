@@ -13,7 +13,7 @@
 #include <string>
 
 //! 命令管理器实现类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
 */
 class MgCmdManagerImpl
     : public MgCommandManager
@@ -30,7 +30,7 @@ private:
     virtual bool setCommand(const MgMotion* sender, const char* name);
     virtual bool cancel(const MgMotion* sender);
     virtual void unloadCommands();
-    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false);
+    virtual int getSelection(MgView* view, int count, MgShape** shapes, bool forChange = false);
     virtual bool dynamicChangeEnded(MgView* view, bool apply);
     virtual MgSelection* getSelection(MgView* view);
     virtual MgActionDispatcher* getActionDispatcher();
@@ -38,9 +38,13 @@ private:
     virtual MgSnap* getSnap();
     
 private:
-    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
-    virtual Point2d snapPoint(const MgMotion* sender, MgShape* hotShape, int hotHandle);
+    virtual bool drawSnap(const MgMotion* sender, GiGraphics* gs);
+    virtual Point2d snapPoint(const MgMotion* sender, const MgShape* shape,
+                              int hotHandle, int ignoreHandle = -1,
+                              const int* ignoreids = NULL);
     virtual int getSnappedType();
+    virtual int getSnappedPoint(Point2d& fromPt, Point2d& toPt);
+    virtual bool getSnappedHandle(int& shapeid, int& handleIndex, int& handleIndexSrc);
     virtual void clearSnap();
     
     virtual bool showInSelect(const MgMotion* sender, int selState, const MgShape* shape, const Box2d& selbox);
@@ -49,6 +53,7 @@ private:
     
 private:
     void eraseWnd(const MgMotion* sender);
+    MgCommand* findCommand(const char* name);
 
 private:
     typedef std::map<std::string, MgCommand*> CMDS;
@@ -59,6 +64,9 @@ private:
     Point2d         _ptSnap;
     Point2d         _snapBase[2];
     int             _snapType[2];
+    int          _snapShapeId;
+    int           _snapHandle;
+    int           _snapHandleSrc;
 };
 
 #endif // __GEOMETRY_MGCOMMAND_MANAGER_H_

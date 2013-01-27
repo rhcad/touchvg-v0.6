@@ -63,16 +63,11 @@ MgCommand* MgCmdManagerImpl::getCommand()
     return it != _cmds.end() ? it->second : NULL;
 }
 
-bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
+MgCommand* MgCmdManagerImpl::findCommand(const char* name)
 {
-    cancel(sender);
-    
-    if (strcmp(name, "@draw") == 0) {
-        name = _drawcmd.empty() ? "splines" : _drawcmd.c_str();
-    }
-
     CMDS::iterator it = _cmds.find(name);
-    if (it == _cmds.end())
+    
+    if (it == _cmds.end() && *name)
     {
         MgCommand* cmd = NULL;
         Factories::iterator itf = _factories.find(name);
@@ -89,18 +84,44 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
         }
     }
     
-    if (it == _cmds.end()) {
-        if (strcmp(name, "erasewnd") == 0)
-            eraseWnd(sender);
+    return it != _cmds.end() ? it->second : NULL;
+}
+
+bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
+{
+    if (strcmp(name, "erase") == 0) {
+        MgSelection *sel = getSelection(sender->view);
+        if (sel && sel->deleteSelection(sender->view))
+            return false;
     }
     
-    bool ret = (it != _cmds.end() && it->second->initialize(sender));
-    if (ret) {
-        _cmdname = it->second->getName();  // change it at end of initialization
-        if (it->second->isDrawingCommand())
-            _drawcmd = _cmdname;
+    cancel(sender);
+    
+    if (strcmp(name, "@draw") == 0) {
+        name = _drawcmd.empty() ? "splines" : _drawcmd.c_str();
     }
 
+    MgCommand* cmd = findCommand(name);
+    bool ret = false;
+    
+    if (cmd) {
+        std::string oldname(_cmdname);
+        _cmdname = cmd->getName();
+        
+        ret = cmd->initialize(sender);
+        if (!ret) {
+            _cmdname = oldname;
+        }
+        else if (cmd->isDrawingCommand()) {
+            _drawcmd = _cmdname;
+        }
+    }
+    else {
+        if (strcmp(name, "erasewnd") == 0) {
+            eraseWnd(sender);
+        }
+    }
+    
     return ret;
 }
 
@@ -115,10 +136,10 @@ bool MgCmdManagerImpl::cancel(const MgMotion* sender)
     return false;
 }
 
-UInt32 MgCmdManagerImpl::getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange)
+int MgCmdManagerImpl::getSelection(MgView* view, int count, MgShape** shapes, bool forChange)
 {
-    if (_cmdname == MgCommandSelect::Name() && view) {
-        MgCommandSelect* sel = (MgCommandSelect*)getCommand();
+    if (_cmdname == MgCmdSelect::Name() && view) {
+        MgCmdSelect* sel = (MgCmdSelect*)getCommand();
         return sel ? sel->getSelection(view, count, shapes, forChange) : 0;
     }
     return 0;
@@ -127,17 +148,16 @@ UInt32 MgCmdManagerImpl::getSelection(MgView* view, UInt32 count, MgShape** shap
 bool MgCmdManagerImpl::dynamicChangeEnded(MgView* view, bool apply)
 {
     bool changed = false;
-    if (_cmdname == MgCommandSelect::Name() && view) {
-        MgCommandSelect* sel = (MgCommandSelect*)getCommand();
+    if (_cmdname == MgCmdSelect::Name() && view) {
+        MgCmdSelect* sel = (MgCmdSelect*)getCommand();
         changed = sel && sel->dynamicChangeEnded(view, apply);
     }
     return changed;
 }
 
-MgSelection* MgCmdManagerImpl::getSelection(MgView* view)
+MgSelection* MgCmdManagerImpl::getSelection(MgView*)
 {
-    return view && _cmdname == MgCommandSelect::Name()
-        ? (MgCommandSelect*)getCommand() : NULL;
+    return (MgCmdSelect*)findCommand(MgCmdSelect::Name());
 }
 
 MgActionDispatcher* MgCmdManagerImpl::getActionDispatcher()
@@ -156,10 +176,13 @@ MgSnap* MgCmdManagerImpl::getSnap()
 }
 
 typedef struct {
-    Point2d pt;
-    Point2d base;
-    float dist;
-    int type;
+    Point2d pt;         // 捕捉到的坐标
+    Point2d base;       // 参考线基准点、原始点
+    float   dist;       // 捕捉距离
+    int     type;       // 特征点类型
+    int  shapeid;        // 捕捉到的图形
+    int     handleIndex;    // 捕捉到图形上的控制点序号
+    int     handleIndexSrc; // 待确定位置的源图形上的控制点序号，与handleIndex点匹配
 } SnapItem;
 
 static int snapHV(const Point2d& basePt, Point2d& newPt, SnapItem arr[3])
@@ -191,61 +214,82 @@ static int snapHV(const Point2d& basePt, Point2d& newPt, SnapItem arr[3])
     return ret;
 }
 
-static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], Point2d* matchpt)
+static void snapPoints(const MgMotion* sender, const MgShape* shape, int ignoreHandle,
+                       const int* ignoreids, SnapItem arr[3], Point2d* matchpt)
 {
-    Box2d snapbox(sender->pointM, 2 * arr[0].dist, 0);
+    Box2d snapbox(sender->pointM, 2 * arr[0].dist, 0);      // 捕捉容差框
     GiTransform* xf = sender->view->xform();
-    Box2d wndbox(Box2d(0, 0, xf->getWidth(), xf->getHeight()) * xf->displayToModel());
+    Box2d wndbox(xf->getWndRectW() * xf->worldToModel());   // 视图模型坐标范围
     void* it = NULL;
     
-    for (MgShape* sp = sender->view->shapes()->getFirstShape(it);
+    for (const MgShape* sp = sender->view->shapes()->getFirstShape(it);
          sp; sp = sender->view->shapes()->getNextShape(it)) {
-        if (shape && shape->getID() == sp->getID())
+        
+        bool skip = false;
+        for (int t = 0; ignoreids[t] != 0 && !skip; t++) {
+            skip = (ignoreids[t] == sp->getID());           // 跳过当前图形
+        }
+        if (skip)
             continue;
         
-        Box2d extent(sp->shape()->getExtent());
-        if (extent.width() < xf->displayToModel(2)
-            && extent.height() < xf->displayToModel(2)) {
+        Box2d extent(sp->shapec()->getExtent());
+        if (extent.width() < xf->displayToModel(2, true)
+            && extent.height() < xf->displayToModel(2, true)) { // 图形太小就跳过
             continue;
         }
-        bool allOnBox = !matchpt && extent.isIntersect(snapbox);
-        if (allOnBox || extent.isIntersect(wndbox)) {
-            UInt32 n = sp->shape()->getHandleCount();
-            bool curve = sp->shape()->isKindOf(MgSplines::Type());
+        bool allOnBox = extent.isIntersect(snapbox);            // 不是整体拖动图形
+        if (allOnBox || extent.isIntersect(wndbox)) {           // 或者在视图内可能单向捕捉
+            int n = sp->shapec()->getHandleCount();
+            bool curve = sp->shapec()->isKindOf(MgSplines::Type());
+            bool dragHandle = (!shape || shape->getID() == 0 || sender->pointM
+                               == shape->shapec()->getHandlePoint(ignoreHandle));
             
-            for (UInt32 i = 0; i < n; i++) {
-                if (curve && ((i > 0 && i + 1 < n) || sp->shape()->isClosed())) {
-                    continue;
+            for (int i = 0; i < n; i++) {                    // 循环每一个控制点
+                if (curve && ((i > 0 && i + 1 < n) || sp->shapec()->isClosed())) {
+                    continue;                                   // 对于开放曲线只捕捉端点
                 }
-                Point2d pnt(sp->shape()->getHandlePoint(i));
+                Point2d pnt(sp->shapec()->getHandlePoint(i));   // 已有图形的一个顶点
                 if (allOnBox) {
-                    float dist = pnt.distanceTo(sender->pointM);
+                    float dist = pnt.distanceTo(sender->pointM);    // 触点与顶点匹配
                     if (arr[0].dist > dist) {
                         arr[0].dist = dist;
+                        arr[0].base = sender->pointM;
                         arr[0].pt = pnt;
                         arr[0].type = kSnapPoint;
+                        arr[0].shapeid = sp->getID();
+                        arr[0].handleIndex = i;
+                        arr[0].handleIndexSrc = dragHandle ? ignoreHandle : -1;
                     }
                 }
-                if (!curve && wndbox.contains(pnt)) {
+                if (!matchpt && !curve && wndbox.contains(pnt)) {   // 在视图可见范围内捕捉X或Y
                     Point2d newPt (sender->pointM);
                     snapHV(pnt, newPt, arr);
                 }
-                int d = matchpt && shape ? (int)shape->shape()->getHandleCount() - 1 : -1;
-                for (; d >= 0; d--) {
-                    Point2d ptd (shape->shape()->getHandlePoint(d));
-                    float dist = pnt.distanceTo(ptd);
-                    if (arr[0].dist > dist) {
+                int d = matchpt && shape ? (int)shape->shapec()->getHandleCount() - 1 : -1;
+                for (; d >= 0; d--) {                           // 整体移动图形，顶点匹配
+                    if (d == ignoreHandle || shape->shapec()->isHandleFixed(d))
+                        continue;
+                    Point2d ptd (shape->shapec()->getHandlePoint(d));
+                    float dist = pnt.distanceTo(ptd);           // 当前图形与其他图形顶点匹配
+                    if (arr[0].dist > dist - _MGZERO) {
                         arr[0].dist = dist;
+                        arr[0].base = ptd;
                         arr[0].pt = pnt;
                         arr[0].type = kSnapPoint;
-                        *matchpt = sender->pointM + (pnt - ptd);
+                        arr[0].shapeid = sp->getID();
+                        arr[0].handleIndex = i;
+                        arr[0].handleIndexSrc = d;
+                        
+                        // 因为对当前图形先从startM移到pointM，然后再从pointM移到matchpt
+                        *matchpt = sender->pointM + (pnt - ptd); // 所以最后差量为(pnt-ptd)
                     }
                 }
             }
             
-            if (allOnBox && sp->shape()->isKindOf(MgGrid::Type())) {
+            if (allOnBox && sp->shapec()->isKindOf(MgGrid::Type())) {
                 Point2d newPt (sender->pointM);
-                MgGrid* grid = (MgGrid*)(sp->shape());
+                const MgGrid* grid = (const MgGrid*)(sp->shapec());
+                
                 int type = grid->snap(newPt, arr[1].dist, arr[2].dist);
                 if (type & 1) {
                     arr[1].base = newPt;
@@ -257,53 +301,97 @@ static void snapPoints(const MgMotion* sender, MgShape* shape, SnapItem arr[3], 
                     arr[2].pt = newPt;
                     arr[2].type = kSnapGridY;
                 }
+                
+                int d = matchpt && shape ? (int)shape->shapec()->getHandleCount() - 1 : -1;
+                for (; d >= 0; d--) {
+                    if (d == ignoreHandle || shape->shapec()->isHandleFixed(d))
+                        continue;
+                    
+                    Point2d ptd (shape->shapec()->getHandlePoint(d));
+                    float distx = mgMin(arr[0].dist, arr[1].dist);
+                    float disty = mgMin(arr[0].dist, arr[2].dist);
+                    
+                    newPt = ptd;
+                    type = grid->snap(newPt, distx, disty);
+                    float dist = newPt.distanceTo(ptd);
+                    
+                    if ((type & 3) == 3 && arr[0].dist > dist - _MGZERO) {
+                        arr[0].dist = dist;
+                        arr[0].base = ptd;
+                        arr[0].pt = newPt;
+                        arr[0].type = kSnapPoint;
+                        arr[0].shapeid = sp->getID();
+                        arr[0].handleIndex = -1;
+                        arr[0].handleIndexSrc = d;
+                        
+                        // 因为对当前图形先从startM移到pointM，然后再从pointM移到matchpt
+                        *matchpt = sender->pointM + (newPt - ptd); // 所以最后差量为(pnt-ptd)
+                    }
+                }
             }
         }
     }
     sender->view->shapes()->freeIterator(it);
 }
 
-Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, MgShape* shape, int hotHandle)
+// hotHandle: 绘新图时，起始步骤为-1，后续步骤>0；拖动一个或多个整体图形时为-1，拖动顶点时>=0
+Point2d MgCmdManagerImpl::snapPoint(const MgMotion* sender, const MgShape* shape,
+                                    int hotHandle, int ignoreHandle,
+                                    const int* ignoreids)
 {
-    if (shape && hotHandle >= (int)shape->shape()->getHandleCount()) {
-        hotHandle = -1;
-    }
-    _ptSnap = sender->pointM;
+    int ignoreids_tmp[2] = { shape ? shape->getID() : 0, 0 };
+    if (!ignoreids) ignoreids = ignoreids_tmp;
     
-    SnapItem arr[3] = {
-        { _ptSnap, _ptSnap, mgDisplayMmToModel(5.f, sender), 0 },   // XY
-        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), 0 },   // X,Vert
-        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), 0 },   // Y,Horz
+    if (!shape || hotHandle >= (int)shape->shapec()->getHandleCount()) {
+        hotHandle = -1;         // 对hotHandle进行越界检查
+    }
+    _ptSnap = sender->pointM;   // 默认结果为当前触点位置
+    
+    SnapItem arr[3] = {         // 设置捕捉容差和捕捉初值
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(3.f, sender), 0, 0,-1,-1 }, // XY点捕捉
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(2.f, sender), 0, 0,-1,-1 }, // X分量捕捉，竖直线
+        { _ptSnap, _ptSnap, mgDisplayMmToModel(2.f, sender), 0, 0,-1,-1 }, // Y分量捕捉，水平线
     };
     
-    if (shape && shape->getID() == 0 && hotHandle > 0
-        && !shape->shape()->isKindOf(MgBaseRect::Type())) {
+    if (shape && shape->getID() == 0 && hotHandle > 0               // 绘图命令中的临时图形
+        && !shape->shapec()->isKindOf(MgBaseRect::Type())) {        // 不是矩形或椭圆
         Point2d pt (sender->pointM);
-        snapHV(shape->shape()->getPoint(hotHandle - 1), pt, arr);
+        snapHV(shape->shapec()->getPoint(hotHandle - 1), pt, arr);  // 和上一个点对齐
     }
-    Point2d pnt(-1e10f, -1e10f);
-    bool matchpt = shape && shape->getID() != 0 && hotHandle < 0;
     
-    snapPoints(sender, shape, arr, matchpt ? &pnt : NULL);
+    Point2d pnt(-1e10f, -1e10f);                    // 当前图形的某一个顶点匹配到其他顶点pnt
+    bool matchpt = (shape && shape->getID() != 0    // 拖动整个图形
+                    && (hotHandle < 0 || (ignoreHandle >= 0 && ignoreHandle != hotHandle)));
     
-    if (arr[0].type > 0) {
-        _ptSnap = arr[0].pt;
+    snapPoints(sender, shape, ignoreHandle, ignoreids,
+               arr, matchpt ? &pnt : NULL);         // 在所有图形中捕捉
+    
+    if (arr[0].type > 0) {                          // X和Y方向同时捕捉到一个点
+        _ptSnap = arr[0].pt;                        // 结果点
+        _snapBase[0] = arr[0].base;                 // 原始点
         _snapType[0] = arr[0].type;
+        _snapShapeId = arr[0].shapeid;
+        _snapHandle = arr[0].handleIndex;
+        _snapHandleSrc = arr[0].handleIndexSrc;
     }
     else {
-        _snapType[0] = arr[1].type;
+        _snapShapeId = 0;
+        _snapHandle = -1;
+        _snapHandleSrc = -1;
+        
+        _snapType[0] = arr[1].type;                 // 竖直方向捕捉到一个点
         if (arr[1].type > 0) {
             _ptSnap.x = arr[1].pt.x;
             _snapBase[0] = arr[1].base;
         }
-        _snapType[1] = arr[2].type;
+        _snapType[1] = arr[2].type;                 // 水平方向捕捉到一个点
         if (arr[2].type > 0) {
             _ptSnap.y = arr[2].pt.y;
             _snapBase[1] = arr[2].base;
         }
     }
     
-    return matchpt && pnt.x > -1e8f ? pnt : _ptSnap;
+    return matchpt && pnt.x > -1e8f ? pnt : _ptSnap;    // 顶点匹配优先于用触点捕捉结果
 }
 
 int MgCmdManagerImpl::getSnappedType()
@@ -313,13 +401,28 @@ int MgCmdManagerImpl::getSnappedType()
     return (_snapType[0] == kSnapGridX && _snapType[1] == kSnapGridY) ? kSnapPoint : 0;
 }
 
+int MgCmdManagerImpl::getSnappedPoint(Point2d& fromPt, Point2d& toPt)
+{
+    fromPt = _snapBase[0];
+    toPt = _ptSnap;
+    return getSnappedType();
+}
+
+bool MgCmdManagerImpl::getSnappedHandle(int& shapeid, int& handleIndex, int& handleIndexSrc)
+{
+    shapeid = _snapShapeId;
+    handleIndex = _snapHandle;
+    handleIndexSrc = _snapHandleSrc;
+    return shapeid != 0;
+}
+
 void MgCmdManagerImpl::clearSnap()
 {
     _snapType[0] = 0;
     _snapType[1] = 0;
 }
 
-bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
+bool MgCmdManagerImpl::drawSnap(const MgMotion* sender, GiGraphics* gs)
 {
     bool ret = false;
     
@@ -367,7 +470,7 @@ bool MgCmdManagerImpl::draw(const MgMotion* sender, GiGraphics* gs)
 void MgCmdManagerImpl::eraseWnd(const MgMotion* sender)
 {
     Box2d snap(sender->view->xform()->getWndRectW() * sender->view->xform()->worldToModel());
-    std::vector<UInt32> delIds;
+    std::vector<int> delIds;
     void *it = NULL;
     MgShapes* s = sender->view->shapes();
     
@@ -382,7 +485,7 @@ void MgCmdManagerImpl::eraseWnd(const MgMotion* sender)
         && sender->view->shapeWillDeleted(s->findShape(delIds.front()))) {
         MgShapesLock locker(s, MgShapesLock::Remove);
         
-        for (std::vector<UInt32>::iterator i = delIds.begin(); i != delIds.end(); ++i) {
+        for (std::vector<int>::iterator i = delIds.begin(); i != delIds.end(); ++i) {
             MgShape* shape = s->findShape(*i);
             if (shape && sender->view->removeShape(shape)) {
                 shape->release();

@@ -32,7 +32,7 @@ void CRandomShapeView::OnDynDraw(GiGraphics* gs)
     if (m_selection)
     {
         GiContext context(-4, GiColor(0, 0, 255, 55));
-        m_selection->draw(*gs, &context);
+        m_selection->draw(1, *gs, &context);
 
         context.setLineWidth(0, false);
         gs->drawEllipse(&context, Box2d(m_ptNear, 1, 1));
@@ -49,6 +49,6 @@ void CRandomShapeView::OnMouseMove(UINT nFlags, CPoint point)
     
     rect *= m_graph->xf.displayToModel();
     m_ptSnap = rect.center();
-    m_selection = m_shapes->hitTest(rect, m_ptNear, m_segment);
+    m_selection = m_shapes->hitTest(rect, m_ptNear, &m_segment);
     Invalidate();
 }

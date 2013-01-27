@@ -151,7 +151,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\android\skiaview\jni\GiSkiaView.h"
+				RelativePath="..\..\..\android\skiaview\jni\GiCoreView.h"
 				>
 			</File>
 		</Filter>
@@ -171,6 +171,46 @@
 				RelativePath="..\..\..\android\skiaview\jni\skiaview.swig"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\android\skiaview\jni\skiaview_java_wrap.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\android\skiaview\jni\skiaview_java_wrap.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -181,7 +221,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\android\skiaview\jni\GiSkiaView.cpp"
+				RelativePath="..\..\..\android\skiaview\jni\GiCoreView.cpp"
 				>
 			</File>
 		</Filter>
@@ -652,14 +692,14 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\ios\FreeDraw\Sources\TransformCmd.mm"
+					RelativePath="..\..\..\ios\FreeDraw\Sources\TransformCmd.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
 						ExcludedFromBuild="true"
 						>
 						<Tool
-							Name="VCCustomBuildTool"
+							Name="VCCLCompilerTool"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -667,7 +707,7 @@
 						ExcludedFromBuild="true"
 						>
 						<Tool
-							Name="VCCustomBuildTool"
+							Name="VCCLCompilerTool"
 						/>
 					</FileConfiguration>
 				</File>

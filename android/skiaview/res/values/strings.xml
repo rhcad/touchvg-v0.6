@@ -4,12 +4,13 @@
     <string name="selectshapes_button">选择</string>
     <string name="eraser">橡皮</string>
     <string name="clearshapes_button">清除</string>
-    <string name="redPen">红笔</string>
-    <string name="yellowPen">黄笔</string>
-    <string name="bluePen">蓝笔</string>
+    <string name="redPen">红</string>
+    <string name="yellowPen">黄</string>
+    <string name="bluePen">蓝</string>
     <string name="thickPen">细</string>
     <string name="boldPen">粗</string>
     <string name="stylePen">线型</string>
     <string name="save">保存</string>
-    <string name="shapeType">形状</string>
+    <string name="shapeType">splines</string>
+    <string name="addPicture">插图</string>
 </resources>

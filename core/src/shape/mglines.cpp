@@ -21,17 +21,17 @@ MgBaseLines::~MgBaseLines()
         delete[] _points;
 }
 
-UInt32 MgBaseLines::_getPointCount() const
+int MgBaseLines::_getPointCount() const
 {
     return _count;
 }
 
-Point2d MgBaseLines::_getPoint(UInt32 index) const
+Point2d MgBaseLines::_getPoint(int index) const
 {
     return index < _count ? _points[index] : Point2d();
 }
 
-void MgBaseLines::_setPoint(UInt32 index, const Point2d& pt)
+void MgBaseLines::_setPoint(int index, const Point2d& pt)
 {
     if (index < _count)
         _points[index] = pt;
@@ -40,7 +40,7 @@ void MgBaseLines::_setPoint(UInt32 index, const Point2d& pt)
 void MgBaseLines::_copy(const MgBaseLines& src)
 {
     resize(src._count);
-    for (UInt32 i = 0; i < _count; i++)
+    for (int i = 0; i < _count; i++)
         _points[i] = src._points[i];
 
     __super::_copy(src);
@@ -51,7 +51,7 @@ bool MgBaseLines::_equals(const MgBaseLines& src) const
     if (_count != src._count)
         return false;
 
-    for (UInt32 i = 0; i < _count; i++)
+    for (int i = 0; i < _count; i++)
     {
         if (_points[i] != src._points[i])
             return false;
@@ -60,7 +60,7 @@ bool MgBaseLines::_equals(const MgBaseLines& src) const
     return __super::_equals(src);
 }
 
-bool MgBaseLines::_isKindOf(UInt32 type) const
+bool MgBaseLines::_isKindOf(int type) const
 {
     return type == Type() || __super::_isKindOf(type);
 }
@@ -73,7 +73,7 @@ void MgBaseLines::_update()
 
 void MgBaseLines::_transform(const Matrix2d& mat)
 {
-    for (UInt32 i = 0; i < _count; i++)
+    for (int i = 0; i < _count; i++)
         _points[i] *= mat;
     __super::_transform(mat);
 }
@@ -89,7 +89,7 @@ Point2d MgBaseLines::endPoint() const
     return _count > 0 ? _points[_count - 1] : Point2d();
 }
 
-bool MgBaseLines::resize(UInt32 count)
+bool MgBaseLines::resize(int count)
 {
     if (_maxCount < count)
     {
@@ -97,7 +97,7 @@ bool MgBaseLines::resize(UInt32 count)
 
         Point2d* pts = new Point2d[_maxCount];
 
-        for (UInt32 i = 0; i < _count; i++)
+        for (int i = 0; i < _count; i++)
             pts[i] = _points[i];
         if (_points)
             delete[] _points;
@@ -114,13 +114,13 @@ bool MgBaseLines::addPoint(const Point2d& pt)
     return true;
 }
 
-bool MgBaseLines::insertPoint(Int32 segment, const Point2d& pt)
+bool MgBaseLines::insertPoint(int segment, const Point2d& pt)
 {
     bool ret = false;
     
-    if (segment >= 0 && segment < (Int32)(_count - (isClosed() ? 0 : 1))) {
+    if (segment >= 0 && segment < (int)(_count - (isClosed() ? 0 : 1))) {
         resize(_count + 1);
-        for (Int32 i = (Int32)_count - 1; i > segment + 1; i--)
+        for (int i = (int)_count - 1; i > segment + 1; i--)
             _points[i] = _points[i - 1];
         _points[segment + 1] = pt;
         ret = true;
@@ -129,13 +129,13 @@ bool MgBaseLines::insertPoint(Int32 segment, const Point2d& pt)
     return ret;
 }
 
-bool MgBaseLines::removePoint(UInt32 index)
+bool MgBaseLines::removePoint(int index)
 {
     bool ret = false;
     
     if (index < _count && _count > 1)
     {
-        for (UInt32 i = index + 1; i < _count; i++)
+        for (int i = index + 1; i < _count; i++)
             _points[i - 1] = _points[i];
         _count--;
         ret = true;
@@ -144,10 +144,10 @@ bool MgBaseLines::removePoint(UInt32 index)
     return ret;
 }
 
-bool MgBaseLines::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
+bool MgBaseLines::_setHandlePoint(int index, const Point2d& pt, float tol)
 {
-    Int32 preindex = (isClosed() && 0 == index) ? _count - 1 : index - 1;
-    UInt32 postindex = (isClosed() && index + 1 == _count) ? 0 : index + 1;
+    int preindex = (isClosed() && 0 == index) ? _count - 1 : index - 1;
+    int postindex = (isClosed() && index + 1 == _count) ? 0 : index + 1;
     
     float predist = preindex < 0 ? _FLT_MAX : getPoint(preindex).distanceTo(pt);
     float postdist = postindex >= _count ? _FLT_MAX : getPoint(postindex).distanceTo(pt);
@@ -169,7 +169,7 @@ bool MgBaseLines::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
 }
 
 float MgBaseLines::_hitTest(const Point2d& pt, float tol, 
-                            Point2d& nearpt, Int32& segment) const
+                            Point2d& nearpt, int& segment) const
 {
     return mgLinesHit(_count, _points, isClosed(), pt, tol, nearpt, segment);
 }
@@ -179,7 +179,7 @@ bool MgBaseLines::_hitTestBox(const Box2d& rect) const
     if (!__super::_hitTestBox(rect))
         return false;
     
-    for (UInt32 i = 0; i + 1 < _count; i++) {
+    for (int i = 0; i + 1 < _count; i++) {
         if (Box2d(_points[i], _points[i + 1]).isIntersect(rect))
             return true;
     }
@@ -199,7 +199,7 @@ bool MgBaseLines::_load(MgStorage* s)
 {
     bool ret = __super::_load(s);
     
-    UInt32 n = s->readUInt32("count", 0);
+    int n = s->readUInt32("count", 0);
     if (n < 1 || n > 9999)
         return false;
     
@@ -222,12 +222,12 @@ MgLines::~MgLines()
 {
 }
 
-bool MgLines::_draw(GiGraphics& gs, const GiContext& ctx) const
+bool MgLines::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
 {
     bool ret = false;
     if (isClosed())
         ret = gs.drawPolygon(&ctx, _count, _points);
     else
         ret = gs.drawLines(&ctx, _count, _points);
-    return __super::_draw(gs, ctx) || ret;
+    return __super::_draw(mode, gs, ctx) || ret;
 }

@@ -180,6 +180,11 @@ float Matrix2d::scaleY() const
     return mgIsZero(m21) ? fabs(m22) : mgHypot(m21, m22);
 }
 
+float Matrix2d::angle() const
+{
+    return Vector2d(m11, m12).angle2();
+}
+
 // 判断两个矩阵是否相等
 bool Matrix2d::operator==(const Matrix2d& mat) const
 {
@@ -203,8 +208,8 @@ bool Matrix2d::isEqualTo(const Matrix2d& mat, const Tol& tol) const
 // 判断是否为单位矩阵
 bool Matrix2d::isIdentity() const
 {
-    return mgIsZero(m11 - 1.f) && mgIsZero(m12)
-        && mgIsZero(m22 - 1.f) && mgIsZero(m21)
+    return mgEquals(m11, 1.f) && mgIsZero(m12)
+        && mgEquals(m22, 1.f) && mgIsZero(m21)
         && mgIsZero(dx) && mgIsZero(dy);
 }
 
@@ -212,6 +217,19 @@ bool Matrix2d::isIdentity() const
 bool Matrix2d::isOrtho() const
 {
     return mgIsZero(m12) && mgIsZero(m21);
+}
+
+bool Matrix2d::hasMirror(Vector2d& reflex) const
+{
+    Vector2d e0 (m11, m12);
+    Vector2d e1 (m21, m22);
+    if (e0.normalize() && e1.normalize() && e0.isPerpendicularTo(e1)) {
+        if (!mgIsZero(e0.x - e1.y) || !mgIsZero(e0.y + e1.x)) {
+            reflex.setAngleLength(e0.angle2() / 2.f, 1.f);
+            return true;
+        }
+    }
+    return false;
 }
 
 // 得到比例、旋转、镜像成分
@@ -231,12 +249,12 @@ bool Matrix2d::isConformal(float& scaleX, float& scaleY, float& angle,
     if (mgIsZero(e0.x - e1.y) && mgIsZero(e0.y + e1.x))
     {
         isMirror = false;
-        angle = e0.angle();
+        angle = e0.angle2();
     }
     else
     {
         isMirror = true;
-        angle = e0.angle() / 2.f;
+        angle = e0.angle2() / 2.f;
         reflex.x = cos(angle);
         reflex.y = sin(angle);
         angle = 0.f;

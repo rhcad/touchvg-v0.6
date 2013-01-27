@@ -22,12 +22,13 @@ typedef enum {
 } MgSelState;
 
 //! 选择集接口
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \interface MgSelection
+    \see MgSelState
 */
 struct MgSelection {
     //! 得到当前选择的图形
-    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false) = 0;
+    virtual int getSelection(MgView* view, int count, MgShape** shapes, bool forChange = false) = 0;
     
     //! 返回选择状态
     virtual MgSelState getSelectState(MgView* view) = 0;
@@ -45,7 +46,7 @@ struct MgSelection {
     virtual void resetSelection(MgView* view) = 0;
 
     //! 添加选择图形
-    virtual bool addSelection(MgView* view, UInt32 shapeID) = 0;
+    virtual bool addSelection(MgView* view, int shapeID) = 0;
     
     //! 删除当前图形的选中的顶点
     virtual bool deleteVertext(const MgMotion* sender) = 0;
@@ -72,11 +73,16 @@ struct MgSelection {
     virtual bool isVertexMode(MgView* view) = 0;
     
     //! 设置当前是否处于顶点编辑状态
-    virtual void setVertexMode(MgView* view, bool vertexMode) = 0;
+    virtual bool setVertexMode(MgView* view, bool vertexMode) = 0;
+    
+    //! 对当前选中多边形沿一条边翻转
+    virtual bool overturnPolygon(const MgMotion* sender) = 0;
     
     //! 响应双指触摸, state: 1-Began, 2-Moved, 3-Ended
     virtual bool handleTwoFingers(const MgMotion* sender, int state,
                                   const Point2d& pt1, const Point2d& pt2) = 0;
+    //! 返回选择包络框，模型坐标
+    virtual Box2d getBoundingBox(const MgMotion* sender) = 0;
 };
 
 #endif // __GEOMETRY_MGSELECTION_H_

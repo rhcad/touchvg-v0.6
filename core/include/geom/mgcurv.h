@@ -114,7 +114,7 @@ GEOMAPI bool mgArc3P(
     \ingroup GEOMAPI_CURVE
     \param[in] start 圆弧的起点
     \param[in] end 圆弧的终点
-    \param[in] tanv 圆弧的起点处的切向矢量
+    \param[in] startTan 圆弧的起点处的切向矢量
     \param[out] center 圆心
     \param[out] radius 半径
     \param[out] startAngle 填充起始角度，为NULL则忽略该参数
@@ -123,7 +123,7 @@ GEOMAPI bool mgArc3P(
     \see mgArc3P, mgArcBulge, mgAngleArcToBezier
 */
 GEOMAPI bool mgArcTan(
-    const Point2d& start, const Point2d& end, const Vector2d& tanv,
+    const Point2d& start, const Point2d& end, const Vector2d& startTan,
     Point2d& center, float& radius,
     float* startAngle = NULL, float* sweepAngle = NULL);
 
@@ -144,6 +144,20 @@ GEOMAPI bool mgArcBulge(
     const Point2d& start, const Point2d& end, float bulge,
     Point2d& center, float& radius,
     float* startAngle = NULL, float* sweepAngle = NULL);
+
+//! 计算两圆的交点
+/*!
+    \ingroup GEOMAPI_CURVE
+    \param[out] pt1 第一个交点，返回为1或2时有效
+    \param[out] pt2 第二个交点，返回为2时有效
+    \param[in] c1 第一个圆的圆心
+    \param[in] r1 第一个圆的半径，正数
+    \param[in] c2 第二个圆的圆心
+    \param[in] r2 第二个圆的半径，正数
+    \return 交点个数，-1:无穷个，0：没有交点，1：相切，2：两个交点相交
+*/
+GEOMAPI int mgInsectTwoCircles(Point2d& pt1, Point2d& pt2,
+                               const Point2d& c1, float r1, const Point2d& c2, float r2);
 
 //! 求解三对角线方程组
 /*! 三对角线方程组如下所示: \n

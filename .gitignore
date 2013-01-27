@@ -16,3 +16,4 @@ build
 *.DS_Store
 xcuserdata
 ._*
+.metadata

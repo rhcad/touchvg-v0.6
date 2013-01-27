@@ -4,7 +4,7 @@
 
 #include "Step2View.h"
 
-class MgViewEx;
+class MgViewProxyMfc;
 
 class CDrawShapeView : public CScrollShapeView
 {
@@ -15,10 +15,12 @@ public:
 
 // Attributes
 public:
+    CString m_filename;
 
 // Operations
 public:
     bool showContextActions(const int* actions);
+    void setRandomProp(BOOL randomProp);
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -40,15 +42,15 @@ protected:
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
     afx_msg void OnUpdateContextItems(CCmdUI* pCmdUI);
     afx_msg void OnContextItems(UINT nID);
+    afx_msg void OnFileSave();
+    afx_msg void OnInitialUpdate();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
 // Implementation
 private:
-    const char* getCmdName(UINT nID) const;
-
     UINT        m_cmdID;
-    MgViewEx*   m_proxy;
+    MgViewProxyMfc*   m_proxy;
     BOOL        m_moved;
     BOOL        m_delayUp;
     long        m_downTime;

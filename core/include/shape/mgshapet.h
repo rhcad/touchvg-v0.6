@@ -20,9 +20,9 @@ class MgShapeT : public MgShape
 public:
     ShapeT      _shape;
     ContextT    _context;
-    UInt32      _id;
+    int      _id;
     MgShapes*   _parent;
-    UInt32      _tag;
+    int      _tag;
     
     MgShapeT() : _id(0), _parent(NULL), _tag(0)
     {
@@ -57,10 +57,10 @@ public:
         return &_shape;
     }
     
-    bool draw(GiGraphics& gs, const GiContext *ctx = NULL) const
+    bool draw(int mode, GiGraphics& gs, const GiContext *ctx = NULL) const
     {
         ContextT tmpctx(getContext(gs, ctx));
-        return shapec()->draw(gs, tmpctx);
+        return shapec()->draw(mode, gs, tmpctx);
     }
     
     static MgShape* create()
@@ -68,10 +68,10 @@ public:
         return new ThisClass;
     }
     
-    static UInt32 Type() { return 0x10000 | ShapeT::Type(); }
-    UInt32 getType() const { return Type(); }
+    static int Type() { return 0x10000 | ShapeT::Type(); }
+    int getType() const { return Type(); }
     
-    bool isKindOf(UInt32 type) const
+    bool isKindOf(int type) const
     {
         return type == Type() || type == MgShape::Type();
     }
@@ -120,7 +120,7 @@ public:
         return ret;
     }
     
-    UInt32 getID() const
+    int getID() const
     {
         return _id;
     }
@@ -130,18 +130,19 @@ public:
         return _parent;
     }
     
-    void setParent(MgShapes* p, UInt32 nID)
+    void setParent(MgShapes* p, int sid)
     {
         _parent = p;
-        _id = nID;
+        _id = sid;
+        shape()->setOwner(this);
     }
 
-    UInt32 getTag() const
+    int getTag() const
     {
         return _tag;
     }
 
-    void setTag(UInt32 tag)
+    void setTag(int tag)
     {
         _tag = tag;
     }
@@ -165,7 +166,7 @@ public:
     
     bool load(MgStorage* s)
     {
-        UInt32 c;
+        int c;
         
         _tag = s->readUInt32("tag", _tag);
         _context.setLineStyle((GiLineStyle)s->readUInt8("lineStyle", 0));
@@ -196,25 +197,26 @@ protected:
     {
         ContextT tmpctx(_context);
         
-        if (ctx && !ctx->isNullLine()) {
+        if (ctx) {
             float addw  = ctx->getLineWidth();
             float width = tmpctx.getLineWidth();
             
             width = -gs.calcPenWidth(width, tmpctx.isAutoScale());  // 像素宽度，负数
             if (addw <= 0)
-                tmpctx.setLineWidth(width + addw, false);       // 像素宽度加宽
-            else
-                tmpctx.setLineWidth(-addw, ctx->isAutoScale()); // 换成新的像素宽度
+                tmpctx.setLineWidth(width + addw, false);           // 像素宽度加宽
+            else                                                    // 传入正数表示像素宽度
+                tmpctx.setLineWidth(-addw, ctx->isAutoScale());     // 换成新的像素宽度
         }
         
-        if (ctx && !ctx->isNullLine())
+        if (ctx && ctx->getLineColor().a > 0) {
             tmpctx.setLineColor(ctx->getLineColor());
-        
-        if (ctx && !ctx->isNullLine())
+        }
+        if (ctx && !ctx->isNullLine()) {
             tmpctx.setLineStyle(ctx->getLineStyle());
-        
-        if (ctx && ctx->hasFillColor())
+        }
+        if (ctx && ctx->hasFillColor()) {
             tmpctx.setFillColor(ctx->getFillColor());
+        }
         
         return tmpctx;
     }

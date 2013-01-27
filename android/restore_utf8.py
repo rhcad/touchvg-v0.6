@@ -14,12 +14,15 @@ def restore_utf8(dir):
             continue
         if fn.endswith('.utf8'):
             orgfile = sfile[:-5]
-            if os.path.exists(orgfile): os.remove(orgfile)
-            os.rename(sfile, orgfile)
-            resultfn += fn[:-5] + ' '
+            try:
+                if os.path.exists(orgfile): os.remove(orgfile)
+                os.rename(sfile, orgfile)
+                resultfn += fn[:-5] + ' '
+            except:
+                print('except for %s' %(fn,))
     return resultfn
 
 if __name__=="__main__":
     resultfn = restore_utf8(os.path.abspath('core'))
-    resultfn += restore_utf8(os.path.abspath('android/skiaview/src/touchvg/view'))
+    resultfn += restore_utf8(os.path.abspath('android/skiaview/src/touchvg'))
     if resultfn != '': print('restore files: ' + resultfn)

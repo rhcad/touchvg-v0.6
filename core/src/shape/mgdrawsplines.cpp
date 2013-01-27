@@ -37,7 +37,7 @@ bool MgCmdDrawSplines::draw(const MgMotion* sender, GiGraphics* gs)
         GiContext ctx(0, GiColor(64, 128, 64, 172), kGiLineSolid, GiColor(0, 64, 64, 128));
         float radius = gs->xf().displayToModel(4);
         
-        for (UInt32 i = 1, n = dynshape()->shape()->getPointCount(); i < 6 && n >= i; i++) {
+        for (int i = 1, n = dynshape()->shape()->getPointCount(); i < 6 && n >= i; i++) {
             gs->drawEllipse(&ctx, dynshape()->shape()->getPoint(n - i), radius);
         }
         gs->drawEllipse(&ctx, dynshape()->shape()->getPoint(0), radius * 1.5f);
@@ -73,12 +73,13 @@ bool MgCmdDrawSplines::touchBegan(const MgMotion* sender)
 bool MgCmdDrawSplines::touchMoved(const MgMotion* sender)
 {
     MgBaseLines* lines = (MgBaseLines*)dynshape()->shape();
+    Point2d pnt((sender->pointM + sender->lastPointM) / 2); // 中点采样法
     
-    dynshape()->shape()->setPoint(m_step, sender->pointM);
+    dynshape()->shape()->setPoint(m_step, pnt);
     if (m_step > 0 && canAddPoint(sender, false)) {
         m_step++;
         if (m_step >= dynshape()->shape()->getPointCount()) {
-            lines->addPoint(sender->pointM);
+            lines->addPoint(pnt);
         }
     }
     dynshape()->shape()->update();
@@ -128,9 +129,10 @@ bool MgCmdDrawSplines::canAddPoint(const MgMotion* sender, bool ended)
     if (!m_freehand && !ended)
         return false;
     
-    if (m_step > 0 && mgDisplayMmToModel(ended ? 0.2f : 0.5f, sender)
-        > sender->pointM.distanceTo(dynshape()->shape()->getPoint(m_step - 1))) {
-        return false;
+    if (m_step > 0) {
+        float dist = sender->pointM.distanceTo(dynshape()->shape()->getPoint(m_step - 1));
+        if (dist < mgDisplayMmToModel(ended ? 0.2f : 0.5f, sender))
+            return false;
     }
     
     return true;

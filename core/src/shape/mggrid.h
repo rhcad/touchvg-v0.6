@@ -15,7 +15,7 @@ class MgGrid : public MgBaseRect
 {
     MG_INHERIT_CREATE(MgGrid, MgBaseRect, 20)
 public:
-    virtual int snap(Point2d& pnt, float& distx, float& disty);
+    virtual int snap(Point2d& pnt, float& distx, float& disty) const;
 
 protected:
     virtual void setFlag(MgShapeBit bit, bool on);
@@ -24,9 +24,9 @@ protected:
     void _clear();
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
-    UInt32 _getHandleCount() const;
-    Point2d _getHandlePoint(UInt32 index) const;
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
+    int _getHandleCount() const;
+    Point2d _getHandlePoint(int index) const;
+    bool _setHandlePoint(int index, const Point2d& pt, float tol);
     bool isFloatingCommand() { return true; }
 
 protected:

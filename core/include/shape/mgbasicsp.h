@@ -26,6 +26,9 @@ public:
 
     //! 返回线段长度
     float length() const { return _points[0].distanceTo(_points[1]); }
+    
+    //! 返回线段角度, [-PI, PI)
+    float angle() const { return (_points[1] - _points[0]).angle2(); }
 
     //! 设置起点，未调 update()
     void setStartPoint(const Point2d& pt) { _points[0] = pt; }
@@ -34,9 +37,15 @@ public:
     void setEndPoint(const Point2d& pt)  { _points[1] = pt; }
     
 protected:
+    bool isCurve() const { return false; }
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
+    int _getHandleCount() const;
+    Point2d _getHandlePoint(int index) const;
+    bool _setHandlePoint(int index, const Point2d& pt, float tol);
+    bool _isHandleFixed(int index) const;
+    int _getDimensions(const Matrix2d& m2w, float* vars, char* types, int count) const;
 
 private:
     Point2d     _points[2];
@@ -50,7 +59,7 @@ class MgBaseRect : public MgBaseShape
     MG_DECLARE_DYNAMIC(MgBaseRect, MgBaseShape)
 public:
     //! 返回本对象的类型
-    static UInt32 Type() { return 4; }
+    static int Type() { return 4; }
 
     //! 返回中心点
     Point2d getCenter() const;
@@ -73,15 +82,15 @@ public:
     //! 返回是否为水平矩形
     bool isOrtho() const;
 
-    //! 设置矩形
-    void setRect(const Point2d& pt1, const Point2d& pt2);
+    //! 设置水平矩形，对于正方形pt1固定
+    void setRect2P(const Point2d& pt1, const Point2d& pt2);
     
-    //! 设置倾斜矩形
-    void setRect(const Point2d& pt1, const Point2d& pt2,
-                 float angle, const Point2d& basept);
+    //! 设置倾斜矩形，(pt1-pt2)为旋转前的对角点，basept为旋转中心
+    void setRectWithAngle(const Point2d& pt1, const Point2d& pt2,
+                          float angle, const Point2d& basept);
 
     //! 设置四个角点
-    void setRect(const Point2d points[4]);
+    void setRect4P(const Point2d points[4]);
 
     //! 设置中心点
     void setCenter(const Point2d& pt);
@@ -91,23 +100,25 @@ public:
 
 protected:
     MgBaseRect();
-    UInt32 _getPointCount() const;
-    Point2d _getPoint(UInt32 index) const;
-    void _setPoint(UInt32 index, const Point2d& pt);
+    bool isCurve() const { return false; }
+    int _getPointCount() const;
+    Point2d _getPoint(int index) const;
+    void _setPoint(int index, const Point2d& pt);
     void _copy(const MgBaseRect& src);
     bool _equals(const MgBaseRect& src) const;
-    bool _isKindOf(UInt32 type) const;
+    bool _isKindOf(int type) const;
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
     bool _isClosed() const { return true; }
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
-    UInt32 _getHandleCount() const;
-    Point2d _getHandlePoint(UInt32 index) const;
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment) const;
+    int _getHandleCount() const;
+    Point2d _getHandlePoint(int index) const;
+    bool _setHandlePoint(int index, const Point2d& pt, float tol);
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
+    int _getDimensions(const Matrix2d& m2w, float* vars, char* types, int count) const;
 
 protected:
     Point2d     _points[4]; // 从左上角起顺时针的四个角点
@@ -138,11 +149,12 @@ public:
     void setRadius(float rx, float ry = 0.0);
 
 protected:
+    bool isCurve() const { return true; }
     void _update();
-    UInt32 _getHandleCount() const;
-    Point2d _getHandlePoint(UInt32 index) const;
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
+    int _getHandleCount() const;
+    Point2d _getHandlePoint(int index) const;
+    bool _setHandlePoint(int index, const Point2d& pt, float tol);
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:
@@ -166,32 +178,17 @@ public:
     void setRadius(float rx, float ry = 0.0);
 
 protected:
+    bool isCurve() const;
     void _copy(const MgRoundRect& src);
     bool _equals(const MgRoundRect& src) const;
     void _clear();
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment) const;
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
 
 protected:
     float      _rx;
     float      _ry;
-};
-
-//! 菱形图形类
-/*! \ingroup GEOM_SHAPE
-*/
-class MgDiamond : public MgBaseRect
-{
-    MG_INHERIT_CREATE(MgDiamond, MgBaseRect, 14)
-protected:
-    UInt32 _getHandleCount() const;
-    Point2d _getHandlePoint(UInt32 index) const;
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
-    void _update();
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
-    bool _hitTestBox(const Box2d& rect) const;
-    bool _rotateHandlePoint(UInt32 index, const Point2d& pt);
 };
 
 //! 折线基类
@@ -202,7 +199,7 @@ class MgBaseLines : public MgBaseShape
     MG_DECLARE_DYNAMIC(MgBaseLines, MgBaseShape)
 public:
     //! 返回本对象的类型
-    static UInt32 Type() { return 5; }
+    static int Type() { return 5; }
 
     //! 设置是否闭合
     void setClosed(bool closed) { setFlag(kMgClosed, closed); }
@@ -211,39 +208,39 @@ public:
     Point2d endPoint() const;
 
     //! 改变顶点数
-    bool resize(UInt32 count);
+    bool resize(int count);
 
     //! 添加一个顶点
     bool addPoint(const Point2d& pt);
     
     //! 在指定段插入一个顶点
-    bool insertPoint(Int32 segment, const Point2d& pt);
+    bool insertPoint(int segment, const Point2d& pt);
 
     //! 删除一个顶点
-    bool removePoint(UInt32 index);
+    bool removePoint(int index);
 
 protected:
     MgBaseLines();
     virtual ~MgBaseLines();
-    UInt32 _getPointCount() const;
-    Point2d _getPoint(UInt32 index) const;
-    void _setPoint(UInt32 index, const Point2d& pt);
+    int _getPointCount() const;
+    Point2d _getPoint(int index) const;
+    void _setPoint(int index, const Point2d& pt);
     void _copy(const MgBaseLines& src);
     bool _equals(const MgBaseLines& src) const;
-    bool _isKindOf(UInt32 type) const;
+    bool _isKindOf(int type) const;
     void _update();
     void _transform(const Matrix2d& mat);
     void _clear();
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
+    bool _setHandlePoint(int index, const Point2d& pt, float tol);
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
 
 protected:
     Point2d*    _points;
-    UInt32      _maxCount;
-    UInt32      _count;
+    int      _maxCount;
+    int      _count;
 };
 
 //! 折线图形类
@@ -253,6 +250,7 @@ class MgLines : public MgBaseLines
 {
     MG_INHERIT_CREATE(MgLines, MgBaseLines, 15)
 protected:
+    bool isCurve() const { return false; }
 };
 
 //! 三次参数样条曲线类
@@ -266,49 +264,75 @@ public:
     void smooth(float tol);
     
 protected:
+    bool isCurve() const { return true; }
     void _update();
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, Int32& segment) const;
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment) const;
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:
     Vector2d*   _knotvs;
-    UInt32      _bzcount;
+    int      _bzcount;
 };
 
-//! 矩形图形基类
+//! 图像矩形类
+/*! \ingroup GEOM_SHAPE
+ */
+class MgImageShape : public MgBaseRect
+{
+    MG_INHERIT_CREATE(MgImageShape, MgBaseRect, 18)
+public:
+    const char* getName() const { return _name; }
+    void setName(const char* name);
+    
+    static MgShape* findShapeByImageID(MgShapes* shapes, const char* name);
+    
+protected:
+    void _copy(const MgImageShape& src);
+    bool _equals(const MgImageShape& src) const;
+    void _clear();
+    bool _save(MgStorage* s) const;
+    bool _load(MgStorage* s);
+    
+protected:
+    char    _name[64];
+};
+
+//! 圆弧图形类
 /*! \ingroup GEOM_SHAPE
 */
-class MgParallelogram : public MgBaseShape
+class MgArc : public MgBaseShape
 {
-    MG_DECLARE_CREATE(MgParallelogram, MgBaseShape, 17)
+    MG_DECLARE_CREATE(MgArc, MgBaseShape, 19)
 public:
-    //! 返回中心点
-    Point2d getCenter() const { return (_points[0] + _points[2]) / 2; }
+    Point2d getCenter() const;
+    Point2d getStartPoint() const;
+    Point2d getEndPoint() const;
+    Point2d getMidPoint() const;
+    float getRadius() const;
+    float getStartAngle() const;
+    float getEndAngle() const;
+    float getSweepAngle() const;
+    Vector2d getStartTangent() const;
+    Vector2d getEndTangent() const;
 
-    //! 返回矩形框，是本对象未旋转时的形状
-    Box2d getRect() const { return Box2d(getCenter(), getWidth(), getHeight()); }
-
-    //! 返回宽度
-    float getWidth() const { return _points[0].distanceTo(_points[1]); }
-
-    //! 返回高度
-    float getHeight() const { return _points[2].distanceTo(_points[1]); }
-
-    //! 返回是否为空矩形
-    bool isEmpty(float minDist) const {
-        return getWidth() <= minDist || getHeight() <= minDist; }
-
+    bool setStartMidEnd(const Point2d& start, const Point2d& point, const Point2d& end);
+    bool setCenterStartEnd(const Point2d& center, const Point2d& start, const Point2d& end);
+    bool setTanStartEnd(const Vector2d& startTan, const Point2d& start, const Point2d& end);
+    bool setCenterRadius(const Point2d& center, float radius, float startAngle, float sweepAngle);
+    
 protected:
-    bool _isClosed() const { return true; }
-    bool _setHandlePoint(UInt32 index, const Point2d& pt, float tol);
-    bool _offset(const Vector2d& vec, Int32 segment);
-    bool _rotateHandlePoint(UInt32 index, const Point2d& pt);
+    bool isCurve() const { return true; }
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;
     bool _load(MgStorage* s);
+    int _getHandleCount() const;
+    Point2d _getHandlePoint(int index) const;
+    bool _setHandlePoint(int index, const Point2d& pt, float tol);
+    int _getDimensions(const Matrix2d& m2w, float* vars, char* types, int count) const;
+    bool _reverse();
 
-protected:
-    Point2d     _points[4]; // 从左上角起顺时针的四个角点
+private:
+    Point2d _points[4]; // center,start,end, mid
 };
 
 #endif // __GEOMETRY_BASICSHAPE_H_

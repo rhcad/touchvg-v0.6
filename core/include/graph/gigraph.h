@@ -155,6 +155,18 @@ public:
     bool drawArc(const GiContext* ctx, 
         const Point2d& center, float rx, float ry, 
         float startAngle, float sweepAngle, bool modelUnit = true);
+    
+    //! 给定线上三点绘制椭圆弧，模型坐标或世界坐标
+    /*!
+        \param ctx 绘图参数，忽略填充参数，为NULL时取为上一个绘图参数
+        \param startpt 起点
+        \param midpt 中点
+        \param endpt 终点
+        \param modelUnit 指定的坐标尺寸是模型坐标(true)还是世界坐标(false)
+        \return 是否显示成功。失败原因为参数错误或超出剪裁区域
+    */
+    bool drawArc3P(const GiContext* ctx, const Point2d& startpt, 
+                   const Point2d& midpt, const Point2d& endpt, bool modelUnit = true);
 
 
     //! 绘制并填充多边形，模型坐标或世界坐标
@@ -315,6 +327,8 @@ public:
     bool rawLineTo(float x, float y);
     bool rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y);
     bool rawClosePath();
+    void rawTextCenter(const char* text, float x, float y, float h);
+    bool drawImage(const char* name, float xc, float yc, float w, float h, float angle);
 
 private:
     GiGraphics();

@@ -147,13 +147,13 @@ GEOMAPI float mgPtToBeeline2(
         return a.distanceTo(pt);
     }
     // 竖直线
-    else if (mgIsZero(a.x - b.x))
+    else if (mgEquals(a.x, b.x))
     {
         ptPerp.set(a.x, pt.y);
         return fabs(a.x - pt.x);
     }
     // 水平线
-    else if (mgIsZero(a.y - b.y))
+    else if (mgEquals(a.y, b.y))
     {
         ptPerp.set(pt.x, a.y);
         return fabs(a.y - pt.y);
@@ -392,7 +392,7 @@ static bool PtInArea_Edge(int &odd, const Point2d& pt, const Point2d& p1,
     float yy = p1.y + (pt.x - p1.x) * (p2.y - p1.y) / (p2.x - p1.x);
     if (pt.y > yy)      // 相交
     {
-        if (mgIsZero(pt.x - p1.x))    // 交点是顶点, 则比较P[i+1]和P[i-1]是否在pt.x同侧
+        if (mgEquals(pt.x, p1.x))   // 交点是顶点, 则比较P[i+1]和P[i-1]是否在pt.x同侧
         {
             if (((p0.x > pt.x) && (p2.x > pt.x)) ||
                 ((p0.x < pt.x) && (p2.x < pt.x)) )      // 同侧
@@ -408,10 +408,10 @@ static bool PtInArea_Edge(int &odd, const Point2d& pt, const Point2d& p1,
 
 // 功能: 判断一点是否在一多边形范围内
 GEOMAPI MgPtInAreaRet mgPtInArea(
-    const Point2d& pt, Int32 count, const Point2d* vertexs, 
-    Int32& order, const Tol& tol)
+    const Point2d& pt, int count, const Point2d* vertexs, 
+    int& order, const Tol& tol)
 {
-    Int32 i;
+    int i;
     int odd = 1;    // 1: 交点数为偶数, 0: 交点数为奇数
     
     order = -1;
@@ -448,7 +448,7 @@ GEOMAPI MgPtInAreaRet mgPtInArea(
 }
 
 // 判断多边形是否为凸多边形
-GEOMAPI bool mgIsConvex(Int32 count, const Point2d* vs, bool* pACW)
+GEOMAPI bool mgIsConvex(int count, const Point2d* vs, bool* pACW)
 {
     if (count < 3 || vs == NULL)
         return true;

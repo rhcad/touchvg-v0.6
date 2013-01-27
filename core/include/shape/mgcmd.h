@@ -8,6 +8,7 @@
 
 #include <gigraph.h>
 #include <mgshapes.h>
+#include <mgshape.h>
 
 struct MgSelection;
 struct MgView;
@@ -18,13 +19,13 @@ struct MgCommandManager;
 struct MgSnap;
 struct MgActionDispatcher;
 
-//! 返回命令管理器
-/*! \ingroup GEOM_SHAPE
-*/
+//! 返回命令管理器.
+/*! \ingroup CORE_COMMAND
+ */
 MgCommandManager* mgGetCommandManager();
 
 //! 注册外部命令
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \param name 命令名称，例如 YourCmd::Name()
     \param factory 命令类的创建函数，例如 YourCmd::Create, 为NULL则取消注册
 */
@@ -35,10 +36,10 @@ void mgRegisterCommand(const char* name, MgCommand* (*factory)());
     \param type MgBaseShape 派生图形类的 Type()，或 MgShapeT(图形类)的 Type()
     \param factory 图形类的创建函数，例如 MgShapeT(图形类)的 create, 为NULL则取消注册
 */
-void mgRegisterShapeCreator(UInt32 type, MgShape* (*factory)());
+void mgRegisterShapeCreator(int type, MgShape* (*factory)());
 
 //! 图形视图接口
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \interface MgView
 */
 struct MgView {
@@ -70,14 +71,14 @@ struct MgView {
     
     virtual bool isContextActionsVisible() { return false; }
     virtual bool showContextActions(int selState, const int* actions,
-                                    const Box2d& selbox) { //!< 显示上下文菜单
-        return selState < 0 && actions && selbox.isEmpty(); }
+                                    const Box2d& selbox, const MgShape* shape) { //!< 显示上下文菜单
+        return selState < 0 && actions && selbox.isEmpty() && shape; }
     virtual bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) {  //!< 显示控制点
         return gs && pnt != pnt && hotdot; }
 };
 
 //! 命令参数
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
 */
 struct MgMotion {
     MgView*     view;                           //!< 图形视图
@@ -94,7 +95,7 @@ struct MgMotion {
 };
 
 //! 命令接口
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \interface MgCommand
     \see mgGetCommandManager, mgRegisterCommand, MgBaseCommand
 */
@@ -120,11 +121,13 @@ struct MgCommand {
     
     virtual bool isDrawingCommand() { return false; }       //!< 是否为绘图命令
     virtual bool isFloatingCommand() { return false; }      //!< 是否可嵌套在其他命令中
+    virtual bool doContextAction(const MgMotion*, int) { return false; } //!< 执行上下文动作
+    virtual int getDimensions(MgView*, float*, char*, int) { return 0; } //!< 得到各种度量尺寸
 };
 
 //! 命令接口的默认实现，可以以此派生新命令类
 /*! example: mgRegisterCommand(YourCmd::Name(), YourCmd::Create);
-    \ingroup GEOM_SHAPE
+    \ingroup CORE_COMMAND
     \see MgCommandDraw
 */
 class MgBaseCommand : public MgCommand {
@@ -149,7 +152,7 @@ protected:
 };
 
 //! 命令管理器接口
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \interface MgCommandManager
     \see mgGetCommandManager
 */
@@ -168,7 +171,7 @@ struct MgCommandManager {
         \param forChange 是否用于修改，用于修改时将复制临时图形，动态修改完后要调用 dynamicChangeEnded()
         \return 获取多少个图形，或实际个数
     */
-    virtual UInt32 getSelection(MgView* view, UInt32 count, MgShape** shapes, bool forChange = false) = 0;
+    virtual int getSelection(MgView* view, int count, MgShape** shapes, bool forChange = false) = 0;
     
     //! 结束动态修改，提交或放弃所改的临时图形
     virtual bool dynamicChangeEnded(MgView* view, bool apply) = 0;

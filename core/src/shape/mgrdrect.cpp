@@ -26,6 +26,11 @@ void MgRoundRect::setRadius(float rx, float ry)
         _ry = _rx;
 }
 
+bool MgRoundRect::isCurve() const
+{
+    return fabsf(_rx) > getWidth() / 6 || fabsf(_ry) > getHeight() / 6;
+}
+
 void MgRoundRect::_copy(const MgRoundRect& src)
 {
     _rx = src._rx;
@@ -35,8 +40,8 @@ void MgRoundRect::_copy(const MgRoundRect& src)
 
 bool MgRoundRect::_equals(const MgRoundRect& src) const
 {
-    return mgIsZero(_rx - src._rx)
-        && mgIsZero(_ry - src._ry)
+    return mgEquals(_rx, src._rx)
+        && mgEquals(_ry, src._ry)
         && __super::_equals(src);
 }
 
@@ -47,7 +52,7 @@ void MgRoundRect::_clear()
 }
 
 float MgRoundRect::_hitTest(const Point2d& pt, float tol, 
-                            Point2d& nearpt, Int32& segment) const
+                            Point2d& nearpt, int& segment) const
 {
     float dist;
 
@@ -69,7 +74,7 @@ float MgRoundRect::_hitTest(const Point2d& pt, float tol,
     return dist;
 }
 
-bool MgRoundRect::_draw(GiGraphics& gs, const GiContext& ctx) const
+bool MgRoundRect::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
 {
     bool ret = false;
 
@@ -83,7 +88,7 @@ bool MgRoundRect::_draw(GiGraphics& gs, const GiContext& ctx) const
         ret = gs.drawRoundRect(&ctx, getRect(), _rx, _ry);
     }
 
-    return __super::_draw(gs, ctx) || ret;
+    return __super::_draw(mode, gs, ctx) || ret;
 }
 
 bool MgRoundRect::_save(MgStorage* s) const

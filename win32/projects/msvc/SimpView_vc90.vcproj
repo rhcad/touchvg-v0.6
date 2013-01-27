@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="geom.lib graph.lib shape.lib graphwin.lib"
+				AdditionalDependencies="geom.lib graph.lib shape.lib graphwin.lib json.lib"
 				AdditionalLibraryDirectories="$(TargetDir)"
 			/>
 			<Tool
@@ -133,7 +133,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="geom.lib graph.lib shape.lib graphwin.lib"
+				AdditionalDependencies="geom.lib graph.lib shape.lib graphwin.lib json.lib"
 				AdditionalLibraryDirectories="$(TargetDir)"
 				GenerateDebugInformation="true"
 			/>

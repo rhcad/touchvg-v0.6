@@ -33,10 +33,10 @@ GiPath::GiPath(const GiPath& src)
 {
     m_data = new GiPathImpl();
 
-    UInt32 count = src.m_data->points.size();
+    int count = src.m_data->points.size();
     m_data->points.reserve(count);
     m_data->types.reserve(count);
-    for (UInt32 i = 0; i < count; i++)
+    for (int i = 0; i < count; i++)
     {
         m_data->points.push_back(src.m_data->points[i]);
         m_data->types.push_back(src.m_data->types[i]);
@@ -76,10 +76,10 @@ GiPath& GiPath::copy(const GiPath& src)
     if (this != &src)
     {
         clear();
-        UInt32 count = src.m_data->points.size();
+        int count = src.m_data->points.size();
         m_data->points.reserve(count);
         m_data->types.reserve(count);
-        for (UInt32 i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             m_data->points.push_back(src.m_data->points[i]);
             m_data->types.push_back(src.m_data->types[i]);
@@ -148,10 +148,8 @@ bool GiPath::lineTo(const Point2d& point)
 bool GiPath::linesTo(int count, const Point2d* points)
 {
     bool ret = (m_data->beginIndex >= 0 && count > 0 && points != NULL);
-    if (ret)
-    {
-        for (int i = 0; i < count; i++)
-        {
+    if (ret) {
+        for (int i = 0; i < count; i++) {
             m_data->points.push_back(points[i]);
             m_data->types.push_back(kGiLineTo);
         }
@@ -160,14 +158,18 @@ bool GiPath::linesTo(int count, const Point2d* points)
     return ret;
 }
 
-bool GiPath::beziersTo(int count, const Point2d* points)
+bool GiPath::beziersTo(int count, const Point2d* points, bool reverse)
 {
     bool ret = (m_data->beginIndex >= 0 && count > 0 && points != NULL
         && (count % 3) == 0);
-    if (ret)
-    {
-        for (int i = 0; i < count; i++)
-        {
+    if (ret && reverse) {
+        for (int i = count - 1; i >= 0; i--) {
+            m_data->points.push_back(points[i]);
+            m_data->types.push_back(kGiBeziersTo);
+        }
+    }
+    else if (ret) {
+        for (int i = 0; i < count; i++) {
             m_data->points.push_back(points[i]);
             m_data->types.push_back(kGiBeziersTo);
         }

@@ -26,7 +26,7 @@ bool MgBaseShape::_equals(const MgBaseShape& src) const
     return _flags == src._flags;
 }
 
-bool MgBaseShape::_isKindOf(UInt32 type) const
+bool MgBaseShape::_isKindOf(int type) const
 {
     return type == Type();
 }
@@ -53,22 +53,22 @@ void MgBaseShape::_clear()
     _extent.empty();
 }
 
-bool MgBaseShape::_draw(GiGraphics&, const GiContext&) const
+bool MgBaseShape::_draw(int, GiGraphics&, const GiContext&) const
 {
     return false;
 }
 
-UInt32 MgBaseShape::_getHandleCount() const
+int MgBaseShape::_getHandleCount() const
 {
     return getPointCount();
 }
 
-Point2d MgBaseShape::_getHandlePoint(UInt32 index) const
+Point2d MgBaseShape::_getHandlePoint(int index) const
 {
     return getPoint(index);
 }
 
-bool MgBaseShape::_rotateHandlePoint(UInt32 index, const Point2d& pt)
+bool MgBaseShape::_rotateHandlePoint(int index, const Point2d& pt)
 {
     if (getFlag(kMgFixedLength)) {
         if (getFlag(kMgRotateDisnable)) {
@@ -77,7 +77,10 @@ bool MgBaseShape::_rotateHandlePoint(UInt32 index, const Point2d& pt)
         else {
             Point2d basept(_extent.center());
             if (!getFlag(kMgSquare)) {
-                basept = (getHandlePoint(index > 0 ? index - 1 : getHandleCount() - 1));
+                int baseindex = index > 0 ? index - 1 : getHandleCount() - 1;
+                while (baseindex > 0 && isHandleFixed(baseindex))
+                    baseindex--;
+                basept = (getHandlePoint(baseindex));
             }
             float a1 = (pt - basept).angle2();
             float a2 = (getHandlePoint(index) - basept).angle2();
@@ -90,16 +93,16 @@ bool MgBaseShape::_rotateHandlePoint(UInt32 index, const Point2d& pt)
     return false;
 }
 
-bool MgBaseShape::_setHandlePoint(UInt32 index, const Point2d& pt, float)
+bool MgBaseShape::_setHandlePoint(int index, const Point2d& pt, float)
 {
     setPoint(index, pt);
     update();
     return true;
 }
 
-bool MgBaseShape::_offset(const Vector2d& vec, Int32)
+bool MgBaseShape::_offset(const Vector2d& vec, int)
 {
-    for (UInt32 i = 0; i < getPointCount(); i++) {
+    for (int i = 0; i < getPointCount(); i++) {
         setPoint(i, getPoint(i) + vec);
     }
     update();

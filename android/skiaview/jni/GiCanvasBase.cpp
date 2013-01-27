@@ -14,6 +14,8 @@ GiCanvasBase::~GiCanvasBase()
 {
 }
 
+bool GiCanvasBase::showContextActions(const mgvector<int>&, float, float, float, float) { return false; }
+
 bool GiCanvasBase::drawLine(float, float, float, float) { return false; }
 bool GiCanvasBase::drawLines(const mgvector<float>&) { return false; }
 bool GiCanvasBase::drawBeziers(const mgvector<float>&) { return false; }
@@ -37,6 +39,8 @@ void GiCanvasBase::penChanged(int, float, int) {}
 void GiCanvasBase::brushChanged(int) {}
 void GiCanvasBase::setNeedRedraw() {}
 bool GiCanvasBase::drawHandle(float, float, int) { return false; }
+bool GiCanvasBase::drawImage(const char*, float, float, float, float, float) { return false; }
+void GiCanvasBase::rawTextCenter(const char*, float, float, float) {}
 
 bool GiCanvasBase::rawLine(const GiContext* ctx, float x1, float y1, float x2, float y2)
 {
@@ -139,8 +143,8 @@ bool GiCanvasBase::checkStroke(const GiContext* ctx)
     if (!ctx->isNullLine() && changed)
     {
         _ctxstatus |= 1;
-        penChanged(ctx->getLineARGB(), 
-            _gs.calcPenWidth(ctx->getLineWidth(), ctx->isAutoScale()), 
+        penChanged(ctx->getLineARGB(),
+            _gs.calcPenWidth(ctx->getLineWidth(), ctx->isAutoScale()),
             ctx->getLineStyle());
     }
 

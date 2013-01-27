@@ -6,6 +6,7 @@
 #ifndef __GEOMETRY_GIDEF_H_
 #define __GEOMETRY_GIDEF_H_
 
+#ifndef SWIG
 #ifdef _MACOSX
 #include <libkern/OSAtomic.h>
 inline long giInterlockedIncrement(volatile long *p) { return OSAtomicIncrement32((volatile int32_t *)p); }
@@ -21,6 +22,7 @@ inline long giInterlockedDecrement(volatile long *p) { return --*p; }
 inline long giInterlockedIncrement(volatile long *p) { return InterlockedIncrement(p); }
 inline long giInterlockedDecrement(volatile long *p) { return InterlockedDecrement(p); }
 #endif
+#endif // SWIG
 
 //! 矢量路径节点类型
 /*! \see GiPath

@@ -53,21 +53,19 @@ BoundBox& BoundBox::extend(const Point2d& pnt)
     }
     else
     {
-        float x, y;
-        vec.resolveVector(m_dir1, m_dir2, x, y);
-        if (x > 1.f)
-            m_dir1 *= x;
-        if (y > 1.f)
-            m_dir2 *= y;
-        if (x < 0.f)
-        {
-            m_base += m_dir1 * x;
-            m_dir1 *= (1.f - x);
+        Vector2d uv;
+        vec.resolveVector(m_dir1, m_dir2, uv);
+        if (uv.x > 1.f)
+            m_dir1 *= uv.x;
+        if (uv.y > 1.f)
+            m_dir2 *= uv.y;
+        if (uv.x < 0.f) {
+            m_base += m_dir1 * uv.x;
+            m_dir1 *= (1.f - uv.x);
         }
-        if (y < 0.f)
-        {
-            m_base += m_dir2 * y;
-            m_dir2 *= (1.f - y);
+        if (uv.y < 0.f) {
+            m_base += m_dir2 * uv.y;
+            m_dir2 *= (1.f - uv.y);
         }
     }
     return *this;
@@ -133,24 +131,24 @@ BoundBox& BoundBox::swell(float distance)
 // 判断是否包含一个点
 bool BoundBox::contains(const Point2d& pnt) const
 {
-    float x, y;
+    Vector2d uv;
     Vector2d vec (pnt - m_base);
     
     if (m_dir1.isZeroVector() && m_dir2.isZeroVector())
         return vec.isZeroVector();
     else if (m_dir1.isParallelTo(m_dir2))
     {
-        x = vec.projectScaleToVector(m_dir1);
-        if (x < -_MGZERO || x > 1.f + _MGZERO)
+        uv.x = vec.projectScaleToVector(m_dir1);
+        if (uv.x < -_MGZERO || uv.x > 1.f + _MGZERO)
             return false;
-        y = vec.projectScaleToVector(m_dir2);
-        return y > -_MGZERO && y < 1.f + _MGZERO;
+        uv.y = vec.projectScaleToVector(m_dir2);
+        return uv.y > -_MGZERO && uv.y < 1.f + _MGZERO;
     }
     else
     {
-        vec.resolveVector(m_dir1, m_dir2, x, y);
-        return x > -_MGZERO && x < 1.f + _MGZERO
-            && y > -_MGZERO && y < 1.f + _MGZERO;
+        vec.resolveVector(m_dir1, m_dir2, uv);
+        return uv.x > -_MGZERO && uv.x < 1.f + _MGZERO
+            && uv.y > -_MGZERO && uv.y < 1.f + _MGZERO;
     }
 }
 

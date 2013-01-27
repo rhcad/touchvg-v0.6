@@ -86,10 +86,10 @@ GEOMAPI bool mgCubicSplinesIntersectBox(
 
 GEOMAPI float mgCubicSplinesHit(
     Int32 n, const Point2d* knots, const Vector2d* knotvs, bool closed, 
-    const Point2d& pt, float tol, Point2d& nearpt, Int32& segment)
+    const Point2d& pt, float tol, Point2d& nearpt, int& segment)
 {
     Point2d ptTemp;
-    float dDist, dDistMin = _FLT_MAX;
+    float dist, distMin = _FLT_MAX;
     Point2d pts[4];
     const Box2d rect (pt, 2 * tol, 2 * tol);
     Int32 n2 = (closed && n > 1) ? n + 1 : n;
@@ -101,17 +101,17 @@ GEOMAPI float mgCubicSplinesHit(
         if (rect.isIntersect(computeCubicBox(pts)))
         {
             mgNearestOnBezier(pt, pts, ptTemp);
-            dDist = pt.distanceTo(ptTemp);
-            if (dDist <= tol && dDist < dDistMin)
+            dist = pt.distanceTo(ptTemp);
+            if (dist <= tol && dist < distMin)
             {
-                dDistMin = dDist;
+                distMin = dist;
                 nearpt = ptTemp;
                 segment = i;
             }
         }
     }
 
-    return dDistMin;
+    return distMin;
 }
 
 GEOMAPI Int32 mgBSplinesToBeziers(
@@ -146,27 +146,27 @@ GEOMAPI Int32 mgBSplinesToBeziers(
 
 GEOMAPI float mgLinesHit(
     Int32 n, const Point2d* points, bool closed, 
-    const Point2d& pt, float tol, Point2d& nearpt, Int32& segment)
+    const Point2d& pt, float tol, Point2d& nearpt, int& segment)
 {
     Point2d ptTemp;
-    float dDist, dDistMin = _FLT_MAX;
+    float dist, distMin = _FLT_MAX;
     const Box2d rect (pt, 2 * tol, 2 * tol);
     Int32 n2 = (closed && n > 1) ? n + 1 : n;
     
-    MgPtInAreaRet inArea = closed ? mgPtInArea(pt, n, points, segment) : kMgPtInArea;
+    MgPtInAreaRet inArea = (closed ? mgPtInArea(pt, n, points, segment, Tol(tol/5, 0)) : kMgPtInArea);
     
     if (closed) {
         if (inArea == kMgPtOutArea) {
-            return dDistMin;
+            return distMin;
         }
         if (inArea == kMgPtAtVertex) {
             nearpt = points[segment];
-            dDistMin = nearpt.distanceTo(pt);
-            return dDistMin;
+            distMin = nearpt.distanceTo(pt);
+            return distMin;
         }
         if (inArea == kMgPtOnEdge) {
-            dDistMin = mgPtToLine(points[segment], points[(segment+1)%n], pt, nearpt);
-            return dDistMin;
+            distMin = mgPtToLine(points[segment], points[(segment+1)%n], pt, nearpt);
+            return distMin;
         }
     }
     
@@ -175,17 +175,18 @@ GEOMAPI float mgLinesHit(
         const Point2d& pt2 = points[(i + 1) % n];
         if (closed || rect.isIntersect(Box2d(points[i], pt2)))
         {
-            dDist = mgPtToLine(points[i], pt2, pt, ptTemp);
-            if (dDist <= tol && dDist < dDistMin)
+            dist = mgPtToLine(points[i], pt2, pt, ptTemp);
+            if (distMin > 1e10f || (dist <= tol && dist < distMin))
             {
-                dDistMin = dDist;
+                distMin = dist;
                 nearpt = ptTemp;
-                segment = i;
+                if (dist <= tol)
+                    segment = i;
             }
         }
     }
 
-    return dDistMin;
+    return distMin;
 }
 
 static inline
@@ -200,8 +201,8 @@ Point2d RoundRectTan(Int32 nFrom, Int32 nTo, const Box2d& rect, float r)
 static void _RoundRectHit(
     const Box2d& rect, float rx, float ry, 
     const Point2d& pt, float tol, const Box2d &rectTol, 
-    Point2d* pts, float& dDistMin, 
-    Point2d& nearpt, Int32& segment)
+    Point2d* pts, float& distMin, 
+    Point2d& nearpt, int& segment)
 {
     Point2d ptsBezier[13], ptTemp;
     Vector2d vec;
@@ -233,10 +234,10 @@ static void _RoundRectHit(
         if (rectTol.isIntersect(Box2d(4, pts)))
         {
             mgNearestOnBezier(pt, pts, ptTemp);
-            float dDist = pt.distanceTo(ptTemp);
-            if (dDist <= tol && dDist < dDistMin)
+            float dist = pt.distanceTo(ptTemp);
+            if (dist <= tol && dist < distMin)
             {
-                dDistMin = dDist;
+                distMin = dist;
                 nearpt = ptTemp;
                 segment = (5 - i) % 4;
             }
@@ -248,7 +249,7 @@ static void _RoundRectHit(
 
 GEOMAPI float mgRoundRectHit(
     const Box2d& rect, float rx, float ry, 
-    const Point2d& pt, float tol, Point2d& nearpt, Int32& segment)
+    const Point2d& pt, float tol, Point2d& nearpt, int& segment)
 {
     rx = fabs(rx);
     if (ry < _MGZERO)
@@ -258,7 +259,7 @@ GEOMAPI float mgRoundRectHit(
     segment = -1;
     
     Point2d ptTemp, ptTemp2;
-    float dDist, dDistMin = _FLT_MAX;
+    float dist, distMin = _FLT_MAX;
     Point2d pts[8];
     const Box2d rectTol (pt, 2 * tol, 2 * tol);
     
@@ -283,10 +284,10 @@ GEOMAPI float mgRoundRectHit(
         Box2d rcLine (pts[2 * i], pts[2 * i + 1]);
         if (rcLine.isEmpty() || rectTol.isIntersect(rcLine))
         {
-            dDist = mgPtToLine(pts[2 * i], pts[2 * i + 1], pt, ptTemp);
-            if (dDist <= tol && dDist < dDistMin)
+            dist = mgPtToLine(pts[2 * i], pts[2 * i + 1], pt, ptTemp);
+            if (dist <= tol && dist < distMin)
             {
-                dDistMin = dDist;
+                distMin = dist;
                 nearpt = ptTemp;
                 segment = 4 + i;
             }
@@ -295,10 +296,10 @@ GEOMAPI float mgRoundRectHit(
     
     if (rx > _MGZERO && ry > _MGZERO)
     {
-        _RoundRectHit(rect, rx, ry, pt, tol, rectTol, pts, dDistMin, nearpt, segment);
+        _RoundRectHit(rect, rx, ry, pt, tol, rectTol, pts, distMin, nearpt, segment);
     }
 
-    return dDistMin;
+    return distMin;
 }
 
 GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 index, Point2d& pt)

@@ -513,6 +513,17 @@ bool GiGraphics::drawArc(const GiContext* ctx,
     return count > 3 && rawBeziers(ctx, points, count);
 }
 
+bool GiGraphics::drawArc3P(const GiContext* ctx, const Point2d& startpt, 
+                           const Point2d& midpt, const Point2d& endpt, 
+                           bool modelUnit)
+{
+    Point2d center;
+    float r, startAngle, sweepAngle;
+    
+    return (mgArc3P(startpt, midpt, endpt, center, r, &startAngle, &sweepAngle)
+            && drawArc(ctx, center, r, r, startAngle, sweepAngle, modelUnit));
+}
+
 static inline int findInvisibleEdge(const PolygonClip& clip)
 {
     int i = 0;
@@ -607,8 +618,8 @@ static bool _DrawPolygon(GiCanvas* cv, const GiContext* ctx,
         }
     }
 
-    if (n == 4 && mgIsZero(pxs[0].x - pxs[3].x) && mgIsZero(pxs[1].x - pxs[2].x)
-        && mgIsZero(pxs[0].y - pxs[1].y) && mgIsZero(pxs[2].y - pxs[3].y))
+    if (n == 4 && mgEquals(pxs[0].x, pxs[3].x) && mgEquals(pxs[1].x, pxs[2].x)
+        && mgEquals(pxs[0].y, pxs[1].y) && mgEquals(pxs[2].y, pxs[3].y))
     {
         return cv->rawRect(&context, pxs[0].x, pxs[0].y, 
             pxs[2].x - pxs[0].x, pxs[2].y - pxs[0].y);
@@ -1097,4 +1108,14 @@ bool GiGraphics::rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x
 bool GiGraphics::rawClosePath()
 {
     return m_impl->canvas && m_impl->canvas->rawClosePath();
+}
+
+void GiGraphics::rawTextCenter(const char* text, float x, float y, float h)
+{
+    m_impl->canvas->rawTextCenter(text, x, y, h);
+}
+
+bool GiGraphics::drawImage(const char* name, float xc, float yc, float w, float h, float angle)
+{
+    return m_impl->canvas->drawImage(name, xc, yc, w, h, angle);
 }

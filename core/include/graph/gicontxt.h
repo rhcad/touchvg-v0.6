@@ -231,7 +231,7 @@ public:
     }
     
     //! 返回线条透明度
-    char getLineAlpha() const
+    int getLineAlpha() const
     {
         return m_lineColor.a;
     }
@@ -255,6 +255,7 @@ public:
     void setNoFillColor()
     {
         m_fillColor = GiColor::Invalid();
+        m_autoFillColor = false;
     }
     
     //! 返回填充颜色
@@ -267,12 +268,14 @@ public:
     void setFillColor(const GiColor& color)
     {
         m_fillColor = color;
+        m_autoFillColor = false;
     }
     
     //! 设置填充颜色
     void setFillColor(int r, int g, int b)
     {
         m_fillColor.set((UInt8)r, (UInt8)g, (UInt8)b);
+        m_autoFillColor = false;
     }
 
     //! 返回线条ARGB颜色
@@ -288,7 +291,7 @@ public:
     }
     
     //! 返回填充透明度
-    char getFillAlpha() const
+    int getFillAlpha() const
     {
         return m_fillColor.a;
     }

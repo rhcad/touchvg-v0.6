@@ -6,34 +6,53 @@
 #ifndef __GEOMETRY_MGSHAPES_H_
 #define __GEOMETRY_MGSHAPES_H_
 
-#include <mgshape.h>
+#include <mgbox.h>
+#include "mgobject.h"
 
+struct MgShape;
+struct MgStorage;
+class GiGraphics;
+class GiContext;
 class MgLockRW;
 
 //! 图形列表接口
 /*! \ingroup GEOM_SHAPE
     \interface MgShapes
+    \see MgShapeIterator
 */
 struct MgShapes : public MgObject
 {
-    static UInt32 Type() { return 1; }
+    //! 返回本对象的类型
+    static int Type() { return 1; }
     
-    virtual UInt32 getShapeCount() const = 0;
+    //! 复制出一个新图形列表对象
+    MgShapes* cloneShapes() const { return (MgShapes*)clone(); }
 
+#ifndef SWIG
     virtual MgShape* getFirstShape(void*& it) const = 0;
     virtual MgShape* getNextShape(void*& it) const = 0;
     virtual void freeIterator(void*& it) = 0;
+    typedef bool (*Filter)(const MgShape*);
+#endif
 
+    virtual int getShapeCount() const = 0;
     virtual MgShape* getLastShape() const = 0;
-    virtual MgShape* findShape(UInt32 nID) const = 0;
-    virtual MgShape* findShapeByTag(UInt32 tag) const = 0;
+    virtual MgShape* findShape(int sid) const = 0;
+    virtual MgShape* findShapeByTag(int tag) const = 0;
+    virtual MgShape* findShapeByType(int type) const = 0;
     virtual Box2d getExtent() const = 0;
     
-    virtual MgShape* hitTest(const Box2d& limits, Point2d& nearpt, Int32& segment) const = 0;
+    virtual MgShape* hitTest(const Box2d& limits, Point2d& nearpt
+#ifndef SWIG
+        , int* segment = NULL, Filter filter = NULL) const = 0;
+#else
+        ) const = 0;
+#endif
+    
     virtual int draw(GiGraphics& gs, const GiContext *ctx = NULL) const = 0;
-    virtual UInt32 getChangeCount() = 0;
+    virtual int getChangeCount() = 0;
     virtual void afterChanged() = 0;
-    virtual bool save(MgStorage* s, UInt32 startIndex = 0) const = 0;
+    virtual bool save(MgStorage* s, int startIndex = 0) const = 0;
     virtual bool load(MgStorage* s, bool addOnly = false) = 0;
     
     //! 删除所有图形
@@ -43,7 +62,10 @@ struct MgShapes : public MgObject
     virtual MgShape* addShape(const MgShape& src) = 0;
     
     //! 移除一个图形，由调用者删除图形对象
-    virtual MgShape* removeShape(UInt32 nID) = 0;
+    virtual MgShape* removeShape(int sid) = 0;
+    
+    //! 移动图形到最后，以便显示在最前面
+    virtual bool bringToFront(int sid) = 0;
     
     //! 返回新图形的图形属性
     virtual GiContext* context() = 0;
@@ -53,15 +75,35 @@ struct MgShapes : public MgObject
     
     //! 得到页面范围的世界坐标
     virtual Box2d getZoomRectW() const = 0;
+
+    //! 得到显示比例
+    virtual float getViewScale() const = 0;
     
     //! 设置页面范围的世界坐标
-    virtual void setZoomRectW(const Box2d& rectW) = 0;
+    virtual void setZoomRectW(const Box2d& rectW, float viewScale) = 0;
     
     //! 得到锁定数据对象以便读写锁定
     virtual MgLockRW* getLockData() = 0;
 };
 
-#ifndef SWIG
+//! 遍历图形的辅助类
+/*! \ingroup GEOM_SHAPE
+*/
+class MgShapeIterator
+{
+public:
+    MgShapeIterator(const MgShapes* shapes) : _s(shapes), _it(NULL) {}
+    ~MgShapeIterator() { freeIterator(); }
+
+    MgShape* getFirstShape() { return _s->getFirstShape(_it); }
+    MgShape* getNextShape() { return _s->getNextShape(_it); }
+    void freeIterator() { _s->getNextShape(_it); }
+
+private:
+    MgShapeIterator();
+    const MgShapes* _s;
+    void* _it;
+};
 
 //! 读写锁定数据类
 /*! \ingroup GEOM_SHAPE
@@ -106,9 +148,11 @@ public:
     int getEditFlags() { return shapes->getLockData()->getEditFlags(); }
     void resetEditFlags() { shapes->getLockData()->setEditFlags(0); }
     
+#ifndef SWIG
     typedef void (*ShapesLocked)(MgShapes* sp, void* obj, bool locked);
     static void registerObserver(ShapesLocked func, void* obj);
     static void unregisterObserver(ShapesLocked func, void* obj);
+#endif
 };
 
 //! 动态图形锁定辅助类
@@ -125,7 +169,5 @@ public:
     static bool lockedForRead();
     static bool lockedForWrite();
 };
-
-#endif // SWIG
 
 #endif // __GEOMETRY_MGSHAPES_H_

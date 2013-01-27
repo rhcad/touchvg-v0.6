@@ -95,7 +95,7 @@ struct GiTransformImpl
     {
         bool bChanged = false;
 
-        if (pnt != centerW || !mgIsZero(scale - viewScale))
+        if (pnt != centerW || !mgEquals(scale, viewScale))
         {
             tmpCenterW = pnt;
             tmpViewScale = scale;
@@ -180,7 +180,7 @@ long GiTransform::getZoomTimes() const
     return m_impl->zoomTimes;
 }
 
-void GiTransform::setWndSize(long width, long height)
+bool GiTransform::setWndSize(long width, long height)
 {
     if ((m_impl->cxWnd != width || m_impl->cyWnd != height)
         && width > 1 && height > 1)
@@ -189,7 +189,9 @@ void GiTransform::setWndSize(long width, long height)
         m_impl->cyWnd = height;
         m_impl->updateTransforms();
         m_impl->zoomChanged();
+        return true;
     }
+    return false;
 }
 
 void GiTransform::setModelTransform(const Matrix2d& mat)
@@ -219,7 +221,7 @@ void GiTransform::setResolution(float dpiX, float dpiY)
 
 Box2d GiTransform::getWndRectW() const
 {
-    return Box2d(0, 0, (float)getWidth(), (float)getHeight()) * displayToWorld();
+    return Box2d((float)getWidth(), (float)getHeight()) * displayToWorld();
 }
 
 void GiTransform::setViewScaleRange(float minScale, float maxScale)
@@ -240,7 +242,7 @@ void GiTransform::setViewScaleRange(float minScale, float maxScale)
 Box2d GiTransform::setWorldLimits(const Box2d& rect)
 {
     Box2d ret = m_impl->rectLimitsW;
-    m_impl->rectLimitsW = rect;
+    m_impl->rectLimitsW = rect.isEmpty() ? Box2d(Point2d::kOrigin(), 2e5f, 2e5f) : rect;
     m_impl->rectLimitsW.normalize();
     return ret;
 }
@@ -252,14 +254,16 @@ bool GiTransform::enableZoom(bool enabled)
     return bOld;
 }
 
-void GiTransform::getZoomValue(Point2d& centerW, float& viewScale) const
+float GiTransform::getZoomValue(Point2d& centerW) const
 {
     centerW = m_impl->tmpCenterW;
-    viewScale = m_impl->tmpViewScale;
+    return m_impl->tmpViewScale;
 }
 
-bool GiTransform::zoom(Point2d centerW, float viewScale, bool* changed)
+bool GiTransform::zoom(Point2d centerW, float viewScale)
 {
+    bool changed = false;
+
     viewScale = mgMax(viewScale, m_impl->minViewScale);
     viewScale = mgMin(viewScale, m_impl->maxViewScale);
 
@@ -293,15 +297,16 @@ bool GiTransform::zoom(Point2d centerW, float viewScale, bool* changed)
         }
     }
 
-    m_impl->zoomNoAdjust(centerW, viewScale, changed);
+    m_impl->zoomNoAdjust(centerW, viewScale, &changed);
 
-    return true;
+    return changed;
 }
 
 static inline bool ScaleOutRange(float scale, const GiTransformImpl* impl)
 {
-    return scale < impl->minViewScale - 1e-5
-        || scale > impl->maxViewScale + 1e-5;
+    return scale < _MGZERO
+        || scale < impl->minViewScale - _MGZERO
+        || scale > impl->maxViewScale + _MGZERO;
 }
 
 static void AdjustCenterW(Point2d &ptW, float halfw, float halfh, 
@@ -516,7 +521,7 @@ bool GiTransform::zoomByFactor(float factor, const Point2d* pxAt, bool adjust)
         scale = mgMax(scale, m_impl->minViewScale);
         scale = mgMin(scale, m_impl->maxViewScale);
     }
-    if (mgIsZero(scale - m_impl->viewScale))
+    if (mgEquals(scale, m_impl->viewScale))
         return false;
     return zoomScale(scale, pxAt, adjust);
 }

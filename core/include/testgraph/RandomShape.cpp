@@ -65,7 +65,7 @@ void RandomParam::initShapes(MgShapes* shapes)
             curveCount--;
             
             setShapeProp(sp->context());
-            for (UInt32 i = 0; i < sp->shape()->getPointCount(); i++)
+            for (int i = 0; i < sp->shape()->getPointCount(); i++)
             {
                 if (0 == i)
                 {
@@ -97,7 +97,7 @@ void RandomParam::initShapes(MgShapes* shapes)
             MgShapeT<MgRect> shape;
             
             Box2d rect(Point2d(RandF(-1000, 1000), RandF(-1000, 1000)), RandF(1, 200), 0);
-            shape._shape.setRect(rect.leftTop(), rect.rightBottom());
+            shape._shape.setRect2P(rect.leftTop(), rect.rightBottom());
             sp = shapes->addShape(shape);
             rectCount--;
             

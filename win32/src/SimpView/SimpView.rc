@@ -77,6 +77,7 @@ BEGIN
     POPUP "文件(&F)"
     BEGIN
         MENUITEM "新建(&N)...\tCtrl+N",           ID_FILE_NEW
+        MENUITEM "打开(&S)\tCtrl+O",              ID_FILE_OPEN
         MENUITEM SEPARATOR
         MENUITEM "退出(&X)",                      ID_APP_EXIT
     END
@@ -95,58 +96,64 @@ BEGIN
     POPUP "文件(&F)"
     BEGIN
         MENUITEM "新建(&N)...\tCtrl+N",           ID_FILE_NEW
+        MENUITEM "打开(&S)\tCtrl+O",              ID_FILE_OPEN
+        MENUITEM "保存(&S)\tCtrl+S",              ID_FILE_SAVE
         MENUITEM "关闭(&C)",                      ID_FILE_CLOSE
         MENUITEM SEPARATOR
         MENUITEM "退出(&X)",                      ID_APP_EXIT
     END
     POPUP "绘图(&D)"
     BEGIN
-        MENUITEM "选择",                          ID_CMD_SELECT
-        MENUITEM "删除",                          ID_CMD_ERASE
-        MENUITEM "撤销\tCtrl+Z",                  ID_EDIT_UNDO
-        MENUITEM "重做\tCtrl+Y",                  ID_EDIT_REDO
+        MENUITEM "选择",                        ID_CMD_SELECT
+        MENUITEM "删除",                        ID_CMD_ERASE
+        MENUITEM "撤销\tCtrl+Z",                ID_EDIT_UNDO
+        MENUITEM "重做\tCtrl+Y",                ID_EDIT_REDO
         MENUITEM SEPARATOR
-        MENUITEM "线段",                          ID_CMD_LINE
-        MENUITEM "矩形",                          ID_CMD_RECT
-        MENUITEM "正方形",                         ID_CMD_SQUARE
-        MENUITEM "椭圆",                          ID_CMD_ELLIPSE
-        MENUITEM "圆",                           ID_CMD_CIRCLE
-        MENUITEM "菱形",                          ID_CMD_DIAMOND
-        MENUITEM "平行四边形",                       ID_CMD_PARALLELOGRAM
-        MENUITEM "三角形",                         ID_CMD_TRIANGLE
-        MENUITEM "折线",                          ID_CMD_LINES
-        MENUITEM "曲线",                          ID_CMD_SPLINES
-        MENUITEM "网格",                          ID_CMD_GRID
-        MENUITEM "裁断",                          ID_CMD_BREAK
+        MENUITEM "cmd",                         ID_CMD_03
+        MENUITEM "cmd",                         ID_CMD_04
+        MENUITEM "cmd",                         ID_CMD_05
+        MENUITEM "cmd",                         ID_CMD_06
+        MENUITEM "cmd",                         ID_CMD_07
+        MENUITEM "cmd",                         ID_CMD_08
+        MENUITEM "cmd",                         ID_CMD_09
+        MENUITEM "cmd",                         ID_CMD_10
+        MENUITEM "cmd",                         ID_CMD_11
+        MENUITEM "cmd",                         ID_CMD_12
+        MENUITEM "cmd",                         ID_CMD_13
+        MENUITEM "cmd",                         ID_CMD_14
+        MENUITEM "cmd",                         ID_CMD_15
+        MENUITEM "cmd",                         ID_CMD_16
+        MENUITEM "cmd",                         ID_CMD_17
+        MENUITEM "cmd",                         ID_CMD_18
     END
     POPUP "查看(&V)"
     BEGIN
-        MENUITEM "状态栏(&S)",                     ID_VIEW_STATUS_BAR
+        MENUITEM "状态栏(&S)",                  ID_VIEW_STATUS_BAR
         MENUITEM SEPARATOR
-        MENUITEM "灰度显示(&G)",                    ID_VIEW_GRAY
-        MENUITEM "使用GDI&+\tCtrl+G",             ID_VIEW_GDIP
-        MENUITEM "反走样(&A)\tCtrl+L",             ID_VIEW_ANTIALIAS
-        MENUITEM "背景颜色(&B)...",                 ID_VIEW_BKCOLOR
+        MENUITEM "灰度显示(&G)",                ID_VIEW_GRAY
+        MENUITEM "使用GDI&+\tCtrl+G",           ID_VIEW_GDIP
+        MENUITEM "反走样(&A)\tCtrl+L",          ID_VIEW_ANTIALIAS
+        MENUITEM "背景颜色(&B)...",             ID_VIEW_BKCOLOR
         MENUITEM SEPARATOR
-        MENUITEM "全部显示(&E)\tCtrl+E",            ID_ZOOM_EXTENT
-        MENUITEM "放大(&I)\t+",                   ID_VIEW_ZOOMIN
-        MENUITEM "缩小(&O)\t-",                   ID_VIEW_ZOOMOUT
-        MENUITEM "左移(&L)\tLeft",                ID_PAN_LEFT
-        MENUITEM "右移(&R)\tRight",               ID_PAN_RIGHT
-        MENUITEM "上移(&U)\tUp",                  ID_PAN_UP
-        MENUITEM "下移(&D)\tDown",                ID_PAN_DOWN
-        MENUITEM "动态滚动(&P)",                    ID_REAL_PAN
+        MENUITEM "全部显示(&E)\tCtrl+E",        ID_ZOOM_EXTENT
+        MENUITEM "放大(&I)\t+",                 ID_VIEW_ZOOMIN
+        MENUITEM "缩小(&O)\t-",                 ID_VIEW_ZOOMOUT
+        MENUITEM "左移(&L)\tLeft",              ID_PAN_LEFT
+        MENUITEM "右移(&R)\tRight",             ID_PAN_RIGHT
+        MENUITEM "上移(&U)\tUp",                ID_PAN_UP
+        MENUITEM "下移(&D)\tDown",              ID_PAN_DOWN
+        MENUITEM "动态滚动(&P)",                ID_REAL_PAN
     END
     POPUP "窗口(&W)"
     BEGIN
-        MENUITEM "层叠(&C)",                      ID_WINDOW_CASCADE
-        MENUITEM "水平平铺(&H)",                    ID_WINDOW_TILE_HORZ
-        MENUITEM "垂直平铺(&V)",                    ID_WINDOW_TILE_VERT
-        MENUITEM "排列图标(&A)",                    ID_WINDOW_ARRANGE
+        MENUITEM "层叠(&C)",                    ID_WINDOW_CASCADE
+        MENUITEM "水平平铺(&H)",                ID_WINDOW_TILE_HORZ
+        MENUITEM "垂直平铺(&V)",                ID_WINDOW_TILE_VERT
+        MENUITEM "排列图标(&A)",                ID_WINDOW_ARRANGE
     END
     POPUP "帮助(&H)"
     BEGIN
-        MENUITEM "关于 SimpView(&A)",             ID_APP_ABOUT
+        MENUITEM "关于 SimpView(&A)",           ID_APP_ABOUT
     END
 END
 
@@ -202,6 +209,8 @@ BEGIN
     "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
     "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
     "Y",            ID_EDIT_REDO,           VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
 END
 
 
@@ -227,6 +236,7 @@ CAPTION "新建视图"
 FONT 9, "宋体", 0, 0, 0x0
 BEGIN
     GROUPBOX        "",IDC_STATIC,7,7,87,69
+    CONTROL         "随机图形最大数量",IDC_NEW_ADDDSHAPES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,7,80,10
     LTEXT           "线段数:",IDC_STATIC,14,22,29,8
     EDITTEXT        IDC_NEW_LINECOUNT,47,19,40,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "圆弧数:",IDC_STATIC,14,40,29,8
@@ -239,7 +249,6 @@ BEGIN
     CONTROL         "绘图选择",IDC_NEW_WITHCMD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,109,47,48,10
     DEFPUSHBUTTON   "确定",IDOK,176,7,50,14
     PUSHBUTTON      "取消",IDCANCEL,176,24,50,14
-    CONTROL         "随机图形",IDC_NEW_USERAND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,7,48,10
 END
 
 
@@ -421,25 +430,8 @@ BEGIN
     ID_INDICATOR_X          "X: 0000.00"
     ID_INDICATOR_Y          "Y: 0000.00"
     ID_INDICATOR_VIEWSCALE  "100.00%"
-    ID_INDICATOR_DRAWTIME   "00.000 s"
     ID_CMD_SELECT           "取消绘图命令，开始选择图形\n选择"
     ID_CMD_ERASE            "选择并删除图形\n删除"
-    ID_CMD_GRID             "绘制网格图形\n网格"
-    ID_CMD_LINE             "绘制直线段\n线段"
-    ID_CMD_RECT             "绘制矩形图形\n矩形"
-    ID_CMD_ELLIPSE          "绘制椭圆图形\n椭圆"
-    ID_CMD_SQUARE           "绘制正方形图形\n正方形"
-END
-
-STRINGTABLE 
-BEGIN
-    ID_CMD_CIRCLE           "绘制圆图形\n圆"
-    ID_CMD_TRIANGLE         "绘制三角形图形\n三角形"
-    ID_CMD_DIAMOND          "绘制菱形图形\n菱形"
-    ID_CMD_PARALLELOGRAM    "绘制平行四边形图形\n平行四边形"
-    ID_CMD_BREAK            "划一段直线将四边形或直线段裁断为两个图形\n裁断"
-    ID_CMD_LINES            "绘制折线图形\n折线"
-    ID_CMD_SPLINES          "绘制曲线图形\n曲线"
 END
 
 #endif    // Chinese (P.R.C.) resources

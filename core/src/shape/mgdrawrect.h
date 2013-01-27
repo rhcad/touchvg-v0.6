@@ -9,7 +9,7 @@
 #include "mgcmddraw.h"
 
 //! 矩形绘图命令类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgRect
 */
 class MgCmdDrawRect : public MgCommandDraw
@@ -39,7 +39,7 @@ protected:
 };
 
 //! 椭圆绘图命令类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgEllipse
 */
 class MgCmdDrawEllipse : public MgCmdDrawRect
@@ -55,24 +55,8 @@ private:
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
 };
 
-//! 菱形绘图命令类
-/*! \ingroup GEOM_SHAPE
-    \see MgDiamond
-*/
-class MgCmdDrawDiamond : public MgCmdDrawEllipse
-{
-public:
-    static const char* Name() { return "diamond"; }
-    static MgCommand* Create() { return new MgCmdDrawDiamond; }
-    
-private:
-    virtual const char* getName() const { return Name(); }
-    virtual void release() { delete this; }
-    virtual bool initialize(const MgMotion* sender);
-};
-
 //! 正方形绘图命令类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgRect
 */
 class MgCmdDrawSquare : public MgCmdDrawRect
@@ -88,7 +72,7 @@ private:
 };
 
 //! 圆绘图命令类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgEllipse
 */
 class MgCmdDrawCircle : public MgCmdDrawEllipse
@@ -104,7 +88,7 @@ private:
 };
 
 //! 网格绘图命令类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
     \see MgGrid
 */
 class MgCmdDrawGrid : public MgCmdDrawRect
@@ -117,7 +101,6 @@ private:
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
     virtual bool initialize(const MgMotion* sender);
-    virtual bool cancel(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);

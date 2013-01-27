@@ -122,8 +122,9 @@ public:
         否则需要将纸张可打印区域的大小作为参数调用本函数
         \param width 显示窗口的宽度，像素
         \param height 显示窗口的高度，像素
+        \return 是否改变了宽高
     */
-    void setWndSize(long width, long height);
+    bool setWndSize(long width, long height);
 
     //! 设置显示分辨率
     /*! 一般不直接调用本函数，而是调用图形系统的 beginPaint 或 printSetup 函数
@@ -228,10 +229,9 @@ public:
     /*! 
         \param[in] centerW 显示窗口中心的世界坐标
         \param[in] viewScale 显示比例
-        \param[out] changed 填充是否已改变放缩参数的标记，为NULL则忽略
-        \return 始终返回true
+        \return 填充是否已改变放缩参数的标记
     */
-    bool zoom(Point2d centerW, float viewScale, bool* changed = NULL);
+    bool zoom(Point2d centerW, float viewScale);
 
     //! 设置各种放缩函数是否立即生效
     /*! 本函数可用于检查放缩参数的有效性，避免改变图形系统的放缩状态；
@@ -245,9 +245,9 @@ public:
     //! 得到上一次放缩函数的结果
     /*! 不论 enableZoom 设置什么值，都能获取放缩结果
         \param[out] centerW 显示窗口中心的世界坐标
-        \param[out] viewScale 显示比例
+        \return viewScale 显示比例
     */
-    void getZoomValue(Point2d& centerW, float& viewScale) const;
+    float getZoomValue(Point2d& centerW) const;
 
     //! 返回放缩结果改变的次数，供图形系统等观察者作比较使用
     long getZoomTimes() const;

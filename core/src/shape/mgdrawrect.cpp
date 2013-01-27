@@ -28,7 +28,7 @@ bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
 {
     m_step = 1;
     m_startPt = snapPoint(sender, true);
-    ((MgBaseRect*)dynshape()->shape())->setRect(m_startPt, m_startPt);
+    ((MgBaseRect*)dynshape()->shape())->setRect2P(m_startPt, m_startPt);
     dynshape()->shape()->update();
 
     return _touchBegan(sender);
@@ -40,13 +40,7 @@ bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
     Point2d pt2(snapPoint(sender));
     MgBaseRect* shape = (MgBaseRect*)dynshape()->shape();
     
-    if (shape->getFlag(kMgSquare)) {
-        float len = (float)mgMax(fabs(pt2.x - pt1.x), fabs(pt2.y - pt1.y));
-        Box2d rect(m_startPt, 2.f * len, 0);
-        pt1 = rect.leftTop();
-        pt2 = rect.rightBottom();
-    }
-    shape->setRect(pt1, pt2);
+    shape->setRect2P(pt1, pt2);
     dynshape()->shape()->update();
 
     return _touchMoved(sender);
@@ -58,13 +52,7 @@ bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
     Point2d pt2(snapPoint(sender));
     MgBaseRect* shape = (MgBaseRect*)dynshape()->shape();
     
-    if (shape->getFlag(kMgSquare)) {
-        float len = (float)mgMax(fabs(pt2.x - pt1.x), fabs(pt2.y - pt1.y));
-        Box2d rect(m_startPt, 2.f * len, 0);
-        pt1 = rect.leftTop();
-        pt2 = rect.rightBottom();
-    }
-    shape->setRect(pt1, pt2);
+    shape->setRect2P(pt1, pt2);
     dynshape()->shape()->update();
 
     float minDist = mgDisplayMmToModel(5, sender);
@@ -98,11 +86,6 @@ bool MgCmdDrawEllipse::draw(const MgMotion* sender, GiGraphics* gs)
     return MgCmdDrawRect::draw(sender, gs);
 }
 
-bool MgCmdDrawDiamond::initialize(const MgMotion* sender)
-{
-    return _initialize(MgShapeT<MgDiamond>::create, sender);
-}
-
 bool MgCmdDrawSquare::initialize(const MgMotion* sender)
 {
     bool ret = _initialize(MgShapeT<MgRect>::create, sender);
@@ -130,19 +113,10 @@ bool MgCmdDrawGrid::initialize(const MgMotion* sender)
     return _initialize(MgShapeT<MgGrid>::create, sender);
 }
 
-bool MgCmdDrawGrid::cancel(const MgMotion* sender)
-{
-    if (m_step > 1) {
-        _addshape(sender);
-        _delayClear();
-    }
-    return MgCmdDrawRect::cancel(sender);
-}
-
 bool MgCmdDrawGrid::draw(const MgMotion* sender, GiGraphics* gs)
 {
     if (m_step == 2) {
-        sender->view->drawHandle(gs, dynshape()->shape()->getHandlePoint(4), false);
+        sender->view->drawHandle(gs, dynshape()->shape()->getHandlePoint(8), false);
     }
     return MgCmdDrawRect::draw(sender, gs);
 }
@@ -162,7 +136,7 @@ bool MgCmdDrawGrid::touchMoved(const MgMotion* sender)
         return MgCmdDrawRect::touchMoved(sender);
     }
     
-    dynshape()->shape()->setHandlePoint(4, snapPoint(sender), 0);
+    dynshape()->shape()->setHandlePoint(8, snapPoint(sender), 0);
     dynshape()->shape()->update();
     
     return _touchMoved(sender);
@@ -174,6 +148,7 @@ bool MgCmdDrawGrid::touchEnded(const MgMotion* sender)
         return MgCmdDrawRect::touchEnded(sender);
     }
     
+    dynshape()->context()->setNoFillColor();
     _addshape(sender);
     _delayClear();
     

@@ -320,6 +320,7 @@ public:
         return set(len * cos(angle), len * sin(angle));
     }
     
+#ifndef SWIG
     //! 得到四舍五入后的整数大小
     /*! 利用该函数可以将矢量转换为SIZE、CSize值
         \param[out] cx 四舍五入后的X坐标分量
@@ -329,6 +330,7 @@ public:
     {
         cx = mgRound(x); cy = mgRound(y);
     }
+#endif
 
     //! 判断是否在指定矢量的右侧，即沿逆时针方向转到指定矢量时最近
     bool isRightOf(const Vector2d& vec) const
@@ -350,16 +352,6 @@ public:
     */
     bool isParallelTo(const Vector2d& vec, const Tol& tol = Tol::gTol()) const;
     
-    //! 判断两个矢量是否平行
-    /*! 判断本矢量和另一个矢量是否平行，并检查零矢量。
-        零矢量和任何矢量平行
-        \param[in] vec 另一个矢量
-        \param[in] tol 判断的容差，用到其矢量容差值
-        \param[out] nonzero 这两个矢量中是否没有零矢量
-        \return 是否平行
-    */
-    bool isParallelTo(const Vector2d& vec, const Tol& tol, bool& nonzero) const;
-    
     //! 判断两个矢量是否同向
     /*! 判断本矢量和另一个矢量是否同向，零矢量和任何矢量都不同向
         \param[in] vec 另一个矢量
@@ -367,16 +359,6 @@ public:
         \return 是否同向
     */
     bool isCodirectionalTo(const Vector2d& vec, const Tol& tol = Tol::gTol()) const;
-    
-    //! 判断两个矢量是否同向
-    /*! 判断本矢量和另一个矢量是否同向，并检查零矢量。
-        零矢量和任何矢量都不同向
-        \param[in] vec 另一个矢量
-        \param[in] tol 判断的容差，用到其矢量容差值
-        \param[out] nonzero 这两个矢量中是否没有零矢量
-        \return 是否同向
-    */
-    bool isCodirectionalTo(const Vector2d& vec, const Tol& tol, bool& nonzero) const;
     
     //! 判断两个矢量是否反向
     /*! 判断本矢量和另一个矢量是否反向，零矢量和任何矢量都不反向
@@ -386,6 +368,35 @@ public:
     */
     bool isOppositeTo(const Vector2d& vec, const Tol& tol = Tol::gTol()) const;
     
+    //! 判断两个矢量是否垂直
+    /*! 判断本矢量和另一个矢量是否平行，零矢量和任何矢量都不垂直
+        \param[in] vec 另一个矢量
+        \param[in] tol 判断的容差，用到其矢量容差值
+        \return 是否垂直
+    */
+    bool isPerpendicularTo(const Vector2d& vec, const Tol& tol = Tol::gTol()) const;
+
+#ifndef SWIG
+    //! 判断两个矢量是否平行
+    /*! 判断本矢量和另一个矢量是否平行，并检查零矢量。
+        零矢量和任何矢量平行
+        \param[in] vec 另一个矢量
+        \param[in] tol 判断的容差，用到其矢量容差值
+        \param[out] nonzero 这两个矢量中是否没有零矢量
+        \return 是否平行
+    */
+    bool isParallelTo(const Vector2d& vec, const Tol& tol, bool& nonzero) const;
+
+    //! 判断两个矢量是否同向
+    /*! 判断本矢量和另一个矢量是否同向，并检查零矢量。
+        零矢量和任何矢量都不同向
+        \param[in] vec 另一个矢量
+        \param[in] tol 判断的容差，用到其矢量容差值
+        \param[out] nonzero 这两个矢量中是否没有零矢量
+        \return 是否同向
+    */
+    bool isCodirectionalTo(const Vector2d& vec, const Tol& tol, bool& nonzero) const;
+
     //! 判断两个矢量是否反向
     /*! 判断本矢量和另一个矢量是否反向，并检查零矢量。
         零矢量和任何矢量都不反向
@@ -397,14 +408,6 @@ public:
     bool isOppositeTo(const Vector2d& vec, const Tol& tol, bool& nonzero) const;
     
     //! 判断两个矢量是否垂直
-    /*! 判断本矢量和另一个矢量是否平行，零矢量和任何矢量都不垂直
-        \param[in] vec 另一个矢量
-        \param[in] tol 判断的容差，用到其矢量容差值
-        \return 是否垂直
-    */
-    bool isPerpendicularTo(const Vector2d& vec, const Tol& tol = Tol::gTol()) const;
-    
-    //! 判断两个矢量是否垂直
     /*! 判断本矢量和另一个矢量是否平行，并检查零矢量。
         零矢量和任何矢量都不垂直
         \param[in] vec 另一个矢量
@@ -413,6 +416,7 @@ public:
         \return 是否垂直
     */
     bool isPerpendicularTo(const Vector2d& vec, const Tol& tol, bool& nonzero) const;
+#endif // SWIG
 
     //! 求本矢量投影到矢量xAxis上的垂直距离
     /*! 在xAxis的逆时针方向时返回正值，顺时针则返回负值
@@ -444,12 +448,19 @@ public:
     /*! 将本矢量在两个不共线的非零矢量上进行矢量分解, 本矢量 = u*uAxis+v*vAxis
         \param[in] uAxis u轴矢量
         \param[in] vAxis v轴矢量
-        \param[out] u 在u轴上的矢量分量系数，矢量分量 = uAxis * u
-        \param[out] v 在v轴上的矢量分量系数，矢量分量 = vAxis * v
+        \param[out] uv 在这两轴上的矢量分量系数，(uAxis * u, vAxis * v)
         \return 是否求解成功，uAxis和vAxis共线时失败
     */
     bool resolveVector(const Vector2d& uAxis, const Vector2d& vAxis, 
-        float& u, float& v) const;
+        Vector2d& uv) const;
+    
+    //! 矢量分解
+    /*! 将本矢量在两个不共线的非零矢量上进行矢量分解
+        \param[in] uAxis u轴矢量
+        \param[in] vAxis v轴矢量
+        \return 是否求解成功，uAxis和vAxis共线时失败
+    */
+    bool resolveVector(const Vector2d& uAxis, const Vector2d& vAxis);
 };
 
 #endif // __GEOMETRY_VECTOR_H_

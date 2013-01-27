@@ -110,6 +110,9 @@ public:
     
     //! Y比例大小
     float scaleY() const;
+
+    //! X旋转角度，弧度
+    float angle() const;
     
 #ifndef SWIG
     //! 判断两个矩阵是否相等
@@ -127,7 +130,11 @@ public:
 
     //! 判断矩阵的坐标轴矢量是否分别水平和垂直
     bool isOrtho() const;
+
+    //! 判断矩阵中是否含有对称成分
+    bool hasMirror(Vector2d& reflex) const;
     
+#ifndef SWIG
     //! 得到比例、旋转、镜像成分
     /*!
         \param[out] scaleX 矩阵的X方向放缩比例
@@ -139,6 +146,7 @@ public:
     */
     bool isConformal(float& scaleX, float& scaleY, float& angle,
         bool& isMirror, Vector2d& reflex) const;
+#endif
     
     //! 设置为原点为origin，坐标轴矢量为e0和e1的坐标系
     Matrix2d& setCoordSystem(

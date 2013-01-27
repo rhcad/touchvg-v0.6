@@ -1,5 +1,5 @@
 //! \file mgcmderase.h
-//! \brief 定义橡皮擦命令类 MgCommandErase
+//! \brief 定义橡皮擦命令类 MgCmdErase
 // Copyright (c) 2004-2012, Zhang Yungui
 // License: LGPL, https://github.com/rhcad/touchvg
 
@@ -10,17 +10,17 @@
 #include <vector>
 
 //! 橡皮擦命令类
-/*! \ingroup GEOM_SHAPE
+/*! \ingroup CORE_COMMAND
 */
-class MgCommandErase : public MgCommand
+class MgCmdErase : public MgBaseCommand
 {
 protected:
-    MgCommandErase();
-    virtual ~MgCommandErase();
+    MgCmdErase();
+    virtual ~MgCmdErase();
 
 public:
     static const char* Name() { return "erase"; }
-    static MgCommand* Create() { return new MgCommandErase; }
+    static MgCommand* Create() { return new MgCmdErase; }
     
 private:
     virtual const char* getName() const { return Name(); }
@@ -32,18 +32,17 @@ private:
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual void gatherShapes(const MgMotion* sender, MgShapes* shapes);
     virtual bool click(const MgMotion* sender);
-    virtual bool doubleClick(const MgMotion* sender);
     virtual bool longPress(const MgMotion* sender);
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);
 
 private:
-    UInt32 getStep() { return 0; }
+    int getStep() { return 0; }
     MgShape* hitTest(const MgMotion* sender);
     bool isIntersectMode(const MgMotion* sender);
     
-    std::vector<UInt32>     m_delIds;
+    std::vector<int>     m_delIds;
     bool                    m_boxsel;
 };
 

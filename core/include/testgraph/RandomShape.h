@@ -2,6 +2,7 @@
 #define _TEST_RANDOMSHAPE_H
 
 #include <mgshapes.h>
+#include <mgshape.h>
 
 struct RandomParam
 {

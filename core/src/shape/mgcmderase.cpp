@@ -11,15 +11,15 @@
 
 float mgDisplayMmToModel(float mm, const MgMotion* sender);
 
-MgCommandErase::MgCommandErase()
+MgCmdErase::MgCmdErase()
 {
 }
 
-MgCommandErase::~MgCommandErase()
+MgCmdErase::~MgCmdErase()
 {
 }
 
-bool MgCommandErase::cancel(const MgMotion* sender)
+bool MgCmdErase::cancel(const MgMotion* sender)
 {
     bool recall;
     m_boxsel = false;
@@ -28,13 +28,13 @@ bool MgCommandErase::cancel(const MgMotion* sender)
     return undo(recall, sender) || ret;
 }
 
-bool MgCommandErase::initialize(const MgMotion* /*sender*/)
+bool MgCmdErase::initialize(const MgMotion* /*sender*/)
 {
     m_boxsel = false;
     return true;
 }
 
-bool MgCommandErase::undo(bool &enableRecall, const MgMotion* sender)
+bool MgCmdErase::undo(bool &enableRecall, const MgMotion* sender)
 {
     enableRecall = true;
     if (!m_delIds.empty()) {
@@ -49,11 +49,11 @@ bool MgCommandErase::undo(bool &enableRecall, const MgMotion* sender)
     return false;
 }
 
-bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
+bool MgCmdErase::draw(const MgMotion* sender, GiGraphics* gs)
 {
     if (m_boxsel) {
-        GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
-                          isIntersectMode(sender) ? kGiLineDash : kGiLineSolid, GiColor(0, 0, 255, 32));
+        GiContext ctxshap(0, GiColor(0, 0, 255, 80), 
+                          isIntersectMode(sender) ? kGiLineDash : kGiLineSolid, GiColor(0, 0, 255, 24));
         
         bool antiAlias = gs->setAntiAliasMode(false);
         gs->drawRect(&ctxshap, Box2d(sender->startPointM, sender->pointM));
@@ -62,16 +62,16 @@ bool MgCommandErase::draw(const MgMotion* sender, GiGraphics* gs)
     
     GiContext ctx(-4, GiColor(64, 64, 64, 128));
     
-    for (std::vector<UInt32>::const_iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
+    for (std::vector<int>::const_iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
         MgShape* shape = sender->view->shapes()->findShape(*it);
         if (shape)
-            shape->draw(*gs, &ctx);
+            shape->draw(1, *gs, &ctx);
     }
     
     return true;
 }
 
-void MgCommandErase::gatherShapes(const MgMotion* sender, MgShapes* shapes)
+void MgCmdErase::gatherShapes(const MgMotion* sender, MgShapes* shapes)
 {
     if (m_boxsel) {
         MgShapeT<MgRect> shape;
@@ -79,21 +79,20 @@ void MgCommandErase::gatherShapes(const MgMotion* sender, MgShapes* shapes)
         GiContext ctxshap(0, GiColor(0, 0, 255, 128), 
                           isIntersectMode(sender) ? kGiLineDash : kGiLineSolid, GiColor(0, 0, 255, 32));
         *shape.context() = ctxshap;
-        ((MgRect*)shape.shape())->setRect(sender->startPointM, sender->pointM);
+        ((MgRect*)shape.shape())->setRect2P(sender->startPointM, sender->pointM);
         shapes->addShape(shape);
     }
 }
 
-MgShape* MgCommandErase::hitTest(const MgMotion* sender)
+MgShape* MgCmdErase::hitTest(const MgMotion* sender)
 {
     Box2d limits(sender->startPointM, mgDisplayMmToModel(6, sender), 0);
     Point2d nearpt;
-    Int32 segment;
     
-    return sender->view->shapes()->hitTest(limits, nearpt, segment);
+    return sender->view->shapes()->hitTest(limits, nearpt);
 }
 
-bool MgCommandErase::click(const MgMotion* sender)
+bool MgCmdErase::click(const MgMotion* sender)
 {
     MgShape* shape = hitTest(sender);
     if (shape && sender->view->shapeWillDeleted(shape)) {
@@ -107,38 +106,33 @@ bool MgCommandErase::click(const MgMotion* sender)
     return true;
 }
 
-bool MgCommandErase::doubleClick(const MgMotion* /*sender*/)
-{
-    return false;
-}
-
-bool MgCommandErase::longPress(const MgMotion* sender)
+bool MgCmdErase::longPress(const MgMotion* sender)
 {
     int actions[] = { 0 };
-    return sender->view->showContextActions(0, actions, Box2d(sender->pointM, 0, 0));
+    return sender->view->showContextActions(0, actions, Box2d(sender->point, 0, 0), NULL);
 }
 
 bool MgBaseCommand::longPress(const MgMotion* sender)
 {
     int actions[] = { kMgActionCancel, 0 };
     return sender->view->showContextActions(0, isFloatingCommand() ? actions : actions + 1,
-                                            Box2d(sender->pointM, 0, 0));
+                                            Box2d(sender->point, 0, 0), NULL);
 }
 
-bool MgCommandErase::touchBegan(const MgMotion* sender)
+bool MgCmdErase::touchBegan(const MgMotion* sender)
 {
     m_boxsel = true;
     sender->view->redraw(false);
     return true;
 }
 
-bool MgCommandErase::isIntersectMode(const MgMotion* sender)
+bool MgCmdErase::isIntersectMode(const MgMotion* sender)
 {
     return (sender->startPoint.x < sender->point.x
             && sender->startPoint.y < sender->point.y);
 }
 
-bool MgCommandErase::touchMoved(const MgMotion* sender)
+bool MgCmdErase::touchMoved(const MgMotion* sender)
 {
     Box2d snap(sender->startPointM, sender->pointM);
     void *it = NULL;
@@ -157,7 +151,7 @@ bool MgCommandErase::touchMoved(const MgMotion* sender)
     return true;
 }
 
-bool MgCommandErase::touchEnded(const MgMotion* sender)
+bool MgCmdErase::touchEnded(const MgMotion* sender)
 {
     MgShapes* s = sender->view->shapes();
     
@@ -166,7 +160,7 @@ bool MgCommandErase::touchEnded(const MgMotion* sender)
         MgShapesLock locker(s, MgShapesLock::Remove);
         int count = 0;
         
-        for (std::vector<UInt32>::iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
+        for (std::vector<int>::iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
             MgShape* shape = s->findShape(*it);
             if (shape && sender->view->removeShape(shape)) {
                 shape->release();

@@ -14,17 +14,17 @@ MgBaseRect::MgBaseRect()
 {
 }
 
-UInt32 MgBaseRect::_getPointCount() const
+int MgBaseRect::_getPointCount() const
 {
     return 4;
 }
 
-Point2d MgBaseRect::_getPoint(UInt32 index) const
+Point2d MgBaseRect::_getPoint(int index) const
 {
     return _points[index];
 }
 
-void MgBaseRect::_setPoint(UInt32 index, const Point2d& pt)
+void MgBaseRect::_setPoint(int index, const Point2d& pt)
 {
     _points[index] = pt;
 }
@@ -45,7 +45,7 @@ bool MgBaseRect::_equals(const MgBaseRect& src) const
     return __super::_equals(src);
 }
 
-bool MgBaseRect::_isKindOf(UInt32 type) const
+bool MgBaseRect::_isKindOf(int type) const
 {
     return type == Type() || __super::_isKindOf(type);
 }
@@ -64,7 +64,7 @@ void MgBaseRect::_transform(const Matrix2d& mat)
     for (int i = 0; i < 4; i++)
         _points[i] *= mat;
     Box2d rect(getRect());
-    setRect(rect.leftTop(), rect.rightBottom(), getAngle(), rect.center());
+    setRectWithAngle(rect.leftTop(), rect.rightBottom(), getAngle(), rect.center());
     __super::_transform(mat);
 }
 
@@ -108,22 +108,32 @@ bool MgBaseRect::isEmpty(float minDist) const
 
 bool MgBaseRect::isOrtho() const
 {
-    return mgIsZero(_points[1].y - _points[0].y);
+    return mgEquals(_points[1].y, _points[0].y);
 }
 
-void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2)
+void MgBaseRect::setRect2P(const Point2d& pt1, const Point2d& pt2)
 {
-    setRect(pt1, pt2, 0, (pt1 + pt2) / 2);
+    setRectWithAngle(pt1, pt2, 0, pt1);
 }
 
-void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2,
-                         float angle, const Point2d& basept)
+void MgBaseRect::setRectWithAngle(const Point2d& pt1, const Point2d& pt2,
+                                  float angle, const Point2d& basept)
 {
     Box2d rect(pt1, pt2);
     
     if (getFlag(kMgSquare)) {
-        float len = (float)sqrt(fabs((pt2.x - pt1.x) * (pt2.y - pt1.y)));
-        rect.set(basept, len, 0);
+        if (basept == pt1 && isCurve()) {
+            rect.set(basept, 2 * basept.distanceTo(pt2), 0);
+        }
+        else {
+            float len = (float)mgMax(fabs(pt2.x - pt1.x), fabs(pt2.y - pt1.y));
+            if (basept == pt1 && !isCurve()) {
+                rect.set(pt1, pt1 + Point2d(pt2.x > pt1.x ? len : -len,
+                                            pt2.y > pt1.y ? len : -len));
+            } else {
+                rect.set(basept, basept == pt1 ? 2 * len : len, 0);
+            }
+        }
     }
     
     _points[0] = rect.leftTop();
@@ -139,7 +149,7 @@ void MgBaseRect::setRect(const Point2d& pt1, const Point2d& pt2,
     }
 }
 
-void MgBaseRect::setRect(const Point2d points[4])
+void MgBaseRect::setRect4P(const Point2d points[4])
 {
     for (int i = 0; i < 4; i++)
         _points[i] = points[i];
@@ -153,7 +163,7 @@ void MgBaseRect::setCenter(const Point2d& pt)
 }
 
 float MgBaseRect::_hitTest(const Point2d& pt, float tol, 
-                           Point2d& nearpt, Int32& segment) const
+                           Point2d& nearpt, int& segment) const
 {
     return mgLinesHit(4, _points, true, pt, tol, nearpt, segment);
 }
@@ -171,12 +181,12 @@ bool MgBaseRect::_hitTestBox(const Box2d& rect) const
     return false;
 }
 
-UInt32 MgBaseRect::_getHandleCount() const
+int MgBaseRect::_getHandleCount() const
 {
     return 8;
 }
 
-Point2d MgBaseRect::_getHandlePoint(UInt32 index) const
+Point2d MgBaseRect::_getHandlePoint(int index) const
 {
     Point2d pt;
     mgGetRectHandle(getRect(), index, pt);
@@ -184,24 +194,39 @@ Point2d MgBaseRect::_getHandlePoint(UInt32 index) const
     return pt;
 }
 
-bool MgBaseRect::_setHandlePoint(UInt32 index, const Point2d& pt, float)
+bool MgBaseRect::_setHandlePoint(int index, const Point2d& pt, float)
 {
-    if (index < 4 && getFlag(kMgSquare)) {
-        Point2d basept(getCenter());
-        Point2d pt2(pt * Matrix2d::rotation(-getAngle(), basept));
-        setRect(basept * 2.f - pt2.asVector(), pt2, getAngle(), basept);
+    if (getFlag(kMgSquare)) {
+        if (isCurve() && !isEmpty(_MGZERO)) {
+            float olddist = _getHandlePoint(index).distanceTo(getCenter());
+            transform(Matrix2d::scaling(pt.distanceTo(getCenter()) / olddist, getCenter()));
+        }
+        else {
+            Matrix2d mat(Matrix2d::rotation(-getAngle(), getCenter()));
+            Point2d pt2(pt * mat);
+            Box2d rect(getRect());
+            mgMoveRectHandle(rect, index, pt2);
+            
+            if (4 == index || 6 == index) {
+                rect = Box2d(rect.center(), rect.height(), rect.height());
+            }
+            else {
+                rect = Box2d(rect.center(), rect.width(), rect.width());
+            }
+            setRectWithAngle(rect.leftTop(), rect.rightBottom(), getAngle(), 
+                             rect.center() * mat.inverse());
+        }
     }
     else {
-        Point2d pt2(pt * Matrix2d::rotation(-getAngle(), getCenter()));
-        Box2d rect(getRect());
+        int index2 = index / 4 * 4 + (index % 4 + 2) % 4;
+        Point2d corner(_getHandlePoint(index2));
+        Matrix2d mat(Matrix2d::rotation(-getAngle(), corner));
+        
+        Box2d rect(_getHandlePoint(0) * mat, _getHandlePoint(2) * mat);
+        Point2d pt2(pt * mat);
+        
         mgMoveRectHandle(rect, index, pt2);
-        if (getFlag(kMgSquare) && (4 == index || 6 == index)) {
-            rect = Box2d(rect.center(), rect.height(), rect.height());
-        }
-        else if (getFlag(kMgSquare)) {
-            rect = Box2d(rect.center(), rect.width(), rect.width());
-        }
-        setRect(rect.leftTop(), rect.rightBottom(), getAngle(), getCenter());
+        setRectWithAngle(rect.leftTop(), rect.rightBottom(), getAngle(), corner);
     }
     update();
     return true;
@@ -219,6 +244,22 @@ bool MgBaseRect::_load(MgStorage* s)
     return __super::_load(s) && s->readFloatArray("points", &(_points[0].x), 8) == 8;
 }
 
+int MgBaseRect::_getDimensions(const Matrix2d& m2w, float* vars, char* types, int count) const
+{
+    int ret = 0;
+    
+    if (count > ret) {
+        types[ret] = 'w';
+        vars[ret++] = fabsf(getWidth() * m2w.m11);
+    }
+    if (count > ret) {
+        types[ret] = 'h';
+        vars[ret++] = fabsf(getHeight() * m2w.m22);
+    }
+    
+    return ret;
+}
+
 // MgRect
 //
 
@@ -232,96 +273,105 @@ MgRect::~MgRect()
 {
 }
 
-bool MgRect::_draw(GiGraphics& gs, const GiContext& ctx) const
+bool MgRect::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
 {
     bool ret = gs.drawPolygon(&ctx, 4, _points);
-    return __super::_draw(gs, ctx) || ret;
+    return __super::_draw(mode, gs, ctx) || ret;
 }
 
-// MgDiamond
+// MgImageShape
 //
 
-MG_IMPLEMENT_CREATE(MgDiamond)
+#include <string.h>
+#include <mgshapes.h>
 
-MgDiamond::MgDiamond()
+MG_IMPLEMENT_CREATE(MgImageShape)
+
+MgImageShape::MgImageShape()
+{
+    _name[0] = 0;
+}
+
+MgImageShape::~MgImageShape()
 {
 }
 
-MgDiamond::~MgDiamond()
+void MgImageShape::setName(const char* name)
 {
+    int len = sizeof(_name) - 1;
+#if defined(_MSC_VER) && _MSC_VER >= 1400 // VC8
+    strncpy_s(_name, sizeof(_name), name, len);
+#else
+    strncpy(_name, name, len);
+#endif
+    _name[len] = 0;
 }
 
-UInt32 MgDiamond::_getHandleCount() const
+bool MgImageShape::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
 {
-    return 4;
+    Box2d rect(getRect() * gs.xf().modelToDisplay());
+    Vector2d vec((_points[1] - _points[0]) * gs.xf().modelToWorld());
+    
+    GiContext tmpctx(ctx);
+    tmpctx.setNoFillColor();
+    
+    bool ret = (gs.drawPolygon(&tmpctx, 4, _points) ||
+                gs.drawImage(_name, rect.center().x, rect.center().y, 
+                             rect.width(), rect.height(), vec.angle2()));
+    return __super::_draw(mode, gs, tmpctx) || ret;
 }
 
-Point2d MgDiamond::_getHandlePoint(UInt32 index) const
+void MgImageShape::_copy(const MgImageShape& src)
 {
-    return MgBaseRect::_getHandlePoint(4 + index % 4);
+#if defined(_MSC_VER) && _MSC_VER >= 1400 // VC8
+    strcpy_s(_name, sizeof(_name), src._name);
+#else
+    strcpy(_name, src._name);
+#endif
+    __super::_copy(src);
 }
 
-bool MgDiamond::_setHandlePoint(UInt32 index, const Point2d& pt, float tol)
+bool MgImageShape::_equals(const MgImageShape& src) const
 {
-    if (!getFlag(kMgFixedLength)) {
-        return MgBaseRect::_setHandlePoint(4 + index % 4, pt, tol);
+    return strcmp(_name, src._name) == 0 && __super::_equals(src);
+}
+
+void MgImageShape::_clear()
+{
+    _name[0] = 0;
+    __super::_clear();
+}
+
+bool MgImageShape::_save(MgStorage* s) const
+{
+    s->writeString("name", _name);
+    return __super::_save(s);
+}
+
+bool MgImageShape::_load(MgStorage* s)
+{
+    int len = sizeof(_name) - 1;
+    len = s->readString("name", _name, len);
+    _name[len] = 0;
+    
+    return __super::_load(s);
+}
+
+MgShape* MgImageShape::findShapeByImageID(MgShapes* shapes, const char* name)
+{
+    void* it;
+    MgShape* ret = NULL;
+    
+    for (MgShape* sp = shapes->getFirstShape(it); sp; sp = shapes->getNextShape(it)) {
+        if (sp->shape()->isKindOf(MgImageShape::Type())) {
+            MgImageShape *image = (MgImageShape*)sp->shape();
+            if (strcmp(name, image->getName()) == 0) {
+                ret = sp;
+                break;
+            }
+        }
     }
+    shapes->freeIterator(it);
     
-    Point2d cen(getCenter());
-    Point2d pnt, ptup, ptside;
-    
-    pnt = pt * Matrix2d::rotation(-getAngle(), cen);
-    mgGetRectHandle(getRect(), 4 + (index + 2) % 4, ptup);
-    mgGetRectHandle(getRect(), 4 + (index + 1) % 4, ptside);
-    
-    float len = ptup.distanceTo(ptside);
-    float dy = index % 2 == 0 ? pnt.y - ptup.y : pnt.x - ptup.x;
-    float ry = mgMin(len, (float)fabs(dy) / 2);
-    float rx = (float)sqrt(len * len - ry * ry);
-    Box2d rect(cen, rx * 2, ry * 2);
-    setRect(rect.leftTop(), rect.rightBottom(), getAngle(), cen);
-    
-    return true;
-}
-
-bool MgDiamond::_rotateHandlePoint(UInt32, const Point2d&)
-{
-    return false;
-}
-
-void MgDiamond::_update()
-{
-    __super::_update();
-    Point2d pts[] = { _getHandlePoint(0), _getHandlePoint(1),
-        _getHandlePoint(2), _getHandlePoint(3) };
-    _extent.set(4, pts);
-}
-
-float MgDiamond::_hitTest(const Point2d& pt, float tol, 
-                          Point2d& nearpt, Int32& segment) const
-{
-    Point2d pts[] = { _getHandlePoint(0), _getHandlePoint(1),
-        _getHandlePoint(2), _getHandlePoint(3) };
-    return mgLinesHit(4, pts, true, pt, tol, nearpt, segment);
-}
-
-bool MgDiamond::_hitTestBox(const Box2d& rect) const
-{
-    if (!__super::_hitTestBox(rect))
-        return false;
-    
-    for (int i = 0; i < 3; i++) {
-        if (Box2d(_getHandlePoint(i), _getHandlePoint(i + 1)).isIntersect(rect))
-            return true;
-    }
-    
-    return false;
-}
-
-bool MgDiamond::_draw(GiGraphics& gs, const GiContext& ctx) const
-{
-    Point2d pts[] = { _getHandlePoint(0), _getHandlePoint(1),
-        _getHandlePoint(2), _getHandlePoint(3) };
-    bool ret = gs.drawPolygon(&ctx, 4, pts);
-    return __super::_draw(gs, ctx) || ret;
+    return ret;
 }
