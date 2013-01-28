@@ -44,6 +44,6 @@ def utf8togbk(dir):
     return resultfn
 
 if __name__=="__main__":
-    resultfn = utf8togbk(os.path.abspath('core'))
-    resultfn += utf8togbk(os.path.abspath('android/skiaview/src/touchvg'))
+    resultfn = utf8togbk(os.path.abspath('../core'))
+    resultfn += utf8togbk(os.path.abspath('skiaview/src/touchvg'))
     if resultfn != '': print('utf8->gbk: ' + resultfn)

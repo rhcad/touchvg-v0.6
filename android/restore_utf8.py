@@ -23,6 +23,6 @@ def restore_utf8(dir):
     return resultfn
 
 if __name__=="__main__":
-    resultfn = restore_utf8(os.path.abspath('core'))
-    resultfn += restore_utf8(os.path.abspath('android/skiaview/src/touchvg'))
+    resultfn = restore_utf8(os.path.abspath('../core'))
+    resultfn += restore_utf8(os.path.abspath('skiaview/src/touchvg'))
     if resultfn != '': print('restore files: ' + resultfn)
