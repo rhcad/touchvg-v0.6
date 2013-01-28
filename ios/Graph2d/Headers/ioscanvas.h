@@ -63,7 +63,8 @@ public:
     CGContextRef getCGContext();
     
     //! Draw a image at the point.
-    bool drawImage(CGImageRef image, const Point2d& centerM, bool autoScale = false);
+    bool drawImage(CGImageRef image, float scale, 
+                   const Point2d& centerM, bool autoScale = false);
     
     //! Draw a image within the rectangle extent.
     bool drawImage(CGImageRef image, const Box2d& rectM);

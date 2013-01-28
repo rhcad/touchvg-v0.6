@@ -141,7 +141,7 @@ private:
             [_pointImages[index] retain];
         }
         if (_pointImages[index]) {
-            canvas->drawImage([_pointImages[index] CGImage], pnt);
+            canvas->drawImage([_pointImages[index] CGImage], _pointImages[index].scale, pnt);
         }
         
         return _pointImages[index];

@@ -48,6 +48,7 @@
 - (IBAction)addTestShapes:(id)sender;   // 添加随机测试图形
 - (IBAction)selectCommand:(id)sender;   // 选择绘图命令
 - (IBAction)commandSelected:(id)sender; // 绘图命令已选择
+- (IBAction)addImageShape:(id)sender;   // 排入图片
 
 - (UIButton *)addButton:(NSString *)imgname action:(SEL)action bar:(UIView*)bar
                       x:(CGFloat*)x size:(CGFloat)size diffx:(CGFloat)diffx;

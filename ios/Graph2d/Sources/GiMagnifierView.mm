@@ -5,6 +5,7 @@
 #import "GiGraphView.h"
 #include <iosgraph.h>
 #include <mgshapes.h>
+#include <mgshape.h>
 
 @interface GiMagnifierView ()
 
@@ -163,7 +164,7 @@
     
     if (_scale < 1 && !self.hidden && ![_gview isZooming]) {    // 缩略视图，动态放缩时不regen
         CGSize gsize = [_gview ownerView].bounds.size;
-        Box2d rcw(Box2d(0, 0, gsize.width, gsize.height) * [_gview xform]->displayToWorld());
+        Box2d rcw(Box2d(gsize.width, gsize.height) * [_gview xform]->displayToWorld());
         Box2d rcd(rcw * xf.worldToDisplay());       // 实际图形视图在本视图中的位置
         
         if (rcd.width() < self.bounds.size.width
@@ -206,7 +207,7 @@
         else if (_shapeAdded) {                     // 在缓冲图上显示新的图形
             MgShapesLock locker([_gview shapes], MgShapesLock::ReadOnly, 0);
             if (locker.locked()) {
-                _shapeAdded->draw(gs);
+                _shapeAdded->draw(0, gs);
                 cv.saveCachedBitmap();              // 更新缓冲图
                 _shapeAdded = NULL;
             }
@@ -263,7 +264,7 @@
     if (_scale < 1) {
         GiContext ctx(0, GiColor(64, 64, 64, 172), kGiLineDot);
         UIView *v = [_gview ownerView];
-        Box2d rect(Box2d(0, 0, v.bounds.size.width, v.bounds.size.height)
+        Box2d rect(Box2d(v.bounds.size.width, v.bounds.size.height)
                    * [_gview xform]->displayToWorld());
         gs->drawRect(&ctx, rect, false);
     }

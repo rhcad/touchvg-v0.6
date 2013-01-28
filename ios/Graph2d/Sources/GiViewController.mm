@@ -542,7 +542,7 @@
             && sender == self.view && _magViews[0]
             && !_magViews[0].hidden && !_magViews[0].superview.hidden) {
             GiMagnifierView *aview = (GiMagnifierView *)_magViews[0];
-            Box2d rect(0, 0, aview.bounds.size.width, aview.bounds.size.height);
+            Box2d rect(aview.bounds.size.width, aview.bounds.size.height);
             bool fromMag = (_activeView == _magViews[0]);
             GiContext ctx(fromMag ? -2 : 0, 
                           GiColor(0, 200, 200, fromMag ? 160 : 64), kGiLineDot, 

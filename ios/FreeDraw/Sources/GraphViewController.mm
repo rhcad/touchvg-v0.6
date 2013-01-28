@@ -34,8 +34,6 @@ static const NSUInteger kYellowTag      = 2;
 static const NSUInteger kLineTag        = 3;
 static const NSUInteger kDashLineTag    = 4;
 
-void registerTransformCmd();
-
 @interface GiViewControllerEx : GiViewController<GiEditAction> {
     UIView              *downview;
 }
@@ -285,8 +283,6 @@ void registerTransformCmd();
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    registerTransformCmd();
     _graphc.commandName = "@draw";
 }
 
@@ -450,24 +446,24 @@ void registerTransformCmd();
     [calloutView release];
     calloutView.backgroundColor = [UIColor darkGrayColor];
     
-    struct { NSString* caption; NSString* name; SEL action; } cmds[] = {
-        { @"直线段",  @"line", nil }, 
-        { @"定长线段",  @"fixedline", nil },        
+    struct { NSString* caption; NSString* name; SEL action; } cmds[] = {        
+        { @"坐标系T",  @"xfdemo", nil },
+        { @"直线段",   @"line", nil },
         { @"矩形",    @"rect", nil },
-        { @"正方形",  @"square", nil },
+        { @"正方形",   @"square", nil },
         { @"椭圆",    @"ellipse", nil },
-        { @"圆",      @"circle", nil },
-        { @"三角形",  @"triangle", nil },
-        { @"棱形",    @"diamond", nil },
-        { @"多边形",  @"polygon", nil },
-        { @"四边形",  @"quadrangle", nil },
+        { @"圆",     @"circle", nil },
+        { @"三角形",   @"triangle", nil },
+        { @"多边形",   @"polygon", nil },
+        { @"四边形",   @"quadrangle", nil },
         { @"折线",    @"lines", nil },
-        { @"曲线",    @"splines", nil },
-        { @"平行四边形", @"parallelogram", nil },
+        { @"随手画",   @"splines", nil },
         { @"网格",    @"grid", nil },
         //{ @"写字",    nil, @selector(writeInBox:) },
-        { @"撤销",    @"undo", nil },
-        { @"重做",    @"redo", nil },
+        { @"排图",    nil, @selector(addImageShape:) },
+        { @"三点圆弧",  @"arc3p", nil },
+        { @"圆心圆弧",  @"arc-cse", nil },
+        { @"切线圆弧",  @"arc-tan", nil },
     };
     const int count = sizeof(cmds) / sizeof(cmds[0]);
     
@@ -495,6 +491,12 @@ void registerTransformCmd();
 {
     UIButton* btn = (UIButton*)sender;
     _graphc.commandName = [btn titleForState:UIControlStateHighlighted].UTF8String;
+    [btn.superview removeFromSuperview];
+}
+
+- (IBAction)addImageShape:(id)sender    // 排入图片
+{
+    UIButton* btn = (UIButton*)sender;
     [btn.superview removeFromSuperview];
 }
 

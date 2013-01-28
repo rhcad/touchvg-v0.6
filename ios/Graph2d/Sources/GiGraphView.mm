@@ -5,6 +5,7 @@
 #import "GiGraphView.h"
 #include <iosgraph.h>
 #include <mgshapes.h>
+#include <mgshape.h>
 
 @interface GiGraphView(Zooming)
 
@@ -143,7 +144,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
             }
         }
         else if (_shapeAdded) {                     // 在缓冲图上显示新的图形
-            _shapeAdded->draw(gs);
+            _shapeAdded->draw(0, gs);
             cv.saveCachedBitmap();                  // 更新缓冲图
             tmpAdded = NULL;
         }
@@ -329,7 +330,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     fromrc *= _graph->xf.modelToWorld();
     _graph->xf.zoomTo(fromrc, &torc);
     if (save) {
-        _shapes->setZoomRectW(_graph->xf.getWndRectW());
+        _shapes->setZoomRectW(_graph->xf.getWndRectW(), _graph->xf.getViewScale());
         _initialScale = _graph->xf.getViewScale();
         _scaleReaded = YES;
     }
@@ -358,7 +359,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 - (void)saveZoomScale:(CGPoint)point
 {
     Point2d centerW;
-    _graph->xf.getZoomValue(centerW, _lastViewScale);
+    _lastViewScale = _graph->xf.getZoomValue(centerW);
     _lastCenterW = CGPointMake(centerW.x, centerW.y);
     _firstPoint = point;
 }
@@ -449,7 +450,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     }
     else {                  // zoomin at the point
         Point2d centerW;
-        _graph->xf.getZoomValue(centerW, _scaleBeforeDbl);
+        _scaleBeforeDbl = _graph->xf.getZoomValue(centerW);
         _centerBeforeDbl = CGPointMake(centerW.x, centerW.y);
         
         if (_graph->xf.zoomByFactor(2, &at)) {

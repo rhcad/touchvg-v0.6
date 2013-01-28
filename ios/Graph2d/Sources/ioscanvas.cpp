@@ -456,15 +456,16 @@ void GiCanvasIos::clearCachedBitmap(bool clearAll)
     }
 }
 
-bool GiCanvasIos::drawImage(CGImageRef image, const Point2d& centerM, bool autoScale)
+bool GiCanvasIos::drawImage(CGImageRef image, float scale,
+                            const Point2d& centerM, bool autoScale)
 {
     CGContextRef context = m_draw->getContext();
     bool ret = false;
     
     if (context && image) {
         Point2d ptD = centerM * m_draw->xf().modelToDisplay();
-        float w = CGImageGetWidth(image);
-        float h = CGImageGetHeight(image);
+        float w = CGImageGetWidth(image) / scale;
+        float h = CGImageGetHeight(image) / scale;
         
         if (autoScale) {
             w *= m_draw->xf().getViewScale();
