@@ -192,20 +192,14 @@ END
 
 IDR_MAINFRAME ACCELERATORS 
 BEGIN
-    "-",            ID_VIEW_ZOOMOUT,        ASCII,  NOINVERT
-    "=",            ID_VIEW_ZOOMIN,         ASCII,  NOINVERT
     "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
     "E",            ID_ZOOM_EXTENT,         VIRTKEY, CONTROL, NOINVERT
     "G",            ID_VIEW_GDIP,           VIRTKEY, CONTROL, NOINVERT
     "L",            ID_VIEW_ANTIALIAS,      VIRTKEY, CONTROL, NOINVERT
     "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
     "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
-    VK_DOWN,        ID_PAN_DOWN,            VIRTKEY, NOINVERT
     VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
     VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
-    VK_LEFT,        ID_PAN_LEFT,            VIRTKEY, NOINVERT
-    VK_RIGHT,       ID_PAN_RIGHT,           VIRTKEY, NOINVERT
-    VK_UP,          ID_PAN_UP,              VIRTKEY, NOINVERT
     "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
     "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
     "Y",            ID_EDIT_REDO,           VIRTKEY, CONTROL, NOINVERT

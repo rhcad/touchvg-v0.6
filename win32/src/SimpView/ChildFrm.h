@@ -4,10 +4,10 @@
 
 class CChildFrame : public CMDIChildWnd
 {
-	DECLARE_DYNCREATE(CChildFrame)
+    DECLARE_DYNCREATE(CChildFrame)
 public:
-	CChildFrame();
-	virtual ~CChildFrame();
+    CChildFrame();
+    virtual ~CChildFrame();
 
 // Attributes
 public:
@@ -16,27 +16,27 @@ public:
 public:
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CStep1Frame)
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CStep1Frame)
     public:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
     protected:
     virtual void PostNcDestroy() { delete this; }
     virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd, CCreateContext* pContext = NULL);
-	//}}AFX_VIRTUAL
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	// view for the client area of the frame.
-	CWnd*	m_pwndView;
+    // view for the client area of the frame.
+    CWnd*   m_pwndView;
 
 // Generated message map functions
 protected:
-	//{{AFX_MSG(CStep1Frame)
-	afx_msg void OnFileClose();
-	afx_msg void OnSetFocus(CWnd* pOldWnd);
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CStep1Frame)
+    afx_msg void OnFileClose();
+    afx_msg void OnSetFocus(CWnd* pOldWnd);
+    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };

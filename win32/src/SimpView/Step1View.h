@@ -8,8 +8,8 @@ class CRandomShapeView : public CBaseView
 {
 // Construction
 public:
-	CRandomShapeView(RandomParam& param);
-	virtual ~CRandomShapeView();
+    CRandomShapeView(RandomParam& param);
+    virtual ~CRandomShapeView();
 
 // Attributes
 public:
@@ -18,18 +18,18 @@ public:
 public:
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRandomShapeView)
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CRandomShapeView)
+    //}}AFX_VIRTUAL
     protected:
     virtual void OnDynDraw(GiGraphics* gs);
 
 // Generated message map functions
 protected:
-	//{{AFX_MSG(CRandomShapeView)
-	//}}AFX_MSG
+    //{{AFX_MSG(CRandomShapeView)
+    //}}AFX_MSG
     afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	DECLARE_MESSAGE_MAP()
+    DECLARE_MESSAGE_MAP()
 
 // Implementation
 private:

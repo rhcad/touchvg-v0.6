@@ -21,11 +21,11 @@ static char THIS_FILE[] = __FILE__;
 // CSimpViewApp
 
 BEGIN_MESSAGE_MAP(CSimpViewApp, CWinApp)
-	//{{AFX_MSG_MAP(CSimpViewApp)
-	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-	ON_COMMAND(ID_FILE_NEW, OnFileNew)
+    //{{AFX_MSG_MAP(CSimpViewApp)
+    ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
+    ON_COMMAND(ID_FILE_NEW, OnFileNew)
     ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
-	//}}AFX_MSG_MAP
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 CSimpViewApp::CSimpViewApp()
@@ -37,52 +37,52 @@ static CDrawShapeView* s_pNewView = NULL;
 
 BOOL CSimpViewApp::InitInstance()
 {
-	RandomParam::init();
+    RandomParam::init();
 
-	CMDIFrameWnd* pFrame = new CMainFrame;
-	m_pMainWnd = pFrame;
+    CMDIFrameWnd* pFrame = new CMainFrame;
+    m_pMainWnd = pFrame;
 
-	// Create main MDI frame window
-	if (!pFrame->LoadFrame(IDR_MAINFRAME))
-		return FALSE;
+    // Create main MDI frame window
+    if (!pFrame->LoadFrame(IDR_MAINFRAME))
+        return FALSE;
 
-	// Load shared MDI menus and accelerator table
-	HINSTANCE hInst = AfxGetResourceHandle();
-	m_hMDIMenu  = ::LoadMenu(hInst, MAKEINTRESOURCE(IDR_STEP1_VIEW));
-	m_hMDIAccel = ::LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_STEP1_VIEW));
+    // Load shared MDI menus and accelerator table
+    HINSTANCE hInst = AfxGetResourceHandle();
+    m_hMDIMenu  = ::LoadMenu(hInst, MAKEINTRESOURCE(IDR_STEP1_VIEW));
+    m_hMDIAccel = ::LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_STEP1_VIEW));
 
-	pFrame->ShowWindow(m_nCmdShow);
-	pFrame->UpdateWindow();
+    pFrame->ShowWindow(m_nCmdShow);
+    pFrame->UpdateWindow();
     pFrame->PostMessage(WM_COMMAND, ID_FILE_NEW);
 
-	return TRUE;
+    return TRUE;
 }
 
-int CSimpViewApp::ExitInstance() 
+int CSimpViewApp::ExitInstance()
 {
-	if (m_hMDIMenu != NULL)
-		FreeResource(m_hMDIMenu);
-	if (m_hMDIAccel != NULL)
-		FreeResource(m_hMDIAccel);
+    if (m_hMDIMenu != NULL)
+        FreeResource(m_hMDIMenu);
+    if (m_hMDIAccel != NULL)
+        FreeResource(m_hMDIAccel);
 
-	return CWinApp::ExitInstance();
+    return CWinApp::ExitInstance();
 }
 
 CWnd* CreateChildView(UINT nFrameID)
 {
-	CNewViewDlg dlg;
-	CBaseView* pView = s_pNewView;
+    CNewViewDlg dlg;
+    CBaseView* pView = s_pNewView;
 
     if (s_pNewView)
     {
         s_pNewView = NULL;
         return pView;
     }
-	if (IDOK != dlg.DoModal())
-		return NULL;
+    if (IDOK != dlg.DoModal())
+        return NULL;
 
-	if (IDR_STEP1_VIEW == nFrameID)
-	{
+    if (IDR_STEP1_VIEW == nFrameID)
+    {
         RandomParam param;
 
         param.lineCount = dlg.m_bAddShapes ? dlg.m_nLineCount : 0;
@@ -96,23 +96,23 @@ CWnd* CreateChildView(UINT nFrameID)
             pView = p;
         }
         else if (dlg.m_bScrollBar) {
-			pView = new CScrollShapeView(param);
+            pView = new CScrollShapeView(param);
         }
         else {
-			pView = new CRandomShapeView(param);
+            pView = new CRandomShapeView(param);
         }
-	}
+    }
 
-	return pView;
+    return pView;
 }
 
-void CSimpViewApp::OnFileNew() 
+void CSimpViewApp::OnFileNew()
 {
-	CMainFrame* pFrame = STATIC_DOWNCAST(CMainFrame, m_pMainWnd);
+    CMainFrame* pFrame = STATIC_DOWNCAST(CMainFrame, m_pMainWnd);
 
-	// create a new MDI child window
-	pFrame->CreateNewChild(
-		RUNTIME_CLASS(CChildFrame), IDR_STEP1_VIEW, m_hMDIMenu, m_hMDIAccel);
+    // create a new MDI child window
+    pFrame->CreateNewChild(
+        RUNTIME_CLASS(CChildFrame), IDR_STEP1_VIEW, m_hMDIMenu, m_hMDIAccel);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -121,49 +121,49 @@ void CSimpViewApp::OnFileNew()
 class CAboutDlg : public CDialog
 {
 public:
-	CAboutDlg();
+    CAboutDlg();
 
 // Dialog Data
-	//{{AFX_DATA(CAboutDlg)
-	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+    //{{AFX_DATA(CAboutDlg)
+    enum { IDD = IDD_ABOUTBOX };
+    //}}AFX_DATA
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CAboutDlg)
+    protected:
+    virtual void DoDataExchange(CDataExchange* pDX);
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	//{{AFX_MSG(CAboutDlg)
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CAboutDlg)
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+    //{{AFX_DATA_INIT(CAboutDlg)
+    //}}AFX_DATA_INIT
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(CAboutDlg)
+    //}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(CAboutDlg)
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 // App command to run the dialog
 void CSimpViewApp::OnAppAbout()
 {
-	CAboutDlg aboutDlg;
-	aboutDlg.DoModal();
+    CAboutDlg aboutDlg;
+    aboutDlg.DoModal();
 }
 
 /////////////////////////////////////////////////////////////////////////////

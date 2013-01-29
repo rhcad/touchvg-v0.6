@@ -9,7 +9,7 @@
 #endif // _MSC_VER > 1000
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+    #error include 'stdafx.h' before including this file for PCH
 #endif
 
 #include "resource.h"       // main symbols
@@ -22,28 +22,28 @@
 class CSimpViewApp : public CWinApp
 {
 public:
-	CSimpViewApp();
+    CSimpViewApp();
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSimpViewApp)
-	public:
-	virtual BOOL InitInstance();
-	virtual int ExitInstance();
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CSimpViewApp)
+    public:
+    virtual BOOL InitInstance();
+    virtual int ExitInstance();
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	HMENU m_hMDIMenu;
-	HACCEL m_hMDIAccel;
+    HMENU m_hMDIMenu;
+    HACCEL m_hMDIAccel;
 
 public:
-	//{{AFX_MSG(CSimpViewApp)
-	afx_msg void OnAppAbout();
-	afx_msg void OnFileNew();
+    //{{AFX_MSG(CSimpViewApp)
+    afx_msg void OnAppAbout();
+    afx_msg void OnFileNew();
     afx_msg void OnFileOpen();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 

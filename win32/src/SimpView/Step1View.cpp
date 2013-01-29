@@ -12,9 +12,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 CRandomShapeView::CRandomShapeView(RandomParam& param)
-	: m_selection(NULL)
+    : m_selection(NULL)
 {
-	param.initShapes(m_shapes);
+    param.initShapes(m_shapes);
 }
 
 CRandomShapeView::~CRandomShapeView()
@@ -22,9 +22,9 @@ CRandomShapeView::~CRandomShapeView()
 }
 
 BEGIN_MESSAGE_MAP(CRandomShapeView, CBaseView)
-	//{{AFX_MSG_MAP(CRandomShapeView)
+    //{{AFX_MSG_MAP(CRandomShapeView)
     ON_WM_MOUSEMOVE()
-	//}}AFX_MSG_MAP
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 void CRandomShapeView::OnDynDraw(GiGraphics* gs)
@@ -44,9 +44,9 @@ void CRandomShapeView::OnDynDraw(GiGraphics* gs)
 void CRandomShapeView::OnMouseMove(UINT nFlags, CPoint point)
 {
     CBaseView::OnMouseMove(nFlags, point);
-    
+
     Box2d rect(Point2d((float)point.x, (float)point.y), 50, 0);
-    
+
     rect *= m_graph->xf.displayToModel();
     m_ptSnap = rect.center();
     m_selection = m_shapes->hitTest(rect, m_ptNear, &m_segment);

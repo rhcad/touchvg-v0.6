@@ -10,8 +10,8 @@ class CDrawShapeView : public CScrollShapeView
 {
 // Construction
 public:
-	CDrawShapeView(RandomParam& param);
-	virtual ~CDrawShapeView();
+    CDrawShapeView(RandomParam& param);
+    virtual ~CDrawShapeView();
 
 // Attributes
 public:
@@ -23,15 +23,15 @@ public:
     void setRandomProp(BOOL randomProp);
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDrawShapeView)
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CDrawShapeView)
+    //}}AFX_VIRTUAL
     protected:
     virtual void OnDynDraw(GiGraphics* gs);
 
 // Generated message map functions
 protected:
-	//{{AFX_MSG(CDrawShapeView)
+    //{{AFX_MSG(CDrawShapeView)
     afx_msg void OnUpdateCmds(CCmdUI* pCmdUI);
     afx_msg void OnCmds(UINT nID);
     afx_msg void OnMouseMove(UINT nFlags, CPoint point);
@@ -44,8 +44,8 @@ protected:
     afx_msg void OnContextItems(UINT nID);
     afx_msg void OnFileSave();
     afx_msg void OnInitialUpdate();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 
 // Implementation
 private:

@@ -69,7 +69,7 @@ private:
 
     bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot)
     {
-        GiContext ctx(0, GiColor::Black(), kGiLineSolid, 
+        GiContext ctx(0, GiColor::Black(), kGiLineSolid,
             GiColor(240, 240, 240, hotdot ? 200 : 128));
         bool old = gs->setAntiAliasMode(false);
         gs->drawRect(&ctx, Box2d(pnt, gs->xf().displayToModel(hotdot ? 3.f : 1.5f, true), 0));
@@ -81,7 +81,7 @@ private:
     {
         return view->GetLastActivePopup() != view;
     }
-    
+
     bool showContextActions(int, const int* actions, const Box2d&, const MgShape*)
     {
         return view->showContextActions(actions);
@@ -94,7 +94,7 @@ void CDrawShapeView::setRandomProp(BOOL randomProp)
 }
 
 CDrawShapeView::CDrawShapeView(RandomParam& param)
-	: CScrollShapeView(param), m_cmdID(0)
+    : CScrollShapeView(param), m_cmdID(0)
     , m_moved(FALSE), m_delayUp(FALSE), m_downTime(0), m_downFlags(0)
 {
     m_proxy = new MgViewProxyMfc(this);
@@ -106,7 +106,7 @@ CDrawShapeView::~CDrawShapeView()
 }
 
 BEGIN_MESSAGE_MAP(CDrawShapeView, CScrollShapeView)
-	//{{AFX_MSG_MAP(CDrawShapeView)
+    //{{AFX_MSG_MAP(CDrawShapeView)
     ON_UPDATE_COMMAND_UI_RANGE(ID_CMD_FIRST, ID_CMD_LAST, OnUpdateCmds)
     ON_COMMAND_RANGE(ID_CMD_FIRST, ID_CMD_LAST, OnCmds)
     //ON_COMMAND_RANGE(ID_EDIT_UNDO, ID_EDIT_REDO, OnCmds)
@@ -120,7 +120,7 @@ BEGIN_MESSAGE_MAP(CDrawShapeView, CScrollShapeView)
     ON_COMMAND_RANGE(ID_DUMMY_1, ID_DUMMY_20, OnContextItems)
     ON_COMMAND(ID_FILE_SAVE, OnFileSave)
     ON_MESSAGE_VOID(WM_INITIALUPDATE, OnInitialUpdate)
-	//}}AFX_MSG_MAP
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 void CDrawShapeView::OnUpdateCmds(CCmdUI* pCmdUI)
@@ -136,7 +136,7 @@ void CDrawShapeView::OnUpdateCmds(CCmdUI* pCmdUI)
 void CDrawShapeView::OnCmds(UINT nID)
 {
     if (nID >= ID_CMD_FIRST && nID - ID_CMD_FIRST < s_cmdCount) {
-        if (mgGetCommandManager()->setCommand(&m_proxy->motion, 
+        if (mgGetCommandManager()->setCommand(&m_proxy->motion,
             s_cmds[nID - ID_CMD_FIRST].name)) {
                 m_cmdID = nID;
         }
@@ -164,7 +164,7 @@ void CDrawShapeView::OnMouseMove(UINT nFlags, CPoint point)
         m_proxy->motion.point = Point2d((float)point.x, (float)point.y);
         m_proxy->motion.pointM = m_proxy->motion.point * m_graph->xf.displayToModel();
 
-        if (!m_moved && mgHypot(m_proxy->motion.point.x - m_proxy->motion.startPoint.x, 
+        if (!m_moved && mgHypot(m_proxy->motion.point.x - m_proxy->motion.startPoint.x,
             m_proxy->motion.point.y - m_proxy->motion.startPoint.y) > 5)
         {
             m_moved = TRUE;
@@ -318,9 +318,9 @@ bool CDrawShapeView::showContextActions(const int* actions)
 // see MgContextAction in mgaction.h
 static LPCWSTR const ACTION_NAMES[] = { NULL,
     L"全选", L"重选", L"绘图", L"取消",
-    L"删除", L"克隆", L"剪开", L"角标", L"定长", L"不定长", L"锁定", L"解锁", 
+    L"删除", L"克隆", L"剪开", L"角标", L"定长", L"不定长", L"锁定", L"解锁",
     L"编辑", L"取消", L"闭合", L"不闭合", L"加点", L"删点", L"成组", L"解组",
-    L"翻转", L"三视图", 
+    L"翻转", L"三视图",
 };
 
 void CDrawShapeView::OnUpdateContextItems(CCmdUI* pCmdUI)
@@ -352,14 +352,14 @@ void CDrawShapeView::OnFileSave()
 {
     if (m_filename.IsEmpty())
     {
-        CFileDialog dlg(FALSE, L".vg", NULL, 
+        CFileDialog dlg(FALSE, L".vg", NULL,
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST,
             L"Shape files (*.vg)|*.vg||", this);
         if (dlg.DoModal() != IDOK)
             return;
         m_filename = dlg.GetPathName();
     }
-    
+
     MgJsonStorage s;
 
     shapes()->setZoomRectW(m_graph->xf.getWndRectW(), m_graph->xf.getViewScale());
