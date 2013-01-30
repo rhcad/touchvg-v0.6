@@ -424,6 +424,7 @@ namespace Swig {
 #include "GiCanvasBase.h"
 #include <mgshapes.h>
 #include <mgshape.h>
+#include <mgbasicsp.h>
 #include <mgstoragebs.h>
 #include <mgjsonstorage.h>
 
@@ -13707,6 +13708,1309 @@ SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseShape_1setFlag(JNIEnv
 }
 
 
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_new_1MgLine(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgLine *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgLine *)new MgLine();
+  *(MgLine **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_delete_1MgLine(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  MgLine *arg1 = (MgLine *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(MgLine **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgLine_1create(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgLine *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgLine *)MgLine::create();
+  *(MgLine **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_MgLine_1Type(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)MgLine::Type();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgLine_1startPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgLine *arg1 = (MgLine *) 0 ;
+  Point2d *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgLine **)&jarg1; 
+  result = (Point2d *) &((MgLine const *)arg1)->startPoint();
+  *(Point2d **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgLine_1endPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgLine *arg1 = (MgLine *) 0 ;
+  Point2d *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgLine **)&jarg1; 
+  result = (Point2d *) &((MgLine const *)arg1)->endPoint();
+  *(Point2d **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgLine_1center(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgLine *arg1 = (MgLine *) 0 ;
+  Point2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgLine **)&jarg1; 
+  result = ((MgLine const *)arg1)->center();
+  *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgLine_1length(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgLine *arg1 = (MgLine *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgLine **)&jarg1; 
+  result = (float)((MgLine const *)arg1)->length();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgLine_1angle(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgLine *arg1 = (MgLine *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgLine **)&jarg1; 
+  result = (float)((MgLine const *)arg1)->angle();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgLine_1setStartPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  MgLine *arg1 = (MgLine *) 0 ;
+  Point2d *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgLine **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return ;
+  } 
+  (arg1)->setStartPoint((Point2d const &)*arg2);
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgLine_1setEndPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  MgLine *arg1 = (MgLine *) 0 ;
+  Point2d *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgLine **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return ;
+  } 
+  (arg1)->setEndPoint((Point2d const &)*arg2);
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1Type(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)MgBaseRect::Type();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1getCenter(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  Point2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  result = ((MgBaseRect const *)arg1)->getCenter();
+  *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1getRect(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  Box2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  result = ((MgBaseRect const *)arg1)->getRect();
+  *(Box2d **)&jresult = new Box2d((const Box2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1getWidth(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  result = (float)((MgBaseRect const *)arg1)->getWidth();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1getHeight(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  result = (float)((MgBaseRect const *)arg1)->getHeight();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1getAngle(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  result = (float)((MgBaseRect const *)arg1)->getAngle();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
+  jboolean jresult = 0 ;
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  float arg2 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  arg2 = (float)jarg2; 
+  result = (bool)((MgBaseRect const *)arg1)->isEmpty(arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1isOrtho(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  result = (bool)((MgBaseRect const *)arg1)->isOrtho();
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1setRect2P(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  Point2d *arg2 = 0 ;
+  Point2d *arg3 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return ;
+  } 
+  arg3 = *(Point2d **)&jarg3;
+  if (!arg3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return ;
+  } 
+  (arg1)->setRect2P((Point2d const &)*arg2,(Point2d const &)*arg3);
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1setRectWithAngle(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jfloat jarg4, jlong jarg5, jobject jarg5_) {
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  Point2d *arg2 = 0 ;
+  Point2d *arg3 = 0 ;
+  float arg4 ;
+  Point2d *arg5 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  (void)jarg5_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return ;
+  } 
+  arg3 = *(Point2d **)&jarg3;
+  if (!arg3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return ;
+  } 
+  arg4 = (float)jarg4; 
+  arg5 = *(Point2d **)&jarg5;
+  if (!arg5) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return ;
+  } 
+  (arg1)->setRectWithAngle((Point2d const &)*arg2,(Point2d const &)*arg3,arg4,(Point2d const &)*arg5);
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1setRect4P(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  Point2d *arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2; 
+  (arg1)->setRect4P((Point2d const (*))arg2);
+  
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1setCenter(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  Point2d *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return ;
+  } 
+  (arg1)->setCenter((Point2d const &)*arg2);
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1setSquare(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  bool arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  arg2 = jarg2 ? true : false; 
+  (arg1)->setSquare(arg2);
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_delete_1MgBaseRect(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  MgBaseRect *arg1 = (MgBaseRect *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(MgBaseRect **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_new_1MgRect(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgRect *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgRect *)new MgRect();
+  *(MgRect **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_delete_1MgRect(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  MgRect *arg1 = (MgRect *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(MgRect **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgRect_1create(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgRect *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgRect *)MgRect::create();
+  *(MgRect **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_MgRect_1Type(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)MgRect::Type();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_new_1MgEllipse(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgEllipse *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgEllipse *)new MgEllipse();
+  *(MgEllipse **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_delete_1MgEllipse(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  MgEllipse *arg1 = (MgEllipse *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(MgEllipse **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgEllipse_1create(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgEllipse *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgEllipse *)MgEllipse::create();
+  *(MgEllipse **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_MgEllipse_1Type(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)MgEllipse::Type();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgEllipse_1getRadiusX(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgEllipse *arg1 = (MgEllipse *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgEllipse **)&jarg1; 
+  result = (float)((MgEllipse const *)arg1)->getRadiusX();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgEllipse_1getRadiusY(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgEllipse *arg1 = (MgEllipse *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgEllipse **)&jarg1; 
+  result = (float)((MgEllipse const *)arg1)->getRadiusY();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgEllipse_1setRadius_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2, jfloat jarg3) {
+  MgEllipse *arg1 = (MgEllipse *) 0 ;
+  float arg2 ;
+  float arg3 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgEllipse **)&jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  (arg1)->setRadius(arg2,arg3);
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgEllipse_1setRadius_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
+  MgEllipse *arg1 = (MgEllipse *) 0 ;
+  float arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgEllipse **)&jarg1; 
+  arg2 = (float)jarg2; 
+  (arg1)->setRadius(arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_new_1MgRoundRect(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgRoundRect *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgRoundRect *)new MgRoundRect();
+  *(MgRoundRect **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_delete_1MgRoundRect(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  MgRoundRect *arg1 = (MgRoundRect *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(MgRoundRect **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgRoundRect_1create(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgRoundRect *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgRoundRect *)MgRoundRect::create();
+  *(MgRoundRect **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_MgRoundRect_1Type(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)MgRoundRect::Type();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgRoundRect_1getRadiusX(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgRoundRect *arg1 = (MgRoundRect *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgRoundRect **)&jarg1; 
+  result = (float)((MgRoundRect const *)arg1)->getRadiusX();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgRoundRect_1getRadiusY(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgRoundRect *arg1 = (MgRoundRect *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgRoundRect **)&jarg1; 
+  result = (float)((MgRoundRect const *)arg1)->getRadiusY();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgRoundRect_1setRadius_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2, jfloat jarg3) {
+  MgRoundRect *arg1 = (MgRoundRect *) 0 ;
+  float arg2 ;
+  float arg3 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgRoundRect **)&jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  (arg1)->setRadius(arg2,arg3);
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgRoundRect_1setRadius_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
+  MgRoundRect *arg1 = (MgRoundRect *) 0 ;
+  float arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgRoundRect **)&jarg1; 
+  arg2 = (float)jarg2; 
+  (arg1)->setRadius(arg2);
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseLines_1Type(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)MgBaseLines::Type();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseLines_1setClosed(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
+  MgBaseLines *arg1 = (MgBaseLines *) 0 ;
+  bool arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseLines **)&jarg1; 
+  arg2 = jarg2 ? true : false; 
+  (arg1)->setClosed(arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseLines_1endPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgBaseLines *arg1 = (MgBaseLines *) 0 ;
+  Point2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseLines **)&jarg1; 
+  result = ((MgBaseLines const *)arg1)->endPoint();
+  *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseLines_1resize(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jboolean jresult = 0 ;
+  MgBaseLines *arg1 = (MgBaseLines *) 0 ;
+  int arg2 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseLines **)&jarg1; 
+  arg2 = (int)jarg2; 
+  result = (bool)(arg1)->resize(arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseLines_1addPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jboolean jresult = 0 ;
+  MgBaseLines *arg1 = (MgBaseLines *) 0 ;
+  Point2d *arg2 = 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseLines **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  result = (bool)(arg1)->addPoint((Point2d const &)*arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseLines_1insertPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_) {
+  jboolean jresult = 0 ;
+  MgBaseLines *arg1 = (MgBaseLines *) 0 ;
+  int arg2 ;
+  Point2d *arg3 = 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg3_;
+  arg1 = *(MgBaseLines **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = *(Point2d **)&jarg3;
+  if (!arg3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  result = (bool)(arg1)->insertPoint(arg2,(Point2d const &)*arg3);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseLines_1removePoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jboolean jresult = 0 ;
+  MgBaseLines *arg1 = (MgBaseLines *) 0 ;
+  int arg2 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseLines **)&jarg1; 
+  arg2 = (int)jarg2; 
+  result = (bool)(arg1)->removePoint(arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_new_1MgLines(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgLines *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgLines *)new MgLines();
+  *(MgLines **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_delete_1MgLines(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  MgLines *arg1 = (MgLines *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(MgLines **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgLines_1create(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgLines *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgLines *)MgLines::create();
+  *(MgLines **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_MgLines_1Type(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)MgLines::Type();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_new_1MgSplines(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgSplines *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgSplines *)new MgSplines();
+  *(MgSplines **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_delete_1MgSplines(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  MgSplines *arg1 = (MgSplines *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(MgSplines **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgSplines_1create(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgSplines *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgSplines *)MgSplines::create();
+  *(MgSplines **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_MgSplines_1Type(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)MgSplines::Type();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgSplines_1smooth(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
+  MgSplines *arg1 = (MgSplines *) 0 ;
+  float arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgSplines **)&jarg1; 
+  arg2 = (float)jarg2; 
+  (arg1)->smooth(arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_new_1MgImageShape(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgImageShape *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgImageShape *)new MgImageShape();
+  *(MgImageShape **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_delete_1MgImageShape(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  MgImageShape *arg1 = (MgImageShape *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(MgImageShape **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgImageShape_1create(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgImageShape *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgImageShape *)MgImageShape::create();
+  *(MgImageShape **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_MgImageShape_1Type(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)MgImageShape::Type();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_touchvg_jni_skiaviewJNI_MgImageShape_1getName(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  MgImageShape *arg1 = (MgImageShape *) 0 ;
+  char *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgImageShape **)&jarg1; 
+  result = (char *)((MgImageShape const *)arg1)->getName();
+  if (result) jresult = jenv->NewStringUTF((const char *)result);
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_MgImageShape_1setName(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  MgImageShape *arg1 = (MgImageShape *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgImageShape **)&jarg1; 
+  arg2 = 0;
+  if (jarg2) {
+    arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
+    if (!arg2) return ;
+  }
+  (arg1)->setName((char const *)arg2);
+  if (arg2) jenv->ReleaseStringUTFChars(jarg2, (const char *)arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgImageShape_1findShapeByImageID(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  jlong jresult = 0 ;
+  MgShapes *arg1 = (MgShapes *) 0 ;
+  char *arg2 = (char *) 0 ;
+  MgShape *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgShapes **)&jarg1; 
+  arg2 = 0;
+  if (jarg2) {
+    arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
+    if (!arg2) return 0;
+  }
+  result = (MgShape *)MgImageShape::findShapeByImageID(arg1,(char const *)arg2);
+  *(MgShape **)&jresult = result; 
+  if (arg2) jenv->ReleaseStringUTFChars(jarg2, (const char *)arg2);
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_new_1MgArc(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgArc *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgArc *)new MgArc();
+  *(MgArc **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_jni_skiaviewJNI_delete_1MgArc(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  MgArc *arg1 = (MgArc *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(MgArc **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1create(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  MgArc *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (MgArc *)MgArc::create();
+  *(MgArc **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1Type(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)MgArc::Type();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1getCenter(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  Point2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgArc **)&jarg1; 
+  result = ((MgArc const *)arg1)->getCenter();
+  *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1getStartPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  Point2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgArc **)&jarg1; 
+  result = ((MgArc const *)arg1)->getStartPoint();
+  *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1getEndPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  Point2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgArc **)&jarg1; 
+  result = ((MgArc const *)arg1)->getEndPoint();
+  *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1getMidPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  Point2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgArc **)&jarg1; 
+  result = ((MgArc const *)arg1)->getMidPoint();
+  *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1getRadius(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgArc **)&jarg1; 
+  result = (float)((MgArc const *)arg1)->getRadius();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1getStartAngle(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgArc **)&jarg1; 
+  result = (float)((MgArc const *)arg1)->getStartAngle();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1getEndAngle(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgArc **)&jarg1; 
+  result = (float)((MgArc const *)arg1)->getEndAngle();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jfloat JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1getSweepAngle(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jfloat jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  float result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgArc **)&jarg1; 
+  result = (float)((MgArc const *)arg1)->getSweepAngle();
+  jresult = (jfloat)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1getStartTangent(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  Vector2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgArc **)&jarg1; 
+  result = ((MgArc const *)arg1)->getStartTangent();
+  *(Vector2d **)&jresult = new Vector2d((const Vector2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1getEndTangent(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  Vector2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgArc **)&jarg1; 
+  result = ((MgArc const *)arg1)->getEndTangent();
+  *(Vector2d **)&jresult = new Vector2d((const Vector2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1setStartMidEnd(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
+  jboolean jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  Point2d *arg2 = 0 ;
+  Point2d *arg3 = 0 ;
+  Point2d *arg4 = 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  (void)jarg4_;
+  arg1 = *(MgArc **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  arg3 = *(Point2d **)&jarg3;
+  if (!arg3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  arg4 = *(Point2d **)&jarg4;
+  if (!arg4) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  result = (bool)(arg1)->setStartMidEnd((Point2d const &)*arg2,(Point2d const &)*arg3,(Point2d const &)*arg4);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1setCenterStartEnd(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
+  jboolean jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  Point2d *arg2 = 0 ;
+  Point2d *arg3 = 0 ;
+  Point2d *arg4 = 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  (void)jarg4_;
+  arg1 = *(MgArc **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  arg3 = *(Point2d **)&jarg3;
+  if (!arg3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  arg4 = *(Point2d **)&jarg4;
+  if (!arg4) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  result = (bool)(arg1)->setCenterStartEnd((Point2d const &)*arg2,(Point2d const &)*arg3,(Point2d const &)*arg4);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1setTanStartEnd(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
+  jboolean jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  Vector2d *arg2 = 0 ;
+  Point2d *arg3 = 0 ;
+  Point2d *arg4 = 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  (void)jarg4_;
+  arg1 = *(MgArc **)&jarg1; 
+  arg2 = *(Vector2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Vector2d const & reference is null");
+    return 0;
+  } 
+  arg3 = *(Point2d **)&jarg3;
+  if (!arg3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  arg4 = *(Point2d **)&jarg4;
+  if (!arg4) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  result = (bool)(arg1)->setTanStartEnd((Vector2d const &)*arg2,(Point2d const &)*arg3,(Point2d const &)*arg4);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1setCenterRadius(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jfloat jarg3, jfloat jarg4, jfloat jarg5) {
+  jboolean jresult = 0 ;
+  MgArc *arg1 = (MgArc *) 0 ;
+  Point2d *arg2 = 0 ;
+  float arg3 ;
+  float arg4 ;
+  float arg5 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgArc **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  arg3 = (float)jarg3; 
+  arg4 = (float)jarg4; 
+  arg5 = (float)jarg5; 
+  result = (bool)(arg1)->setCenterRadius((Point2d const &)*arg2,arg3,arg4,arg5);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jint JNICALL Java_touchvg_jni_skiaviewJNI_kSinglePan_1get(JNIEnv *jenv, jclass jcls) {
   jint jresult = 0 ;
   GiGestureType result;
@@ -14544,6 +15848,86 @@ SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseShape_1SWIGUpcast(JN
     (void)jenv;
     (void)jcls;
     *(MgObject **)&baseptr = *(MgBaseShape **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgLine_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(MgBaseShape **)&baseptr = *(MgLine **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseRect_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(MgBaseShape **)&baseptr = *(MgBaseRect **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgRect_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(MgBaseRect **)&baseptr = *(MgRect **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgEllipse_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(MgBaseRect **)&baseptr = *(MgEllipse **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgRoundRect_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(MgBaseRect **)&baseptr = *(MgRoundRect **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgBaseLines_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(MgBaseShape **)&baseptr = *(MgBaseLines **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgLines_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(MgBaseLines **)&baseptr = *(MgLines **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgSplines_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(MgBaseLines **)&baseptr = *(MgSplines **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgImageShape_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(MgBaseRect **)&baseptr = *(MgImageShape **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_touchvg_jni_skiaviewJNI_MgArc_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(MgBaseShape **)&baseptr = *(MgArc **)&jarg1;
     return baseptr;
 }
 

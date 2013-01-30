@@ -5,6 +5,7 @@
 	\defgroup GEOMAPI_CURVE 曲线计算函数
 	\defgroup GRAPH_INTERFACE 图形接口类
 	\defgroup GEOM_SHAPE 图形实体类
+	\defgroup CORE_COMMAND 交互命令类
 	\defgroup GRAPH_WIN Windows图形接口类
 	\defgroup GRAPH_IOS iOS图形接口类
 	\defgroup GRAPH_SKIA Android图形接口类
@@ -20,37 +21,40 @@
 	- 图形接口库（graph）包含了各种显示类、符号类，用于屏幕显示、打印。\n
 	- 图形实体库（shape）包含跨平台矢量图形类和交互命令类。\n
 	- Windows图形接口库（win32/graphwin）采用GDI或GDI+实现，字符串为Unicode编码。\n
-	- iOS图形接口库（ios/Graph2d）采用CoreGraphics库和ObjC语言实现，还包含了iOS视图和交互控制器。
-	- Android图形接口库（android/skiaview/jni）采用Skia库和Java语言实现。
+	- iOS图形接口库（ios/Graph2d）采用Quartz 2D库和ObjC语言实现，还包含了iOS视图和交互控制器。
+	- Android图形接口库（android/skiaview/jni）采用android.graphics包和Java语言实现，还包含了视图类。
 
 	\section sectionDOM 接口说明
 
 	通用图形平台库的接口说明分为以下部分：
 	
 	- \ref GEOM_CLASS "几何对象类" \n
-		数学几何库的几何对象类，包含矢量、坐标、变换矩阵、矩形框等类。\n\n
-
+		数学几何库的几何对象类，包含矢量、坐标、变换矩阵、矩形框等类。\n
+		
 	- \ref GEOMAPI_BASIC "基本计算函数" \n
-		数学几何库的基本计算功能函数。\n\n
-
+		数学几何库的基本计算功能函数。\n
+		
 	- \ref GEOMAPI_LNREL "图形位置函数" \n
-		数学几何库的点、直线、曲线、多边形的位置关系函数。\n\n
-
+		数学几何库的点、直线、曲线、多边形的位置关系函数。\n
+		
 	- \ref GEOMAPI_CURVE "曲线计算函数" \n
-		数学几何库的曲线拟合、转换、绑定框等计算函数。\n\n
-
+		数学几何库的曲线拟合、转换、绑定框等计算函数。\n
+		
 	- \ref GRAPH_INTERFACE "图形接口类" \n
-		图形接口库的各种显示类、符号类，用于屏幕显示、打印。\n\n
-
+		图形接口库的各种显示类、符号类，用于屏幕显示、打印。\n
+		
 	- \ref GEOM_SHAPE "图形实体类" \n
-		图形实体库包含跨平台矢量图形类和交互命令类。\n\n
+		图形实体库包含跨平台矢量图形类和交互命令类。\n
+		
+	- \ref CORE_COMMAND "交互命令类" \n
+		图形实体库包含跨平台矢量图形类和交互命令类。\n
 		
 	- \ref GRAPH_WIN "Windows图形接口类" \n
-		Windows图形接口库采用GDI/GDI+实现。\n\n
+		Windows图形接口库采用GDI/GDI+实现。\n
 		
 	- \ref GRAPH_IOS "iOS图形接口类" \n
-		iOS图形接口库（ios/Graph2d）采用CoreGraphics实现，还包含了iOS视图和交互控制器（ios/Graph2d）。\n\n
+		iOS图形接口库采用Quartz 2D实现，还包含了iOS视图和交互控制器。\n
 		
 	- \ref GRAPH_SKIA "Android图形接口类" \n
-		Android图形接口库（android/skiaview/jni）采用Skia库和Java语言实现。
+		Android图形接口库（android/skiaview/jni）采用android.graphics包和Java语言实现。
 */

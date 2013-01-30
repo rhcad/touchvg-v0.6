@@ -11,6 +11,7 @@
 #include "GiCanvasBase.h"
 #include <mgshapes.h>
 #include <mgshape.h>
+#include <mgbasicsp.h>
 #include <mgstoragebs.h>
 #include <mgjsonstorage.h>
 %}
@@ -39,6 +40,7 @@
 %include <mgobject.h>
 %include <mgshapes.h>
 %include <mgshape.h>
+%include <mgbasicsp.h>
 
 %include "GiCoreView.h"
 %include <mgjsonstorage.h>

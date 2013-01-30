@@ -8,16 +8,15 @@
 
 package touchvg.jni;
 
-public class Floats {
+public class MgSplines extends MgBaseLines {
   private long swigCPtr;
-  protected boolean swigCMemOwn;
 
-  protected Floats(long cPtr, boolean cMemoryOwn) {
-    swigCMemOwn = cMemoryOwn;
+  protected MgSplines(long cPtr, boolean cMemoryOwn) {
+    super(skiaviewJNI.MgSplines_SWIGUpcast(cPtr), cMemoryOwn);
     swigCPtr = cPtr;
   }
 
-  protected static long getCPtr(Floats obj) {
+  protected static long getCPtr(MgSplines obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 
@@ -29,26 +28,28 @@ public class Floats {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        skiaviewJNI.delete_Floats(swigCPtr);
+        skiaviewJNI.delete_MgSplines(swigCPtr);
       }
       swigCPtr = 0;
     }
+    super.delete();
   }
 
-  public Floats(int n) {
-    this(skiaviewJNI.new_Floats(n), true);
+  public MgSplines() {
+    this(skiaviewJNI.new_MgSplines(), true);
   }
 
-  public int count() {
-    return skiaviewJNI.Floats_count(swigCPtr, this);
+  public static MgSplines create() {
+    long cPtr = skiaviewJNI.MgSplines_create();
+    return (cPtr == 0) ? null : new MgSplines(cPtr, false);
   }
 
-  public float get(int index) {
-    return skiaviewJNI.Floats_get(swigCPtr, this, index);
+  public static int Type() {
+    return skiaviewJNI.MgSplines_Type();
   }
 
-  public void set(int index, float value) {
-    skiaviewJNI.Floats_set(swigCPtr, this, index, value);
+  public void smooth(float tol) {
+    skiaviewJNI.MgSplines_smooth(swigCPtr, this, tol);
   }
 
 }

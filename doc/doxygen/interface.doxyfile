@@ -709,6 +709,7 @@ RECURSIVE              = YES
 
 EXCLUDE                = ../../core/include/testgraph \
                          ../../android/skiaview/jni/._java \
+                         ../../android/skiaview/jni/skiaview_java_wrap.h
                          ../../win32/src/SimpView
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or 

@@ -8,16 +8,15 @@
 
 package touchvg.jni;
 
-public class Floats {
+public class MgRect extends MgBaseRect {
   private long swigCPtr;
-  protected boolean swigCMemOwn;
 
-  protected Floats(long cPtr, boolean cMemoryOwn) {
-    swigCMemOwn = cMemoryOwn;
+  protected MgRect(long cPtr, boolean cMemoryOwn) {
+    super(skiaviewJNI.MgRect_SWIGUpcast(cPtr), cMemoryOwn);
     swigCPtr = cPtr;
   }
 
-  protected static long getCPtr(Floats obj) {
+  protected static long getCPtr(MgRect obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 
@@ -29,26 +28,24 @@ public class Floats {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        skiaviewJNI.delete_Floats(swigCPtr);
+        skiaviewJNI.delete_MgRect(swigCPtr);
       }
       swigCPtr = 0;
     }
+    super.delete();
   }
 
-  public Floats(int n) {
-    this(skiaviewJNI.new_Floats(n), true);
+  public MgRect() {
+    this(skiaviewJNI.new_MgRect(), true);
   }
 
-  public int count() {
-    return skiaviewJNI.Floats_count(swigCPtr, this);
+  public static MgRect create() {
+    long cPtr = skiaviewJNI.MgRect_create();
+    return (cPtr == 0) ? null : new MgRect(cPtr, false);
   }
 
-  public float get(int index) {
-    return skiaviewJNI.Floats_get(swigCPtr, this, index);
-  }
-
-  public void set(int index, float value) {
-    skiaviewJNI.Floats_set(swigCPtr, this, index, value);
+  public static int Type() {
+    return skiaviewJNI.MgRect_Type();
   }
 
 }

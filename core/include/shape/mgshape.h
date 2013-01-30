@@ -201,7 +201,7 @@ protected:                                                      \
     bool _isKindOf(int type) const;                             \
 protected:                                                      \
     bool _draw(int mode, GiGraphics& gs, const GiContext& ctx) const; \
-public:                                                         \
+protected:                                                      \
     virtual MgObject* clone() const;                            \
     virtual void copy(const MgObject& src);                     \
     virtual void release();                                     \
