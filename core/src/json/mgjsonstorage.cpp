@@ -1,6 +1,8 @@
 ﻿#include "mgjsonstorage.h"
 #include <mgstorage.h>
 #include <vector>
+
+#if !defined(_MSC_VER) || _MSC_VER > 1200
 #include "rapidjson/document.h"     // rapidjson's DOM-style API
 #include "rapidjson/prettywriter.h" // for stringify JSON
 #include "rapidjson/filestream.h"   // wrapper of C stream for prettywriter as output
@@ -12,15 +14,17 @@ using namespace rapidjson;
 class MgJsonStorage::Impl : public MgStorage
 {
 public:
-    Impl() {}
+    Impl() : _err(NULL) {}
 
     void clear();
     const char* stringify(bool pretty);
     Document& document() { return _doc; }
+    const char* getError() { return _err ? _err : _doc.GetParseError(); }
 
 private:
     bool readNode(const char* name, int index, bool ended);
     bool writeNode(const char* name, int index, bool ended);
+    bool setError(const char* err);
 
     int readInt(const char* name, int defvalue);
     bool readBool(const char* name, bool defvalue);
@@ -39,50 +43,82 @@ private:
     Document _doc;
     std::vector<Value*> _stack;
     StringBuffer _strbuf;
+    const char* _err;
 };
 
-MgJsonStorage::MgJsonStorage()
+#endif
+
+MgJsonStorage::MgJsonStorage() : _impl(NULL)
 {
+#ifdef RAPIDJSON_DOCUMENT_H_
     _impl = new Impl();
+#endif
 }
 
 MgJsonStorage::~MgJsonStorage()
 {
+#ifdef RAPIDJSON_DOCUMENT_H_
     delete _impl;
+#endif
 }
 
 const char* MgJsonStorage::stringify(bool pretty)
 {
+#ifdef RAPIDJSON_DOCUMENT_H_
     return _impl->stringify(pretty);
+#else
+    pretty;
+	return "";
+#endif
 }
 
 MgStorage* MgJsonStorage::storageForRead(const char* content)
 {
+#ifdef RAPIDJSON_DOCUMENT_H_
     _impl->clear();
     if (content) {
         _impl->document().Parse<0>(content);
     }
 
     return _impl;
+#else
+    content;
+	return NULL;
+#endif
 }
 
 const char* MgJsonStorage::getParseError()
 {
-    return _impl->document().GetParseError();
+#ifdef RAPIDJSON_DOCUMENT_H_
+    return _impl->getError();
+#else
+	return "";
+#endif
 }
 
 MgStorage* MgJsonStorage::storageForWrite()
 {
+#ifdef RAPIDJSON_DOCUMENT_H_
     _impl->clear();
-
     return _impl;
+#else
+	return NULL;
+#endif
 }
+
+#ifdef RAPIDJSON_DOCUMENT_H_
 
 void MgJsonStorage::Impl::clear()
 {
     _doc.SetNull();
     _stack.clear();
     _strbuf.Clear();
+}
+
+bool MgJsonStorage::Impl::setError(const char* err)
+{
+    _err = err;
+    return false;
 }
 
 bool MgJsonStorage::Impl::readNode(const char* name, int index, bool ended)
@@ -103,6 +139,7 @@ bool MgJsonStorage::Impl::readNode(const char* name, int index, bool ended)
                 return false;           // 没有此节点
             }
             _stack.push_back(&_doc[name]);  // 当前JSON对象压栈
+            _err = NULL;
         }
         else {
             Value &parent = *_stack.back();
@@ -144,6 +181,7 @@ bool MgJsonStorage::Impl::writeNode(const char* name, int index, bool ended)
             _doc.SetObject();
             _doc.AddMember(namenode, tmpnode, _doc.GetAllocator());
             _stack.push_back(&(_doc.MemberEnd() - 1)->value); // 新节点压栈
+            _err = NULL;
         }
         else {
             Value &parent = *_stack.back();
@@ -254,9 +292,9 @@ int MgJsonStorage::Impl::readFloatArray(const char* name, float* values, int cou
         if (item.IsArray()) {
             ret = item.Size();
             if (values) {
-                count = ret < count ? ret : count;
+                int n = ret < count ? ret : count;
                 ret = 0;
-                for (int i = 0; i < count; i++) {
+                for (int i = 0; i < n; i++) {
                     const Value &v = item[i];
 
                     if (v.IsDouble()) {
@@ -274,6 +312,9 @@ int MgJsonStorage::Impl::readFloatArray(const char* name, float* values, int cou
         else {
             ret = ret;
         }
+    }
+    if (values && ret < count) {
+        setError("readFloatArray: lose numbers.");
     }
 
     return ret;
@@ -340,3 +381,5 @@ void MgJsonStorage::Impl::writeString(const char* name, const char* value)
 {
     _stack.back()->AddMember(name, value ? value : "", _doc.GetAllocator());
 }
+
+#endif

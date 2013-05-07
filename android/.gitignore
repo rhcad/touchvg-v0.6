@@ -4,6 +4,5 @@ gen
 obj
 assets
 *.db
-*.so
-*.jar
 libs
+android.jar

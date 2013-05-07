@@ -2,21 +2,20 @@
 // Created by Zhang Yungui on 2012-3-2.
 
 #import "TestGraphView.h"
+#include <mgshapedoc.h>
 
 #ifdef TESTMODE_SIMPLEVIEW
-#include <mgshapest.h>
-#include <vector>
 #ifdef USE_RANDOMSHAPE
-#include "../../../core/include/testgraph/RandomShape.cpp"
+#include "RandomShape.cpp"
 #endif
 
 @implementation TestGraphView
 
 - (void)dealloc
 {
-    if (_shapes) {
-        _shapes->release();
-        _shapes = NULL;
+    if (_doc) {
+        _doc->release();
+        _doc = NULL;
     }
     [super dealloc];
 }
@@ -26,7 +25,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0.9 green:0.95 blue:0.9 alpha:1.0];//clearColor
-        _shapes = new MgShapesT<std::vector<MgShape*> >;
+        _doc = MgShapeDoc::create();
         
 #ifdef USE_RANDOMSHAPE
         RandomParam::init();
@@ -37,9 +36,9 @@
         param.curveCount = 20;
         param.randomLineStyle = true;
         
-        param.initShapes(_shapes);
+        param.initShapes(_doc->getCurrentShapes());
         
-        [self xform]->zoomTo(_shapes->getExtent() * [self xform]->modelToWorld());
+        [self xform]->zoomTo(_doc->getExtent() * [self xform]->modelToWorld());
         [self xform]->zoomByFactor(4.0);
 #endif
     }
@@ -55,9 +54,9 @@
     param.curveCount = RandomParam::RandInt(0, 50);
     param.randomLineStyle = true;
     
-    _shapes->clear();
-    param.initShapes(_shapes);
-    [self setShapes:_shapes];
+    _doc->clear();
+    param.initShapes(_doc->getCurrentShapes());
+    [self setDoc:_doc];
 #endif
 }
 

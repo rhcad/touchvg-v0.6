@@ -234,6 +234,11 @@ void* GiCanvasGdip::GetGraphics()
     return m_draw->getDrawGs();
 }
 
+void* GiCanvasGdip::GetBufferedBitmap()
+{
+    return m_draw->m_memBitmap;
+}
+
 void GiCanvasGdip::_antiAliasModeChanged(bool antiAlias)
 {
     if (m_draw->getDrawGs() != NULL)
@@ -315,7 +320,7 @@ private:
 bool GiCanvasGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
 {
     bool ret = (NULL == m_draw->m_gs)
-        && GiCanvasWin::beginPaint(hdc, attribDC, buffered, overlay);
+        && _beginPaint(hdc, attribDC, buffered, overlay);
     if (!ret)
         return false;
 
@@ -330,7 +335,7 @@ bool GiCanvasGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay
     m_draw->m_gs = new G::Graphics(hdc);
     if (m_draw->m_gs == NULL)
     {
-        GiCanvasWin::endPaint(false);
+        _endPaint(false);
         return false;
     }
 
@@ -346,12 +351,32 @@ bool GiCanvasGdip::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay
     return ret;
 }
 
+bool GiCanvasGdip::beginPaintBuffered()
+{
+    bool ret = (NULL == m_draw->m_gs) && _beginPaint(NULL);;
+    if (!ret)
+        return false;
+
+    m_draw->m_bkColor = GiColor::Invalid();
+    m_draw->m_memBitmap = new G::Bitmap(xf().getWidth(), xf().getHeight());
+    m_draw->m_gs = G::Graphics::FromImage(m_draw->m_memBitmap);
+
+    _antiAliasModeChanged(gs()->isAntiAliasMode());
+
+    return ret;
+}
+
 void GiCanvasGdip::clearWindow()
 {
     if (!gs()->isPrint() && gs()->isDrawing())
     {
-        G::Color color(m_draw->m_bkColor.r, m_draw->m_bkColor.g, m_draw->m_bkColor.b);
-        m_draw->getDrawGs()->Clear(color);
+        if (m_draw->m_bkColor.isInvalid()) {
+            m_draw->getDrawGs()->Clear(G::Color::Transparent);
+        }
+        else {
+            G::Color color(m_draw->m_bkColor.r, m_draw->m_bkColor.g, m_draw->m_bkColor.b);
+            m_draw->getDrawGs()->Clear(color);
+        }
     }
 }
 
@@ -470,7 +495,7 @@ void GiCanvasGdip::endPaint(bool draw)
             m_draw->m_gs = NULL;
         }
 
-        GiCanvasWin::endPaint(draw);
+        _endPaint(draw);
     }
 }
 
@@ -838,6 +863,24 @@ bool GiCanvasGdip::drawGdipImage(LPVOID pBmp, const Box2d& rectW, bool fast)
     }
 
     return ret;
+}
+
+void GiCanvasGdip::rawTextCenter(const char* text, float x, float y, float)
+{
+    if (text && m_draw->getDrawGs()) {
+        HDC hdc = acquireDC();
+        SetBkMode(hdc, TRANSPARENT);
+        SetTextAlign(hdc, TA_CENTER | TA_BASELINE);
+
+        if (m_draw->m_pen) {
+            G::Color color;
+            m_draw->m_pen->GetColor(&color);
+            SetTextColor(hdc, color.ToCOLORREF());
+        }
+
+        rawTextOut(hdc, x, y, text, (int)strlen(text));
+        releaseDC(hdc);
+    }
 }
 
 #endif

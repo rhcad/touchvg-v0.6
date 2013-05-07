@@ -76,7 +76,7 @@ BoundBox& BoundBox::swell(float distance)
 {
     if (m_dir1.isZeroVector() && m_dir2.isZeroVector())
     {
-        distance = fabs(distance);
+        distance = fabsf(distance);
         m_base.x -= distance;
         m_base.y -= distance;
         m_dir1.set(2.f * distance, 0.f);
@@ -91,7 +91,7 @@ BoundBox& BoundBox::swell(float distance)
             m_dir1 = m_dir2;
             m_dir2 = v;
         }
-        distance = fabs(distance) / m_dir1.length();
+        distance = fabsf(distance) / m_dir1.length();
         
         // 求两条边在m_dir1上的投影
         float proj1 = 1.f;

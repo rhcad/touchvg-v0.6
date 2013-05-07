@@ -42,7 +42,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\..\core\include\shape;..\..\include\graphwin;..\..\src\SimpView;..\..\..\core\include\testgraph"
+				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\..\core\include\shape;..\..\..\core\include\command;..\..\include\graphwin;..\..\src\SimpView;..\..\..\core\include\testgraph"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -112,7 +112,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\..\core\include\shape;..\..\include\graphwin;..\..\src\SimpView;..\..\..\core\include\testgraph"
+				AdditionalIncludeDirectories="..\..\..\core\include\geom;..\..\..\core\include\graph;..\..\..\core\include\shape;..\..\..\core\include\command;..\..\include\graphwin;..\..\src\SimpView;..\..\..\core\include\testgraph"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

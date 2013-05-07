@@ -56,8 +56,8 @@ bool MgGrid::_setHandlePoint(int index, const Point2d& pt, float tol)
         return __super::_setHandlePoint(index, pt, tol);
     }
     
-    float cx = (float)fabs(pt.x - getPoint(3).x);
-    float cy = (float)fabs(pt.y - getPoint(3).y);
+    float cx = fabsf(pt.x - getPoint(3).x);
+    float cy = fabsf(pt.y - getPoint(3).y);
     cx = mgMax(mgMax(cx, tol / 3.f), cy);
     cx = (float)( (int)(cx * 100) / 10 ) * 0.1f;
     m_cell.set(cx, cx);
@@ -65,7 +65,7 @@ bool MgGrid::_setHandlePoint(int index, const Point2d& pt, float tol)
     return true;
 }
 
-bool MgGrid::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
+bool MgGrid::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const
 {
     Vector2d cell(m_cell / 2);
     
@@ -73,7 +73,7 @@ bool MgGrid::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
         GiContext ctxedge(ctx);
         ctxedge.setNoFillColor();
         gs.drawRect(&ctxedge, getRect());
-        return __super::_draw(mode, gs, ctx);
+        return __super::_draw(mode, gs, ctx, segment);
     }
     
     int nx = (int)(getWidth() / cell.x + _MGZERO);
@@ -113,7 +113,7 @@ bool MgGrid::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
 
     gs.setAntiAliasMode(antiAlias);
     
-    return __super::_draw(mode, gs, ctx) || ret > 0;
+    return __super::_draw(mode, gs, ctx, segment) || ret > 0;
 }
 
 bool MgGrid::_save(MgStorage* s) const
@@ -145,16 +145,16 @@ int MgGrid::snap(Point2d& pnt, float& distx, float& disty) const
     disty *= 3;
     
     for (float x = cell.x; x < getWidth() - _MGZERO; x += cell.x) {        
-        if (distx > fabs(pnt.x - (org.x + x))) {
+        if (distx > fabsf(pnt.x - (org.x + x))) {
             newpt.x = org.x + x;
-            distx = (float)fabs(pnt.x - newpt.x);
+            distx = fabsf(pnt.x - newpt.x);
             ret |= 1;
         }
     }
     for (float y = cell.y; y < getHeight() - _MGZERO; y += cell.y) {
-        if (disty > fabs(pnt.y - (org.y + y))) {
+        if (disty > fabsf(pnt.y - (org.y + y))) {
             newpt.y = org.y + y;
-            disty = (float)fabs(pnt.y - newpt.y);
+            disty = fabsf(pnt.y - newpt.y);
             ret |= 2;
         }
     }

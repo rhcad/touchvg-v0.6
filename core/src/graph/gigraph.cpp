@@ -348,8 +348,8 @@ static bool DrawEdge(int count, int &i, Point2d* pts, Point2d &ptLast,
         for (int j = si; j <= ei; j++)
         {
             // 记下第一个点，其他点如果和上一点不重合则记下，否则跳过
-            if (j == si || fabs(pt1.x - pts[j].x) > 2
-                || fabs(pt1.y - pts[j].y) > 2)
+            if (j == si || fabsf(pt1.x - pts[j].x) > 2
+                || fabsf(pt1.y - pts[j].y) > 2)
             {
                 pt1 = pts[j];
                 pxs[n++] = pt1;
@@ -390,7 +390,7 @@ bool GiGraphics::drawLines(const GiContext* ctx, int count,
         for (i = 0; i < count; i++)
         {
             pt2 = points[i] * matD;
-            if (i == 0 || fabs(pt1.x - pt2.x) > 2 || fabs(pt1.y - pt2.y) > 2)
+            if (i == 0 || fabsf(pt1.x - pt2.x) > 2 || fabsf(pt1.y - pt2.y) > 2)
             {
                 pt1 = pt2;
                 pxs[n++] = pt2;
@@ -495,7 +495,7 @@ bool GiGraphics::drawArc(const GiContext* ctx,
                          float startAngle, float sweepAngle, 
                          bool modelUnit)
 {
-    if (m_impl->drawRefcnt == 0 || rx < _MGZERO || fabs(sweepAngle) < 1e-5f)
+    if (m_impl->drawRefcnt == 0 || rx < _MGZERO || fabsf(sweepAngle) < 1e-5f)
         return false;
     GiLock lock (&m_impl->drawRefcnt);
 
@@ -565,8 +565,8 @@ static bool drawPolygonEdge(const PolylineAux& aux,
             for (i = si; i <= ei; i++)
             {
                 pt2 = clip.getPoint(i);
-                if (i == si || fabs(pt1.x - pt2.x) > 2
-                    || fabs(pt1.y - pt2.y) > 2)
+                if (i == si || fabsf(pt1.x - pt2.x) > 2
+                    || fabsf(pt1.y - pt2.y) > 2)
                 {
                     pt1 = pt2;
                     pxs[n++] = pt1;
@@ -610,8 +610,8 @@ static bool _DrawPolygon(GiCanvas* cv, const GiContext* ctx,
         pt2 = points[i];
         if (bM2D)
             pt2 *= matD;
-        if (i == 0 || fabs(pt1.x - pt2.x) > 2
-            || fabs(pt1.y - pt2.y) > 2)
+        if (i == 0 || fabsf(pt1.x - pt2.x) > 2
+            || fabsf(pt1.y - pt2.y) > 2)
         {
             pt1 = pt2;
             pxs[n++] = pt1;
@@ -700,8 +700,8 @@ bool GiGraphics::drawEllipse(const GiContext* ctx, const Point2d& center,
     if (mgIsZero(matD.m12) && mgIsZero(matD.m21))
     {
         Point2d cen (center * matD);
-        rx *= (float)fabs(matD.m11);
-        ry *= (float)fabs(matD.m22);
+        rx *= fabsf(matD.m11);
+        ry *= fabsf(matD.m22);
 
         ret = rawEllipse(ctx, cen.x - rx, cen.y - ry, 2 * rx, 2 * ry);
     }
@@ -732,7 +732,7 @@ bool GiGraphics::drawPie(const GiContext* ctx,
                          float startAngle, float sweepAngle, 
                          bool modelUnit)
 {
-    if (m_impl->drawRefcnt == 0 || rx < _MGZERO || fabs(sweepAngle) < 1e-5f)
+    if (m_impl->drawRefcnt == 0 || rx < _MGZERO || fabsf(sweepAngle) < 1e-5f)
         return false;
     GiLock lock (&m_impl->drawRefcnt);
 
@@ -774,7 +774,7 @@ bool GiGraphics::drawRect(const GiContext* ctx, const Box2d& rect,
         rect.leftBottom(), rect.rightBottom(), 
         rect.rightTop(), rect.leftTop()
     };
-    return drawPolygon(ctx, 4, points, modelUnit);
+    return !rect.isEmpty() && drawPolygon(ctx, 4, points, modelUnit);
 }
 
 bool GiGraphics::drawRoundRect(const GiContext* ctx, 

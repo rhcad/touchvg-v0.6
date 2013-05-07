@@ -147,47 +147,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\core\src\shape\mgactions.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgcmddraw.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgcmderase.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgcmdmgr.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgcmds.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgcmdselect.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgdrawline.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgdrawlines.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgdrawrect.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgdrawsplines.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgdrawtriang.cpp"
+				RelativePath="..\..\..\core\src\shape\mgcomposite.cpp"
 				>
 			</File>
 			<File
@@ -219,11 +179,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\shape\mgsplines.cpp"
+				RelativePath="..\..\..\core\src\shape\mgshapedoc.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\src\shape\TransformCmd.cpp"
+				RelativePath="..\..\..\core\src\shape\mgshapes.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\src\shape\mgsplines.cpp"
 				>
 			</File>
 		</Filter>
@@ -232,63 +196,19 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\..\core\include\shape\mgaction.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\core\include\shape\mgbasicsp.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\shape\mgcmd.h"
+				RelativePath="..\..\..\core\include\shape\mgcomposite.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\shape\mgcmddraw.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgcmderase.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgcmdmgr.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgcmdselect.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgdrawline.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgdrawlines.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgdrawrect.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgdrawsplines.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mgdrawtriang.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\src\shape\mggrid.h"
+				RelativePath="..\..\..\core\include\shape\mggrid.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\shape\mgobject.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\shape\mgselect.h"
 				>
 			</File>
 			<File
@@ -297,6 +217,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\shape\mgshape_.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\core\include\shape\mgshapedoc.h"
 				>
 			</File>
 			<File
@@ -312,7 +236,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\core\include\shape\mgsnap.h"
+				RelativePath="..\..\..\core\include\shape\mgshapetype.h"
 				>
 			</File>
 			<File

@@ -17,9 +17,12 @@ class GiGraphIos
 public:
     GiTransform xf;
     GiGraphics  gs;
-    GiCanvasIos canvas;
+    GiCanvasIos *canvas;
+    GiCanvasIos defaultCanvas;
 
-    GiGraphIos(float dpi = 0) : gs(&xf), canvas(&gs, dpi) {}
+    GiGraphIos(float dpi = 0) : gs(&xf), defaultCanvas(&gs, dpi) {
+        canvas = &defaultCanvas;
+    }
 };
 
 #endif // __GEOMETRY_GRAPHIOS_H_

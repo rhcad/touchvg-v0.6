@@ -19,7 +19,7 @@ class GiPathImpl
 {
 public:
     std::vector<Point2d>    points;         //!< 每个节点的坐标
-    std::vector<UInt8>      types;          //!< 每个节点的类型, kGiLineTo 等
+    std::vector<char>       types;          //!< 每个节点的类型, kGiLineTo 等
     int                     beginIndex;     //!< 新图形的起始节点(即MOVETO节点)的序号
 };
 
@@ -44,7 +44,7 @@ GiPath::GiPath(const GiPath& src)
     m_data->beginIndex = src.m_data->beginIndex;
 }
 
-GiPath::GiPath(int count, const Point2d* points, const UInt8* types)
+GiPath::GiPath(int count, const Point2d* points, const char* types)
 {
     m_data = new GiPathImpl();
     m_data->beginIndex = -1;
@@ -99,7 +99,7 @@ const Point2d* GiPath::getPoints() const
     return m_data->points.size() > 0 ? &m_data->points.front() : NULL;
 }
 
-const UInt8* GiPath::getTypes() const
+const char* GiPath::getTypes() const
 {
     return m_data->types.size() > 0 ? &m_data->types.front() : NULL;
 }
@@ -113,8 +113,7 @@ void GiPath::clear()
 
 void GiPath::transform(const Matrix2d& mat)
 {
-    for (UInt32 i = 0; i < m_data->points.size(); i++)
-    {
+    for (size_t i = 0; i < m_data->points.size(); i++) {
         m_data->points[i] *= mat;
     }
 }
@@ -251,7 +250,7 @@ bool GiPath::closeFigure()
         && getSize(m_data->points) >= m_data->beginIndex + 3
         && m_data->points.size() == m_data->types.size())
     {
-        UInt8 type = m_data->types[m_data->points.size() - 1];
+        char type = m_data->types[m_data->points.size() - 1];
         if (type == kGiLineTo || type == kGiBeziersTo)
         {
             m_data->types[m_data->points.size() - 1] |= kGiCloseFigure;
@@ -268,8 +267,8 @@ static int AngleToBezier(Point2d* pts, float radius)
     const Vector2d vec1 (pts[1] - pts[0]);      // 第一条边
     const Vector2d vec2 (pts[2] - pts[1]);      // 第二条边
 
-    const float dHalfAngle = 0.5f * fabs(vec1.angleTo2(vec2));  // 夹角的一半
-    if (dHalfAngle < 1e-4f || fabs(dHalfAngle - _M_PI_2) < 1e-4f)  // 两条边平行
+    const float dHalfAngle = 0.5f * fabsf(vec1.angleTo2(vec2));  // 夹角的一半
+    if (dHalfAngle < 1e-4f || fabsf(dHalfAngle - _M_PI_2) < 1e-4f)  // 两条边平行
         return 0;
 
     const float dDist1 = 0.5f * vec1.length();

@@ -104,30 +104,33 @@ float GiCanvasWin::getScreenDpi() const
     return (float)s_dpi;
 }
 
-bool GiCanvasWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
+bool GiCanvasWin::_beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
 {
-    if (m_owner->isDrawing() || hdc == NULL)
+    if (m_owner->isDrawing())
         return false;
 
     if (attribDC == hdc)
         attribDC = NULL;
     HDC prtDC = (attribDC != NULL) ? attribDC : hdc;
-    if (::GetMapMode(prtDC) != MM_TEXT)
-        return false;
 
-    m_attribDC = attribDC;
-    m_impl->drawColors = GetDeviceCaps(prtDC, NUMCOLORS);
-    m_impl->xform->setResolution((float)GetDeviceCaps(prtDC, LOGPIXELSX), 
-        (float)GetDeviceCaps(prtDC, LOGPIXELSY));
-    m_impl->isPrint = (DT_RASDISPLAY != GetDeviceCaps(prtDC, TECHNOLOGY));
-    if (m_impl->isPrint)
-    {
-        m_impl->xform->setWndSize(GetDeviceCaps(prtDC, HORZRES),
-            GetDeviceCaps(prtDC, VERTRES));
-    }
-    else
-    {
-        m_attribDC = NULL;
+    if (hdc) {
+        if (::GetMapMode(prtDC) != MM_TEXT)
+            return false;
+
+        m_attribDC = attribDC;
+        m_impl->drawColors = GetDeviceCaps(prtDC, NUMCOLORS);
+        m_impl->xform->setResolution((float)GetDeviceCaps(prtDC, LOGPIXELSX), 
+            (float)GetDeviceCaps(prtDC, LOGPIXELSY));
+        m_impl->isPrint = (DT_RASDISPLAY != GetDeviceCaps(prtDC, TECHNOLOGY));
+        if (m_impl->isPrint)
+        {
+            m_impl->xform->setWndSize(GetDeviceCaps(prtDC, HORZRES),
+                GetDeviceCaps(prtDC, VERTRES));
+        }
+        else
+        {
+            m_attribDC = NULL;
+        }
     }
 
     RECT clipBox;
@@ -145,7 +148,7 @@ bool GiCanvasWin::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool)
     return true;
 }
 
-void GiCanvasWin::endPaint(bool /*draw*/)
+void GiCanvasWin::_endPaint(bool /*draw*/)
 {
     if (m_owner->isDrawing())
     {
@@ -165,8 +168,8 @@ bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y, const wchar_t* str, int 
 }
 
 bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y, 
-                            UInt32 options, const RECT_2D& rc, 
-                            const char* str, int len, const Int32* pDx)
+                             int options, const RECT_2D& rc, 
+                             const char* str, int len, const int* pDx)
 {
     RECT rect = { mgRound(rc.left), mgRound(rc.top), mgRound(rc.right), mgRound(rc.bottom) };
     return ::ExtTextOutA(hdc, mgRound(x), mgRound(y), options, &rect, 
@@ -174,8 +177,8 @@ bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y,
 }
 
 bool GiCanvasWin::rawTextOut(HDC hdc, float x, float y, 
-                            UInt32 options, const RECT_2D& rc, 
-                            const wchar_t* str, int len, const Int32* pDx)
+                             int options, const RECT_2D& rc, 
+                             const wchar_t* str, int len, const int* pDx)
 {
     RECT rect = { mgRound(rc.left), mgRound(rc.top), mgRound(rc.right), mgRound(rc.bottom) };
     return ::ExtTextOutW(hdc, mgRound(x), mgRound(y), options, &rect, 

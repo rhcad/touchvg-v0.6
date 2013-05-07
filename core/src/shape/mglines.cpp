@@ -68,6 +68,8 @@ bool MgBaseLines::_isKindOf(int type) const
 void MgBaseLines::_update()
 {
     _extent.set(_count, _points);
+    if (_extent.isEmpty() && _points)
+        _extent.set(_points[0], 2 * Tol::gTol().equalPoint(), 0);
     __super::_update();
 }
 
@@ -201,7 +203,7 @@ bool MgBaseLines::_load(MgStorage* s)
     
     int n = s->readUInt32("count", 0);
     if (n < 1 || n > 9999)
-        return false;
+        return s->setError(n < 1 ? "No point." : "Too many points.");
     
     resize(n);
     n = s->readFloatArray("points", (float*)_points, _count * 2);
@@ -222,12 +224,12 @@ MgLines::~MgLines()
 {
 }
 
-bool MgLines::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
+bool MgLines::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const
 {
     bool ret = false;
     if (isClosed())
         ret = gs.drawPolygon(&ctx, _count, _points);
     else
         ret = gs.drawLines(&ctx, _count, _points);
-    return __super::_draw(mode, gs, ctx) || ret;
+    return __super::_draw(mode, gs, ctx, segment) || ret;
 }

@@ -32,7 +32,7 @@ public:
         \param points 节点坐标数组，元素个数为count
         \param types 节点类型数组，元素个数为count，由 GiPathNode 值组成
     */
-    GiPath(int count, const Point2d* points, const UInt8* types);
+    GiPath(int count, const Point2d* points, const char* types);
 
     //! 析构函数
     virtual ~GiPath();
@@ -61,7 +61,7 @@ public:
     const Point2d* getPoints() const;
 
     //! 返回节点类型数组，由 GiPathNode 值组成
-    const UInt8* getTypes() const;
+    const char* getTypes() const;
     
 
     //! 清除所有节点

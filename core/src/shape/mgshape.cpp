@@ -26,11 +26,6 @@ bool MgBaseShape::_equals(const MgBaseShape& src) const
     return _flags == src._flags;
 }
 
-bool MgBaseShape::_isKindOf(int type) const
-{
-    return type == Type();
-}
-
 void MgBaseShape::_update()
 {
     if (!_extent.isNull()) {
@@ -53,7 +48,7 @@ void MgBaseShape::_clear()
     _extent.empty();
 }
 
-bool MgBaseShape::_draw(int, GiGraphics&, const GiContext&) const
+bool MgBaseShape::_draw(int, GiGraphics&, const GiContext&, int) const
 {
     return false;
 }

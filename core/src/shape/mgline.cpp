@@ -71,6 +71,8 @@ bool MgLine::_equals(const MgLine& src) const
 void MgLine::_update()
 {
     _extent.set(_points[0], _points[1]);
+    if (_extent.isEmpty())
+        _extent.set(_points[0], 2 * Tol::gTol().equalPoint(), 0);
     __super::_update();
 }
 
@@ -101,10 +103,10 @@ bool MgLine::_hitTestBox(const Box2d& rect) const
     return mgClipLine(pts[0], pts[1], rect);
 }
 
-bool MgLine::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
+bool MgLine::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const
 {
     bool ret = gs.drawLine(&ctx, _points[0], _points[1]);
-    return __super::_draw(mode, gs, ctx) || ret;
+    return __super::_draw(mode, gs, ctx, segment) || ret;
 }
 
 bool MgLine::_save(MgStorage* s) const

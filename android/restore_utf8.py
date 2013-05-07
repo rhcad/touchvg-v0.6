@@ -24,5 +24,5 @@ def restore_utf8(dir):
 
 if __name__=="__main__":
     resultfn = restore_utf8(os.path.abspath('../core'))
-    resultfn += restore_utf8(os.path.abspath('skiaview/src/touchvg'))
+    resultfn += restore_utf8(os.path.abspath('graph2d/src/touchvg'))
     if resultfn != '': print('restore files: ' + resultfn)

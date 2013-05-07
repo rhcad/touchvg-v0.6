@@ -8,8 +8,10 @@
 
 #include "gicanvdr.h"
 
+#ifndef SWIG
 class GiGraphics;
 class GiGraphicsImpl;
+#endif
 
 //! 抽象画布接口类
 /*! 本类是图形显示适配接口类，
@@ -23,12 +25,14 @@ public:
     GiCanvas() {}
     virtual ~GiCanvas() {}
 
+#ifndef SWIG
     //! 供GiGraphics调用
     void _init(GiGraphics* owner, GiGraphicsImpl* impl)
     {
         m_owner = owner;
         m_impl = impl;
     }
+#endif
 
     //! 返回图形系统对象，拥有者
     const GiGraphics* gs() const

@@ -9,6 +9,7 @@
 #include <gigraph.h>
 
 #define MG_IMPLEMENT_CREATE(Cls)                                \
+    const char* Cls::getTypeName() const{ return #Cls; }        \
     Cls* Cls::create() { return new Cls(); }                    \
     MgObject* Cls::clone() const                                \
         { Cls* p = create(); p->_copy(*this); return p; }       \
@@ -34,8 +35,8 @@
         { return _hitTest(pt, tol, nearpt, segment); }          \
     bool Cls::hitTestBox(const Box2d& rect) const               \
         { return _hitTestBox(rect); }                           \
-    bool Cls::draw(int mode, GiGraphics& gs, const GiContext& ctx) const  \
-        { return _draw(mode, gs, ctx); }                              \
+    bool Cls::draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const  \
+        { return _draw(mode, gs, ctx, segment); }               \
     bool Cls::save(MgStorage* s) const { return _save(s); }     \
     bool Cls::load(MgStorage* s)       { return _load(s); }     \
     int Cls::getHandleCount() const { return _getHandleCount(); }    \

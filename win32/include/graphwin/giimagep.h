@@ -34,6 +34,9 @@ public:
     //! 打开指定的图像文件
     bool open(const wchar_t* filename);
 
+    //! 设置为Gdiplus::Bitmap对象，不释放也不加引用计数
+    void setBitmap(void* bitmap);
+
     //! 返回X分辨率
     long getDpiX() const;
 
@@ -70,7 +73,7 @@ public:
         \param maxHeight 新图像的最大像素高度，0表示不缩小
         \return 新的缩略图，需要用 delete 释放
     */
-    GiGdipImage* thumbnailImage(UInt32 maxWidth = 0, UInt32 maxHeight = 0);
+    GiGdipImage* thumbnailImage(int maxWidth = 0, int maxHeight = 0);
 
     //! 保存新图像到文件
     /*!

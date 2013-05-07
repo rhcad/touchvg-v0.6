@@ -6,8 +6,6 @@
 #ifndef __GEOMETRY_MGSTORAGE_H_
 #define __GEOMETRY_MGSTORAGE_H_
 
-#include <mgtype.h>
-
 //! 图形存取接口
 /*! \ingroup GEOM_SHAPE
     \interface MgStorage
@@ -55,36 +53,36 @@ struct MgStorage
     virtual void writeFloatArray(const char* name, const float* values, int count) = 0;
 
     //! 给定字段名称(常量)，取出一个单字节整数的值
-    virtual Int8  readInt8(const char* name, Int8 defvalue) {
-        return (Int8)readInt(name, defvalue); }
+    virtual char  readInt8(const char* name, char defvalue) {
+        return (char)readInt(name, defvalue); }
     //! 给定字段名称(常量)，取出一个双字节整数的值
-    virtual Int16 readInt16(const char* name, Int16 defvalue) {
-        return (Int16)readInt(name, defvalue); }
+    virtual short readInt16(const char* name, short defvalue) {
+        return (short)readInt(name, defvalue); }
     //! 给定字段名称(常量)，取出一个长整数的值
-    virtual Int32 readInt32(const char* name, Int32 defvalue) {
-        return (Int32)readInt(name, defvalue); }
+    virtual long readInt32(const char* name, long defvalue) {
+        return (long)readInt(name, defvalue); }
     //! 给定字段名称(常量)，取出一个单字节整数的值
-    virtual UInt8  readUInt8(const char* name, UInt8 defvalue) {
-        return (UInt8)readInt(name, defvalue); }
+    virtual unsigned char  readUInt8(const char* name, unsigned char defvalue) {
+        return (unsigned char)readInt(name, defvalue); }
     //! 给定字段名称(常量)，取出一个双字节整数的值
-    virtual UInt16 readUInt16(const char* name, UInt16 defvalue) {
-        return (UInt16)readInt(name, defvalue); }
+    virtual unsigned short readUInt16(const char* name, unsigned short defvalue) {
+        return (unsigned short)readInt(name, defvalue); }
     //! 给定字段名称(常量)，取出一个长整数的值
-    virtual UInt32 readUInt32(const char* name, UInt32 defvalue) {
-        return (UInt32)readInt(name, defvalue); }
+    virtual unsigned long readUInt32(const char* name, unsigned long defvalue) {
+        return (unsigned long)readInt(name, defvalue); }
 
     //! 添加一个给定字段名称(常量)的单字节整数的值
-    virtual void writeInt8(const char* name, Int8 value) { writeInt(name, value); }
+    virtual void writeInt8(const char* name, char value) { writeInt(name, value); }
     //! 添加一个给定字段名称(常量)的双字节整数的值
-    virtual void writeInt16(const char* name, Int16 value) { writeInt(name, value); }
+    virtual void writeInt16(const char* name, short value) { writeInt(name, value); }
     //! 添加一个给定字段名称(常量)的长整数的值
-    virtual void writeInt32(const char* name, Int32 value) { writeInt(name, value); }
+    virtual void writeInt32(const char* name, long value) { writeInt(name, value); }
     //! 添加一个给定字段名称(常量)的单字节整数的值
-    virtual void writeUInt8(const char* name, UInt8 value) { writeUInt(name, value); }
+    virtual void writeUInt8(const char* name, unsigned char value) { writeUInt(name, value); }
     //! 添加一个给定字段名称(常量)的双字节整数的值
-    virtual void writeUInt16(const char* name, UInt16 value) { writeUInt(name, value); }
+    virtual void writeUInt16(const char* name, unsigned short value) { writeUInt(name, value); }
     //! 添加一个给定字段名称(常量)的长整数的值
-    virtual void writeUInt32(const char* name, UInt32 value) { writeUInt(name, value); }
+    virtual void writeUInt32(const char* name, unsigned long value) { writeUInt(name, value); }
 #endif
 
     //! 给定字段名称(常量)，取出一个整数的值
@@ -93,6 +91,9 @@ struct MgStorage
     virtual void writeInt(const char* name, int value) { if (name && value) value = 0; }
     //! 添加一个给定字段名称(常量)的无符号整数的值
     virtual void writeUInt(const char* name, int value) { if (name && value) value = 0; }
+
+    //! 设置读写错误描述文字，总是返回false
+    virtual bool setError(const char*) { return false; }
 };
 
 #endif // __GEOMETRY_MGSTORAGE_H_

@@ -14,8 +14,9 @@
     \param[in] pt 曲线段外给定的点
     \param[in] pts 三次贝塞尔曲线段的控制点，4个点
     \param[out] nearpt 曲线段上的最近点
+    \return 给定的点到最近点的距离
 */
-GEOMAPI void mgNearestOnBezier(
+GEOMAPI float mgNearestOnBezier(
     const Point2d& pt, const Point2d* pts, Point2d& nearpt);
 
 //! 计算贝塞尔曲线的绑定框
@@ -28,7 +29,7 @@ GEOMAPI void mgNearestOnBezier(
     \see mgCubicSplines, mgBeziersBox2, mgBeziersIntersectBox
 */
 GEOMAPI void mgBeziersBox(
-    Box2d& box, Int32 count, const Point2d* points, bool closed = false);
+    Box2d& box, int count, const Point2d* points, bool closed = false);
 
 //! 判断贝塞尔曲线是否与矩形相交
 /*!
@@ -41,7 +42,7 @@ GEOMAPI void mgBeziersBox(
     \see mgCubicSplines, mgBeziersBox2, mgBeziersBox
 */
 GEOMAPI bool mgBeziersIntersectBox(
-    const Box2d& box, Int32 count, const Point2d* points, bool closed = false);
+    const Box2d& box, int count, const Point2d* points, bool closed = false);
 
 //! 计算三次样条曲线的绑定框
 /*!
@@ -54,7 +55,7 @@ GEOMAPI bool mgBeziersIntersectBox(
     \see mgCubicSplines, mgCubicSplinesIntersectBox
 */
 GEOMAPI void mgCubicSplinesBox(
-    Box2d& box, Int32 n, const Point2d* knots, 
+    Box2d& box, int n, const Point2d* knots, 
     const Vector2d* knotvs, bool closed = false);
 
 //! 判断三次样条曲线是否与矩形相交
@@ -69,7 +70,7 @@ GEOMAPI void mgCubicSplinesBox(
     \see mgCubicSplines, mgCubicSplinesBox
 */
 GEOMAPI bool mgCubicSplinesIntersectBox(
-    const Box2d& box, Int32 n, const Point2d* knots, 
+    const Box2d& box, int n, const Point2d* knots, 
     const Vector2d* knotvs, bool closed = false);
 
 //! 计算点到三次样条曲线的最近距离
@@ -87,7 +88,7 @@ GEOMAPI bool mgCubicSplinesIntersectBox(
     \see mgCubicSplines
 */
 GEOMAPI float mgCubicSplinesHit(
-    Int32 n, const Point2d* knots, const Vector2d* knotvs, bool closed, 
+    int n, const Point2d* knots, const Vector2d* knotvs, bool closed, 
     const Point2d& pt, float tol, Point2d& nearpt, int& segment);
 
 //! 计算点到折线或多边形的最近距离
@@ -103,7 +104,7 @@ GEOMAPI float mgCubicSplinesHit(
     \return 给定的点到最近点的距离，失败时为极大数
 */
 GEOMAPI float mgLinesHit(
-    Int32 n, const Point2d* points, bool closed, 
+    int n, const Point2d* points, bool closed, 
     const Point2d& pt, float tol, Point2d& nearpt, int& segment);
 
 //! 计算点到圆角矩形的最近距离
@@ -131,7 +132,7 @@ GEOMAPI float mgRoundRectHit(
         0到3为从左上角起顺时针的四个角点；4到7为顶右底左的中点；其余为中心点
     \param[out] pt 控制手柄的坐标
 */
-GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 index, Point2d& pt);
+GEOMAPI void mgGetRectHandle(const Box2d& rect, int index, Point2d& pt);
 
 //! 移动矩形的一个控制手柄
 /*!
@@ -142,7 +143,7 @@ GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 index, Point2d& pt);
     \param[in] pt 控制手柄的新坐标
     \param[in] lockCornerScale 当index为0到3时，是否保持宽高比例不变
 */
-GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 index, 
+GEOMAPI void mgMoveRectHandle(Box2d& rect, int index, 
                               const Point2d& pt, bool lockCornerScale = true);
 
 #endif // __GEOMETRY_CURVENEAR_H_

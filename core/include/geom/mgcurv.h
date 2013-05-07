@@ -177,7 +177,7 @@ GEOMAPI int mgInsectTwoCircles(Point2d& pt1, Point2d& pt2,
     \see mgGaussJordan
 */
 GEOMAPI bool mgTriEquations(
-    Int32 n, float *a, float *b, float *c, Vector2d *vs);
+    int n, float *a, float *b, float *c, Vector2d *vs);
 
 //! Gauss-Jordan法求解线性方程组
 /*!
@@ -188,7 +188,7 @@ GEOMAPI bool mgTriEquations(
     \return 是否求解成功，失败原因可能是参数错误或因系数矩阵非主角占优而出现除零
     \see mgTriEquations
 */
-GEOMAPI bool mgGaussJordan(Int32 n, float *mat, Vector2d *vs);
+GEOMAPI bool mgGaussJordan(int n, float *mat, Vector2d *vs);
 
 //! 三次参数样条曲线的端点条件
 //! \see mgCubicSplines
@@ -199,9 +199,6 @@ typedef enum {
     kMgCubicArm2 = 8,         //!< 终止悬臂端
     kMgCubicLoop = 16,        //!< 闭合, 有该值时忽略其他组合值
 } MgCubicSplineFlag;
-
-//! 由 MgCubicSplineFlag 各种值按位组成的端点条件
-typedef UInt32 kMgCubicSplineFlags;
 
 //! 计算三次参数样条曲线的型值点的切矢量
 /*! 三次参数样条曲线的分段曲线方程为：\n
@@ -223,8 +220,8 @@ typedef UInt32 kMgCubicSplineFlags;
     \see MgCubicSplineFlag, mgFitCubicSpline, mgCubicSplinesBox
 */
 GEOMAPI bool mgCubicSplines(
-    Int32 n, const Point2d* knots, Vector2d* knotvs,
-    kMgCubicSplineFlags flag = 0, float tension = 1);
+    int n, const Point2d* knots, Vector2d* knotvs,
+    int flag = 0, float tension = 1);
 
 //! 在三次样条曲线的一条弦上插值得到拟和点坐标
 /*!
@@ -238,8 +235,8 @@ GEOMAPI bool mgCubicSplines(
     \see mgCubicSplines, mgCubicSplineToBezier
 */
 GEOMAPI void mgFitCubicSpline(
-    Int32 n, const Point2d* knots, const Vector2d* knotvs,
-    Int32 i, float t, Point2d& fitpt);
+    int n, const Point2d* knots, const Vector2d* knotvs,
+    int i, float t, Point2d& fitpt);
 
 //! 得到三次样条曲线的分段贝塞尔曲线段控制点
 /*!
@@ -252,8 +249,8 @@ GEOMAPI void mgFitCubicSpline(
     \see mgCubicSplines, mgFitCubicSpline
 */
 GEOMAPI void mgCubicSplineToBezier(
-    Int32 n, const Point2d* knots, const Vector2d* knotvs,
-    Int32 i, Point2d points[4]);
+    int n, const Point2d* knots, const Vector2d* knotvs,
+    int i, Point2d points[4]);
 
 //! 得到三次B样条曲线的分段贝塞尔曲线段控制点
 /*!
@@ -264,8 +261,8 @@ GEOMAPI void mgCubicSplineToBezier(
     \param closed 三次B样条曲线是否为闭合曲线
     \return 实际转换的贝塞尔曲线控制点的个数
 */
-GEOMAPI Int32 mgBSplinesToBeziers(
-    Point2d points[/*1+n*3*/], Int32 n, const Point2d* ctlpts, bool closed);
+GEOMAPI int mgBSplinesToBeziers(
+    Point2d points[/*1+n*3*/], int n, const Point2d* ctlpts, bool closed);
 
 //! 计算张力样条曲线的型值点参数和弦长
 /*!
@@ -281,7 +278,7 @@ GEOMAPI Int32 mgBSplinesToBeziers(
     \see mgFitClampedSpline
 */
 GEOMAPI bool mgClampedSplines(
-    Int32& n, Point2d* knots, float sgm, float tol, float& sigma,
+    int& n, Point2d* knots, float sgm, float tol, float& sigma,
     float* hp, Vector2d* knotvs);
 
 //! 在张力样条曲线的一条弦上插值得到拟和点坐标
@@ -297,7 +294,7 @@ GEOMAPI bool mgClampedSplines(
     \see mgClampedSplines
 */
 GEOMAPI void mgFitClampedSpline(
-    const Point2d* knots, Int32 i, float t, float sigma,
+    const Point2d* knots, int i, float t, float sigma,
     const float* hp, const Vector2d* knotvs, Point2d& fitpt);
 
 #endif // __GEOMETRY_FITCURVE_H_

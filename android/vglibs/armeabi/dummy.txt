@@ -1,1 +1,0 @@
-Type 'sh toapp.sh' to make skiaview.jar and libskiaview.so .

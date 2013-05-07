@@ -8,8 +8,10 @@
 
 #include "gicanvdr.h"
 
+#ifndef SWIG
 class GiGraphicsImpl;
 class GiCanvas;
+#endif
 
 //! 图形系统类
 /*! 本类用于显示各种图形，图元显示原语由外部的 GiCanvas 实现类来实现。

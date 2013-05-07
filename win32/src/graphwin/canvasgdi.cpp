@@ -187,7 +187,7 @@ void GiCanvasGdi::releaseDC(HDC)
 bool GiCanvasGdi::beginPaint(HDC hdc, HDC attribDC, bool buffered, bool overlay)
 {
     bool ret = (NULL == m_draw->m_hdc)
-        && GiCanvasWin::beginPaint(hdc, attribDC, buffered, overlay);
+        && _beginPaint(hdc, attribDC, buffered, overlay);
     if (!ret)
         return false;
 
@@ -378,7 +378,7 @@ void GiCanvasGdi::endPaint(bool draw)
 
         m_draw->m_hdc = NULL;
 
-        GiCanvasWin::endPaint(draw);
+        _endPaint(draw);
     }
 }
 
@@ -574,8 +574,9 @@ bool GiCanvasGdi::rawLineTo(float x, float y)
 
 bool GiCanvasGdi::rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y)
 {
-    POINT pxs[3] = { mgRound(c1x), mgRound(c1y), 
-        mgRound(c2x), mgRound(c2y), mgRound(x), mgRound(y) };
+    POINT pxs[3] = { { mgRound(c1x), mgRound(c1y) }, 
+        { mgRound(c2x), mgRound(c2y) },
+        { mgRound(x), mgRound(y) } };
 
     return !!PolyBezierTo(m_draw->getDrawDC(), pxs, 3);
 }

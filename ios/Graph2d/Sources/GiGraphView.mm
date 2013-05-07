@@ -4,8 +4,9 @@
 
 #import "GiGraphView.h"
 #include <iosgraph.h>
-#include <mgshapes.h>
+#include <mgshapedoc.h>
 #include <mgshape.h>
+#include <mach/mach_time.h>
 
 @interface GiGraphView(Zooming)
 
@@ -14,7 +15,7 @@
 - (BOOL)dynZooming:(UIPinchGestureRecognizer *)sender;
 - (BOOL)dynPanning:(UIPanGestureRecognizer *)sender;
 - (BOOL)switchZoomed:(UIGestureRecognizer *)sender;
-- (void)shapesLocked:(MgShapes*)sp locked:(BOOL)locked;
+- (void)shapesLocked:(MgShapeDoc*)doc locked:(BOOL)locked;
 
 @end
 
@@ -23,10 +24,10 @@ GiColor giFromUIColor(UIColor *color)
     return color ? giFromCGColor(color.CGColor) : GiColor::Invalid();
 }
 
-static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
+static void onShapesLocked(MgShapeDoc* doc, void* obj, bool locked)
 {
     GiGraphView* view = (GiGraphView*)obj;
-    [view shapesLocked:sp locked:locked];
+    [view shapesLocked:doc locked:locked];
 }
 
 @implementation GiGraphView
@@ -41,7 +42,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _shapes = NULL; // need to set by the subclass
+        _doc = NULL; // need to set by the subclass
         _graph = NULL;
         [self afterCreated];
     }
@@ -52,7 +53,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        _shapes = NULL; // need to set by the subclass
+        _doc = NULL; // need to set by the subclass
         _graph = NULL;
         [self afterCreated];
     }
@@ -63,10 +64,6 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 {
     MgShapesLock::unregisterObserver(onShapesLocked, self);
     
-    if (_playShapes) {
-        _playShapes->release();
-        _playShapes = NULL;
-    }
     if (_bkImg) {
         [_bkImg release];
         _bkImg = nil;
@@ -80,7 +77,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (void)afterCreated
 {
-    BOOL iPad = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+    BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
     GiCanvasIos::setScreenDpi(iPad ? 132 : 163, [UIScreen mainScreen].scale);
     
     if (!_graph) {
@@ -98,45 +95,120 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     
     _drawingDelegate = Nil;
     _shapeAdded = NULL;
-    _playShapes = NULL;
     _buffered = 0x11;
     _scaleReaded = NO;
     _zooming = NO;
     _doubleZoomed = NO;
     _enableZoom = YES;
     _initialScale = 1.f;
+    _limitedInView = NO;
     
     MgShapesLock::registerObserver(onShapesLocked, self);
 }
 
 - (CGImageRef)cachedBitmap:(BOOL)invert
 {
-    return _graph->canvas.cachedBitmap(!!invert);
+    return _graph->canvas->cachedBitmap(!!invert);
+}
+
+- (void)saveAsPdf
+{
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, 
+                                                          NSUserDomainMask, YES) objectAtIndex:0];
+    static int order = 0;
+    NSString *filename = [NSString stringWithFormat:@"%@/page%d.pdf", path, order++ % 10];
+    
+    if (UIGraphicsBeginPDFContextToFile(filename, CGRectZero, nil)) {
+        CGRect mediabox = self.bounds;
+        UIGraphicsBeginPDFPageWithInfo(self.bounds, nil);
+        
+        CGContextRef ctx = UIGraphicsGetCurrentContext();
+        CGContextSetTextMatrix(ctx, CGAffineTransformMake(1, 0, 0, -1, 0, mediabox.size.height));
+        
+        GiCanvasIos canvas(&_graph->gs);
+        _graph->canvas = &canvas;
+        
+        if (canvas.beginPaint(ctx)) {
+            [self draw:&_graph->gs];
+            [self dynDraw:&_graph->gs];
+            canvas.endPaint();
+        }
+        _graph->canvas = &_graph->defaultCanvas;
+        _graph->gs._setCanvas(_graph->canvas);
+        
+        UIGraphicsEndPDFContext();
+    }
+}
+
+- (void)saveAsPng
+{
+    if (UIGraphicsBeginImageContextWithOptions) {
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO,
+                                               [UIScreen mainScreen].scale);
+    } else {
+        UIGraphicsBeginImageContext(self.bounds.size);
+    }
+    
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSetTextMatrix(ctx, CGAffineTransformMake(1, 0, 0, -1, 0, self.bounds.size.height));
+    
+    GiCanvasIos canvas(&_graph->gs);
+    _graph->canvas = &canvas;
+    
+    if (canvas.beginPaint(ctx)) {
+        [self draw:&_graph->gs];
+        [self dynDraw:&_graph->gs];
+        canvas.endPaint();
+    }
+    _graph->canvas = &_graph->defaultCanvas;
+    _graph->gs._setCanvas(_graph->canvas);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, 
+                                                          NSUserDomainMask, YES) objectAtIndex:0];
+    static int order = 0;
+    NSString *fmt = [UIScreen mainScreen].scale > 1 ? @"%@/page%d@2x.png" : @"%@/page%d.png";
+    NSString *filename = [NSString stringWithFormat:fmt, path, order++ % 10];
+    
+    NSData* imageData = UIImagePNGRepresentation(image);
+    if (imageData) {
+        [imageData writeToFile:filename atomically:NO];                 
+    }
 }
 
 - (void)drawRect:(CGRect)rect
 {
-    GiCanvasIos &cv = _graph->canvas;
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    GiCanvasIos &cv = *_graph->canvas;
     GiGraphics &gs = _graph->gs;
-    bool buffered = (_buffered & 0x10) && ((_buffered & 1) || !cv.hasCachedBitmap());
+    bool buffered = (cv.screenScale() < 1.5f && (_buffered & 0x10)
+                     && ((_buffered & 1) || !cv.hasCachedBitmap()));
     bool nextDraw = false;
     MgShape* tmpAdded = _shapeAdded;
+    const uint64_t startTime = mach_absolute_time();
     
-    _graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    if (_shapes && !_scaleReaded) {
+    if (_graph->xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))
+        && _limitedInView) {
+        _graph->xf.setWorldLimits(_graph->xf.getWndRectW());
+    }
+    if (_doc && !_scaleReaded) {
         _scaleReaded = YES;
-        _graph->xf.setModelTransform(_shapes->modelTransform());
-        _graph->xf.zoomTo(_shapes->getZoomRectW());
+        _graph->xf.setModelTransform(_doc->modelTransform());
+        _graph->xf.zoomTo(_doc->getPageRectW());
         _initialScale = _graph->xf.getViewScale();
     }
     
-    if (cv.beginPaint(UIGraphicsGetCurrentContext(),    // 在当前画布上准备绘图
+    if (cv.beginPaint(context,                      // 在当前画布上准备绘图
                       !!_zooming, buffered))        // iPad3上不用缓冲更快
     {
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
             if ([self draw:&gs]) {                  // 不行则重新显示所有图形
-                if (!_zooming)                      // 动态放缩时不保存显示内容
+                int us = (int)((mach_absolute_time() - startTime) / 1000);
+                if (!_zooming && us > 4000) {       // 动态放缩时不保存显示内容
                     cv.saveCachedBitmap();          // 保存显示缓冲图，下次就不重新显示图形
+                }
                 tmpAdded = NULL;
             }
             else {
@@ -149,6 +221,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
             tmpAdded = NULL;
         }
         
+        CGContextSetInterpolationQuality(context, kCGInterpolationNone);
         nextDraw = ![self dynDraw:&gs] || nextDraw; // 显示动态临时图形
         
         cv.endPaint();                              // 显示完成后贴到视图画布上
@@ -178,20 +251,7 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (BOOL)draw:(GiGraphics*)gs
 {
-    BOOL ret = YES;
-    
-    if (_playShapes) {
-        MgShapesLock locker(_playShapes, MgShapesLock::ReadOnly, 50);
-        ret = locker.locked();
-        if (ret) {
-            _playShapes->draw(*gs);
-        }
-    }
-    else if (_shapes) {
-        _shapes->draw(*gs);
-    }
-    
-    return ret;
+    return _doc && _doc->draw(*gs) > 0;
 }
 
 - (BOOL)dynDraw:(GiGraphics*)gs
@@ -203,26 +263,8 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     return ret;
 }
 
-- (MgShapes*)getPlayShapes:(BOOL)clear
-{
-    if (clear) {
-        MgShapesLock locker(_playShapes, MgShapesLock::Edit, 1000);
-        if (locker.shapes) {
-            locker.shapes->release();
-            locker.shapes = NULL;
-        }
-        _playShapes = NULL;
-    }
-    else if (!_playShapes) {
-        MgShapesLock locker(_shapes, MgShapesLock::ReadOnly);
-        _playShapes = (MgShapes*)_shapes->clone();
-    }
-    
-    return _playShapes;
-}
-
-- (MgShapes*)shapes {
-    return _shapes;
+- (MgShapeDoc*)doc {
+    return _doc;
 }
 
 - (GiTransform*)xform {
@@ -237,10 +279,10 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     return self;
 }
 
-- (void)setShapes:(MgShapes*)data
+- (void)setDoc:(MgShapeDoc*)data
 {
-    [self shapesLocked:_shapes locked:YES];
-    _shapes = data;
+    [self shapesLocked:_doc locked:YES];
+    _doc = data;
     [self regen];
 }
 
@@ -314,8 +356,8 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     Matrix2d mat(xf.a, xf.b, xf.c, xf.d, xf.tx, xf.ty);
     
     _graph->xf.setModelTransform(mat);
-    if (_shapes) {
-        _shapes->modelTransform() = mat;
+    if (_doc) {
+        _doc->modelTransform() = mat;
         [self regen];
     }
 }
@@ -324,13 +366,21 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 {
     Box2d fromrc(pageRect.origin.x, pageRect.origin.y, 
                pageRect.origin.x + pageRect.size.width, pageRect.origin.y + pageRect.size.height);
+    fromrc *= _graph->xf.modelToWorld();
+    if (!_doc->getPageRectW().isEmpty()) {
+        fromrc = _doc->getPageRectW();
+        _graph->xf.setModelTransform(_doc->modelTransform());
+    }
+    
     RECT_2D torc = { pxRect.origin.x, pxRect.origin.y, 
         pxRect.origin.x + pxRect.size.width, pxRect.origin.y + pxRect.size.height };
     
-    fromrc *= _graph->xf.modelToWorld();
     _graph->xf.zoomTo(fromrc, &torc);
+    
     if (save) {
-        _shapes->setZoomRectW(_graph->xf.getWndRectW(), _graph->xf.getViewScale());
+        if (_doc->getPageRectW().isEmpty()) {
+            _doc->setPageRectW(fromrc, _graph->xf.getViewScale());
+        }
         _initialScale = _graph->xf.getViewScale();
         _scaleReaded = YES;
     }
@@ -344,6 +394,15 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 
 - (float)getViewScale {
     return _graph->xf.getViewScale();
+}
+
+- (float)getDotsPerMm {
+    return _graph->xf.getWorldToDisplayX(false);
+}
+
+- (void)setLimitedInView:(BOOL)limited {
+    _limitedInView = limited;
+    _graph->xf.setWorldLimits(limited ? _graph->xf.getWndRectW() : Box2d());
 }
 
 - (CGRect)getModelRect {
@@ -466,9 +525,9 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
     return YES;
 }
 
-- (void)shapesLocked:(MgShapes*)sp locked:(BOOL)locked
+- (void)shapesLocked:(MgShapeDoc*)doc locked:(BOOL)locked
 {
-    if (!locked && sp == _shapes) {
+    if (!locked && doc == _doc) {
         if ([_drawingDelegate respondsToSelector:@selector(afterShapeChanged)]) {
             [_drawingDelegate performSelector:@selector(afterShapeChanged)];
         }
@@ -476,3 +535,15 @@ static void onShapesLocked(MgShapes* sp, void* obj, bool locked)
 }
 
 @end
+
+void drawTextCenter(const char* text, float x, float y, float h)
+{
+    float fontsize = 72.f * h / GiCanvasIos::screenDpi();
+    float width = strlen(text) * h;
+    
+    NSString *str = [NSString stringWithUTF8String:text];
+    [str drawInRect:CGRectMake(x - width / 2, y - h / 3, width, h)
+           withFont:[UIFont systemFontOfSize:fontsize]
+      lineBreakMode:UILineBreakModeWordWrap
+          alignment:UITextAlignmentCenter];
+}

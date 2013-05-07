@@ -15,11 +15,11 @@ static inline Box2d computeCubicBox(const Point2d points[4])
 }
 
 GEOMAPI void mgBeziersBox(
-    Box2d& box, Int32 count, const Point2d* points, bool closed)
+    Box2d& box, int count, const Point2d* points, bool closed)
 {
     box.empty();
 
-    for (Int32 i = 0; i + 3 < count; i += 3) {
+    for (int i = 0; i + 3 < count; i += 3) {
         box.unionWith(computeCubicBox(points + i));
     }
     if (closed && count > 3) {
@@ -30,9 +30,9 @@ GEOMAPI void mgBeziersBox(
 }
 
 GEOMAPI bool mgBeziersIntersectBox(
-    const Box2d& box, Int32 count, const Point2d* points, bool closed)
+    const Box2d& box, int count, const Point2d* points, bool closed)
 {
-    for (Int32 i = 0; i + 3 < count; i += 3) {
+    for (int i = 0; i + 3 < count; i += 3) {
         if (box.isIntersect(computeCubicBox(points + i))) {
             return true;
         }
@@ -50,13 +50,13 @@ GEOMAPI bool mgBeziersIntersectBox(
 }
 
 GEOMAPI void mgCubicSplinesBox(
-    Box2d& box, Int32 n, const Point2d* knots, 
+    Box2d& box, int n, const Point2d* knots, 
     const Vector2d* knotvs, bool closed)
 {
-    Int32 n2 = (closed && n > 1) ? n + 1 : n;
+    int n2 = (closed && n > 1) ? n + 1 : n;
 
     box.empty();
-    for (Int32 i = 0; i + 1 < n2; i++)
+    for (int i = 0; i + 1 < n2; i++)
     {
         box.unionWith(computeCubicBox(knots[i], 
             knots[i] + knotvs[i] / 3.f, 
@@ -66,12 +66,12 @@ GEOMAPI void mgCubicSplinesBox(
 }
 
 GEOMAPI bool mgCubicSplinesIntersectBox(
-    const Box2d& box, Int32 n, const Point2d* knots, 
+    const Box2d& box, int n, const Point2d* knots, 
     const Vector2d* knotvs, bool closed)
 {
-    Int32 n2 = (closed && n > 1) ? n + 1 : n;
+    int n2 = (closed && n > 1) ? n + 1 : n;
     
-    for (Int32 i = 0; i + 1 < n2; i++)
+    for (int i = 0; i + 1 < n2; i++)
     {
         Point2d pts[4] = { knots[i], 
             knots[i] + knotvs[i] / 3.f, 
@@ -85,24 +85,24 @@ GEOMAPI bool mgCubicSplinesIntersectBox(
 }
 
 GEOMAPI float mgCubicSplinesHit(
-    Int32 n, const Point2d* knots, const Vector2d* knotvs, bool closed, 
+    int n, const Point2d* knots, const Vector2d* knotvs, bool closed, 
     const Point2d& pt, float tol, Point2d& nearpt, int& segment)
 {
     Point2d ptTemp;
     float dist, distMin = _FLT_MAX;
     Point2d pts[4];
     const Box2d rect (pt, 2 * tol, 2 * tol);
-    Int32 n2 = (closed && n > 1) ? n + 1 : n;
+    int n2 = (closed && n > 1) ? n + 1 : n;
 
     segment = -1;
-    for (Int32 i = 0; i + 1 < n2; i++)
+    for (int i = 0; i + 1 < n2; i++)
     {
         mgCubicSplineToBezier(n, knots, knotvs, i, pts);
         if (rect.isIntersect(computeCubicBox(pts)))
         {
-            mgNearestOnBezier(pt, pts, ptTemp);
-            dist = pt.distanceTo(ptTemp);
-            if (dist <= tol && dist < distMin)
+            dist = mgNearestOnBezier(pt, pts, ptTemp);
+            //dist = pt.distanceTo(ptTemp);
+            if (dist < distMin)
             {
                 distMin = dist;
                 nearpt = ptTemp;
@@ -114,8 +114,8 @@ GEOMAPI float mgCubicSplinesHit(
     return distMin;
 }
 
-GEOMAPI Int32 mgBSplinesToBeziers(
-    Point2d points[/*1+n*3*/], Int32 n, const Point2d* ctlpts, bool closed)
+GEOMAPI int mgBSplinesToBeziers(
+    Point2d points[/*1+n*3*/], int n, const Point2d* ctlpts, bool closed)
 {
     Point2d pt1, pt2, pt3, pt4;
     float d6 = 1.f / 6.f;
@@ -145,13 +145,13 @@ GEOMAPI Int32 mgBSplinesToBeziers(
 }
 
 GEOMAPI float mgLinesHit(
-    Int32 n, const Point2d* points, bool closed, 
+    int n, const Point2d* points, bool closed, 
     const Point2d& pt, float tol, Point2d& nearpt, int& segment)
 {
     Point2d ptTemp;
     float dist, distMin = _FLT_MAX;
     const Box2d rect (pt, 2 * tol, 2 * tol);
-    Int32 n2 = (closed && n > 1) ? n + 1 : n;
+    int n2 = (closed && n > 1) ? n + 1 : n;
     
     MgPtInAreaRet inArea = (closed ? mgPtInArea(pt, n, points, segment, Tol(tol/5, 0)) : kMgPtInArea);
     
@@ -170,7 +170,7 @@ GEOMAPI float mgLinesHit(
         }
     }
     
-    for (Int32 i = 0; i + 1 < n2; i++)
+    for (int i = 0; i + 1 < n2; i++)
     {
         const Point2d& pt2 = points[(i + 1) % n];
         if (closed || rect.isIntersect(Box2d(points[i], pt2)))
@@ -190,7 +190,7 @@ GEOMAPI float mgLinesHit(
 }
 
 static inline
-Point2d RoundRectTan(Int32 nFrom, Int32 nTo, const Box2d& rect, float r)
+Point2d RoundRectTan(int nFrom, int nTo, const Box2d& rect, float r)
 {
     Point2d pt1, pt2;
     mgGetRectHandle(rect, nFrom, pt1);
@@ -251,7 +251,7 @@ GEOMAPI float mgRoundRectHit(
     const Box2d& rect, float rx, float ry, 
     const Point2d& pt, float tol, Point2d& nearpt, int& segment)
 {
-    rx = fabs(rx);
+    rx = fabsf(rx);
     if (ry < _MGZERO)
         ry = rx;
     rx = mgMin(rx, rect.width() * 0.5f);
@@ -302,7 +302,7 @@ GEOMAPI float mgRoundRectHit(
     return distMin;
 }
 
-GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 index, Point2d& pt)
+GEOMAPI void mgGetRectHandle(const Box2d& rect, int index, Point2d& pt)
 {
     switch (index)
     {
@@ -318,7 +318,7 @@ GEOMAPI void mgGetRectHandle(const Box2d& rect, Int32 index, Point2d& pt)
     }
 }
 
-GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 index, 
+GEOMAPI void mgMoveRectHandle(Box2d& rect, int index, 
                               const Point2d& pt, bool lockCornerScale)
 {
     Point2d pts[4];
@@ -333,8 +333,8 @@ GEOMAPI void mgMoveRectHandle(Box2d& rect, Int32 index,
         
         if (lockCornerScale && !rect.isEmpty()) {
             Point2d& pt2 = pts[(index + 2) % 4];
-            float w = (float)fabs(pt2.x - pt.x);
-            float h = (float)fabs(pt2.y - pt.y);
+            float w = fabsf(pt2.x - pt.x);
+            float h = fabsf(pt2.y - pt.y);
             
             if (w * rect.height() > h * rect.width())
                 h = w * rect.height() / rect.width();
@@ -376,7 +376,7 @@ static float computeCubicBaseValue(float t, float a, float b, float c, float d) 
 static Point2d computeCubicFirstDerivativeRoots(float a, float b, float c, float d) {
     Point2d ret (-1, -1);
     float tl = -a+2*b-c;
-    float tr = -(float)sqrt(-a*(c-d) + b*b - b*(c+d) +c*c);
+    float tr = -sqrtf(-a*(c-d) + b*b - b*(c+d) +c*c);
     float dn = -a+3*b-3*c+d;
     if (dn != 0) {
         ret.x = (tl+tr)/dn;

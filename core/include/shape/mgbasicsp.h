@@ -191,6 +191,22 @@ protected:
     float      _ry;
 };
 
+//! 菱形图形类
+/*! \ingroup GEOM_SHAPE
+*/
+class MgDiamond : public MgBaseRect
+{
+    MG_INHERIT_CREATE(MgDiamond, MgBaseRect, 14)
+protected:
+    int _getHandleCount() const;
+    Point2d _getHandlePoint(int index) const;
+    bool _setHandlePoint(int index, const Point2d& pt, float tol);
+    void _update();
+    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment) const;
+    bool _hitTestBox(const Box2d& rect) const;
+    bool _rotateHandlePoint(int index, const Point2d& pt);
+};
+
 //! 折线基类
 /*! \ingroup GEOM_SHAPE
 */

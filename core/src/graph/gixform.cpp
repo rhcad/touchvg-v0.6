@@ -345,8 +345,8 @@ bool GiTransform::zoomWnd(const Point2d& pt1, const Point2d& pt2, bool adjust)
 {
     // 计算开窗矩形的中心和宽高
     Point2d ptCen ((pt2.x + pt1.x) * 0.5f, (pt2.y + pt1.y) * 0.5f);
-    float w = fabs(static_cast<float>(pt2.x - pt1.x));
-    float h = fabs(static_cast<float>(pt2.y - pt1.y));
+    float w = fabsf(static_cast<float>(pt2.x - pt1.x));
+    float h = fabsf(static_cast<float>(pt2.y - pt1.y));
     if (w < 4 || h < 4)
         return false;
 
@@ -395,8 +395,8 @@ bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT_2D* rcTo, bool adjus
     Point2d ptCen;
 
     if (rcTo != NULL) {
-        w = fabs(static_cast<float>(rcTo->right - rcTo->left));
-        h = fabs(static_cast<float>(rcTo->bottom - rcTo->top));
+        w = fabsf(static_cast<float>(rcTo->right - rcTo->left));
+        h = fabsf(static_cast<float>(rcTo->bottom - rcTo->top));
         ptCen.x = (rcTo->left + rcTo->right) * 0.5f;
         ptCen.y = (rcTo->top + rcTo->bottom) * 0.5f;
     }
@@ -404,6 +404,8 @@ bool GiTransform::zoomTo(const Box2d& rectWorld, const RECT_2D* rcTo, bool adjus
         w = (float)m_impl->cxWnd;
         h = (float)m_impl->cyWnd;
         ptCen.set(w * 0.5f, h * 0.5f);
+        w -= 8;
+        h -= 8;
     }
     if (w < 4 || h < 4)
         return false;
@@ -485,7 +487,7 @@ bool GiTransformImpl::zoomPanAdjust(Point2d &ptW, float dxPixel, float dyPixel) 
         bAdjusted = true;
         ptW.x += rectW.xmax - (ptW.x + halfw);
     }
-    if (fabs(dxPixel) > 0 && 2 * halfw >= rectW.width()) {
+    if (fabsf(dxPixel) > 0 && 2 * halfw >= rectW.width()) {
         bAdjusted = true;
         ptW.x = rectW.center().x;
     }
@@ -497,7 +499,7 @@ bool GiTransformImpl::zoomPanAdjust(Point2d &ptW, float dxPixel, float dyPixel) 
         bAdjusted = true;
         ptW.y += rectW.ymax - (ptW.y + halfh);
     }
-    if (fabs(dyPixel) > 0 && 2 * halfh >= rectW.height()) {
+    if (fabsf(dyPixel) > 0 && 2 * halfh >= rectW.height()) {
         bAdjusted = true;
         ptW.y = rectLimitsW.center().y;
     }
@@ -509,9 +511,9 @@ bool GiTransform::zoomByFactor(float factor, const Point2d* pxAt, bool adjust)
 {
     float scale = m_impl->viewScale;
     if (factor > 0)
-        scale *= (1 + fabs(factor));
+        scale *= (1.f + fabsf(factor));
     else
-        scale /= (1 + fabs(factor));
+        scale /= (1.f + fabsf(factor));
 
     if (adjust) {
         scale = mgMax(scale, m_impl->minViewScale);

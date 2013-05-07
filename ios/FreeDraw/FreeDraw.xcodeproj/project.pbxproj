@@ -11,13 +11,13 @@
 		4AC4D3B41424794C0055F4CA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4D3B21424794C0055F4CA /* main.m */; };
 		7E3D20681500BE2F008ACC1B /* GraphViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7E3D20671500BE2F008ACC1B /* GraphViewController.mm */; };
 		7EC8FF911504CB1100F6193D /* TestGraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7EC8FF901504CB1100F6193D /* TestGraphView.mm */; };
-		AE414EB016B606A20066E3FD /* vgdot1.png in Resources */ = {isa = PBXBuildFile; fileRef = AE414EAC16B606A20066E3FD /* vgdot1.png */; };
-		AE414EB116B606A20066E3FD /* vgdot1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE414EAD16B606A20066E3FD /* vgdot1@2x.png */; };
-		AE414EB216B606A20066E3FD /* vgdot2.png in Resources */ = {isa = PBXBuildFile; fileRef = AE414EAE16B606A20066E3FD /* vgdot2.png */; };
-		AE414EB316B606A20066E3FD /* vgdot2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE414EAF16B606A20066E3FD /* vgdot2@2x.png */; };
+		AE47CAE31574C8FD009E6F69 /* vgdot1.png in Resources */ = {isa = PBXBuildFile; fileRef = AE47CAE11574C8FD009E6F69 /* vgdot1.png */; };
+		AE47CAE41574C8FD009E6F69 /* vgdot2.png in Resources */ = {isa = PBXBuildFile; fileRef = AE47CAE21574C8FD009E6F69 /* vgdot2.png */; };
+		AEDF4B26162E871400769164 /* charback.png in Resources */ = {isa = PBXBuildFile; fileRef = AEDF4B25162E871400769164 /* charback.png */; };
 		AEEB2512155CFE3500B03D0A /* app57.png in Resources */ = {isa = PBXBuildFile; fileRef = AEEB2510155CFE3500B03D0A /* app57.png */; };
 		AEEB2513155CFE3500B03D0A /* app72.png in Resources */ = {isa = PBXBuildFile; fileRef = AEEB2511155CFE3500B03D0A /* app72.png */; };
-		C97B07E715021F5200040728 /* libGraph2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C97B07E515021F5200040728 /* libGraph2d.a */; };
+		AEF513871655C65700A15EE0 /* vgdot1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AEF513771655C65700A15EE0 /* vgdot1@2x.png */; };
+		AEF513881655C65700A15EE0 /* vgdot2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AEF513781655C65700A15EE0 /* vgdot2@2x.png */; };
 		C985F88A14562C4400728C97 /* SCCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = C985F88914562C4400728C97 /* SCCalloutView.m */; };
 		C985F8A214562DBE00728C97 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F88B14562DBE00728C97 /* back.png */; };
 		C985F8A514562DBE00728C97 /* bluebrush.png in Resources */ = {isa = PBXBuildFile; fileRef = C985F88E14562DBE00728C97 /* bluebrush.png */; };
@@ -42,33 +42,8 @@
 		C98AEA5B1456AF6900695359 /* back1.png in Resources */ = {isa = PBXBuildFile; fileRef = C98AEA5A1456AF6800695359 /* back1.png */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		4A93E2E91426EEA30068F29D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4AE2C1D21424998500C67987;
-			remoteInfo = Graph2d;
-		};
-		4A93E2EB1426EEA30068F29D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4AE2C1DF1424998500C67987;
-			remoteInfo = Graph2dUnitTests;
-		};
-		C9340F2E15021BC800C2831C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4AE2C1D11424998500C67987;
-			remoteInfo = Graph2d;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		2752EE9A1559202D00F0CCDD /* TestConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestConfig.h; path = Sources/TestConfig.h; sourceTree = SOURCE_ROOT; };
-		4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Graph2d.xcodeproj; path = ../Graph2d/Graph2d.xcodeproj; sourceTree = "<group>"; };
 		4AC4D32F142455C60055F4CA /* FreeDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FreeDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AC4D3B0142479420055F4CA /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Headers/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		4AC4D3B11424794C0055F4CA /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Sources/AppDelegate.m; sourceTree = SOURCE_ROOT; };
@@ -80,13 +55,13 @@
 		7E3D20671500BE2F008ACC1B /* GraphViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GraphViewController.mm; path = Sources/GraphViewController.mm; sourceTree = SOURCE_ROOT; };
 		7EC8FF8F1504CB1100F6193D /* TestGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestGraphView.h; path = Sources/TestGraphView.h; sourceTree = SOURCE_ROOT; };
 		7EC8FF901504CB1100F6193D /* TestGraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TestGraphView.mm; path = Sources/TestGraphView.mm; sourceTree = SOURCE_ROOT; };
-		AE414EAC16B606A20066E3FD /* vgdot1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = vgdot1.png; path = Resources/graph2d/vgdot1.png; sourceTree = SOURCE_ROOT; };
-		AE414EAD16B606A20066E3FD /* vgdot1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "vgdot1@2x.png"; path = "Resources/graph2d/vgdot1@2x.png"; sourceTree = SOURCE_ROOT; };
-		AE414EAE16B606A20066E3FD /* vgdot2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = vgdot2.png; path = Resources/graph2d/vgdot2.png; sourceTree = SOURCE_ROOT; };
-		AE414EAF16B606A20066E3FD /* vgdot2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "vgdot2@2x.png"; path = "Resources/graph2d/vgdot2@2x.png"; sourceTree = SOURCE_ROOT; };
+		AE47CAE11574C8FD009E6F69 /* vgdot1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vgdot1.png; sourceTree = "<group>"; };
+		AE47CAE21574C8FD009E6F69 /* vgdot2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vgdot2.png; sourceTree = "<group>"; };
+		AEDF4B25162E871400769164 /* charback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = charback.png; path = Resources/images/charback.png; sourceTree = SOURCE_ROOT; };
 		AEEB2510155CFE3500B03D0A /* app57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = app57.png; path = Resources/app57.png; sourceTree = SOURCE_ROOT; };
 		AEEB2511155CFE3500B03D0A /* app72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = app72.png; path = Resources/app72.png; sourceTree = SOURCE_ROOT; };
-		C97B07E515021F5200040728 /* libGraph2d.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGraph2d.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AEF513771655C65700A15EE0 /* vgdot1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "vgdot1@2x.png"; path = "Resources/graph2d/vgdot1@2x.png"; sourceTree = SOURCE_ROOT; };
+		AEF513781655C65700A15EE0 /* vgdot2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "vgdot2@2x.png"; path = "Resources/graph2d/vgdot2@2x.png"; sourceTree = SOURCE_ROOT; };
 		C985F88814562C4400728C97 /* SCCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCCalloutView.h; path = Sources/SCCalloutView.h; sourceTree = SOURCE_ROOT; };
 		C985F88914562C4400728C97 /* SCCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCCalloutView.m; path = Sources/SCCalloutView.m; sourceTree = SOURCE_ROOT; };
 		C985F88B14562DBE00728C97 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Resources/images/back.png; sourceTree = SOURCE_ROOT; };
@@ -117,22 +92,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C97B07E715021F5200040728 /* libGraph2d.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4A93E2E21426EEA30068F29D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4A93E2EA1426EEA30068F29D /* libGraph2d.a */,
-				4A93E2EC1426EEA30068F29D /* Graph2dUnitTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		4AC4D324142455C50055F4CA = {
 			isa = PBXGroup;
 			children = (
@@ -195,8 +160,6 @@
 		4AE2C17A1424866C00C67987 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				C97B07E515021F5200040728 /* libGraph2d.a */,
-				4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */,
 			);
 			name = Dependencies;
 			sourceTree = "<group>";
@@ -204,10 +167,10 @@
 		AE47CAE01574C8FD009E6F69 /* Graph2d */ = {
 			isa = PBXGroup;
 			children = (
-				AE414EAC16B606A20066E3FD /* vgdot1.png */,
-				AE414EAD16B606A20066E3FD /* vgdot1@2x.png */,
-				AE414EAE16B606A20066E3FD /* vgdot2.png */,
-				AE414EAF16B606A20066E3FD /* vgdot2@2x.png */,
+				AE47CAE11574C8FD009E6F69 /* vgdot1.png */,
+				AE47CAE21574C8FD009E6F69 /* vgdot2.png */,
+				AEF513771655C65700A15EE0 /* vgdot1@2x.png */,
+				AEF513781655C65700A15EE0 /* vgdot2@2x.png */,
 			);
 			name = Graph2d;
 			path = Resources/Graph2d;
@@ -216,6 +179,7 @@
 		C985F85914562BE200728C97 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				AEDF4B25162E871400769164 /* charback.png */,
 				C98AEA5A1456AF6800695359 /* back1.png */,
 				C985F88B14562DBE00728C97 /* back.png */,
 				C985F88E14562DBE00728C97 /* bluebrush.png */,
@@ -256,7 +220,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				C9340F2F15021BC800C2831C /* PBXTargetDependency */,
 			);
 			name = FreeDraw;
 			productName = FreeDraw;
@@ -282,35 +245,12 @@
 			mainGroup = 4AC4D324142455C50055F4CA;
 			productRefGroup = 4AC4D330142455C60055F4CA /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 4A93E2E21426EEA30068F29D /* Products */;
-					ProjectRef = 4A93E2E11426EEA30068F29D /* Graph2d.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				4AC4D32E142455C60055F4CA /* FreeDraw */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		4A93E2EA1426EEA30068F29D /* libGraph2d.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libGraph2d.a;
-			remoteRef = 4A93E2E91426EEA30068F29D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4A93E2EC1426EEA30068F29D /* Graph2dUnitTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = Graph2dUnitTests.octest;
-			remoteRef = 4A93E2EB1426EEA30068F29D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4AC4D32D142455C60055F4CA /* Resources */ = {
@@ -340,10 +280,11 @@
 				C98AEA5B1456AF6900695359 /* back1.png in Resources */,
 				AEEB2512155CFE3500B03D0A /* app57.png in Resources */,
 				AEEB2513155CFE3500B03D0A /* app72.png in Resources */,
-				AE414EB016B606A20066E3FD /* vgdot1.png in Resources */,
-				AE414EB116B606A20066E3FD /* vgdot1@2x.png in Resources */,
-				AE414EB216B606A20066E3FD /* vgdot2.png in Resources */,
-				AE414EB316B606A20066E3FD /* vgdot2@2x.png in Resources */,
+				AE47CAE31574C8FD009E6F69 /* vgdot1.png in Resources */,
+				AE47CAE41574C8FD009E6F69 /* vgdot2.png in Resources */,
+				AEDF4B26162E871400769164 /* charback.png in Resources */,
+				AEF513871655C65700A15EE0 /* vgdot1@2x.png in Resources */,
+				AEF513881655C65700A15EE0 /* vgdot2@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,14 +305,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		C9340F2F15021BC800C2831C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Graph2d;
-			targetProxy = C9340F2E15021BC800C2831C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
 		4AC4D348142455C60055F4CA /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -388,10 +321,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/include\"",
 				);
 				INFOPLIST_FILE = "";
 				PROVISIONING_PROFILE = "";
@@ -413,10 +343,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/include\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -435,15 +362,12 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/include\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/libs/$(PLATFORM_NAME)\"",
 				);
 				WRAPPER_EXTENSION = app;
 			};
@@ -457,15 +381,12 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/include\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/libs/$(PLATFORM_NAME)\"",
 				);
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -485,10 +406,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/include\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -506,15 +424,12 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/include\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/libs/$(PLATFORM_NAME)\"",
 				);
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -534,10 +449,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/include\"",
 				);
 				INFOPLIST_FILE = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -555,15 +467,12 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
 					"$(STDLIB_HEADERS)",
-					"\"$(BUILT_PRODUCTS_DIR)/../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios\"",
-					"\"$(CONFIGURATION_BUILD_DIR)/../../ios\"",
-					"\"$(BUILT_PRODUCTS_DIR)/../../ios/Graph2d\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/include\"",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"\"$(ROOT_SOURCE_PATH)/Graph2d-Build/libs/$(PLATFORM_NAME)\"",
 				);
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;

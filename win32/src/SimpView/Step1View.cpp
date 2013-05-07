@@ -14,7 +14,7 @@ static char THIS_FILE[] = __FILE__;
 CRandomShapeView::CRandomShapeView(RandomParam& param)
     : m_selection(NULL)
 {
-    param.initShapes(m_shapes);
+    param.initShapes(shapes());
 }
 
 CRandomShapeView::~CRandomShapeView()
@@ -49,6 +49,6 @@ void CRandomShapeView::OnMouseMove(UINT nFlags, CPoint point)
 
     rect *= m_graph->xf.displayToModel();
     m_ptSnap = rect.center();
-    m_selection = m_shapes->hitTest(rect, m_ptNear, &m_segment);
+    m_selection = shapes()->hitTest(rect, m_ptNear, &m_segment);
     Invalidate();
 }

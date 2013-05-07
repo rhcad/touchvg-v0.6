@@ -25,7 +25,7 @@
 #import <GiGraphView.h>
 #import <GiEditAction.h>
 #ifdef USE_RANDOMSHAPE
-#include "../../../core/include/testgraph/RandomShape.cpp"
+#include "RandomShape.cpp"
 #endif
 
 static const NSUInteger kRedTag         = 0;
@@ -33,6 +33,8 @@ static const NSUInteger kBlueTag        = 1;
 static const NSUInteger kYellowTag      = 2;
 static const NSUInteger kLineTag        = 3;
 static const NSUInteger kDashLineTag    = 4;
+
+void registerTransformCmd();
 
 @interface GiViewControllerEx : GiViewController<GiEditAction> {
     UIView              *downview;
@@ -47,7 +49,13 @@ static const NSUInteger kDashLineTag    = 4;
 {
     self = [super init];
     downview = nil;
+    self.editDelegate = self;
     return self;
+}
+
+- (void)dealloc
+{
+    [super dealloc];
 }
 
 - (void)gestureStateChanged:(UIGestureRecognizer*)sender
@@ -115,7 +123,6 @@ static const NSUInteger kDashLineTag    = 4;
     // 计算图形视图和放大镜容器视图的位置大小
     CGRect viewFrame = rect;
     CGRect barFrame = rect;
-    viewFrame.size.height -= BAR_HEIGHT;            // 减去底部按钮栏高度
     
 #ifdef USE_MAGNIFIER
     CGRect magFrame = CGRectMake(10, 10, 260, 200);
@@ -179,7 +186,7 @@ static const NSUInteger kDashLineTag    = 4;
     
     // 创建缩小显示的放大镜视图
 #ifdef MAG_AT_BOTTOM
-    _magViews[1] = [_graphc createMagnifierView:magnifierView frame:mag1rect scale:0.1];
+    _magViews[1] = [_graphc createMagnifierView:magView frame:mag1rect scale:0.1];
     _magViews[1].autoresizingMask = (UIViewAutoresizingFlexibleHeight
                                      | UIViewAutoresizingFlexibleRightMargin
                                      | UIViewAutoresizingFlexibleBottomMargin);
@@ -225,7 +232,7 @@ static const NSUInteger kDashLineTag    = 4;
 #endif
     
     barFrame.size.height = BAR_HEIGHT;
-    barFrame.origin.y += viewFrame.size.height;
+    barFrame.origin.y += viewFrame.size.height - BAR_HEIGHT;
     
     // 创建底部按钮栏视图
     UIButton* downview = [[UIButton alloc]initWithFrame:barFrame];
@@ -283,6 +290,8 @@ static const NSUInteger kDashLineTag    = 4;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    registerTransformCmd();    
     _graphc.commandName = "@draw";
 }
 
@@ -437,29 +446,33 @@ static const NSUInteger kDashLineTag    = 4;
 
 - (IBAction)selectCommand:(id)sender    // 选择绘图命令
 {
-    CGRect viewrect = CGRectMake(0, 0, 480, 240);
+    float x = 0, y = 0, w = 90, h = 40;
+    CGRect viewrect = CGRectMake(0, 0, w*5, h*6);
     viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
-    viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _graphc.downview.frame.size.height - 20;
+    viewrect.origin.y = self.view.bounds.size.height - viewrect.size.height - _graphc.downview.frame.size.height - 10;
     
 	SCCalloutView *calloutView = [[SCCalloutView alloc]initWithFrame:viewrect];
     [self.view addSubview:calloutView];
     [calloutView release];
     calloutView.backgroundColor = [UIColor darkGrayColor];
     
-    struct { NSString* caption; NSString* name; SEL action; } cmds[] = {        
+    struct { NSString* caption; NSString* name; SEL action; } cmds[] = {
         { @"坐标系T",  @"xfdemo", nil },
-        { @"直线段",   @"line", nil },
+        { @"点中测试",  @"hittest", nil },
+        { @"随手画",    @"splines", nil },
+        { @"直线段",  @"line", nil }, 
         { @"矩形",    @"rect", nil },
-        { @"正方形",   @"square", nil },
+        { @"正方形",  @"square", nil },
         { @"椭圆",    @"ellipse", nil },
-        { @"圆",     @"circle", nil },
-        { @"三角形",   @"triangle", nil },
-        { @"多边形",   @"polygon", nil },
-        { @"四边形",   @"quadrangle", nil },
+        { @"圆",      @"circle", nil },
+        { @"三角形",  @"triangle", nil },
+        { @"菱形",    @"diamond", nil },
+        { @"多边形",  @"polygon", nil },
+        { @"四边形",  @"quadrangle", nil },
         { @"折线",    @"lines", nil },
-        { @"随手画",   @"splines", nil },
+        { @"平行四边形", @"parallelogram", nil },
         { @"网格",    @"grid", nil },
-        //{ @"写字",    nil, @selector(writeInBox:) },
+        { @"写字",    nil, @selector(writeInBox:) },
         { @"排图",    nil, @selector(addImageShape:) },
         { @"三点圆弧",  @"arc3p", nil },
         { @"圆心圆弧",  @"arc-cse", nil },
@@ -467,7 +480,6 @@ static const NSUInteger kDashLineTag    = 4;
     };
     const int count = sizeof(cmds) / sizeof(cmds[0]);
     
-    float x = 0, y = 0, w = 120, h = 40;
     for (int i = 0; i < count; i++) {
         UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(x, y, w, h)];
         [btn setTitle:cmds[i].caption forState: UIControlStateNormal];
@@ -475,6 +487,7 @@ static const NSUInteger kDashLineTag    = 4;
         [btn addTarget:self
                 action:cmds[i].action ? cmds[i].action : @selector(commandSelected:)
       forControlEvents:UIControlEventTouchUpInside];
+        btn.showsTouchWhenHighlighted = YES;
         
         [calloutView addSubview:btn];
         [btn release];
@@ -494,10 +507,44 @@ static const NSUInteger kDashLineTag    = 4;
     [btn.superview removeFromSuperview];
 }
 
-- (IBAction)addImageShape:(id)sender    // 排入图片
+- (IBAction)writeInBox:(id)sender       // 在放大区域内写字
 {
     UIButton* btn = (UIButton*)sender;
     [btn.superview removeFromSuperview];
+    
+    // 写字视图位于屏幕中央，宽高400px
+    CGRect viewrect = CGRectMake(0, 0, 400, 400);
+    viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
+    viewrect.origin.y = (self.view.bounds.size.height - viewrect.size.height) / 2;
+    
+    // 创建弹出视图
+    SCCalloutGraphView *calloutView = [[SCCalloutGraphView alloc]initWithFrame:viewrect];
+    [self.view addSubview:calloutView];
+    [calloutView release];
+    calloutView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+    calloutView.regenobj = self;
+    
+    // 在弹出视图上显示底图
+    UIImage *image = [UIImage imageNamed:@"charback.png"];
+    UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
+    [imageView setFrame:calloutView.bounds];
+    [calloutView addSubview:imageView];
+    [imageView release];
+    
+    // 在弹出视图上创建图形视图
+    [calloutView.graphc createSubGraphView:calloutView frame:calloutView.bounds
+                                    doc:_graphc.doc backgroundColor:nil];
+    [calloutView.graphc zoomTo:CGRectMake(0, 0, 10, 10)];       // 放缩到对应于页面区域
+    calloutView.graphc.commandName = "@draw";                   // 开始画曲线
+}
+
+- (IBAction)addImageShape:(id)sender    // 插入一个图片
+{
+    UIButton* btn = (UIButton*)sender;
+    [btn.superview removeFromSuperview];
+    
+    UIImage* image = [UIImage imageNamed:@"charback.png"];
+    [_graphc addImageShape:image filename:nil name:nil];
 }
 
 - (IBAction)lineWidthChange:(id)sender  // 线条宽度调整
@@ -519,7 +566,7 @@ static const NSUInteger kDashLineTag    = 4;
 - (IBAction)showPaletee:(id)sender  // 显示调色板
 {
     [self showUnlightButtons];
-	[colorbtn setImage:[UIImage imageNamed:@"colormix1"] forState:UIControlStateNormal]; // 图标加亮
+	[colorbtn setImage:[UIImage imageNamed:@"colormix1.png"] forState:UIControlStateNormal]; // 图标加亮
     
     CGRect viewrect = CGRectMake(0, 0, 300, 400);
     viewrect.origin.x = (self.view.bounds.size.width - viewrect.size.width) / 2;
@@ -536,7 +583,7 @@ static const NSUInteger kDashLineTag    = 4;
     imgRect.size.height = 120;
     imgRect = CGRectInset(imgRect, 2, 2);
     
-    UIImage *image = [_graphc createThumbnail:imgRect.size shapes:NULL];
+    UIImage *image = [_graphc createThumbnail:imgRect.size shapes:NULL invert:NO];
     if (image) {
         imgRect.size = image.size;
         UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
@@ -553,7 +600,7 @@ static const NSUInteger kDashLineTag    = 4;
     viewrect.size.height -= viewrect.origin.y;
     viewrect = CGRectInset(viewrect, 2, 2);
     UIView* gview = [calloutView.graphc createSubGraphView:calloutView frame:viewrect
-                                    shapes:_graphc.shapes backgroundColor:nil];
+                          doc:_graphc.doc backgroundColor:nil];
     gview.backgroundColor = [UIColor lightGrayColor];
     calloutView.graphc.commandName = "@draw";
 }
@@ -625,7 +672,7 @@ static const NSUInteger kDashLineTag    = 4;
 {
     [self showUnlightButtons];
     [backbtn setImage:[UIImage imageNamed:@"back1.png"] forState:UIControlStateNormal];
-    _graphc.commandName = "select";
+    _graphc.commandName = [_graphc isCommand:"select"] ? "" : "select";
 }
 
 - (IBAction)addTestShapes:(id)sender
@@ -640,7 +687,7 @@ static const NSUInteger kDashLineTag    = 4;
     param.curveCount = 10;
     param.randomLineStyle = true;
     
-    param.initShapes((MgShapes*)_graphc.shapes);
+    param.initShapes((MgShapes*)_graphc.currentShapes);
     [_graphc regen];
 #endif
 }

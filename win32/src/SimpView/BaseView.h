@@ -4,6 +4,7 @@
 
 #include "RandomShape.h"
 #include <graphwin.h>
+#include <mgshapedoc.h>
 
 class CBaseView : public CWnd
 {
@@ -12,11 +13,11 @@ public:
     CBaseView();
     virtual ~CBaseView();
 
-    MgShapes*       m_shapes;           // 图形数据
+    MgShapeDoc*     m_doc;              // 图形数据
     GiGraphWin*     m_graph;            // 图形系统对象
     MgShape*        m_shapeAdded;
 
-    MgShapes* shapes() { return m_shapes; }
+    MgShapes* shapes() { return m_doc->getCurrentShapes(); }
     void shapeAdded(MgShape* shape);
 
 // Overrides

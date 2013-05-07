@@ -31,8 +31,8 @@ float MgEllipse::getRadiusY() const
 
 void MgEllipse::setRadius(float rx, float ry)
 {
-    rx = fabs(rx);
-    ry = fabs(ry);
+    rx = fabsf(rx);
+    ry = fabsf(ry);
     if (ry < _MGZERO)
         ry = rx;
 
@@ -107,7 +107,7 @@ bool MgEllipse::_hitTestBox(const Box2d& rect) const
     return mgBeziersIntersectBox(rect, 13, _bzpts, true);
 }
 
-bool MgEllipse::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
+bool MgEllipse::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const
 {
     bool ret = false;
 
@@ -120,7 +120,7 @@ bool MgEllipse::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
         ret = gs.drawBeziers(&ctx, 13, _bzpts, true);
     }
 
-    return __super::_draw(mode, gs, ctx) || ret;
+    return __super::_draw(mode, gs, ctx, segment) || ret;
 }
 
 // MgArc
@@ -193,7 +193,7 @@ float MgArc::getSweepAngle() const
     while (endAngle2 < midAngle2)
         endAngle2 += _M_2PI;
 
-    if (fabs(startAngle2 + endAngle2 - 2 * midAngle2) < _M_PI_6
+    if (fabsf(startAngle2 + endAngle2 - 2 * midAngle2) < _M_PI_6
         && endAngle2 - startAngle2 < _M_2PI) {
         return endAngle2 - startAngle2;
     }
@@ -209,7 +209,7 @@ float MgArc::getSweepAngle() const
     while (endAngle2 > midAngle2)
         endAngle2 -= _M_2PI;
 
-    if (fabs(startAngle2 + endAngle2 - 2 * midAngle2) < _M_PI_6) {
+    if (fabsf(startAngle2 + endAngle2 - 2 * midAngle2) < _M_PI_6) {
         if (endAngle2 - startAngle2 > -_M_2PI)
             return endAngle2 - startAngle2;
         return mgToRange(endAngle2 - startAngle2, -_M_2PI, 0);
@@ -274,7 +274,7 @@ bool MgArc::setTanStartEnd(const Vector2d& startTan, const Point2d& start, const
         && setCenterRadius(center, radius, startAngle, sweepAngle);
 }
 
-bool MgArc::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
+bool MgArc::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const
 {
     bool ret = gs.drawArc(&ctx, getCenter(), getRadius(), 0, getStartAngle(), getSweepAngle());
     if (mode > 0) {
@@ -284,7 +284,7 @@ bool MgArc::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
         gs.drawLine(&ctxln, getStartPoint(), getStartPoint() + getStartTangent());
         gs.drawLine(&ctxln, getEndPoint(), getEndPoint() + getEndTangent());
     }
-    return __super::_draw(mode, gs, ctx) || ret;
+    return __super::_draw(mode, gs, ctx, segment) || ret;
 }
 
 void MgArc::_update()

@@ -41,6 +41,12 @@ public:
      */
     static void setScreenDpi(float dpi, float scale);
     
+    //! Return the screen's DPI.
+    static float screenDpi();
+    
+    //! Return the screen's scale.
+    static float screenScale();
+    
     //! Ready to draw shapes.
     /*!
         \param context drawing target.
@@ -56,6 +62,9 @@ public:
     //! End to draw shapes and output to the view.
     void endPaint(bool draw = true);
     
+    //! Set drawing with sketchy details.
+    void setFastMode(bool fast);
+    
     //! Create a bitmap inverted or get the original cached bitmap.
     CGImageRef cachedBitmap(bool invert = true);
     
@@ -64,7 +73,7 @@ public:
     
     //! Draw a image at the point.
     bool drawImage(CGImageRef image, float scale, 
-                   const Point2d& centerM, bool autoScale = false);
+                   const Point2d& centerM, bool useViewScale = false);
     
     //! Draw a image within the rectangle extent.
     bool drawImage(CGImageRef image, const Box2d& rectM);
@@ -101,6 +110,9 @@ public:
     virtual bool rawLineTo(float x, float y);
     virtual bool rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y);
     virtual bool rawClosePath();
+    
+    virtual void rawTextCenter(const char* text, float x, float y, float h);
+    virtual bool drawImage(const char* name, float xc, float yc, float w, float h, float angle);
 
 private:
     GiCanvasIos();

@@ -4,7 +4,7 @@
 
 #import "GiGraphView.h"
 #include <iosgraph.h>
-#include <mgshapes.h>
+#include <mgshapedoc.h>
 #include <mgshape.h>
 
 @interface GiMagnifierView ()
@@ -101,8 +101,8 @@
     }
 }
 
-- (MgShapes*)shapes {
-    return [_gview shapes];
+- (MgShapeDoc*)doc {
+    return [_gview doc];
 }
 
 - (GiTransform*)xform {
@@ -117,7 +117,7 @@
     return self;
 }
 
-- (void)setShapes:(MgShapes*)data {
+- (void)setDoc:(MgShapeDoc*)data {
 }
 
 - (void)setAnimating:(BOOL)animated {
@@ -155,16 +155,16 @@
     GiTransform& xf = _graph->xf;
     
     xf.setWndSize(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
-    if ([_gview shapes]) {
-        MgShapesLock locker([_gview shapes], MgShapesLock::ReadOnly);
+    if ([_gview doc]) {
+        MgShapesLock locker([_gview doc], MgShapesLock::ReadOnly);
         if (locker.locked()) {
-            _graph->xf.setModelTransform([_gview shapes]->modelTransform());
+            _graph->xf.setModelTransform([_gview doc]->modelTransform());
         }
     }
     
     if (_scale < 1 && !self.hidden && ![_gview isZooming]) {    // 缩略视图，动态放缩时不regen
         CGSize gsize = [_gview ownerView].bounds.size;
-        Box2d rcw(Box2d(gsize.width, gsize.height) * [_gview xform]->displayToWorld());
+        Box2d rcw(Box2d(0.f, 0.f, gsize.width, gsize.height) * [_gview xform]->displayToWorld());
         Box2d rcd(rcw * xf.worldToDisplay());       // 实际图形视图在本视图中的位置
         
         if (rcd.width() < self.bounds.size.width
@@ -185,15 +185,18 @@
 {
     [self updateTransform];
     
-    GiCanvasIos &cv = _graph->canvas;
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    GiCanvasIos &cv = *_graph->canvas;
     GiGraphics &gs = _graph->gs;
     bool nextDraw = false;
 
     if (!self.hidden && !self.superview.hidden &&
-        cv.beginPaint(UIGraphicsGetCurrentContext(), [self isZooming])) // 在当前画布上准备绘图
+        cv.beginPaint(context, [self isZooming]))   // 在当前画布上准备绘图
     {
+        CGContextSetInterpolationQuality(context, kCGInterpolationNone);
+        
         if (!cv.drawCachedBitmap()) {               // 显示上次保存的缓冲图
-            MgShapesLock locker([_gview shapes], MgShapesLock::ReadOnly, 0);    // 锁定读取
+            MgShapesLock locker([_gview doc], MgShapesLock::ReadOnly, 0);    // 锁定读取
             if (locker.locked()) {
                 [self draw:&gs];                    // 不行则重新显示所有图形
                 if (![self isZooming])              // 动态放缩时不保存显示内容
@@ -205,7 +208,7 @@
             }
         }
         else if (_shapeAdded) {                     // 在缓冲图上显示新的图形
-            MgShapesLock locker([_gview shapes], MgShapesLock::ReadOnly, 0);
+            MgShapesLock locker([_gview doc], MgShapesLock::ReadOnly, 0);
             if (locker.locked()) {
                 _shapeAdded->draw(0, gs);
                 cv.saveCachedBitmap();              // 更新缓冲图
@@ -242,8 +245,8 @@
 - (BOOL)draw:(GiGraphics*)gs
 {
     int count = 0;
-    if ([_gview shapes]) {
-        count = [_gview shapes]->draw(*gs);
+    if ([_gview doc]) {
+        count = [_gview doc]->draw(*gs);
     }
     return count > 0;
 }
@@ -303,7 +306,7 @@
             float newscale = _scale / sender.scale;
             _zooming = (sender.state == UIGestureRecognizerStateChanged);
             
-            if (_zooming && fabs(sender.scale - 1) < 1e-2) {
+            if (_zooming && fabsf(sender.scale - 1) < 1e-2) {
                 [self zoomPan:CGPointMake(_lastPt.x - pt.x, _lastPt.y - pt.y)];
             }
             else if (_zooming && (_scale > 1.f) == (newscale > 1.f)

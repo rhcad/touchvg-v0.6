@@ -3,12 +3,13 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #import "GiViewController.h"
-#include <mgshapest.h>
-#include <list>
 #import "GiCmdController.h"
 #import "GiGraphView.h"
 #include <string.h>
 #include <iosgraph.h>
+#include <mgbasicsp.h>
+#include <mgstorage.h>
+#include <list>
 
 @interface GiViewController(GestureRecognizer)
 
@@ -31,6 +32,27 @@
 
 @end
 
+#define MAXPATH 512
+typedef struct {
+    char filename[MAXPATH];
+    char name[64];
+    UIImage* image;
+} ImageItem;
+typedef std::list<ImageItem>::iterator ImageIt;
+
+static std::list<CGPoint>   s_ptsPending;
+
+@interface GiViewController(Image)
+- (void)clearImages;
+- (void)clearUnusedImages;
+- (UIImage *)getImageWithID:(const char*)name;
+- (std::list<ImageItem>*)images;
+- (BOOL)addImageShape_:(UIImage*)image filename:(NSString*)filename name:(NSString*)name;
+@end
+
+void mgGetBoundingViewBox(Box2d& box, const MgMotion* sender);
+static GiViewController* s_instance = nil;
+
 @implementation GiViewController
 
 @synthesize editDelegate;
@@ -38,15 +60,10 @@
 @synthesize magnifierView;
 @synthesize activeView = _activeView;
 @synthesize currentShapeFixedLength;
-@synthesize lineWidth;
-@synthesize strokeWidth;
-@synthesize lineColor;
-@synthesize fillColor;
-@synthesize lineAlpha;
-@synthesize fillAlpha;
-@synthesize lineStyle;
+@synthesize lineWidth, strokeWidth, lineColor, fillColor;
+@synthesize lineAlpha, fillAlpha, lineStyle;
 @synthesize commandName;
-@synthesize shapes;
+@synthesize doc, currentShapes;
 
 - (id)init
 {
@@ -55,11 +72,8 @@
         for (int iv = 0; iv < 3; iv++)                      // 末尾的nil用于结束占位
             _magViews[iv] = Nil;
         _cmdctl = [[GiCommandController alloc]initWithViews:_magViews];
-        _shapesCreated = NULL;
-        _shapesDynamic = NULL;
-        _dynChangeCount[0] = 0;
-        _dynChangeCount[1] = 0;
-        _recordIndex = 0;
+        _docCreated = NULL;
+        _images = new std::list<ImageItem>;
         
         for (int t = 0; t < 2; t++) {
             for (int i = 0; i < RECOGNIZER_COUNT; i++)
@@ -67,7 +81,7 @@
         }
         _gestureRecognizerUsed = YES;
         
-        BOOL iPad = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad);
+        BOOL iPad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
         GiCanvasIos::setScreenDpi(iPad ? 132 : 163, [UIScreen mainScreen].scale);
     }
     return self;
@@ -77,6 +91,9 @@
 {
     if ([self gview]) {
         _activeView = self.view;
+        
+        if (!s_instance)
+            s_instance = self;
         
         [[self gview] setDrawingDelegate:self];
         [self addGestureRecognizers:0 view:self.view];
@@ -94,14 +111,11 @@
 - (void)dealloc
 {
     [_cmdctl release];
+    _cmdctl = nil;
     
-    if (_shapesDynamic) {
-        ((MgShapes*)_shapesDynamic)->release();
-        _shapesDynamic = NULL;
-    }
-    if (_shapesCreated) {
-        ((MgShapes*)_shapesCreated)->release();
-        _shapesCreated = NULL;
+    if (_docCreated) {
+        ((MgShapeDoc*)_docCreated)->release();
+        _docCreated = NULL;
     }
     for (int t = 0; t < 2; t++) {
         for (int i = 0; i < RECOGNIZER_COUNT; i++) {
@@ -109,6 +123,17 @@
             _recognizers[t][i] = Nil;
         }
     }
+    if (s_instance == self) {
+        s_instance = nil;
+    }
+    if (_images) {
+        [self clearImages];
+        std::list<ImageItem>* imgs = [self images];
+        imgs->clear();
+        delete imgs;
+        _images = NULL;
+    }
+    
     [super dealloc];
 }
 
@@ -134,12 +159,12 @@
     [aview setDrawingDelegate:self];
     [parentView addSubview:aview];
     
-    if (_shapesCreated) {
-        aview.shapes = (MgShapes*)_shapesCreated;
+    if (_docCreated) {
+        aview.doc = (MgShapeDoc*)_docCreated;
     }
     else {
-        aview.shapes = new MgShapesT<std::list<MgShape*> >;
-        _shapesCreated = aview.shapes;
+        aview.doc = MgShapeDoc::create();
+        _docCreated = aview.doc;
     }
     
     [self viewDidLoad];
@@ -149,7 +174,7 @@
 }
 
 - (UIView*)createSubGraphView:(UIView*)parentView frame:(CGRect)frame
-                       shapes:(void*)sp backgroundColor:(UIColor*)bkColor
+                          doc:(void*)d backgroundColor:(UIColor*)bkColor
 {
     GiGraphView *aview = [[GiGraphView alloc] initWithFrame:frame];
     
@@ -170,11 +195,11 @@
     [aview setDrawingDelegate:self];
     [parentView addSubview:aview];
     
-    aview.shapes = (MgShapes*)(sp ? sp : _shapesCreated);
-    if (!aview.shapes)
+    aview.doc = (MgShapeDoc*)(d ? d : _docCreated);
+    if (!aview.doc)
     {
-        aview.shapes = new MgShapesT<std::list<MgShape*> >;
-        _shapesCreated = aview.shapes;
+        aview.doc = MgShapeDoc::create();
+        _docCreated = aview.doc;
     }
     
     [self viewDidLoad];
@@ -234,6 +259,7 @@
 - (void)clearCachedData
 {
     [[self gview] graph]->clearCachedBitmap();
+    [self clearImages];
 }
 
 - (CGImageRef)cachedBitmap:(BOOL)invert
@@ -242,27 +268,27 @@
     return [aview cachedBitmap:invert];
 }
 
-- (UIImage *)createThumbnail:(CGSize)size shapes:(void*)mgstorage
+- (UIImage *)createThumbnail:(CGSize)size shapes:(void*)mgstorage invert:(BOOL)invert
 {
-    MgShapes *sp = NULL;
+    MgShapeDoc *sp = NULL;
     GiGraphIos graph;
     UIImage *image = nil;
     Box2d rectW;
     
     if (mgstorage) {
-        sp = new MgShapesT<std::list<MgShape*> >;
+        sp = MgShapeDoc::create();
         if (!sp->load((MgStorage*)mgstorage)) {
             return image;
         }
         graph.xf.setModelTransform(sp->modelTransform());
-        rectW = sp->getZoomRectW();
+        rectW = sp->getPageRectW();
         rectW = rectW.isEmpty() ? sp->getExtent() * sp->modelTransform() : rectW;
     }
     else {
         GiGraphView *aview = (GiGraphView *)self.view;
-        sp = [aview shapes];
+        sp = [aview doc];
         graph.xf.setModelTransform(sp->modelTransform());
-        rectW = sp->getZoomRectW();
+        rectW = sp->getPageRectW();
         if (rectW.isEmpty()) {
             graph.xf.setModelTransform([aview xform]->modelToWorld());
             rectW = [aview xform]->getWndRectW();
@@ -281,21 +307,29 @@
     else
         size.height = rectW.height() / rectW.width() * size.width;
     
-    graph.xf.setWndSize(mgRound(size.width), mgRound(size.height));
+    int w = mgRound(size.width);
+    int h = mgRound(size.height);
+    while (w > 1024 || h > 1024) {
+        w = w * 4 / 5;
+        h = h * 4 / 5;
+    }
+    graph.xf.setWndSize(w, h);
     graph.xf.zoomTo(rectW);
     
-    if (graph.canvas.beginPaintBuffered(false, false)) {
+    if (graph.canvas->beginPaintBuffered(false, false)) {
         sp->draw(graph.gs);
         
-        graph.canvas.saveCachedBitmap();
-        graph.canvas.endPaint();
+        graph.canvas->saveCachedBitmap();
+        graph.canvas->endPaint();
     }
     
-    CGImageRef cgimage = graph.canvas.cachedBitmap(true);
+    CGImageRef cgimage = graph.canvas->cachedBitmap(invert);
     image = [[UIImage alloc]initWithCGImage:cgimage
                                       scale:1 //[UIScreen mainScreen].scale
                                 orientation:UIImageOrientationUp];
-    CGImageRelease(cgimage);
+    if (invert) {
+        CGImageRelease(cgimage);
+    }
     
     if (mgstorage && sp) {
         sp->release();
@@ -310,168 +344,44 @@
 
 - (NSUInteger)getShapeCount
 {
-    return [[self gview] shapes]->getShapeCount();
+    return [[self gview] doc]->getShapeCount();
 }
 
 - (void)removeShapes
 {
-    MgShapesLock locker([[self gview] shapes], MgShapesLock::Remove);
-    [[self gview] shapes]->clear();
+    [self setCommandName:""];   // 取消当前命令
+    
+    MgShapesLock locker([[self gview] doc], MgShapesLock::Remove);
+    [[self gview] doc]->clear();
     [self regen];
     
-    // 清除播放图形列表
-    GiGraphView *gview = (GiGraphView *)self.view;
-    [gview getPlayShapes:YES];
-    [self setDynamicShapes:NULL];
+    [self clearImages];
 }
 
 - (BOOL)loadShapes:(void*)mgstorage
 {
-    MgShapes* sp = [[self gview] shapes];
+    const char* oldcmd = [self commandName];
+    [self setCommandName:""];
+    
+    MgShapeDoc* sp = [[self gview] doc];
     MgShapesLock locker(sp, MgShapesLock::Load);
     BOOL ret = (locker.locked() && mgstorage
                 && sp->load((MgStorage*)mgstorage));
     [self regen];
+    [self setCommandName:oldcmd];
     
     return ret;
 }
 
 - (BOOL)saveShapes:(void*)mgstorage
 {
-    MgShapesLock locker([[self gview] shapes], MgShapesLock::ReadOnly);
+    MgShapesLock locker([[self gview] doc], MgShapesLock::ReadOnly);
     bool ret = locker.locked() && mgstorage;
     
     if (ret) {
-        ret = locker.shapes->save((MgStorage*)mgstorage);
+        ret = locker.doc->save((MgStorage*)mgstorage);
         locker.resetEditFlags();
-    }
-    
-    return ret;
-}
-
-- (BOOL)record:(void*)mgstorage
-{
-    MgStorage* s = (MgStorage*)mgstorage;
-    MgShapesLock locker([[self gview] shapes], MgShapesLock::ReadOnly);
-    bool ret = locker.locked() && mgstorage;
-    
-    if (ret) {
-        GiGraphView *gview = (GiGraphView *)self.view;
-        [gview getPlayShapes:YES];                      // 清除播放图形列表
-        
-        int mode = locker.getEditFlags();               // 修改标志
-        bool addOnly = (MgShapesLock::Add == mode);
-        
-        s->writeNode("record", -1, false);
-        s->writeInt32("mode", mode);
-        
-        ret = locker.shapes->save(s, addOnly ? _recordIndex : 0);   // 增量保存
-        s->writeNode("record", -1, true);
-        
-        if (!addOnly) {
-            _recordIndex = locker.shapes->getShapeCount();  // 下次新加图形时的序号
-        }
-        locker.resetEditFlags();                            // 清除修改标志，表示已录屏
-    }
-    
-    return ret;
-}
-
-- (BOOL)playback:(void*)mgstorage
-{
-    MgStorage* s = (MgStorage*)mgstorage;
-    GiGraphView *gview = (GiGraphView *)self.view;
-    MgShapes* sp = [gview getPlayShapes:!s];            // 播放图形列表，自动创建或删除
-    MgShapesLock locker(sp, MgShapesLock::Edit);        // 锁定改写播放图形列表
-    BOOL ret = !sp || locker.locked();                  // 删除或锁定成功
-    
-    if (locker.locked() && s->readNode("record", -1, false))
-    {            
-        int mode = s->readInt32("mode", 0);             // 录制的标记
-        bool addOnly = (MgShapesLock::Add == mode);
-        UInt32 oldCount = sp->getShapeCount();          // 原来的图形数
-        
-        ret = sp->load(s, addOnly);                     // 增量播放
-        s->readNode("record", -1, true);
-        
-        if (!addOnly || oldCount + 1 != sp->getShapeCount()) {
-            [self regen];
-        }
-        else {                                              // 是增量录制最后一个图形
-            [[self gview] shapeAdded:sp->getLastShape()];   // 仅添加显示一个图形
-        }
-    }
-    
-    return ret;
-}
-
-- (NSUInteger)getChangeCount
-{
-    return _dynChangeCount[0];
-}
-
-- (NSUInteger)getRedrawCount
-{
-    return _dynChangeCount[1];
-}
-
-- (BOOL)getDynamicShapes:(void*)mgstorage
-{
-    MgDynShapeLock locker(false);       // 锁定以便读取, 临界区是动态图形
-    bool ret = locker.locked();
-    
-    if (ret) {
-        GiCommandController* cmd = (GiCommandController*)_cmdctl;
-        GiGraphView *gview = (GiGraphView *)self.view;
-        MgShapesT<std::list<MgShape*> > sp(false);
-        
-        [cmd getDynamicShapes:&sp];         // 从当前命令取动态图形
-        
-        if (sp.getShapeCount() == 0) {
-            MgShapesLock locker2([[self gview] shapes], MgShapesLock::ReadOnly);
-            if (gview.shapeAdded && locker2.locked()
-                && locker2.getEditFlags() == MgShapesLock::Add) {
-                sp.addShape(*gview.shapeAdded);
-            }
-            else {
-                return NO;
-            }
-        }
-        ret = sp.save((MgStorage*)mgstorage);  // 存到mgstorage
-        
-        [self setDynamicShapes:NULL];   // 录时取消动态播放
-    }
-    
-    return ret;
-}
-
-- (BOOL)setDynamicShapes:(void*)mgstorage
-{
-    BOOL ret = YES;
-    
-    if (!mgstorage) {
-        if (_shapesDynamic) {
-            MgShapesLock locker((MgShapes*)_shapesDynamic, MgShapesLock::Edit);
-            if (locker.shapes) {
-                locker.shapes->release();
-                locker.shapes = NULL;
-            }
-            _shapesDynamic = NULL;
-        }
-    }
-    else {
-        if (!_shapesDynamic) {
-            _shapesDynamic = new MgShapesT<std::list<MgShape*> >(false);
-        }
-        
-        // 优先写到最旧的临时图形列表，不能锁定则换另一个临时图形列表
-        MgShapesLock locker((MgShapes*)_shapesDynamic, MgShapesLock::Edit);
-        
-        ret = locker.locked();
-        if (ret) {
-            MgShapes* sp = (MgShapes*)_shapesDynamic;
-            ret = sp->load((MgStorage*)mgstorage);          // 写到临时图形列表
-        }
+        [self clearUnusedImages];
     }
     
     return ret;
@@ -479,16 +389,12 @@
 
 - (void)afterShapeChanged
 {
-    while (_dynChangeCount[0] < [[self gview] shapes]->getChangeCount()) {
-        giInterlockedIncrement(_dynChangeCount);
-    }
 }
 
 - (id)dynDraw:(id)sender
 {
     GiGraphics* gs = NULL;
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
-    GiGraphView *gview = (GiGraphView *)self.view;
     
     if ([sender conformsToProtocol:@protocol(GiView)]) {
         id<GiView> aview = (id<GiView>)sender;
@@ -504,38 +410,6 @@
     }
     
     if (gs && gs->isDrawing()) {
-        // 优先取最新的临时图形列表，不能锁定则换另一个临时图形列表
-        MgShapesLock locker((MgShapes*)_shapesDynamic, MgShapesLock::ReadOnly);
-        
-        if (locker.locked()) {
-            if (locker.shapes->getShapeCount() != 1) {
-                locker.shapes->draw(*gs);
-            }
-            else {
-                void *it;
-                MgShape *tmpShape = locker.shapes->getFirstShape(it);
-                MgShape *added = [gview shapeAdded];
-                
-                if (tmpShape && added
-                    && tmpShape->shape()->getExtent() == added->shape()->getExtent()
-                    && tmpShape->shape()->getPointCount() == added->shape()->getPointCount()) {
-                    locker.shapes->clear();
-                }
-                else {
-                    locker.shapes->draw(*gs);
-                }
-            }
-        }
-        else if (_shapesDynamic) {                      // 冲突则下次再显示
-            sender = nil;
-        }
-    }
-    if (gs && gs->isDrawing()) {
-        // 延迟到显示完成才检查动态图形是否已改变，自增一让外界知道已改变
-        if ([cmd isDynamicChanged:YES]) {
-            giInterlockedIncrement(_dynChangeCount + 1);
-        }
-        
         [cmd dynDraw: gs];
         
         if ((_activeView != self.view || !cmd.dragging)
@@ -554,8 +428,12 @@
     return sender;
 }
 
-- (void*)shapes {
-    return [[self gview] shapes];
+- (void*)doc {
+    return [[self gview] doc];
+}
+
+- (void*)currentShapes {
+    return [[self gview] doc]->getCurrentShapes();
 }
 
 - (BOOL)isCommand:(const char*)cmdname
@@ -572,11 +450,6 @@
 - (void)setCommandName:(const char*)name {
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     cmd.commandName = name;
-    
-    // 清除播放图形列表
-    GiGraphView *gview = (GiGraphView *)self.view;
-    [gview getPlayShapes:YES];
-    [self setDynamicShapes:NULL];
 }
 
 - (NSObject*)editDelegate
@@ -699,6 +572,32 @@
     return [cmd dynamicChangeEnded:apply];
 }
 
+- (CGRect)getBoundingViewBox
+{
+    Box2d box;
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    mgGetBoundingViewBox(box, cmd.motion);
+    return CGRectMake(box.xmin, box.ymin, box.width(), box.height());
+}
+
+- (BOOL)addImageShape:(UIImage*)image filename:(NSString*)filename name:(NSString*)name
+{
+    if (s_instance != self)
+        s_instance = self;
+    return [self addImageShape_:image filename:filename name:name];
+}
+
+- (NSString*)getImageShapePath:(NSString*)name
+{
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, 
+                                                          NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *filename = [NSString stringWithFormat:@"%@/%@", path, name];
+    
+    return filename;
+}
+
+- (void)imageShapeDeleted:(NSString*)name {}
+
 #pragma mark - View motion
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -790,6 +689,7 @@
     else if (gestureRecognizer == _recognizers[0][kPanGesture]) {
         allow = [self oneFingerPan:(UIPanGestureRecognizer *)gestureRecognizer];
     }
+    
     if (!allow) {
         return allow;
     }
@@ -977,9 +877,22 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     }
     GiCommandController* cmd = (GiCommandController*)_cmdctl;
     [cmd touchesBegan:point view:touch.view count:count];
+    s_ptsPending.clear();
     
     if (touch.view == self.view) {
         [super touchesBegan:touches withEvent:event];
+    }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (_gestureState != UIGestureRecognizerStateChanged && [touches count] == 1) {
+        UITouch *touch = [touches anyObject];
+        CGPoint point = [touch locationInView:touch.view];
+        s_ptsPending.push_back(point);
+    }
+    else {
+        s_ptsPending.clear();
     }
 }
 
@@ -989,6 +902,20 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     
     _timeBegan = 0;
     
+    if (!s_ptsPending.empty() && touch) {
+        MgDynShapeLock locker;
+        GiCommandController* cmd = (GiCommandController*)_cmdctl;
+        std::list<CGPoint>::iterator it = s_ptsPending.begin();
+        CGPoint pt;
+        
+        for (; it != s_ptsPending.end(); ++it) {
+            pt = *it;
+            [cmd touchesMoved:pt view:touch.view count:1];
+        }
+        [cmd touchesEnded:pt view:touch.view count:1];
+    }
+    s_ptsPending.clear();
+    
     if (touch.view == self.view) {
         [super touchesEnded:touches withEvent:event];
     }
@@ -996,11 +923,24 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
     UITouch *touch = [touches anyObject];
     
-    if (touch) {            // oneFingerOneTap不直接处理是为了检测是点击还是短划动
+    if (!s_ptsPending.empty() && touch
+        && _gestureState > UIGestureRecognizerStateChanged) {
+        MgDynShapeLock locker;
+        std::list<CGPoint>::iterator it = s_ptsPending.begin();
+        CGPoint pt;
+        
+        for (; it != s_ptsPending.end(); ++it) {
+            pt = *it;
+            [cmd touchesMoved:pt view:touch.view count:1];
+        }
+        [cmd touchesEnded:pt view:touch.view count:1];
+        s_ptsPending.clear();
+    }
+    else if (touch) {           // oneFingerOneTap不直接处理是为了检测是点击还是短划动
         CGPoint point = [touch locationInView:touch.view];
-        GiCommandController* cmd = (GiCommandController*)_cmdctl;
         if ([cmd delayTap:point view:touch.view]) { // 看是否有点击待处理
             [self updateMagnifierCenter:nil];
         }
@@ -1018,11 +958,12 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
         sender.cancelsTouchesInView = YES;
         return NO;
     }
-    if (MgShapesLock::lockedForRead([[self gview] shapes])      // 如果正在录屏复制
+    _gestureState = sender.state;
+    if (MgShapesLock::lockedForRead([[self gview] doc])      // 如果正在录屏复制
         || MgDynShapeLock::lockedForRead()) {
         if (sender.state == UIGestureRecognizerStateChanged)    // 触摸移动则忽略本次
             return NO;
-        MgShapesLock([[self gview] shapes], MgShapesLock::Unknown);     // 等待
+        MgShapesLock([[self gview] doc], MgShapesLock::Unknown);     // 等待
         MgDynShapeLock();                                       // 等待录屏复制完成
     }
     if (sender.state == UIGestureRecognizerStateBegan
@@ -1101,6 +1042,17 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     if (![self gestureCheck:sender])
         return NO;
     
+    if (!s_ptsPending.empty() && _gestureState == UIGestureRecognizerStateChanged) {
+        MgDynShapeLock locker;
+        GiCommandController* cmd = (GiCommandController*)_cmdctl;
+        std::list<CGPoint>::iterator it = s_ptsPending.begin();
+        
+        for (; it != s_ptsPending.end(); ++it) {
+            [cmd touchesMoved:*it view:sender.view count:1];
+        }
+        s_ptsPending.clear();
+    }
+    
     BOOL ret = [[self getCommand:@selector(oneFingerPan:)] oneFingerPan:sender];
     if (!ret && sender.view == self.view) {
         ret = [[self motionView:@selector(oneFingerPan:)] oneFingerPan:sender];
@@ -1119,6 +1071,7 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
         && sender.view == self.view) {
         [[self motionView:@selector(oneFingerOneTap:)] oneFingerOneTap:sender];
     }
+    
     [self updateMagnifierCenter:sender];
 }
 
@@ -1176,6 +1129,147 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
     else {
         [zview setPointW:[cmd getPointW]];
     }
+}
+
+@end
+
+MgShape* mgAddImageShape(const MgMotion* sender, const char* name, float width, float height);
+
+CGImageRef getImageInShape(const char* name)
+{
+    UIImage *image = [s_instance getImageWithID:name];
+    return image ? [image CGImage] : NULL;
+}
+
+@implementation GiViewController(Image)
+
+- (std::list<ImageItem>*)images
+{
+    return (std::list<ImageItem>*)_images;
+}
+
+- (void)clearImages
+{
+    std::list<ImageItem>* imgs = [self images];
+    for (ImageIt it = imgs->begin(); it != imgs->end(); ++it) {
+        if (it->image) {
+            [it->image release];
+            it->image = nil;
+            if (_cmdctl) {
+                [self imageShapeDeleted:[NSString stringWithUTF8String:it->name]];
+            }
+        }
+    }
+}
+
+- (void)clearUnusedImages
+{
+    MgShapes* sp = [[self gview] doc]->getCurrentShapes();
+    std::list<ImageItem>* imgs = [self images];
+    
+    for (ImageIt it = imgs->begin(); it != imgs->end(); ++it) {
+        if (it->image && !MgImageShape::findShapeByImageID(sp, it->name)) {
+            [it->image release];
+            it->image = nil;
+            [self imageShapeDeleted:[NSString stringWithUTF8String:it->name]];
+        }
+    }
+}
+
+- (UIImage *)getImageWithID:(const char*)name
+{
+    int len1 = strlen(name);
+    UIImage *image = nil;
+    
+    for (ImageIt it = [self images]->begin(); it != [self images]->end(); ++it) {
+        int len2 = strlen(it->filename);
+        int len = std::min(len1, len2);
+        
+        if (strcmp(name, it->filename + len2 - len) == 0) {
+            if (!it->image) {
+                NSString* filename = nil;
+                if (s_instance) {
+                    filename = [NSString stringWithUTF8String:name];
+                    filename = [s_instance getImageShapePath:filename];
+                }
+                if (filename && [filename length] > len1) {
+                    len = std::min((int)[filename length], MAXPATH-1);
+                    strncpy(it->filename, [filename UTF8String] + [filename length] - len, MAXPATH);
+                    it->filename[MAXPATH - 1] = 0;
+                }
+                filename = [NSString stringWithUTF8String:it->filename];
+                it->image = [[UIImage alloc]initWithContentsOfFile:filename];
+            }
+            image = it->image;
+            break;
+        }
+    }
+    if (!image && s_instance) {
+        NSString* filename = [NSString stringWithUTF8String:name];
+        filename = [s_instance getImageShapePath:filename];
+        
+        if (filename && [filename length] > len1) {
+            ImageItem item;
+            
+            item.image = [[UIImage alloc]initWithContentsOfFile:filename];
+            if (item.image == nil || item.image.size.width < 1) {
+                [item.image release];
+                return nil;
+            }
+            
+            strncpy(item.name, name, sizeof(item.name));
+            item.name[sizeof(item.name) - 1] = 0;
+            
+            strncpy(item.filename, [filename UTF8String], sizeof(item.filename));
+            item.filename[sizeof(item.filename) - 1] = 0;
+            
+            [self images]->push_back(item);
+            image = item.image;
+        }
+    }
+    
+    return image;
+}
+
+- (BOOL)addImageShape_:(UIImage*)image filename:(NSString*)filename name:(NSString*)name
+{
+    if (!filename)
+        filename = [NSString stringWithFormat:@"%ld",[self images]->size()];
+    if (!name)
+        name = filename;
+    
+    const char* sname = strrchr([name UTF8String], '/');
+    sname = sname ? sname + 1 : [name UTF8String];
+    
+    ImageItem item;
+    UIImage* imageOld = [self getImageWithID:sname];
+    GiCommandController* cmd = (GiCommandController*)_cmdctl;
+    
+    if (image || !imageOld) {
+        if (image) {
+            item.image = image;
+            [image retain];
+        }
+        else {
+            item.image = [[UIImage alloc]initWithContentsOfFile:filename];
+            if (item.image && item.image.size.width < 1) {
+                [item.image release];
+                return nil;
+            }
+            image = item.image;
+        }
+        
+        strncpy(item.name, sname, sizeof(item.name));
+        item.name[sizeof(item.name) - 1] = 0;
+        
+        strncpy(item.filename, [filename UTF8String], sizeof(item.filename));
+        item.filename[sizeof(item.filename) - 1] = 0;
+        
+        [self images]->push_back(item);
+    }
+    
+    image = image ? image : imageOld;
+    return image && mgAddImageShape(cmd.motion, sname, image.size.width, image.size.height);
 }
 
 @end

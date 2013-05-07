@@ -37,6 +37,11 @@ static CDrawShapeView* s_pNewView = NULL;
 
 BOOL CSimpViewApp::InitInstance()
 {
+    CWinApp::InitInstance();
+#ifdef afxAmbientActCtx
+    afxAmbientActCtx = FALSE;           // 避免AfxDeactivateActCtx异常
+#endif
+
     RandomParam::init();
 
     CMDIFrameWnd* pFrame = new CMainFrame;
@@ -171,8 +176,8 @@ void CSimpViewApp::OnAppAbout()
 
 void CSimpViewApp::OnFileOpen()
 {
-    CFileDialog dlg(TRUE, L".vg", NULL, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST,
-        L"Shape files (*.vg)|*.vg||", m_pMainWnd);
+    CFileDialog dlg(TRUE, _T(".vg"), NULL, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST,
+        _T("Shape files (*.vg)|*.vg||"), m_pMainWnd);
     if (dlg.DoModal() != IDOK) {
         return;
     }
@@ -187,18 +192,16 @@ void CSimpViewApp::OnFileOpen()
     file.Read(&content[0], content.size());
 
     RandomParam param;
-
     param.lineCount = 0;
     param.arcCount = 0;
     param.curveCount = 0;
 
     s_pNewView = new CDrawShapeView(param);
-    s_pNewView->m_filename = dlg.GetPathName();
 
     MgJsonStorage s;
-    if (!s_pNewView->shapes()->load(s.storageForRead(&content[0])))
+    if (!s_pNewView->Load(dlg.GetPathName(), s.storageForRead(&content[0])))
     {
-        AfxMessageBox(L"读取文件内容出错。");
+        AfxMessageBox(_T("读取文件内容出错。"));
     }
     else
     {

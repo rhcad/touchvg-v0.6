@@ -143,7 +143,7 @@ GEOMAPI float mgRoundReal(float value, int decimal)
 {
     if (decimal < -6) decimal = -6;
     else if (decimal > 7) decimal = 7;
-    float e10n = (float)pow(10.0, decimal);
-    float l = floor(e10n * value + 0.5f);
+    float e10n = powf(10.f, (float)decimal);
+    float l = floorf(e10n * value + 0.5f);
     return static_cast<float>(l / e10n);
 }

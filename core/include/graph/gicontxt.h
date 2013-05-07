@@ -90,7 +90,7 @@ public:
             if (mask & 0x02) {
                 m_lineColor.a = src.m_lineColor.a;
                 if (m_autoFillColor) {
-                    m_fillColor.a = m_lineColor.a / 3;
+                    m_fillColor.a = (unsigned char)(m_lineColor.a / 3);
                 }
             }
             if (mask & 0x04) {
@@ -106,7 +106,7 @@ public:
                 m_autoFillColor = src.m_autoFillColor;
             }
             if (mask & 0x20) {
-                m_fillColor.a = src.m_autoFillColor ? src.m_lineColor.a / 3 : src.m_fillColor.a;
+                m_fillColor.a = src.m_autoFillColor ? (unsigned char)(src.m_lineColor.a / 3) : src.m_fillColor.a;
                 m_autoFillColor = src.m_autoFillColor;
             }
         }
@@ -214,7 +214,11 @@ public:
     //! 设置线条颜色
     void setLineColor(int r, int g, int b)
     {
-        setLineColor(GiColor((UInt8)r, (UInt8)g, (UInt8)b));
+        m_lineColor.set((unsigned char)r, (unsigned char)g, (unsigned char)b);
+        if (m_autoFillColor) {
+            m_fillColor = m_lineColor;
+            m_fillColor.a /= 3;
+        }
     }
 
     //! 返回线条ARGB颜色
@@ -241,7 +245,7 @@ public:
     {
         m_lineColor.a = (unsigned char)alpha;
         if (m_autoFillColor) {
-            m_fillColor.a = m_lineColor.a / 3;
+            m_fillColor.a = (unsigned char)(m_lineColor.a / 3);
         }
     }
     
@@ -274,7 +278,9 @@ public:
     //! 设置填充颜色
     void setFillColor(int r, int g, int b)
     {
-        m_fillColor.set((UInt8)r, (UInt8)g, (UInt8)b);
+        if (m_fillColor.a < 1)
+            m_fillColor.a = m_lineColor.a;
+        m_fillColor.set((unsigned char)r, (unsigned char)g, (unsigned char)b);
         m_autoFillColor = false;
     }
 
@@ -299,6 +305,8 @@ public:
     //! 设置填充透明度，0到255，0表示全透明，255表示不透明
     void setFillAlpha(int alpha)
     {
+        if (m_fillColor.a == 0 && alpha > 0)
+            m_fillColor = m_lineColor;
         m_fillColor.a = (unsigned char)alpha;
     }
     

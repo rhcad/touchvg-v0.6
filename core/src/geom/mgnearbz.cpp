@@ -3,12 +3,13 @@
 // License: LGPL, https://github.com/rhcad/touchvg
 
 #include "mgcurv.h"
+#include "mgdblpt.h"
 
 static const int DEGREE     = 3;    // Cubic Bezier curve
 static const int W_DEGREE   = 5;    // Degree of eqn to find roots of
 static const int MAXDEPTH   = 64;   // Maximum depth for recursion
 
-static inline int SGN(float a) { return a<0 ? -1 : 1; }
+static inline int SGN(double a) { return a<0 ? -1 : 1; }
 
 // ConvertToBezierForm :
 //      Given a point and a Bezier curve, generate a 5th-degree
@@ -19,17 +20,17 @@ static inline int SGN(float a) { return a<0 ? -1 : 1; }
 //      pts: The control points
 //      w: Ctl pts of 5th-degree curve, [W_DEGREE+1]
 //
-static void ConvertToBezierForm(const Point2d& pt, const Point2d* pts, Point2d* w)
+static void ConvertToBezierForm(const point_t& pt, const point_t* pts, point_t* w)
 {
     int     i, j, k, m, n, ub, lb;
     int     row, column;            // Table indices
-    Vector2d    c[DEGREE+1];        // pts(i)'s - pt
-    Vector2d    d[DEGREE];          // pts(i+1) - pts(i)
-    float  cdTable[3][4];           // Dot product of c, d
-    const float z[3][4] = {         // Precomputed "z" for cubics
-        {1.0f, 0.6f, 0.3f, 0.1f},
-        {0.4f, 0.6f, 0.6f, 0.4f},
-        {0.1f, 0.3f, 0.6f, 1.0f},
+    point_t c[DEGREE+1];            // pts(i)'s - pt
+    point_t d[DEGREE];              // pts(i+1) - pts(i)
+    double  cdTable[3][4];          // Dot product of c, d
+    const double z[3][4] = {        // Precomputed "z" for cubics
+        {1.0, 0.6, 0.3, 0.1},
+        {0.4, 0.6, 0.6, 0.4},
+        {0.1, 0.3, 0.6, 1.0},
     };
 
 
@@ -41,7 +42,7 @@ static void ConvertToBezierForm(const Point2d& pt, const Point2d* pts, Point2d* 
     // Determine the d's -- these are vectors created by subtracting
     // each control point from the next
     for (i = 0; i <= DEGREE - 1; i++) {
-        d[i] = 3.f * (pts[i+1] - pts[i]);
+        d[i] = 3.0 * (pts[i+1] - pts[i]);
     }
 
     // Create the c,d table -- this is a table of dot products of the
@@ -55,8 +56,8 @@ static void ConvertToBezierForm(const Point2d& pt, const Point2d* pts, Point2d* 
     // Now, apply the z's to the dot products, on the skew diagonal
     // Also, set up the x-values, making these "points"
     for (i = 0; i <= W_DEGREE; i++) {
-        w[i].y = 0.f;
-        w[i].x = static_cast<float>(i) / W_DEGREE;
+        w[i].y = 0.0;
+        w[i].x = static_cast<double>(i) / W_DEGREE;
     }
 
     n = DEGREE;
@@ -78,7 +79,7 @@ static void ConvertToBezierForm(const Point2d& pt, const Point2d* pts, Point2d* 
 //      pts: Control pts
 //      degree: Degree of bezier curve
 //
-static int CrossingCount(const Point2d* pts, int degree)
+static int CrossingCount(const point_t* pts, int degree)
 {
     int     i;
     int     n_crossings = 0;    // Number of zero-crossings
@@ -100,24 +101,24 @@ static int CrossingCount(const Point2d* pts, int degree)
 //      pts: Control pts
 //      degree: Degree of bezier curve
 //
-static int ControlPolygonFlatEnough(const Point2d* pts, int degree)
+static int ControlPolygonFlatEnough(const point_t* pts, int degree)
 {
     int     i;                      // Index variable
-    float  distance[W_DEGREE+1];   // Distances from pts to line
-    float  max_distance_above;     // maximum of these
-    float  max_distance_below;
-    float  error;                  // Precision of root
-    float  intercept_1,
+    double  distance[W_DEGREE+1];   // Distances from pts to line
+    double  max_distance_above;     // maximum of these
+    double  max_distance_below;
+    double  error;                  // Precision of root
+    double  intercept_1,
         intercept_2,
         left_intercept,
         right_intercept;
-    float  a, b, c;    // Coefficients of implicit eqn for line from pts[0]-pts[deg]
+    double  a, b, c;    // Coefficients of implicit eqn for line from pts[0]-pts[deg]
 
     // Find the  perpendicular distance
     // from each interior control point to
     // line connecting pts[0] and pts[degree]
     {
-        float  abSquared;
+        double  abSquared;
 
         // Derive the implicit equation for line connecting first *'
         // and last control points
@@ -155,8 +156,8 @@ static int ControlPolygonFlatEnough(const Point2d* pts, int degree)
     }
 
     {
-        float  det, dInv;
-        float  a1, b1, c1, a2, b2, c2;
+        double  det, dInv;
+        double  a1, b1, c1, a2, b2, c2;
 
         // Implicit equation for zero line
         a1 = 0.0;
@@ -188,7 +189,7 @@ static int ControlPolygonFlatEnough(const Point2d* pts, int degree)
     left_intercept = mgMin(intercept_1, intercept_2);
     right_intercept = mgMax(intercept_1, intercept_2);
 
-    error = 0.5f * (right_intercept-left_intercept);
+    error = 0.5 * (right_intercept-left_intercept);
     if (error < _MGZERO) {
         return 1;
     }
@@ -206,12 +207,12 @@ static int ControlPolygonFlatEnough(const Point2d* pts, int degree)
 //      pts: Control points
 //      degree: Degree of curve
 //
-static float ComputeXIntercept(const Point2d* pts, int degree)
+static double ComputeXIntercept(const point_t* pts, int degree)
 {
-    float  XLK, YLK, XNM, YNM, XMK, YMK;
-    float  det, detInv;
-    float  S;
-    float  X;
+    double  XLK, YLK, XNM, YNM, XMK, YMK;
+    double  det, detInv;
+    double  S;
+    double  X;
 
     XLK = 1;
     YLK = 0;
@@ -243,11 +244,11 @@ static float ComputeXIntercept(const Point2d* pts, int degree)
 //      Left: output left half ctl pts
 //      Right: output right half ctl pts
 //
-static Point2d BezierPoint(const Point2d* pts, int degree, float t, 
-                           Point2d* Left, Point2d* Right)
+static point_t BezierPoint(const point_t* pts, int degree, double t, 
+                           point_t* Left, point_t* Right)
 {
     int     i, j;       // Index variables
-    Point2d Vtemp[W_DEGREE+1][W_DEGREE+1];
+    point_t Vtemp[W_DEGREE+1][W_DEGREE+1];
 
 
     // Copy control points
@@ -289,15 +290,15 @@ static Point2d BezierPoint(const Point2d* pts, int degree, float t,
 //      t: output candidate t-values
 //      depth: The depth of the recursion
 //
-static int FindRoots(const Point2d* w, int degree, float* t, int depth)
+static int FindRoots(const point_t* w, int degree, double* t, int depth)
 {
     int i;
-    Point2d Left[W_DEGREE+1];   // New left and right
-    Point2d Right[W_DEGREE+1];  // control polygons
+    point_t Left[W_DEGREE+1];   // New left and right
+    point_t Right[W_DEGREE+1];  // control polygons
     int     left_count;         // Solution count from children
     int     right_count;
-    float  left_t[W_DEGREE+1]; // Solutions from kids
-    float  right_t[W_DEGREE+1];
+    double  left_t[W_DEGREE+1]; // Solutions from kids
+    double  right_t[W_DEGREE+1];
 
     switch (CrossingCount(w, degree))
     {
@@ -320,7 +321,7 @@ static int FindRoots(const Point2d* w, int degree, float* t, int depth)
     }
 
     // Otherwise, solve recursively after subdividing control polygon
-    BezierPoint(w, degree, 0.5f, Left, Right);
+    BezierPoint(w, degree, 0.5, Left, Right);
     left_count  = FindRoots(Left,  degree, left_t, depth+1);
     right_count = FindRoots(Right, degree, right_t, depth+1);
 
@@ -342,13 +343,12 @@ static int FindRoots(const Point2d* w, int degree, float* t, int depth)
 //      pts: Control points of cubic Bezier
 //      nearpt: output the point on the curve at that parameter value
 //
-GEOMAPI void mgNearestOnBezier(
-    const Point2d& pt, const Point2d* pts, Point2d& nearpt)
+static void NearestOnBezier(const point_t& pt, const point_t* pts, point_t& nearpt)
 {
-    Point2d w[W_DEGREE+1];          // Ctl pts for 5th-degree eqn
-    float  t_candidate[W_DEGREE];  // Possible roots
+    point_t w[W_DEGREE+1];          // Ctl pts for 5th-degree eqn
+    double  t_candidate[W_DEGREE];  // Possible roots
     int     n_solutions;            // Number of roots found
-    float  t;                      // Parameter value of closest pt
+    double  t;                      // Parameter value of closest pt
 
     // Convert problem to 5th-degree Bezier form
     ConvertToBezierForm(pt, pts, w);
@@ -358,20 +358,20 @@ GEOMAPI void mgNearestOnBezier(
 
     // Compare distances of pt to all candidates, and to t=0, and t=1
     {
-        float  dist, new_dist;
-        Point2d p;
+        double  dist, new_dist;
+        point_t p;
         int     i;
 
 
         // Check distance to beginning of curve, where t = 0
-        dist = (pt - pts[0]).lengthSqrd();
+        dist = (pt - pts[0]).lengthSquare();
         t = 0.0;
 
         // Find distances for candidate points
         for (i = 0; i < n_solutions; i++) {
             p = BezierPoint(pts, DEGREE, t_candidate[i],
-                (Point2d *)NULL, (Point2d *)NULL);
-            new_dist = (pt - p).lengthSqrd();
+                NULL, NULL);
+            new_dist = (pt - p).lengthSquare();
             if (new_dist < dist) {
                 dist = new_dist;
                 t = t_candidate[i];
@@ -379,7 +379,7 @@ GEOMAPI void mgNearestOnBezier(
         }
 
         // Finally, look at distance to end point, where t = 1.0
-        new_dist = (pt - pts[DEGREE]).lengthSqrd();
+        new_dist = (pt - pts[DEGREE]).lengthSquare();
         if (new_dist < dist) {
             dist = new_dist;
             t = 1.0;
@@ -388,5 +388,18 @@ GEOMAPI void mgNearestOnBezier(
 
     // Return the point on the curve at parameter value t
     // printf("t : %4.12f\n", t);
-    nearpt = (BezierPoint(pts, DEGREE, t, (Point2d *)NULL, (Point2d *)NULL));
+    nearpt = (BezierPoint(pts, DEGREE, t, NULL, NULL));
+}
+
+GEOMAPI float mgNearestOnBezier(
+    const Point2d& pt, const Point2d* pts, Point2d& nearpt)
+{
+    point_t nearpt2, pts2[4], pt2 = { pt.x, pt.y };
+    for (int i = 0; i < 4; i++) {
+        pts2[i].x = pts[i].x;
+        pts2[i].y = pts[i].y;
+    }
+    NearestOnBezier(pt2, pts2, nearpt2);
+    nearpt.set((float)nearpt2.x, (float)nearpt2.y);
+    return (float)nearpt2.distance(pt2);
 }

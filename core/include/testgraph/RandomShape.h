@@ -22,7 +22,7 @@ struct RandomParam
 
     static float RandF(float dMin, float dMax);
     static long RandInt(long nMin, long nMax);
-    static UInt8 RandUInt8(long nMin, long nMax);
+    static unsigned char RandUInt8(long nMin, long nMax);
 };
 
 #endif // _TEST_RANDOMSHAPE_H

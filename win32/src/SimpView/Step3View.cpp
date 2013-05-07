@@ -17,25 +17,33 @@ static char THIS_FILE[] = __FILE__;
 static const UINT WM_DELAY_LBUTTONUP = WM_USER + 101;
 
 static struct {
-    LPCWSTR caption;
+    LPCTSTR caption;
     LPCSTR  name;
 } s_cmds[] = {
-    { L"选择",      "select" },
-    { L"删除",      "erase" },
-    { L"直线段",    "line" },
-    { L"矩形",      "rect" },
-    { L"正方形",    "square" },
-    { L"椭圆",      "ellipse" },
-    { L"圆",        "circle" },
-    { L"三角形",    "triangle" },
-    { L"多边形",    "polygon" },
-    { L"四边形",    "quadrangle" },
-    { L"折线",      "lines" },
-    { L"随手画",    "splines" },
-    { L"网格",      "grid" },
-    { L"三点圆弧",  "arc3p" },
-    { L"圆心圆弧",  "arc-cse" },
-    { L"切线圆弧",  "arc-tan" },
+    { _T("选择"),      "select" },
+    { _T("删除"),      "erase" },
+    { _T("随手画"),    "splines" },
+    { _T("直线段"),    "line" },
+    { _T("矩形"),      "rect" },
+    { _T("正方形"),    "square" },
+    { _T("椭圆"),      "ellipse" },
+    { _T("圆"),        "circle" },
+    { _T("三角形"),    "triangle" },
+    { _T("菱形"),      "diamond" },
+    { _T("多边形"),    "polygon" },
+    { _T("四边形"),    "quadrangle" },
+    { _T("折线"),      "lines" },
+    { _T("平行四边形"), "parallelogram" },
+    { _T("长方体"),    "cuboid" },
+    { _T("正方体"),    "cube" },
+    { _T("网格"),      "grid" },
+    { _T("圆柱体"),    "cylinder" },
+    { _T("半圆柱体"),  "halfcylinder" },
+    { _T("圆环体"),    "torus" },
+    { _T("半圆环体"),  "halftorus" },
+    { _T("三点圆弧"),  "arc3p" },
+    { _T("圆心圆弧"),  "arc-cse" },
+    { _T("切线圆弧"),  "arc-tan" },
 };
 static const int s_cmdCount = sizeof(s_cmds)/sizeof(s_cmds[0]);
 
@@ -49,8 +57,11 @@ public:
     MgViewProxyMfc(CDrawShapeView* _view) : view(_view), randomProp(FALSE) {
         motion.view = this;
     }
+    void release() {
+        delete this;
+    }
 private:
-    MgShapes* shapes() { return view->m_shapes; }
+    MgShapeDoc* doc() { return view->m_doc; }
     GiTransform* xform() { return &view->m_graph->xf; }
     GiGraphics* graph() { return &view->m_graph->gs; }
     void redraw(bool) { view->Invalidate(); }
@@ -60,11 +71,11 @@ private:
     }
     GiContext* context() {
         if (randomProp) {
-            RandomParam().setShapeProp(view->m_shapes->context());
+            RandomParam().setShapeProp(view->m_doc->context());
         }
-        return view->m_shapes->context();
+        return view->m_doc->context();
     }
-    bool useFingle() { return false; }
+    bool useFinger() { return false; }
     void shapeAdded(MgShape* shape) { view->shapeAdded(shape); }
 
     bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot)
@@ -102,7 +113,10 @@ CDrawShapeView::CDrawShapeView(RandomParam& param)
 
 CDrawShapeView::~CDrawShapeView()
 {
-    delete m_proxy;
+    if (m_proxy) {
+        m_proxy->release();
+        m_proxy = NULL;
+    }
 }
 
 BEGIN_MESSAGE_MAP(CDrawShapeView, CScrollShapeView)
@@ -127,7 +141,7 @@ void CDrawShapeView::OnUpdateCmds(CCmdUI* pCmdUI)
 {
     int index = pCmdUI->m_nID - ID_CMD_FIRST;
     if (index >= 0) {
-        pCmdUI->SetText(index < s_cmdCount ? s_cmds[index].caption : L"-");
+        pCmdUI->SetText(index < s_cmdCount ? s_cmds[index].caption : _T("-"));
         pCmdUI->Enable(index < s_cmdCount);
     }
     pCmdUI->SetCheck(m_cmdID == pCmdUI->m_nID ? 1 : 0);
@@ -180,6 +194,8 @@ void CDrawShapeView::OnMouseMove(UINT nFlags, CPoint point)
     }
     else if (cmd && !(nFlags & MK_LBUTTON))
     {
+        m_proxy->motion.point = Point2d((float)point.x, (float)point.y);
+        m_proxy->motion.pointM = m_proxy->motion.point * m_graph->xf.displayToModel();
         cmd->mouseHover(&m_proxy->motion);
     }
 }
@@ -316,11 +332,11 @@ bool CDrawShapeView::showContextActions(const int* actions)
 }
 
 // see MgContextAction in mgaction.h
-static LPCWSTR const ACTION_NAMES[] = { NULL,
-    L"全选", L"重选", L"绘图", L"取消",
-    L"删除", L"克隆", L"剪开", L"角标", L"定长", L"不定长", L"锁定", L"解锁",
-    L"编辑", L"取消", L"闭合", L"不闭合", L"加点", L"删点", L"成组", L"解组",
-    L"翻转", L"三视图",
+static LPCTSTR const ACTION_NAMES[] = { NULL,
+    _T("全选"), _T("重选"), _T("绘图"), _T("取消"),
+    _T("删除"), _T("克隆"), _T("剪开"), _T("角标"), _T("定长"), _T("不定长"), _T("锁定"), _T("解锁"),
+    _T("编辑"), _T("返回"), _T("闭合"), _T("不闭合"), _T("加点"), _T("删点"), _T("成组"), _T("解组"),
+    _T("翻转"), _T("三视图"),
 };
 
 void CDrawShapeView::OnUpdateContextItems(CCmdUI* pCmdUI)
@@ -329,7 +345,7 @@ void CDrawShapeView::OnUpdateContextItems(CCmdUI* pCmdUI)
     bool enabled = action > 0 && action < sizeof(ACTION_NAMES)/sizeof(ACTION_NAMES[0]);
 
     pCmdUI->Enable(enabled);
-    pCmdUI->SetText(enabled ? ACTION_NAMES[action] : L"?");
+    pCmdUI->SetText(enabled ? ACTION_NAMES[action] : _T("?"));
 }
 
 void CDrawShapeView::OnContextItems(UINT nID)
@@ -341,20 +357,26 @@ void CDrawShapeView::OnContextItems(UINT nID)
 void CDrawShapeView::OnInitialUpdate()
 {
     if (!m_filename.IsEmpty()) {
-        m_graph->xf.setModelTransform(shapes()->modelTransform());
-        m_graph->xf.zoomTo(shapes()->getZoomRectW());
-        m_graph->xf.zoomScale(shapes()->getViewScale());
+        m_graph->xf.setModelTransform(m_doc->modelTransform());
+        m_graph->xf.zoomTo(m_doc->getPageRectW());
+        m_graph->xf.zoomScale(m_doc->getViewScale());
         OnZoomed();
     }
+}
+
+bool CDrawShapeView::Load(LPCTSTR filename, MgStorage* s)
+{
+    m_filename = filename;
+    return m_doc->load(s);
 }
 
 void CDrawShapeView::OnFileSave()
 {
     if (m_filename.IsEmpty())
     {
-        CFileDialog dlg(FALSE, L".vg", NULL,
+        CFileDialog dlg(FALSE, _T(".vg"), NULL,
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST,
-            L"Shape files (*.vg)|*.vg||", this);
+            _T("Shape files (*.vg)|*.vg||"), this);
         if (dlg.DoModal() != IDOK)
             return;
         m_filename = dlg.GetPathName();
@@ -362,8 +384,7 @@ void CDrawShapeView::OnFileSave()
 
     MgJsonStorage s;
 
-    shapes()->setZoomRectW(m_graph->xf.getWndRectW(), m_graph->xf.getViewScale());
-    if (shapes()->save(s.storageForWrite()))
+    if (m_doc->save(s.storageForWrite()))
     {
         const char* content = s.stringify(true);
         CFile file;
@@ -373,6 +394,6 @@ void CDrawShapeView::OnFileSave()
     }
     else
     {
-        AfxMessageBox(L"得到文件内容出错。");
+        AfxMessageBox(_T("得到文件内容出错。"));
     }
 }

@@ -23,23 +23,21 @@ long RandomParam::RandInt(long nMin, long nMax)
     return rand() % (nMax - nMin + 1) + nMin;
 }
 
-UInt8 RandomParam::RandUInt8(long nMin, long nMax)
+unsigned char RandomParam::RandUInt8(long nMin, long nMax)
 {
-    return (UInt8)RandInt(nMin, nMax);
+    return (unsigned char)RandInt(nMin, nMax);
 }
 
 void RandomParam::setShapeProp(GiContext* context)
 {
     context->setLineColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(32, 255)));
-    context->setLineWidth((Int16)RandInt(-10, 100), true);
+    context->setLineWidth(RandF(-10, 100), true);
     context->setLineStyle((randomLineStyle ? (GiLineStyle)RandInt(kGiLineSolid, kGiLineDashDotdot) : kGiLineSolid));
     context->setFillColor(GiColor(RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(0, 255), RandUInt8(32, 240)));
 }
 
 void RandomParam::initShapes(MgShapes* shapes)
 {
-    MgShapesLock locker(shapes, MgShapesLock::Load);
-    
     for (long n = getShapeCount(); n > 0; n--)
     {
         int type = RandInt(0, 2);

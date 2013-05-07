@@ -37,7 +37,7 @@ bool Vector2d::isParallelTo(const Vector2d& vec, const Tol& tol) const
 {
     float cosfz = dotProduct(vec);
     float sinfz = crossProduct(vec);
-    return (fabs(sinfz) <= fabs(cosfz) * tol.equalVector());
+    return (fabsf(sinfz) <= fabsf(cosfz) * tol.equalVector());
 }
 
 // 判断两个矢量是否平行
@@ -48,7 +48,7 @@ bool Vector2d::isParallelTo(const Vector2d& vec,
     nonzero = true;
     float cosfz = dotProduct(vec);
     float sinfz = crossProduct(vec);
-    if (fabs(sinfz) <= fabs(cosfz) * tol.equalVector())
+    if (fabsf(sinfz) <= fabsf(cosfz) * tol.equalVector())
     {
         if (mgIsZero(cosfz))
             nonzero = false;
@@ -64,7 +64,7 @@ bool Vector2d::isCodirectionalTo(const Vector2d& vec, const Tol& tol) const
     if (cosfz < -_MGZERO)          // 同向则cos(夹角)接近1.0
         return false;
     float sinfz = crossProduct(vec);
-    return (fabs(sinfz) <= cosfz * tol.equalVector());
+    return (fabsf(sinfz) <= cosfz * tol.equalVector());
 }
 
 // 判断两个矢量是否同向
@@ -75,9 +75,9 @@ bool Vector2d::isCodirectionalTo(const Vector2d& vec,
     nonzero = true;
     float cosfz = dotProduct(vec);
     float sinfz = crossProduct(vec);
-    if (fabs(sinfz) <= fabs(cosfz) * tol.equalVector())
+    if (fabsf(sinfz) <= fabsf(cosfz) * tol.equalVector())
     {
-        if (fabs(cosfz) < _MGZERO)
+        if (fabsf(cosfz) < _MGZERO)
         {
             nonzero = false;
             ret = true;
@@ -95,7 +95,7 @@ bool Vector2d::isOppositeTo(const Vector2d& vec, const Tol& tol) const
     if (cosfz > -_MGZERO)          // 反向则cos(夹角)接近-1.0
         return false;
     float sinfz = crossProduct(vec);
-    return (fabs(sinfz) <= (-cosfz) * tol.equalVector());
+    return (fabsf(sinfz) <= (-cosfz) * tol.equalVector());
 }
 
 // 判断两个矢量是否反向
@@ -106,9 +106,9 @@ bool Vector2d::isOppositeTo(const Vector2d& vec,
     nonzero = true;
     float cosfz = dotProduct(vec);
     float sinfz = crossProduct(vec);
-    if (fabs(sinfz) <= fabs(cosfz) * tol.equalVector())
+    if (fabsf(sinfz) <= fabsf(cosfz) * tol.equalVector())
     {
-        if (fabs(cosfz) < _MGZERO)
+        if (fabsf(cosfz) < _MGZERO)
         {
             nonzero = false;
             ret = false;
@@ -122,10 +122,10 @@ bool Vector2d::isOppositeTo(const Vector2d& vec,
 // 判断两个矢量是否垂直
 bool Vector2d::isPerpendicularTo(const Vector2d& vec, const Tol& tol) const
 {
-    float sinfz = fabs(crossProduct(vec));
+    float sinfz = fabsf(crossProduct(vec));
     if (sinfz < _MGZERO)
         return false;
-    float cosfz = fabs(dotProduct(vec));
+    float cosfz = fabsf(dotProduct(vec));
     return (cosfz <= sinfz * tol.equalVector());
 }
 
@@ -135,8 +135,8 @@ bool Vector2d::isPerpendicularTo(const Vector2d& vec,
 {
     bool ret = false;
     nonzero = true;
-    float sinfz = fabs(crossProduct(vec));
-    float cosfz = fabs(dotProduct(vec));
+    float sinfz = fabsf(crossProduct(vec));
+    float cosfz = fabsf(dotProduct(vec));
     if (cosfz <= sinfz * tol.equalVector())
     {
         ret = (sinfz >= _MGZERO);

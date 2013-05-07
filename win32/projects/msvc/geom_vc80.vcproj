@@ -205,6 +205,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\core\src\geom\mgdblpt.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\core\include\geom\mgdef.h"
 				>
 			</File>
@@ -226,10 +230,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\core\include\geom\mgtol.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\core\include\geom\mgtype.h"
 				>
 			</File>
 			<File

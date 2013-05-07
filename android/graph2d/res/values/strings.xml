@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TouchVG</string>
+    <string name="selectshapes_button">选</string>
+    <string name="eraser">擦</string>
+    <string name="clearshapes_button">清</string>
+    <string name="redPen">红</string>
+    <string name="yellowPen">黄</string>
+    <string name="bluePen">蓝</string>
+    <string name="thickPen">细</string>
+    <string name="boldPen">粗</string>
+    <string name="stylePen">虚</string>
+    <string name="save">存</string>
+    <string name="shapeType">splines</string>
+    <string name="capture">拍</string>
+    <string name="localpic">图</string>
+</resources>

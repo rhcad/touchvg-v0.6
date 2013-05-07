@@ -12,7 +12,7 @@ Matrix2d::Matrix2d()
 }
 
 // 拷贝构造函数
-Matrix2d::Matrix2d(const MATRIX_2D& src)
+Matrix2d::Matrix2d(const Matrix2d& src)
 {
     m11 = src.m11; m12 = src.m12;
     m21 = src.m21; m22 = src.m22;
@@ -157,7 +157,7 @@ Matrix2d Matrix2d::inverse() const
 // 判断矩阵是否可逆
 bool Matrix2d::isInvertible() const
 {
-    return fabs(m11 * m22 - m12 * m21) > _MGZERO;
+    return fabsf(m11 * m22 - m12 * m21) > _MGZERO;
 }
 
 // 比例大小
@@ -165,19 +165,19 @@ float Matrix2d::scale() const
 {
     float sx = scaleX();
     float sy = scaleY();
-    return fabs(sx - sy) < _MGZERO ? sx : mgHypot(sx, sy);
+    return fabsf(sx - sy) < _MGZERO ? sx : mgHypot(sx, sy);
 }
 
 // X比例大小
 float Matrix2d::scaleX() const
 {
-    return mgIsZero(m12) ? fabs(m11) : mgHypot(m11, m12);
+    return mgIsZero(m12) ? fabsf(m11) : mgHypot(m11, m12);
 }
 
 // Y比例大小
 float Matrix2d::scaleY() const
 {
-    return mgIsZero(m21) ? fabs(m22) : mgHypot(m21, m22);
+    return mgIsZero(m21) ? fabsf(m22) : mgHypot(m21, m22);
 }
 
 float Matrix2d::angle() const
@@ -255,8 +255,8 @@ bool Matrix2d::isConformal(float& scaleX, float& scaleY, float& angle,
     {
         isMirror = true;
         angle = e0.angle2() / 2.f;
-        reflex.x = cos(angle);
-        reflex.y = sin(angle);
+        reflex.x = cosf(angle);
+        reflex.y = sinf(angle);
         angle = 0.f;
     }
     
@@ -293,8 +293,8 @@ Matrix2d Matrix2d::coordSystem(const Point2d& origin, float scaleX,
                                float scaleY, float angle)
 {
     if (mgIsZero(scaleY)) scaleY = scaleX;
-    float s = sin(angle);
-    float c = cos(angle);
+    float s = sinf(angle);
+    float c = cosf(angle);
     return Matrix2d(c*scaleX, s*scaleX, -s*scaleY, c*scaleY, origin.x, origin.y);
 }
 
@@ -324,8 +324,8 @@ Matrix2d& Matrix2d::setToTranslation(const Vector2d& vec)
 Matrix2d& Matrix2d::setToRotation(float angle, 
                                   const Point2d& center)
 {
-    float c = cos(angle);
-    float s = sin(angle);
+    float c = cosf(angle);
+    float s = sinf(angle);
     return set(c, s, -s, c, (1 - c) * center.x + s * center.y, 
         (1 - c) * center.y - s * center.x);
 }

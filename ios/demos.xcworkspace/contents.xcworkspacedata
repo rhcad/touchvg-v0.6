@@ -4,7 +4,4 @@
    <FileRef
       location = "group:FreeDraw/FreeDraw.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:Graph2d/Graph2d.xcodeproj">
-   </FileRef>
 </Workspace>

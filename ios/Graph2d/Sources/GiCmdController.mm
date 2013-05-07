@@ -8,7 +8,7 @@
 #include <mgselect.h>
 #include <vector>
 #include <ioscanvas.h>
-#include <mgbasicsp.h>
+#include <mgaction.h>
 
 @interface GiCommandController()
 
@@ -16,7 +16,8 @@
 - (void)convertPoint:(CGPoint)pt;
 - (BOOL)getPointForPressDrag:(UIGestureRecognizer *)sender :(CGPoint*)point;
 - (GiContext*)currentContext;
-- (bool)showActions:(int)selState :(const int*)actions :(const Box2d*)selbox;
+- (bool)showActions:(int)selState :(const int*)actions
+                   :(const Box2d*)selbox :(const MgShape*)shape;
 - (IBAction)onContextAction:(id)sender;
 - (BOOL)handleSelectionTwoFingers:(UIGestureRecognizer *)sender;
 
@@ -24,7 +25,7 @@
 
 static NSMutableArray* _buttons = nil;
 
-class MgViewProxy : public MgView
+class MgViewProxyIos : public MgView
 {
 private:
     GiCommandController*    _owner;
@@ -37,7 +38,7 @@ public:
     BOOL            _dynChanged;
     BOOL            _lockVertex;
     
-    MgViewProxy(GiCommandController* owner, UIView** views) : _owner(owner)
+    MgViewProxyIos(GiCommandController* owner, UIView** views) : _owner(owner)
         , _curview(Nil), _mainview(Nil), _auxviews(views)
         , _dynChanged(NO), _lockVertex(false)
     {
@@ -45,11 +46,15 @@ public:
         _pointImages[1] = nil;
     }
     
-    ~MgViewProxy() {
+    ~MgViewProxyIos() {
         [_pointImages[0] release];
         [_pointImages[1] release];
         [_buttons release];
         _buttons = nil;
+    }
+    
+    void release() {
+        delete this;
     }
     
     id<GiView> getView() { return _curview; }
@@ -66,7 +71,7 @@ public:
         return _auxviews[0] && !_auxviews[0].hidden && !_auxviews[0].superview.hidden;
     }
     
-    MgShapes* shapes() { return [_curview shapes]; }
+    MgShapeDoc* doc() { return [_curview doc]; }
     GiTransform* xform() { return [_curview xform]; }
     GiGraphics* graph() { return [_curview graph]; }
     
@@ -128,8 +133,9 @@ private:
         return _buttons && [_buttons count] > 0;
     }
     
-    bool showContextActions(int selState, const int* actions, const Box2d& selbox) {
-        return [_owner showActions:selState :actions :&selbox];
+    bool showContextActions(int selState, const int* actions, 
+                            const Box2d& selbox, const MgShape* shape) {
+        return [_owner showActions:selState :actions :&selbox :shape];
     }
     
     bool drawHandle(GiGraphics* gs, const Point2d& pnt, bool hotdot) {
@@ -151,7 +157,25 @@ private:
 static long s_cmdRef = 0;
 
 @implementation GiActionParams
-@synthesize selstate, actions, selbox, view, buttons;
+@synthesize shape, selstate, actions, selbox, view, buttons, extra, button;
+
+- (int)getActionIndex:(int)action
+{
+    for (int i = 0; actions[i] > 0; i++) {
+        if (actions[i] == action)
+            return i;
+    }
+    return -1;
+}
+
+- (int)getActionCount
+{
+    int count = 0;
+    for (int i = 0; actions[i] > 0; i++)
+        count++;
+    return count;
+}
+
 @end
 
 @implementation GiCommandController
@@ -213,11 +237,17 @@ static long s_cmdRef = 0;
 - (IBAction)onContextAction:(id)sender
 {
     UIView *btn = (UIView *)sender;
-    mgGetCommandManager()->doContextAction(_motion, btn.tag);
+    if (btn.tag >= kMgActionCustomized) {
+        [editDelegate performSelector:@selector(doExtraAction:) withObject:btn];
+    }
+    else {
+        mgGetCommandManager()->doContextAction(_motion, btn.tag);
+    }
     [GiCommandController hideContextActions];
 }
 
-- (bool)showActions:(int)selState :(const int*)actions :(const Box2d*)selbox
+- (bool)showActions:(int)selState :(const int*)actions
+                   :(const Box2d*)selbox :(const MgShape*)shape
 {
     if (!_buttons) {
         _buttons = [[NSMutableArray alloc]init];
@@ -235,46 +265,100 @@ static long s_cmdRef = 0;
     
     UIView *view = [_mgview->getView() ownerView];
     bool handled = false;
+    NSMutableDictionary *extra = nil;
+    GiActionParams *params = nil;
     
     if ([editDelegate respondsToSelector:@selector(showContextActions:)]) {
-        GiActionParams *params = [[GiActionParams alloc]init];
+        params = [[GiActionParams alloc]init];
+        params.shape = shape;
         params.selstate = selState;
         params.actions = actions;
         params.selbox = CGRectMake(selbox->xmin, selbox->ymin, selbox->width(), selbox->height());
         params.view = view;
-        params.buttons = _buttons;        
-        handled = ![editDelegate performSelector:@selector(showContextActions:) withObject:params];
-        [params release];
-        if (handled)
+        params.buttons = _buttons;
+        extra = [[NSMutableDictionary alloc]init];
+        params.extra = extra;
+        handled = !![editDelegate performSelector:@selector(showContextActions:) withObject:params];
+        if (handled) {
+            [params release];
+            [extra release];
             return true;
+        }
     }
     
     NSString* captions[] = { nil, @"全选", @"重选", @"绘图", @"取消",
-        @"删除", @"克隆", @"剪开", @"定长", @"取消定长", @"锁定", @"解锁", 
-        @"编辑顶点", @"隐藏顶点", @"闭合", @"不闭合", @"加点", @"删点" };
+        @"删除", @"克隆", @"剪开", @"角标", @"定长", @"不定长", @"锁定", @"解锁", 
+        @"编辑", @"返回", @"闭合", @"不闭合", @"加点", @"删点", @"成组", @"解组", 
+        @"翻转", @"三视图", 
+    };
     
     CGPoint pt = CGPointMake(_motion->point.x - 40, _motion->point.y - 60);
     
     for (int i = 0; actions[i] > 0; i++) {
         if (actions[i] > 0 && actions[i] < sizeof(captions)/sizeof(captions[0])) {
-            CGRect rect = CGRectMake(pt.x, pt.y, 80, 36);
+            CGRect rect = CGRectMake(pt.x, pt.y, 60, 36);
             UIButton *btn = [[UIButton alloc]initWithFrame:rect];
             
             btn.tag = actions[i];
+            btn.showsTouchWhenHighlighted = YES;
             btn.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.8];
             [btn addTarget:self action:@selector(onContextAction:) forControlEvents:UIControlEventTouchUpInside];
             [btn setTitle:captions[actions[i]] forState: UIControlStateNormal];
-            pt.y -= rect.size.height;
+            [btn setTitle:captions[actions[i]] forState: UIControlStateHighlighted];
+            [btn setTitleColor:[UIColor blackColor] forState: UIControlStateHighlighted];
             
+            if (params && [editDelegate respondsToSelector:@selector(contextButtonWillAdded:)]) {
+                params.button = btn;
+                btn = [editDelegate performSelector:@selector(contextButtonWillAdded:) withObject:params];
+            }
+            if (btn) {
+                [view addSubview:btn];
+                [_buttons addObject:btn];
+                [btn release];
+                if (CGRectEqualToRect(rect, btn.frame))
+                    pt.y -= rect.size.height;
+            }
+        }
+    }
+    for (int e = 0; extra; e++) {
+        NSNumber *aid = [extra objectForKey:[NSString stringWithFormat:@"id%d", e]];
+        if (!aid)
+            break;
+        NSString *title = [extra objectForKey:[NSString stringWithFormat:@"title%d", e]];
+        if (!title)
+            break;
+        
+        CGRect rect = CGRectMake(pt.x, pt.y, 80, 36);
+        UIButton *btn = [[UIButton alloc]initWithFrame:rect];
+        
+        btn.tag = [aid intValue];
+        btn.showsTouchWhenHighlighted = YES;
+        btn.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.8];
+        [btn addTarget:self action:@selector(onContextAction:) forControlEvents:UIControlEventTouchUpInside];
+        [btn setTitle:title forState: UIControlStateNormal];
+        [btn setTitle:title forState: UIControlStateHighlighted];
+        [btn setTitleColor:[UIColor blackColor] forState: UIControlStateHighlighted];
+        
+        if (params && [editDelegate respondsToSelector:@selector(contextButtonWillAdded::)]) {
+            btn = [editDelegate performSelector:@selector(contextButtonWillAdded::) withObject:btn withObject:params];
+        }
+        if (btn) {
             [view addSubview:btn];
             [_buttons addObject:btn];
             [btn release];
+            pt.y -= rect.size.height;
+            if (CGRectEqualToRect(rect, btn.frame))
+                pt.y -= rect.size.height;
         }
     }
+    
+    [params release];
+    [extra release];
     
     return [_buttons count] > 0;
 }
 
+@synthesize motion = _motion;
 @synthesize editDelegate;
 @synthesize commandName;
 @synthesize currentShapeFixedLength;
@@ -289,7 +373,7 @@ static long s_cmdRef = 0;
 {
     self = [super init];
     if (self) {
-        _mgview = new MgViewProxy(self, auxviews);
+        _mgview = new MgViewProxyIos(self, auxviews);
         _motion = new MgMotion;
         _motion->view = _mgview;
         s_cmdRef++;
@@ -303,7 +387,10 @@ static long s_cmdRef = 0;
         mgGetCommandManager()->unloadCommands();
     }
     delete _motion;
-    delete _mgview;
+	if (_mgview) {
+		_mgview->release();
+		_mgview = NULL;
+	}
     [super dealloc];
 }
 
@@ -324,11 +411,11 @@ static long s_cmdRef = 0;
 }
 
 - (void)setLineWidth:(float)w {
-    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
-    std::vector<MgShape*> shapes(n, NULL);
+    int n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
+    std::vector<MgShape*> shapes(n, (MgShape*)NULL);
     
     if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
-        for (UInt32 i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             shapes[i]->context()->setLineWidth(w, true);
         }
         _motion->view->redraw(false);
@@ -343,11 +430,11 @@ static long s_cmdRef = 0;
 }
 
 - (void)setLineColor:(GiColor)c {
-    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
-    std::vector<MgShape*> shapes(n, NULL);
+    int n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
+    std::vector<MgShape*> shapes(n, (MgShape*)NULL);
     
     if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
-        for (UInt32 i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             shapes[i]->context()->setLineColor(c);
         }
         _motion->view->redraw(false);
@@ -362,11 +449,11 @@ static long s_cmdRef = 0;
 }
 
 - (void)setFillColor:(GiColor)c {
-    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
-    std::vector<MgShape*> shapes(n, NULL);
+    int n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
+    std::vector<MgShape*> shapes(n, (MgShape*)NULL);
     
     if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
-        for (UInt32 i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             shapes[i]->context()->setFillColor(c);
         }
         _motion->view->redraw(false);
@@ -381,11 +468,11 @@ static long s_cmdRef = 0;
 }
 
 - (void)setLineStyle:(int)style {
-    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
-    std::vector<MgShape*> shapes(n, NULL);
+    int n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
+    std::vector<MgShape*> shapes(n, (MgShape*)NULL);
     
     if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
-        for (UInt32 i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             shapes[i]->context()->setLineStyle((GiLineStyle)style);
         }
         _motion->view->redraw(false);
@@ -400,11 +487,11 @@ static long s_cmdRef = 0;
 }
 
 - (void)setAutoFillColor:(BOOL)value {
-    UInt32 n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
-    std::vector<MgShape*> shapes(n, NULL);
+    int n = mgGetCommandManager()->getSelection(_mgview, 0, NULL, true);
+    std::vector<MgShape*> shapes(n, (MgShape*)NULL);
     
     if (n > 0 && mgGetCommandManager()->getSelection(_mgview, n, (MgShape**)&shapes.front(), true) == n) {
-        for (UInt32 i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             shapes[i]->context()->setAutoFillColor(value);
         }
         _motion->view->redraw(false);
@@ -660,6 +747,7 @@ static long s_cmdRef = 0;
         Point2d pnt1 = Point2d(pt1.x, pt1.y) * _mgview->xform()->displayToModel();
         Point2d pnt2 = Point2d(pt2.x, pt2.y) * _mgview->xform()->displayToModel();
         
+        _motion->dragging = (sender.state == UIGestureRecognizerStateChanged);
         if (sel && sel->handleTwoFingers(_motion, sender.state, pnt1, pnt2)) {
             _twoFingersHandled = (sender.state < UIGestureRecognizerStateEnded);
         }
@@ -683,7 +771,7 @@ static long s_cmdRef = 0;
 - (BOOL)oneFingerTwoTaps:(UITapGestureRecognizer *)sender
 {
     _clickFingers = 2;
-    return mgGetCommandManager()->getCommand() != NULL;
+    return [self delayTap:[sender locationInView:sender.view] view:sender.view];
 }
 
 - (BOOL)longPressGesture:(UIGestureRecognizer *)sender
@@ -705,13 +793,14 @@ static long s_cmdRef = 0;
                 _motion->startPointM = _motion->pointM;
                 _motion->lastPoint = _motion->point;
                 _motion->lastPointM = _motion->pointM;
+                ret = cmd->longPress(_motion);
             }
             else if (sender.state >= UIGestureRecognizerStateEnded
                      && _motion->startPoint.distanceTo(_motion->point) < 10) {
                 return YES;                 // 长按不动再松开时，忽略Ended消息
             }
             
-            ret = cmd->longPress(_motion);
+            //ret = cmd->longPress(_motion);
         }
     }
     
@@ -742,8 +831,11 @@ static long s_cmdRef = 0;
             
             [_mgview->getView() redraw:true];
             ret = YES;
-            if (strcmp(cmd->getName(), "splines") != 0 && 1 == _clickFingers) {
-                cmd->click(_motion);                // 除了随手画命令外，将向命令传递点击事件
+            if (strcmp(cmd->getName(), "splines") != 0) { // 除了随手画命令外，将向命令传递点击事件
+                if (1 == _clickFingers)
+                    cmd->click(_motion);
+                else
+                    cmd->doubleClick(_motion);
             }
         }
         else if (1 == _clickFingers) {

@@ -20,9 +20,9 @@ class MgShapeT : public MgShape
 public:
     ShapeT      _shape;
     ContextT    _context;
-    int      _id;
+    int         _id;
     MgShapes*   _parent;
-    int      _tag;
+    int         _tag;
     
     MgShapeT() : _id(0), _parent(NULL), _tag(0)
     {
@@ -57,10 +57,14 @@ public:
         return &_shape;
     }
     
-    bool draw(int mode, GiGraphics& gs, const GiContext *ctx = NULL) const
+    bool draw(int mode, GiGraphics& gs, const GiContext *ctx = NULL, int segment = -1) const
     {
+        if (shapec()->isKindOf(6)) { // MgComposite
+            GiContext ctxnull(0, GiColor(), kGiLineNull);
+            return shapec()->draw(mode, gs, ctx ? *ctx : ctxnull, segment);
+        }
         ContextT tmpctx(getContext(gs, ctx));
-        return shapec()->draw(mode, gs, tmpctx);
+        return shapec()->draw(mode, gs, tmpctx, segment);
     }
     
     static MgShape* create()
@@ -152,7 +156,7 @@ public:
         GiColor c;
         
         s->writeUInt32("tag", _tag);
-        s->writeUInt8("lineStyle", (UInt8)_context.getLineStyle());
+        s->writeUInt8("lineStyle", (unsigned char)_context.getLineStyle());
         s->writeFloat("lineWidth", _context.getLineWidth());
         
         c = _context.getLineColor();
@@ -166,22 +170,12 @@ public:
     
     bool load(MgStorage* s)
     {
-        int c;
-        
         _tag = s->readUInt32("tag", _tag);
         _context.setLineStyle((GiLineStyle)s->readUInt8("lineStyle", 0));
         _context.setLineWidth(s->readFloat("lineWidth", 0), true);
         
-        c = s->readUInt32("lineColor", 0xFF000000);
-        _context.setLineColor(GiColor((UInt8)(c & 0xFF), 
-                                      (UInt8)((c >> 8 ) & 0xFF), 
-                                      (UInt8)((c >> 16) & 0xFF), 
-                                      (UInt8)((c >> 24) & 0xFF)));
-        c = s->readUInt32("fillColor", 0);
-        _context.setFillColor(GiColor((UInt8)(c & 0xFF), 
-                                      (UInt8)((c >> 8 ) & 0xFF), 
-                                      (UInt8)((c >> 16) & 0xFF), 
-                                      (UInt8)((c >> 24) & 0xFF)));
+        _context.setLineColor(GiColor(s->readUInt32("lineColor", 0xFF000000), true));
+        _context.setFillColor(GiColor(s->readUInt32("fillColor", 0), true));
         _context.setAutoFillColor(s->readBool("autoFillColor", _context.isAutoFillColor()));
         
         bool ret = shape()->load(s);

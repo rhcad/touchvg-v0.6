@@ -6,8 +6,6 @@
 #include "BaseView.h"
 #include <canvasgdip.h>
 #include <canvasgdi.h>
-#include <mgshapest.h>
-#include <list>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,7 +15,7 @@ static char THIS_FILE[] = __FILE__;
 
 CBaseView::CBaseView()
 {
-    m_shapes = new MgShapesT<std::list<MgShape*> >;
+    m_doc = MgShapeDoc::create();
     m_gdip = true;
     m_graph = new GiGraphWin(m_gdip ? GiCanvasGdip::Create : GiCanvasGdi::Create);
     m_shapeAdded = NULL;
@@ -28,8 +26,8 @@ CBaseView::CBaseView()
 
 CBaseView::~CBaseView()
 {
-    if (m_shapes)
-        m_shapes->release();
+    if (m_doc)
+        m_doc->release();
     delete m_graph;
 }
 
@@ -135,15 +133,16 @@ void CBaseView::shapeAdded(MgShape* shape)
 
 void CBaseView::DrawAll(GiGraphics* gs)
 {
-    m_shapes->draw(*gs);
+    CWaitCursor cursor;
+    m_doc->draw(*gs);
 
     GiContext ctx(0, GiColor(128, 0, 0, 64), kGiLineDash);
-    gs->drawRect(&ctx, m_shapes->getExtent());
+    gs->drawRect(&ctx, m_doc->getExtent());
 }
 
 void CBaseView::OnZoomExtent()
 {
-    if (m_graph->xf.zoomTo(m_shapes->getExtent() * m_graph->xf.modelToWorld(), NULL))
+    if (m_graph->xf.zoomTo(m_doc->getExtent() * m_graph->xf.modelToWorld(), NULL))
     {
         OnZoomed();
     }
@@ -269,12 +268,18 @@ void CBaseView::OnPanDown()
 
 void CBaseView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    if (nChar == VK_OEM_PLUS || nChar == VK_OEM_MINUS
-        || nChar == VK_ADD || nChar == VK_SUBTRACT)     // 加减号:放缩显示
+    if (nChar == VK_ADD || nChar == VK_SUBTRACT)        // 加减号:放缩显示
     {
-        bool add = VK_OEM_PLUS || nChar == VK_ADD;
+        bool add = (nChar == VK_ADD);
         SendMessage(WM_COMMAND, add ? ID_VIEW_ZOOMIN : ID_VIEW_ZOOMOUT);
     }
+#ifdef VK_OEM_PLUS
+    else if (nChar == VK_OEM_PLUS || nChar == VK_OEM_MINUS) // 加减号
+    {
+        bool add = (nChar == VK_OEM_PLUS);
+        SendMessage(WM_COMMAND, add ? ID_VIEW_ZOOMIN : ID_VIEW_ZOOMOUT);
+    }
+#endif
     else if (VK_LEFT == nChar || VK_RIGHT == nChar
         || VK_UP == nChar || VK_DOWN == nChar)          // 方向键:平移显示
     {

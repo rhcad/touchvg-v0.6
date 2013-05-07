@@ -32,7 +32,7 @@ void MgSplines::_update()
     }
 
     mgCubicSplines(_count, _points, _knotvs, isClosed() ? kMgCubicLoop : 0);
-    mgCubicSplinesBox(_extent, _count, _points, _knotvs);
+    mgCubicSplinesBox(_extent, _count, _points, _knotvs, isClosed());
 }
 
 float MgSplines::_hitTest(const Point2d& pt, float tol, 
@@ -49,7 +49,7 @@ bool MgSplines::_hitTestBox(const Box2d& rect) const
     return mgCubicSplinesIntersectBox(rect, _count, _points, _knotvs, isClosed());
 }
 
-bool MgSplines::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
+bool MgSplines::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const
 {
     bool ret = false;
 
@@ -60,7 +60,17 @@ bool MgSplines::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
     else
         ret = gs.drawSplines(&ctx, _count, _points, _knotvs);
 
-    return __super::_draw(mode, gs, ctx) || ret;
+    if (mode > 0 && segment >= 0) {
+        Point2d pts[4];
+        mgCubicSplineToBezier(_count, _points, _knotvs, segment, pts);
+
+        GiContext ctxseg(ctx);
+        ctxseg.setLineWidth(ctx.getLineWidth() - 3, ctx.isAutoScale());
+        ctxseg.setLineAlpha(ctx.getLineAlpha() * 3 / 4);
+        gs.drawBeziers(&ctxseg, 4, pts);
+    }
+
+    return __super::_draw(mode, gs, ctx, segment) || ret;
 }
 
 void MgSplines::smooth(float tol)

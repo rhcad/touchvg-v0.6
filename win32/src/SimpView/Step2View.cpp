@@ -57,7 +57,7 @@ void CScrollShapeView::OnZoomed()
     Box2d rect;
 
     // m_rcLimits: 极限范围对应的坐标范围, 像素
-    rect = m_shapes->getExtent() * m_graph->xf.modelToDisplay();
+    rect = m_doc->getExtent() * m_graph->xf.modelToDisplay();
     rect.inflate(1, 1);
     rect.get(m_rcLimits);
 
@@ -243,7 +243,7 @@ void CScrollShapeView::OnVScrThumbTrack(SCROLLINFO &si, UINT nPos)
 
 bool CScrollShapeView::NeedUpdatePan()
 {
-    return m_bRealPan //|| fabs(m_graph->xf.getViewScale() - 1.0) < 0.01
+    return m_bRealPan //|| fabsf(m_graph->xf.getViewScale() - 1.0) < 0.01
         || abs(m_pan.cx) > m_graph->xf.getWidth() * 4 / 5
         || abs(m_pan.cy) > m_graph->xf.getHeight() * 4 / 5;
 }

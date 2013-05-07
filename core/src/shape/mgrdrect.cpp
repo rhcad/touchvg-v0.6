@@ -20,8 +20,8 @@ MgRoundRect::~MgRoundRect()
 
 void MgRoundRect::setRadius(float rx, float ry)
 {
-    _rx = fabs(rx);
-    _ry = fabs(ry);
+    _rx = fabsf(rx);
+    _ry = fabsf(ry);
     if (_ry < _MGZERO)
         _ry = _rx;
 }
@@ -74,7 +74,7 @@ float MgRoundRect::_hitTest(const Point2d& pt, float tol,
     return dist;
 }
 
-bool MgRoundRect::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
+bool MgRoundRect::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const
 {
     bool ret = false;
 
@@ -88,7 +88,7 @@ bool MgRoundRect::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
         ret = gs.drawRoundRect(&ctx, getRect(), _rx, _ry);
     }
 
-    return __super::_draw(mode, gs, ctx) || ret;
+    return __super::_draw(mode, gs, ctx, segment) || ret;
 }
 
 bool MgRoundRect::_save(MgStorage* s) const

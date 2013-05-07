@@ -43,7 +43,7 @@ GEOMAPI bool mgIsColinear2(
     const Point2d& a, const Point2d& b, const Point2d& pt, const Tol& tol)
 {
     float dist = (b-a).crossProduct(pt-a);
-    return fabs(dist) < tol.equalPoint();
+    return fabsf(dist) < tol.equalPoint();
 }
 
 // 判断两个线段ab和cd是否相交于线段内部
@@ -105,13 +105,13 @@ GEOMAPI bool mgIsBetweenLine3(
     {
         ret = (a.x <= pt.x && pt.x <= b.x) || (a.x >= pt.x && pt.x >= b.x);
         if (nearpt != NULL)
-            *nearpt = fabs(pt.x - a.x) < fabs(pt.x - b.x) ? a : b;
+            *nearpt = fabsf(pt.x - a.x) < fabsf(pt.x - b.x) ? a : b;
     }
     else
     {
         ret = (a.y <= pt.y && pt.y <= b.y) || (a.y >= pt.y && pt.y >= b.y);
         if (nearpt != NULL)
-            *nearpt = fabs(pt.y - a.y) < fabs(pt.y - b.y) ? a : b;
+            *nearpt = fabsf(pt.y - a.y) < fabsf(pt.y - b.y) ? a : b;
     }
     return ret;
 }
@@ -150,13 +150,13 @@ GEOMAPI float mgPtToBeeline2(
     else if (mgEquals(a.x, b.x))
     {
         ptPerp.set(a.x, pt.y);
-        return fabs(a.x - pt.x);
+        return fabsf(a.x - pt.x);
     }
     // 水平线
     else if (mgEquals(a.y, b.y))
     {
         ptPerp.set(pt.x, a.y);
-        return fabs(a.y - pt.y);
+        return fabsf(a.y - pt.y);
     }
     else
     {
@@ -193,7 +193,7 @@ GEOMAPI bool mgCrossLineAbc(
     if (mgIsZero(sinnum))
         return false;
     cosnum = a1*a2 + b1*b2;
-    if (!mgIsZero(cosnum) && fabs(sinnum / cosnum) < tolVec.equalVector())
+    if (!mgIsZero(cosnum) && fabsf(sinnum / cosnum) < tolVec.equalVector())
         return false;
     
     ptCross.x = (b1*c2 - b2*c1) / sinnum;
@@ -214,7 +214,7 @@ GEOMAPI bool mgCross2Beeline(
         return false;
     
     cosnum = (b.x-a.x)*(d.x - c.x) + (b.y-a.y)*(d.y-c.y);
-    if (!mgIsZero(cosnum) && fabs(denom / cosnum) < tolVec.equalVector())
+    if (!mgIsZero(cosnum) && fabsf(denom / cosnum) < tolVec.equalVector())
         return false;
     
     u = ((c.x-a.x)*(d.y-c.y)-(c.y-a.y)*(d.x-c.x)) / denom;
@@ -251,7 +251,7 @@ GEOMAPI bool mgCross2Line(
         return false;
     
     cosnum = (b.x-a.x)*(d.x - c.x) + (b.y-a.y)*(d.y-c.y);
-    if (!mgIsZero(cosnum) && fabs(denom / cosnum) < tolVec.equalVector())
+    if (!mgIsZero(cosnum) && fabsf(denom / cosnum) < tolVec.equalVector())
         return false;
     
     u = ((c.x-a.x)*(d.y-c.y)-(c.y-a.y)*(d.x-c.x)) / denom;
@@ -280,7 +280,7 @@ GEOMAPI bool mgCrossLineBeeline(
         return false;
     
     cosnum = (b.x-a.x)*(d.x - c.x) + (b.y-a.y)*(d.y-c.y);
-    if (!mgIsZero(cosnum) && fabs(denom / cosnum) < tolVec.equalVector())
+    if (!mgIsZero(cosnum) && fabsf(denom / cosnum) < tolVec.equalVector())
         return false;
     
     u = ((c.x-a.x)*(d.y-c.y)-(c.y-a.y)*(d.x-c.x)) / denom;

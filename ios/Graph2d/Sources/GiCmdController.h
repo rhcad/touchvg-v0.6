@@ -7,7 +7,7 @@
 #include <mgcmd.h>
 
 struct MgMotion;
-class MgViewProxy;
+class MgViewProxyIos;
 
 //! 命令控制器类，代理调用内部命令(MgCommand)
 /*! \ingroup GRAPH_IOS
@@ -15,7 +15,7 @@ class MgViewProxy;
 @interface GiCommandController : NSObject<GiMotionHandler> {
 @private
     MgMotion    *_motion;           //!< 当前命令参数
-    MgViewProxy *_mgview;           //!< 命令所用视图
+    MgViewProxyIos *_mgview;        //!< 命令所用视图
     BOOL        _moved;             //!< 是否已触发touchBegan命令消息
     int         _clickFingers;      //!< 是否已触发单指点击或双击事件
     BOOL        _undoFired;         //!< 是否已触发Undo操作
@@ -23,6 +23,7 @@ class MgViewProxy;
     BOOL        _twoFingersHandled; //!< 选择状态下双指触摸模式
 }
 
+@property (nonatomic,readonly)  MgMotion* motion;       //!< 当前命令参数
 @property (nonatomic,assign)  NSObject* editDelegate;   //!< 编辑代理,GiEditAction
 @property (nonatomic)   const char*     commandName;    //!< 当前命令名称
 @property (nonatomic)   BOOL            currentShapeFixedLength;    //!< 当前选中图形是否固定边长

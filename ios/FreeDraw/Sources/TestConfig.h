@@ -20,3 +20,6 @@
 
 // 定义AUTO_HIDE_CMDBAR时在触摸时自动隐藏命令按钮
 #define AUTO_HIDE_CMDBAR
+
+// 使用图像按钮做上下文弹出按钮
+#define BITMAP_CONTEXT_BUTTONS

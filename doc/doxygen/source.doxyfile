@@ -677,8 +677,8 @@ INPUT                  = ../../core \
                          ../../ios/Graph2d/Sources \
                          ../../ios/FreeDraw/Headers \
                          ../../ios/FreeDraw/Sources \
-                         ../../android/skiaview/jni \
-                         ../../android/skiaview/src \
+                         ../../android/graph2d/jni \
+                         ../../android/graph2d/src \
                          MainPage.txt
 
 # This tag can be used to specify the character encoding of the source files 
@@ -712,7 +712,12 @@ RECURSIVE              = YES
 # run.
 
 EXCLUDE                = ../../core/include/testgraph \
-                         ../../win32/src/SimpView/resource.h
+                         ../../win32/src/SimpView/Stdafx.h \
+                         ../../win32/src/SimpView/resource.h \
+                         ../../win32/src/ShapeEditor/stdafx.h \
+                         ../../win32/src/ShapeEditor/Resource.h \
+                         ../../win32/LrcLayout/LrcLayout/stdafx.h \
+                         ../../win32/LrcLayout/LrcLayout/Resource.h
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or 
 # directories that are symbolic links (a Unix file system feature) are excluded 

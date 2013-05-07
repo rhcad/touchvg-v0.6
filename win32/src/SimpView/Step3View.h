@@ -13,14 +13,11 @@ public:
     CDrawShapeView(RandomParam& param);
     virtual ~CDrawShapeView();
 
-// Attributes
-public:
-    CString m_filename;
-
 // Operations
 public:
     bool showContextActions(const int* actions);
     void setRandomProp(BOOL randomProp);
+    bool Load(LPCTSTR filename, MgStorage* s);
 
 // Overrides
     // ClassWizard generated virtual function overrides
@@ -49,6 +46,7 @@ protected:
 
 // Implementation
 private:
+    CString     m_filename;
     UINT        m_cmdID;
     MgViewProxyMfc*   m_proxy;
     BOOL        m_moved;

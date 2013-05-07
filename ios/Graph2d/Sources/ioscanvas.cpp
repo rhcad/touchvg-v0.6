@@ -77,7 +77,7 @@ public:
         return xf().getHeight();
     }
 
-    CGFloat toFloat(UInt8 c) const
+    CGFloat toFloat(unsigned char c) const
     {
         return (CGFloat)c / 255.0f;
     }
@@ -91,19 +91,19 @@ public:
 
     bool setPen(const GiContext* ctx)
     {
-        bool changed = !_ctxused[0];
+        bool changed = false;
         
         if (ctx && !ctx->isNullLine())
         {
-            if (_gictx.getLineColor() != ctx->getLineColor()) {
+            if (!_ctxused[0] || _gictx.getLineColor() != ctx->getLineColor()) {
                 _gictx.setLineColor(ctx->getLineColor());
                 changed = true;
             }
-            if (_gictx.getLineWidth() != ctx->getLineWidth()) {
+            if (!_ctxused[0] || _gictx.getLineWidth() != ctx->getLineWidth()) {
                 _gictx.setLineWidth(ctx->getLineWidth(), ctx->isAutoScale());
                 changed = true;
             }
-            if (_gictx.getLineStyle() != ctx->getLineStyle()) {
+            if (!_ctxused[0] || _gictx.getLineStyle() != ctx->getLineStyle()) {
                 _gictx.setLineStyle(ctx->getLineStyle());
                 changed = true;
             }
@@ -145,11 +145,11 @@ public:
 
     bool setBrush(const GiContext* ctx)
     {
-        bool changed = !_ctxused[1];
+        bool changed = false;
         
         if (ctx && ctx->hasFillColor())
         {
-            if (_gictx.getFillColor() != ctx->getFillColor()) {
+            if (!_ctxused[1] || _gictx.getFillColor() != ctx->getFillColor()) {
                 _gictx.setFillColor(ctx->getFillColor());
                 changed = true;
             }
@@ -183,17 +183,17 @@ GiColor giFromCGColor(CGColorRef color)
     const CGFloat *rgba = CGColorGetComponents(color);
     
     if (space == kCGColorSpaceModelMonochrome && num >= 2) {
-        UInt8 c = (UInt8)mgRound(rgba[0] * 255);
-        return GiColor(c, c, c, (UInt8)mgRound(rgba[1] * 255));
+        unsigned char c = (unsigned char)mgRound(rgba[0] * 255);
+        return GiColor(c, c, c, (unsigned char)mgRound(rgba[1] * 255));
     }
     if (num < 3) {
         return GiColor::Invalid();
     }
 
-    return GiColor((UInt8)mgRound(rgba[0] * 255),
-                   (UInt8)mgRound(rgba[1] * 255),
-                   (UInt8)mgRound(rgba[2] * 255),
-                   (UInt8)mgRound(CGColorGetAlpha(color) * 255));
+    return GiColor((unsigned char)mgRound(rgba[0] * 255),
+                   (unsigned char)mgRound(rgba[1] * 255),
+                   (unsigned char)mgRound(rgba[2] * 255),
+                   (unsigned char)mgRound(CGColorGetAlpha(color) * 255));
 }
 
 GiCanvasIos::GiCanvasIos(GiGraphics* gs, float dpi)
@@ -223,7 +223,6 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
     }
 
     m_draw->_context = context;
-    m_draw->_fast = fast;
     m_draw->_ctxused[0] = false;
     m_draw->_ctxused[1] = false;
     
@@ -231,18 +230,26 @@ bool GiCanvasIos::beginPaint(CGContextRef context, bool fast, bool buffered)
         m_draw->createBufferBitmap(m_draw->width(), m_draw->height(), m_draw->_scale);
         context = m_draw->getContext();
     }
-
-    bool antiAlias = !fast && (!gs() || gs()->isAntiAliasMode());
-    CGContextSetAllowsAntialiasing(context, antiAlias);
-    CGContextSetShouldAntialias(context, antiAlias);
-    CGContextSetFlatness(context, fast ? 20 : 1);
-
+    
+    setFastMode(fast);
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineJoin(context, kCGLineJoinRound);
     if (owner())        // 设置最小线宽为0.5像素，使用屏幕放大倍数以便得到实际像素值
         owner()->setMaxPenWidth(-1, 0.5f / m_draw->_scale);
 
     return true;
+}
+
+void GiCanvasIos::setFastMode(bool fast)
+{
+    CGContextRef context = m_draw->getContext();
+    bool antiAlias = !fast && (!gs() || gs()->isAntiAliasMode());
+    
+    m_draw->_fast = fast;
+    CGContextSetAllowsAntialiasing(context, antiAlias);
+    CGContextSetShouldAntialias(context, antiAlias);
+    CGContextSetFlatness(context, fast ? 20 : 1);
+    CGContextSetInterpolationQuality(context, fast ? kCGInterpolationNone : kCGInterpolationHigh);
 }
 
 bool GiCanvasIos::beginPaintBuffered(bool fast, bool autoscale)
@@ -456,8 +463,8 @@ void GiCanvasIos::clearCachedBitmap(bool clearAll)
     }
 }
 
-bool GiCanvasIos::drawImage(CGImageRef image, float scale,
-                            const Point2d& centerM, bool autoScale)
+bool GiCanvasIos::drawImage(CGImageRef image, float scale, 
+                            const Point2d& centerM, bool useViewScale)
 {
     CGContextRef context = m_draw->getContext();
     bool ret = false;
@@ -467,7 +474,7 @@ bool GiCanvasIos::drawImage(CGImageRef image, float scale,
         float w = CGImageGetWidth(image) / scale;
         float h = CGImageGetHeight(image) / scale;
         
-        if (autoScale) {
+        if (useViewScale) {
             w *= m_draw->xf().getViewScale();
             h *= m_draw->xf().getViewScale();
         }
@@ -516,6 +523,16 @@ void GiCanvasIos::setScreenDpi(float dpi, float scale)
 {
     GiCanvasIosImpl::_dpi = dpi;
     GiCanvasIosImpl::_scale = scale;
+}
+
+float GiCanvasIos::screenDpi()
+{
+    return GiCanvasIosImpl::_dpi;
+}
+
+float GiCanvasIos::screenScale()
+{
+    return GiCanvasIosImpl::_scale;
 }
 
 float GiCanvasIos::getScreenDpi() const
@@ -679,8 +696,8 @@ bool GiCanvasIos::rawEndPath(const GiContext* ctx, bool fill)
     bool usebrush = fill && m_draw->setBrush(ctx);
     
     if (usepen || usebrush) {
-        CGContextDrawPath(m_draw->getContext(), usepen && usebrush ? kCGPathFillStroke
-                          : usepen ? kCGPathStroke : kCGPathFill);
+        CGContextDrawPath(m_draw->getContext(), usepen && usebrush ? kCGPathEOFillStroke
+                          : usepen ? kCGPathStroke : kCGPathEOFill);
     }
 
     return usepen || usebrush;
@@ -708,4 +725,38 @@ bool GiCanvasIos::rawClosePath()
 {
     CGContextClosePath(m_draw->getContext());
     return true;
+}
+
+void drawTextCenter(const char* text, float x, float y, float h);
+CGImageRef getImageInShape(const char* name);
+
+void GiCanvasIos::rawTextCenter(const char* text, float x, float y, float h)
+{
+    drawTextCenter(text, x, y, h);
+}
+
+bool GiCanvasIos::drawImage(const char* name, float xc, float yc, float w, float h, float angle)
+{
+    CGImageRef img = getImageInShape(name);
+    CGAffineTransform af = CGAffineTransformMake(1, 0, 0, -1, xc, yc);
+    
+    af = CGAffineTransformRotate(af, angle);
+    CGContextConcatCTM(m_draw->getContext(), af);
+    
+    if (img) {
+        CGContextDrawImage(m_draw->getContext(), CGRectMake(-w/2, -h/2, w, h), img);
+    } else {
+        CGContextStrokeRect(m_draw->getContext(), CGRectMake(-w/2, -h/2, w, h));
+        
+        CGContextMoveToPoint(m_draw->getContext(), -w/2, -h/2);
+        CGContextAddLineToPoint(m_draw->getContext(), w/2, h/2);
+        CGContextStrokePath(m_draw->getContext());
+        
+        CGContextMoveToPoint(m_draw->getContext(), w/2, -h/2);
+        CGContextAddLineToPoint(m_draw->getContext(), -w/2, h/2);
+        CGContextStrokePath(m_draw->getContext());
+    }
+    CGContextConcatCTM(m_draw->getContext(), CGAffineTransformInvert(af));
+    
+    return !!img;
 }

@@ -57,7 +57,7 @@ public:
         \see endPaint
     */
     virtual bool beginPaint(HDC hdc, HDC attribDC = NULL, 
-        bool buffered = true, bool overlay = false);
+        bool buffered = true, bool overlay = false) = 0;
 
     //! 结束绘图
     /*! 本函数销毁绘图缓冲和绘图环境的临时数据，如果使用了绘图缓冲，就将缓冲中的
@@ -67,7 +67,7 @@ public:
         \see beginPaint
         \see drawCachedBitmap2
     */
-    virtual void endPaint(bool draw = true);
+    virtual void endPaint(bool draw = true) = 0;
 
     //! 获取绘图DC
     /*! 如果在函数 beginPaint 中指定使用绘图缓冲，则会返回绘图缓冲DC。\n
@@ -95,12 +95,12 @@ public:
     virtual bool rawTextOut(HDC hdc, float x, float y, const wchar_t* str, int len);
 
     //! 显示文字的原语函数(类似于ExtTextOutA)
-    virtual bool rawTextOut(HDC hdc, float x, float y, UInt32 options, 
-        const RECT_2D& rc, const char* str, int len, const Int32* pDx);
+    virtual bool rawTextOut(HDC hdc, float x, float y, int options, 
+        const RECT_2D& rc, const char* str, int len, const int* pDx);
 
     //! 显示文字的原语函数(类似于ExtTextOutW)
-    virtual bool rawTextOut(HDC hdc, float x, float y, UInt32 options, 
-        const RECT_2D& rc, const wchar_t* str, int len, const Int32* pDx);
+    virtual bool rawTextOut(HDC hdc, float x, float y, int options, 
+        const RECT_2D& rc, const wchar_t* str, int len, const int* pDx);
 
     //! 显示图像（旋转角度为90度的整数倍）
     /*!
@@ -115,6 +115,10 @@ public:
         const Box2d& rectW, bool fast = false) = 0;
 
 protected:
+    bool _beginPaint(HDC hdc, HDC attribDC = NULL, 
+        bool buffered = true, bool overlay = false);
+    void _endPaint(bool draw);
+
     HDC         m_attribDC;         //!< 属性DC，打印预览时为打印机DC
 };
 

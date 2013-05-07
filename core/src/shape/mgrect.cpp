@@ -56,6 +56,8 @@ void MgBaseRect::_update()
     _points[2] = _points[1].rulerPoint(_points[0], yoff);
     _points[3] = _points[0].rulerPoint(_points[1], -yoff);
     _extent.set(4, _points);
+    if (_extent.isEmpty())
+        _extent.set(_points[0], 2 * Tol::gTol().equalPoint(), 0);
     __super::_update();
 }
 
@@ -126,7 +128,7 @@ void MgBaseRect::setRectWithAngle(const Point2d& pt1, const Point2d& pt2,
             rect.set(basept, 2 * basept.distanceTo(pt2), 0);
         }
         else {
-            float len = (float)mgMax(fabs(pt2.x - pt1.x), fabs(pt2.y - pt1.y));
+            float len = mgMax(fabsf(pt2.x - pt1.x), fabsf(pt2.y - pt1.y));
             if (basept == pt1 && !isCurve()) {
                 rect.set(pt1, pt1 + Point2d(pt2.x > pt1.x ? len : -len,
                                             pt2.y > pt1.y ? len : -len));
@@ -190,7 +192,8 @@ Point2d MgBaseRect::_getHandlePoint(int index) const
 {
     Point2d pt;
     mgGetRectHandle(getRect(), index, pt);
-    pt *= Matrix2d::rotation(getAngle(), getCenter());
+    float a = getAngle();
+    pt *= Matrix2d::rotation(a, getCenter());
     return pt;
 }
 
@@ -273,10 +276,10 @@ MgRect::~MgRect()
 {
 }
 
-bool MgRect::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
+bool MgRect::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const
 {
     bool ret = gs.drawPolygon(&ctx, 4, _points);
-    return __super::_draw(mode, gs, ctx) || ret;
+    return __super::_draw(mode, gs, ctx, segment) || ret;
 }
 
 // MgImageShape
@@ -307,7 +310,7 @@ void MgImageShape::setName(const char* name)
     _name[len] = 0;
 }
 
-bool MgImageShape::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
+bool MgImageShape::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const
 {
     Box2d rect(getRect() * gs.xf().modelToDisplay());
     Vector2d vec((_points[1] - _points[0]) * gs.xf().modelToWorld());
@@ -318,7 +321,7 @@ bool MgImageShape::_draw(int mode, GiGraphics& gs, const GiContext& ctx) const
     bool ret = (gs.drawPolygon(&tmpctx, 4, _points) ||
                 gs.drawImage(_name, rect.center().x, rect.center().y, 
                              rect.width(), rect.height(), vec.angle2()));
-    return __super::_draw(mode, gs, tmpctx) || ret;
+    return __super::_draw(mode, gs, ctx, segment) || ret;
 }
 
 void MgImageShape::_copy(const MgImageShape& src)
@@ -374,4 +377,94 @@ MgShape* MgImageShape::findShapeByImageID(MgShapes* shapes, const char* name)
     shapes->freeIterator(it);
     
     return ret;
+}
+
+// MgDiamond
+//
+
+MG_IMPLEMENT_CREATE(MgDiamond)
+
+MgDiamond::MgDiamond()
+{
+}
+
+MgDiamond::~MgDiamond()
+{
+}
+
+int MgDiamond::_getHandleCount() const
+{
+    return 4;
+}
+
+Point2d MgDiamond::_getHandlePoint(int index) const
+{
+    return MgBaseRect::_getHandlePoint(4 + index % 4);
+}
+
+bool MgDiamond::_setHandlePoint(int index, const Point2d& pt, float tol)
+{
+    if (!getFlag(kMgFixedLength)) {
+        return MgBaseRect::_setHandlePoint(4 + index % 4, pt, tol);
+    }
+    
+    Point2d cen(getCenter());
+    Point2d pnt, ptup, ptside;
+    
+    pnt = pt * Matrix2d::rotation(-getAngle(), cen);
+    mgGetRectHandle(getRect(), 4 + (index + 2) % 4, ptup);
+    mgGetRectHandle(getRect(), 4 + (index + 1) % 4, ptside);
+    
+    float len = ptup.distanceTo(ptside);
+    float dy = index % 2 == 0 ? pnt.y - ptup.y : pnt.x - ptup.x;
+    float ry = mgMin(len, fabsf(dy) / 2);
+    float rx = sqrtf(len * len - ry * ry);
+    Box2d rect(cen, rx * 2, ry * 2);
+    setRectWithAngle(rect.leftTop(), rect.rightBottom(), getAngle(), cen);
+    
+    return true;
+}
+
+bool MgDiamond::_rotateHandlePoint(int, const Point2d&)
+{
+    return false;
+}
+
+void MgDiamond::_update()
+{
+    __super::_update();
+    Point2d pts[] = { _getHandlePoint(0), _getHandlePoint(1),
+        _getHandlePoint(2), _getHandlePoint(3) };
+    _extent.set(4, pts);
+    if (_extent.isEmpty())
+        _extent.set(pts[0], 2 * Tol::gTol().equalPoint(), 0);
+}
+
+float MgDiamond::_hitTest(const Point2d& pt, float tol, 
+                          Point2d& nearpt, int& segment) const
+{
+    Point2d pts[] = { _getHandlePoint(0), _getHandlePoint(1),
+        _getHandlePoint(2), _getHandlePoint(3) };
+    return mgLinesHit(4, pts, true, pt, tol, nearpt, segment);
+}
+
+bool MgDiamond::_hitTestBox(const Box2d& rect) const
+{
+    if (!__super::_hitTestBox(rect))
+        return false;
+    
+    for (int i = 0; i < 3; i++) {
+        if (Box2d(_getHandlePoint(i), _getHandlePoint(i + 1)).isIntersect(rect))
+            return true;
+    }
+    
+    return false;
+}
+
+bool MgDiamond::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const
+{
+    Point2d pts[] = { _getHandlePoint(0), _getHandlePoint(1),
+        _getHandlePoint(2), _getHandlePoint(3) };
+    bool ret = gs.drawPolygon(&ctx, 4, pts);
+    return __super::_draw(mode, gs, ctx, segment) || ret;
 }

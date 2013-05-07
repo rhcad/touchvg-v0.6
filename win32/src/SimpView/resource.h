@@ -48,7 +48,13 @@
 #define ID_CMD_16                       32825
 #define ID_CMD_17                       32826
 #define ID_CMD_18                       32827
-#define ID_CMD_LAST                     32827
+#define ID_CMD_19                       32828
+#define ID_CMD_20                       32829
+#define ID_CMD_21                       32830
+#define ID_CMD_22                       32831
+#define ID_CMD_23                       32832
+#define ID_CMD_24                       32833
+#define ID_CMD_LAST                     32833
 #define ID_DUMMY_1                      32850
 #define ID_DUMMY_2                      32851
 #define ID_DUMMY_3                      32852
@@ -75,7 +81,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        132
-#define _APS_NEXT_COMMAND_VALUE         32807
+#define _APS_NEXT_COMMAND_VALUE         32808
 #define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

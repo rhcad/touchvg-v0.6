@@ -5,7 +5,7 @@
 #include "mgbox.h"
 #include "mgmat.h"
 
-Box2d::Box2d(const BOX_2D& src, bool bNormalize)
+Box2d::Box2d(const Box2d& src, bool bNormalize)
 {
     xmin = src.xmin;
     ymin = src.ymin;
@@ -15,7 +15,7 @@ Box2d::Box2d(const BOX_2D& src, bool bNormalize)
         normalize();
 }
 
-Box2d& Box2d::set(const BOX_2D& src, bool bNormalize)
+Box2d& Box2d::set(const Box2d& src, bool bNormalize)
 {
     xmin = src.xmin;
     ymin = src.ymin;
@@ -30,8 +30,6 @@ Box2d& Box2d::set(const Point2d& p1, const Point2d& p2)
     ymin = mgMin(p1.y, p2.y);
     xmax = mgMax(p1.x, p2.x);
     ymax = mgMax(p1.y, p2.y);
-    if (isEmpty())
-        inflate(Tol::gTol().equalPoint());
     return *this;
 }
 
@@ -41,8 +39,6 @@ Box2d& Box2d::set(float x1, float y1, float x2, float y2)
     ymin = mgMin(y1, y2);
     xmax = mgMax(x1, x2);
     ymax = mgMax(y1, y2);
-    if (isEmpty())
-        inflate(Tol::gTol().equalPoint());
     return *this;
 }
 
@@ -53,8 +49,6 @@ Box2d& Box2d::set(const Point2d& p1, const Point2d& p2,
     ymin = mgMin(mgMin(p1.y, p2.y), mgMin(p3.y, p4.y));
     xmax = mgMax(mgMax(p1.x, p2.x), mgMax(p3.x, p4.x));
     ymax = mgMax(mgMax(p1.y, p2.y), mgMax(p3.y, p4.y));
-    if (isEmpty())
-        inflate(Tol::gTol().equalPoint());
     return *this;
 }
 
@@ -75,8 +69,6 @@ Box2d& Box2d::set(int count, const Point2d* points)
         if (ymax < points[i].y)
             ymax = points[i].y;
     }
-    if (isEmpty())
-        inflate(Tol::gTol().equalPoint());
 
     return *this;
 }

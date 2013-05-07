@@ -5,6 +5,7 @@
 #include "mgcurv.h"
 #include "mgbase.h"
 #include "mglnrel.h"
+#include "mgdblpt.h"
 
 GEOMAPI void mgFitBezier(const Point2d* pts, float t, Point2d& fitpt)
 {
@@ -118,8 +119,8 @@ static void _mgAngleArcToBezier(
     // Anticlockwise: (0,-B), (x,-y), (x,y), (0,B)
     float sy = ry / rx;
     ry = rx;
-    float B = ry * sin(sweepAngle / 2);
-    float C = rx * cos(sweepAngle / 2);
+    float B = ry * sinf(sweepAngle / 2);
+    float C = rx * cosf(sweepAngle / 2);
     float A = rx - C;
     
     float X = A * 4 / 3;
@@ -132,8 +133,8 @@ static void _mgAngleArcToBezier(
     
     // rotate to the original angle
     A = startAngle + sweepAngle / 2;
-    float s = sin(A);
-    float c = cos(A);
+    float s = sinf(A);
+    float c = cosf(A);
     
     for (int i = 0; i < 4; i++)
     {
@@ -228,7 +229,7 @@ GEOMAPI int mgAngleArcToBezier(
     Point2d points[16], const Point2d& center, float rx, float ry,
     float startAngle, float sweepAngle)
 {
-    if (mgIsZero(rx) || fabs(sweepAngle) < 1e-5)
+    if (mgIsZero(rx) || fabsf(sweepAngle) < 1e-5)
         return 0;
     if (mgIsZero(ry))
         ry = rx;
@@ -239,7 +240,7 @@ GEOMAPI int mgAngleArcToBezier(
     
     int n = 0;
     
-    if (fabs(sweepAngle) < _M_PI_2 + 1e-5)
+    if (fabsf(sweepAngle) < _M_PI_2 + 1e-5)
     {
         _mgAngleArcToBezier(points, center, rx, ry, startAngle, sweepAngle);
         n = 4;
@@ -285,9 +286,9 @@ GEOMAPI bool mgArc3P(
     if (startAngle != NULL && sweepAngle != NULL)
     {
         // 分别计算圆心到三点的角度
-        float a = atan2(start.y - center.y, start.x - center.x);
-        float b = atan2(point.y - center.y, point.x - center.x);
-        float c = atan2(end.y - center.y, end.x - center.x);
+        float a = atan2f(start.y - center.y, start.x - center.x);
+        float b = atan2f(point.y - center.y, point.x - center.x);
+        float c = atan2f(end.y - center.y, end.x - center.x);
         
         *startAngle = a;
         
@@ -331,8 +332,8 @@ GEOMAPI bool mgArcTan(
     
     if (startAngle != NULL && sweepAngle != NULL)
     {
-        float sa = atan2(start.y - center.y, start.x - center.x);
-        float ea = atan2(end.y - center.y, end.x - center.x);
+        float sa = atan2f(start.y - center.y, start.x - center.x);
+        float ea = atan2f(end.y - center.y, end.x - center.x);
         *startAngle = sa;
         if (startTan.crossProduct(start - center) > 0.f)
             *sweepAngle = -mgTo0_2PI(sa - ea);
@@ -353,20 +354,6 @@ GEOMAPI bool mgArcBulge(
     return mgArc3P(start, point, end, center, radius, startAngle, sweepAngle);
 }
 
-struct point_t {
-    double x, y;
-};
-
-static double distanceSquare(const point_t& a, const point_t& b)
-{
-    return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
-}
-
-static double distance(const point_t& a, const point_t& b)
-{
-    return sqrt(distanceSquare(a, b));
-}
-
 static int _InsectTwoCircles(point_t& pt1, point_t& pt2,
                              const point_t& c1, double r1,
                              const point_t& c2, double r2)
@@ -378,14 +365,14 @@ static int _InsectTwoCircles(point_t& pt1, point_t& pt2,
         return -1;
     }
     
-    d = distance(c1, c2);
+    d = c1.distance(c2);
     if (d > r1 + r2 || d < fabs(r1 - r2)) {
         return 0;
     }
     
     a = 2.0 * r1 * (c1.x - c2.x);
     b = 2.0 * r1 * (c1.y - c2.y);
-    c = r2 * r2 - r1 * r1 - distanceSquare(c1, c2);
+    c = r2 * r2 - r1 * r1 - c1.distanceSquare(c2);
     p = a * a + b * b;
     q = -2.0 * a * c;
     if (mgEquals(d, r1 + r2) || mgEquals(d, fabs(r1 - r2))) {
@@ -395,7 +382,7 @@ static int _InsectTwoCircles(point_t& pt1, point_t& pt2,
         pt1.x = r1 * cos_value[0] + c1.x;
         pt1.y = r1 * sin_value[0] + c1.y;
         
-        if (!mgEquals(distanceSquare(pt1, c2), r2 * r2)) {
+        if (!mgEquals(pt1.distanceSquare(c2), r2 * r2)) {
             pt1.y = c1.y - r1 * sin_value[0];
         }
         return 1;
@@ -412,10 +399,10 @@ static int _InsectTwoCircles(point_t& pt1, point_t& pt2,
     pt1.y = r1 * sin_value[0] + c1.y;
     pt2.y = r1 * sin_value[1] + c1.y;
     
-    if (!mgEquals(distanceSquare(pt1, c2), r2 * r2)) {
+    if (!mgEquals(pt1.distanceSquare(c2), r2 * r2)) {
         pt1.y = c1.y - r1 * sin_value[0];
     }
-    if (!mgEquals(distanceSquare(pt2, c2), r2 * r2)) {
+    if (!mgEquals(pt2.distanceSquare(c2), r2 * r2)) {
         pt2.y = c1.y - r1 * sin_value[1];
     }
     if (mgEquals(pt1.y, pt2.y) && mgEquals(pt1.x, pt2.x)) {
@@ -445,13 +432,13 @@ GEOMAPI int mgInsectTwoCircles(Point2d& pt1, Point2d& pt2,
 }
 
 GEOMAPI bool mgTriEquations(
-    Int32 n, float *a, float *b, float *c, Vector2d *vs)
+    int n, float *a, float *b, float *c, Vector2d *vs)
 {
     if (!a || !b || !c || !vs || n < 2)
         return false;
     
     float w;
-    Int32 i;
+    int i;
     
     w = b[0];
     if (mgIsZero(w))
@@ -480,9 +467,9 @@ GEOMAPI bool mgTriEquations(
     return true;
 }
 
-GEOMAPI bool mgGaussJordan(Int32 n, float *mat, Vector2d *vs)
+GEOMAPI bool mgGaussJordan(int n, float *mat, Vector2d *vs)
 {
-    Int32 i, j, k, m;
+    int i, j, k, m;
     float c, t;
     Vector2d tt;
     
@@ -496,7 +483,7 @@ GEOMAPI bool mgGaussJordan(Int32 n, float *mat, Vector2d *vs)
         c = mat[k*n+k];
         for (i = k+1; i < n; i++)
         {
-            if (fabs(mat[i*n+k]) > fabs(c))
+            if (fabsf(mat[i*n+k]) > fabsf(c))
             {
                 m = i;
                 c = mat[i*n+k];
@@ -544,9 +531,9 @@ GEOMAPI bool mgGaussJordan(Int32 n, float *mat, Vector2d *vs)
 }
 
 static bool CalcCubicClosed(
-    Int32 n, float* a, Vector2d* vecs, const Point2d* knots)
+    int n, float* a, Vector2d* vecs, const Point2d* knots)
 {
-    Int32 i, n1 = n - 1;
+    int i, n1 = n - 1;
 
     for (i = n*n - 1; i >= 0; i--)
         a[i] = 0.f;
@@ -575,7 +562,7 @@ static bool CalcCubicClosed(
 }
 
 static bool CalcCubicUnclosed(
-    kMgCubicSplineFlags flag, Int32 n, const Point2d* knots, 
+    int flag, int n, const Point2d* knots, 
     float* a, float* b, float* c, Vector2d* vecs)
 {
     if (flag & kMgCubicTan1)          // 起始夹持端
@@ -633,8 +620,8 @@ static bool CalcCubicUnclosed(
 }
 
 GEOMAPI bool mgCubicSplines(
-    Int32 n, const Point2d* knots, Vector2d* knotvs,
-    kMgCubicSplineFlags flag, float tension)
+    int n, const Point2d* knots, Vector2d* knotvs,
+    int flag, float tension)
 {
     bool ret = false;
     
@@ -668,8 +655,8 @@ GEOMAPI bool mgCubicSplines(
 }
 
 GEOMAPI void mgFitCubicSpline(
-    Int32 n, const Point2d* knots, const Vector2d* knotvs,
-    Int32 i, float t, Point2d& fitpt)
+    int n, const Point2d* knots, const Vector2d* knotvs,
+    int i, float t, Point2d& fitpt)
 {
     float b2, b3;
     int i1 = i % n;
@@ -685,8 +672,8 @@ GEOMAPI void mgFitCubicSpline(
 }
 
 GEOMAPI void mgCubicSplineToBezier(
-    Int32 n, const Point2d* knots, const Vector2d* knotvs,
-    Int32 i, Point2d points[4])
+    int n, const Point2d* knots, const Vector2d* knotvs,
+    int i, Point2d points[4])
 {
     int i1 = i % n;
     int i2 = (i+1) % n;
@@ -696,7 +683,7 @@ GEOMAPI void mgCubicSplineToBezier(
     points[3] = knots[i2];
 }
 
-static Int32 RemoveSamePoint(Int32 &n, Point2d* knots, float tol)
+static int RemoveSamePoint(int &n, Point2d* knots, float tol)
 {
     for (int i = 0; i < n - 1; i++)
     {
@@ -712,7 +699,7 @@ static Int32 RemoveSamePoint(Int32 &n, Point2d* knots, float tol)
 }
 
 static void CalcClampedS1n(
-    Int32 n1, const Point2d* knots, bool closed, float &len1, 
+    int n1, const Point2d* knots, bool closed, float &len1, 
     float &sx1, float &sy1, float &sxn, float &syn)
 {
     float dx, dy, len;
@@ -738,7 +725,7 @@ static void CalcClampedS1n(
 }
 
 static float CalcClampedHp(
-    Int32 n1, const Point2d* knots, float* hp, Vector2d* vecs, 
+    int n1, const Point2d* knots, float* hp, Vector2d* vecs, 
     float len1, float sx1, float sy1, float sxn, float syn)
 {
     float dx, dy, dx1, dy1, dx2, dy2, len, s;
@@ -771,19 +758,19 @@ static float CalcClampedHp(
 }
 
 static bool CalcClampedVecs(
-    float sigma, bool closed, Int32 n1, const float* hp, 
+    float sigma, bool closed, int n1, const float* hp, 
     float* a, float* b, float* c, Vector2d* vecs)
 {
     int i;
     float w, ds, d1, d2;
 
     ds = sigma * hp[0];
-    d1 = sigma * cosh(ds) / sinh(ds) - 1.f / hp[0];
+    d1 = sigma * coshf(ds) / sinhf(ds) - 1.f / hp[0];
     for (i = 0; i < n1; i++)
     {
         ds = sigma * hp[i];
-        d2 = sigma * cosh(ds) / sinh(ds) - 1.f / hp[i];
-        c[i] = 1.f / hp[i] - sigma / sinh(ds);
+        d2 = sigma * coshf(ds) / sinhf(ds) - 1.f / hp[i];
+        c[i] = 1.f / hp[i] - sigma / sinhf(ds);
         a[i] = c[i];
         b[i] = d1 + d2;
         d1 = d2;
@@ -817,10 +804,10 @@ static bool CalcClampedVecs(
 }
 
 GEOMAPI bool mgClampedSplines(
-    Int32& n, Point2d* knots, 
+    int& n, Point2d* knots, 
     float sgm, float tol, float& sigma, float* hp, Vector2d* knotvs)
 {
-    Int32 n1;
+    int n1;
     float len1, sx1, sy1, sxn, syn, s;
     bool closed;
     
@@ -874,7 +861,7 @@ GEOMAPI bool mgClampedSplines(
 //       s_0 = 0, s_i = s_(i-1) + h_i, h_i = | P[i+1]P[i] |
 GEOMAPI void mgFitClampedSpline(
     const Point2d* knots, 
-    Int32 i, float t, float sigma,
+    int i, float t, float sigma,
     const float* hp, const Vector2d* knotvs, Point2d& fitpt)
 {
     float s1, s2, s3, tx1, ty1, tx2, ty2;
@@ -885,9 +872,9 @@ GEOMAPI void mgFitClampedSpline(
     ty1 = (knots[i].y - knotvs[i].y)  * div_hp0;
     ty2 = (knots[i+1].y - knotvs[i+1].y) * div_hp0;
     
-    s1 = sinh(sigma * (hp[i] - t));
-    s2 = sinh(sigma * t);
-    s3 = 1.f / sinh(sigma * hp[i]);
+    s1 = sinhf(sigma * (hp[i] - t));
+    s2 = sinhf(sigma * t);
+    s3 = 1.f / sinhf(sigma * hp[i]);
     
     fitpt.x = (knotvs[i].x * s1 + knotvs[i+1].x * s2) *s3 + tx1*(hp[i] - t) + tx2*t;
     fitpt.y = (knotvs[i].y * s1 + knotvs[i+1].y * s2) *s3 + ty1*(hp[i] - t) + ty2*t;

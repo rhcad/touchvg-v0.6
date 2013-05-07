@@ -58,6 +58,11 @@ bool GiGdipImage::open(const wchar_t* filename)
     return getWidth() > 0;
 }
 
+void GiGdipImage::setBitmap(void* bitmap)
+{
+    m_impl->bmp = (G::Bitmap*)bitmap;
+}
+
 long GiGdipImage::getDpiX() const
 {
     return m_impl->bmp ? mgRound(m_impl->bmp->GetHorizontalResolution()) : 0;
@@ -84,7 +89,7 @@ long GiGdipImage::getHmWidth() const
 
     if (m_impl->bmp != NULL)
     {
-        UINT w = m_impl->bmp->GetWidth();
+        int w = m_impl->bmp->GetWidth();
         G::REAL dpi = m_impl->bmp->GetHorizontalResolution();
         ret = mgRound(w / dpi * 2540);
     }
@@ -98,7 +103,7 @@ long GiGdipImage::getHmHeight() const
 
     if (m_impl->bmp != NULL)
     {
-        UINT h = m_impl->bmp->GetHeight();
+        int h = m_impl->bmp->GetHeight();
         G::REAL dpi = m_impl->bmp->GetVerticalResolution();
         ret = mgRound(h / dpi * 2540);
     }
@@ -234,11 +239,11 @@ bool GiGdipImage::getEncoder(const wchar_t* filename, WCHAR format[20], CLSID& c
     return i >= 0;
 }
 
-GiGdipImage* GiGdipImage::thumbnailImage(UInt32 maxWidth, UInt32 maxHeight)
+GiGdipImage* GiGdipImage::thumbnailImage(int maxWidth, int maxHeight)
 {
     GiGdipImage* image = NULL;
-    UINT width = getWidth();
-    UINT height = getHeight();
+    int width = getWidth();
+    int height = getHeight();
 
     if (width > 0 && height > 0)
     {

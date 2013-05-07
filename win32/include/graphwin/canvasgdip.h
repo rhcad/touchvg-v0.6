@@ -27,9 +27,13 @@ public:
     //! 返回当前绘图输出对象(Gdiplus::Graphics*)
     void* GetGraphics();
 
+    //! 返回缓冲位图对象(Gdiplus::Bitmap)
+    void* GetBufferedBitmap();
+
 public:
     virtual bool beginPaint(HDC hdc, HDC attribDC = NULL, 
         bool buffered = true, bool overlay = false);
+    bool beginPaintBuffered();
     virtual void endPaint(bool draw = true);
     virtual void clearWindow();
     virtual bool drawCachedBitmap(float x = 0, float y = 0, bool secondBmp = false);
@@ -63,6 +67,8 @@ public:
     virtual bool rawLineTo(float x, float y);
     virtual bool rawBezierTo(float c1x, float c1y, float c2x, float c2y, float x, float y);
     virtual bool rawClosePath();
+
+    virtual void rawTextCenter(const char* text, float x, float y, float h);
     
     virtual bool drawImage(long hmWidth, long hmHeight, HBITMAP hbitmap, 
         const Box2d& rectW, bool fast = false);
