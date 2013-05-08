@@ -6,7 +6,6 @@ build
 *.aps
 *.obj
 *.o
-*.a
 *.d
 *.cc
 *.tmp
