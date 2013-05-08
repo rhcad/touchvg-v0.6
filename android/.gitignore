@@ -4,5 +4,5 @@ gen
 obj
 assets
 *.db
-libs
 android.jar
+android-support-v4.jar
