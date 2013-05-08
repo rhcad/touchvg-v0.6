@@ -2,7 +2,7 @@
 # Replace destlibs as your app's location.
 
 cd ios/Graph2d
-destlibs=../../../WitCloudyReader2.0/Resources/ThirdPartSDK/Graph2d
+destlibs=../Graph2d-Build
 
 xcodebuild -sdk iphoneos5.1 -configuration Release
 cp ../Build/ios/Graph2d/*.h $destlibs/include/

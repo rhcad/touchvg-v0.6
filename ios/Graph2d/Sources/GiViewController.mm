@@ -19,7 +19,6 @@
 - (void)updateMagnifierCenter:(UIGestureRecognizer *)sender;
 
 - (void)addGestureRecognizers:(int)t view:(UIView*)view;
-- (void)setGestureRecognizerEnabled:(BOOL)enabled;
 - (BOOL)gestureCheck:(UIGestureRecognizer*)sender;
 
 - (BOOL)twoFingersPinch:(UIPinchGestureRecognizer *)sender;
@@ -667,6 +666,43 @@ static GiViewController* s_instance = nil;
     [_magViews[1] setNeedsDisplay];
 }
 
+- (void)setGestureRecognizerUsed:(BOOL)used
+{
+    if (_gestureRecognizerUsed) {
+        for (int i = 0; i < RECOGNIZER_COUNT; i++) {
+            if (_recognizers[0][i]) {
+                [self.view removeGestureRecognizer:_recognizers[0][i]];
+            }
+            if (_recognizers[1][i]) {
+                [_magViews[0] removeGestureRecognizer:_recognizers[1][i]];
+            }
+        }
+    }
+    _gestureRecognizerUsed = used;
+    if (_gestureRecognizerUsed) {
+        for (int i = 0; i < RECOGNIZER_COUNT; i++) {
+            if (_recognizers[0][i]) {
+                [self.view addGestureRecognizer:_recognizers[0][i]];
+            }
+            if (_recognizers[1][i]) {
+                [_magViews[0] addGestureRecognizer:_recognizers[1][i]];
+            }
+        }
+    }
+}
+
+/*- (void)setGestureRecognizerEnabled:(BOOL)enabled
+{
+    for (int i = 0; i < RECOGNIZER_COUNT; i++) {
+        if (_recognizers[0][i]) {
+            _recognizers[0][i].enabled = enabled;
+        }
+        if (_recognizers[1][i]) {
+            _recognizers[1][i].enabled = enabled;
+        }
+    }
+}*/
+
 - (UIGestureRecognizer*) getGestureRecognizer:(int)index
 {
     return index >= 0 && index < RECOGNIZER_COUNT ? _recognizers[0][index] : NULL;
@@ -819,43 +855,6 @@ static CGPoint _ignorepoint = CGPointMake(-1000, -1000);    // 全局屏幕坐�
             if (_recognizers[t][i]) {
                 [view addGestureRecognizer:_recognizers[t][i]];
             }
-        }
-    }
-}
-
-- (void)setGestureRecognizerUsed:(BOOL)used
-{
-    if (_gestureRecognizerUsed) {
-        for (int i = 0; i < RECOGNIZER_COUNT; i++) {
-            if (_recognizers[0][i]) {
-                [self.view removeGestureRecognizer:_recognizers[0][i]];
-            }
-            if (_recognizers[1][i]) {
-                [_magViews[0] removeGestureRecognizer:_recognizers[1][i]];
-            }
-        }
-    }
-    _gestureRecognizerUsed = used;
-    if (_gestureRecognizerUsed) {
-        for (int i = 0; i < RECOGNIZER_COUNT; i++) {
-            if (_recognizers[0][i]) {
-                [self.view addGestureRecognizer:_recognizers[0][i]];
-            }
-            if (_recognizers[1][i]) {
-                [_magViews[0] addGestureRecognizer:_recognizers[1][i]];
-            }
-        }
-    }
-}
-
-- (void)setGestureRecognizerEnabled:(BOOL)enabled
-{
-    for (int i = 0; i < RECOGNIZER_COUNT; i++) {
-        if (_recognizers[0][i]) {
-            _recognizers[0][i].enabled = enabled;
-        }
-        if (_recognizers[1][i]) {
-            _recognizers[1][i].enabled = enabled;
         }
     }
 }
