@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Graph2d/Graph2d.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:FreeDraw/FreeDraw.xcodeproj">
    </FileRef>
 </Workspace>
