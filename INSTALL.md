@@ -4,7 +4,7 @@
 
 * 编译条件： Mac OS X 10.5 以上，Xcode 3.2 以上
 
-* 在 Xcode 中打开 ios 目录下的 demos 工作区文件
+* 在 Xcode 中打开 ios 目录下的 demos.xcworkspace 工作区文件
   * 选择 FreeDraw 工程编译到 iPad / iPhone / iPod Touch 真机或模拟器上。
   * 在真机上调试时需要修改主程序的Bundle Identifier，例如“com.yourcompany.FreeDraw”，并选择自己的开发证书（Code Signing）
 
@@ -19,7 +19,7 @@
 
 ## 二、Android 程序
 
-* 演示程序编译 
+* 演示程序编译 （Mac/Linux/Win)
 
   * 在eclipse中导入 android/graph2d 工程，在AVD模拟器或真机上运行看测试界面。
   
@@ -38,15 +38,15 @@
 
 * 安装Android开发环境
   * 安装 JDK，并将其bin路径加到PATH (Mac和Linux下省略)
-  * 解压安装 Android Bundle 到本地，含有 Android SDK r21、eclipse、ADT。
+  * 解压安装 Android Bundle r21 到本地，含有 Android SDK r21、eclipse、ADT。
     
   * 如果需要编译本地库 libgraph2d.so，则
      * 解压安装 Android NDK (例如 r8e)，将NDK目录、Android SDK的 platform-tools 目录加到 PATH，对Mac则在 .bash_profile 文件中设置环境变量
-     * 对于Windows安装 MSYS (Mac下省略)，以便使用UNIX环境，或者安装cygwin
+     * 对于Windows推荐安装 MSYS (Mac下省略)，以便使用UNIX环境，或者安装cygwin
       
   * 如需修改内核接口、重新生成JNI类，则再安装：
      * 安装 ActivePython 2.7 (Mac下省略)，3.0或更高版本可能会出现encoding问题，将python目录加到 PATH
-     * 安装 swigwin-2.0.8，对于Mac则编译安装 swig-2.0.8，将swigwin目录加到 PATH
+     * 安装 swigwin-2.0.9，对于Mac则编译安装 swig-2.0.9，将swigwin目录加到 PATH
 
 ## 三、Windows 程序
 
