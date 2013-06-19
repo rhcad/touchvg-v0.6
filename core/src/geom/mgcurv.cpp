@@ -97,17 +97,17 @@ GEOMAPI void mgRoundRectToBeziers(
 
     mgEllipseToBezier(points, rect.center(), rx, ry);
 
-    for (i = 3; i >= 1; i--)
-    {
-        for (j = 3; j >= 0; j--)
+    for (i = 3; i >= 1; i--) {
+        for (j = 3; j >= 0; j--) {
             points[4 * i + j] = points[3 * i + j];
+        }
     }
-    for (i = 0; i < 4; i++)
-    {
+    for (i = 0; i < 4; i++) {
         float dx1 = (0 == i || 3 == i) ? dx : -dx;
         float dy1 = (0 == i || 1 == i) ? dy : -dy;
-        for (j = 0; j < 4; j++)
-            points[0 ].offset(dx1, dy1);
+        for (j = 0; j < 4; j++) {
+            points[4 * i + j].offset(dx1, dy1);
+        }
     }
 }
 
