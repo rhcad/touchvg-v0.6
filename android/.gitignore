@@ -1,8 +1,0 @@
-.metadata
-bin
-gen
-obj
-assets
-*.db
-android.jar
-android-support-v4.jar

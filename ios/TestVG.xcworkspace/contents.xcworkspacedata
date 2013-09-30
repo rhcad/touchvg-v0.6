@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:lib/DemoCmds/DemoCmds.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:lib/TouchVG/TouchVG.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:tests/TestGesture/TestGesture.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:tests/TestCanvas/TestCanvas.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:tests/TestView/TestView.xcodeproj">
+   </FileRef>
+</Workspace>

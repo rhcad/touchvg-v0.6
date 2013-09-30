@@ -1,9 +1,9 @@
 # Included by Makefile of swig project.
-# x3py framework: https://github.com/rhcad/x3py
+# TouchVG framework: https://github.com/rhcad/touchvg
 
 SOURCES ?=$(wildcard *.cpp)
 OBJDIR0  =._$(SWIG_TYPE)o/
-OBJDIR   =._$(SWIG_TYPE)o/o/
+OBJDIR   =._$(SWIG_TYPE)o/o/o/
 OBJS     =$(addprefix $(OBJDIR), $(SOURCES:.cpp=$(OBJEXT)))
 
 # SWIG_TYPE == ?
@@ -12,6 +12,7 @@ USE_PERL     :=$(shell echo $(SWIG_TYPE)|grep -i perl)
 USE_JAVA     :=$(shell echo $(SWIG_TYPE)|grep -i java)
 USE_CSHARP   :=$(shell echo $(SWIG_TYPE)|grep -i csharp)
 USE_RUBY     :=$(shell echo $(SWIG_TYPE)|grep -i ruby)
+USE_PHP      :=$(shell echo $(SWIG_TYPE)|grep -i php)
 
 # The extension of the target file to compile.
 ifdef IS_WIN
@@ -77,10 +78,23 @@ WRAPTARGET    =$(PROJNAME).rb
 CPPFLAGS     += -DUSE_RUBY
 endif
 
+ifdef USE_PHP
+SWIG_INCLUDE ?=$(PHP_INCLUDE)
+SWIG_LIBPATH :=$(PHP_LIB)
+SWIG_LIBFILE :=$(PHP_LIBFILE)
+SWIG_TESTEXT  =.rb
+WRAPTARGET    =$(PROJNAME).php
+CPPFLAGS     += -DUSE_PHP
+endif
+
 ifdef SWIG_INCLUDE
 INCLUDES     += -I"$(SWIG_INCLUDE)"
 ifdef IS_WIN
 INCLUDES     += -I"$(SWIG_INCLUDE)\win32"
+endif
+ifdef USE_PHP
+INCLUDES     += -I"$(SWIG_INCLUDE)/main" -I"$(SWIG_INCLUDE)/TSRM" -I"$(SWIG_INCLUDE)/Zend"
+INCLUDES     += -I"$(INSTALL_DIR)/$(SWIG_TYPE)"
 endif
 endif
 ifdef SWIG_LIBPATH
@@ -143,18 +157,22 @@ swig: $(REMOTE_TARGET) $(REMOTE_WRAPTARGET) $(REMOTE_TESTFILE)
 swigonly: $(REMOTE_WRAPTARGET)
 
 $(REMOTE_TARGET): $(OBJS)
-	-@test -d $(SWIG_TESTDIR) || mkdir -v $(SWIG_TESTDIR)
-	-@test -d $(SWIG_OUTDIR) || mkdir -v $(SWIG_OUTDIR)
+	-@mkdir -vp $(SWIG_TESTDIR)
+	-@mkdir -vp $(SWIG_OUTDIR)
 	$(LINK) $(LDFLAGS) $(OUTFLAG)$@ $(OBJS) $(LIBS)
 
 $(OBJDIR)%$(OBJEXT): %.cxx
-	-@test -d $(OBJDIR) || mkdir -v $(OBJDIR)
+	-@mkdir -vp $(OBJDIR)
 	$(CPP) $(subst -Wall ,,$(subst -W4 ,,$(CPPFLAGS))) $(INCLUDES) -c $< $(OFLAG)$@
 
+HAS_PUBSRC      :=$(shell echo $(SOURCES)|grep -i pub_src)
+
 $(OBJDIR)%.d: %.cpp
-	-@test -d $(OBJDIR0) || mkdir -v $(OBJDIR0)
-	-@test -d $(OBJDIR) || mkdir -v $(OBJDIR)
-	-@test -d $(OBJDIR)$(dir $<) || mkdir -v $(OBJDIR)$(dir $<)
+	-@mkdir -vp $(OBJDIR)
+ifdef HAS_PUBSRC
+	-@mkdir -vp $(OBJDIR0)pub_src
+endif
+	-@mkdir -vp $(OBJDIR)$(dir $<)
 	@echo Generating $@ from $<; $(DEPEND_CC) $@ $(INCLUDES) $<
 
 $(OBJDIR)%$(OBJEXT): %.cpp
@@ -165,20 +183,16 @@ include $(addprefix $(OBJDIR), $(SOURCES:.cpp=.d))
 endif
 
 #------------------------------------------------
-
-$(WRAPFILE).cxx: $(PROJNAME).i
+SWIGFILE       ?=$(PROJNAME).i
+$(WRAPFILE).cxx: $(SWIGFILE)
 	@echo --Making $(SWIG_TYPE) project $(PROJNAME)...
-	-@test -d $(SWIG_TESTDIR) || mkdir -v $(SWIG_TESTDIR)
-	-@test -d $(SWIG_OUTDIR) || mkdir -v $(SWIG_OUTDIR)
+	-@mkdir -vp $(SWIG_TESTDIR)
+	-@mkdir -vp $(SWIG_OUTDIR)
 ifdef SWIGTMP
 	-@test -d $(SWIGTMP) || mkdir -v $(SWIGTMP); rm -rf $(SWIGTMP)/*.*
 ifdef USE_JAVA
-	-@test -d $(SWIGTMP)/$(PKGNAME) || mkdir $(SWIGTMP)/$(PKGNAME)
-	-@test -d $(SWIGTMP)/$(PKGNAME)/$(PROJNAME) \
-        || mkdir -v $(SWIGTMP)/$(PKGNAME)/$(PROJNAME)
+	-@mkdir -vp $(SWIGTMP)/$(PKGNAME)/$(PROJNAME)
 	-@rm -rf $(JAVATMPDIR)/*.*
-else
-	-@test -d $(SWIGTMP) || mkdir -v $(SWIGTMP); rm -rf $(SWIGTMP)/*.*
 endif
 endif
 	$(SWIG_CC) -o $(WRAPFILE).cxx $(INCLUDES) $<

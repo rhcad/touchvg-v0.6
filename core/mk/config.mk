@@ -127,5 +127,9 @@ PERL5_INCLUDE  ?=/usr/lib/perl/5.12.4/CORE
 PERL5_LIBFILE  ?=perl
 RUBY_INCLUDE   ?=/usr/include/ruby-1.9.1
 RUBY_LIBFILE   ?=ruby-1.9.1
+PHP_INCLUDE    ?=/usr/local/php5/include/php
+PHP_LIB        ?=/usr/local/php5
+PHP_LIBFILE    ?=php5
+
 endif
 
