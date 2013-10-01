@@ -160,7 +160,6 @@
 		AE34CF7917F903B4004BC88B /* mgshapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE34CEE817F903B4004BC88B /* mgshapes.cpp */; };
 		AE34CF7A17F903B4004BC88B /* mgsplines.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE34CEE917F903B4004BC88B /* mgsplines.cpp */; };
 		AE3A618117EE7CC600B23F69 /* GiViewAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE3A618017EE7CC600B23F69 /* GiViewAdapter.mm */; };
-		AEE5C70F17E17D1100AFF74D /* GiGestureHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEE5C70D17E17D1100AFF74D /* GiGestureHandler.mm */; };
 		AEE5C71017E17D1100AFF74D /* GiGraphViewImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = AEE5C70E17E17D1100AFF74D /* GiGraphViewImpl.h */; };
 		AEF1B1D817E29D2C005B5132 /* GiViewHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = AEF1B1D717E29D2C005B5132 /* GiViewHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AEF1B1DA17E29D36005B5132 /* GiViewHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEF1B1D917E29D36005B5132 /* GiViewHelper.mm */; };
@@ -322,7 +321,6 @@
 		AE34CEE817F903B4004BC88B /* mgshapes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mgshapes.cpp; sourceTree = "<group>"; };
 		AE34CEE917F903B4004BC88B /* mgsplines.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mgsplines.cpp; sourceTree = "<group>"; };
 		AE3A618017EE7CC600B23F69 /* GiViewAdapter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiViewAdapter.mm; path = ../../../view/src/GiViewAdapter.mm; sourceTree = "<group>"; };
-		AEE5C70D17E17D1100AFF74D /* GiGestureHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiGestureHandler.mm; path = ../../../view/src/GiGestureHandler.mm; sourceTree = "<group>"; };
 		AEE5C70E17E17D1100AFF74D /* GiGraphViewImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiGraphViewImpl.h; path = ../../../view/src/GiGraphViewImpl.h; sourceTree = "<group>"; };
 		AEF1B1D717E29D2C005B5132 /* GiViewHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GiViewHelper.h; path = ../../../view/include/GiViewHelper.h; sourceTree = "<group>"; };
 		AEF1B1D917E29D36005B5132 /* GiViewHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GiViewHelper.mm; path = ../../../view/src/GiViewHelper.mm; sourceTree = "<group>"; };
@@ -814,7 +812,6 @@
 				AEF1B1D917E29D36005B5132 /* GiViewHelper.mm */,
 				AEE5C70E17E17D1100AFF74D /* GiGraphViewImpl.h */,
 				AE2A3A6A178FC617000194AE /* GiGraphView.mm */,
-				AEE5C70D17E17D1100AFF74D /* GiGestureHandler.mm */,
 				AE2A3A6B178FC617000194AE /* GiCanvasAdapter.mm */,
 			);
 			name = src;
@@ -1006,7 +1003,6 @@
 			files = (
 				AE2A3A6C178FC617000194AE /* GiGraphView.mm in Sources */,
 				AE2A3A6D178FC617000194AE /* GiCanvasAdapter.mm in Sources */,
-				AEE5C70F17E17D1100AFF74D /* GiGestureHandler.mm in Sources */,
 				AEF1B1DA17E29D36005B5132 /* GiViewHelper.mm in Sources */,
 				AE3A618117EE7CC600B23F69 /* GiViewAdapter.mm in Sources */,
 				AE34CF0217F903B4004BC88B /* cmdbasic.cpp in Sources */,
