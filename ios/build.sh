@@ -1,10 +1,6 @@
 #!/bin/sh
 # Type 'sh build.sh' to make TouchVG's library and bundle.
 
-mkdir -p output/include
-rm -f output/include/*.*
-rm -f output/*.a
-
 iphoneos61=`xcodebuild -showsdks | grep -i iphoneos6.1`
 iphoneos51=`xcodebuild -showsdks | grep -i iphoneos5.1`
 iphoneos43=`xcodebuild -showsdks | grep -i iphoneos4.3`
@@ -24,6 +20,7 @@ fi
 fi
 fi
 
+mkdir -p output/include
 cp -R lib/TouchVG/build/Release-universal/libTouchVG.a output
 cp -R lib/TouchVG/build/Release-universal/usr/local/include/*.h output/include
 cp -R lib/DemoCmds/build/Release-universal/libDemoCmds.a output

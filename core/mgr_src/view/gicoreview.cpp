@@ -909,43 +909,43 @@ bool GiCoreViewImpl::gestureToCommand(const MgMotion& motion)
     }
     if (motion.gestureState == kMgGesturePossible
         && motion.gestureType != kGiTwoFingersMove) {
-    	return true;
+        return true;
     }
 
     switch (motion.gestureType)
     {
     case kGiTwoFingersMove:
-    	ret = cmd->twoFingersMove(&motion);
-    	break;
+        ret = cmd->twoFingersMove(&motion);
+        break;
     case kGiGesturePan:
-    	switch (motion.gestureState)
-    	{
-    	case kMgGestureBegan:
-    		ret = cmd->touchBegan(&motion);
-    		break;
-    	case kMgGestureMoved:
-    		ret = cmd->touchMoved(&motion);
-    		break;
-    	case kMgGestureEnded:
-    	default:
-    		ret = cmd->touchEnded(&motion);
-    		break;
-    	}
-    	break;
+        switch (motion.gestureState)
+        {
+        case kMgGestureBegan:
+            ret = cmd->touchBegan(&motion);
+            break;
+        case kMgGestureMoved:
+            ret = cmd->touchMoved(&motion);
+            break;
+        case kMgGestureEnded:
+        default:
+            ret = cmd->touchEnded(&motion);
+            break;
+        }
+        break;
     case kGiGestureTap:
-    	ret = cmd->click(&motion);
-    	break;
+        ret = cmd->click(&motion);
+        break;
     case kGiGestureDblTap:
-    	ret = cmd->doubleClick(&motion);
-    	break;
+        ret = cmd->doubleClick(&motion);
+        break;
     case kGiGesturePress:
-    	ret = cmd->longPress(&motion);
-    	break;
+        ret = cmd->longPress(&motion);
+        break;
     }
 
     if (!ret) {
-    	LOGE("The current command (%s) don't support #%d gesture (state=%d)",
-    		cmd->getName(), motion.gestureType, motion.gestureState);
+        LOGD("The current command (%s) don't support #%d gesture (state=%d)",
+            cmd->getName(), motion.gestureType, motion.gestureState);
     }
     return ret;
 }

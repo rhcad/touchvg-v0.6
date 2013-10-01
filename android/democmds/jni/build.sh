@@ -8,8 +8,6 @@ if [ ! -f democmds_java_wrap.cpp ]; then # Make JNI classes
         -outdir ../src/democmds/core \
         -o democmds_java_wrap.cpp \
         -I../../../core/pub_inc \
-        -I../../../core/pub_inc/canvas \
-        -I../../../core/pub_inc/graph \
         -I../../../core/pub_inc/cmd \
         -I../../../core/democmds/gate \
         ../../../core/democmds/gate/democmds.i
