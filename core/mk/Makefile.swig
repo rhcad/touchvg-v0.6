@@ -139,6 +139,11 @@ else
 SWIG_CC      += -outdir $(SWIG_OUTDIR)
 endif
 
+USE_TDMGCC   :=$(shell g++ --version|grep -i tdm)
+ifdef USE_TDMGCC
+SWIG_CC      += -D__MINGW32__
+endif
+
 #------------------------------------------------
 
 TARGET              =$(SWIG_PRE)$(PROJNAME)$(SWIG_EXT)

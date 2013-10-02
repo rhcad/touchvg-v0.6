@@ -388,7 +388,7 @@ GiCoreView::~GiCoreView()
     }
 }
 
-#ifdef __MINGW__
+#if defined(__MINGW64__) || defined(__MINGW32__)
 void* GiCoreView::viewAdapter()
 {
     return (MgView*)impl;

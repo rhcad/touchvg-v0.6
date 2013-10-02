@@ -5,7 +5,7 @@
 #ifndef TOUCHVG_CMDVIEW_HANDLE_H
 #define TOUCHVG_CMDVIEW_HANDLE_H
 
-#ifdef __MINGW__
+#if defined(__MINGW64__) || defined(__MINGW32__)
 #define MGVIEW_HANDLE void*
 #else
 #define MGVIEW_HANDLE long
