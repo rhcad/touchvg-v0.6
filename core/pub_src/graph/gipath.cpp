@@ -31,10 +31,10 @@ GiPath::GiPath(const GiPath& src)
 {
     m_data = new GiPathImpl();
 
-    size_t count = src.m_data->points.size();
+    unsigned count = src.m_data->points.size();
     m_data->points.reserve(count);
     m_data->types.reserve(count);
-    for (size_t i = 0; i < count; i++)
+    for (unsigned i = 0; i < count; i++)
     {
         m_data->points.push_back(src.m_data->points[i]);
         m_data->types.push_back(src.m_data->types[i]);
@@ -69,10 +69,10 @@ GiPath& GiPath::copy(const GiPath& src)
     if (this != &src)
     {
         clear();
-        size_t count = src.m_data->points.size();
+        unsigned count = src.m_data->points.size();
         m_data->points.reserve(count);
         m_data->types.reserve(count);
-        for (size_t i = 0; i < count; i++)
+        for (unsigned i = 0; i < count; i++)
         {
             m_data->points.push_back(src.m_data->points[i]);
             m_data->types.push_back(src.m_data->types[i]);
@@ -106,7 +106,7 @@ void GiPath::clear()
 
 void GiPath::transform(const Matrix2d& mat)
 {
-    for (size_t i = 0; i < m_data->points.size(); i++) {
+    for (unsigned i = 0; i < m_data->points.size(); i++) {
         m_data->points[i] *= mat;
     }
 }

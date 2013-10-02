@@ -58,7 +58,7 @@ MgShapeDoc::MgShapeDoc()
 
 MgShapeDoc::~MgShapeDoc()
 {
-    for (size_t i = 0; i < im->layers.size(); i++) {
+    for (unsigned i = 0; i < im->layers.size(); i++) {
         im->layers[i]->release();
     }
     delete im;
@@ -108,7 +108,7 @@ bool MgShapeDoc::equals(const MgObject& src) const
 			return false;
 		}
 
-        for (size_t i = 0; i < im->layers.size(); i++) {
+        for (unsigned i = 0; i < im->layers.size(); i++) {
             if (!im->layers[i]->equals(*(doc.im->layers[i]))) {
                 return false;
             }
@@ -147,7 +147,7 @@ void MgShapeDoc::clear()
 
 void MgShapeDoc::clearCachedData()
 {
-    for (size_t i = 0; i < im->layers.size(); i++) {
+    for (unsigned i = 0; i < im->layers.size(); i++) {
         im->layers[i]->clearCachedData();
     }
 }
@@ -156,7 +156,7 @@ Box2d MgShapeDoc::getExtent() const
 {
     Box2d rect;
 
-    for (size_t i = 0; i < im->layers.size(); i++) {
+    for (unsigned i = 0; i < im->layers.size(); i++) {
         rect.unionWith(im->layers[i]->getExtent());
     }
 
@@ -167,7 +167,7 @@ int MgShapeDoc::getShapeCount() const
 {
     int n = 0;
 
-    for (size_t i = 0; i < im->layers.size(); i++) {
+    for (unsigned i = 0; i < im->layers.size(); i++) {
         n += im->layers[i]->getShapeCount();
     }
 
@@ -209,7 +209,7 @@ int MgShapeDoc::draw(GiGraphics& gs) const
 {
     int n = 0;
 
-    for (size_t i = 0; i < im->layers.size(); i++) {
+    for (unsigned i = 0; i < im->layers.size(); i++) {
         n += im->layers[i]->draw(gs);
     }
 
@@ -269,7 +269,7 @@ bool MgShapeDoc::save(MgStorage* s, int startIndex) const
     s->writeFloatArray("extent", &rect.xmin, 4);
     s->writeUInt32("count", 1);
 
-    for (size_t i = 0; i < im->layers.size(); i++) {
+    for (unsigned i = 0; i < im->layers.size(); i++) {
         ret = im->layers[i]->save(s, startIndex) || ret;
         startIndex = -1;
     }

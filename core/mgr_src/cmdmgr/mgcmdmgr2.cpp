@@ -6,6 +6,7 @@
 #include <mgshapet.h>
 #include <mgbasicsp.h>
 #include "mgcmdselect.h"
+#include <string.h>
 
 MgShape* MgCmdManagerImpl::addImageShape(const MgMotion* sender, 
 										 const char* name, float width, float height)
