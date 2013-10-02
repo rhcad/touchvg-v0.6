@@ -15,7 +15,7 @@
 
 * 演示程序编译 （Mac/Linux/Win)
 
-  * 在eclipse中导入 android/demo 工程，在AVD模拟器或真机上运行看测试界面。
+  * 在eclipse中导入 android 下的core等三个工程，在AVD模拟器或真机上运行test工程看测试界面。
      * 可能需要根据实际安装情况修改工程的SDK版本号(target)。
      * 需要在eclipse的Android选项页中设置NDK目录。
   
@@ -26,8 +26,8 @@
      * 复制Android安装目录下的 android.jar 到本项目的 android 下的 output 目录，则运行“sh build.sh”将编译出 touchvg.jar 。
   
   * 如需修改内核接口、重新生成JNI类，则
-     * 删除 android/demo/jni/touchvg_java_wrap.cpp ，然后按上面方法输入“sh swig.sh”重新编译。
-     * 或进入android下的 mk 目录，输入“sh swig.sh”编译。
+     * 删除 android/core/jni/touchvg_java_wrap.cpp ，然后按上面方法输入“sh build.sh”重新编译。
+     * 或进入android下的 mk 目录，输入“sh build.sh”编译。
 
 * 安装Android开发环境
   * 安装 JDK，并将其bin路径加到PATH (Mac和Linux下省略)

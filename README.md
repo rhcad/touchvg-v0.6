@@ -17,12 +17,11 @@ Some documents in chinese may be found at http://www.cnblogs.com/rhcad .
 Build
 ------
 Installation notes in chinese, see INSTALL.md .
-* Build for Android:
-  * Import the android/demo project into eclipse, then run the demo application.
+* Build for Android applications:
+  * Import the android/test project into eclipse, then run the demo application.
   * Or type 'sh build.sh' in the android folder to make libtouchvg.so and touchvg.jar for Android applications.
-* Build for iOS:
+* Build for iOS applications:
   * Open ios/TestVG.xcworkspace in Xcode, then run a demo application.
   * Or type 'sh build.sh' in the ios folder to make libtouchvg.a for iOS applications.
-* Build for Windows:
-  * Open win/Test_vc9.sln in VC++ 2008, then run a demo application.
-  * Open win/Test_cs9.sln (or Test_cs10.sln for VS2010) to run the C# demo application.
+* Build for WPF applications:
+  * Open wpf/Test_cs9.sln in VS2008(or Test_cs10.sln in VS2010), then run a demo application.

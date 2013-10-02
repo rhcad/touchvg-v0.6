@@ -20,6 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demolib_cs9", "demolib\demo
 		{2E14C3C2-B9BD-4A73-809E-38ECBA8565AE} = {2E14C3C2-B9BD-4A73-809E-38ECBA8565AE}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "democmds", "democmds", "{FE43E5BF-CB27-4B6A-96AC-430B0C4CE082}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "touchvg", "touchvg", "{B2153A16-3420-486B-839D-CF6FAE418EBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,5 +111,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2E14C3C2-B9BD-4A73-809E-38ECBA8565AE} = {FE43E5BF-CB27-4B6A-96AC-430B0C4CE082}
+		{C81D9406-B164-469D-83F1-AFE50842F31E} = {FE43E5BF-CB27-4B6A-96AC-430B0C4CE082}
+		{180CC455-E62C-4AB8-A024-F3FF724719EA} = {B2153A16-3420-486B-839D-CF6FAE418EBF}
+		{AD99A603-DE1E-461B-975B-464BCEFBE035} = {B2153A16-3420-486B-839D-CF6FAE418EBF}
 	EndGlobalSection
 EndGlobal

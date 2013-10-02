@@ -53,5 +53,5 @@
 		iOS适配器采用Quartz 2D、UIKit框架和ObjC语言实现。\n
 		
 	- \ref GROUP_ANDROID "Android平台适配器" \n
-		Android适配器（android/demo）采用android.graphics、android.view包和Java语言实现。
+		Android适配器（android/core）采用android.graphics、android.view包和Java语言实现。
 */
