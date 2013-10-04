@@ -31,7 +31,7 @@ GiPath::GiPath(const GiPath& src)
 {
     m_data = new GiPathImpl();
 
-    unsigned count = src.m_data->points.size();
+    unsigned count = (unsigned)src.m_data->points.size();
     m_data->points.reserve(count);
     m_data->types.reserve(count);
     for (unsigned i = 0; i < count; i++)
@@ -69,7 +69,7 @@ GiPath& GiPath::copy(const GiPath& src)
     if (this != &src)
     {
         clear();
-        unsigned count = src.m_data->points.size();
+        unsigned count = (unsigned)src.m_data->points.size();
         m_data->points.reserve(count);
         m_data->types.reserve(count);
         for (unsigned i = 0; i < count; i++)
