@@ -1,9 +1,10 @@
 TouchVG
-======
+=======
 A lightweight 2D vector drawing framework using C++ for iOS, Android and Windows.
+TouchVG can be used to develop graphics applications for multiple platforms.
 
 Installation notes in chinese, see INSTALL.md .
-License: GNU LGPL v3. Author: Zhang Yungui <rhcad@hotmail.com>
+Author: Zhang Yungui <rhcad@hotmail.com>
 
 FAQ and other hints may be found on the Wiki:
         https://github.com/rhcad/touchvg/wiki
