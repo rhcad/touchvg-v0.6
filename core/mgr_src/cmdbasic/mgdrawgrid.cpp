@@ -6,7 +6,7 @@
 #include <mgshapet.h>
 #include <mggrid.h>
 
-bool MgCmdDrawGrid::initialize(const MgMotion* sender)
+bool MgCmdDrawGrid::initialize(const MgMotion* sender, MgStorage*)
 {
     return _initialize(MgShapeT<MgGrid>::create, sender);
 }

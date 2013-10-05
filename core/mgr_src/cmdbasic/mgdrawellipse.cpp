@@ -6,7 +6,7 @@
 #include <mgshapet.h>
 #include <mgbasicsp.h>
 
-bool MgCmdDrawEllipse::initialize(const MgMotion* sender)
+bool MgCmdDrawEllipse::initialize(const MgMotion* sender, MgStorage*)
 {
     return _initialize(MgShapeT<MgEllipse>::create, sender);
 }

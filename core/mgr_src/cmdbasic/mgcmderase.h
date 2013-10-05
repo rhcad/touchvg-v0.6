@@ -27,7 +27,7 @@ private:
     virtual void release() { delete this; }
 
     virtual bool cancel(const MgMotion* sender);
-    virtual bool initialize(const MgMotion* sender);
+    virtual bool initialize(const MgMotion* sender, MgStorage* s);
     virtual bool backStep(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual int gatherShapes(const MgMotion* sender, MgShapes* shapes);

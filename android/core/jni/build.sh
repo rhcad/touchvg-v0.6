@@ -13,6 +13,15 @@ if [ ! -f touchvg_java_wrap.cpp ]; then # Make JNI classes
         -I../../../core/pub_inc/cmd \
         -I../../../core/mgr_inc/test \
         -I../../../core/mgr_inc/view \
-        ../../../core/mgr_src/view/touchvg.swig
+        -I../../../core/pub_inc/storage \
+        -I../../../core/pub_inc/geom \
+        -I../../../core/pub_inc/shape \
+        -I../../../core/pub_inc/cmdobserver \
+        -I../../../core/pub_inc/cmdbase \
+        -I../../../core/mgr_inc/cmdbasic \
+        -I../../../core/mgr_inc/shapedoc \
+        -I../../../core/mgr_inc/json \
+        -I../../../core/mgr_inc/cmdmgr \
+        ../../../core/mgr_src/view/touchvg.i
 fi
 ndk-build # Make libtouchvg.so

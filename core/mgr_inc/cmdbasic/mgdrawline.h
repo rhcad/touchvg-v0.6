@@ -26,7 +26,7 @@ private:
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
 
-    virtual bool initialize(const MgMotion* sender);
+    virtual bool initialize(const MgMotion* sender, MgStorage* s);
     virtual bool backStep(const MgMotion* sender);
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);
@@ -46,7 +46,7 @@ public:
 private:
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
-    virtual bool initialize(const MgMotion* sender);
+    virtual bool initialize(const MgMotion* sender, MgStorage* s);
 };
 
 #endif // TOUCHVG_CMD_DRAW_LINE_H_

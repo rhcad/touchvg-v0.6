@@ -131,11 +131,11 @@ bool MgCmdManagerImpl::doAction(const MgMotion* sender, int action)
             break;
             
         case kMgActionDraw:
-            ret = setCommand(sender, "@draw");
+            ret = setCommand(sender, "@draw", NULL);
             break;
             
         case kMgActionCancel:
-            ret = setCommand(sender, "select");
+            ret = setCommand(sender, "select", NULL);
             break;
             
         case kMgActionDelete:

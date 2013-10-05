@@ -14,7 +14,7 @@ MgCmdDrawLine::~MgCmdDrawLine()
 {
 }
 
-bool MgCmdDrawLine::initialize(const MgMotion* sender)
+bool MgCmdDrawLine::initialize(const MgMotion* sender, MgStorage*)
 {
     return _initialize(MgShapeT<MgLine>::create, sender);
 }
@@ -57,7 +57,7 @@ bool MgCmdDrawLine::touchEnded(const MgMotion* sender)
     return _touchEnded(sender);
 }
 
-bool MgCmdDrawFixedLine::initialize(const MgMotion* sender)
+bool MgCmdDrawFixedLine::initialize(const MgMotion* sender, MgStorage*)
 {
     bool ret = _initialize(MgShapeT<MgLine>::create, sender);
     if (ret) {

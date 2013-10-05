@@ -198,7 +198,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Swig generating..."
-						CommandLine="swig.exe -c++ -csharp -namespace &quot;touchvg.core&quot; -module touchvg -outdir $(ProjectDir)..\touchvglib\core -o &quot;$(ProjectDir)touchvg_csharp_wrap.cpp&quot; -I&quot;$(ProjectDir)..\..\core/pub_inc&quot; -I&quot;$(ProjectDir)..\..\core/pub_inc\canvas&quot; -I&quot;$(ProjectDir)..\..\core/pub_inc\graph&quot; -I&quot;$(ProjectDir)..\..\core/pub_inc\cmd&quot; -I&quot;$(ProjectDir)..\..\core/mgr_inc\test&quot; -I&quot;$(ProjectDir)..\..\core/mgr_inc\view&quot; $(InputPath)&#x0D;&#x0A;"
+						CommandLine="swig.exe -c++ -csharp -namespace &quot;touchvg.core&quot; -module touchvg -outdir $(ProjectDir)..\touchvglib\core -o &quot;$(ProjectDir)touchvg_csharp_wrap.cpp&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\canvas&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\graph&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\cmd&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\storage&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\test&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\view&quot; $(InputPath)"
 						Outputs="$(ProjectDir)touchvg_csharp_wrap.cpp"
 					/>
 				</FileConfiguration>
@@ -208,7 +208,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Swig generating..."
-						CommandLine="swig.exe -c++ -csharp -namespace &quot;touchvg.core&quot; -module touchvg -outdir $(ProjectDir)..\touchvglib\core -o &quot;$(ProjectDir)touchvg_csharp_wrap.cpp&quot; -I&quot;$(ProjectDir)..\..\core/pub_inc&quot; -I&quot;$(ProjectDir)..\..\core/pub_inc\canvas&quot; -I&quot;$(ProjectDir)..\..\core/pub_inc\graph&quot; -I&quot;$(ProjectDir)..\..\core/pub_inc\cmd&quot; -I&quot;$(ProjectDir)..\..\core/mgr_inc\test&quot; -I&quot;$(ProjectDir)..\..\core/mgr_inc\view&quot; $(InputPath)&#x0D;&#x0A;"
+						CommandLine="swig.exe -c++ -csharp -namespace &quot;touchvg.core&quot; -module touchvg -outdir $(ProjectDir)..\touchvglib\core -o &quot;$(ProjectDir)touchvg_csharp_wrap.cpp&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\canvas&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\graph&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\cmd&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\storage&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\test&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\view&quot; $(InputPath)"
 						Outputs="$(ProjectDir)touchvg_csharp_wrap.cpp"
 					/>
 				</FileConfiguration>

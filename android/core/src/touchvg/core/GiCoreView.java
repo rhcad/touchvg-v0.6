@@ -115,8 +115,12 @@ public class GiCoreView {
     return touchvgJNI.GiCoreView_getCommand(swigCPtr, this);
   }
 
+  public boolean setCommand(GiView view, String name, String params) {
+    return touchvgJNI.GiCoreView_setCommand__SWIG_0(swigCPtr, this, GiView.getCPtr(view), view, name, params);
+  }
+
   public boolean setCommand(GiView view, String name) {
-    return touchvgJNI.GiCoreView_setCommand(swigCPtr, this, GiView.getCPtr(view), view, name);
+    return touchvgJNI.GiCoreView_setCommand__SWIG_1(swigCPtr, this, GiView.getCPtr(view), view, name);
   }
 
   public boolean doContextAction(int action) {

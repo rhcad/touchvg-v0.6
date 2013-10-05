@@ -14,7 +14,7 @@ MgCmdDrawRect::~MgCmdDrawRect()
 {
 }
 
-bool MgCmdDrawRect::initialize(const MgMotion* sender)
+bool MgCmdDrawRect::initialize(const MgMotion* sender, MgStorage*)
 {
     return _initialize(MgShapeT<MgRect>::create, sender);
 }

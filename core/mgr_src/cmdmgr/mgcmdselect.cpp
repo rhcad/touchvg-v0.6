@@ -77,7 +77,7 @@ bool MgCmdSelect::cancel(const MgMotion* sender)
     return backStep(sender) || ret;
 }
 
-bool MgCmdSelect::initialize(const MgMotion* sender)
+bool MgCmdSelect::initialize(const MgMotion* sender, MgStorage*)
 {
     m_boxsel = false;
     m_id = 0;

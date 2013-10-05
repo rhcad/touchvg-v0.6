@@ -130,8 +130,13 @@ public class GiCoreView : IDisposable {
     return ret;
   }
 
+  public bool setCommand(GiView view, string name, string arg2) {
+    bool ret = touchvgPINVOKE.GiCoreView_setCommand__SWIG_0(swigCPtr, GiView.getCPtr(view), name, arg2);
+    return ret;
+  }
+
   public bool setCommand(GiView view, string name) {
-    bool ret = touchvgPINVOKE.GiCoreView_setCommand(swigCPtr, GiView.getCPtr(view), name);
+    bool ret = touchvgPINVOKE.GiCoreView_setCommand__SWIG_1(swigCPtr, GiView.getCPtr(view), name);
     return ret;
   }
 

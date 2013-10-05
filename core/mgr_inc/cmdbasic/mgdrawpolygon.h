@@ -27,7 +27,7 @@ private:
     
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
-    virtual bool initialize(const MgMotion* sender);
+    virtual bool initialize(const MgMotion* sender, MgStorage* s);
     
     int     _maxEdges;
 };

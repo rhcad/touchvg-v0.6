@@ -83,7 +83,8 @@ MgCommand* MgCmdManagerImpl::findCommand(const char* name)
     return it != _cmds.end() ? it->second : NULL;
 }
 
-bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
+bool MgCmdManagerImpl::setCommand(const MgMotion* sender,
+                                  const char* name, MgStorage* s)
 {
     if (strcmp(name, "@draw") == 0) {   // 将 @draw 换成上一次绘图命令名
         name = _drawcmd.empty() ? "splines" : _drawcmd.c_str();
@@ -105,7 +106,7 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
     if (cmd) {
         _cmdname = cmd->getName();
         
-        ret = cmd->initialize(sender);
+        ret = cmd->initialize(sender, s);
         if (!ret) {
             _cmdname = oldname;
         }
@@ -120,7 +121,7 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
         else {
             _cmdname = "select";
             cmd = findCommand(_cmdname.c_str());
-            cmd->initialize(sender);
+            cmd->initialize(sender, s);
         }
     }
     

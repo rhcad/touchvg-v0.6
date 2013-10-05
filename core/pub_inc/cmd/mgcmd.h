@@ -19,7 +19,7 @@ struct MgCommand {
     virtual void release() = 0;                                 //!< 销毁对象
     
     virtual bool cancel(const MgMotion* sender) { return !sender; } //!< 取消命令
-    virtual bool initialize(const MgMotion* sender) { return !!sender; }    //!< 开始命令
+    virtual bool initialize(const MgMotion* sender, MgStorage* s) { return sender || s; }    //!< 开始命令
     virtual bool backStep(const MgMotion* sender) { return !sender; }   //!< 回退一步
     
     virtual bool draw(const MgMotion* sender, GiGraphics* gs) = 0;  //!< 显示动态图形

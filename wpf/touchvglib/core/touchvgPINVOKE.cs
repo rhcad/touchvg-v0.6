@@ -618,8 +618,11 @@ class touchvgPINVOKE {
   [DllImport("touchvg", EntryPoint="CSharp_GiCoreView_getCommand")]
   public static extern string GiCoreView_getCommand(HandleRef jarg1);
 
-  [DllImport("touchvg", EntryPoint="CSharp_GiCoreView_setCommand")]
-  public static extern bool GiCoreView_setCommand(HandleRef jarg1, HandleRef jarg2, string jarg3);
+  [DllImport("touchvg", EntryPoint="CSharp_GiCoreView_setCommand__SWIG_0")]
+  public static extern bool GiCoreView_setCommand__SWIG_0(HandleRef jarg1, HandleRef jarg2, string jarg3, string jarg4);
+
+  [DllImport("touchvg", EntryPoint="CSharp_GiCoreView_setCommand__SWIG_1")]
+  public static extern bool GiCoreView_setCommand__SWIG_1(HandleRef jarg1, HandleRef jarg2, string jarg3);
 
   [DllImport("touchvg", EntryPoint="CSharp_GiCoreView_doContextAction")]
   public static extern bool GiCoreView_doContextAction(HandleRef jarg1, int jarg2);

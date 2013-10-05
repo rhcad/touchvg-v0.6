@@ -25,7 +25,7 @@ bool MgCmdErase::cancel(const MgMotion* sender)
     return backStep(sender) || ret;
 }
 
-bool MgCmdErase::initialize(const MgMotion* /*sender*/)
+bool MgCmdErase::initialize(const MgMotion*, MgStorage*)
 {
     m_boxsel = false;
     return true;

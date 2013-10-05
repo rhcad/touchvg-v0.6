@@ -6,7 +6,7 @@
 #include <mgshapet.h>
 #include <mgbasicsp.h>
 
-bool MgCmdDrawCircle::initialize(const MgMotion* sender)
+bool MgCmdDrawCircle::initialize(const MgMotion* sender, MgStorage*)
 {
     bool ret = _initialize(MgShapeT<MgEllipse>::create, sender);
     

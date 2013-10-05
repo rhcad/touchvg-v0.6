@@ -6,7 +6,7 @@
 #include <mgshapet.h>
 #include <mgbasicsp.h>
 
-bool MgCmdDrawPolygon::initialize(const MgMotion* sender)
+bool MgCmdDrawPolygon::initialize(const MgMotion* sender, MgStorage*)
 {
     bool ret = _initialize(MgShapeT<MgLines>::create, sender);
     if (ret) {

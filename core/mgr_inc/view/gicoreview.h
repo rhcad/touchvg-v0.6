@@ -11,6 +11,7 @@
 class GiCanvas;
 class GiCoreViewImpl;
 class GiContext;
+struct MgStorage;
 
 //! 内核视图分发器类
 /*! 本对象拥有图形文档对象，负责显示和手势动作的分发。
@@ -68,7 +69,7 @@ public:
     const char* getCommand() const;
     
     //! 启动命令
-    bool setCommand(GiView* view, const char* name);
+    bool setCommand(GiView* view, const char* name, const char* params = "");
 
     //! 执行上下文动作
     bool doContextAction(int action);
@@ -155,6 +156,9 @@ public:
 #endif
 
 private:
+    bool loadShapes(MgStorage* s);
+    bool saveShapes(MgStorage* s);
+
     GiCoreViewImpl* impl;
 };
 

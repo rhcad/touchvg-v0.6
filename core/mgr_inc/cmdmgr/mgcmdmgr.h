@@ -27,7 +27,8 @@ struct MgCmdManager {
     virtual const char* getCommandName() = 0;               //!< 得到当前命令名称
     virtual MgCommand* getCommand() = 0;                    //!< 得到当前命令
     virtual MgCommand* findCommand(const char* name) = 0;   //!< 查找命令
-    virtual bool setCommand(const MgMotion* sender, const char* name) = 0;  //!< 启动命令
+    virtual bool setCommand(const MgMotion* sender,
+        const char* name, MgStorage* s) = 0;                //!< 启动命令
     virtual bool cancel(const MgMotion* sender) = 0;        //!< 取消当前命令
     virtual void unloadCommands() = 0;                      //!< 退出时卸载命令
     virtual bool addCommand(MgCommand* cmd) = 0;            //!< 添加命令

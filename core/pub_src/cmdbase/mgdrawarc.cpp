@@ -8,7 +8,7 @@
 // MgCmdArc3P
 //
 
-bool MgCmdArc3P::initialize(const MgMotion* sender)
+bool MgCmdArc3P::initialize(const MgMotion* sender, MgStorage*)
 {
     return _initialize(MgShapeT<MgArc>::create, sender);
 }

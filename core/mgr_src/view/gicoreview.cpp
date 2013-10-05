@@ -72,12 +72,12 @@ public:
     void registerCommand(const char* name, MgCommand* (*creator)()) {
         _cmds->registerCommand(name, creator); }
     void cancel(const MgMotion* sender) {
-        _cmds->setCommand(sender, "select"); }
+        _cmds->setCommand(sender, "select", NULL); }
     MgCommand* getCommand() { return _cmds->getCommand(); }
     MgCommand* findCommand(const char* name) {
         return _cmds->findCommand(name); }
     bool setCommand(const MgMotion* sender, const char* name) {
-        return _cmds->setCommand(sender, name); }
+        return _cmds->setCommand(sender, name, NULL); }
     bool addCommand(MgCommand* cmd) {
         return _cmds->addCommand(cmd); }
     bool setCurrentShapes(MgShapes* shapes) {
@@ -641,7 +641,7 @@ const char* GiCoreView::getCommand() const
     return impl->_cmds->getCommandName();
 }
 
-bool GiCoreView::setCommand(GiView* view, const char* name)
+bool GiCoreView::setCommand(GiView* view, const char* name, const char* params)
 {
     DrawLocker locker(impl);
     GcBaseView* aview = impl->_doc->findView(view);
@@ -649,7 +649,9 @@ bool GiCoreView::setCommand(GiView* view, const char* name)
 
     if (aview) {
         impl->setView(aview);
-        ret = impl->_cmds->setCommand(&impl->motion, name);
+        MgJsonStorage s;
+        ret = impl->_cmds->setCommand(&impl->motion, name, 
+                                      s.storageForRead(params));
     }
 
     return ret;
@@ -695,11 +697,11 @@ int GiCoreView::getSelectedShapeType()
     return sel ? sel->getSelectType(impl) : 0;
 }
 
-static bool loadShapes(GiCoreViewImpl* impl, MgStorage* s)
+bool GiCoreView::loadShapes(MgStorage* s)
 {
     bool ret = true;
 
-    impl->_cmds->setCommand(&impl->motion, impl->_cmds->getCommandName());
+    impl->setCommand(&impl->motion, impl->_cmds->getCommandName());
 
     if (s) {
         MgShapesLock locker(MgShapesLock::Load, impl);
@@ -716,7 +718,7 @@ static bool loadShapes(GiCoreViewImpl* impl, MgStorage* s)
     return ret;
 }
 
-static bool saveShapes(GiCoreViewImpl* impl, MgStorage* s)
+bool GiCoreView::saveShapes(MgStorage* s)
 {
     MgShapesLock locker(MgShapesLock::ReadOnly, impl);
     return s && impl->doc()->save(s);
@@ -725,13 +727,13 @@ static bool saveShapes(GiCoreViewImpl* impl, MgStorage* s)
 void GiCoreView::clear()
 {
     DrawLocker locker(impl);
-    loadShapes(impl, (MgStorage*)0);
+    loadShapes((MgStorage*)0);
 }
 
 const char* GiCoreView::getContent()
 {
     const char* content = "";
-    if (saveShapes(impl, impl->defaultStorage.storageForWrite())) {
+    if (saveShapes(impl->defaultStorage.storageForWrite())) {
         content = impl->defaultStorage.stringify();
     }
     return content; // has't free defaultStorage's string buffer
@@ -745,7 +747,7 @@ void GiCoreView::freeContent()
 bool GiCoreView::setContent(const char* content)
 {
     DrawLocker locker(impl);
-    bool ret = loadShapes(impl, impl->defaultStorage.storageForRead(content));
+    bool ret = loadShapes(impl->defaultStorage.storageForRead(content));
     impl->defaultStorage.clear();
     return ret;
 }
@@ -760,7 +762,7 @@ bool GiCoreView::loadFromFile(const char* vgfile)
 #endif
     DrawLocker locker(impl);
     MgJsonStorage s;
-    bool ret = loadShapes(impl, s.storageForRead(fp));
+    bool ret = loadShapes(s.storageForRead(fp));
 
     if (fp) {
         fclose(fp);
@@ -781,7 +783,7 @@ bool GiCoreView::saveToFile(const char* vgfile, bool pretty)
 #endif
     MgJsonStorage s;
     bool ret = (fp != NULL
-        && saveShapes(impl, s.storageForWrite())
+        && saveShapes(s.storageForWrite())
         && s.save(fp, pretty));
 
     if (fp) {

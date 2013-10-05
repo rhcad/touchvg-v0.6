@@ -14,7 +14,7 @@ MgCmdDrawFreeLines::~MgCmdDrawFreeLines()
 {
 }
 
-bool MgCmdDrawFreeLines::initialize(const MgMotion* sender)
+bool MgCmdDrawFreeLines::initialize(const MgMotion* sender, MgStorage*)
 {
     return _initialize(MgShapeT<MgLines>::create, sender);
 }

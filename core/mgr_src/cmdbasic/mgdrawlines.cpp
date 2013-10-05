@@ -14,7 +14,7 @@ MgCmdDrawLines::~MgCmdDrawLines()
 {
 }
 
-bool MgCmdDrawLines::initialize(const MgMotion* sender)
+bool MgCmdDrawLines::initialize(const MgMotion* sender, MgStorage*)
 {
     return _initialize(MgShapeT<MgLines>::create, sender);
 }

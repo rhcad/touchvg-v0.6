@@ -45,6 +45,181 @@ protected:
     bool swig_override[20];
 };
 
+class SwigDirector_MgStorageBase : public MgStorageBase, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_MgStorageBase(JNIEnv *jenv);
+    virtual bool readNode(char const *name, int index, bool ended);
+    virtual bool writeNode(char const *name, int index, bool ended);
+    virtual bool readBool(char const *name, bool defvalue);
+    virtual float readFloat(char const *name, float defvalue);
+    virtual void writeBool(char const *name, bool value);
+    virtual void writeFloat(char const *name, float value);
+    virtual void writeString(char const *name, char const *value);
+    virtual int readInt(char const *name, int defvalue);
+    virtual void writeInt(char const *name, int value);
+    virtual void writeUInt(char const *name, int value);
+    virtual bool setError(char const *arg0);
+    virtual ~SwigDirector_MgStorageBase();
+    virtual int readFloatArray(char const *name, mgvector< float > &values);
+    virtual void writeFloatArray(char const *name, mgvector< float > const &values);
+    virtual int readString(char const *name, mgvector< char > &value);
+public:
+    bool swig_overrides(int n) {
+      return (n < 14 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[14];
+};
+
+struct SwigDirector_MgCommand : public MgCommand, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_MgCommand(JNIEnv *jenv);
+    virtual ~SwigDirector_MgCommand();
+    virtual char const *getName() const;
+    virtual void release();
+    virtual bool cancel(MgMotion const *sender);
+    virtual bool initialize(MgMotion const *sender, MgStorage *s);
+    virtual bool backStep(MgMotion const *sender);
+    virtual bool draw(MgMotion const *sender, GiGraphics *gs);
+    virtual int gatherShapes(MgMotion const *sender, MgShapes *shapes);
+    virtual bool click(MgMotion const *sender);
+    virtual bool doubleClick(MgMotion const *sender);
+    virtual bool longPress(MgMotion const *sender);
+    virtual bool touchBegan(MgMotion const *sender);
+    virtual bool touchMoved(MgMotion const *sender);
+    virtual bool touchEnded(MgMotion const *sender);
+    virtual bool mouseHover(MgMotion const *sender);
+    virtual bool twoFingersMove(MgMotion const *sender);
+    virtual bool isDrawingCommand();
+    virtual bool isFloatingCommand();
+    virtual bool doContextAction(MgMotion const *sender, int action);
+public:
+    bool swig_overrides(int n) {
+      return (n < 18 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[18];
+};
+
+class SwigDirector_CmdObserverDefault : public CmdObserverDefault, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_CmdObserverDefault(JNIEnv *jenv);
+    virtual void onDocLoaded(MgMotion const *arg0);
+    virtual void onEnterSelectCommand(MgMotion const *arg0);
+    virtual void onUnloadCommands(MgCmdManager *arg0);
+    virtual bool selectActionsNeedHided(MgMotion const *arg0);
+    virtual bool doAction(MgMotion const *arg0, int arg1);
+    virtual bool doEndAction(MgMotion const *arg0, int arg1);
+    virtual void drawInShapeCommand(MgMotion const *arg0, MgCommand *arg1, GiGraphics *arg2);
+    virtual void drawInSelectCommand(MgMotion const *arg0, MgShape const *arg1, int arg2, GiGraphics *arg3);
+    virtual bool onShapeWillAdded(MgMotion const *arg0, MgShape *arg1);
+    virtual void onShapeAdded(MgMotion const *arg0, MgShape *arg1);
+    virtual bool onShapeWillDeleted(MgMotion const *arg0, MgShape *arg1);
+    virtual void onShapeDeleted(MgMotion const *arg0, MgShape *arg1);
+    virtual bool onShapeCanRotated(MgMotion const *arg0, MgShape const *arg1);
+    virtual bool onShapeCanTransform(MgMotion const *arg0, MgShape const *arg1);
+    virtual bool onShapeCanUnlock(MgMotion const *arg0, MgShape const *arg1);
+    virtual bool onShapeCanUngroup(MgMotion const *arg0, MgShape const *arg1);
+    virtual void onShapeMoved(MgMotion const *arg0, MgShape *arg1, int arg2);
+    virtual ~SwigDirector_CmdObserverDefault();
+public:
+    bool swig_overrides(int n) {
+      return (n < 17 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[17];
+};
+
+class SwigDirector_MgCommandDraw : public MgCommandDraw, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_MgCommandDraw(JNIEnv *jenv);
+    virtual ~SwigDirector_MgCommandDraw();
+    virtual char const *getName() const;
+    virtual void release();
+    virtual bool cancel(MgMotion const *sender);
+    virtual bool initialize(MgMotion const *sender, MgStorage *s);
+    virtual bool backStep(MgMotion const *sender);
+    virtual bool draw(MgMotion const *sender, GiGraphics *gs);
+    virtual int gatherShapes(MgMotion const *sender, MgShapes *shapes);
+    virtual bool click(MgMotion const *sender);
+    virtual bool doubleClick(MgMotion const *sender);
+    virtual bool longPress(MgMotion const *sender);
+    virtual bool touchBegan(MgMotion const *sender);
+    virtual bool touchMoved(MgMotion const *sender);
+    virtual bool touchEnded(MgMotion const *sender);
+    virtual bool mouseHover(MgMotion const *sender);
+    virtual bool twoFingersMove(MgMotion const *sender);
+    virtual bool isDrawingCommand();
+    virtual bool isFloatingCommand();
+    virtual bool doContextAction(MgMotion const *sender, int action);
+    virtual int getMaxStep();
+    virtual int getMaxStepSwigPublic() {
+      return MgCommandDraw::getMaxStep();
+    }
+    virtual void setStepPoint(int step, Point2d const &pt);
+    virtual void setStepPointSwigPublic(int step, Point2d const &pt) {
+      MgCommandDraw::setStepPoint(step,pt);
+    }
+public:
+    bool swig_overrides(int n) {
+      return (n < 20 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[20];
+};
+
+class SwigDirector_MgCmdDrawRect : public MgCmdDrawRect, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_MgCmdDrawRect(JNIEnv *jenv);
+    virtual ~SwigDirector_MgCmdDrawRect();
+    virtual char const *getName() const;
+    virtual void release();
+    virtual bool cancel(MgMotion const *sender);
+    virtual bool initialize(MgMotion const *sender, MgStorage *s);
+    virtual bool backStep(MgMotion const *sender);
+    virtual bool draw(MgMotion const *sender, GiGraphics *gs);
+    virtual int gatherShapes(MgMotion const *sender, MgShapes *shapes);
+    virtual bool click(MgMotion const *sender);
+    virtual bool doubleClick(MgMotion const *sender);
+    virtual bool longPress(MgMotion const *sender);
+    virtual bool touchBegan(MgMotion const *sender);
+    virtual bool touchMoved(MgMotion const *sender);
+    virtual bool touchEnded(MgMotion const *sender);
+    virtual bool mouseHover(MgMotion const *sender);
+    virtual bool twoFingersMove(MgMotion const *sender);
+    virtual bool isDrawingCommand();
+    virtual bool isFloatingCommand();
+    virtual bool doContextAction(MgMotion const *sender, int action);
+    virtual int getMaxStep();
+    virtual int getMaxStepSwigPublic() {
+      return MgCommandDraw::getMaxStep();
+    }
+    virtual void setStepPoint(int step, Point2d const &pt);
+    virtual void setStepPointSwigPublic(int step, Point2d const &pt) {
+      MgCommandDraw::setStepPoint(step,pt);
+    }
+    virtual void addRectShape(MgMotion const *sender);
+    virtual void addRectShapeSwigPublic(MgMotion const *sender) {
+      MgCmdDrawRect::addRectShape(sender);
+    }
+public:
+    bool swig_overrides(int n) {
+      return (n < 21 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[21];
+};
+
 class SwigDirector_GiView : public GiView, public Swig::Director {
 
 public:

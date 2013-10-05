@@ -24,7 +24,7 @@ public:
     virtual bool touchBegan(const MgMotion* sender) { return _touchBeganStep(sender); }
     virtual bool touchMoved(const MgMotion* sender) { return _touchMovedStep(sender); }
     virtual bool touchEnded(const MgMotion* sender) { return _touchEndedStep(sender); }
-    virtual bool initialize(const MgMotion* sender);
+    virtual bool initialize(const MgMotion* sender, MgStorage* s);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
 
 protected:

@@ -6,7 +6,7 @@
 #include <mgshapet.h>
 #include <mgbasicsp.h>
 
-bool MgCmdDrawSquare::initialize(const MgMotion* sender)
+bool MgCmdDrawSquare::initialize(const MgMotion* sender, MgStorage*)
 {
     bool ret = _initialize(MgShapeT<MgRect>::create, sender);
     

@@ -13,7 +13,7 @@ MgCmdDrawTriangle::~MgCmdDrawTriangle()
 {
 }
 
-bool MgCmdDrawTriangle::initialize(const MgMotion* sender)
+bool MgCmdDrawTriangle::initialize(const MgMotion* sender, MgStorage*)
 {
     return _initialize(MgShapeT<MgLines>::create, sender);
 }

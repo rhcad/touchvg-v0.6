@@ -32,7 +32,8 @@ private:
     virtual const char* getCommandName();
     virtual MgCommand* getCommand();
     virtual MgCommand* findCommand(const char* name);
-    virtual bool setCommand(const MgMotion* sender, const char* name);
+    virtual bool setCommand(const MgMotion* sender,
+        const char* name, MgStorage* s);
     virtual bool cancel(const MgMotion* sender);
     virtual void unloadCommands();
     virtual bool addCommand(MgCommand* cmd);

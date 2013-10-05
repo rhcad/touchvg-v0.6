@@ -14,7 +14,7 @@ MgCmdDrawSplines::~MgCmdDrawSplines()
 {
 }
 
-bool MgCmdDrawSplines::initialize(const MgMotion* sender)
+bool MgCmdDrawSplines::initialize(const MgMotion* sender, MgStorage*)
 {
     return _initialize(MgShapeT<MgSplines>::create, sender);
 }

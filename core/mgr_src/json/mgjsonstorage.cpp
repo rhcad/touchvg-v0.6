@@ -102,7 +102,7 @@ MgStorage* MgJsonStorage::storageForRead(const char* content)
 {
 #ifdef RAPIDJSON_DOCUMENT_H_
     _impl->clear();
-    if (content) {
+    if (content && *content) {
         _impl->document().Parse<0>(content);
         if (_impl->getError()) {
             LOGE("parse error: %s", _impl->getError());
