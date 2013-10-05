@@ -76,10 +76,10 @@ public:
     virtual void shapeAdded(MgShape* shape) = 0;        //!< 通知已添加图形，由视图重新构建显示
     virtual bool shapeWillDeleted(MgShape* shape) = 0;  //!< 通知将删除图形
     virtual bool removeShape(MgShape* shape) = 0;       //!< 删除图形
-    virtual bool shapeCanRotated(MgShape* shape) = 0;   //!< 通知是否能旋转图形
-    virtual bool shapeCanTransform(MgShape* shape) = 0; //!< 通知是否能对图形变形
-    virtual bool shapeCanUnlock(MgShape* shape) = 0;    //!< 通知是否能对图形解锁
-    virtual bool shapeCanUngroup(MgShape* shape) = 0;   //!< 通知是否能对成组图形解散
+    virtual bool shapeCanRotated(const MgShape* shape) = 0;   //!< 通知是否能旋转图形
+    virtual bool shapeCanTransform(const MgShape* shape) = 0; //!< 通知是否能对图形变形
+    virtual bool shapeCanUnlock(const MgShape* shape) = 0;    //!< 通知是否能对图形解锁
+    virtual bool shapeCanUngroup(const MgShape* shape) = 0;   //!< 通知是否能对成组图形解散
     virtual void shapeMoved(MgShape* shape, int segment) = 0;   //!< 通知图形已拖动
     
     virtual bool isContextActionsVisible() = 0;         //!< 返回上下文菜单是否已显示

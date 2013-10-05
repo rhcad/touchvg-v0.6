@@ -117,7 +117,7 @@ private:
             (*it)->onShapeDeleted(sender, shape);
         }
     }
-    virtual bool onShapeCanRotated(const MgMotion* sender, MgShape* shape) {
+    virtual bool onShapeCanRotated(const MgMotion* sender, const MgShape* shape) {
         for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
             if (!(*it)->onShapeCanRotated(sender, shape)) {
                 return false;
@@ -125,7 +125,7 @@ private:
         }
         return true;
     }
-    virtual bool onShapeCanTransform(const MgMotion* sender, MgShape* shape) {
+    virtual bool onShapeCanTransform(const MgMotion* sender, const MgShape* shape) {
         for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
             if (!(*it)->onShapeCanTransform(sender, shape)) {
                 return false;
@@ -133,7 +133,7 @@ private:
         }
         return true;
     }
-    virtual bool onShapeCanUnlock(const MgMotion* sender, MgShape* shape) {
+    virtual bool onShapeCanUnlock(const MgMotion* sender, const MgShape* shape) {
         for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
             if (!(*it)->onShapeCanUnlock(sender, shape)) {
                 return false;
@@ -141,7 +141,7 @@ private:
         }
         return true;
     }
-    virtual bool onShapeCanUngroup(const MgMotion* sender, MgShape* shape) {
+    virtual bool onShapeCanUngroup(const MgMotion* sender, const MgShape* shape) {
         for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
             if (!(*it)->onShapeCanUngroup(sender, shape)) {
                 return false;

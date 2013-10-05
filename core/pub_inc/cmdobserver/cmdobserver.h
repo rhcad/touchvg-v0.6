@@ -56,10 +56,10 @@ struct CmdObserver {
     virtual void onShapeAdded(const MgMotion* sender, MgShape* shape) = 0;        //!< 通知已添加图形
     virtual bool onShapeWillDeleted(const MgMotion* sender, MgShape* shape) = 0;  //!< 通知将删除图形
     virtual void onShapeDeleted(const MgMotion* sender, MgShape* shape) = 0;      //!< 通知已删除图形
-    virtual bool onShapeCanRotated(const MgMotion* sender, MgShape* shape) = 0;   //!< 通知是否能旋转图形
-    virtual bool onShapeCanTransform(const MgMotion* sender, MgShape* shape) = 0; //!< 通知是否能对图形变形
-    virtual bool onShapeCanUnlock(const MgMotion* sender, MgShape* shape) = 0;    //!< 通知是否能对图形解锁
-    virtual bool onShapeCanUngroup(const MgMotion* sender, MgShape* shape) = 0;   //!< 通知是否能对成组图形解散
+    virtual bool onShapeCanRotated(const MgMotion* sender, const MgShape* shape) = 0;   //!< 通知是否能旋转图形
+    virtual bool onShapeCanTransform(const MgMotion* sender, const MgShape* shape) = 0; //!< 通知是否能对图形变形
+    virtual bool onShapeCanUnlock(const MgMotion* sender, const MgShape* shape) = 0;    //!< 通知是否能对图形解锁
+    virtual bool onShapeCanUngroup(const MgMotion* sender, const MgShape* shape) = 0;   //!< 通知是否能对成组图形解散
     virtual void onShapeMoved(const MgMotion* sender, MgShape* shape, int segment) = 0;   //!< 通知图形已拖动
 };
 
@@ -82,10 +82,10 @@ public:
     virtual void onShapeAdded(const MgMotion*, MgShape*) {}
     virtual bool onShapeWillDeleted(const MgMotion*, MgShape*) { return true; }
     virtual void onShapeDeleted(const MgMotion*, MgShape*) {}
-    virtual bool onShapeCanRotated(const MgMotion*, MgShape*) { return true; }
-    virtual bool onShapeCanTransform(const MgMotion*, MgShape*) { return true; }
-    virtual bool onShapeCanUnlock(const MgMotion*, MgShape*) { return true; }
-    virtual bool onShapeCanUngroup(const MgMotion*, MgShape*) { return true; }
+    virtual bool onShapeCanRotated(const MgMotion*, const MgShape*) { return true; }
+    virtual bool onShapeCanTransform(const MgMotion*, const MgShape*) { return true; }
+    virtual bool onShapeCanUnlock(const MgMotion*, const MgShape*) { return true; }
+    virtual bool onShapeCanUngroup(const MgMotion*, const MgShape*) { return true; }
     virtual void onShapeMoved(const MgMotion*, MgShape*, int) {}
 #ifndef SWIG
     virtual void addShapeActions(const MgMotion*,int*, int &, const MgShape*) {}

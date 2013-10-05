@@ -87,13 +87,13 @@ public:
         return getCmdSubject()->onShapeWillAdded(&motion, shape); }
     bool shapeWillDeleted(MgShape* shape) {
         return getCmdSubject()->onShapeWillDeleted(&motion, shape); }
-    bool shapeCanRotated(MgShape* shape) {
+    bool shapeCanRotated(const MgShape* shape) {
         return getCmdSubject()->onShapeCanRotated(&motion, shape); }
-    bool shapeCanTransform(MgShape* shape) {
+    bool shapeCanTransform(const MgShape* shape) {
         return getCmdSubject()->onShapeCanTransform(&motion, shape); }
-    bool shapeCanUnlock(MgShape* shape) {
+    bool shapeCanUnlock(const MgShape* shape) {
         return getCmdSubject()->onShapeCanUnlock(&motion, shape); }
-    bool shapeCanUngroup(MgShape* shape) {
+    bool shapeCanUngroup(const MgShape* shape) {
         return getCmdSubject()->onShapeCanUngroup(&motion, shape); }
     void shapeMoved(MgShape* shape, int segment) {
         getCmdSubject()->onShapeMoved(&motion, shape, segment); }
