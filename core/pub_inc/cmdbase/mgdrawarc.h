@@ -18,16 +18,17 @@ protected:
 public:
     static const char* Name() { return "arc3p"; }
     static MgCommand* Create() { return new MgCmdArc3P; }
-private:
+
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
     virtual bool touchBegan(const MgMotion* sender) { return _touchBeganStep(sender); }
     virtual bool touchMoved(const MgMotion* sender) { return _touchMovedStep(sender); }
     virtual bool touchEnded(const MgMotion* sender) { return _touchEndedStep(sender); }
-protected:
-    virtual void setStepPoint(int step, const Point2d& pt);
     virtual bool initialize(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
+
+protected:
+    virtual void setStepPoint(int step, const Point2d& pt);
     virtual void drawArcHandle(const MgMotion* sender, GiGraphics* gs);
     
 protected:
@@ -45,7 +46,6 @@ protected:
 public:
     static const char* Name() { return "arc_cse"; }
     static MgCommand* Create() { return new MgCmdArcCSE; }
-private:
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
 protected:
@@ -64,7 +64,6 @@ protected:
 public:
     static const char* Name() { return "arc_tan"; }
     static MgCommand* Create() { return new MgCmdArcTan; }
-private:
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
 protected:

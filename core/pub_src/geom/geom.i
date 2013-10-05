@@ -1,4 +1,5 @@
 %module geom
+
 %{
 #include <mgbox.h>
 #include <mgmat.h>

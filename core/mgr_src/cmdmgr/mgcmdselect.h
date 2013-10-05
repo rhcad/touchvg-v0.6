@@ -54,7 +54,7 @@ private:
 
     virtual bool cancel(const MgMotion* sender);
     virtual bool initialize(const MgMotion* sender);
-    virtual bool undo(const MgMotion* sender);
+    virtual bool backStep(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual int gatherShapes(const MgMotion* sender, MgShapes* shapes);
     virtual bool click(const MgMotion* sender);
@@ -66,7 +66,6 @@ private:
     virtual bool twoFingersMove(const MgMotion* sender);
 
 private:
-    MgShape* getCurrentShape(const MgMotion* sender) { return getShape(m_id, sender); }
     int getStep() { return 0; }
     MgShape* hitTestAll(const MgMotion* sender, Point2d &nearpt, int &segment);
     MgShape* getSelectedShape(const MgMotion* sender);

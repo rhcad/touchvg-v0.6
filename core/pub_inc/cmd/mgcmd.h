@@ -14,17 +14,17 @@
 	\see mgRegisterCommand
 */
 struct MgCommand {
+    virtual ~MgCommand() {}
     virtual const char* getName() const = 0;					//!< 返回命令名称
     virtual void release() = 0;									//!< 销毁对象
     
     virtual bool cancel(const MgMotion* sender) { return !sender; }	//!< 取消命令
     virtual bool initialize(const MgMotion* sender) { return !!sender; }	//!< 开始命令
-    virtual bool undo(const MgMotion* sender) { return !sender; }	//!< 回退一步
+    virtual bool backStep(const MgMotion* sender) { return !sender; }	//!< 回退一步
     
     virtual bool draw(const MgMotion* sender, GiGraphics* gs) = 0;  //!< 显示动态图形
 	virtual int gatherShapes(const MgMotion* sender, MgShapes* shapes) { //!< 得到动态图形
 		return sender && shapes ? 0 : 0; }
-    virtual MgShape* getCurrentShape(const MgMotion*) { return NULL; } //!< 获得当前图形
     
     virtual bool click(const MgMotion* sender) {	//!< 点击
 		return sender->view->useFinger() && longPress(sender); }
@@ -38,7 +38,7 @@ struct MgCommand {
     
     virtual bool isDrawingCommand() { return false; }       //!< 是否为绘图命令
     virtual bool isFloatingCommand() { return false; }      //!< 是否可嵌套在其他命令中
-    virtual bool doContextAction(const MgMotion*, int) { return false; } //!< 执行上下文动作
+    virtual bool doContextAction(const MgMotion* sender, int action) { return !sender && !action; } //!< 执行上下文动作
 };
 
 //! 图形列表锁定辅助类

@@ -38,9 +38,6 @@ struct CmdObserver {
     //! 在非绘图的命令中执行额外的上下文操作的通知
     virtual bool doEndAction(const MgMotion* sender, int action) = 0;
 
-    //! 在绘图命令中创建了图形的通知
-    virtual void onShapeAdded(const MgMotion* sender, MgShape* shape) = 0;
-
     //! 在绘图命令中显示额外内容的通知
     virtual void drawInShapeCommand(const MgMotion* sender, 
         MgCommand* cmd, GiGraphics* gs) = 0;
@@ -54,10 +51,20 @@ struct CmdObserver {
         int handleIndex, int snapid, int snapHandle,
         int count, const int* ids) = 0;
 #endif
+
+    virtual bool onShapeWillAdded(const MgMotion* sender, MgShape* shape) = 0;    //!< 通知将添加图形
+    virtual void onShapeAdded(const MgMotion* sender, MgShape* shape) = 0;        //!< 通知已添加图形
+    virtual bool onShapeWillDeleted(const MgMotion* sender, MgShape* shape) = 0;  //!< 通知将删除图形
+    virtual void onShapeDeleted(const MgMotion* sender, MgShape* shape) = 0;      //!< 通知已删除图形
+    virtual bool onShapeCanRotated(const MgMotion* sender, MgShape* shape) = 0;   //!< 通知是否能旋转图形
+    virtual bool onShapeCanTransform(const MgMotion* sender, MgShape* shape) = 0; //!< 通知是否能对图形变形
+    virtual bool onShapeCanUnlock(const MgMotion* sender, MgShape* shape) = 0;    //!< 通知是否能对图形解锁
+    virtual bool onShapeCanUngroup(const MgMotion* sender, MgShape* shape) = 0;   //!< 通知是否能对成组图形解散
+    virtual void onShapeMoved(const MgMotion* sender, MgShape* shape, int segment) = 0;   //!< 通知图形已拖动
 };
 
-#ifndef SWIG
-class CmdObserverDefault : public CmdObserver {
+class CmdObserverDefault : public CmdObserver
+{
 public:
     CmdObserverDefault() {}
     virtual ~CmdObserverDefault() {}
@@ -66,14 +73,24 @@ public:
     virtual void onEnterSelectCommand(const MgMotion*) {}
     virtual void onUnloadCommands(MgCmdManager*) {}
     virtual bool selectActionsNeedHided(const MgMotion*) { return false; }
-    virtual void addShapeActions(const MgMotion*,int*, int &, const MgShape*) {}
     virtual bool doAction(const MgMotion*, int) { return false; }
     virtual bool doEndAction(const MgMotion*, int) { return false; }
-    virtual void onShapeAdded(const MgMotion*, MgShape*) {}
     virtual void drawInShapeCommand(const MgMotion*, MgCommand*, GiGraphics*) {}
     virtual void drawInSelectCommand(const MgMotion*, const MgShape*, int, GiGraphics*) {}
+
+    virtual bool onShapeWillAdded(const MgMotion*, MgShape*) { return true; }
+    virtual void onShapeAdded(const MgMotion*, MgShape*) {}
+    virtual bool onShapeWillDeleted(const MgMotion*, MgShape*) { return true; }
+    virtual void onShapeDeleted(const MgMotion*, MgShape*) {}
+    virtual bool onShapeCanRotated(const MgMotion*, MgShape*) { return true; }
+    virtual bool onShapeCanTransform(const MgMotion*, MgShape*) { return true; }
+    virtual bool onShapeCanUnlock(const MgMotion*, MgShape*) { return true; }
+    virtual bool onShapeCanUngroup(const MgMotion*, MgShape*) { return true; }
+    virtual void onShapeMoved(const MgMotion*, MgShape*, int) {}
+#ifndef SWIG
+    virtual void addShapeActions(const MgMotion*,int*, int &, const MgShape*) {}
     virtual void onSelectTouchEnded(const MgMotion*,int,int,int,int,int,const int*) {}
-};
 #endif
+};
 
 #endif // TOUCHVG_CMDOBSERVER_H_

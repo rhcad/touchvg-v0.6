@@ -30,6 +30,7 @@ struct MgCmdManager {
     virtual bool setCommand(const MgMotion* sender, const char* name) = 0;  //!< 启动命令
     virtual bool cancel(const MgMotion* sender) = 0;        //!< 取消当前命令
     virtual void unloadCommands() = 0;                      //!< 退出时卸载命令
+    virtual bool addCommand(MgCommand* cmd) = 0;            //!< 添加命令
     
     virtual int getNewShapeID() = 0;                        //!< 返回新绘图形的ID
     virtual void setNewShapeID(int sid) = 0;                //!< 设置新绘图形的ID

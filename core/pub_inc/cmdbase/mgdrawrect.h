@@ -21,17 +21,17 @@ protected:
 public:
     static const char* Name() { return "rect"; }
     static MgCommand* Create() { return new MgCmdDrawRect; }
-    
-protected:
+
     virtual const char* getName() const { return Name(); }
     virtual void release() { delete this; }
 
     virtual bool initialize(const MgMotion* sender);
-    virtual bool undo(const MgMotion* sender);
+    virtual bool backStep(const MgMotion* sender);
     virtual bool touchBegan(const MgMotion* sender);
     virtual bool touchMoved(const MgMotion* sender);
     virtual bool touchEnded(const MgMotion* sender);
     
+protected:
     virtual void addRectShape(const MgMotion* sender);
     
 protected:

@@ -19,9 +19,9 @@ bool MgCmdDrawLine::initialize(const MgMotion* sender)
     return _initialize(MgShapeT<MgLine>::create, sender);
 }
 
-bool MgCmdDrawLine::undo(const MgMotion* sender)
+bool MgCmdDrawLine::backStep(const MgMotion* sender)
 {
-    return MgCommandDraw::_undo(sender);
+    return MgCommandDraw::_backStep(sender);
 }
 
 bool MgCmdDrawLine::touchBegan(const MgMotion* sender)

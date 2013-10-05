@@ -35,6 +35,7 @@ private:
     virtual bool setCommand(const MgMotion* sender, const char* name);
     virtual bool cancel(const MgMotion* sender);
     virtual void unloadCommands();
+    virtual bool addCommand(MgCommand* cmd);
 	virtual int getNewShapeID() { return _newShapeID; }
 	virtual void setNewShapeID(int sid) { _newShapeID = sid; }
     virtual float displayMmToModel(float mm, GiGraphics* gs);

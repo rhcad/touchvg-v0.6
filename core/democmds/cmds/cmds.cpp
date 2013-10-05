@@ -5,13 +5,13 @@
 #include "HitTestCmd.h"
 #include <mgshapet.h>
 
-class EduCmdObserver : public CmdObserverDefault
+class DemoCmdsObserver : public CmdObserverDefault
 {
 public:
-    EduCmdObserver() {}
+    DemoCmdsObserver() {}
 };
 
-static EduCmdObserver _observer;
+static DemoCmdsObserver _observer;
 
 int DemoCmdsImpl::registerCmds(MGVIEW_HANDLE mgView)
 {

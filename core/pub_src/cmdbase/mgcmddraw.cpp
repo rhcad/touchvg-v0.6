@@ -70,7 +70,7 @@ MgShape* MgCommandDraw::_addshape(const MgMotion* sender, MgShape* shape, bool a
     return newsp;
 }
 
-bool MgCommandDraw::_undo(const MgMotion* sender)
+bool MgCommandDraw::_backStep(const MgMotion* sender)
 {
     if (m_step > 1) {
         m_step--;

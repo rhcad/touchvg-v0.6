@@ -72,9 +72,9 @@ MgCmdSelect::~MgCmdSelect()
 
 bool MgCmdSelect::cancel(const MgMotion* sender)
 {
-    bool ret = undo(sender);
-    ret = undo(sender) || ret;
-    return undo(sender) || ret;
+    bool ret = backStep(sender);
+    ret = backStep(sender) || ret;
+    return backStep(sender) || ret;
 }
 
 bool MgCmdSelect::initialize(const MgMotion* sender)
@@ -104,7 +104,7 @@ bool MgCmdSelect::initialize(const MgMotion* sender)
     return true;
 }
 
-bool MgCmdSelect::undo(const MgMotion* sender)
+bool MgCmdSelect::backStep(const MgMotion* sender)
 {
     m_boxsel = false;
     m_boxHandle = 99;

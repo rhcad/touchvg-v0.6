@@ -43,8 +43,9 @@ private:
     }
     virtual bool selectActionsNeedHided(const MgMotion* sender) {
         for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
-            if ((*it)->selectActionsNeedHided(sender))
+            if ((*it)->selectActionsNeedHided(sender)) {
                 return true;
+            }
         }
         return false;
     }
@@ -68,11 +69,6 @@ private:
         }
         return false;
     }
-    virtual void onShapeAdded(const MgMotion* sender, MgShape* shape) {
-        for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
-            (*it)->onShapeAdded(sender, shape);
-        }
-    }
     virtual void drawInShapeCommand(const MgMotion* sender, 
         MgCommand* cmd, GiGraphics* gs) {
         for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
@@ -92,6 +88,70 @@ private:
         for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
             (*it)->onSelectTouchEnded(sender, shapeid, 
                 handleIndex, snapid, snapHandle, count, ids);
+        }
+    }
+
+    virtual bool onShapeWillAdded(const MgMotion* sender, MgShape* shape) {
+        for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
+            if (!(*it)->onShapeWillAdded(sender, shape)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    virtual void onShapeAdded(const MgMotion* sender, MgShape* shape) {
+        for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
+            (*it)->onShapeAdded(sender, shape);
+        }
+    }
+    virtual bool onShapeWillDeleted(const MgMotion* sender, MgShape* shape) {
+        for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
+            if (!(*it)->onShapeWillDeleted(sender, shape)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    virtual void onShapeDeleted(const MgMotion* sender, MgShape* shape) {
+        for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
+            (*it)->onShapeDeleted(sender, shape);
+        }
+    }
+    virtual bool onShapeCanRotated(const MgMotion* sender, MgShape* shape) {
+        for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
+            if (!(*it)->onShapeCanRotated(sender, shape)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    virtual bool onShapeCanTransform(const MgMotion* sender, MgShape* shape) {
+        for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
+            if (!(*it)->onShapeCanTransform(sender, shape)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    virtual bool onShapeCanUnlock(const MgMotion* sender, MgShape* shape) {
+        for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
+            if (!(*it)->onShapeCanUnlock(sender, shape)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    virtual bool onShapeCanUngroup(const MgMotion* sender, MgShape* shape) {
+        for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
+            if (!(*it)->onShapeCanUngroup(sender, shape)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    virtual void onShapeMoved(const MgMotion* sender, MgShape* shape, int segment) {
+        for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
+            (*it)->onShapeMoved(sender, shape, segment);
         }
     }
 

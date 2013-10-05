@@ -78,16 +78,25 @@ public:
         return _cmds->findCommand(name); }
     bool setCommand(const MgMotion* sender, const char* name) {
         return _cmds->setCommand(sender, name); }
+    bool addCommand(MgCommand* cmd) {
+        return _cmds->addCommand(cmd); }
     bool setCurrentShapes(MgShapes* shapes) {
         return doc()->setCurrentShapes(shapes); }
 
-    bool shapeWillAdded(MgShape*) { return true; }
-    bool shapeWillDeleted(MgShape*) { return true; }
-    bool shapeCanRotated(MgShape*) { return true; }
-    bool shapeCanTransform(MgShape*) { return true; }
-    bool shapeCanUnlock(MgShape*) { return true; }
-    bool shapeCanUngroup(MgShape*) { return true; }
-    void shapeMoved(MgShape*, int) {}
+    bool shapeWillAdded(MgShape* shape) {
+        return getCmdSubject()->onShapeWillAdded(&motion, shape); }
+    bool shapeWillDeleted(MgShape* shape) {
+        return getCmdSubject()->onShapeWillDeleted(&motion, shape); }
+    bool shapeCanRotated(MgShape* shape) {
+        return getCmdSubject()->onShapeCanRotated(&motion, shape); }
+    bool shapeCanTransform(MgShape* shape) {
+        return getCmdSubject()->onShapeCanTransform(&motion, shape); }
+    bool shapeCanUnlock(MgShape* shape) {
+        return getCmdSubject()->onShapeCanUnlock(&motion, shape); }
+    bool shapeCanUngroup(MgShape* shape) {
+        return getCmdSubject()->onShapeCanUngroup(&motion, shape); }
+    void shapeMoved(MgShape* shape, int segment) {
+        getCmdSubject()->onShapeMoved(&motion, shape, segment); }
 
     void commandChanged() {
         CALL_VIEW(deviceView()->commandChanged());
@@ -98,8 +107,12 @@ public:
 
     bool removeShape(MgShape* shape) {
         showContextActions(0, NULL, Box2d::kIdentity(), NULL);
-        return (shape && shape->getParent()
+        bool ret = (shape && shape->getParent()
             && shape->getParent()->removeShape(shape->getID()));
+        if (ret) {
+            getCmdSubject()->onShapeDeleted(&motion, shape);
+        }
+        return ret;
     }
 
     bool useFinger() {
@@ -137,6 +150,7 @@ public:
         else {                                  // 已经regenAppend并增量重绘
             regenAll();
         }
+        getCmdSubject()->onShapeAdded(&motion, sp);
     }
 
     void redraw() {

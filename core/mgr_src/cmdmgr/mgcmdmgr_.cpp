@@ -134,6 +134,15 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender, const char* name)
     return ret;
 }
 
+bool MgCmdManagerImpl::addCommand(MgCommand* cmd)
+{
+    bool ret = cmd && !findCommand(cmd->getName());
+    if (ret) {
+        _cmds[cmd->getName()] = cmd;
+    }
+    return ret;
+}
+
 bool MgCmdManagerImpl::cancel(const MgMotion* sender)
 {
     clearSnap();

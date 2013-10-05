@@ -20,9 +20,9 @@ MgCmdErase::~MgCmdErase()
 bool MgCmdErase::cancel(const MgMotion* sender)
 {
     m_boxsel = false;
-    bool ret = undo(sender);
-    ret = undo(sender) || ret;
-    return undo(sender) || ret;
+    bool ret = backStep(sender);
+    ret = backStep(sender) || ret;
+    return backStep(sender) || ret;
 }
 
 bool MgCmdErase::initialize(const MgMotion* /*sender*/)
@@ -31,7 +31,7 @@ bool MgCmdErase::initialize(const MgMotion* /*sender*/)
     return true;
 }
 
-bool MgCmdErase::undo(const MgMotion* sender)
+bool MgCmdErase::backStep(const MgMotion* sender)
 {
     if (!m_delIds.empty()) {
         m_delIds.pop_back();

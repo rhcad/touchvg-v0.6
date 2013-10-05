@@ -26,7 +26,7 @@ protected:
     bool _touchMoved(const MgMotion* sender);
     bool _touchEnded(const MgMotion* sender);
     MgShape* _addshape(const MgMotion* sender, MgShape* shape = NULL, bool autolock = true);
-    bool _undo(const MgMotion* sender);
+    bool _backStep(const MgMotion* sender);
     bool _draw(const MgMotion* sender, GiGraphics* gs);
     bool _click(const MgMotion* sender);
     void _delayClear();
@@ -36,19 +36,19 @@ protected:
     bool _touchEndedStep(const MgMotion* sender);
     virtual int getMaxStep() { return 3; }
     virtual void setStepPoint(int step, const Point2d& pt);
+
+private:
+    virtual bool isDrawingCommand() { return true; }
     
-    virtual bool undo(const MgMotion* sender) { return _undo(sender); }
+public:
+    virtual bool backStep(const MgMotion* sender) { return _backStep(sender); }
     virtual bool cancel(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs) { return _draw(sender, gs); }
     virtual int gatherShapes(const MgMotion* sender, MgShapes* shapes);
     virtual bool click(const MgMotion* sender);
     virtual bool longPress(const MgMotion* sender);
     virtual bool mouseHover(const MgMotion* sender);
-private:
-    virtual bool isDrawingCommand() { return true; }
-    
-public:
-    MgShape* getCurrentShape(const MgMotion*) { return m_shape; }
+
     int getStep() { return m_needClear ? 0 : m_step; }
     MgShape* dynshape() { return m_shape; }
     Point2d snapPoint(const MgMotion* sender, bool firstStep = false);

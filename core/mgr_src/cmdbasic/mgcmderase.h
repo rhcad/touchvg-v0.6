@@ -28,7 +28,7 @@ private:
 
     virtual bool cancel(const MgMotion* sender);
     virtual bool initialize(const MgMotion* sender);
-    virtual bool undo(const MgMotion* sender);
+    virtual bool backStep(const MgMotion* sender);
     virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual int gatherShapes(const MgMotion* sender, MgShapes* shapes);
     virtual bool click(const MgMotion* sender);

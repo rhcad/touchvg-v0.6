@@ -19,14 +19,14 @@ bool MgCmdDrawLines::initialize(const MgMotion* sender)
     return _initialize(MgShapeT<MgLines>::create, sender);
 }
 
-bool MgCmdDrawLines::undo(const MgMotion* sender)
+bool MgCmdDrawLines::backStep(const MgMotion* sender)
 {
     if (m_step > 2) {                   // 去掉倒数第二个点，倒数第一点是临时动态点
         ((MgBaseLines*)dynshape()->shape())->removePoint(
             m_index == m_step ? m_step - 1 : m_index);
         dynshape()->shape()->update();
     }
-    return MgCommandDraw::_undo(sender);
+    return MgCommandDraw::_backStep(sender);
 }
 
 bool MgCmdDrawLines::draw(const MgMotion* sender, GiGraphics* gs)
