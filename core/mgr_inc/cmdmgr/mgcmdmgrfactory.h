@@ -14,7 +14,7 @@ struct MgCmdManager;
 class MgCmdManagerFactory {
 public:
     //! 创建命令管理器
-	static MgCmdManager* create();
+    static MgCmdManager* create();
 };
 
 #endif // TOUCHVG_CMDMGR_FACTORY_H_

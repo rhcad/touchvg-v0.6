@@ -72,7 +72,7 @@ const char* MgJsonStorage::stringify(bool pretty)
     return _impl->stringify(pretty);
 #else
     pretty;
-	return "";
+    return "";
 #endif
 }
 
@@ -112,7 +112,7 @@ MgStorage* MgJsonStorage::storageForRead(const char* content)
     return _impl;
 #else
     content;
-	return NULL;
+    return NULL;
 #endif
 }
 
@@ -129,7 +129,7 @@ MgStorage* MgJsonStorage::storageForRead(FILE* fp)
     return fp ? _impl : NULL;
 #else
     fp;
-	return NULL;
+    return NULL;
 #endif
 }
 
@@ -143,7 +143,7 @@ const char* MgJsonStorage::getParseError()
 #ifdef RAPIDJSON_DOCUMENT_H_
     return _impl->getError();
 #else
-	return "";
+    return "";
 #endif
 }
 
@@ -153,7 +153,7 @@ MgStorage* MgJsonStorage::storageForWrite()
     _impl->clear();
     return _impl;
 #else
-	return NULL;
+    return NULL;
 #endif
 }
 

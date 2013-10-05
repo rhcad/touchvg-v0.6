@@ -122,7 +122,7 @@ public class ContextAction {
             return true;
         }
         if (mCaptions == null && mCaptionsID != 0) {
-        	mCaptions = mContext.getResources().getStringArray(mCaptionsID);
+            mCaptions = mContext.getResources().getStringArray(mCaptionsID);
         }
         if (mCaptions != null && action > 0 && action < mCaptions.length) {
             button.setText(mCaptions[action]);
@@ -136,6 +136,6 @@ public class ContextAction {
     }
     
     public static void setButtonCaptionsID(int captionsID) {
-    	mCaptionsID = captionsID;
+        mCaptionsID = captionsID;
     }
 }

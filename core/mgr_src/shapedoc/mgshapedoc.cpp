@@ -30,18 +30,18 @@ MgShape* MgShapeDoc::ShapeFactory::createShape(int type)
 }
 
 struct MgShapeDoc::Impl {
-	std::vector<MgLayer*> layers;
+    std::vector<MgLayer*> layers;
     MgShapes*   curShapes;
     GiContext   context;
     Matrix2d    xf;
     Box2d       rectW;
     float       viewScale;
     long        changeCount;
-	volatile long   refcount;
+    volatile long   refcount;
 
     MgLockRW    lock;
-	MgLockRW    dynlock;
-	typedef std::pair<ShapesLocked, void*> Observer;
+    MgLockRW    dynlock;
+    typedef std::pair<ShapesLocked, void*> Observer;
     std::vector<Observer>  observers;
 };
 
@@ -103,10 +103,10 @@ bool MgShapeDoc::equals(const MgObject& src) const
     if (src.isKindOf(Type())) {
         const MgShapeDoc& doc = (const MgShapeDoc&)src;
 
-		if (im->xf != doc.im->xf
-			|| im->layers.size() != doc.im->layers.size()) {
-			return false;
-		}
+        if (im->xf != doc.im->xf
+            || im->layers.size() != doc.im->layers.size()) {
+            return false;
+        }
 
         for (unsigned i = 0; i < im->layers.size(); i++) {
             if (!im->layers[i]->equals(*(doc.im->layers[i]))) {
@@ -194,9 +194,9 @@ bool MgShapeDoc::switchLayer(int index)
 {
     bool ret = false;
 
-	if (index == getLayerCount()) {
-		im->layers.push_back(MgLayer::create(this, index));
-	}
+    if (index == getLayerCount()) {
+        im->layers.push_back(MgLayer::create(this, index));
+    }
     if (index >= 0 && index < getLayerCount()) {
         im->curShapes = im->layers[index];
         ret = true;

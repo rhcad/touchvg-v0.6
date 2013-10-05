@@ -88,7 +88,7 @@ public class ViewHelper {
      * @endcode
      */
     public static void setContextButtonImages(int[] imageIDs, int captionsID, 
-    		int[] extraImageIDs, int[] handleImageIDs) {
+            int[] extraImageIDs, int[] handleImageIDs) {
         GraphView.setContextButtonImages(imageIDs, captionsID, extraImageIDs, handleImageIDs);
     }
     

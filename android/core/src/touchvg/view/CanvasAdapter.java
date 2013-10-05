@@ -33,7 +33,7 @@ public class CanvasAdapter extends GiCanvas {
     private static final float[] DOT = { 1, 2 };
     private static final float[] DASH_DOT = { 10, 2, 2, 2 };
     private static final float[] DASH_DOTDOT = { 20, 2, 2, 2, 2, 2 };
-    private static int[] mHandleIDs;  	// 控制手柄图像id数组
+    private static int[] mHandleIDs;    // 控制手柄图像id数组
     
     static {
         System.loadLibrary("touchvg");  // 加载绘图内核动态库，以便访问JNI

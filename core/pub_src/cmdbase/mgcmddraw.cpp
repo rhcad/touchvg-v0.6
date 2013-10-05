@@ -93,7 +93,7 @@ bool MgCommandDraw::_draw(const MgMotion* sender, GiGraphics* gs)
 
 int MgCommandDraw::gatherShapes(const MgMotion* /*sender*/, MgShapes* shapes)
 {
-	return (m_step > 0 && m_shape && shapes->addShape(*m_shape)) ? 1 : 0;
+    return (m_step > 0 && m_shape && shapes->addShape(*m_shape)) ? 1 : 0;
 }
 
 bool MgCommandDraw::click(const MgMotion* sender)

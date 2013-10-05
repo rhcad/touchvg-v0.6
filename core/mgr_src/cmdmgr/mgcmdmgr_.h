@@ -27,7 +27,7 @@ public:
     virtual ~MgCmdManagerImpl();
     
 private:
-	virtual void registerCommand(const char* name, MgCommand* (*creator)());
+    virtual void registerCommand(const char* name, MgCommand* (*creator)());
     virtual void release() { delete this; }
     virtual const char* getCommandName();
     virtual MgCommand* getCommand();
@@ -36,8 +36,8 @@ private:
     virtual bool cancel(const MgMotion* sender);
     virtual void unloadCommands();
     virtual bool addCommand(MgCommand* cmd);
-	virtual int getNewShapeID() { return _newShapeID; }
-	virtual void setNewShapeID(int sid) { _newShapeID = sid; }
+    virtual int getNewShapeID() { return _newShapeID; }
+    virtual void setNewShapeID(int sid) { _newShapeID = sid; }
     virtual float displayMmToModel(float mm, GiGraphics* gs);
     virtual float displayMmToModel(float mm, const MgMotion* sender);
     virtual int getSelection(MgView* view, int count, MgShape** shapes, bool forChange = false);
@@ -47,8 +47,8 @@ private:
     virtual bool doContextAction(const MgMotion* sender, int action);
     virtual MgSnap* getSnap();
     virtual CmdSubject* getCmdSubject();
-	virtual MgShape* addImageShape(const MgMotion* sender, const char* name, float width, float height);
-	virtual void getBoundingBox(Box2d& box, const MgMotion* sender);
+    virtual MgShape* addImageShape(const MgMotion* sender, const char* name, float width, float height);
+    virtual void getBoundingBox(Box2d& box, const MgMotion* sender);
     
 private:
     virtual bool drawSnap(const MgMotion* sender, GiGraphics* gs);
@@ -73,7 +73,7 @@ private:
     CMDS            _cmds;
     std::string     _cmdname;
     std::string     _drawcmd;
-	int				_newShapeID;
+    int             _newShapeID;
     
     Point2d         _ptSnap;
     Point2d         _snapBase[2];

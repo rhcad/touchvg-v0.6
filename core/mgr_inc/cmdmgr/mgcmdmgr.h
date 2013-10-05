@@ -13,7 +13,7 @@ struct MgSelection;
 //! 命令管理器接口
 /*! \ingroup CORE_COMMAND
     \interface MgCmdManager
-	\see mgRegisterCommand(), MgShapeT<T>::registerCreator()
+    \see mgRegisterCommand(), MgShapeT<T>::registerCreator()
 */
 struct MgCmdManager {
 

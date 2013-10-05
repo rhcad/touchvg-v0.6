@@ -17,7 +17,7 @@ struct DemoCmdsGate {
 
     //! 得到当前图形的各种度量尺寸
     static int getDimensions(MGVIEW_HANDLE mgView, 
-		mgvector<float>& vars, mgvector<char>& types);
+        mgvector<float>& vars, mgvector<char>& types);
 };
 
 #endif // DEMOCMDS_GATE_H_

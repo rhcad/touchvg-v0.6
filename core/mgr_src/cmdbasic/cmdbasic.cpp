@@ -18,7 +18,7 @@
 
 void MgBasicCommands::registerCmds(MgView* view)
 {
-	mgRegisterCommand<MgCmdErase>(view);
+    mgRegisterCommand<MgCmdErase>(view);
     mgRegisterCommand<MgCmdDrawRect>(view);
     mgRegisterCommand<MgCmdDrawSquare>(view);
     mgRegisterCommand<MgCmdDrawEllipse>(view);

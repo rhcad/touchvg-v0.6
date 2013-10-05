@@ -128,8 +128,8 @@ public class GraphView extends View {
     
     //! 设置上下文按钮的图像ID数组
     public static void setContextButtonImages(int[] imageIDs, int captionsID, 
-    		int[] extraImageIDs, int[] handleImageIDs) {
-    	ContextAction.setButtonImages(imageIDs, extraImageIDs);
+            int[] extraImageIDs, int[] handleImageIDs) {
+        ContextAction.setButtonImages(imageIDs, extraImageIDs);
         ContextAction.setButtonCaptionsID(captionsID);
         CanvasAdapter.setHandleImageIDs(handleImageIDs);
     }

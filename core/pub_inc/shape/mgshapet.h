@@ -64,9 +64,9 @@ public:
     }
 
 #ifdef TOUCHVG_SHAPE_FACTORY_H_
-	//! 登记类型号对应的图形创建函数
-	static void registerCreator(MgShapeFactory* factory) {
-		factory->registerShape(Type(), create);
+    //! 登记类型号对应的图形创建函数
+    static void registerCreator(MgShapeFactory* factory) {
+        factory->registerShape(Type(), create);
     }
 #endif
     

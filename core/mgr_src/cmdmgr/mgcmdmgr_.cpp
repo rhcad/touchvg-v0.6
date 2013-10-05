@@ -30,7 +30,7 @@ void MgCmdManagerImpl::registerCommand(const char* name, MgCommand* (*creator)()
 
 MgCmdManagerImpl::MgCmdManagerImpl() : _newShapeID(0), _snapShapeId(0)
 {
-	_snapType[0] = _snapType[1] = 0;
+    _snapType[0] = _snapType[1] = 0;
 }
 
 MgCmdManagerImpl::~MgCmdManagerImpl()
@@ -71,8 +71,8 @@ MgCommand* MgCmdManagerImpl::findCommand(const char* name)
         if (itf != _factories.end() && itf->second) {
             cmd = (itf->second)();
         }
-		if (!cmd && strcmp(name, "select") == 0) {
-			cmd = MgCmdSelect::Create();
+        if (!cmd && strcmp(name, "select") == 0) {
+            cmd = MgCmdSelect::Create();
         }
         if (cmd) {
             _cmds[name] = cmd;

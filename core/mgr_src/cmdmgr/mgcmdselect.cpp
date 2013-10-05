@@ -296,7 +296,7 @@ bool MgCmdSelect::draw(const MgMotion* sender, GiGraphics* gs)
 
 int MgCmdSelect::gatherShapes(const MgMotion* sender, MgShapes* shapes)
 {
-	int ret = 0;
+    int ret = 0;
 
     if (m_boxsel) {
         MgShapeT<MgRect> shape;
@@ -306,15 +306,15 @@ int MgCmdSelect::gatherShapes(const MgMotion* sender, MgShapes* shapes)
         *shape.context() = ctxshap;
         ((MgRect*)shape.shape())->setRect2P(sender->startPtM, sender->pointM);
         shapes->addShape(shape);
-		ret++;
+        ret++;
     }
     for (std::vector<MgShape*>::const_iterator it = m_clones.begin();
          it != m_clones.end(); ++it) {
         shapes->addShape(*(*it));
-		ret++;
+        ret++;
     }
 
-	return ret;
+    return ret;
 }
 
 MgCmdSelect::sel_iterator MgCmdSelect::getSelectedPostion(MgShape* shape)

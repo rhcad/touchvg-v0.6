@@ -11,7 +11,7 @@ class HitTestCmd : public MgCommand
 {
 protected:
     HitTestCmd() : _tol(0), _curid(0), _segment(-1) { _cur.dist = 1e10f; }
-	virtual ~HitTestCmd() {}
+    virtual ~HitTestCmd() {}
 
 public:
     static const char* Name() { return "hittest"; }

@@ -82,17 +82,17 @@ public:
     //! 返回图形总数
     int getShapeCount();
 
-	//! 返回图形改变次数，可用于检查是否需要保存
+    //! 返回图形改变次数，可用于检查是否需要保存
     int getChangeCount();
 
-	//! 返回选中的图形个数
+    //! 返回选中的图形个数
     int getSelectedShapeCount();
 
-	//! 返回选中的图形的类型, MgShapeType
+    //! 返回选中的图形的类型, MgShapeType
     int getSelectedShapeType();
 
-	//! 删除所有图形，包括锁定的图形
-	void clear();
+    //! 删除所有图形，包括锁定的图形
+    void clear();
 
     //! 从JSON文件中加载图形
     bool loadFromFile(const char* vgfile);
@@ -144,8 +144,8 @@ public:
      */
     bool addImageShape(const char* name, float width, float height);
 
-	//! 返回选择包络框，四个点坐标(left, top, right, bottom)
-	bool getBoundingBox(mgvector<float>& box);
+    //! 返回选择包络框，四个点坐标(left, top, right, bottom)
+    bool getBoundingBox(mgvector<float>& box);
     
     //! 命令视图回调适配器的句柄, 可转换为 MgView 指针
 #if defined(__MINGW64__) || defined(__MINGW32__)

@@ -9,7 +9,7 @@
 #include <string.h>
 
 MgShape* MgCmdManagerImpl::addImageShape(const MgMotion* sender, 
-										 const char* name, float width, float height)
+                                         const char* name, float width, float height)
 {
     if (!name || *name == 0 || width < 1 || height < 1)
         return NULL;

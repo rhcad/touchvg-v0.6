@@ -20,7 +20,7 @@ typedef enum {
 
 //! 设置属性的位掩码类型
 typedef enum {
-	kContextCopyNone  = 0,		//!< 不设置属性
+    kContextCopyNone  = 0,      //!< 不设置属性
     kContextLineRGB   = 0x01,   //!< 设置线色的RGB分量
     kContextLineAlpha = 0x02,   //!< 设置线色的透明度分量
     kContextLineARGB  = 0x03,   //!< 设置线色的所有分量

@@ -75,7 +75,7 @@ int MgCmdErase::gatherShapes(const MgMotion* sender, MgShapes* shapes)
         ((MgRect*)shape.shape())->setRect2P(sender->startPtM, sender->pointM);
         shapes->addShape(shape);
     }
-	return m_boxsel ? 1 : 0;
+    return m_boxsel ? 1 : 0;
 }
 
 MgShape* MgCmdErase::hitTest(const MgMotion* sender)
