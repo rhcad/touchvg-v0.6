@@ -81,7 +81,7 @@ bool MgCmdSelect::initialize(const MgMotion* sender, MgStorage*)
 {
     m_boxsel = false;
     m_id = 0;
-    m_segment = -1;
+    m_hit.segment = -1;
     m_handleIndex = 0;
     m_rotateHandle = 0;
     m_editMode = false;
@@ -121,7 +121,7 @@ bool MgCmdSelect::backStep(const MgMotion* sender)
     }
     if (!m_selIds.empty()) {                        // 图形整体选中状态
         m_id = 0;
-        m_segment = -1;
+        m_hit.segment = -1;
         m_handleIndex = 0;
         m_rotateHandle = 0;
         m_selIds.clear();
@@ -179,7 +179,7 @@ bool MgCmdSelect::draw(const MgMotion* sender, GiGraphics* gs)
     else if (m_clones.empty()) {                    // 蓝色显示选中的图形
         GiContext ctx(-1.f, GiColor(0, 0, 255, 48));
         for (it = shapes.begin(); it != shapes.end(); ++it) {
-            (*it)->draw(1, *gs, &ctx, m_segment);
+            (*it)->draw(1, *gs, &ctx, m_hit.segment);
         }
     }
     
@@ -278,13 +278,13 @@ bool MgCmdSelect::draw(const MgMotion* sender, GiGraphics* gs)
         if (m_insertPt && !m_clones.empty()) {  // 在临时图形上显示新插入顶点
             GiContext insertctx(ctxhd);
             insertctx.setFillColor(GiColor(255, 0, 0, 64));
-            gs->drawEllipse(&insertctx, m_ptNear, r2x);
-            gs->drawHandle(m_ptNear, 1);
+            gs->drawEllipse(&insertctx, m_hit.nearpt, r2x);
+            gs->drawHandle(m_hit.nearpt, 1);
         }
     }
     if (shapes.size() == 1 && m_clones.empty()
-        && m_ptNear.distanceTo(pnt) > r2x * 2) {
-        gs->drawEllipse(&ctxhd, m_ptNear, radius / 2);  // 显示线上的最近点，以便用户插入新点
+        && m_hit.nearpt.distanceTo(pnt) > r2x * 2) {
+        gs->drawEllipse(&ctxhd, m_hit.nearpt, radius / 2);  // 显示线上的最近点，以便用户插入新点
     }
     
     sender->cmds()->getSnap()->drawSnap(sender, gs); // 显示拖动捕捉提示线
@@ -337,12 +337,10 @@ bool MgCmdSelect::isSelected(MgShape* shape)
     return getSelectedPostion(shape) != m_selIds.end();
 }
 
-MgShape* MgCmdSelect::hitTestAll(const MgMotion* sender, 
-                                 Point2d &nearpt, int &segment)
+MgShape* MgCmdSelect::hitTestAll(const MgMotion* sender, MgHitResult& result)
 {
     Box2d limits(sender->pointM, sender->displayMmToModel(8.f), 0);
-    segment = -1;
-    return sender->view->shapes()->hitTest(limits, nearpt, &segment);
+    return sender->view->shapes()->hitTest(limits, result);
 }
 
 MgShape* MgCmdSelect::getSelectedShape(const MgMotion* sender)
@@ -355,13 +353,10 @@ bool MgCmdSelect::canSelect(MgShape* shape, const MgMotion* sender)
 {
     Box2d limits(sender->startPtM, sender->displayMmToModel(10.f), 0);
     float d = _FLT_MAX;
-    bool inside = false;
     
-    m_segment = -1;
     if (shape) {
-        d = shape->shape()->hitTest(limits.center(), limits.width() / 2,
-                                    m_ptNear, m_segment, inside);
-        if (inside && shape->hasFillColor()) {
+        d = shape->shape()->hitTest(limits.center(), limits.width() / 2, m_hit);
+        if (m_hit.inside && shape->hasFillColor()) {
             return true;
         }
         if (d > limits.width() / 2) {
@@ -384,7 +379,7 @@ int MgCmdSelect::hitTestHandles(MgShape* shape, const Point2d& pointM,
     
     int handleIndex = 0;
     float minDist = sender->displayMmToModel(tolmm);
-    float nearDist = m_ptNear.distanceTo(pointM);
+    float nearDist = m_hit.nearpt.distanceTo(pointM);
     int n = shape->shapec()->getHandleCount();
     
     for (int i = 0; i < n; i++) {
@@ -423,8 +418,7 @@ bool MgCmdSelect::click(const MgMotion* sender)
     if (sender->pressDrag)
         return false;
     
-    Point2d nearpt;
-    int     segment = -1;
+    MgHitResult result;
     MgShape *shape = NULL;
     bool    canSelAgain;
     
@@ -440,7 +434,7 @@ bool MgCmdSelect::click(const MgMotion* sender)
                    && canSelect(shape, sender));    // 仅检查这个图形能否选中
     
     if (!canSelAgain) {                 // 没有选中或点中其他图形
-        shape = hitTestAll(sender, nearpt, segment);
+        shape = hitTestAll(sender, result);
         bool changed = ((int)m_selIds.size() != (shape ? 1 : 0))
             || (shape && shape->getID() != m_id);
 
@@ -449,8 +443,7 @@ bool MgCmdSelect::click(const MgMotion* sender)
             m_selIds.push_back(shape->getID()); // 选中新图形
         m_id = shape ? shape->getID() : 0;
         
-        m_ptNear = nearpt;
-        m_segment = segment;
+        m_hit = result;
         m_handleIndex = 0;
 
         if (changed) {
@@ -528,16 +521,14 @@ static int _dragData = 0;
 bool MgCmdSelect::touchBegan(const MgMotion* sender)
 {
     if (!sender->switchGesture) {
-        Point2d nearpt;
-        int segment;
-        MgShape* newshape = hitTestAll(sender, nearpt, segment);
+        MgHitResult result;
+        MgShape* newshape = hitTestAll(sender, result);
         MgShape* oldshape = getSelectedShape(sender);
         
         if (newshape && newshape->getID() != m_id
             && !sender->view->shapes()->getOwner()->isKindOf(kMgShapeComposite)
             && (!oldshape || !canSelect(oldshape, sender))) {
-            m_ptNear = nearpt;
-            m_segment = segment;
+            m_hit = result;
             m_id = newshape->getID();
             m_selIds.clear();
             m_selIds.push_back(m_id);
@@ -557,7 +548,7 @@ bool MgCmdSelect::touchBegan(const MgMotion* sender)
     
     m_insertPt = false;                     // setted in hitTestHandles
     if (m_clones.size() == 1) {
-        canSelect(shape, sender);           // calc m_ptNear
+        canSelect(shape, sender);           // calc m_hit.nearpt
     }
     
     _dragData = 0;
@@ -566,9 +557,9 @@ bool MgCmdSelect::touchBegan(const MgMotion* sender)
     
     if (m_insertPt && shape && shape->shape()->isKindOf(MgBaseLines::Type())) {
         MgBaseLines* lines = (MgBaseLines*)(shape->shape());
-        lines->insertPoint(m_segment, m_ptNear);
+        lines->insertPoint(m_hit.segment, m_hit.nearpt);
         shape->shape()->update();
-        m_handleIndex = hitTestHandles(shape, m_ptNear, sender);
+        m_handleIndex = hitTestHandles(shape, m_hit.nearpt, sender);
     }
     
     if (m_clones.empty()) {
@@ -578,8 +569,8 @@ bool MgCmdSelect::touchBegan(const MgMotion* sender)
     
     int tmpindex = hitTestHandles(shape, sender->startPtM, sender, 5);
     if (tmpindex < 1) {
-        if (sender->startPtM.distanceTo(m_ptNear) < sender->displayMmToModel(3.f)) {
-            m_ptStart = m_ptNear;
+        if (sender->startPtM.distanceTo(m_hit.nearpt) < sender->displayMmToModel(3.f)) {
+            m_ptStart = m_hit.nearpt;
         }
         else {
             m_ptStart = sender->startPtM;
@@ -754,8 +745,8 @@ bool MgCmdSelect::touchMoved(const MgMotion* sender)
     Matrix2d mat;
     bool dragCorner = isDragRectCorner(sender, mat);
     
-    if (m_insertPt && pointM.distanceTo(m_ptNear) < sender->displayMmToModel(5.f)) {
-        pointM = m_ptNear;  // 拖动刚新加的点到起始点时取消新增
+    if (m_insertPt && pointM.distanceTo(m_hit.nearpt) < sender->displayMmToModel(5.f)) {
+        pointM = m_hit.nearpt;  // 拖动刚新加的点到起始点时取消新增
     }
     
     Vector2d minsnap(1e8f, 1e8f);
@@ -781,7 +772,7 @@ bool MgCmdSelect::touchMoved(const MgMotion* sender)
             
             if (m_insertPt && shape->isKindOf(MgBaseLines::Type())) {
                 MgBaseLines* lines = (MgBaseLines*)shape;
-                lines->insertPoint(m_segment, m_ptNear);    // 插入新顶点
+                lines->insertPoint(m_hit.segment, m_hit.nearpt);    // 插入新顶点
             }
             if (m_rotateHandle > 0 && canRotate(basesp, sender)) {
                 int oldRotateHandle = m_rotateHandle;
@@ -813,7 +804,7 @@ bool MgCmdSelect::touchMoved(const MgMotion* sender)
             }
             else {                                          // 拖动整个图形
                 int segment = (!m_editMode &&
-                    shape->isKindOf(kMgShapeComposite)) ? -1 : m_segment;
+                    shape->isKindOf(kMgShapeComposite)) ? -1 : m_hit.segment;
 
                 shape->offset(pointM - m_ptStart, segment); // 先从起始点拖到当前点
                 if (t > 1 || m_clones.size() == 1) {        // 不是第二遍循环
@@ -856,7 +847,7 @@ bool MgCmdSelect::touchMoved(const MgMotion* sender)
         
         m_selIds.clear();
         m_id = 0;
-        m_segment = -1;
+        m_hit.segment = -1;
         for (; shape; shape = sender->view->shapes()->getNextShape(it)) {
             if (isIntersectMode(sender) ? shape->shape()->hitTestBox(snap)
                 : snap.contains(shape->shape()->getExtent())) {
@@ -883,7 +874,7 @@ bool MgCmdSelect::touchEnded(const MgMotion* sender)
 {
     // 拖动刚新加的点到起始点时取消新增
     if (m_insertPt && m_clones.size() == 1
-        && sender->pointM.distanceTo(m_ptNear) < sender->displayMmToModel(5.f)) {
+        && sender->pointM.distanceTo(m_hit.nearpt) < sender->displayMmToModel(5.f)) {
         m_clones[0]->release();
         m_clones.clear();
     }
@@ -897,7 +888,7 @@ bool MgCmdSelect::touchEnded(const MgMotion* sender)
     sender->cmds()->getSnap()->clearSnap();
     
     m_insertPt = false;
-    m_ptNear = sender->pointM;
+    m_hit.nearpt = sender->pointM;
     m_boxHandle = 99;
     
     if (isEditMode(sender->view) && m_handleIndex > 0) {
@@ -1055,7 +1046,7 @@ bool MgCmdSelect::selectAll(const MgMotion* sender)
     m_rotateHandle = 0;
     m_insertPt = false;
     m_boxsel = false;
-    m_segment = -1;
+    m_hit.segment = -1;
     
     for (MgShape* shape = sender->view->shapes()->getFirstShape(it);
          shape; shape = sender->view->shapes()->getNextShape(it)) {
@@ -1221,7 +1212,7 @@ bool MgCmdSelect::addSelection(const MgMotion* sender, int shapeID)
     {
         m_selIds.push_back(shape->getID());
         m_id = shape->getID();
-        m_segment = -1;
+        m_hit.segment = -1;
         sender->view->redraw();
         sender->view->selectionChanged();
     }
@@ -1244,7 +1235,7 @@ bool MgCmdSelect::deleteVertext(const MgMotion* sender)
         if (ret) {
             shape->shape()->update();
             sender->view->regenAll();
-            m_handleIndex = hitTestHandles(shape, m_ptNear, sender);
+            m_handleIndex = hitTestHandles(shape, m_hit.nearpt, sender);
         }
     }
     m_insertPt = false;
@@ -1263,14 +1254,14 @@ bool MgCmdSelect::insertVertext(const MgMotion* sender)
         && shape->shape()->isKindOf(MgBaseLines::Type()))
     {
         MgBaseLines *lines = (MgBaseLines *)shape->shape();
-        float dist = m_ptNear.distanceTo(shape->shape()->getPoint(m_segment));
+        float dist = m_hit.nearpt.distanceTo(shape->shape()->getPoint(m_hit.segment));
         
         ret = (dist > sender->displayMmToModel(1.f)
-               && lines->insertPoint(m_segment, m_ptNear));
+               && lines->insertPoint(m_hit.segment, m_hit.nearpt));
         if (ret) {
             shape->shape()->update();
             sender->view->regenAll();
-            m_handleIndex = hitTestHandles(shape, m_ptNear, sender);
+            m_handleIndex = hitTestHandles(shape, m_hit.nearpt, sender);
         }
     }
     m_insertPt = false;

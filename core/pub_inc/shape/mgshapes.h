@@ -42,9 +42,9 @@ public:
     MgShape* findShapeByType(int type) const;
     Box2d getExtent() const;
     
-    MgShape* hitTest(const Box2d& limits, Point2d& nearpt
+    MgShape* hitTest(const Box2d& limits, MgHitResult& result
 #ifndef SWIG
-        , int* segment = NULL, Filter filter = NULL) const;
+        , Filter filter = NULL) const;
 #else
         ) const;
 #endif

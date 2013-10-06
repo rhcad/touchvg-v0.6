@@ -48,15 +48,14 @@ void MgRoundRect::_clear()
     __super::_clear();
 }
 
-float MgRoundRect::_hitTest(const Point2d& pt, float tol, 
-                            Point2d& nearpt, int& segment, bool&) const
+float MgRoundRect::_hitTest(const Point2d& pt, float tol, MgHitResult& result) const
 {
     float dist;
 
     if (isOrtho())
     {
         dist = mgnear::roundRectHit(Box2d(_points[0], _points[2]),
-            _rx, _ry, pt, tol, nearpt, segment);
+            _rx, _ry, pt, tol, result.nearpt, result.segment);
     }
     else
     {
@@ -64,9 +63,9 @@ float MgRoundRect::_hitTest(const Point2d& pt, float tol,
         Box2d rect(Box2d(pt, 2 * tol, 2 * tol) * mat.inverse());
 
         dist = mgnear::roundRectHit(getRect(), _rx, _ry, 
-            rect.center(), rect.width(), nearpt, segment);
-        if (dist < 1e10)
-            nearpt *= mat;
+            rect.center(), rect.width(), result.nearpt, result.segment);
+        if (dist < 1e10f)
+            result.nearpt *= mat;
     }
 
     return dist;

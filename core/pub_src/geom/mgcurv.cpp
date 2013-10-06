@@ -302,7 +302,7 @@ bool mgcurv::arc3P(
         return false;
     radius = mgHypot(center.x - start.x, center.y - start.y);
     
-    if (startAngle != NULL && sweepAngle != NULL)
+    if (startAngle && sweepAngle)
     {
         // 分别计算圆心到三点的角度
         float a = atan2f(start.y - center.y, start.x - center.x);
@@ -349,7 +349,7 @@ bool mgcurv::arcTan(
         return false;
     radius = mgHypot(center.x - start.x, center.y - start.y);
     
-    if (startAngle != NULL && sweepAngle != NULL)
+    if (startAngle && sweepAngle)
     {
         float sa = atan2f(start.y - center.y, start.x - center.x);
         float ea = atan2f(end.y - center.y, end.x - center.x);
@@ -850,13 +850,9 @@ bool mgcurv::clampedSplines(
     sigma = sgm * n1 / s;
     
     float* a = new float[n * 3];
-    bool ret = (a != NULL);
-    if (ret)
-    {
-        ret = CalcClampedVecs(sigma, closed, n1, hp, 
-            a, a+n, a+2*n, knotvs);
-        delete[] a;
-    }
+    bool ret = CalcClampedVecs(sigma, closed, n1, hp, 
+        a, a+n, a+2*n, knotvs);
+    delete[] a;
     
     return ret;
 }

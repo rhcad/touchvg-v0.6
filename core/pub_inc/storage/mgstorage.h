@@ -93,7 +93,7 @@ struct MgStorage
     virtual void writeUInt(const char* name, int value) { if (name && value) value++; }
 
     //! 设置读写错误描述文字，总是返回false
-    virtual bool setError(const char*) { return false; }
+    virtual bool setError(const char* errdesc) { return !errdesc; }
 };
 
 #endif // TOUCHVG_MGSTORAGE_H_

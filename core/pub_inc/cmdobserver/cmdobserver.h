@@ -30,7 +30,7 @@ struct CmdObserver {
 #ifndef SWIG
     //! 对选中的图形增加上下文操作的回调通知
     virtual void addShapeActions(const MgMotion* sender,
-        int* actions, int &n, const MgShape* shape) = 0;
+        int* actions, int &n, const MgShape* sp) = 0;
 #endif
     //! 执行非内置上下文操作的通知
     virtual bool doAction(const MgMotion* sender, int action) = 0;
@@ -44,7 +44,7 @@ struct CmdObserver {
 
     //! 在选择命令中显示额外内容的通知
     virtual void drawInSelectCommand(const MgMotion* sender, 
-        const MgShape* shape, int handleIndex, GiGraphics* gs) = 0;
+        const MgShape* sp, int handleIndex, GiGraphics* gs) = 0;
 #ifndef SWIG
     //! 在选择命令中拖放图形后的通知
     virtual void onSelectTouchEnded(const MgMotion* sender, int shapeid,
@@ -52,15 +52,15 @@ struct CmdObserver {
         int count, const int* ids) = 0;
 #endif
 
-    virtual bool onShapeWillAdded(const MgMotion* sender, MgShape* shape) = 0;    //!< 通知将添加图形
-    virtual void onShapeAdded(const MgMotion* sender, MgShape* shape) = 0;        //!< 通知已添加图形
-    virtual bool onShapeWillDeleted(const MgMotion* sender, MgShape* shape) = 0;  //!< 通知将删除图形
-    virtual void onShapeDeleted(const MgMotion* sender, MgShape* shape) = 0;      //!< 通知已删除图形
-    virtual bool onShapeCanRotated(const MgMotion* sender, const MgShape* shape) = 0;   //!< 通知是否能旋转图形
-    virtual bool onShapeCanTransform(const MgMotion* sender, const MgShape* shape) = 0; //!< 通知是否能对图形变形
-    virtual bool onShapeCanUnlock(const MgMotion* sender, const MgShape* shape) = 0;    //!< 通知是否能对图形解锁
-    virtual bool onShapeCanUngroup(const MgMotion* sender, const MgShape* shape) = 0;   //!< 通知是否能对成组图形解散
-    virtual void onShapeMoved(const MgMotion* sender, MgShape* shape, int segment) = 0;   //!< 通知图形已拖动
+    virtual bool onShapeWillAdded(const MgMotion* sender, MgShape* sp) = 0;    //!< 通知将添加图形
+    virtual void onShapeAdded(const MgMotion* sender, MgShape* sp) = 0;        //!< 通知已添加图形
+    virtual bool onShapeWillDeleted(const MgMotion* sender, MgShape* sp) = 0;  //!< 通知将删除图形
+    virtual void onShapeDeleted(const MgMotion* sender, MgShape* sp) = 0;      //!< 通知已删除图形
+    virtual bool onShapeCanRotated(const MgMotion* sender, const MgShape* sp) = 0;   //!< 通知是否能旋转图形
+    virtual bool onShapeCanTransform(const MgMotion* sender, const MgShape* sp) = 0; //!< 通知是否能对图形变形
+    virtual bool onShapeCanUnlock(const MgMotion* sender, const MgShape* sp) = 0;    //!< 通知是否能对图形解锁
+    virtual bool onShapeCanUngroup(const MgMotion* sender, const MgShape* sp) = 0;   //!< 通知是否能对成组图形解散
+    virtual void onShapeMoved(const MgMotion* sender, MgShape* sp, int segment) = 0;   //!< 通知图形已拖动
 };
 
 class CmdObserverDefault : public CmdObserver
@@ -69,28 +69,49 @@ public:
     CmdObserverDefault() {}
     virtual ~CmdObserverDefault() {}
 
-    virtual void onDocLoaded(const MgMotion*) {}
-    virtual void onEnterSelectCommand(const MgMotion*) {}
-    virtual void onUnloadCommands(MgCmdManager*) {}
-    virtual bool selectActionsNeedHided(const MgMotion*) { return false; }
-    virtual bool doAction(const MgMotion*, int) { return false; }
-    virtual bool doEndAction(const MgMotion*, int) { return false; }
-    virtual void drawInShapeCommand(const MgMotion*, MgCommand*, GiGraphics*) {}
-    virtual void drawInSelectCommand(const MgMotion*, const MgShape*, int, GiGraphics*) {}
+    virtual void onDocLoaded(const MgMotion* sender) {
+        _ignore(sender); }
+    virtual void onEnterSelectCommand(const MgMotion* sender) {
+        _ignore(sender); }
+    virtual void onUnloadCommands(MgCmdManager* sender) {
+        if (sender) sender = sender; }
+    virtual bool selectActionsNeedHided(const MgMotion* sender) {
+        return !sender; } // false
+    virtual bool doAction(const MgMotion* sender, int action) {
+        return !sender && action; } // false
+    virtual bool doEndAction(const MgMotion* sender, int action) {
+        return !sender && action; } // false
+    virtual void drawInShapeCommand(const MgMotion* sender,
+        MgCommand* cmd, GiGraphics* gs) { if (sender && cmd) gs = gs; }
+    virtual void drawInSelectCommand(const MgMotion* sender, 
+        const MgShape* sp, int handleIndex, GiGraphics* gs) {
+            if (sender && sp && gs) handleIndex++; }
 
-    virtual bool onShapeWillAdded(const MgMotion*, MgShape*) { return true; }
-    virtual void onShapeAdded(const MgMotion*, MgShape*) {}
-    virtual bool onShapeWillDeleted(const MgMotion*, MgShape*) { return true; }
-    virtual void onShapeDeleted(const MgMotion*, MgShape*) {}
-    virtual bool onShapeCanRotated(const MgMotion*, const MgShape*) { return true; }
-    virtual bool onShapeCanTransform(const MgMotion*, const MgShape*) { return true; }
-    virtual bool onShapeCanUnlock(const MgMotion*, const MgShape*) { return true; }
-    virtual bool onShapeCanUngroup(const MgMotion*, const MgShape*) { return true; }
-    virtual void onShapeMoved(const MgMotion*, MgShape*, int) {}
+    virtual bool onShapeWillAdded(const MgMotion* sender, MgShape* sp) {
+        return sender || sp; } // true
+    virtual void onShapeAdded(const MgMotion* sender, MgShape* sp) {
+        if (sender) sp = sp; }
+    virtual bool onShapeWillDeleted(const MgMotion* sender, MgShape* sp) {
+        return sender || sp; } // true
+    virtual void onShapeDeleted(const MgMotion* sender, MgShape* sp) {
+        if (sender) sp = sp; }
+    virtual bool onShapeCanRotated(const MgMotion* sender, const MgShape* sp) {
+        return sender || sp; } // true
+    virtual bool onShapeCanTransform(const MgMotion* sender, const MgShape* sp) {
+        return sender || sp; } // true
+    virtual bool onShapeCanUnlock(const MgMotion* sender, const MgShape* sp) {
+        return sender || sp; } // true
+    virtual bool onShapeCanUngroup(const MgMotion* sender, const MgShape* sp) {
+        return sender || sp; } // true
+    virtual void onShapeMoved(const MgMotion* sender, MgShape* sp, int segment) {
+        if (sender && sp) segment++; }
 #ifndef SWIG
     virtual void addShapeActions(const MgMotion*,int*, int &, const MgShape*) {}
     virtual void onSelectTouchEnded(const MgMotion*,int,int,int,int,int,const int*) {}
 #endif
+
+private:
+    void _ignore(const MgMotion* sender) { if (sender) sender = sender; }
 };
 
 #endif // TOUCHVG_CMDOBSERVER_H_

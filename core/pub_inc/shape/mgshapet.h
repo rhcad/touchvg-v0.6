@@ -49,20 +49,6 @@ public:
         return &_shape;
     }
 
-    bool hasFillColor() const
-    {
-        return _context.hasFillColor() && _shape.isClosed();
-    }
-    
-    bool draw(int mode, GiGraphics& gs, const GiContext *ctx = NULL, int segment = -1) const {
-        if (shapec()->isKindOf(6)) { // MgComposite
-            GiContext ctxnull(0, GiColor(), kGiLineNull);
-            return shapec()->draw(mode, gs, ctx ? *ctx : ctxnull, segment);
-        }
-        ContextT tmpctx(getContext(gs, ctx));
-        return shapec()->draw(mode, gs, tmpctx, segment);
-    }
-
 #ifdef TOUCHVG_SHAPE_FACTORY_H_
     //! 登记类型号对应的图形创建函数
     static void registerCreator(MgShapeFactory* factory) {
@@ -91,36 +77,6 @@ public:
         return p;
     }
     
-    void copy(const MgObject& src) {
-        if (src.isKindOf(Type())) {
-            const ThisClass& _src = (const ThisClass&)src;
-            shape()->copy(_src._shape);
-            _context = _src._context;
-            _tag = _src._tag;
-            if (!_parent && 0 == _id) {
-                _parent = _src._parent;
-                _id = _src._id;
-            }
-        }
-        else if (src.isKindOf(ShapeT::Type())) {
-            shape()->copy((const ShapeT&)src);
-        }
-        shape()->update();
-    }
-    
-    bool equals(const MgObject& src) const {
-        bool ret = false;
-        
-        if (src.isKindOf(Type())) {
-            const ThisClass& _src = (const ThisClass&)src;
-            ret = shapec()->equals(_src._shape)
-            && _context == _src._context
-            && _tag == _src._tag;
-        }
-        
-        return ret;
-    }
-    
     int getID() const {
         return _id;
     }
@@ -141,34 +97,6 @@ public:
 
     void setTag(int tag) {
         _tag = tag;
-    }
-    
-protected:
-    ContextT getContext(GiGraphics& gs, const GiContext *ctx) const {
-        ContextT tmpctx(_context);
-        
-        if (ctx) {
-            float addw  = ctx->getLineWidth();
-            float width = tmpctx.getLineWidth();
-            
-            width = -gs.calcPenWidth(width, tmpctx.isAutoScale());  // 像素宽度，负数
-            if (addw <= 0)
-                tmpctx.setLineWidth(width + addw, false);           // 像素宽度加宽
-            else                                                    // 传入正数表示像素宽度
-                tmpctx.setLineWidth(-addw, ctx->isAutoScale());     // 换成新的像素宽度
-        }
-        
-        if (ctx && ctx->getLineColor().a > 0) {
-            tmpctx.setLineColor(ctx->getLineColor());
-        }
-        if (ctx && !ctx->isNullLine()) {
-            tmpctx.setLineStyle(ctx->getLineStyle());
-        }
-        if (ctx && ctx->hasFillColor()) {
-            tmpctx.setFillColor(ctx->getFillColor());
-        }
-        
-        return tmpctx;
     }
 };
 

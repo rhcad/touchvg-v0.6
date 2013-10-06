@@ -10,7 +10,7 @@
 class HitTestCmd : public MgCommand
 {
 protected:
-    HitTestCmd() : _tol(0), _curid(0), _segment(-1) { _cur.dist = 1e10f; }
+    HitTestCmd() : _tol(0), _curid(0) { _cur.dist = 1e10f; }
     virtual ~HitTestCmd() {}
 
 public:
@@ -35,7 +35,7 @@ private:
     Item    _cur;
     std::list<Item> _items;
     int     _curid;
-    int     _segment;
+    MgHitResult _hit;
 };
 
 #endif // TOUCHVG_TEST_HITTESTCMD_H

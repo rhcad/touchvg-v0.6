@@ -14,7 +14,7 @@ bool HitTestCmd::draw(const MgMotion* sender, GiGraphics* gs)
     MgShape* sp = sender->view->shapes()->findShape(_curid);
     if (sp) {
         GiContext ctxSel(0, GiColor(0, 0, 255, 128));
-        sp->draw(2, *gs, &ctxSel, _segment);
+        sp->draw(2, *gs, &ctxSel, _hit.segment);
     }
     if (_cur.dist < 1e8f) {
         ctx.setLineAlpha(128);
@@ -36,14 +36,12 @@ bool HitTestCmd::touchMoved(const MgMotion* sender)
         _tol = sender->displayMmToModel(20, sender->view->graph());
     }
     
-    Point2d nearpt;
     Box2d box(sender->pointM, 2 * _tol, 0);
-    MgShape* sp = sender->view->shapes()->hitTest(box, nearpt, &_segment);
+    MgShape* sp = sender->view->shapes()->hitTest(box, _hit);
     float mindist = sender->displayMmToModel(0.5f, sender->view->graph());
     
     _curid = sp ? sp->getID() : 0;
-    _cur.dist = sp ? sp->shape()->hitTest2(box.center(), _tol, nearpt) : 1e10f;
-    _cur.nearpt = nearpt;
+    _cur.nearpt = _hit.nearpt;
     _cur.pt = box.center();
     sender->view->redraw();
     
@@ -52,8 +50,8 @@ bool HitTestCmd::touchMoved(const MgMotion* sender)
         //for (float y = -0.25f * _tol; y < 0.25f * _tol; y += _tol * 0.25f) {
         //box.set(sender->pointM + Vector2d(x, y), 2 * _tol, 0);
         Item item;
-        item.dist = sp->shape()->hitTest2(box.center(), _tol, nearpt);
-        item.nearpt = nearpt;
+        item.dist = _hit.dist;
+        item.nearpt = _hit.nearpt;
         item.pt = box.center();
         if (item.dist < _tol) {
             std::list<Item>::const_iterator it = _items.begin();

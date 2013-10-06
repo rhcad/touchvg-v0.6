@@ -157,6 +157,10 @@ public class MgLine extends MgBaseShape {
     return touchvgJNI.MgLine_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
+  public float hitTest(Point2d pt, float tol, MgHitResult result) {
+    return touchvgJNI.MgLine_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  }
+
   public Point2d startPoint() {
     return new Point2d(touchvgJNI.MgLine_startPoint(swigCPtr, this), false);
   }
@@ -183,6 +187,10 @@ public class MgLine extends MgBaseShape {
 
   public void setEndPoint(Point2d pt) {
     touchvgJNI.MgLine_setEndPoint(swigCPtr, this, Point2d.getCPtr(pt), pt);
+  }
+
+  public boolean isCurve() {
+    return touchvgJNI.MgLine_isCurve(swigCPtr, this);
   }
 
 }

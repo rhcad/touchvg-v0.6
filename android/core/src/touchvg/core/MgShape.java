@@ -105,4 +105,12 @@ public class MgShape extends MgObject {
     touchvgJNI.MgShape_setTag(swigCPtr, this, tag);
   }
 
+  public void copy(MgObject src) {
+    touchvgJNI.MgShape_copy(swigCPtr, this, MgObject.getCPtr(src), src);
+  }
+
+  public boolean equals(MgObject src) {
+    return touchvgJNI.MgShape_equals(swigCPtr, this, MgObject.getCPtr(src), src);
+  }
+
 }

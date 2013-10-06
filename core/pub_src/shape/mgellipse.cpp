@@ -77,14 +77,12 @@ bool MgEllipse::_setHandlePoint(int index, const Point2d& pt, float tol)
             : offset(pt - getCenter(), -1));
 }
 
-float MgEllipse::_hitTest(const Point2d& pt, float tol,
-                          Point2d& nearpt, int& segment, bool&) const
+float MgEllipse::_hitTest(const Point2d& pt, float tol, MgHitResult& result) const
 {
     float distMin = _FLT_MAX;
     const Box2d rect (pt, 2 * tol, 2 * tol);
     Point2d ptTemp;
 
-    segment = -1;
     for (int i = 0; i < 4; i++)
     {
         if (rect.isIntersect(Box2d(4, _bzpts + 3 * i)))
@@ -94,8 +92,8 @@ float MgEllipse::_hitTest(const Point2d& pt, float tol,
             if (dist <= tol && dist < distMin)
             {
                 distMin = dist;
-                nearpt = ptTemp;
-                segment = i;
+                result.nearpt = ptTemp;
+                result.segment = i;
             }
         }
     }
@@ -380,8 +378,7 @@ void MgArc::_clear()
     __super::_clear();
 }
 
-float MgArc::_hitTest(const Point2d& pt, float tol, 
-                      Point2d& nearpt, int&, bool&) const
+float MgArc::_hitTest(const Point2d& pt, float tol, MgHitResult& result) const
 {
     Point2d points[16];
     int n = mgcurv::arcToBezier(points, getCenter(), getRadius(), 0, getStartAngle(), getSweepAngle());
@@ -394,7 +391,7 @@ float MgArc::_hitTest(const Point2d& pt, float tol,
         float dist = pt.distanceTo(ptTemp);
         if (dist <= tol && dist < distMin) {
             distMin = dist;
-            nearpt = ptTemp;
+            result.nearpt = ptTemp;
         }
     }
     

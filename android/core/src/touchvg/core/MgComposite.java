@@ -31,6 +31,21 @@ public class MgComposite extends MgBaseShape {
     super.delete();
   }
 
+  protected void swigDirectorDisconnect() {
+    swigCMemOwn = false;
+    delete();
+  }
+
+  public void swigReleaseOwnership() {
+    swigCMemOwn = false;
+    touchvgJNI.MgComposite_change_ownership(this, swigCPtr, false);
+  }
+
+  public void swigTakeOwnership() {
+    swigCMemOwn = true;
+    touchvgJNI.MgComposite_change_ownership(this, swigCPtr, true);
+  }
+
   public static int Type() {
     return touchvgJNI.MgComposite_Type();
   }
@@ -44,8 +59,17 @@ public class MgComposite extends MgBaseShape {
     return (cPtr == 0) ? null : new MgShapes(cPtr, false);
   }
 
-  public boolean canOffsetShapeAlone(MgShape arg0) {
-    return touchvgJNI.MgComposite_canOffsetShapeAlone(swigCPtr, this, MgShape.getCPtr(arg0), arg0);
+  public boolean canOffsetShapeAlone(MgShape shape) {
+    return (getClass() == MgComposite.class) ? touchvgJNI.MgComposite_canOffsetShapeAlone(swigCPtr, this, MgShape.getCPtr(shape), shape) : touchvgJNI.MgComposite_canOffsetShapeAloneSwigExplicitMgComposite(swigCPtr, this, MgShape.getCPtr(shape), shape);
+  }
+
+  public boolean isCurve() {
+    return (getClass() == MgComposite.class) ? touchvgJNI.MgComposite_isCurve(swigCPtr, this) : touchvgJNI.MgComposite_isCurveSwigExplicitMgComposite(swigCPtr, this);
+  }
+
+  protected MgComposite() {
+    this(touchvgJNI.new_MgComposite(), true);
+    touchvgJNI.MgComposite_director_connect(this, swigCPtr, swigCMemOwn, true);
   }
 
 }

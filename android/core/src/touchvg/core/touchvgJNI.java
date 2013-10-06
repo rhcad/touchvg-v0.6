@@ -9,7 +9,6 @@
 package touchvg.core;
 
 public class touchvgJNI {
-  public final static native int NULL_get();
   public final static native float _MGZERO_get();
   public final static native float _M_E_get();
   public final static native float _M_LOG2E_get();
@@ -658,10 +657,24 @@ public class touchvgJNI {
   public final static native void MgShape_setParent(long jarg1, MgShape jarg1_, long jarg2, MgShapes jarg2_, int jarg3);
   public final static native int MgShape_getTag(long jarg1, MgShape jarg1_);
   public final static native void MgShape_setTag(long jarg1, MgShape jarg1_, int jarg2);
+  public final static native void MgShape_copy(long jarg1, MgShape jarg1_, long jarg2, MgObject jarg2_);
+  public final static native boolean MgShape_equals(long jarg1, MgShape jarg1_, long jarg2, MgObject jarg2_);
+  public final static native void MgHitResult_nearpt_set(long jarg1, MgHitResult jarg1_, long jarg2, Point2d jarg2_);
+  public final static native long MgHitResult_nearpt_get(long jarg1, MgHitResult jarg1_);
+  public final static native void MgHitResult_segment_set(long jarg1, MgHitResult jarg1_, int jarg2);
+  public final static native int MgHitResult_segment_get(long jarg1, MgHitResult jarg1_);
+  public final static native void MgHitResult_inside_set(long jarg1, MgHitResult jarg1_, boolean jarg2);
+  public final static native boolean MgHitResult_inside_get(long jarg1, MgHitResult jarg1_);
+  public final static native void MgHitResult_dist_set(long jarg1, MgHitResult jarg1_, float jarg2);
+  public final static native float MgHitResult_dist_get(long jarg1, MgHitResult jarg1_);
+  public final static native long new_MgHitResult();
+  public final static native void delete_MgHitResult(long jarg1);
+  public final static native long new_MgBaseShape();
   public final static native int MgBaseShape_Type();
   public final static native long MgBaseShape_minTol();
   public final static native long MgBaseShape_cloneShape(long jarg1, MgBaseShape jarg1_);
   public final static native void MgBaseShape_setOwner(long jarg1, MgBaseShape jarg1_, long jarg2, MgShape jarg2_);
+  public final static native void MgBaseShape_setOwnerSwigExplicitMgBaseShape(long jarg1, MgBaseShape jarg1_, long jarg2, MgShape jarg2_);
   public final static native long MgBaseShape_getExtent(long jarg1, MgBaseShape jarg1_);
   public final static native void MgBaseShape_update(long jarg1, MgBaseShape jarg1_);
   public final static native void MgBaseShape_transform(long jarg1, MgBaseShape jarg1_, long jarg2, Matrix2d jarg2_);
@@ -672,6 +685,7 @@ public class touchvgJNI {
   public final static native void MgBaseShape_setPoint(long jarg1, MgBaseShape jarg1_, int jarg2, long jarg3, Point2d jarg3_);
   public final static native boolean MgBaseShape_isClosed(long jarg1, MgBaseShape jarg1_);
   public final static native boolean MgBaseShape_isCurve(long jarg1, MgBaseShape jarg1_);
+  public final static native float MgBaseShape_hitTest(long jarg1, MgBaseShape jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native float MgBaseShape_hitTest2(long jarg1, MgBaseShape jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, Point2d jarg4_);
   public final static native boolean MgBaseShape_hitTestBox(long jarg1, MgBaseShape jarg1_, long jarg2, Box2d jarg2_);
   public final static native boolean MgBaseShape_draw__SWIG_0(long jarg1, MgBaseShape jarg1_, int jarg2, long jarg3, GiGraphics jarg3_, long jarg4, GiContext jarg4_, int jarg5);
@@ -686,7 +700,10 @@ public class touchvgJNI {
   public final static native boolean MgBaseShape_offset(long jarg1, MgBaseShape jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
   public final static native boolean MgBaseShape_getFlag(long jarg1, MgBaseShape jarg1_, int jarg2);
   public final static native void MgBaseShape_setFlag(long jarg1, MgBaseShape jarg1_, int jarg2, boolean jarg3);
+  public final static native void MgBaseShape_setFlagSwigExplicitMgBaseShape(long jarg1, MgBaseShape jarg1_, int jarg2, boolean jarg3);
   public final static native String MgBaseShape_getTypeName(long jarg1, MgBaseShape jarg1_);
+  public final static native void MgBaseShape_director_connect(MgBaseShape obj, long cptr, boolean mem_own, boolean weak_global);
+  public final static native void MgBaseShape_change_ownership(MgBaseShape obj, long cptr, boolean take_or_release);
   public final static native long MgShapeFactory_createShape(long jarg1, MgShapeFactory jarg1_, int jarg2);
   public final static native void delete_MgShapeFactory(long jarg1);
   public final static native int MgShapes_Type();
@@ -702,7 +719,7 @@ public class touchvgJNI {
   public final static native long MgShapes_findShapeByTag(long jarg1, MgShapes jarg1_, int jarg2);
   public final static native long MgShapes_findShapeByType(long jarg1, MgShapes jarg1_, int jarg2);
   public final static native long MgShapes_getExtent(long jarg1, MgShapes jarg1_);
-  public final static native long MgShapes_hitTest(long jarg1, MgShapes jarg1_, long jarg2, Box2d jarg2_, long jarg3, Point2d jarg3_);
+  public final static native long MgShapes_hitTest(long jarg1, MgShapes jarg1_, long jarg2, Box2d jarg2_, long jarg3, MgHitResult jarg3_);
   public final static native int MgShapes_draw__SWIG_0(long jarg1, MgShapes jarg1_, long jarg2, GiGraphics jarg2_, long jarg3, GiContext jarg3_);
   public final static native int MgShapes_draw__SWIG_1(long jarg1, MgShapes jarg1_, long jarg2, GiGraphics jarg2_);
   public final static native int MgShapes_dyndraw(long jarg1, MgShapes jarg1_, int jarg2, long jarg3, GiGraphics jarg3_, long jarg4, GiContext jarg4_, int jarg5);
@@ -762,6 +779,7 @@ public class touchvgJNI {
   public final static native boolean MgLine_isHandleFixed(long jarg1, MgLine jarg1_, int jarg2);
   public final static native int MgLine_getHandleType(long jarg1, MgLine jarg1_, int jarg2);
   public final static native boolean MgLine_offset(long jarg1, MgLine jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgLine_hitTest(long jarg1, MgLine jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native long MgLine_startPoint(long jarg1, MgLine jarg1_);
   public final static native long MgLine_endPoint(long jarg1, MgLine jarg1_);
   public final static native long MgLine_center(long jarg1, MgLine jarg1_);
@@ -769,6 +787,7 @@ public class touchvgJNI {
   public final static native float MgLine_angle(long jarg1, MgLine jarg1_);
   public final static native void MgLine_setStartPoint(long jarg1, MgLine jarg1_, long jarg2, Point2d jarg2_);
   public final static native void MgLine_setEndPoint(long jarg1, MgLine jarg1_, long jarg2, Point2d jarg2_);
+  public final static native boolean MgLine_isCurve(long jarg1, MgLine jarg1_);
   public final static native int MgBaseRect_Type();
   public final static native long MgBaseRect_getCenter(long jarg1, MgBaseRect jarg1_);
   public final static native long MgBaseRect_getRect(long jarg1, MgBaseRect jarg1_);
@@ -782,7 +801,12 @@ public class touchvgJNI {
   public final static native void MgBaseRect_setRect4P(long jarg1, MgBaseRect jarg1_, long jarg2, Point2d jarg2_);
   public final static native void MgBaseRect_setCenter(long jarg1, MgBaseRect jarg1_, long jarg2, Point2d jarg2_);
   public final static native void MgBaseRect_setSquare(long jarg1, MgBaseRect jarg1_, boolean jarg2);
+  public final static native boolean MgBaseRect_isCurve(long jarg1, MgBaseRect jarg1_);
+  public final static native boolean MgBaseRect_isCurveSwigExplicitMgBaseRect(long jarg1, MgBaseRect jarg1_);
+  public final static native long new_MgBaseRect();
   public final static native void delete_MgBaseRect(long jarg1);
+  public final static native void MgBaseRect_director_connect(MgBaseRect obj, long cptr, boolean mem_own, boolean weak_global);
+  public final static native void MgBaseRect_change_ownership(MgBaseRect obj, long cptr, boolean take_or_release);
   public final static native long new_MgRect();
   public final static native void delete_MgRect(long jarg1);
   public final static native long MgRect_create();
@@ -814,6 +838,7 @@ public class touchvgJNI {
   public final static native boolean MgRect_isHandleFixed(long jarg1, MgRect jarg1_, int jarg2);
   public final static native int MgRect_getHandleType(long jarg1, MgRect jarg1_, int jarg2);
   public final static native boolean MgRect_offset(long jarg1, MgRect jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgRect_hitTest(long jarg1, MgRect jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native long new_MgEllipse();
   public final static native void delete_MgEllipse(long jarg1);
   public final static native long MgEllipse_create();
@@ -845,10 +870,12 @@ public class touchvgJNI {
   public final static native boolean MgEllipse_isHandleFixed(long jarg1, MgEllipse jarg1_, int jarg2);
   public final static native int MgEllipse_getHandleType(long jarg1, MgEllipse jarg1_, int jarg2);
   public final static native boolean MgEllipse_offset(long jarg1, MgEllipse jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgEllipse_hitTest(long jarg1, MgEllipse jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native float MgEllipse_getRadiusX(long jarg1, MgEllipse jarg1_);
   public final static native float MgEllipse_getRadiusY(long jarg1, MgEllipse jarg1_);
   public final static native void MgEllipse_setRadius__SWIG_0(long jarg1, MgEllipse jarg1_, float jarg2, float jarg3);
   public final static native void MgEllipse_setRadius__SWIG_1(long jarg1, MgEllipse jarg1_, float jarg2);
+  public final static native boolean MgEllipse_isCurve(long jarg1, MgEllipse jarg1_);
   public final static native long new_MgRoundRect();
   public final static native void delete_MgRoundRect(long jarg1);
   public final static native long MgRoundRect_create();
@@ -880,10 +907,12 @@ public class touchvgJNI {
   public final static native boolean MgRoundRect_isHandleFixed(long jarg1, MgRoundRect jarg1_, int jarg2);
   public final static native int MgRoundRect_getHandleType(long jarg1, MgRoundRect jarg1_, int jarg2);
   public final static native boolean MgRoundRect_offset(long jarg1, MgRoundRect jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgRoundRect_hitTest(long jarg1, MgRoundRect jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native float MgRoundRect_getRadiusX(long jarg1, MgRoundRect jarg1_);
   public final static native float MgRoundRect_getRadiusY(long jarg1, MgRoundRect jarg1_);
   public final static native void MgRoundRect_setRadius__SWIG_0(long jarg1, MgRoundRect jarg1_, float jarg2, float jarg3);
   public final static native void MgRoundRect_setRadius__SWIG_1(long jarg1, MgRoundRect jarg1_, float jarg2);
+  public final static native boolean MgRoundRect_isCurve(long jarg1, MgRoundRect jarg1_);
   public final static native long new_MgDiamond();
   public final static native void delete_MgDiamond(long jarg1);
   public final static native long MgDiamond_create();
@@ -915,6 +944,7 @@ public class touchvgJNI {
   public final static native boolean MgDiamond_isHandleFixed(long jarg1, MgDiamond jarg1_, int jarg2);
   public final static native int MgDiamond_getHandleType(long jarg1, MgDiamond jarg1_, int jarg2);
   public final static native boolean MgDiamond_offset(long jarg1, MgDiamond jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgDiamond_hitTest(long jarg1, MgDiamond jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native int MgBaseLines_Type();
   public final static native void MgBaseLines_setClosed(long jarg1, MgBaseLines jarg1_, boolean jarg2);
   public final static native long MgBaseLines_endPoint(long jarg1, MgBaseLines jarg1_);
@@ -923,6 +953,9 @@ public class touchvgJNI {
   public final static native boolean MgBaseLines_insertPoint(long jarg1, MgBaseLines jarg1_, int jarg2, long jarg3, Point2d jarg3_);
   public final static native boolean MgBaseLines_removePoint(long jarg1, MgBaseLines jarg1_, int jarg2);
   public final static native int MgBaseLines_maxEdgeIndex(long jarg1, MgBaseLines jarg1_);
+  public final static native long new_MgBaseLines();
+  public final static native void MgBaseLines_director_connect(MgBaseLines obj, long cptr, boolean mem_own, boolean weak_global);
+  public final static native void MgBaseLines_change_ownership(MgBaseLines obj, long cptr, boolean take_or_release);
   public final static native long new_MgLines();
   public final static native void delete_MgLines(long jarg1);
   public final static native long MgLines_create();
@@ -954,6 +987,8 @@ public class touchvgJNI {
   public final static native boolean MgLines_isHandleFixed(long jarg1, MgLines jarg1_, int jarg2);
   public final static native int MgLines_getHandleType(long jarg1, MgLines jarg1_, int jarg2);
   public final static native boolean MgLines_offset(long jarg1, MgLines jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgLines_hitTest(long jarg1, MgLines jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
+  public final static native boolean MgLines_isCurve(long jarg1, MgLines jarg1_);
   public final static native long new_MgSplines();
   public final static native void delete_MgSplines(long jarg1);
   public final static native long MgSplines_create();
@@ -985,7 +1020,9 @@ public class touchvgJNI {
   public final static native boolean MgSplines_isHandleFixed(long jarg1, MgSplines jarg1_, int jarg2);
   public final static native int MgSplines_getHandleType(long jarg1, MgSplines jarg1_, int jarg2);
   public final static native boolean MgSplines_offset(long jarg1, MgSplines jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgSplines_hitTest(long jarg1, MgSplines jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native void MgSplines_smooth(long jarg1, MgSplines jarg1_, float jarg2);
+  public final static native boolean MgSplines_isCurve(long jarg1, MgSplines jarg1_);
   public final static native long new_MgParallel();
   public final static native void delete_MgParallel(long jarg1);
   public final static native long MgParallel_create();
@@ -1017,12 +1054,14 @@ public class touchvgJNI {
   public final static native boolean MgParallel_isHandleFixed(long jarg1, MgParallel jarg1_, int jarg2);
   public final static native int MgParallel_getHandleType(long jarg1, MgParallel jarg1_, int jarg2);
   public final static native boolean MgParallel_offset(long jarg1, MgParallel jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgParallel_hitTest(long jarg1, MgParallel jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native long MgParallel_getCenter(long jarg1, MgParallel jarg1_);
   public final static native long MgParallel_getRect(long jarg1, MgParallel jarg1_);
   public final static native float MgParallel_getWidth(long jarg1, MgParallel jarg1_);
   public final static native float MgParallel_getHeight(long jarg1, MgParallel jarg1_);
   public final static native float MgParallel_angle(long jarg1, MgParallel jarg1_);
   public final static native boolean MgParallel_isEmpty(long jarg1, MgParallel jarg1_, float jarg2);
+  public final static native boolean MgParallel_isCurve(long jarg1, MgParallel jarg1_);
   public final static native long new_MgImageShape();
   public final static native void delete_MgImageShape(long jarg1);
   public final static native long MgImageShape_create();
@@ -1054,6 +1093,7 @@ public class touchvgJNI {
   public final static native boolean MgImageShape_isHandleFixed(long jarg1, MgImageShape jarg1_, int jarg2);
   public final static native int MgImageShape_getHandleType(long jarg1, MgImageShape jarg1_, int jarg2);
   public final static native boolean MgImageShape_offset(long jarg1, MgImageShape jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgImageShape_hitTest(long jarg1, MgImageShape jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native String MgImageShape_getName(long jarg1, MgImageShape jarg1_);
   public final static native void MgImageShape_setName(long jarg1, MgImageShape jarg1_, String jarg2);
   public final static native long MgImageShape_findShapeByImageID(long jarg1, MgShapes jarg1_, String jarg2);
@@ -1088,6 +1128,7 @@ public class touchvgJNI {
   public final static native boolean MgArc_isHandleFixed(long jarg1, MgArc jarg1_, int jarg2);
   public final static native int MgArc_getHandleType(long jarg1, MgArc jarg1_, int jarg2);
   public final static native boolean MgArc_offset(long jarg1, MgArc jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgArc_hitTest(long jarg1, MgArc jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native long MgArc_getCenter(long jarg1, MgArc jarg1_);
   public final static native long MgArc_getStartPoint(long jarg1, MgArc jarg1_);
   public final static native long MgArc_getEndPoint(long jarg1, MgArc jarg1_);
@@ -1103,10 +1144,17 @@ public class touchvgJNI {
   public final static native boolean MgArc_setCenterStartEnd__SWIG_1(long jarg1, MgArc jarg1_, long jarg2, Point2d jarg2_, long jarg3, Point2d jarg3_, long jarg4, Point2d jarg4_);
   public final static native boolean MgArc_setTanStartEnd(long jarg1, MgArc jarg1_, long jarg2, Vector2d jarg2_, long jarg3, Point2d jarg3_, long jarg4, Point2d jarg4_);
   public final static native boolean MgArc_setCenterRadius(long jarg1, MgArc jarg1_, long jarg2, Point2d jarg2_, float jarg3, float jarg4, float jarg5);
+  public final static native boolean MgArc_isCurve(long jarg1, MgArc jarg1_);
   public final static native int MgComposite_Type();
   public final static native int MgComposite_getShapeCount(long jarg1, MgComposite jarg1_);
   public final static native long MgComposite_shapes(long jarg1, MgComposite jarg1_);
   public final static native boolean MgComposite_canOffsetShapeAlone(long jarg1, MgComposite jarg1_, long jarg2, MgShape jarg2_);
+  public final static native boolean MgComposite_canOffsetShapeAloneSwigExplicitMgComposite(long jarg1, MgComposite jarg1_, long jarg2, MgShape jarg2_);
+  public final static native boolean MgComposite_isCurve(long jarg1, MgComposite jarg1_);
+  public final static native boolean MgComposite_isCurveSwigExplicitMgComposite(long jarg1, MgComposite jarg1_);
+  public final static native long new_MgComposite();
+  public final static native void MgComposite_director_connect(MgComposite obj, long cptr, boolean mem_own, boolean weak_global);
+  public final static native void MgComposite_change_ownership(MgComposite obj, long cptr, boolean take_or_release);
   public final static native long new_MgGroup();
   public final static native void delete_MgGroup(long jarg1);
   public final static native long MgGroup_create();
@@ -1138,6 +1186,7 @@ public class touchvgJNI {
   public final static native boolean MgGroup_isHandleFixed(long jarg1, MgGroup jarg1_, int jarg2);
   public final static native int MgGroup_getHandleType(long jarg1, MgGroup jarg1_, int jarg2);
   public final static native boolean MgGroup_offset(long jarg1, MgGroup jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgGroup_hitTest(long jarg1, MgGroup jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native boolean MgGroup_addShape(long jarg1, MgGroup jarg1_, long jarg2, MgShape jarg2_);
   public final static native long new_MgGrid();
   public final static native void delete_MgGrid(long jarg1);
@@ -1170,6 +1219,7 @@ public class touchvgJNI {
   public final static native boolean MgGrid_isHandleFixed(long jarg1, MgGrid jarg1_, int jarg2);
   public final static native int MgGrid_getHandleType(long jarg1, MgGrid jarg1_, int jarg2);
   public final static native boolean MgGrid_offset(long jarg1, MgGrid jarg1_, long jarg2, Vector2d jarg2_, int jarg3);
+  public final static native float MgGrid_hitTest(long jarg1, MgGrid jarg1_, long jarg2, Point2d jarg2_, float jarg3, long jarg4, MgHitResult jarg4_);
   public final static native int MgGrid_snap(long jarg1, MgGrid jarg1_, long jarg2, Point2d jarg2_, long jarg3, Point2d jarg3_);
   public final static native boolean MgGrid_valid(long jarg1, MgGrid jarg1_, float jarg2);
   public final static native int kMgShapeMultiType_get();
@@ -1796,8 +1846,8 @@ public class touchvgJNI {
   public static void SwigDirector_MgStorageBase_writeUInt(MgStorageBase self, String name, int value) {
     self.writeUInt(name, value);
   }
-  public static boolean SwigDirector_MgStorageBase_setError(MgStorageBase self, String arg0) {
-    return self.setError(arg0);
+  public static boolean SwigDirector_MgStorageBase_setError(MgStorageBase self, String errdesc) {
+    return self.setError(errdesc);
   }
   public static int SwigDirector_MgStorageBase_readFloatArray(MgStorageBase self, String name, long values) {
     return self.readFloatArray(name, new Floats(values, false));
@@ -1807,6 +1857,381 @@ public class touchvgJNI {
   }
   public static int SwigDirector_MgStorageBase_readString(MgStorageBase self, String name, long value) {
     return self.readString(name, new Chars(value, false));
+  }
+  public static long SwigDirector_MgBaseShape_clone(MgBaseShape self) {
+    return MgObject.getCPtr(self.clone());
+  }
+  public static void SwigDirector_MgBaseShape_copy(MgBaseShape self, long src) {
+    self.copy(new MgObject(src, false));
+  }
+  public static void SwigDirector_MgBaseShape_release(MgBaseShape self) {
+    self.release();
+  }
+  public static boolean SwigDirector_MgBaseShape_equals(MgBaseShape self, long src) {
+    return self.equals(new MgObject(src, false));
+  }
+  public static int SwigDirector_MgBaseShape_getType(MgBaseShape self) {
+    return self.getType();
+  }
+  public static boolean SwigDirector_MgBaseShape_isKindOf(MgBaseShape self, int type) {
+    return self.isKindOf(type);
+  }
+  public static void SwigDirector_MgBaseShape_setOwner(MgBaseShape self, long owner) {
+    self.setOwner((owner == 0) ? null : new MgShape(owner, false));
+  }
+  public static long SwigDirector_MgBaseShape_getExtent(MgBaseShape self) {
+    return Box2d.getCPtr(self.getExtent());
+  }
+  public static void SwigDirector_MgBaseShape_update(MgBaseShape self) {
+    self.update();
+  }
+  public static void SwigDirector_MgBaseShape_transform(MgBaseShape self, long mat) {
+    self.transform(new Matrix2d(mat, false));
+  }
+  public static void SwigDirector_MgBaseShape_clear(MgBaseShape self) {
+    self.clear();
+  }
+  public static void SwigDirector_MgBaseShape_clearCachedData(MgBaseShape self) {
+    self.clearCachedData();
+  }
+  public static int SwigDirector_MgBaseShape_getPointCount(MgBaseShape self) {
+    return self.getPointCount();
+  }
+  public static long SwigDirector_MgBaseShape_getPoint(MgBaseShape self, int index) {
+    return Point2d.getCPtr(self.getPoint(index));
+  }
+  public static void SwigDirector_MgBaseShape_setPoint(MgBaseShape self, int index, long pt) {
+    self.setPoint(index, new Point2d(pt, false));
+  }
+  public static boolean SwigDirector_MgBaseShape_isClosed(MgBaseShape self) {
+    return self.isClosed();
+  }
+  public static boolean SwigDirector_MgBaseShape_isCurve(MgBaseShape self) {
+    return self.isCurve();
+  }
+  public static float SwigDirector_MgBaseShape_hitTest(MgBaseShape self, long pt, float tol, long result) {
+    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(result, false));
+  }
+  public static boolean SwigDirector_MgBaseShape_hitTestBox(MgBaseShape self, long rect) {
+    return self.hitTestBox(new Box2d(rect, false));
+  }
+  public static boolean SwigDirector_MgBaseShape_draw__SWIG_0(MgBaseShape self, int mode, long gs, long ctx, int segment) {
+    return self.draw(mode, new GiGraphics(gs, false), new GiContext(ctx, false), segment);
+  }
+  public static boolean SwigDirector_MgBaseShape_draw__SWIG_1(MgBaseShape self, int mode, long gs, long ctx) {
+    return self.draw(mode, new GiGraphics(gs, false), new GiContext(ctx, false));
+  }
+  public static boolean SwigDirector_MgBaseShape_save(MgBaseShape self, long s) {
+    return self.save((s == 0) ? null : new MgStorage(s, false));
+  }
+  public static boolean SwigDirector_MgBaseShape_load(MgBaseShape self, long factory, long s) {
+    return self.load((factory == 0) ? null : new MgShapeFactory(factory, false), (s == 0) ? null : new MgStorage(s, false));
+  }
+  public static int SwigDirector_MgBaseShape_getHandleCount(MgBaseShape self) {
+    return self.getHandleCount();
+  }
+  public static long SwigDirector_MgBaseShape_getHandlePoint(MgBaseShape self, int index) {
+    return Point2d.getCPtr(self.getHandlePoint(index));
+  }
+  public static boolean SwigDirector_MgBaseShape_setHandlePoint(MgBaseShape self, int index, long pt, float tol) {
+    return self.setHandlePoint(index, new Point2d(pt, false), tol);
+  }
+  public static boolean SwigDirector_MgBaseShape_isHandleFixed(MgBaseShape self, int index) {
+    return self.isHandleFixed(index);
+  }
+  public static int SwigDirector_MgBaseShape_getHandleType(MgBaseShape self, int index) {
+    return self.getHandleType(index);
+  }
+  public static boolean SwigDirector_MgBaseShape_offset(MgBaseShape self, long vec, int segment) {
+    return self.offset(new Vector2d(vec, false), segment);
+  }
+  public static void SwigDirector_MgBaseShape_setFlag(MgBaseShape self, int bit, boolean on) {
+    self.setFlag(MgShapeBit.swigToEnum(bit), on);
+  }
+  public static String SwigDirector_MgBaseShape_getTypeName(MgBaseShape self) {
+    return self.getTypeName();
+  }
+  public static long SwigDirector_MgBaseRect_clone(MgBaseRect self) {
+    return MgObject.getCPtr(self.clone());
+  }
+  public static void SwigDirector_MgBaseRect_copy(MgBaseRect self, long src) {
+    self.copy(new MgObject(src, false));
+  }
+  public static void SwigDirector_MgBaseRect_release(MgBaseRect self) {
+    self.release();
+  }
+  public static boolean SwigDirector_MgBaseRect_equals(MgBaseRect self, long src) {
+    return self.equals(new MgObject(src, false));
+  }
+  public static int SwigDirector_MgBaseRect_getType(MgBaseRect self) {
+    return self.getType();
+  }
+  public static boolean SwigDirector_MgBaseRect_isKindOf(MgBaseRect self, int type) {
+    return self.isKindOf(type);
+  }
+  public static void SwigDirector_MgBaseRect_setOwner(MgBaseRect self, long owner) {
+    self.setOwner((owner == 0) ? null : new MgShape(owner, false));
+  }
+  public static long SwigDirector_MgBaseRect_getExtent(MgBaseRect self) {
+    return Box2d.getCPtr(self.getExtent());
+  }
+  public static void SwigDirector_MgBaseRect_update(MgBaseRect self) {
+    self.update();
+  }
+  public static void SwigDirector_MgBaseRect_transform(MgBaseRect self, long mat) {
+    self.transform(new Matrix2d(mat, false));
+  }
+  public static void SwigDirector_MgBaseRect_clear(MgBaseRect self) {
+    self.clear();
+  }
+  public static void SwigDirector_MgBaseRect_clearCachedData(MgBaseRect self) {
+    self.clearCachedData();
+  }
+  public static int SwigDirector_MgBaseRect_getPointCount(MgBaseRect self) {
+    return self.getPointCount();
+  }
+  public static long SwigDirector_MgBaseRect_getPoint(MgBaseRect self, int index) {
+    return Point2d.getCPtr(self.getPoint(index));
+  }
+  public static void SwigDirector_MgBaseRect_setPoint(MgBaseRect self, int index, long pt) {
+    self.setPoint(index, new Point2d(pt, false));
+  }
+  public static boolean SwigDirector_MgBaseRect_isClosed(MgBaseRect self) {
+    return self.isClosed();
+  }
+  public static boolean SwigDirector_MgBaseRect_isCurve(MgBaseRect self) {
+    return self.isCurve();
+  }
+  public static float SwigDirector_MgBaseRect_hitTest(MgBaseRect self, long pt, float tol, long result) {
+    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(result, false));
+  }
+  public static boolean SwigDirector_MgBaseRect_hitTestBox(MgBaseRect self, long rect) {
+    return self.hitTestBox(new Box2d(rect, false));
+  }
+  public static boolean SwigDirector_MgBaseRect_draw__SWIG_0(MgBaseRect self, int mode, long gs, long ctx, int segment) {
+    return self.draw(mode, new GiGraphics(gs, false), new GiContext(ctx, false), segment);
+  }
+  public static boolean SwigDirector_MgBaseRect_draw__SWIG_1(MgBaseRect self, int mode, long gs, long ctx) {
+    return self.draw(mode, new GiGraphics(gs, false), new GiContext(ctx, false));
+  }
+  public static boolean SwigDirector_MgBaseRect_save(MgBaseRect self, long s) {
+    return self.save((s == 0) ? null : new MgStorage(s, false));
+  }
+  public static boolean SwigDirector_MgBaseRect_load(MgBaseRect self, long factory, long s) {
+    return self.load((factory == 0) ? null : new MgShapeFactory(factory, false), (s == 0) ? null : new MgStorage(s, false));
+  }
+  public static int SwigDirector_MgBaseRect_getHandleCount(MgBaseRect self) {
+    return self.getHandleCount();
+  }
+  public static long SwigDirector_MgBaseRect_getHandlePoint(MgBaseRect self, int index) {
+    return Point2d.getCPtr(self.getHandlePoint(index));
+  }
+  public static boolean SwigDirector_MgBaseRect_setHandlePoint(MgBaseRect self, int index, long pt, float tol) {
+    return self.setHandlePoint(index, new Point2d(pt, false), tol);
+  }
+  public static boolean SwigDirector_MgBaseRect_isHandleFixed(MgBaseRect self, int index) {
+    return self.isHandleFixed(index);
+  }
+  public static int SwigDirector_MgBaseRect_getHandleType(MgBaseRect self, int index) {
+    return self.getHandleType(index);
+  }
+  public static boolean SwigDirector_MgBaseRect_offset(MgBaseRect self, long vec, int segment) {
+    return self.offset(new Vector2d(vec, false), segment);
+  }
+  public static void SwigDirector_MgBaseRect_setFlag(MgBaseRect self, int bit, boolean on) {
+    self.setFlag(MgShapeBit.swigToEnum(bit), on);
+  }
+  public static String SwigDirector_MgBaseRect_getTypeName(MgBaseRect self) {
+    return self.getTypeName();
+  }
+  public static long SwigDirector_MgBaseLines_clone(MgBaseLines self) {
+    return MgObject.getCPtr(self.clone());
+  }
+  public static void SwigDirector_MgBaseLines_copy(MgBaseLines self, long src) {
+    self.copy(new MgObject(src, false));
+  }
+  public static void SwigDirector_MgBaseLines_release(MgBaseLines self) {
+    self.release();
+  }
+  public static boolean SwigDirector_MgBaseLines_equals(MgBaseLines self, long src) {
+    return self.equals(new MgObject(src, false));
+  }
+  public static int SwigDirector_MgBaseLines_getType(MgBaseLines self) {
+    return self.getType();
+  }
+  public static boolean SwigDirector_MgBaseLines_isKindOf(MgBaseLines self, int type) {
+    return self.isKindOf(type);
+  }
+  public static void SwigDirector_MgBaseLines_setOwner(MgBaseLines self, long owner) {
+    self.setOwner((owner == 0) ? null : new MgShape(owner, false));
+  }
+  public static long SwigDirector_MgBaseLines_getExtent(MgBaseLines self) {
+    return Box2d.getCPtr(self.getExtent());
+  }
+  public static void SwigDirector_MgBaseLines_update(MgBaseLines self) {
+    self.update();
+  }
+  public static void SwigDirector_MgBaseLines_transform(MgBaseLines self, long mat) {
+    self.transform(new Matrix2d(mat, false));
+  }
+  public static void SwigDirector_MgBaseLines_clear(MgBaseLines self) {
+    self.clear();
+  }
+  public static void SwigDirector_MgBaseLines_clearCachedData(MgBaseLines self) {
+    self.clearCachedData();
+  }
+  public static int SwigDirector_MgBaseLines_getPointCount(MgBaseLines self) {
+    return self.getPointCount();
+  }
+  public static long SwigDirector_MgBaseLines_getPoint(MgBaseLines self, int index) {
+    return Point2d.getCPtr(self.getPoint(index));
+  }
+  public static void SwigDirector_MgBaseLines_setPoint(MgBaseLines self, int index, long pt) {
+    self.setPoint(index, new Point2d(pt, false));
+  }
+  public static boolean SwigDirector_MgBaseLines_isClosed(MgBaseLines self) {
+    return self.isClosed();
+  }
+  public static boolean SwigDirector_MgBaseLines_isCurve(MgBaseLines self) {
+    return self.isCurve();
+  }
+  public static float SwigDirector_MgBaseLines_hitTest(MgBaseLines self, long pt, float tol, long result) {
+    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(result, false));
+  }
+  public static boolean SwigDirector_MgBaseLines_hitTestBox(MgBaseLines self, long rect) {
+    return self.hitTestBox(new Box2d(rect, false));
+  }
+  public static boolean SwigDirector_MgBaseLines_draw__SWIG_0(MgBaseLines self, int mode, long gs, long ctx, int segment) {
+    return self.draw(mode, new GiGraphics(gs, false), new GiContext(ctx, false), segment);
+  }
+  public static boolean SwigDirector_MgBaseLines_draw__SWIG_1(MgBaseLines self, int mode, long gs, long ctx) {
+    return self.draw(mode, new GiGraphics(gs, false), new GiContext(ctx, false));
+  }
+  public static boolean SwigDirector_MgBaseLines_save(MgBaseLines self, long s) {
+    return self.save((s == 0) ? null : new MgStorage(s, false));
+  }
+  public static boolean SwigDirector_MgBaseLines_load(MgBaseLines self, long factory, long s) {
+    return self.load((factory == 0) ? null : new MgShapeFactory(factory, false), (s == 0) ? null : new MgStorage(s, false));
+  }
+  public static int SwigDirector_MgBaseLines_getHandleCount(MgBaseLines self) {
+    return self.getHandleCount();
+  }
+  public static long SwigDirector_MgBaseLines_getHandlePoint(MgBaseLines self, int index) {
+    return Point2d.getCPtr(self.getHandlePoint(index));
+  }
+  public static boolean SwigDirector_MgBaseLines_setHandlePoint(MgBaseLines self, int index, long pt, float tol) {
+    return self.setHandlePoint(index, new Point2d(pt, false), tol);
+  }
+  public static boolean SwigDirector_MgBaseLines_isHandleFixed(MgBaseLines self, int index) {
+    return self.isHandleFixed(index);
+  }
+  public static int SwigDirector_MgBaseLines_getHandleType(MgBaseLines self, int index) {
+    return self.getHandleType(index);
+  }
+  public static boolean SwigDirector_MgBaseLines_offset(MgBaseLines self, long vec, int segment) {
+    return self.offset(new Vector2d(vec, false), segment);
+  }
+  public static void SwigDirector_MgBaseLines_setFlag(MgBaseLines self, int bit, boolean on) {
+    self.setFlag(MgShapeBit.swigToEnum(bit), on);
+  }
+  public static String SwigDirector_MgBaseLines_getTypeName(MgBaseLines self) {
+    return self.getTypeName();
+  }
+  public static long SwigDirector_MgComposite_clone(MgComposite self) {
+    return MgObject.getCPtr(self.clone());
+  }
+  public static void SwigDirector_MgComposite_copy(MgComposite self, long src) {
+    self.copy(new MgObject(src, false));
+  }
+  public static void SwigDirector_MgComposite_release(MgComposite self) {
+    self.release();
+  }
+  public static boolean SwigDirector_MgComposite_equals(MgComposite self, long src) {
+    return self.equals(new MgObject(src, false));
+  }
+  public static int SwigDirector_MgComposite_getType(MgComposite self) {
+    return self.getType();
+  }
+  public static boolean SwigDirector_MgComposite_isKindOf(MgComposite self, int type) {
+    return self.isKindOf(type);
+  }
+  public static void SwigDirector_MgComposite_setOwner(MgComposite self, long owner) {
+    self.setOwner((owner == 0) ? null : new MgShape(owner, false));
+  }
+  public static long SwigDirector_MgComposite_getExtent(MgComposite self) {
+    return Box2d.getCPtr(self.getExtent());
+  }
+  public static void SwigDirector_MgComposite_update(MgComposite self) {
+    self.update();
+  }
+  public static void SwigDirector_MgComposite_transform(MgComposite self, long mat) {
+    self.transform(new Matrix2d(mat, false));
+  }
+  public static void SwigDirector_MgComposite_clear(MgComposite self) {
+    self.clear();
+  }
+  public static void SwigDirector_MgComposite_clearCachedData(MgComposite self) {
+    self.clearCachedData();
+  }
+  public static int SwigDirector_MgComposite_getPointCount(MgComposite self) {
+    return self.getPointCount();
+  }
+  public static long SwigDirector_MgComposite_getPoint(MgComposite self, int index) {
+    return Point2d.getCPtr(self.getPoint(index));
+  }
+  public static void SwigDirector_MgComposite_setPoint(MgComposite self, int index, long pt) {
+    self.setPoint(index, new Point2d(pt, false));
+  }
+  public static boolean SwigDirector_MgComposite_isClosed(MgComposite self) {
+    return self.isClosed();
+  }
+  public static boolean SwigDirector_MgComposite_isCurve(MgComposite self) {
+    return self.isCurve();
+  }
+  public static float SwigDirector_MgComposite_hitTest(MgComposite self, long pt, float tol, long result) {
+    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(result, false));
+  }
+  public static boolean SwigDirector_MgComposite_hitTestBox(MgComposite self, long rect) {
+    return self.hitTestBox(new Box2d(rect, false));
+  }
+  public static boolean SwigDirector_MgComposite_draw__SWIG_0(MgComposite self, int mode, long gs, long ctx, int segment) {
+    return self.draw(mode, new GiGraphics(gs, false), new GiContext(ctx, false), segment);
+  }
+  public static boolean SwigDirector_MgComposite_draw__SWIG_1(MgComposite self, int mode, long gs, long ctx) {
+    return self.draw(mode, new GiGraphics(gs, false), new GiContext(ctx, false));
+  }
+  public static boolean SwigDirector_MgComposite_save(MgComposite self, long s) {
+    return self.save((s == 0) ? null : new MgStorage(s, false));
+  }
+  public static boolean SwigDirector_MgComposite_load(MgComposite self, long factory, long s) {
+    return self.load((factory == 0) ? null : new MgShapeFactory(factory, false), (s == 0) ? null : new MgStorage(s, false));
+  }
+  public static int SwigDirector_MgComposite_getHandleCount(MgComposite self) {
+    return self.getHandleCount();
+  }
+  public static long SwigDirector_MgComposite_getHandlePoint(MgComposite self, int index) {
+    return Point2d.getCPtr(self.getHandlePoint(index));
+  }
+  public static boolean SwigDirector_MgComposite_setHandlePoint(MgComposite self, int index, long pt, float tol) {
+    return self.setHandlePoint(index, new Point2d(pt, false), tol);
+  }
+  public static boolean SwigDirector_MgComposite_isHandleFixed(MgComposite self, int index) {
+    return self.isHandleFixed(index);
+  }
+  public static int SwigDirector_MgComposite_getHandleType(MgComposite self, int index) {
+    return self.getHandleType(index);
+  }
+  public static boolean SwigDirector_MgComposite_offset(MgComposite self, long vec, int segment) {
+    return self.offset(new Vector2d(vec, false), segment);
+  }
+  public static void SwigDirector_MgComposite_setFlag(MgComposite self, int bit, boolean on) {
+    self.setFlag(MgShapeBit.swigToEnum(bit), on);
+  }
+  public static String SwigDirector_MgComposite_getTypeName(MgComposite self) {
+    return self.getTypeName();
+  }
+  public static boolean SwigDirector_MgComposite_canOffsetShapeAlone(MgComposite self, long shape) {
+    return self.canOffsetShapeAlone((shape == 0) ? null : new MgShape(shape, false));
   }
   public static String SwigDirector_MgCommand_getName(MgCommand self) {
     return self.getName();
@@ -1862,56 +2287,56 @@ public class touchvgJNI {
   public static boolean SwigDirector_MgCommand_doContextAction(MgCommand self, long sender, int action) {
     return self.doContextAction((sender == 0) ? null : new MgMotion(sender, false), action);
   }
-  public static void SwigDirector_CmdObserverDefault_onDocLoaded(CmdObserverDefault self, long arg0) {
-    self.onDocLoaded((arg0 == 0) ? null : new MgMotion(arg0, false));
+  public static void SwigDirector_CmdObserverDefault_onDocLoaded(CmdObserverDefault self, long sender) {
+    self.onDocLoaded((sender == 0) ? null : new MgMotion(sender, false));
   }
-  public static void SwigDirector_CmdObserverDefault_onEnterSelectCommand(CmdObserverDefault self, long arg0) {
-    self.onEnterSelectCommand((arg0 == 0) ? null : new MgMotion(arg0, false));
+  public static void SwigDirector_CmdObserverDefault_onEnterSelectCommand(CmdObserverDefault self, long sender) {
+    self.onEnterSelectCommand((sender == 0) ? null : new MgMotion(sender, false));
   }
-  public static void SwigDirector_CmdObserverDefault_onUnloadCommands(CmdObserverDefault self, long arg0) {
-    self.onUnloadCommands((arg0 == 0) ? null : new MgCmdManager(arg0, false));
+  public static void SwigDirector_CmdObserverDefault_onUnloadCommands(CmdObserverDefault self, long sender) {
+    self.onUnloadCommands((sender == 0) ? null : new MgCmdManager(sender, false));
   }
-  public static boolean SwigDirector_CmdObserverDefault_selectActionsNeedHided(CmdObserverDefault self, long arg0) {
-    return self.selectActionsNeedHided((arg0 == 0) ? null : new MgMotion(arg0, false));
+  public static boolean SwigDirector_CmdObserverDefault_selectActionsNeedHided(CmdObserverDefault self, long sender) {
+    return self.selectActionsNeedHided((sender == 0) ? null : new MgMotion(sender, false));
   }
-  public static boolean SwigDirector_CmdObserverDefault_doAction(CmdObserverDefault self, long arg0, int arg1) {
-    return self.doAction((arg0 == 0) ? null : new MgMotion(arg0, false), arg1);
+  public static boolean SwigDirector_CmdObserverDefault_doAction(CmdObserverDefault self, long sender, int action) {
+    return self.doAction((sender == 0) ? null : new MgMotion(sender, false), action);
   }
-  public static boolean SwigDirector_CmdObserverDefault_doEndAction(CmdObserverDefault self, long arg0, int arg1) {
-    return self.doEndAction((arg0 == 0) ? null : new MgMotion(arg0, false), arg1);
+  public static boolean SwigDirector_CmdObserverDefault_doEndAction(CmdObserverDefault self, long sender, int action) {
+    return self.doEndAction((sender == 0) ? null : new MgMotion(sender, false), action);
   }
-  public static void SwigDirector_CmdObserverDefault_drawInShapeCommand(CmdObserverDefault self, long arg0, long arg1, long arg2) {
-    self.drawInShapeCommand((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgCommand(arg1, false), (arg2 == 0) ? null : new GiGraphics(arg2, false));
+  public static void SwigDirector_CmdObserverDefault_drawInShapeCommand(CmdObserverDefault self, long sender, long cmd, long gs) {
+    self.drawInShapeCommand((sender == 0) ? null : new MgMotion(sender, false), (cmd == 0) ? null : new MgCommand(cmd, false), (gs == 0) ? null : new GiGraphics(gs, false));
   }
-  public static void SwigDirector_CmdObserverDefault_drawInSelectCommand(CmdObserverDefault self, long arg0, long arg1, int arg2, long arg3) {
-    self.drawInSelectCommand((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgShape(arg1, false), arg2, (arg3 == 0) ? null : new GiGraphics(arg3, false));
+  public static void SwigDirector_CmdObserverDefault_drawInSelectCommand(CmdObserverDefault self, long sender, long sp, int handleIndex, long gs) {
+    self.drawInSelectCommand((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false), handleIndex, (gs == 0) ? null : new GiGraphics(gs, false));
   }
-  public static boolean SwigDirector_CmdObserverDefault_onShapeWillAdded(CmdObserverDefault self, long arg0, long arg1) {
-    return self.onShapeWillAdded((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgShape(arg1, false));
+  public static boolean SwigDirector_CmdObserverDefault_onShapeWillAdded(CmdObserverDefault self, long sender, long sp) {
+    return self.onShapeWillAdded((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false));
   }
-  public static void SwigDirector_CmdObserverDefault_onShapeAdded(CmdObserverDefault self, long arg0, long arg1) {
-    self.onShapeAdded((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgShape(arg1, false));
+  public static void SwigDirector_CmdObserverDefault_onShapeAdded(CmdObserverDefault self, long sender, long sp) {
+    self.onShapeAdded((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false));
   }
-  public static boolean SwigDirector_CmdObserverDefault_onShapeWillDeleted(CmdObserverDefault self, long arg0, long arg1) {
-    return self.onShapeWillDeleted((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgShape(arg1, false));
+  public static boolean SwigDirector_CmdObserverDefault_onShapeWillDeleted(CmdObserverDefault self, long sender, long sp) {
+    return self.onShapeWillDeleted((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false));
   }
-  public static void SwigDirector_CmdObserverDefault_onShapeDeleted(CmdObserverDefault self, long arg0, long arg1) {
-    self.onShapeDeleted((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgShape(arg1, false));
+  public static void SwigDirector_CmdObserverDefault_onShapeDeleted(CmdObserverDefault self, long sender, long sp) {
+    self.onShapeDeleted((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false));
   }
-  public static boolean SwigDirector_CmdObserverDefault_onShapeCanRotated(CmdObserverDefault self, long arg0, long arg1) {
-    return self.onShapeCanRotated((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgShape(arg1, false));
+  public static boolean SwigDirector_CmdObserverDefault_onShapeCanRotated(CmdObserverDefault self, long sender, long sp) {
+    return self.onShapeCanRotated((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false));
   }
-  public static boolean SwigDirector_CmdObserverDefault_onShapeCanTransform(CmdObserverDefault self, long arg0, long arg1) {
-    return self.onShapeCanTransform((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgShape(arg1, false));
+  public static boolean SwigDirector_CmdObserverDefault_onShapeCanTransform(CmdObserverDefault self, long sender, long sp) {
+    return self.onShapeCanTransform((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false));
   }
-  public static boolean SwigDirector_CmdObserverDefault_onShapeCanUnlock(CmdObserverDefault self, long arg0, long arg1) {
-    return self.onShapeCanUnlock((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgShape(arg1, false));
+  public static boolean SwigDirector_CmdObserverDefault_onShapeCanUnlock(CmdObserverDefault self, long sender, long sp) {
+    return self.onShapeCanUnlock((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false));
   }
-  public static boolean SwigDirector_CmdObserverDefault_onShapeCanUngroup(CmdObserverDefault self, long arg0, long arg1) {
-    return self.onShapeCanUngroup((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgShape(arg1, false));
+  public static boolean SwigDirector_CmdObserverDefault_onShapeCanUngroup(CmdObserverDefault self, long sender, long sp) {
+    return self.onShapeCanUngroup((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false));
   }
-  public static void SwigDirector_CmdObserverDefault_onShapeMoved(CmdObserverDefault self, long arg0, long arg1, int arg2) {
-    self.onShapeMoved((arg0 == 0) ? null : new MgMotion(arg0, false), (arg1 == 0) ? null : new MgShape(arg1, false), arg2);
+  public static void SwigDirector_CmdObserverDefault_onShapeMoved(CmdObserverDefault self, long sender, long sp, int segment) {
+    self.onShapeMoved((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false), segment);
   }
   public static String SwigDirector_MgCommandDraw_getName(MgCommandDraw self) {
     return self.getName();

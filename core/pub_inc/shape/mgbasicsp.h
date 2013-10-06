@@ -43,8 +43,9 @@ public:
     //! 设置终点，未调 update()
     void setEndPoint(const Point2d& pt)  { _points[1] = pt; }
     
+    virtual bool isCurve() const { return false; }
+
 protected:
-    bool isCurve() const { return false; }
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;
     bool _load(MgShapeFactory* factory, MgStorage* s);
@@ -105,9 +106,10 @@ public:
     //! 设置是否为方形
     void setSquare(bool square) { setFlag(kMgSquare, square); }
 
+    virtual bool isCurve() const { return false; }
+
 protected:
     MgBaseRect();
-    bool isCurve() const { return false; }
     int _getPointCount() const;
     Point2d _getPoint(int index) const;
     void _setPoint(int index, const Point2d& pt);
@@ -118,7 +120,7 @@ protected:
     void _transform(const Matrix2d& mat);
     void _clear();
     bool _isClosed() const { return true; }
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment, bool& inside) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
     int _getHandleCount() const;
     Point2d _getHandlePoint(int index) const;
     int _getHandleType(int index) const;
@@ -155,14 +157,15 @@ public:
     //! 设置半轴长度
     void setRadius(float rx, float ry = 0.0);
 
+    virtual bool isCurve() const { return true; }
+
 protected:
-    bool isCurve() const { return true; }
     void _update();
     int _getHandleCount() const;
     Point2d _getHandlePoint(int index) const;
     int _getHandleType(int index) const;
     bool _setHandlePoint(int index, const Point2d& pt, float tol);
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment, bool& inside) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:
@@ -185,12 +188,13 @@ public:
     //! 设置圆角半径
     void setRadius(float rx, float ry = 0.0);
 
+    virtual bool isCurve() const;
+
 protected:
-    bool isCurve() const;
     void _copy(const MgRoundRect& src);
     bool _equals(const MgRoundRect& src) const;
     void _clear();
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment, bool& inside) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
     bool _save(MgStorage* s) const;
     bool _load(MgShapeFactory* factory, MgStorage* s);
 
@@ -212,7 +216,7 @@ protected:
     int _getHandleType(int index) const;
     bool _isHandleFixed(int index) const;
     void _update();
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment, bool& inside) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
     bool _hitTestBox(const Box2d& rect) const;
     bool _rotateHandlePoint(int index, const Point2d& pt);
 };
@@ -267,7 +271,7 @@ protected:
     void _transform(const Matrix2d& mat);
     void _clear();
     bool _setHandlePoint(int index, const Point2d& pt, float tol);
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment, bool& inside) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;
     bool _load(MgShapeFactory* factory, MgStorage* s);
@@ -284,8 +288,9 @@ protected:
 class MgLines : public MgBaseLines
 {
     MG_INHERIT_CREATE(MgLines, MgBaseLines, 15)
+public:
+    virtual bool isCurve() const { return false; }
 protected:
-    bool isCurve() const { return false; }
     int _getHandleCount() const;
     Point2d _getHandlePoint(int index) const;
     int _getHandleType(int index) const;
@@ -302,11 +307,12 @@ public:
     //! 去掉多余点，同时仍然光滑
     void smooth(float tol);
     
+    virtual bool isCurve() const { return true; }
+
 protected:
-    bool isCurve() const { return true; }
     void _update();
     void _clearCachedData();
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment, bool& inside) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:
@@ -340,8 +346,9 @@ public:
     bool isEmpty(float minDist) const {
         return getWidth() <= minDist || getHeight() <= minDist; }
 
+    virtual bool isCurve() const { return false; }
+
 protected:
-    bool isCurve() const { return false; }
     bool _isClosed() const { return true; }
     int _getHandleCount() const;
     Point2d _getHandlePoint(int index) const;
@@ -405,8 +412,9 @@ public:
     bool setTanStartEnd(const Vector2d& startTan, const Point2d& start, const Point2d& end);
     bool setCenterRadius(const Point2d& center, float radius, float startAngle, float sweepAngle);
     
+    virtual bool isCurve() const { return true; }
+
 protected:
-    bool isCurve() const { return true; }
     bool _isClosed() const;
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;

@@ -67,7 +67,7 @@ private:
 
 private:
     int getStep() { return 0; }
-    MgShape* hitTestAll(const MgMotion* sender, Point2d &nearpt, int &segment);
+    MgShape* hitTestAll(const MgMotion* sender, MgHitResult& result);
     MgShape* getSelectedShape(const MgMotion* sender);
     bool canSelect(MgShape* shape, const MgMotion* sender);
     int hitTestHandles(MgShape* shape, const Point2d& pointM, 
@@ -90,10 +90,9 @@ private:
     std::vector<int>        m_selIds;           // 选中的图形的ID
     std::vector<MgShape*>   m_clones;           // 选中图形的复制对象
     int                     m_id;               // 选中图形的ID
-    Point2d                 m_ptNear;           // 图形上的最近点
+    MgHitResult             m_hit;              // 点中结果
     Point2d                 m_ptSnap;           // 捕捉点
     Point2d                 m_ptStart;          // touchBegan捕捉点
-    int                     m_segment;          // 点中的是图行上的哪部分
     int                     m_handleIndex;      // 点中的是哪个控制点
     int                     m_rotateHandle;     // 旋转中心控制点
     int                     m_boxHandle;        // 选中框的活动控制点序号

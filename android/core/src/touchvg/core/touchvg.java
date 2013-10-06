@@ -8,7 +8,7 @@
 
 package touchvg.core;
 
-public class touchvg implements touchvgConstants {
+public class touchvg {
   public static float get_MGZERO() {
     return touchvgJNI._MGZERO_get();
   }

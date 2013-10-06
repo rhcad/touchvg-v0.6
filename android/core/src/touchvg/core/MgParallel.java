@@ -157,6 +157,10 @@ public class MgParallel extends MgBaseShape {
     return touchvgJNI.MgParallel_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
+  public float hitTest(Point2d pt, float tol, MgHitResult result) {
+    return touchvgJNI.MgParallel_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  }
+
   public Point2d getCenter() {
     return new Point2d(touchvgJNI.MgParallel_getCenter(swigCPtr, this), true);
   }
@@ -179,6 +183,10 @@ public class MgParallel extends MgBaseShape {
 
   public boolean isEmpty(float minDist) {
     return touchvgJNI.MgParallel_isEmpty(swigCPtr, this, minDist);
+  }
+
+  public boolean isCurve() {
+    return touchvgJNI.MgParallel_isCurve(swigCPtr, this);
   }
 
 }

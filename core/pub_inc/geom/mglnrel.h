@@ -113,7 +113,7 @@ static bool isBetweenLine2(
     \return 在线段上时返回true，否则返回false
 */
 static bool isBetweenLine3(
-    const Point2d& a, const Point2d& b, const Point2d& pt, Point2d* nearpt = NULL);
+    const Point2d& a, const Point2d& b, const Point2d& pt, Point2d* nearpt = (Point2d*)0);
 
 //! 判断两个线段ab和cd是否相交(交点在线段闭区间内)
 /*!
@@ -188,7 +188,7 @@ static bool crossLineAbc(
 */
 static bool cross2Beeline(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d, 
-    Point2d& ptCross, float* pu = NULL, float* pv = NULL, 
+    Point2d& ptCross, float* pu = (float*)0, float* pv = (float*)0, 
     const Tol& tolVec = Tol::gTol());
 #endif
 
@@ -220,7 +220,7 @@ static bool cross2Line(
 */
 static bool crossLineBeeline(
     const Point2d& a, const Point2d& b, const Point2d& c, const Point2d& d,
-    Point2d& ptCross, float* pv = NULL, 
+    Point2d& ptCross, float* pv = (float*)0, 
     const Tol& tolVec = Tol::gTol());
 #endif
 
@@ -265,7 +265,7 @@ static int ptInArea(
     \param[out] pACW 多边形是否为逆时针方向，为NULL则忽略该参数
     \return 是否为凸多边形
 */
-static bool isConvex(int count, const Point2d* vertexs, bool* pACW = NULL);
+static bool isConvex(int count, const Point2d* vertexs, bool* pACW = (bool*)0);
 #endif
 };
 

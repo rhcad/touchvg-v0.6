@@ -255,11 +255,9 @@ Box2d MgShapes::getExtent() const
     return extent;
 }
 
-MgShape* MgShapes::hitTest(const Box2d& limits, Point2d& nearpt, 
-                           int* segment, Filter filter) const
+MgShape* MgShapes::hitTest(const Box2d& limits, MgHitResult& result, Filter filter) const
 {
     MgShape* retshape = NULL;
-    float distMin = _FLT_MAX;
     
     for (I::citerator it = im->shapes.begin(); it != im->shapes.end(); ++it) {
         const MgBaseShape* shape = (*it)->shapec();
@@ -268,25 +266,19 @@ MgShape* MgShapes::hitTest(const Box2d& limits, Point2d& nearpt,
         if (!shape->getFlag(kMgShapeLocked)
             && extent.isIntersect(limits)
             && (!filter || filter(*it))) {
-            Point2d tmpNear;
-            int    tmpSegment;
-            bool   tmpInside = false;
+            MgHitResult tmpRes;
             float  tol = (!(*it)->hasFillColor() ? limits.width() / 2
                           : mgMax(extent.width(), extent.height()));
-            float  dist = shape->hitTest(limits.center(), tol, tmpNear,
-                                         tmpSegment, tmpInside);
+            float  dist = shape->hitTest(limits.center(), tol, tmpRes);
             
-            if (distMin > dist - _MGZERO) {     // 让末尾图形优先选中
-                distMin = dist;
-                if (segment) {
-                    *segment = tmpSegment;
-                }
-                nearpt = tmpNear;
+            if (result.dist > dist - _MGZERO) {     // 让末尾图形优先选中
+                result.dist = dist;
+                result = tmpRes;
                 retshape = *it;
             }
         }
     }
-    if (retshape && distMin > limits.width() && !retshape->hasFillColor()) {
+    if (retshape && result.dist > limits.width() && !retshape->hasFillColor()) {
         retshape = NULL;
     }
     

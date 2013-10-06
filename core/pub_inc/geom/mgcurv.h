@@ -115,7 +115,7 @@ static int arcToBezier(
 static bool arc3P(
     const Point2d& start, const Point2d& point, const Point2d& end,
     Point2d& center, float& radius,
-    float* startAngle = NULL, float* sweepAngle = NULL);
+    float* startAngle = (float*)0, float* sweepAngle = (float*)0);
 
 //! 给定起点、终点和起点切向，计算圆弧参数
 /*!
@@ -132,7 +132,7 @@ static bool arc3P(
 static bool arcTan(
     const Point2d& start, const Point2d& end, const Vector2d& startTan,
     Point2d& center, float& radius,
-    float* startAngle = NULL, float* sweepAngle = NULL);
+    float* startAngle = (float*)0, float* sweepAngle = (float*)0);
 
 //! 给定弦和拱高计算圆弧参数
 /*!
@@ -149,7 +149,7 @@ static bool arcTan(
 static bool arcBulge(
     const Point2d& start, const Point2d& end, float bulge,
     Point2d& center, float& radius,
-    float* startAngle = NULL, float* sweepAngle = NULL);
+    float* startAngle = (float*)0, float* sweepAngle = (float*)0);
 #endif
 
 //! 计算两圆的交点

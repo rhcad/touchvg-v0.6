@@ -8,10 +8,6 @@
 
 #include <math.h>
 
-#ifndef NULL
-#define NULL  0
-#endif
-
 #ifdef _MSC_VER
 #pragma warning(disable: 4514)  // unreferenced inlines are common
 #pragma warning(disable: 4710)  // private constructors are disallowed

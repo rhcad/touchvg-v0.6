@@ -35,6 +35,21 @@ public class MgBaseRect extends MgBaseShape {
     super.delete();
   }
 
+  protected void swigDirectorDisconnect() {
+    swigCMemOwn = false;
+    delete();
+  }
+
+  public void swigReleaseOwnership() {
+    swigCMemOwn = false;
+    touchvgJNI.MgBaseRect_change_ownership(this, swigCPtr, false);
+  }
+
+  public void swigTakeOwnership() {
+    swigCMemOwn = true;
+    touchvgJNI.MgBaseRect_change_ownership(this, swigCPtr, true);
+  }
+
   public static int Type() {
     return touchvgJNI.MgBaseRect_Type();
   }
@@ -85,6 +100,15 @@ public class MgBaseRect extends MgBaseShape {
 
   public void setSquare(boolean square) {
     touchvgJNI.MgBaseRect_setSquare(swigCPtr, this, square);
+  }
+
+  public boolean isCurve() {
+    return (getClass() == MgBaseRect.class) ? touchvgJNI.MgBaseRect_isCurve(swigCPtr, this) : touchvgJNI.MgBaseRect_isCurveSwigExplicitMgBaseRect(swigCPtr, this);
+  }
+
+  protected MgBaseRect() {
+    this(touchvgJNI.new_MgBaseRect(), true);
+    touchvgJNI.MgBaseRect_director_connect(this, swigCPtr, swigCMemOwn, true);
   }
 
 }

@@ -89,6 +89,10 @@
 %include <mgstorage.h>
 %include <mgstoragebs.h>
 
+%feature("director") MgBaseShape;
+%feature("director") MgBaseRect;
+%feature("director") MgBaseLines;
+%feature("director") MgComposite;
 %include <mgobject.h>
 %include <mgshape.h>
 %include <mgspfactory.h>

@@ -157,4 +157,12 @@ public class MgLines extends MgBaseLines {
     return touchvgJNI.MgLines_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
+  public float hitTest(Point2d pt, float tol, MgHitResult result) {
+    return touchvgJNI.MgLines_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  }
+
+  public boolean isCurve() {
+    return touchvgJNI.MgLines_isCurve(swigCPtr, this);
+  }
+
 }

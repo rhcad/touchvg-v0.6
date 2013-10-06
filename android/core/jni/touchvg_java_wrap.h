@@ -60,7 +60,7 @@ public:
     virtual int readInt(char const *name, int defvalue);
     virtual void writeInt(char const *name, int value);
     virtual void writeUInt(char const *name, int value);
-    virtual bool setError(char const *arg0);
+    virtual bool setError(char const *errdesc);
     virtual ~SwigDirector_MgStorageBase();
     virtual int readFloatArray(char const *name, mgvector< float > &values);
     virtual void writeFloatArray(char const *name, mgvector< float > const &values);
@@ -71,6 +71,183 @@ public:
     }
 protected:
     bool swig_override[14];
+};
+
+class SwigDirector_MgBaseShape : public MgBaseShape, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_MgBaseShape(JNIEnv *jenv);
+    virtual MgObject *clone() const;
+    virtual void copy(MgObject const &src);
+    virtual void release();
+    virtual bool equals(MgObject const &src) const;
+    virtual int getType() const;
+    virtual bool isKindOf(int type) const;
+    virtual ~SwigDirector_MgBaseShape();
+    virtual void setOwner(MgShape *owner);
+    virtual Box2d getExtent() const;
+    virtual void update();
+    virtual void transform(Matrix2d const &mat);
+    virtual void clear();
+    virtual void clearCachedData();
+    virtual int getPointCount() const;
+    virtual Point2d getPoint(int index) const;
+    virtual void setPoint(int index, Point2d const &pt);
+    virtual bool isClosed() const;
+    virtual bool isCurve() const;
+    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &result) const;
+    virtual bool hitTestBox(Box2d const &rect) const;
+    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
+    virtual bool save(MgStorage *s) const;
+    virtual bool load(MgShapeFactory *factory, MgStorage *s);
+    virtual int getHandleCount() const;
+    virtual Point2d getHandlePoint(int index) const;
+    virtual bool setHandlePoint(int index, Point2d const &pt, float tol);
+    virtual bool isHandleFixed(int index) const;
+    virtual int getHandleType(int index) const;
+    virtual bool offset(Vector2d const &vec, int segment);
+    virtual void setFlag(MgShapeBit bit, bool on);
+    virtual char const *getTypeName() const;
+public:
+    bool swig_overrides(int n) {
+      return (n < 31 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[31];
+};
+
+class SwigDirector_MgBaseRect : public MgBaseRect, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_MgBaseRect(JNIEnv *jenv);
+    virtual MgObject *clone() const;
+    virtual void copy(MgObject const &src);
+    virtual void release();
+    virtual bool equals(MgObject const &src) const;
+    virtual int getType() const;
+    virtual bool isKindOf(int type) const;
+    virtual ~SwigDirector_MgBaseRect();
+    virtual void setOwner(MgShape *owner);
+    virtual Box2d getExtent() const;
+    virtual void update();
+    virtual void transform(Matrix2d const &mat);
+    virtual void clear();
+    virtual void clearCachedData();
+    virtual int getPointCount() const;
+    virtual Point2d getPoint(int index) const;
+    virtual void setPoint(int index, Point2d const &pt);
+    virtual bool isClosed() const;
+    virtual bool isCurve() const;
+    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &result) const;
+    virtual bool hitTestBox(Box2d const &rect) const;
+    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
+    virtual bool save(MgStorage *s) const;
+    virtual bool load(MgShapeFactory *factory, MgStorage *s);
+    virtual int getHandleCount() const;
+    virtual Point2d getHandlePoint(int index) const;
+    virtual bool setHandlePoint(int index, Point2d const &pt, float tol);
+    virtual bool isHandleFixed(int index) const;
+    virtual int getHandleType(int index) const;
+    virtual bool offset(Vector2d const &vec, int segment);
+    virtual void setFlag(MgShapeBit bit, bool on);
+    virtual char const *getTypeName() const;
+public:
+    bool swig_overrides(int n) {
+      return (n < 31 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[31];
+};
+
+class SwigDirector_MgBaseLines : public MgBaseLines, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_MgBaseLines(JNIEnv *jenv);
+    virtual MgObject *clone() const;
+    virtual void copy(MgObject const &src);
+    virtual void release();
+    virtual bool equals(MgObject const &src) const;
+    virtual int getType() const;
+    virtual bool isKindOf(int type) const;
+    virtual ~SwigDirector_MgBaseLines();
+    virtual void setOwner(MgShape *owner);
+    virtual Box2d getExtent() const;
+    virtual void update();
+    virtual void transform(Matrix2d const &mat);
+    virtual void clear();
+    virtual void clearCachedData();
+    virtual int getPointCount() const;
+    virtual Point2d getPoint(int index) const;
+    virtual void setPoint(int index, Point2d const &pt);
+    virtual bool isClosed() const;
+    virtual bool isCurve() const;
+    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &result) const;
+    virtual bool hitTestBox(Box2d const &rect) const;
+    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
+    virtual bool save(MgStorage *s) const;
+    virtual bool load(MgShapeFactory *factory, MgStorage *s);
+    virtual int getHandleCount() const;
+    virtual Point2d getHandlePoint(int index) const;
+    virtual bool setHandlePoint(int index, Point2d const &pt, float tol);
+    virtual bool isHandleFixed(int index) const;
+    virtual int getHandleType(int index) const;
+    virtual bool offset(Vector2d const &vec, int segment);
+    virtual void setFlag(MgShapeBit bit, bool on);
+    virtual char const *getTypeName() const;
+public:
+    bool swig_overrides(int n) {
+      return (n < 31 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[31];
+};
+
+class SwigDirector_MgComposite : public MgComposite, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_MgComposite(JNIEnv *jenv);
+    virtual MgObject *clone() const;
+    virtual void copy(MgObject const &src);
+    virtual void release();
+    virtual bool equals(MgObject const &src) const;
+    virtual int getType() const;
+    virtual bool isKindOf(int type) const;
+    virtual ~SwigDirector_MgComposite();
+    virtual void setOwner(MgShape *owner);
+    virtual Box2d getExtent() const;
+    virtual void update();
+    virtual void transform(Matrix2d const &mat);
+    virtual void clear();
+    virtual void clearCachedData();
+    virtual int getPointCount() const;
+    virtual Point2d getPoint(int index) const;
+    virtual void setPoint(int index, Point2d const &pt);
+    virtual bool isClosed() const;
+    virtual bool isCurve() const;
+    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &result) const;
+    virtual bool hitTestBox(Box2d const &rect) const;
+    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
+    virtual bool save(MgStorage *s) const;
+    virtual bool load(MgShapeFactory *factory, MgStorage *s);
+    virtual int getHandleCount() const;
+    virtual Point2d getHandlePoint(int index) const;
+    virtual bool setHandlePoint(int index, Point2d const &pt, float tol);
+    virtual bool isHandleFixed(int index) const;
+    virtual int getHandleType(int index) const;
+    virtual bool offset(Vector2d const &vec, int segment);
+    virtual void setFlag(MgShapeBit bit, bool on);
+    virtual char const *getTypeName() const;
+    virtual bool canOffsetShapeAlone(MgShape *shape);
+public:
+    bool swig_overrides(int n) {
+      return (n < 32 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[32];
 };
 
 struct SwigDirector_MgCommand : public MgCommand, public Swig::Director {
@@ -110,23 +287,23 @@ class SwigDirector_CmdObserverDefault : public CmdObserverDefault, public Swig::
 public:
     void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
     SwigDirector_CmdObserverDefault(JNIEnv *jenv);
-    virtual void onDocLoaded(MgMotion const *arg0);
-    virtual void onEnterSelectCommand(MgMotion const *arg0);
-    virtual void onUnloadCommands(MgCmdManager *arg0);
-    virtual bool selectActionsNeedHided(MgMotion const *arg0);
-    virtual bool doAction(MgMotion const *arg0, int arg1);
-    virtual bool doEndAction(MgMotion const *arg0, int arg1);
-    virtual void drawInShapeCommand(MgMotion const *arg0, MgCommand *arg1, GiGraphics *arg2);
-    virtual void drawInSelectCommand(MgMotion const *arg0, MgShape const *arg1, int arg2, GiGraphics *arg3);
-    virtual bool onShapeWillAdded(MgMotion const *arg0, MgShape *arg1);
-    virtual void onShapeAdded(MgMotion const *arg0, MgShape *arg1);
-    virtual bool onShapeWillDeleted(MgMotion const *arg0, MgShape *arg1);
-    virtual void onShapeDeleted(MgMotion const *arg0, MgShape *arg1);
-    virtual bool onShapeCanRotated(MgMotion const *arg0, MgShape const *arg1);
-    virtual bool onShapeCanTransform(MgMotion const *arg0, MgShape const *arg1);
-    virtual bool onShapeCanUnlock(MgMotion const *arg0, MgShape const *arg1);
-    virtual bool onShapeCanUngroup(MgMotion const *arg0, MgShape const *arg1);
-    virtual void onShapeMoved(MgMotion const *arg0, MgShape *arg1, int arg2);
+    virtual void onDocLoaded(MgMotion const *sender);
+    virtual void onEnterSelectCommand(MgMotion const *sender);
+    virtual void onUnloadCommands(MgCmdManager *sender);
+    virtual bool selectActionsNeedHided(MgMotion const *sender);
+    virtual bool doAction(MgMotion const *sender, int action);
+    virtual bool doEndAction(MgMotion const *sender, int action);
+    virtual void drawInShapeCommand(MgMotion const *sender, MgCommand *cmd, GiGraphics *gs);
+    virtual void drawInSelectCommand(MgMotion const *sender, MgShape const *sp, int handleIndex, GiGraphics *gs);
+    virtual bool onShapeWillAdded(MgMotion const *sender, MgShape *sp);
+    virtual void onShapeAdded(MgMotion const *sender, MgShape *sp);
+    virtual bool onShapeWillDeleted(MgMotion const *sender, MgShape *sp);
+    virtual void onShapeDeleted(MgMotion const *sender, MgShape *sp);
+    virtual bool onShapeCanRotated(MgMotion const *sender, MgShape const *sp);
+    virtual bool onShapeCanTransform(MgMotion const *sender, MgShape const *sp);
+    virtual bool onShapeCanUnlock(MgMotion const *sender, MgShape const *sp);
+    virtual bool onShapeCanUngroup(MgMotion const *sender, MgShape const *sp);
+    virtual void onShapeMoved(MgMotion const *sender, MgShape *sp, int segment);
     virtual ~SwigDirector_CmdObserverDefault();
 public:
     bool swig_overrides(int n) {

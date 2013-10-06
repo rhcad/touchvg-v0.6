@@ -31,6 +31,26 @@ public class MgBaseShape extends MgObject {
     super.delete();
   }
 
+  protected void swigDirectorDisconnect() {
+    swigCMemOwn = false;
+    delete();
+  }
+
+  public void swigReleaseOwnership() {
+    swigCMemOwn = false;
+    touchvgJNI.MgBaseShape_change_ownership(this, swigCPtr, false);
+  }
+
+  public void swigTakeOwnership() {
+    swigCMemOwn = true;
+    touchvgJNI.MgBaseShape_change_ownership(this, swigCPtr, true);
+  }
+
+  protected MgBaseShape() {
+    this(touchvgJNI.new_MgBaseShape(), true);
+    touchvgJNI.MgBaseShape_director_connect(this, swigCPtr, swigCMemOwn, true);
+  }
+
   public static int Type() {
     return touchvgJNI.MgBaseShape_Type();
   }
@@ -44,8 +64,8 @@ public class MgBaseShape extends MgObject {
     return (cPtr == 0) ? null : new MgBaseShape(cPtr, false);
   }
 
-  public void setOwner(MgShape arg0) {
-    touchvgJNI.MgBaseShape_setOwner(swigCPtr, this, MgShape.getCPtr(arg0), arg0);
+  public void setOwner(MgShape owner) {
+    if (getClass() == MgBaseShape.class) touchvgJNI.MgBaseShape_setOwner(swigCPtr, this, MgShape.getCPtr(owner), owner); else touchvgJNI.MgBaseShape_setOwnerSwigExplicitMgBaseShape(swigCPtr, this, MgShape.getCPtr(owner), owner);
   }
 
   public Box2d getExtent() {
@@ -86,6 +106,10 @@ public class MgBaseShape extends MgObject {
 
   public boolean isCurve() {
     return touchvgJNI.MgBaseShape_isCurve(swigCPtr, this);
+  }
+
+  public float hitTest(Point2d pt, float tol, MgHitResult result) {
+    return touchvgJNI.MgBaseShape_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
   }
 
   public float hitTest2(Point2d pt, float tol, Point2d nearpt) {
@@ -141,7 +165,7 @@ public class MgBaseShape extends MgObject {
   }
 
   public void setFlag(MgShapeBit bit, boolean on) {
-    touchvgJNI.MgBaseShape_setFlag(swigCPtr, this, bit.swigValue(), on);
+    if (getClass() == MgBaseShape.class) touchvgJNI.MgBaseShape_setFlag(swigCPtr, this, bit.swigValue(), on); else touchvgJNI.MgBaseShape_setFlagSwigExplicitMgBaseShape(swigCPtr, this, bit.swigValue(), on);
   }
 
   public String getTypeName() {

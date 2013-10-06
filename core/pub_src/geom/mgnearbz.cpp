@@ -266,12 +266,12 @@ static point_t BezierPoint(const point_t* pts, int degree, double t,
         }
     }
 
-    if (Left != NULL) {
+    if (Left) {
         for (j = 0; j <= degree; j++) {
             Left[j]  = Vtemp[j][0];
         }
     }
-    if (Right != NULL) {
+    if (Right) {
         for (j = 0; j <= degree; j++) {
             Right[j] = Vtemp[degree-j][j];
         }
@@ -375,7 +375,7 @@ static void NearestOnBezier(const point_t& pt, const point_t* pts, point_t& near
         // Find distances for candidate points
         for (i = 0; i < n_solutions; i++) {
             p = BezierPoint(pts, DEGREE, t_candidate[i],
-                NULL, NULL);
+                (point_t*)0, (point_t*)0);
             new_dist = (pt - p).lengthSquare();
             if (new_dist < dist) {
                 dist = new_dist;
@@ -393,7 +393,7 @@ static void NearestOnBezier(const point_t& pt, const point_t* pts, point_t& near
 
     // Return the point on the curve at parameter value t
     // printf("t : %4.12f\n", t);
-    nearpt = (BezierPoint(pts, DEGREE, t, NULL, NULL));
+    nearpt = (BezierPoint(pts, DEGREE, t, (point_t*)0, (point_t*)0));
 }
 
 float mgnear::nearestOnBezier(

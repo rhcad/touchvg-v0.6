@@ -75,8 +75,8 @@ public class MgStorage {
     touchvgJNI.MgStorage_writeUInt(swigCPtr, this, name, value);
   }
 
-  public boolean setError(String arg0) {
-    return touchvgJNI.MgStorage_setError(swigCPtr, this, arg0);
+  public boolean setError(String errdesc) {
+    return touchvgJNI.MgStorage_setError(swigCPtr, this, errdesc);
   }
 
 }

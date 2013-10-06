@@ -157,6 +157,10 @@ public class MgArc extends MgBaseShape {
     return touchvgJNI.MgArc_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
+  public float hitTest(Point2d pt, float tol, MgHitResult result) {
+    return touchvgJNI.MgArc_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  }
+
   public Point2d getCenter() {
     return new Point2d(touchvgJNI.MgArc_getCenter(swigCPtr, this), true);
   }
@@ -215,6 +219,10 @@ public class MgArc extends MgBaseShape {
 
   public boolean setCenterRadius(Point2d center, float radius, float startAngle, float sweepAngle) {
     return touchvgJNI.MgArc_setCenterRadius(swigCPtr, this, Point2d.getCPtr(center), center, radius, startAngle, sweepAngle);
+  }
+
+  public boolean isCurve() {
+    return touchvgJNI.MgArc_isCurve(swigCPtr, this);
   }
 
 }

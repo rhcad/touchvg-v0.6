@@ -25,13 +25,14 @@ public:
     MgShapes* shapes() const { return _shapes; }
 
     //! 返回是否可以单独移动一个子图形，在 offset() 中调用
-    virtual bool canOffsetShapeAlone(MgShape*) { return true; }
+    virtual bool canOffsetShapeAlone(MgShape* shape) { return !!shape; }
     
+    virtual bool isCurve() const { return true; }
+
 protected:
     MgComposite();
     virtual ~MgComposite();
 
-    bool isCurve() const { return true; }
     void _copy(const MgComposite& src);
     bool _equals(const MgComposite& src) const;
     bool _isKindOf(int type) const;
@@ -47,7 +48,7 @@ protected:
     void _clearCachedData();
     void _transform(const Matrix2d& mat);
     void _clear();
-    float _hitTest(const Point2d& pt, float tol, Point2d& nearpt, int& segment, bool& inside) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
     bool _offset(const Vector2d& vec, int segment);
     bool _draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const;
 

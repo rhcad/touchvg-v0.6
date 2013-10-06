@@ -94,14 +94,16 @@ bool mglnrel::isBetweenLine3(
     if (a.x != b.x) 
     {
         ret = (a.x <= pt.x && pt.x <= b.x) || (a.x >= pt.x && pt.x >= b.x);
-        if (nearpt != NULL)
+        if (nearpt) {
             *nearpt = fabsf(pt.x - a.x) < fabsf(pt.x - b.x) ? a : b;
+        }
     }
     else
     {
         ret = (a.y <= pt.y && pt.y <= b.y) || (a.y >= pt.y && pt.y >= b.y);
-        if (nearpt != NULL)
+        if (nearpt) {
             *nearpt = fabsf(pt.y - a.y) < fabsf(pt.y - b.y) ? a : b;
+        }
     }
     return ret;
 }
@@ -204,8 +206,8 @@ bool mglnrel::cross2Beeline(
     u = ((c.x-a.x)*(d.y-c.y)-(c.y-a.y)*(d.x-c.x)) / denom;
     v = ((c.x-a.x)*(b.y-a.y)-(c.y-a.y)*(b.x-a.x)) / denom;
     
-    if (pu != NULL) *pu = u;
-    if (pv != NULL) *pv = v;
+    if (pu) *pu = u;
+    if (pv) *pv = v;
     
     ptCross.x = (1 - u) * a.x + u * b.x;
     ptCross.y = (1 - u) * a.y + u * b.y;
@@ -265,8 +267,9 @@ bool mglnrel::crossLineBeeline(
     if (u < _MGZERO || u > 1.f - _MGZERO)
         return false;
     
-    if (pv != NULL)
+    if (pv) {
         *pv = ((c.x-a.x)*(b.y-a.y)-(c.y-a.y)*(b.x-a.x)) / denom;
+    }
     
     ptCross.x = (1 - u) * a.x + u * b.x;
     ptCross.y = (1 - u) * a.y + u * b.y;
@@ -432,7 +435,7 @@ int mglnrel::ptInArea(
 
 bool mglnrel::isConvex(int count, const Point2d* vs, bool* pACW)
 {
-    if (count < 3 || vs == NULL)
+    if (count < 3 || !vs)
         return true;
     bool z0 = (vs[count-1].x - vs[count-2].x) * (vs[1].y - vs[0].y)
             > (vs[count-1].y - vs[count-2].y) * (vs[1].x - vs[0].x);
@@ -442,7 +445,7 @@ bool mglnrel::isConvex(int count, const Point2d* vs, bool* pACW)
                  > (vs[i].y - vs[i-1].y) * (vs[i+1].x - vs[i].x)))
             return false;
     }
-    if (pACW != NULL)
+    if (pACW)
         *pACW = z0;
     return true;
 }

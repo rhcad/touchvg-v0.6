@@ -157,6 +157,10 @@ public class MgEllipse extends MgBaseRect {
     return touchvgJNI.MgEllipse_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
+  public float hitTest(Point2d pt, float tol, MgHitResult result) {
+    return touchvgJNI.MgEllipse_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  }
+
   public float getRadiusX() {
     return touchvgJNI.MgEllipse_getRadiusX(swigCPtr, this);
   }
@@ -171,6 +175,10 @@ public class MgEllipse extends MgBaseRect {
 
   public void setRadius(float rx) {
     touchvgJNI.MgEllipse_setRadius__SWIG_1(swigCPtr, this, rx);
+  }
+
+  public boolean isCurve() {
+    return touchvgJNI.MgEllipse_isCurve(swigCPtr, this);
   }
 
 }

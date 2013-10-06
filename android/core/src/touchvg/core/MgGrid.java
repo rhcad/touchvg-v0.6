@@ -157,6 +157,10 @@ public class MgGrid extends MgBaseRect {
     return touchvgJNI.MgGrid_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
+  public float hitTest(Point2d pt, float tol, MgHitResult result) {
+    return touchvgJNI.MgGrid_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  }
+
   public int snap(Point2d pnt, Point2d dist) {
     return touchvgJNI.MgGrid_snap(swigCPtr, this, Point2d.getCPtr(pnt), pnt, Point2d.getCPtr(dist), dist);
   }

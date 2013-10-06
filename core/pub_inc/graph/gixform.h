@@ -188,7 +188,8 @@ public:
         \param adjust 如果显示比例或位置超出范围，是否调整
         \return 是否放缩成功
     */
-    bool zoomTo(const Box2d& rectWorld, const RECT_2D* rcTo = NULL, bool adjust = true);
+    bool zoomTo(const Box2d& rectWorld, 
+        const RECT_2D* rcTo = (RECT_2D*)0, bool adjust = true);
 
     //! 平移显示
     /*! 将一个世界坐标点平移显示到屏幕上指定点
@@ -197,7 +198,8 @@ public:
         \param adjust 如果显示比例或位置超出范围，是否调整
         \return 是否放缩成功
     */
-    bool zoomTo(const Point2d& pntWorld, const Point2d* pxAt = NULL, bool adjust = true);
+    bool zoomTo(const Point2d& pntWorld, 
+        const Point2d* pxAt = (Point2d*)0, bool adjust = true);
 
     //! 平移显示
     /*! 
@@ -216,7 +218,8 @@ public:
         \param adjust 如果显示比例或位置超出范围，是否调整
         \return 是否放缩成功
     */
-    bool zoomByFactor(float factor, const Point2d* pxAt = NULL, bool adjust = true);
+    bool zoomByFactor(float factor, 
+        const Point2d* pxAt = (Point2d*)0, bool adjust = true);
 
     //! 以一点为中心指定比例放缩
     /*! 
@@ -225,7 +228,8 @@ public:
         \param adjust 如果显示比例或位置超出范围，是否调整
         \return 是否放缩成功
     */
-    bool zoomScale(float viewScale, const Point2d* pxAt = NULL, bool adjust = true);
+    bool zoomScale(float viewScale, 
+        const Point2d* pxAt = (Point2d*)0, bool adjust = true);
 
     //! 设置显示放缩状态
     /*! 

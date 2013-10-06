@@ -93,8 +93,8 @@ public class MgShapes extends MgObject {
     return new Box2d(touchvgJNI.MgShapes_getExtent(swigCPtr, this), true);
   }
 
-  public MgShape hitTest(Box2d limits, Point2d nearpt) {
-    long cPtr = touchvgJNI.MgShapes_hitTest(swigCPtr, this, Box2d.getCPtr(limits), limits, Point2d.getCPtr(nearpt), nearpt);
+  public MgShape hitTest(Box2d limits, MgHitResult result) {
+    long cPtr = touchvgJNI.MgShapes_hitTest(swigCPtr, this, Box2d.getCPtr(limits), limits, MgHitResult.getCPtr(result), result);
     return (cPtr == 0) ? null : new MgShape(cPtr, false);
   }
 

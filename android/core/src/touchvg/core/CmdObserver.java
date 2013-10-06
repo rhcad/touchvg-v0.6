@@ -63,44 +63,44 @@ public class CmdObserver {
     touchvgJNI.CmdObserver_drawInShapeCommand(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgCommand.getCPtr(cmd), cmd, GiGraphics.getCPtr(gs), gs);
   }
 
-  public void drawInSelectCommand(MgMotion sender, MgShape shape, int handleIndex, GiGraphics gs) {
-    touchvgJNI.CmdObserver_drawInSelectCommand(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape, handleIndex, GiGraphics.getCPtr(gs), gs);
+  public void drawInSelectCommand(MgMotion sender, MgShape sp, int handleIndex, GiGraphics gs) {
+    touchvgJNI.CmdObserver_drawInSelectCommand(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp, handleIndex, GiGraphics.getCPtr(gs), gs);
   }
 
-  public boolean onShapeWillAdded(MgMotion sender, MgShape shape) {
-    return touchvgJNI.CmdObserver_onShapeWillAdded(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape);
+  public boolean onShapeWillAdded(MgMotion sender, MgShape sp) {
+    return touchvgJNI.CmdObserver_onShapeWillAdded(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp);
   }
 
-  public void onShapeAdded(MgMotion sender, MgShape shape) {
-    touchvgJNI.CmdObserver_onShapeAdded(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape);
+  public void onShapeAdded(MgMotion sender, MgShape sp) {
+    touchvgJNI.CmdObserver_onShapeAdded(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp);
   }
 
-  public boolean onShapeWillDeleted(MgMotion sender, MgShape shape) {
-    return touchvgJNI.CmdObserver_onShapeWillDeleted(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape);
+  public boolean onShapeWillDeleted(MgMotion sender, MgShape sp) {
+    return touchvgJNI.CmdObserver_onShapeWillDeleted(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp);
   }
 
-  public void onShapeDeleted(MgMotion sender, MgShape shape) {
-    touchvgJNI.CmdObserver_onShapeDeleted(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape);
+  public void onShapeDeleted(MgMotion sender, MgShape sp) {
+    touchvgJNI.CmdObserver_onShapeDeleted(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp);
   }
 
-  public boolean onShapeCanRotated(MgMotion sender, MgShape shape) {
-    return touchvgJNI.CmdObserver_onShapeCanRotated(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape);
+  public boolean onShapeCanRotated(MgMotion sender, MgShape sp) {
+    return touchvgJNI.CmdObserver_onShapeCanRotated(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp);
   }
 
-  public boolean onShapeCanTransform(MgMotion sender, MgShape shape) {
-    return touchvgJNI.CmdObserver_onShapeCanTransform(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape);
+  public boolean onShapeCanTransform(MgMotion sender, MgShape sp) {
+    return touchvgJNI.CmdObserver_onShapeCanTransform(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp);
   }
 
-  public boolean onShapeCanUnlock(MgMotion sender, MgShape shape) {
-    return touchvgJNI.CmdObserver_onShapeCanUnlock(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape);
+  public boolean onShapeCanUnlock(MgMotion sender, MgShape sp) {
+    return touchvgJNI.CmdObserver_onShapeCanUnlock(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp);
   }
 
-  public boolean onShapeCanUngroup(MgMotion sender, MgShape shape) {
-    return touchvgJNI.CmdObserver_onShapeCanUngroup(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape);
+  public boolean onShapeCanUngroup(MgMotion sender, MgShape sp) {
+    return touchvgJNI.CmdObserver_onShapeCanUngroup(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp);
   }
 
-  public void onShapeMoved(MgMotion sender, MgShape shape, int segment) {
-    touchvgJNI.CmdObserver_onShapeMoved(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape, segment);
+  public void onShapeMoved(MgMotion sender, MgShape sp, int segment) {
+    touchvgJNI.CmdObserver_onShapeMoved(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp, segment);
   }
 
 }

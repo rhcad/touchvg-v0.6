@@ -157,6 +157,10 @@ public class MgRoundRect extends MgBaseRect {
     return touchvgJNI.MgRoundRect_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
+  public float hitTest(Point2d pt, float tol, MgHitResult result) {
+    return touchvgJNI.MgRoundRect_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  }
+
   public float getRadiusX() {
     return touchvgJNI.MgRoundRect_getRadiusX(swigCPtr, this);
   }
@@ -171,6 +175,10 @@ public class MgRoundRect extends MgBaseRect {
 
   public void setRadius(float rx) {
     touchvgJNI.MgRoundRect_setRadius__SWIG_1(swigCPtr, this, rx);
+  }
+
+  public boolean isCurve() {
+    return touchvgJNI.MgRoundRect_isCurve(swigCPtr, this);
   }
 
 }

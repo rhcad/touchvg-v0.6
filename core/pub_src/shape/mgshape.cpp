@@ -5,14 +5,6 @@
 #include "mgshape.h"
 #include <mgstorage.h>
 
-MgBaseShape::MgBaseShape() : _flags(0)
-{
-}
-
-MgBaseShape::~MgBaseShape()
-{
-}
-
 void MgBaseShape::_copy(const MgBaseShape& src)
 {
     _extent = src._extent;
@@ -135,7 +127,77 @@ void MgBaseShape::setFlag(MgShapeBit bit, bool on)
 // MgShape
 //
 
-bool MgShape::save(MgStorage* s) const {
+bool MgShape::hasFillColor() const
+{
+    return contextc()->hasFillColor() && shapec()->isClosed();
+}
+
+bool MgShape::draw(int mode, GiGraphics& gs, const GiContext *ctx, int segment) const
+{
+    if (shapec()->isKindOf(6)) { // MgComposite
+        GiContext ctxnull(0, GiColor(), kGiLineNull);
+        return shapec()->draw(mode, gs, ctx ? *ctx : ctxnull, segment);
+    }
+
+    GiContext tmpctx(*contextc());
+
+    if (ctx) {
+        float addw  = ctx->getLineWidth();
+        float width = tmpctx.getLineWidth();
+
+        width = -gs.calcPenWidth(width, tmpctx.isAutoScale());  // 像素宽度，负数
+        if (addw <= 0)
+            tmpctx.setLineWidth(width + addw, false);           // 像素宽度加宽
+        else                                                    // 传入正数表示像素宽度
+            tmpctx.setLineWidth(-addw, ctx->isAutoScale());     // 换成新的像素宽度
+    }
+
+    if (ctx && ctx->getLineColor().a > 0) {
+        tmpctx.setLineColor(ctx->getLineColor());
+    }
+    if (ctx && !ctx->isNullLine()) {
+        tmpctx.setLineStyle(ctx->getLineStyle());
+    }
+    if (ctx && ctx->hasFillColor()) {
+        tmpctx.setFillColor(ctx->getFillColor());
+    }
+
+    return shapec()->draw(mode, gs, tmpctx, segment);
+}
+
+void MgShape::copy(const MgObject& src)
+{
+    if (src.isKindOf(Type())) {
+        const MgShape& _src = (const MgShape&)src;
+        shape()->copy(*_src.shapec());
+        context()->copy(*_src.contextc());
+        setTag(_src.getTag());
+        if (!getParent() && 0 == getID()) {
+            setParent(_src.getParent(), _src.getID());
+        }
+    }
+    else if (src.isKindOf(MgBaseShape::Type())) {
+        shape()->copy(src);
+    }
+    shape()->update();
+}
+
+bool MgShape::equals(const MgObject& src) const
+{
+    bool ret = false;
+
+    if (src.isKindOf(Type())) {
+        const MgShape& _src = (const MgShape&)src;
+        ret = shapec()->equals(*_src.shapec())
+            && contextc()->equals(*_src.contextc())
+            && getTag() == _src.getTag();
+    }
+
+    return ret;
+}
+
+bool MgShape::save(MgStorage* s) const
+{
     GiColor c;
 
     s->writeUInt32("tag", getTag());
@@ -151,7 +213,8 @@ bool MgShape::save(MgStorage* s) const {
     return shapec()->save(s);
 }
 
-bool MgShape::load(MgShapeFactory* factory, MgStorage* s) {
+bool MgShape::load(MgShapeFactory* factory, MgStorage* s)
+{
     setParent(getParent(), s->readUInt32("tag", getTag()));
 
     context()->setLineStyle((GiLineStyle)s->readUInt8("lineStyle", 0));

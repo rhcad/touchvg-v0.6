@@ -107,7 +107,7 @@ static float cubicSplinesHit(
 static float linesHit(
     int n, const Point2d* points, bool closed, 
     const Point2d& pt, float tol, Point2d& nearpt, int& segment, 
-    bool* inside = NULL, int* hitType = NULL);
+    bool* inside = (bool*)0, int* hitType = (int*)0);
 
 //! 计算点到圆角矩形的最近距离
 /*!

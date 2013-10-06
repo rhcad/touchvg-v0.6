@@ -31,6 +31,21 @@ public class MgBaseLines extends MgBaseShape {
     super.delete();
   }
 
+  protected void swigDirectorDisconnect() {
+    swigCMemOwn = false;
+    delete();
+  }
+
+  public void swigReleaseOwnership() {
+    swigCMemOwn = false;
+    touchvgJNI.MgBaseLines_change_ownership(this, swigCPtr, false);
+  }
+
+  public void swigTakeOwnership() {
+    swigCMemOwn = true;
+    touchvgJNI.MgBaseLines_change_ownership(this, swigCPtr, true);
+  }
+
   public static int Type() {
     return touchvgJNI.MgBaseLines_Type();
   }
@@ -61,6 +76,11 @@ public class MgBaseLines extends MgBaseShape {
 
   public int maxEdgeIndex() {
     return touchvgJNI.MgBaseLines_maxEdgeIndex(swigCPtr, this);
+  }
+
+  protected MgBaseLines() {
+    this(touchvgJNI.new_MgBaseLines(), true);
+    touchvgJNI.MgBaseLines_director_connect(this, swigCPtr, swigCMemOwn, true);
   }
 
 }
