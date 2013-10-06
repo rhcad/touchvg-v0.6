@@ -120,7 +120,7 @@ protected:
     void _transform(const Matrix2d& mat);
     void _clear();
     bool _isClosed() const { return true; }
-    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& res) const;
     int _getHandleCount() const;
     Point2d _getHandlePoint(int index) const;
     int _getHandleType(int index) const;
@@ -165,7 +165,7 @@ protected:
     Point2d _getHandlePoint(int index) const;
     int _getHandleType(int index) const;
     bool _setHandlePoint(int index, const Point2d& pt, float tol);
-    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& res) const;
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:
@@ -194,7 +194,7 @@ protected:
     void _copy(const MgRoundRect& src);
     bool _equals(const MgRoundRect& src) const;
     void _clear();
-    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& res) const;
     bool _save(MgStorage* s) const;
     bool _load(MgShapeFactory* factory, MgStorage* s);
 
@@ -216,7 +216,7 @@ protected:
     int _getHandleType(int index) const;
     bool _isHandleFixed(int index) const;
     void _update();
-    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& res) const;
     bool _hitTestBox(const Box2d& rect) const;
     bool _rotateHandlePoint(int index, const Point2d& pt);
 };
@@ -271,7 +271,7 @@ protected:
     void _transform(const Matrix2d& mat);
     void _clear();
     bool _setHandlePoint(int index, const Point2d& pt, float tol);
-    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& res) const;
     bool _hitTestBox(const Box2d& rect) const;
     bool _save(MgStorage* s) const;
     bool _load(MgShapeFactory* factory, MgStorage* s);
@@ -312,7 +312,7 @@ public:
 protected:
     void _update();
     void _clearCachedData();
-    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& res) const;
     bool _hitTestBox(const Box2d& rect) const;
 
 protected:

@@ -81,8 +81,8 @@ int MgCmdErase::gatherShapes(const MgMotion* sender, MgShapes* shapes)
 MgShape* MgCmdErase::hitTest(const MgMotion* sender)
 {
     Box2d limits(sender->startPtM, sender->displayMmToModel(6.f), 0);
-    MgHitResult result;
-    return sender->view->shapes()->hitTest(limits, result);
+    MgHitResult res;
+    return sender->view->shapes()->hitTest(limits, res);
 }
 
 bool MgCmdErase::click(const MgMotion* sender)

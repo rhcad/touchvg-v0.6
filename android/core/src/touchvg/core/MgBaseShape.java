@@ -108,8 +108,8 @@ public class MgBaseShape extends MgObject {
     return touchvgJNI.MgBaseShape_isCurve(swigCPtr, this);
   }
 
-  public float hitTest(Point2d pt, float tol, MgHitResult result) {
-    return touchvgJNI.MgBaseShape_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  public float hitTest(Point2d pt, float tol, MgHitResult res) {
+    return touchvgJNI.MgBaseShape_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(res), res);
   }
 
   public float hitTest2(Point2d pt, float tol, Point2d nearpt) {

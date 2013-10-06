@@ -48,7 +48,7 @@ protected:
     void _clearCachedData();
     void _transform(const Matrix2d& mat);
     void _clear();
-    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const;
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& res) const;
     bool _offset(const Vector2d& vec, int segment);
     bool _draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const;
 

@@ -5,29 +5,8 @@
 
 #include "mgshapedoc.h"
 #include <mgstorage.h>
-#include <mgbasicspreg.h>
 #include <vector>
 #include "mglayer.h"
-#include <map>
-
-static std::map<int, MgShape* (*)()>   s_shapeCreators;
-
-void MgShapeDoc::ShapeFactory::registerShape(int type, MgShape* (*creator)())
-{
-    type = type & 0xFFFF;
-    if (creator) {
-        s_shapeCreators[type] = creator;
-    }
-    else {
-        s_shapeCreators.erase(type);
-    }
-}
-
-MgShape* MgShapeDoc::ShapeFactory::createShape(int type)
-{
-    std::map<int, MgShape* (*)()>::const_iterator it = s_shapeCreators.find(type & 0xFFFF);
-    return (it != s_shapeCreators.end()) ? (it->second)() : NULL;
-}
 
 struct MgShapeDoc::Impl {
     std::vector<MgLayer*> layers;
@@ -53,7 +32,6 @@ MgShapeDoc::MgShapeDoc()
     im->viewScale = 0;
     im->changeCount = 0;
     im->refcount = 1;
-    MgBasicShapes::registerShapes(shapeFactory());
 }
 
 MgShapeDoc::~MgShapeDoc()
@@ -279,7 +257,7 @@ bool MgShapeDoc::save(MgStorage* s, int startIndex) const
     return ret;
 }
 
-bool MgShapeDoc::load(MgStorage* s, bool addOnly)
+bool MgShapeDoc::load(MgShapeFactory* factory, MgStorage* s, bool addOnly)
 {
     bool ret = false;
     Box2d rect;
@@ -296,11 +274,11 @@ bool MgShapeDoc::load(MgStorage* s, bool addOnly)
 
     for (int i = 0; i < 99; i++) {
         if (i < getLayerCount()) {
-            ret = im->layers[i]->load(shapeFactory(), s, addOnly) || ret;
+            ret = im->layers[i]->load(factory, s, addOnly) || ret;
         }
         else {
             MgLayer* layer = MgLayer::create(this, i);
-            if (layer->load(shapeFactory(), s, addOnly)) {
+            if (layer->load(factory, s, addOnly)) {
                 im->layers.push_back(layer);
                 ret = true;
             }

@@ -67,7 +67,7 @@ private:
 
 private:
     int getStep() { return 0; }
-    MgShape* hitTestAll(const MgMotion* sender, MgHitResult& result);
+    MgShape* hitTestAll(const MgMotion* sender, MgHitResult& res);
     MgShape* getSelectedShape(const MgMotion* sender);
     bool canSelect(MgShape* shape, const MgMotion* sender);
     int hitTestHandles(MgShape* shape, const Point2d& pointM, 

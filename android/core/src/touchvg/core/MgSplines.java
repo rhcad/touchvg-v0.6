@@ -157,8 +157,8 @@ public class MgSplines extends MgBaseLines {
     return touchvgJNI.MgSplines_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
-  public float hitTest(Point2d pt, float tol, MgHitResult result) {
-    return touchvgJNI.MgSplines_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  public float hitTest(Point2d pt, float tol, MgHitResult res) {
+    return touchvgJNI.MgSplines_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(res), res);
   }
 
   public void smooth(float tol) {

@@ -109,29 +109,29 @@ bool MgComposite::_equals(const MgComposite& src) const
     return _shapes->equals(*(src._shapes)) && __super::_equals(src);
 }
 
-float MgComposite::_hitTest(const Point2d& pt, float tol, MgHitResult& result) const
+float MgComposite::_hitTest(const Point2d& pt, float tol, MgHitResult& res) const
 {
     void* it;
     MgHitResult tmpRes;
     Box2d limits(pt, 2 * tol, 0);
 
-    result.segment = 0;
+    res.segment = 0;
     for (MgShape* sp = _shapes->getFirstShape(it); sp;
         sp = _shapes->getNextShape(it))
     {
         if (limits.isIntersect(sp->shapec()->getExtent())) {
             float d = sp->shapec()->hitTest(pt, tol, tmpRes);
-            if (result.dist > d - _MGZERO)
+            if (res.dist > d - _MGZERO)
             {
-                result.dist = d;
-                result = tmpRes;
-                result.segment = sp->getID();
+                res.dist = d;
+                res = tmpRes;
+                res.segment = sp->getID();
             }
         }
     }
     _shapes->freeIterator(it);
 
-    return result.segment != 0;
+    return res.segment != 0;
 }
 
 bool MgComposite::_offset(const Vector2d& vec, int)

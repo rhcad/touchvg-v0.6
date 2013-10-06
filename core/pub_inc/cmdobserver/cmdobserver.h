@@ -6,6 +6,7 @@
 #define TOUCHVG_CMDOBSERVER_H_
 
 class MgShape;
+class MgBaseShape;
 class MgMotion;
 class GiGraphics;
 struct MgCommand;
@@ -61,6 +62,8 @@ struct CmdObserver {
     virtual bool onShapeCanUnlock(const MgMotion* sender, const MgShape* sp) = 0;    //!< 通知是否能对图形解锁
     virtual bool onShapeCanUngroup(const MgMotion* sender, const MgShape* sp) = 0;   //!< 通知是否能对成组图形解散
     virtual void onShapeMoved(const MgMotion* sender, MgShape* sp, int segment) = 0;   //!< 通知图形已拖动
+
+    virtual MgBaseShape* createShape(const MgMotion* sender, int type) = 0; //!< 创建自定义的图形
 };
 
 class CmdObserverDefault : public CmdObserver
@@ -105,6 +108,8 @@ public:
         return sender || sp; } // true
     virtual void onShapeMoved(const MgMotion* sender, MgShape* sp, int segment) {
         if (sender && sp) segment++; }
+    virtual MgBaseShape* createShape(const MgMotion* sender, int type) {
+        if (sender) type++; return (MgBaseShape*)0; }
 #ifndef SWIG
     virtual void addShapeActions(const MgMotion*,int*, int &, const MgShape*) {}
     virtual void onSelectTouchEnded(const MgMotion*,int,int,int,int,int,const int*) {}

@@ -113,4 +113,8 @@ public class MgShape extends MgObject {
     return touchvgJNI.MgShape_equals(swigCPtr, this, MgObject.getCPtr(src), src);
   }
 
+  public boolean isKindOf(int type) {
+    return touchvgJNI.MgShape_isKindOf(swigCPtr, this, type);
+  }
+
 }

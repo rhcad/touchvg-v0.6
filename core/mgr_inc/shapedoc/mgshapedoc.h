@@ -59,7 +59,7 @@ public:
     bool save(MgStorage* s, int startIndex = 0) const;
 
     //! 加载图形
-    bool load(MgStorage* s, bool addOnly = false);
+    bool load(MgShapeFactory* factory, MgStorage* s, bool addOnly = false);
 
     //! 删除所有图形
     void clear();
@@ -126,21 +126,11 @@ public:
     virtual int getType() const { return Type(); }
     virtual bool isKindOf(int type) const { return type == Type(); }
 
-    static MgShapeFactory* shapeFactory() {
-        static ShapeFactory factory;
-        return &factory;
-    }
-
 protected:
     MgShapeDoc();
     virtual ~MgShapeDoc();
 
 private:
-    struct ShapeFactory : public MgShapeFactory {
-        ShapeFactory() {}
-        virtual void registerShape(int type, MgShape* (*creator)());
-        virtual MgShape* createShape(int type);
-    };
     struct Impl;
     Impl*  im;
 };

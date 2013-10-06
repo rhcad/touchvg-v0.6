@@ -190,7 +190,7 @@
 			UniqueIdentifier="{B66BBF33-21A8-451F-A173-F4C554C67AFE}"
 			>
 			<File
-				RelativePath="..\..\core\mgr_src\view\touchvg.swig"
+				RelativePath="..\..\core\mgr_src\view\touchvg.i"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -198,7 +198,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Swig generating..."
-						CommandLine="swig.exe -c++ -csharp -namespace &quot;touchvg.core&quot; -module touchvg -outdir $(ProjectDir)..\touchvglib\core -o &quot;$(ProjectDir)touchvg_csharp_wrap.cpp&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\canvas&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\graph&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\cmd&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\storage&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\test&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\view&quot; $(InputPath)"
+						CommandLine="swig.exe -c++ -csharp -namespace &quot;touchvg.core&quot; -module touchvg -outdir $(ProjectDir)..\touchvglib\core -o &quot;$(ProjectDir)touchvg_csharp_wrap.cpp&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\canvas&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\graph&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\cmd&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\test&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\view&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\storage&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\geom&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\shape&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\cmdobserver&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\cmdbase&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\cmdbasic&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\shapedoc&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\json&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\cmdmgr&quot; $(InputPath)"
 						Outputs="$(ProjectDir)touchvg_csharp_wrap.cpp"
 					/>
 				</FileConfiguration>
@@ -208,7 +208,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Swig generating..."
-						CommandLine="swig.exe -c++ -csharp -namespace &quot;touchvg.core&quot; -module touchvg -outdir $(ProjectDir)..\touchvglib\core -o &quot;$(ProjectDir)touchvg_csharp_wrap.cpp&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\canvas&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\graph&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\cmd&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\storage&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\test&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\view&quot; $(InputPath)"
+						CommandLine="swig.exe -c++ -csharp -namespace &quot;touchvg.core&quot; -module touchvg -outdir $(ProjectDir)..\touchvglib\core -o &quot;$(ProjectDir)touchvg_csharp_wrap.cpp&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\canvas&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\graph&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\cmd&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\test&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\view&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\storage&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\geom&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\shape&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\cmdobserver&quot; -I&quot;$(ProjectDir)..\..\core\pub_inc\cmdbase&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\cmdbasic&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\shapedoc&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\json&quot; -I&quot;$(ProjectDir)..\..\core\mgr_inc\cmdmgr&quot; $(InputPath)"
 						Outputs="$(ProjectDir)touchvg_csharp_wrap.cpp"
 					/>
 				</FileConfiguration>

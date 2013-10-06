@@ -7,6 +7,7 @@
 #include "GcMagnifierView.h"
 #include <mgcmdmgr.h>
 #include <mgcmdmgrfactory.h>
+#include <mgbasicspreg.h>
 #include <mglockdata.h>
 #include <RandomShape.h>
 #include <mgjsonstorage.h>
@@ -14,11 +15,53 @@
 #include <mgselect.h>
 #include <mglog.h>
 #include <cmdbasic.h>
+#include <map>
 
 #define CALL_VIEW(func) if (curview) curview->func
 #define CALL_VIEW2(func, v) curview ? curview->func : v
 
-class GiCoreViewImpl : public MgView, private MgLockData
+//! 供Java等语言用的 MgShape 实现类
+class MgShapeExt : public MgShape
+{
+public:
+    MgBaseShape* _shape;
+    GiContext   _context;
+    int         _id;
+    MgShapes*   _parent;
+    int         _tag;
+    
+    MgShapeExt(MgBaseShape* shape)
+        : _shape(shape), _id(0), _parent(NULL), _tag(0) {
+    }
+    virtual ~MgShapeExt() { }
+
+    GiContext* context() { return &_context; }
+    const GiContext* contextc() const { return &_context; }
+    MgBaseShape* shape() { return _shape; }
+    const MgBaseShape* shapec() const { return _shape; }
+    int getType() const { return 0x20000 | _shape->getType(); }
+    void release() { delete this; }
+    int getTag() const { return _tag; }
+    void setTag(int tag) { _tag = tag; }
+    int getID() const { return _id; }
+    MgShapes* getParent() const { return _parent; }
+    
+    MgObject* clone() const {
+        MgShapeExt *p = new MgShapeExt(_shape->cloneShape());
+        p->copy(*this);
+        return p;
+    }
+    void setParent(MgShapes* p, int sid) {
+        _parent = p;
+        _id = sid;
+        shape()->setOwner(this);
+    }
+};
+
+class GiCoreViewImpl
+    : public MgView
+    , private MgLockData
+    , private MgShapeFactory
 {
 public:
     GcShapeDoc*     _doc;
@@ -32,6 +75,7 @@ public:
     long            regenPending;
     long            appendPending;
     long            redrawPending;
+    std::map<int, MgShape* (*)()>   _shapeCreators;
 
 public:
     GiCoreViewImpl() : curview(NULL), refcount(1), gestureHandler(0)
@@ -42,6 +86,8 @@ public:
         motion.gestureState = kMgGesturePossible;
         _doc = new GcShapeDoc();
         _cmds = MgCmdManagerFactory::create();
+
+        MgBasicShapes::registerShapes(this);
         MgBasicCommands::registerCmds(this);
     }
 
@@ -64,7 +110,7 @@ public:
     MgLockData* getLockData() { return this; }
     CmdSubject* getCmdSubject() { return cmds()->getCmdSubject(); }
     MgSelection* getSelection() { return cmds()->getSelection(); }
-    MgShapeFactory* getShapeFactory() { return doc()->shapeFactory(); }
+    MgShapeFactory* getShapeFactory() { return this; }
     MgSnap* getSnap() { return _cmds->getSnap(); }
     MgActionDispatcher* getAction() {
         return _cmds->getActionDispatcher(); }
@@ -228,6 +274,29 @@ private:
         return doc()->getDynLockData()->lockedForRead(); }
     bool lockedForWriteDyn() const {
         return doc()->getDynLockData()->lockedForWrite(); }
+
+    void registerShape(int type, MgShape* (*creator)()) {
+        type = type & 0xFFFF;
+        if (creator) {
+            _shapeCreators[type] = creator;
+        }
+        else {
+            _shapeCreators.erase(type);
+        }
+    }
+    MgShape* createShape(int type) {
+        std::map<int, MgShape* (*)()>::const_iterator it = _shapeCreators.find(type & 0xFFFF);
+        if (it != _shapeCreators.end()) {
+            return (it->second)();
+        }
+
+        MgBaseShape* sp = getCmdSubject()->createShape(&motion, type);
+        if (sp) {
+            return new MgShapeExt(sp);
+        }
+        
+        return NULL;
+    }
 
 private:
     void calcContextButtonPosition(mgvector<float>& pos, int n, const Box2d& box)
@@ -705,7 +774,7 @@ bool GiCoreView::loadShapes(MgStorage* s)
 
     if (s) {
         MgShapesLock locker(MgShapesLock::Load, impl);
-        ret = impl->doc()->load(s);
+        ret = impl->doc()->load(impl->getShapeFactory(), s);
         LOGD("Load %d shapes", impl->doc()->getShapeCount());
     }
     else {

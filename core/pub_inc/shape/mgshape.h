@@ -78,6 +78,7 @@ public:
 
     virtual void copy(const MgObject& src);
     virtual bool equals(const MgObject& src) const;
+    bool isKindOf(int type) const;
 
 protected:
     virtual ~MgShape() {}
@@ -171,10 +172,10 @@ public:
     /*!
         \param[in] pt 外部点的模型坐标，将判断此点能否点中图形
         \param[in] tol 距离公差，正数，超出则不计算最近点
-        \param[in,out] result 选中点击测试的结果
+        \param[in,out] res 选中点击测试的结果
         \return 给定的外部点到最近点的距离，失败则为很大的数
     */
-    virtual float hitTest(const Point2d& pt, float tol, MgHitResult& result) const = 0;
+    virtual float hitTest(const Point2d& pt, float tol, MgHitResult& res) const = 0;
 
 #ifndef SWIG
     //! 设置指定序号的控制点坐标，可以处理拖动状态
@@ -184,18 +185,18 @@ public:
 
     //! 选中点击测试，可输出段号
     float hitTest2(const Point2d& pt, float tol, Point2d& nearpt, int& segment) const {
-        MgHitResult result;
-        float dist = hitTest(pt, tol, result);
-        nearpt = result.nearpt;
-        segment = result.segment;
+        MgHitResult res;
+        float dist = hitTest(pt, tol, res);
+        nearpt = res.nearpt;
+        segment = res.segment;
         return dist;
     }
 #endif
     //! 选中点击测试
     float hitTest2(const Point2d& pt, float tol, Point2d& nearpt) const {
-        MgHitResult result;
-        float dist = hitTest(pt, tol, result);
-        nearpt = result.nearpt;
+        MgHitResult res;
+        float dist = hitTest(pt, tol, res);
+        nearpt = res.nearpt;
         return dist;
     }
     
@@ -321,7 +322,7 @@ public:                                                      \
     virtual bool isHandleFixed(int index) const;                \
     virtual int getHandleType(int index) const;                 \
     virtual bool offset(const Vector2d& vec, int segment);      \
-    virtual float hitTest(const Point2d& pt, float tol, MgHitResult& result) const; \
+    virtual float hitTest(const Point2d& pt, float tol, MgHitResult& res) const; \
 protected:                                                      \
     virtual bool setHandlePoint2(int index, const Point2d& pt, float tol, int& data);
 
@@ -333,7 +334,7 @@ protected:                                                      \
     void _update();                                             \
     void _transform(const Matrix2d& mat);                       \
     void _clear();                                              \
-    float _hitTest(const Point2d& pt, float tol, MgHitResult& result) const; \
+    float _hitTest(const Point2d& pt, float tol, MgHitResult& res) const; \
     int _getPointCount() const;                                 \
     Point2d _getPoint(int index) const;                         \
     void _setPoint(int index, const Point2d& pt);

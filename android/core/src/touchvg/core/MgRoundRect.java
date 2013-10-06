@@ -157,8 +157,8 @@ public class MgRoundRect extends MgBaseRect {
     return touchvgJNI.MgRoundRect_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
-  public float hitTest(Point2d pt, float tol, MgHitResult result) {
-    return touchvgJNI.MgRoundRect_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  public float hitTest(Point2d pt, float tol, MgHitResult res) {
+    return touchvgJNI.MgRoundRect_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(res), res);
   }
 
   public float getRadiusX() {

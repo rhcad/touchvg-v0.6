@@ -162,10 +162,10 @@ void MgBaseRect::setCenter(const Point2d& pt)
         _points[i].offset(pt.x - old.x, pt.y - old.y);
 }
 
-float MgBaseRect::_hitTest(const Point2d& pt, float tol, MgHitResult& result) const
+float MgBaseRect::_hitTest(const Point2d& pt, float tol, MgHitResult& res) const
 {
     return mgnear::linesHit(4, _points, true, pt, tol, 
-        result.nearpt, result.segment, &result.inside);
+        res.nearpt, res.segment, &res.inside);
 }
 
 bool MgBaseRect::_hitTestBox(const Box2d& rect) const
@@ -441,12 +441,12 @@ void MgDiamond::_update()
         _extent.set(pts[0], 2 * Tol::gTol().equalPoint(), 0);
 }
 
-float MgDiamond::_hitTest(const Point2d& pt, float tol, MgHitResult& result) const
+float MgDiamond::_hitTest(const Point2d& pt, float tol, MgHitResult& res) const
 {
     Point2d pts[] = { _getHandlePoint(0), _getHandlePoint(1),
         _getHandlePoint(2), _getHandlePoint(3) };
     return mgnear::linesHit(4, pts, true, pt, tol, 
-        result.nearpt, result.segment, &result.inside);
+        res.nearpt, res.segment, &res.inside);
 }
 
 bool MgDiamond::_hitTestBox(const Box2d& rect) const

@@ -157,8 +157,8 @@ public class MgGroup extends MgComposite {
     return touchvgJNI.MgGroup_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
-  public float hitTest(Point2d pt, float tol, MgHitResult result) {
-    return touchvgJNI.MgGroup_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(result), result);
+  public float hitTest(Point2d pt, float tol, MgHitResult res) {
+    return touchvgJNI.MgGroup_hitTest(swigCPtr, this, Point2d.getCPtr(pt), pt, tol, MgHitResult.getCPtr(res), res);
   }
 
   public boolean addShape(MgShape shape) {

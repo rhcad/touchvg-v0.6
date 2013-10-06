@@ -155,6 +155,14 @@ private:
         }
     }
 
+    virtual MgBaseShape* createShape(const MgMotion* sender, int type) {
+        MgBaseShape* sp = (MgBaseShape*)0;
+        for (Iterator it = _arr.begin(); !sp && it != _arr.end(); ++it) {
+            sp = (*it)->createShape(sender, type);
+        }
+        return sp;
+    }
+
 private:
     typedef std::vector<CmdObserver*> Observers;
     typedef Observers::iterator Iterator;

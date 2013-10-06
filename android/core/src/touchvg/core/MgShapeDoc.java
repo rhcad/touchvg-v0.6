@@ -57,12 +57,12 @@ public class MgShapeDoc extends MgObject {
     return touchvgJNI.MgShapeDoc_save__SWIG_1(swigCPtr, this, MgStorage.getCPtr(s), s);
   }
 
-  public boolean load(MgStorage s, boolean addOnly) {
-    return touchvgJNI.MgShapeDoc_load__SWIG_0(swigCPtr, this, MgStorage.getCPtr(s), s, addOnly);
+  public boolean load(MgShapeFactory factory, MgStorage s, boolean addOnly) {
+    return touchvgJNI.MgShapeDoc_load__SWIG_0(swigCPtr, this, MgShapeFactory.getCPtr(factory), factory, MgStorage.getCPtr(s), s, addOnly);
   }
 
-  public boolean load(MgStorage s) {
-    return touchvgJNI.MgShapeDoc_load__SWIG_1(swigCPtr, this, MgStorage.getCPtr(s), s);
+  public boolean load(MgShapeFactory factory, MgStorage s) {
+    return touchvgJNI.MgShapeDoc_load__SWIG_1(swigCPtr, this, MgShapeFactory.getCPtr(factory), factory, MgStorage.getCPtr(s), s);
   }
 
   public void clear() {
@@ -150,11 +150,6 @@ public class MgShapeDoc extends MgObject {
 
   public boolean isKindOf(int type) {
     return touchvgJNI.MgShapeDoc_isKindOf(swigCPtr, this, type);
-  }
-
-  public static MgShapeFactory shapeFactory() {
-    long cPtr = touchvgJNI.MgShapeDoc_shapeFactory();
-    return (cPtr == 0) ? null : new MgShapeFactory(cPtr, false);
   }
 
 }

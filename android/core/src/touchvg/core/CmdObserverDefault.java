@@ -123,4 +123,9 @@ public class CmdObserverDefault extends CmdObserver {
     if (getClass() == CmdObserverDefault.class) touchvgJNI.CmdObserverDefault_onShapeMoved(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp, segment); else touchvgJNI.CmdObserverDefault_onShapeMovedSwigExplicitCmdObserverDefault(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp, segment);
   }
 
+  public MgBaseShape createShape(MgMotion sender, int type) {
+    long cPtr = (getClass() == CmdObserverDefault.class) ? touchvgJNI.CmdObserverDefault_createShape(swigCPtr, this, MgMotion.getCPtr(sender), sender, type) : touchvgJNI.CmdObserverDefault_createShapeSwigExplicitCmdObserverDefault(swigCPtr, this, MgMotion.getCPtr(sender), sender, type);
+    return (cPtr == 0) ? null : new MgBaseShape(cPtr, false);
+  }
+
 }

@@ -659,6 +659,7 @@ public class touchvgJNI {
   public final static native void MgShape_setTag(long jarg1, MgShape jarg1_, int jarg2);
   public final static native void MgShape_copy(long jarg1, MgShape jarg1_, long jarg2, MgObject jarg2_);
   public final static native boolean MgShape_equals(long jarg1, MgShape jarg1_, long jarg2, MgObject jarg2_);
+  public final static native boolean MgShape_isKindOf(long jarg1, MgShape jarg1_, int jarg2);
   public final static native void MgHitResult_nearpt_set(long jarg1, MgHitResult jarg1_, long jarg2, Point2d jarg2_);
   public final static native long MgHitResult_nearpt_get(long jarg1, MgHitResult jarg1_);
   public final static native void MgHitResult_segment_set(long jarg1, MgHitResult jarg1_, int jarg2);
@@ -1469,6 +1470,7 @@ public class touchvgJNI {
   public final static native boolean CmdObserver_onShapeCanUnlock(long jarg1, CmdObserver jarg1_, long jarg2, MgMotion jarg2_, long jarg3, MgShape jarg3_);
   public final static native boolean CmdObserver_onShapeCanUngroup(long jarg1, CmdObserver jarg1_, long jarg2, MgMotion jarg2_, long jarg3, MgShape jarg3_);
   public final static native void CmdObserver_onShapeMoved(long jarg1, CmdObserver jarg1_, long jarg2, MgMotion jarg2_, long jarg3, MgShape jarg3_, int jarg4);
+  public final static native long CmdObserver_createShape(long jarg1, CmdObserver jarg1_, long jarg2, MgMotion jarg2_, int jarg3);
   public final static native void delete_CmdObserver(long jarg1);
   public final static native long new_CmdObserverDefault();
   public final static native void delete_CmdObserverDefault(long jarg1);
@@ -1506,6 +1508,8 @@ public class touchvgJNI {
   public final static native boolean CmdObserverDefault_onShapeCanUngroupSwigExplicitCmdObserverDefault(long jarg1, CmdObserverDefault jarg1_, long jarg2, MgMotion jarg2_, long jarg3, MgShape jarg3_);
   public final static native void CmdObserverDefault_onShapeMoved(long jarg1, CmdObserverDefault jarg1_, long jarg2, MgMotion jarg2_, long jarg3, MgShape jarg3_, int jarg4);
   public final static native void CmdObserverDefault_onShapeMovedSwigExplicitCmdObserverDefault(long jarg1, CmdObserverDefault jarg1_, long jarg2, MgMotion jarg2_, long jarg3, MgShape jarg3_, int jarg4);
+  public final static native long CmdObserverDefault_createShape(long jarg1, CmdObserverDefault jarg1_, long jarg2, MgMotion jarg2_, int jarg3);
+  public final static native long CmdObserverDefault_createShapeSwigExplicitCmdObserverDefault(long jarg1, CmdObserverDefault jarg1_, long jarg2, MgMotion jarg2_, int jarg3);
   public final static native void CmdObserverDefault_director_connect(CmdObserverDefault obj, long cptr, boolean mem_own, boolean weak_global);
   public final static native void CmdObserverDefault_change_ownership(CmdObserverDefault obj, long cptr, boolean take_or_release);
   public final static native void CmdSubject_registerObserver(long jarg1, CmdSubject jarg1_, long jarg2, CmdObserver jarg2_);
@@ -1619,8 +1623,8 @@ public class touchvgJNI {
   public final static native void MgShapeDoc_addRef(long jarg1, MgShapeDoc jarg1_);
   public final static native boolean MgShapeDoc_save__SWIG_0(long jarg1, MgShapeDoc jarg1_, long jarg2, MgStorage jarg2_, int jarg3);
   public final static native boolean MgShapeDoc_save__SWIG_1(long jarg1, MgShapeDoc jarg1_, long jarg2, MgStorage jarg2_);
-  public final static native boolean MgShapeDoc_load__SWIG_0(long jarg1, MgShapeDoc jarg1_, long jarg2, MgStorage jarg2_, boolean jarg3);
-  public final static native boolean MgShapeDoc_load__SWIG_1(long jarg1, MgShapeDoc jarg1_, long jarg2, MgStorage jarg2_);
+  public final static native boolean MgShapeDoc_load__SWIG_0(long jarg1, MgShapeDoc jarg1_, long jarg2, MgShapeFactory jarg2_, long jarg3, MgStorage jarg3_, boolean jarg4);
+  public final static native boolean MgShapeDoc_load__SWIG_1(long jarg1, MgShapeDoc jarg1_, long jarg2, MgShapeFactory jarg2_, long jarg3, MgStorage jarg3_);
   public final static native void MgShapeDoc_clear(long jarg1, MgShapeDoc jarg1_);
   public final static native void MgShapeDoc_clearCachedData(long jarg1, MgShapeDoc jarg1_);
   public final static native int MgShapeDoc_draw(long jarg1, MgShapeDoc jarg1_, long jarg2, GiGraphics jarg2_);
@@ -1642,7 +1646,6 @@ public class touchvgJNI {
   public final static native boolean MgShapeDoc_equals(long jarg1, MgShapeDoc jarg1_, long jarg2, MgObject jarg2_);
   public final static native int MgShapeDoc_getType(long jarg1, MgShapeDoc jarg1_);
   public final static native boolean MgShapeDoc_isKindOf(long jarg1, MgShapeDoc jarg1_, int jarg2);
-  public final static native long MgShapeDoc_shapeFactory();
   public final static native void delete_GiView(long jarg1);
   public final static native void GiView_regenAll(long jarg1, GiView jarg1_);
   public final static native void GiView_regenAppend(long jarg1, GiView jarg1_);
@@ -1909,8 +1912,8 @@ public class touchvgJNI {
   public static boolean SwigDirector_MgBaseShape_isCurve(MgBaseShape self) {
     return self.isCurve();
   }
-  public static float SwigDirector_MgBaseShape_hitTest(MgBaseShape self, long pt, float tol, long result) {
-    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(result, false));
+  public static float SwigDirector_MgBaseShape_hitTest(MgBaseShape self, long pt, float tol, long res) {
+    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(res, false));
   }
   public static boolean SwigDirector_MgBaseShape_hitTestBox(MgBaseShape self, long rect) {
     return self.hitTestBox(new Box2d(rect, false));
@@ -2002,8 +2005,8 @@ public class touchvgJNI {
   public static boolean SwigDirector_MgBaseRect_isCurve(MgBaseRect self) {
     return self.isCurve();
   }
-  public static float SwigDirector_MgBaseRect_hitTest(MgBaseRect self, long pt, float tol, long result) {
-    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(result, false));
+  public static float SwigDirector_MgBaseRect_hitTest(MgBaseRect self, long pt, float tol, long res) {
+    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(res, false));
   }
   public static boolean SwigDirector_MgBaseRect_hitTestBox(MgBaseRect self, long rect) {
     return self.hitTestBox(new Box2d(rect, false));
@@ -2095,8 +2098,8 @@ public class touchvgJNI {
   public static boolean SwigDirector_MgBaseLines_isCurve(MgBaseLines self) {
     return self.isCurve();
   }
-  public static float SwigDirector_MgBaseLines_hitTest(MgBaseLines self, long pt, float tol, long result) {
-    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(result, false));
+  public static float SwigDirector_MgBaseLines_hitTest(MgBaseLines self, long pt, float tol, long res) {
+    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(res, false));
   }
   public static boolean SwigDirector_MgBaseLines_hitTestBox(MgBaseLines self, long rect) {
     return self.hitTestBox(new Box2d(rect, false));
@@ -2188,8 +2191,8 @@ public class touchvgJNI {
   public static boolean SwigDirector_MgComposite_isCurve(MgComposite self) {
     return self.isCurve();
   }
-  public static float SwigDirector_MgComposite_hitTest(MgComposite self, long pt, float tol, long result) {
-    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(result, false));
+  public static float SwigDirector_MgComposite_hitTest(MgComposite self, long pt, float tol, long res) {
+    return self.hitTest(new Point2d(pt, false), tol, new MgHitResult(res, false));
   }
   public static boolean SwigDirector_MgComposite_hitTestBox(MgComposite self, long rect) {
     return self.hitTestBox(new Box2d(rect, false));
@@ -2337,6 +2340,9 @@ public class touchvgJNI {
   }
   public static void SwigDirector_CmdObserverDefault_onShapeMoved(CmdObserverDefault self, long sender, long sp, int segment) {
     self.onShapeMoved((sender == 0) ? null : new MgMotion(sender, false), (sp == 0) ? null : new MgShape(sp, false), segment);
+  }
+  public static long SwigDirector_CmdObserverDefault_createShape(CmdObserverDefault self, long sender, int type) {
+    return MgBaseShape.getCPtr(self.createShape((sender == 0) ? null : new MgMotion(sender, false), type));
   }
   public static String SwigDirector_MgCommandDraw_getName(MgCommandDraw self) {
     return self.getName();

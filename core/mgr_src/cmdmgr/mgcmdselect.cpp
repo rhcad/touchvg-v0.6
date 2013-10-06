@@ -337,10 +337,10 @@ bool MgCmdSelect::isSelected(MgShape* shape)
     return getSelectedPostion(shape) != m_selIds.end();
 }
 
-MgShape* MgCmdSelect::hitTestAll(const MgMotion* sender, MgHitResult& result)
+MgShape* MgCmdSelect::hitTestAll(const MgMotion* sender, MgHitResult& res)
 {
     Box2d limits(sender->pointM, sender->displayMmToModel(8.f), 0);
-    return sender->view->shapes()->hitTest(limits, result);
+    return sender->view->shapes()->hitTest(limits, res);
 }
 
 MgShape* MgCmdSelect::getSelectedShape(const MgMotion* sender)
@@ -418,7 +418,7 @@ bool MgCmdSelect::click(const MgMotion* sender)
     if (sender->pressDrag)
         return false;
     
-    MgHitResult result;
+    MgHitResult res;
     MgShape *shape = NULL;
     bool    canSelAgain;
     
@@ -434,7 +434,7 @@ bool MgCmdSelect::click(const MgMotion* sender)
                    && canSelect(shape, sender));    // 仅检查这个图形能否选中
     
     if (!canSelAgain) {                 // 没有选中或点中其他图形
-        shape = hitTestAll(sender, result);
+        shape = hitTestAll(sender, res);
         bool changed = ((int)m_selIds.size() != (shape ? 1 : 0))
             || (shape && shape->getID() != m_id);
 
@@ -443,7 +443,7 @@ bool MgCmdSelect::click(const MgMotion* sender)
             m_selIds.push_back(shape->getID()); // 选中新图形
         m_id = shape ? shape->getID() : 0;
         
-        m_hit = result;
+        m_hit = res;
         m_handleIndex = 0;
 
         if (changed) {
@@ -521,14 +521,14 @@ static int _dragData = 0;
 bool MgCmdSelect::touchBegan(const MgMotion* sender)
 {
     if (!sender->switchGesture) {
-        MgHitResult result;
-        MgShape* newshape = hitTestAll(sender, result);
+        MgHitResult res;
+        MgShape* newshape = hitTestAll(sender, res);
         MgShape* oldshape = getSelectedShape(sender);
         
         if (newshape && newshape->getID() != m_id
             && !sender->view->shapes()->getOwner()->isKindOf(kMgShapeComposite)
             && (!oldshape || !canSelect(oldshape, sender))) {
-            m_hit = result;
+            m_hit = res;
             m_id = newshape->getID();
             m_selIds.clear();
             m_selIds.push_back(m_id);

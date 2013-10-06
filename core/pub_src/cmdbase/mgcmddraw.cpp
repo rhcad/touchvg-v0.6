@@ -105,8 +105,8 @@ bool MgCommandDraw::click(const MgMotion* sender)
 bool MgCommandDraw::_click(const MgMotion* sender)
 {
     Box2d limits(sender->pointM, sender->displayMmToModel(10.f), 0);
-    MgHitResult result;
-    MgShape* shape = sender->view->shapes()->hitTest(limits, result);
+    MgHitResult res;
+    MgShape* shape = sender->view->shapes()->hitTest(limits, res);
     
     if (shape) {
         sender->view->setNewShapeID(shape->getID());

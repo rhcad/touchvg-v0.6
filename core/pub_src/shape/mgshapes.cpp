@@ -255,7 +255,7 @@ Box2d MgShapes::getExtent() const
     return extent;
 }
 
-MgShape* MgShapes::hitTest(const Box2d& limits, MgHitResult& result, Filter filter) const
+MgShape* MgShapes::hitTest(const Box2d& limits, MgHitResult& res, Filter filter) const
 {
     MgShape* retshape = NULL;
     
@@ -271,14 +271,14 @@ MgShape* MgShapes::hitTest(const Box2d& limits, MgHitResult& result, Filter filt
                           : mgMax(extent.width(), extent.height()));
             float  dist = shape->hitTest(limits.center(), tol, tmpRes);
             
-            if (result.dist > dist - _MGZERO) {     // 让末尾图形优先选中
-                result.dist = dist;
-                result = tmpRes;
+            if (res.dist > dist - _MGZERO) {     // 让末尾图形优先选中
+                res.dist = dist;
+                res = tmpRes;
                 retshape = *it;
             }
         }
     }
-    if (retshape && result.dist > limits.width() && !retshape->hasFillColor()) {
+    if (retshape && res.dist > limits.width() && !retshape->hasFillColor()) {
         retshape = NULL;
     }
     

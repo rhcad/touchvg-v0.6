@@ -63,10 +63,6 @@ public:
     static int Type() { return 0x10000 | ShapeT::Type(); }
     int getType() const { return Type(); }
     
-    bool isKindOf(int type) const {
-        return type == Type() || type == MgShape::Type();
-    }
-    
     void release() {
         delete this;
     }

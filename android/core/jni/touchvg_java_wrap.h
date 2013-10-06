@@ -96,7 +96,7 @@ public:
     virtual void setPoint(int index, Point2d const &pt);
     virtual bool isClosed() const;
     virtual bool isCurve() const;
-    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &result) const;
+    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &res) const;
     virtual bool hitTestBox(Box2d const &rect) const;
     virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
     virtual bool save(MgStorage *s) const;
@@ -140,7 +140,7 @@ public:
     virtual void setPoint(int index, Point2d const &pt);
     virtual bool isClosed() const;
     virtual bool isCurve() const;
-    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &result) const;
+    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &res) const;
     virtual bool hitTestBox(Box2d const &rect) const;
     virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
     virtual bool save(MgStorage *s) const;
@@ -184,7 +184,7 @@ public:
     virtual void setPoint(int index, Point2d const &pt);
     virtual bool isClosed() const;
     virtual bool isCurve() const;
-    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &result) const;
+    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &res) const;
     virtual bool hitTestBox(Box2d const &rect) const;
     virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
     virtual bool save(MgStorage *s) const;
@@ -228,7 +228,7 @@ public:
     virtual void setPoint(int index, Point2d const &pt);
     virtual bool isClosed() const;
     virtual bool isCurve() const;
-    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &result) const;
+    virtual float hitTest(Point2d const &pt, float tol, MgHitResult &res) const;
     virtual bool hitTestBox(Box2d const &rect) const;
     virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
     virtual bool save(MgStorage *s) const;
@@ -304,13 +304,14 @@ public:
     virtual bool onShapeCanUnlock(MgMotion const *sender, MgShape const *sp);
     virtual bool onShapeCanUngroup(MgMotion const *sender, MgShape const *sp);
     virtual void onShapeMoved(MgMotion const *sender, MgShape *sp, int segment);
+    virtual MgBaseShape *createShape(MgMotion const *sender, int type);
     virtual ~SwigDirector_CmdObserverDefault();
 public:
     bool swig_overrides(int n) {
-      return (n < 17 ? swig_override[n] : false);
+      return (n < 18 ? swig_override[n] : false);
     }
 protected:
-    bool swig_override[17];
+    bool swig_override[18];
 };
 
 class SwigDirector_MgCommandDraw : public MgCommandDraw, public Swig::Director {

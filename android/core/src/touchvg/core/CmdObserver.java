@@ -103,4 +103,9 @@ public class CmdObserver {
     touchvgJNI.CmdObserver_onShapeMoved(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(sp), sp, segment);
   }
 
+  public MgBaseShape createShape(MgMotion sender, int type) {
+    long cPtr = touchvgJNI.CmdObserver_createShape(swigCPtr, this, MgMotion.getCPtr(sender), sender, type);
+    return (cPtr == 0) ? null : new MgBaseShape(cPtr, false);
+  }
+
 }
