@@ -47,7 +47,7 @@ GiPath::GiPath(int count, const Point2d* points, const char* types)
     m_data = new GiPathImpl();
     m_data->beginIndex = -1;
 
-    if (count > 0 && points != NULL && types != NULL)
+    if (count > 0 && points && types)
     {
         m_data->points.reserve(count);
         m_data->types.reserve(count);
@@ -89,12 +89,12 @@ int GiPath::getCount() const
 
 const Point2d* GiPath::getPoints() const
 {
-    return m_data->points.empty() ? NULL : &m_data->points.front();
+    return m_data->points.empty() ? (Point2d*)0 : &m_data->points.front();
 }
 
 const char* GiPath::getTypes() const
 {
-    return m_data->types.empty() ? NULL : &m_data->types.front();
+    return m_data->types.empty() ? (char*)0 : &m_data->types.front();
 }
 
 void GiPath::clear()
@@ -139,7 +139,7 @@ bool GiPath::lineTo(const Point2d& point)
 
 bool GiPath::linesTo(int count, const Point2d* points)
 {
-    bool ret = (m_data->beginIndex >= 0 && count > 0 && points != NULL);
+    bool ret = (m_data->beginIndex >= 0 && count > 0 && points);
     if (ret) {
         for (int i = 0; i < count; i++) {
             m_data->points.push_back(points[i]);
@@ -152,7 +152,7 @@ bool GiPath::linesTo(int count, const Point2d* points)
 
 bool GiPath::beziersTo(int count, const Point2d* points, bool reverse)
 {
-    bool ret = (m_data->beginIndex >= 0 && count > 0 && points != NULL
+    bool ret = (m_data->beginIndex >= 0 && count > 0 && points
         && (count % 3) == 0);
     if (ret && reverse) {
         for (int i = count - 1; i >= 0; i--) {
@@ -296,7 +296,7 @@ bool GiPath::genericRoundLines(int count, const Point2d* points,
 {
     clear();
 
-    if (count < 3 || NULL == points || radius < _MGZERO)
+    if (count < 3 || !points || radius < _MGZERO)
         return false;
 
     Point2d ptsBzr[16];

@@ -305,13 +305,14 @@ public:
     virtual bool onShapeCanUngroup(MgMotion const *sender, MgShape const *sp);
     virtual void onShapeMoved(MgMotion const *sender, MgShape *sp, int segment);
     virtual MgBaseShape *createShape(MgMotion const *sender, int type);
+    virtual MgCommand *createCommand(MgMotion const *sender, char const *name);
     virtual ~SwigDirector_CmdObserverDefault();
 public:
     bool swig_overrides(int n) {
-      return (n < 18 ? swig_override[n] : false);
+      return (n < 19 ? swig_override[n] : false);
     }
 protected:
-    bool swig_override[18];
+    bool swig_override[19];
 };
 
 class SwigDirector_MgCommandDraw : public MgCommandDraw, public Swig::Director {
@@ -323,7 +324,7 @@ public:
     virtual char const *getName() const;
     virtual void release();
     virtual bool cancel(MgMotion const *sender);
-    virtual bool initialize(MgMotion const *sender, MgStorage *s);
+    virtual bool initialize(MgMotion const *sender, MgStorage *arg1);
     virtual bool backStep(MgMotion const *sender);
     virtual bool draw(MgMotion const *sender, GiGraphics *gs);
     virtual int gatherShapes(MgMotion const *sender, MgShapes *shapes);
@@ -338,6 +339,10 @@ public:
     virtual bool isDrawingCommand();
     virtual bool isFloatingCommand();
     virtual bool doContextAction(MgMotion const *sender, int action);
+    virtual MgShape *createShape(MgShapeFactory *arg0);
+    virtual MgShape *createShapeSwigPublic(MgShapeFactory *arg0) {
+      return MgCommandDraw::createShape(arg0);
+    }
     virtual int getMaxStep();
     virtual int getMaxStepSwigPublic() {
       return MgCommandDraw::getMaxStep();
@@ -348,10 +353,10 @@ public:
     }
 public:
     bool swig_overrides(int n) {
-      return (n < 20 ? swig_override[n] : false);
+      return (n < 21 ? swig_override[n] : false);
     }
 protected:
-    bool swig_override[20];
+    bool swig_override[21];
 };
 
 class SwigDirector_MgCmdDrawRect : public MgCmdDrawRect, public Swig::Director {
@@ -378,6 +383,10 @@ public:
     virtual bool isDrawingCommand();
     virtual bool isFloatingCommand();
     virtual bool doContextAction(MgMotion const *sender, int action);
+    virtual MgShape *createShape(MgShapeFactory *arg0);
+    virtual MgShape *createShapeSwigPublic(MgShapeFactory *arg0) {
+      return MgCommandDraw::createShape(arg0);
+    }
     virtual int getMaxStep();
     virtual int getMaxStepSwigPublic() {
       return MgCommandDraw::getMaxStep();
@@ -392,10 +401,10 @@ public:
     }
 public:
     bool swig_overrides(int n) {
-      return (n < 21 ? swig_override[n] : false);
+      return (n < 22 ? swig_override[n] : false);
     }
 protected:
-    bool swig_override[21];
+    bool swig_override[22];
 };
 
 class SwigDirector_GiView : public GiView, public Swig::Director {

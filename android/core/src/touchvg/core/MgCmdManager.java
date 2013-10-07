@@ -65,10 +65,6 @@ public class MgCmdManager {
     touchvgJNI.MgCmdManager_unloadCommands(swigCPtr, this);
   }
 
-  public boolean addCommand(MgCommand cmd) {
-    return touchvgJNI.MgCmdManager_addCommand(swigCPtr, this, MgCommand.getCPtr(cmd), cmd);
-  }
-
   public int getNewShapeID() {
     return touchvgJNI.MgCmdManager_getNewShapeID(swigCPtr, this);
   }

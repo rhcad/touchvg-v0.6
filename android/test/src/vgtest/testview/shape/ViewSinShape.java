@@ -7,6 +7,7 @@ import touchvg.core.GiContext;
 import touchvg.core.GiGraphics;
 import touchvg.core.Matrix2d;
 import touchvg.core.MgBaseShape;
+import touchvg.core.MgCommand;
 import touchvg.core.MgCommandDraw;
 import touchvg.core.MgHitResult;
 import touchvg.core.MgMotion;
@@ -24,7 +25,6 @@ import android.content.Context;
 //! 测试自定义图形类的测试视图类
 public class ViewSinShape extends GraphView {
     private MyCmdObserver mObserver = new MyCmdObserver();
-    private DrawSinShape mSinCmd = new DrawSinShape();
     private static final int[] HANDLEIDS = { R.drawable.vgdot1,
             R.drawable.vgdot2, R.drawable.vgdot3 };
 
@@ -37,16 +37,11 @@ public class ViewSinShape extends GraphView {
                 null, HANDLEIDS);
 
         helper.cmdView().getCmdSubject().registerObserver(mObserver);
-        helper.cmdView().addCommand(mSinCmd);
-        helper.setCommand(mSinCmd.getName());
+        helper.setCommand(DrawSinShape.NAME); // may be called by a button
     }
     
     @Override
     protected void onDetachedFromWindow() {
-        if (mSinCmd != null) {
-            mSinCmd.delete();
-            mSinCmd = null;
-        }
         if (mObserver != null) {
             final ViewHelper helper = new ViewHelper(this);
             helper.cmdView().getCmdSubject().unregisterObserver(mObserver);
@@ -64,6 +59,13 @@ public class ViewSinShape extends GraphView {
                 return new SinShape();
             return super.createShape(sender, type);
         }
+        
+        @Override
+        public MgCommand createCommand(MgMotion sender, String name) {
+            if (name.equals(DrawSinShape.NAME))
+                return new DrawSinShape();
+            return super.createCommand(sender, name);
+        }
     }
     
     private class DrawSinShape extends MgCommandDraw {
@@ -75,7 +77,19 @@ public class ViewSinShape extends GraphView {
         }
         
         @Override
+        public void release() {
+            delete();
+        }
+        
+        @Override
+        public MgShape createShape(MgShapeFactory factory) {
+            return factory.createShape(SinShape.TYPE);
+        }
+        
+        @Override
         public boolean click(MgMotion sender) {
+            dynshape().shape().setHandlePoint(0, snapPoint(sender), 0);
+            addShape(sender);
             return super.click(sender);
         }
     }

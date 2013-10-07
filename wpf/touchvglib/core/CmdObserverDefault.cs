@@ -127,6 +127,12 @@ public class CmdObserverDefault : CmdObserver {
     return ret;
   }
 
+  public override MgCommand createCommand(MgMotion sender, string name) {
+    IntPtr cPtr = (SwigDerivedClassHasMethod("createCommand", swigMethodTypes18) ? touchvgPINVOKE.CmdObserverDefault_createCommandSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), name) : touchvgPINVOKE.CmdObserverDefault_createCommand(swigCPtr, MgMotion.getCPtr(sender), name));
+    MgCommand ret = (cPtr == IntPtr.Zero) ? null : new MgCommand(cPtr, false);
+    return ret;
+  }
+
   private void SwigDirectorConnect() {
     if (SwigDerivedClassHasMethod("onDocLoaded", swigMethodTypes0))
       swigDelegate0 = new SwigDelegateCmdObserverDefault_0(SwigDirectoronDocLoaded);
@@ -164,7 +170,9 @@ public class CmdObserverDefault : CmdObserver {
       swigDelegate16 = new SwigDelegateCmdObserverDefault_16(SwigDirectoronShapeMoved);
     if (SwigDerivedClassHasMethod("createShape", swigMethodTypes17))
       swigDelegate17 = new SwigDelegateCmdObserverDefault_17(SwigDirectorcreateShape);
-    touchvgPINVOKE.CmdObserverDefault_director_connect(swigCPtr, swigDelegate0, swigDelegate1, swigDelegate2, swigDelegate3, swigDelegate4, swigDelegate5, swigDelegate6, swigDelegate7, swigDelegate8, swigDelegate9, swigDelegate10, swigDelegate11, swigDelegate12, swigDelegate13, swigDelegate14, swigDelegate15, swigDelegate16, swigDelegate17);
+    if (SwigDerivedClassHasMethod("createCommand", swigMethodTypes18))
+      swigDelegate18 = new SwigDelegateCmdObserverDefault_18(SwigDirectorcreateCommand);
+    touchvgPINVOKE.CmdObserverDefault_director_connect(swigCPtr, swigDelegate0, swigDelegate1, swigDelegate2, swigDelegate3, swigDelegate4, swigDelegate5, swigDelegate6, swigDelegate7, swigDelegate8, swigDelegate9, swigDelegate10, swigDelegate11, swigDelegate12, swigDelegate13, swigDelegate14, swigDelegate15, swigDelegate16, swigDelegate17, swigDelegate18);
   }
 
   private bool SwigDerivedClassHasMethod(string methodName, Type[] methodTypes) {
@@ -245,6 +253,10 @@ public class CmdObserverDefault : CmdObserver {
     return MgBaseShape.getCPtr(createShape((sender == IntPtr.Zero) ? null : new MgMotion(sender, false), type)).Handle;
   }
 
+  private IntPtr SwigDirectorcreateCommand(IntPtr sender, string name) {
+    return MgCommand.getCPtr(createCommand((sender == IntPtr.Zero) ? null : new MgMotion(sender, false), name)).Handle;
+  }
+
   public delegate void SwigDelegateCmdObserverDefault_0(IntPtr sender);
   public delegate void SwigDelegateCmdObserverDefault_1(IntPtr sender);
   public delegate void SwigDelegateCmdObserverDefault_2(IntPtr sender);
@@ -263,6 +275,7 @@ public class CmdObserverDefault : CmdObserver {
   public delegate bool SwigDelegateCmdObserverDefault_15(IntPtr sender, IntPtr sp);
   public delegate void SwigDelegateCmdObserverDefault_16(IntPtr sender, IntPtr sp, int segment);
   public delegate IntPtr SwigDelegateCmdObserverDefault_17(IntPtr sender, int type);
+  public delegate IntPtr SwigDelegateCmdObserverDefault_18(IntPtr sender, string name);
 
   private SwigDelegateCmdObserverDefault_0 swigDelegate0;
   private SwigDelegateCmdObserverDefault_1 swigDelegate1;
@@ -282,6 +295,7 @@ public class CmdObserverDefault : CmdObserver {
   private SwigDelegateCmdObserverDefault_15 swigDelegate15;
   private SwigDelegateCmdObserverDefault_16 swigDelegate16;
   private SwigDelegateCmdObserverDefault_17 swigDelegate17;
+  private SwigDelegateCmdObserverDefault_18 swigDelegate18;
 
   private static Type[] swigMethodTypes0 = new Type[] { typeof(MgMotion) };
   private static Type[] swigMethodTypes1 = new Type[] { typeof(MgMotion) };
@@ -301,6 +315,7 @@ public class CmdObserverDefault : CmdObserver {
   private static Type[] swigMethodTypes15 = new Type[] { typeof(MgMotion), typeof(MgShape) };
   private static Type[] swigMethodTypes16 = new Type[] { typeof(MgMotion), typeof(MgShape), typeof(int) };
   private static Type[] swigMethodTypes17 = new Type[] { typeof(MgMotion), typeof(int) };
+  private static Type[] swigMethodTypes18 = new Type[] { typeof(MgMotion), typeof(string) };
 }
 
 }

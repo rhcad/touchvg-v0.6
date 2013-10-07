@@ -37,7 +37,7 @@ bool MgCmdDrawTriangle::touchBegan(const MgMotion* sender)
     
     dynshape()->shape()->update();
 
-    return _touchBegan(sender);
+    return MgCommandDraw::touchBegan(sender);
 }
 
 bool MgCmdDrawTriangle::touchMoved(const MgMotion* sender)
@@ -45,7 +45,7 @@ bool MgCmdDrawTriangle::touchMoved(const MgMotion* sender)
     dynshape()->shape()->setPoint(m_step, snapPoint(sender));
     dynshape()->shape()->update();
 
-    return _touchMoved(sender);
+    return MgCommandDraw::touchMoved(sender);
 }
 
 bool MgCmdDrawTriangle::touchEnded(const MgMotion* sender)
@@ -59,11 +59,11 @@ bool MgCmdDrawTriangle::touchEnded(const MgMotion* sender)
     if (pnt.distanceTo(dynshape()->shape()->getPoint(m_step - 1)) > distmin) {
         m_step++;
         if (3 == m_step) {
-            _addshape(sender);
-            _delayClear();
+            addShape(sender);
+            delayClear();
             m_step = 0;
         }
     }
 
-    return _touchEnded(sender);
+    return MgCommandDraw::touchEnded(sender);
 }

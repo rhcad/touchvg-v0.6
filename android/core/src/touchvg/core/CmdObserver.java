@@ -108,4 +108,9 @@ public class CmdObserver {
     return (cPtr == 0) ? null : new MgBaseShape(cPtr, false);
   }
 
+  public MgCommand createCommand(MgMotion sender, String name) {
+    long cPtr = touchvgJNI.CmdObserver_createCommand(swigCPtr, this, MgMotion.getCPtr(sender), sender, name);
+    return (cPtr == 0) ? null : new MgCommand(cPtr, false);
+  }
+
 }

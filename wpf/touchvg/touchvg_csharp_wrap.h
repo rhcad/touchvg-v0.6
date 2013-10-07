@@ -636,6 +636,7 @@ public:
     virtual bool onShapeCanUngroup(MgMotion const *sender, MgShape const *sp);
     virtual void onShapeMoved(MgMotion const *sender, MgShape *sp, int segment);
     virtual MgBaseShape *createShape(MgMotion const *sender, int type);
+    virtual MgCommand *createCommand(MgMotion const *sender, char const *name);
     virtual ~SwigDirector_CmdObserverDefault();
 
     typedef void (SWIGSTDCALL* SWIG_Callback0_t)(void *);
@@ -656,7 +657,8 @@ public:
     typedef unsigned int (SWIGSTDCALL* SWIG_Callback15_t)(void *, void *);
     typedef void (SWIGSTDCALL* SWIG_Callback16_t)(void *, void *, int);
     typedef void * (SWIGSTDCALL* SWIG_Callback17_t)(void *, int);
-    void swig_connect_director(SWIG_Callback0_t callbackonDocLoaded, SWIG_Callback1_t callbackonEnterSelectCommand, SWIG_Callback2_t callbackonUnloadCommands, SWIG_Callback3_t callbackselectActionsNeedHided, SWIG_Callback4_t callbackdoAction, SWIG_Callback5_t callbackdoEndAction, SWIG_Callback6_t callbackdrawInShapeCommand, SWIG_Callback7_t callbackdrawInSelectCommand, SWIG_Callback8_t callbackonShapeWillAdded, SWIG_Callback9_t callbackonShapeAdded, SWIG_Callback10_t callbackonShapeWillDeleted, SWIG_Callback11_t callbackonShapeDeleted, SWIG_Callback12_t callbackonShapeCanRotated, SWIG_Callback13_t callbackonShapeCanTransform, SWIG_Callback14_t callbackonShapeCanUnlock, SWIG_Callback15_t callbackonShapeCanUngroup, SWIG_Callback16_t callbackonShapeMoved, SWIG_Callback17_t callbackcreateShape);
+    typedef void * (SWIGSTDCALL* SWIG_Callback18_t)(void *, char *);
+    void swig_connect_director(SWIG_Callback0_t callbackonDocLoaded, SWIG_Callback1_t callbackonEnterSelectCommand, SWIG_Callback2_t callbackonUnloadCommands, SWIG_Callback3_t callbackselectActionsNeedHided, SWIG_Callback4_t callbackdoAction, SWIG_Callback5_t callbackdoEndAction, SWIG_Callback6_t callbackdrawInShapeCommand, SWIG_Callback7_t callbackdrawInSelectCommand, SWIG_Callback8_t callbackonShapeWillAdded, SWIG_Callback9_t callbackonShapeAdded, SWIG_Callback10_t callbackonShapeWillDeleted, SWIG_Callback11_t callbackonShapeDeleted, SWIG_Callback12_t callbackonShapeCanRotated, SWIG_Callback13_t callbackonShapeCanTransform, SWIG_Callback14_t callbackonShapeCanUnlock, SWIG_Callback15_t callbackonShapeCanUngroup, SWIG_Callback16_t callbackonShapeMoved, SWIG_Callback17_t callbackcreateShape, SWIG_Callback18_t callbackcreateCommand);
 
 private:
     SWIG_Callback0_t swig_callbackonDocLoaded;
@@ -677,6 +679,7 @@ private:
     SWIG_Callback15_t swig_callbackonShapeCanUngroup;
     SWIG_Callback16_t swig_callbackonShapeMoved;
     SWIG_Callback17_t swig_callbackcreateShape;
+    SWIG_Callback18_t swig_callbackcreateCommand;
     void swig_init_callbacks();
 };
 
@@ -688,7 +691,7 @@ public:
     virtual char const *getName() const;
     virtual void release();
     virtual bool cancel(MgMotion const *sender);
-    virtual bool initialize(MgMotion const *sender, MgStorage *s);
+    virtual bool initialize(MgMotion const *sender, MgStorage *arg1);
     virtual bool backStep(MgMotion const *sender);
     virtual bool draw(MgMotion const *sender, GiGraphics *gs);
     virtual int gatherShapes(MgMotion const *sender, MgShapes *shapes);
@@ -703,6 +706,10 @@ public:
     virtual bool isDrawingCommand();
     virtual bool isFloatingCommand();
     virtual bool doContextAction(MgMotion const *sender, int action);
+    virtual MgShape *createShape(MgShapeFactory *arg0);
+    virtual MgShape *createShapeSwigPublic(MgShapeFactory *arg0) {
+      return MgCommandDraw::createShape(arg0);
+    }
     virtual int getMaxStep();
     virtual int getMaxStepSwigPublic() {
       return MgCommandDraw::getMaxStep();
@@ -730,9 +737,10 @@ public:
     typedef unsigned int (SWIGSTDCALL* SWIG_Callback15_t)();
     typedef unsigned int (SWIGSTDCALL* SWIG_Callback16_t)();
     typedef unsigned int (SWIGSTDCALL* SWIG_Callback17_t)(void *, int);
-    typedef int (SWIGSTDCALL* SWIG_Callback18_t)();
-    typedef void (SWIGSTDCALL* SWIG_Callback19_t)(int, void *);
-    void swig_connect_director(SWIG_Callback0_t callbackgetName, SWIG_Callback1_t callbackrelease, SWIG_Callback2_t callbackcancel, SWIG_Callback3_t callbackinitialize, SWIG_Callback4_t callbackbackStep, SWIG_Callback5_t callbackdraw, SWIG_Callback6_t callbackgatherShapes, SWIG_Callback7_t callbackclick, SWIG_Callback8_t callbackdoubleClick, SWIG_Callback9_t callbacklongPress, SWIG_Callback10_t callbacktouchBegan, SWIG_Callback11_t callbacktouchMoved, SWIG_Callback12_t callbacktouchEnded, SWIG_Callback13_t callbackmouseHover, SWIG_Callback14_t callbacktwoFingersMove, SWIG_Callback15_t callbackisDrawingCommand, SWIG_Callback16_t callbackisFloatingCommand, SWIG_Callback17_t callbackdoContextAction, SWIG_Callback18_t callbackgetMaxStep, SWIG_Callback19_t callbacksetStepPoint);
+    typedef void * (SWIGSTDCALL* SWIG_Callback18_t)(void *);
+    typedef int (SWIGSTDCALL* SWIG_Callback19_t)();
+    typedef void (SWIGSTDCALL* SWIG_Callback20_t)(int, void *);
+    void swig_connect_director(SWIG_Callback0_t callbackgetName, SWIG_Callback1_t callbackrelease, SWIG_Callback2_t callbackcancel, SWIG_Callback3_t callbackinitialize, SWIG_Callback4_t callbackbackStep, SWIG_Callback5_t callbackdraw, SWIG_Callback6_t callbackgatherShapes, SWIG_Callback7_t callbackclick, SWIG_Callback8_t callbackdoubleClick, SWIG_Callback9_t callbacklongPress, SWIG_Callback10_t callbacktouchBegan, SWIG_Callback11_t callbacktouchMoved, SWIG_Callback12_t callbacktouchEnded, SWIG_Callback13_t callbackmouseHover, SWIG_Callback14_t callbacktwoFingersMove, SWIG_Callback15_t callbackisDrawingCommand, SWIG_Callback16_t callbackisFloatingCommand, SWIG_Callback17_t callbackdoContextAction, SWIG_Callback18_t callbackcreateShape, SWIG_Callback19_t callbackgetMaxStep, SWIG_Callback20_t callbacksetStepPoint);
 
 private:
     SWIG_Callback0_t swig_callbackgetName;
@@ -753,8 +761,9 @@ private:
     SWIG_Callback15_t swig_callbackisDrawingCommand;
     SWIG_Callback16_t swig_callbackisFloatingCommand;
     SWIG_Callback17_t swig_callbackdoContextAction;
-    SWIG_Callback18_t swig_callbackgetMaxStep;
-    SWIG_Callback19_t swig_callbacksetStepPoint;
+    SWIG_Callback18_t swig_callbackcreateShape;
+    SWIG_Callback19_t swig_callbackgetMaxStep;
+    SWIG_Callback20_t swig_callbacksetStepPoint;
     void swig_init_callbacks();
 };
 
@@ -781,6 +790,10 @@ public:
     virtual bool isDrawingCommand();
     virtual bool isFloatingCommand();
     virtual bool doContextAction(MgMotion const *sender, int action);
+    virtual MgShape *createShape(MgShapeFactory *arg0);
+    virtual MgShape *createShapeSwigPublic(MgShapeFactory *arg0) {
+      return MgCommandDraw::createShape(arg0);
+    }
     virtual int getMaxStep();
     virtual int getMaxStepSwigPublic() {
       return MgCommandDraw::getMaxStep();
@@ -812,10 +825,11 @@ public:
     typedef unsigned int (SWIGSTDCALL* SWIG_Callback15_t)();
     typedef unsigned int (SWIGSTDCALL* SWIG_Callback16_t)();
     typedef unsigned int (SWIGSTDCALL* SWIG_Callback17_t)(void *, int);
-    typedef int (SWIGSTDCALL* SWIG_Callback18_t)();
-    typedef void (SWIGSTDCALL* SWIG_Callback19_t)(int, void *);
-    typedef void (SWIGSTDCALL* SWIG_Callback20_t)(void *);
-    void swig_connect_director(SWIG_Callback0_t callbackgetName, SWIG_Callback1_t callbackrelease, SWIG_Callback2_t callbackcancel, SWIG_Callback3_t callbackinitialize, SWIG_Callback4_t callbackbackStep, SWIG_Callback5_t callbackdraw, SWIG_Callback6_t callbackgatherShapes, SWIG_Callback7_t callbackclick, SWIG_Callback8_t callbackdoubleClick, SWIG_Callback9_t callbacklongPress, SWIG_Callback10_t callbacktouchBegan, SWIG_Callback11_t callbacktouchMoved, SWIG_Callback12_t callbacktouchEnded, SWIG_Callback13_t callbackmouseHover, SWIG_Callback14_t callbacktwoFingersMove, SWIG_Callback15_t callbackisDrawingCommand, SWIG_Callback16_t callbackisFloatingCommand, SWIG_Callback17_t callbackdoContextAction, SWIG_Callback18_t callbackgetMaxStep, SWIG_Callback19_t callbacksetStepPoint, SWIG_Callback20_t callbackaddRectShape);
+    typedef void * (SWIGSTDCALL* SWIG_Callback18_t)(void *);
+    typedef int (SWIGSTDCALL* SWIG_Callback19_t)();
+    typedef void (SWIGSTDCALL* SWIG_Callback20_t)(int, void *);
+    typedef void (SWIGSTDCALL* SWIG_Callback21_t)(void *);
+    void swig_connect_director(SWIG_Callback0_t callbackgetName, SWIG_Callback1_t callbackrelease, SWIG_Callback2_t callbackcancel, SWIG_Callback3_t callbackinitialize, SWIG_Callback4_t callbackbackStep, SWIG_Callback5_t callbackdraw, SWIG_Callback6_t callbackgatherShapes, SWIG_Callback7_t callbackclick, SWIG_Callback8_t callbackdoubleClick, SWIG_Callback9_t callbacklongPress, SWIG_Callback10_t callbacktouchBegan, SWIG_Callback11_t callbacktouchMoved, SWIG_Callback12_t callbacktouchEnded, SWIG_Callback13_t callbackmouseHover, SWIG_Callback14_t callbacktwoFingersMove, SWIG_Callback15_t callbackisDrawingCommand, SWIG_Callback16_t callbackisFloatingCommand, SWIG_Callback17_t callbackdoContextAction, SWIG_Callback18_t callbackcreateShape, SWIG_Callback19_t callbackgetMaxStep, SWIG_Callback20_t callbacksetStepPoint, SWIG_Callback21_t callbackaddRectShape);
 
 private:
     SWIG_Callback0_t swig_callbackgetName;
@@ -836,9 +850,10 @@ private:
     SWIG_Callback15_t swig_callbackisDrawingCommand;
     SWIG_Callback16_t swig_callbackisFloatingCommand;
     SWIG_Callback17_t swig_callbackdoContextAction;
-    SWIG_Callback18_t swig_callbackgetMaxStep;
-    SWIG_Callback19_t swig_callbacksetStepPoint;
-    SWIG_Callback20_t swig_callbackaddRectShape;
+    SWIG_Callback18_t swig_callbackcreateShape;
+    SWIG_Callback19_t swig_callbackgetMaxStep;
+    SWIG_Callback20_t swig_callbacksetStepPoint;
+    SWIG_Callback21_t swig_callbackaddRectShape;
     void swig_init_callbacks();
 };
 

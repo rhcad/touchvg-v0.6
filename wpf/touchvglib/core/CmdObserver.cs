@@ -124,6 +124,12 @@ public class CmdObserver : IDisposable {
     return ret;
   }
 
+  public virtual MgCommand createCommand(MgMotion sender, string name) {
+    IntPtr cPtr = touchvgPINVOKE.CmdObserver_createCommand(swigCPtr, MgMotion.getCPtr(sender), name);
+    MgCommand ret = (cPtr == IntPtr.Zero) ? null : new MgCommand(cPtr, false);
+    return ret;
+  }
+
 }
 
 }

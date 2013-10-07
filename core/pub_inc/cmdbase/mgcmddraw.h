@@ -13,27 +13,20 @@
  */
 class MgCommandDraw : public MgCommand
 {
-protected:
+public:
     MgCommandDraw();
     virtual ~MgCommandDraw();
     
-    //static const char* Name() { return "yourcmd"; }
-    //static MgCommand* Create() { return new YourCmd; }
-    
-protected:
-    bool _initialize(MgShape* (*creator)(), const MgMotion* sender);
-    bool _touchBegan(const MgMotion* sender);
-    bool _touchMoved(const MgMotion* sender);
-    bool _touchEnded(const MgMotion* sender);
-    MgShape* _addshape(const MgMotion* sender, MgShape* shape = NULL, bool autolock = true);
-    bool _backStep(const MgMotion* sender);
-    bool _draw(const MgMotion* sender, GiGraphics* gs);
-    bool _click(const MgMotion* sender);
-    void _delayClear();
+    MgShape* addShape(const MgMotion* sender, MgShape* shape = NULL, bool autolock = true);
+    void delayClear();
+    bool touchBeganStep(const MgMotion* sender);
+    bool touchMovedStep(const MgMotion* sender);
+    bool touchEndedStep(const MgMotion* sender);
 
-    bool _touchBeganStep(const MgMotion* sender);
-    bool _touchMovedStep(const MgMotion* sender);
-    bool _touchEndedStep(const MgMotion* sender);
+protected:
+    virtual MgShape* createShape(MgShapeFactory*) { return (MgShape*)0; }
+    bool _initialize(MgShape* (*creator)(), const MgMotion* sender);
+    bool _click(const MgMotion* sender);
     virtual int getMaxStep() { return 3; }
     virtual void setStepPoint(int step, const Point2d& pt);
 
@@ -41,10 +34,14 @@ private:
     virtual bool isDrawingCommand() { return true; }
     
 public:
-    virtual bool backStep(const MgMotion* sender) { return _backStep(sender); }
+    virtual bool initialize(const MgMotion* sender, MgStorage*) { return _initialize(NULL, sender); }
+    virtual bool backStep(const MgMotion* sender);
     virtual bool cancel(const MgMotion* sender);
-    virtual bool draw(const MgMotion* sender, GiGraphics* gs) { return _draw(sender, gs); }
+    virtual bool draw(const MgMotion* sender, GiGraphics* gs);
     virtual int gatherShapes(const MgMotion* sender, MgShapes* shapes);
+    virtual bool touchBegan(const MgMotion* sender);
+    virtual bool touchMoved(const MgMotion* sender);
+    virtual bool touchEnded(const MgMotion* sender);
     virtual bool click(const MgMotion* sender);
     virtual bool longPress(const MgMotion* sender);
     virtual bool mouseHover(const MgMotion* sender);

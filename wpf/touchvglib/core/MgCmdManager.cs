@@ -76,11 +76,6 @@ public class MgCmdManager : IDisposable {
     touchvgPINVOKE.MgCmdManager_unloadCommands(swigCPtr);
   }
 
-  public virtual bool addCommand(MgCommand cmd) {
-    bool ret = touchvgPINVOKE.MgCmdManager_addCommand(swigCPtr, MgCommand.getCPtr(cmd));
-    return ret;
-  }
-
   public virtual int getNewShapeID() {
     int ret = touchvgPINVOKE.MgCmdManager_getNewShapeID(swigCPtr);
     return ret;

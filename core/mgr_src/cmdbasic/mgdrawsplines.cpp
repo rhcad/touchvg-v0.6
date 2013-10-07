@@ -26,7 +26,7 @@ bool MgCmdDrawSplines::backStep(const MgMotion* sender)
         dynshape()->shape()->update();
     }
     
-    return MgCommandDraw::_backStep(sender);
+    return MgCommandDraw::backStep(sender);
 }
 
 bool MgCmdDrawSplines::draw(const MgMotion* sender, GiGraphics* gs)
@@ -54,7 +54,7 @@ bool MgCmdDrawSplines::touchBegan(const MgMotion* sender)
             dynshape()->shape()->update();
         }
         
-        return _touchMoved(sender);
+        return MgCommandDraw::touchMoved(sender);
     }
     else {
         lines->resize(2);
@@ -65,7 +65,7 @@ bool MgCmdDrawSplines::touchBegan(const MgMotion* sender)
         dynshape()->shape()->setPoint(1, pnt);
         dynshape()->shape()->update();
         
-        return _touchBegan(sender);
+        return MgCommandDraw::touchBegan(sender);
     }
 }
 
@@ -89,7 +89,7 @@ bool MgCmdDrawSplines::touchMoved(const MgMotion* sender)
     }
     dynshape()->shape()->update();
     
-    return _touchMoved(sender);
+    return MgCommandDraw::touchMoved(sender);
 }
 
 bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
@@ -102,12 +102,12 @@ bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
         if (m_step > 0 && !dynshape()->shape()->getExtent().isEmpty(tol, false)) {
             //MgSplines* splines = (MgSplines*)dynshape()->shape();
             //splines->smooth(sender->cmds()->lineHalfWidth(m_shape, sender) + sender->displayMmToModel(1.f));
-            _addshape(sender);
+            addShape(sender);
         }
         else {
             click(sender);  // add a point
         }
-        _delayClear();
+        delayClear();
     }
     else {
         MgBaseLines* lines = (MgBaseLines*)dynshape()->shape();
@@ -119,8 +119,8 @@ bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
             dist = lines->endPoint().distanceTo(dynshape()->shape()->getPoint(0));
         }
         if (m_step > 1 && lines->isClosed()) {
-            _addshape(sender);
-            _delayClear();
+            addShape(sender);
+            delayClear();
         }
         else if (sender->startPtM.distanceTo(sender->pointM) >
                 sender->displayMmToModel(5.f)) {
@@ -132,7 +132,7 @@ bool MgCmdDrawSplines::touchEnded(const MgMotion* sender)
         }
     }
     
-    return _touchEnded(sender);
+    return MgCommandDraw::touchEnded(sender);
 }
 
 bool MgCmdDrawSplines::doubleClick(const MgMotion* sender)
@@ -147,8 +147,8 @@ bool MgCmdDrawSplines::doubleClick(const MgMotion* sender)
             }
         }
         if (m_step > 1) {
-            _addshape(sender);
-            _delayClear();
+            addShape(sender);
+            delayClear();
         }
     }
     else {
@@ -159,14 +159,14 @@ bool MgCmdDrawSplines::doubleClick(const MgMotion* sender)
         line.shape()->setPoint(1, sender->pointM + vec);
         
         if (sender->view->shapeWillAdded(&line)) {
-            _addshape(sender, &line);
+            addShape(sender, &line);
         }
         
         if (sender->pointM.distanceTo(sender->startPtM) > vec.length()) {
             line.shape()->setPoint(0, sender->startPtM);
             line.shape()->setPoint(1, sender->startPtM + vec);
             if (sender->view->shapeWillAdded(&line)) {
-                _addshape(sender, &line);
+                addShape(sender, &line);
             }
         }
     }
@@ -179,7 +179,7 @@ bool MgCmdDrawSplines::cancel(const MgMotion* sender)
     if (!m_freehand && m_step > 1) {
         MgBaseLines* lines = (MgBaseLines*)dynshape()->shape();
         lines->removePoint(m_step--);
-        _addshape(sender);
+        addShape(sender);
     }
     return MgCommandDraw::cancel(sender);
 }
@@ -211,7 +211,7 @@ bool MgCmdDrawSplines::click(const MgMotion* sender)
         line.shape()->setPoint(1, pt);
         
         if (sender->view->shapeWillAdded(&line)) {
-            _addshape(sender, &line);
+            addShape(sender, &line);
         }
         dynshape()->shape()->clear();
         

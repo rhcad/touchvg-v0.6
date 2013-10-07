@@ -64,6 +64,7 @@ struct CmdObserver {
     virtual void onShapeMoved(const MgMotion* sender, MgShape* sp, int segment) = 0;   //!< 通知图形已拖动
 
     virtual MgBaseShape* createShape(const MgMotion* sender, int type) = 0; //!< 创建自定义的图形
+    virtual MgCommand* createCommand(const MgMotion* sender, const char* name) = 0; //!< 创建命令
 };
 
 class CmdObserverDefault : public CmdObserver
@@ -110,6 +111,8 @@ public:
         if (sender && sp) segment++; }
     virtual MgBaseShape* createShape(const MgMotion* sender, int type) {
         if (sender) type++; return (MgBaseShape*)0; }
+    virtual MgCommand* createCommand(const MgMotion* sender, const char* name) {
+        if (sender && name) name=name; return (MgCommand*)0; }
 #ifndef SWIG
     virtual void addShapeActions(const MgMotion*,int*, int &, const MgShape*) {}
     virtual void onSelectTouchEnded(const MgMotion*,int,int,int,int,int,const int*) {}

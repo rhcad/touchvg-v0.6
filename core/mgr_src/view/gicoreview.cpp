@@ -124,8 +124,6 @@ public:
         return _cmds->findCommand(name); }
     bool setCommand(const MgMotion* sender, const char* name) {
         return _cmds->setCommand(sender, name, NULL); }
-    bool addCommand(MgCommand* cmd) {
-        return _cmds->addCommand(cmd); }
     bool setCurrentShapes(MgShapes* shapes) {
         return doc()->setCurrentShapes(shapes); }
 

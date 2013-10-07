@@ -25,7 +25,7 @@ bool MgCmdDrawFreeLines::backStep(const MgMotion* sender)
         ((MgBaseLines*)dynshape()->shape())->removePoint(m_step - 1);
         dynshape()->shape()->update();
     }
-    return MgCommandDraw::_backStep(sender);
+    return MgCommandDraw::backStep(sender);
 }
 
 bool MgCmdDrawFreeLines::draw(const MgMotion* sender, GiGraphics* gs)
@@ -41,7 +41,7 @@ bool MgCmdDrawFreeLines::touchBegan(const MgMotion* sender)
     dynshape()->shape()->setPoint(1, sender->pointM);
     dynshape()->shape()->update();
 
-    return _touchBegan(sender);
+    return MgCommandDraw::touchBegan(sender);
 }
 
 bool MgCmdDrawFreeLines::touchMoved(const MgMotion* sender)
@@ -72,7 +72,7 @@ bool MgCmdDrawFreeLines::touchMoved(const MgMotion* sender)
     }
     dynshape()->shape()->update();
 
-    return _touchMoved(sender);
+    return MgCommandDraw::touchMoved(sender);
 }
 
 bool MgCmdDrawFreeLines::touchEnded(const MgMotion* sender)
@@ -100,14 +100,14 @@ bool MgCmdDrawFreeLines::touchEnded(const MgMotion* sender)
     dynshape()->shape()->update();
     
     if (m_step > 1) {
-        _addshape(sender);
+        addShape(sender);
     }
     else {
         click(sender);  // add a point
     }
-    _delayClear();
+    delayClear();
 
-    return _touchEnded(sender);
+    return MgCommandDraw::touchEnded(sender);
 }
 
 bool MgCmdDrawFreeLines::canAddPoint(const MgMotion* /*sender*/, bool /*ended*/)

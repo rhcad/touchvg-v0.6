@@ -25,7 +25,7 @@ bool MgCmdDrawGrid::touchBegan(const MgMotion* sender)
         return MgCmdDrawRect::touchBegan(sender);
     }
     m_step = 3;
-    return _touchBegan(sender);
+    return MgCommandDraw::touchBegan(sender);
 }
 
 bool MgCmdDrawGrid::touchMoved(const MgMotion* sender)
@@ -37,7 +37,7 @@ bool MgCmdDrawGrid::touchMoved(const MgMotion* sender)
     dynshape()->shape()->setHandlePoint(8, snapPoint(sender), 0);
     dynshape()->shape()->update();
     
-    return _touchMoved(sender);
+    return MgCommandDraw::touchMoved(sender);
 }
 
 bool MgCmdDrawGrid::touchEnded(const MgMotion* sender)
@@ -48,8 +48,8 @@ bool MgCmdDrawGrid::touchEnded(const MgMotion* sender)
     
     if ( ((MgGrid*)dynshape()->shape())->valid(sender->displayMmToModel(1.f)) ) {
         dynshape()->context()->setNoFillColor();
-        _addshape(sender);
-        _delayClear();
+        addShape(sender);
+        delayClear();
         sender->cancel();
     }
     else {
@@ -57,7 +57,7 @@ bool MgCmdDrawGrid::touchEnded(const MgMotion* sender)
         m_step = 2;
     }
     
-    return _touchEnded(sender);
+    return MgCommandDraw::touchEnded(sender);
 }
 
 void MgCmdDrawGrid::addRectShape(const MgMotion* sender)

@@ -129,10 +129,6 @@ public class MgView {
     return touchvgJNI.MgView_setCommand(swigCPtr, this, MgMotion.getCPtr(sender), sender, name);
   }
 
-  public boolean addCommand(MgCommand cmd) {
-    return touchvgJNI.MgView_addCommand(swigCPtr, this, MgCommand.getCPtr(cmd), cmd);
-  }
-
   public void regenAll() {
     touchvgJNI.MgView_regenAll(swigCPtr, this);
   }

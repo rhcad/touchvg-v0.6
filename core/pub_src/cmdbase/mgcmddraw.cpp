@@ -35,7 +35,7 @@ bool MgCommandDraw::cancel(const MgMotion* sender)
 bool MgCommandDraw::_initialize(MgShape* (*creator)(), const MgMotion* sender)
 {
     if (!m_shape) {
-        m_shape = creator();
+        m_shape = creator ? creator() : createShape(sender->view->getShapeFactory());
         if (!m_shape || !m_shape->shape())
             return false;
         m_shape->setParent(sender->view->shapes(), 0);
@@ -49,7 +49,7 @@ bool MgCommandDraw::_initialize(MgShape* (*creator)(), const MgMotion* sender)
     return true;
 }
 
-MgShape* MgCommandDraw::_addshape(const MgMotion* sender, MgShape* shape, bool autolock)
+MgShape* MgCommandDraw::addShape(const MgMotion* sender, MgShape* shape, bool autolock)
 {
     MgShapesLock locker(MgShapesLock::Add, autolock ? sender->view : NULL);
     shape = shape ? shape : m_shape;
@@ -70,7 +70,7 @@ MgShape* MgCommandDraw::_addshape(const MgMotion* sender, MgShape* shape, bool a
     return newsp;
 }
 
-bool MgCommandDraw::_backStep(const MgMotion* sender)
+bool MgCommandDraw::backStep(const MgMotion* sender)
 {
     if (m_step > 1) {
         m_step--;
@@ -80,7 +80,7 @@ bool MgCommandDraw::_backStep(const MgMotion* sender)
     return false;
 }
 
-bool MgCommandDraw::_draw(const MgMotion* sender, GiGraphics* gs)
+bool MgCommandDraw::draw(const MgMotion* sender, GiGraphics* gs)
 {
     if (m_needClear) {
         m_needClear = false;
@@ -121,7 +121,7 @@ bool MgCommandDraw::longPress(const MgMotion* sender)
     return sender->view->getAction()->showInDrawing(sender, m_shape);
 }
 
-bool MgCommandDraw::_touchBegan(const MgMotion* sender)
+bool MgCommandDraw::touchBegan(const MgMotion* sender)
 {
     *m_shape->context() = *sender->view->context();
     sender->view->redraw();
@@ -130,20 +130,20 @@ bool MgCommandDraw::_touchBegan(const MgMotion* sender)
     return true;
 }
 
-bool MgCommandDraw::_touchMoved(const MgMotion* sender)
+bool MgCommandDraw::touchMoved(const MgMotion* sender)
 {
     sender->view->redraw();
     return true;
 }
 
-bool MgCommandDraw::_touchEnded(const MgMotion* sender)
+bool MgCommandDraw::touchEnded(const MgMotion* sender)
 {
     sender->view->getSnap()->clearSnap();
     sender->view->redraw();
     return true;
 }
 
-void MgCommandDraw::_delayClear()
+void MgCommandDraw::delayClear()
 {
     m_step = 0;
     m_needClear = true;
@@ -173,7 +173,7 @@ void MgCommandDraw::setStepPoint(int step, const Point2d& pt)
     }
 }
 
-bool MgCommandDraw::_touchBeganStep(const MgMotion* sender)
+bool MgCommandDraw::touchBeganStep(const MgMotion* sender)
 {
     if (0 == m_step) {
         m_step = 1;
@@ -188,19 +188,19 @@ bool MgCommandDraw::_touchBeganStep(const MgMotion* sender)
     }
     dynshape()->shape()->update();
 
-    return _touchBegan(sender);
+    return MgCommandDraw::touchBegan(sender);
 }
 
-bool MgCommandDraw::_touchMovedStep(const MgMotion* sender)
+bool MgCommandDraw::touchMovedStep(const MgMotion* sender)
 {
     if (sender->dragging()) {
         setStepPoint(m_step, snapPoint(sender));
         dynshape()->shape()->update();
     }
-    return _touchMoved(sender);
+    return MgCommandDraw::touchMoved(sender);
 }
 
-bool MgCommandDraw::_touchEndedStep(const MgMotion* sender)
+bool MgCommandDraw::touchEndedStep(const MgMotion* sender)
 {
     Point2d pnt(snapPoint(sender));
     Tol tol(sender->displayMmToModel(2.f));
@@ -212,12 +212,12 @@ bool MgCommandDraw::_touchEndedStep(const MgMotion* sender)
         m_step++;
         if (m_step >= getMaxStep()) {
             if (!dynshape()->shape()->getExtent().isEmpty(tol, false)) {
-                _addshape(sender);
-                _delayClear();
+                addShape(sender);
+                delayClear();
             }
             m_step = 0;
         }
     }
 
-    return _touchEnded(sender);
+    return MgCommandDraw::touchEnded(sender);
 }

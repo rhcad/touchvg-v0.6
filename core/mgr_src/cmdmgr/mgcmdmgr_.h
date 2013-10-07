@@ -36,7 +36,6 @@ private:
         const char* name, MgStorage* s);
     virtual bool cancel(const MgMotion* sender);
     virtual void unloadCommands();
-    virtual bool addCommand(MgCommand* cmd);
     virtual int getNewShapeID() { return _newShapeID; }
     virtual void setNewShapeID(int sid) { _newShapeID = sid; }
     virtual float displayMmToModel(float mm, GiGraphics* gs);

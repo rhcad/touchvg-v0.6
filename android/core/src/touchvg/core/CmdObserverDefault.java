@@ -128,4 +128,9 @@ public class CmdObserverDefault extends CmdObserver {
     return (cPtr == 0) ? null : new MgBaseShape(cPtr, false);
   }
 
+  public MgCommand createCommand(MgMotion sender, String name) {
+    long cPtr = (getClass() == CmdObserverDefault.class) ? touchvgJNI.CmdObserverDefault_createCommand(swigCPtr, this, MgMotion.getCPtr(sender), sender, name) : touchvgJNI.CmdObserverDefault_createCommandSwigExplicitCmdObserverDefault(swigCPtr, this, MgMotion.getCPtr(sender), sender, name);
+    return (cPtr == 0) ? null : new MgCommand(cPtr, false);
+  }
+
 }

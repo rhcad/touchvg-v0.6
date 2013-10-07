@@ -89,7 +89,14 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender,
     if (strcmp(name, "@draw") == 0) {   // 将 @draw 换成上一次绘图命令名
         name = _drawcmd.empty() ? "splines" : _drawcmd.c_str();
     }
+
     MgCommand* cmd = findCommand(name);
+    if (!cmd) {
+        cmd = sender->view->getCmdSubject()->createCommand(sender, name);
+        if (cmd) {
+            _cmds[name] = cmd;
+        }
+    }
     
     if (strcmp(name, "erase") == 0 && _cmdname == "select") {   // 在选择命令中点橡皮擦
         MgSelection *sel = getSelection();
@@ -132,15 +139,6 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender,
         sender->view->commandChanged();
     }
     
-    return ret;
-}
-
-bool MgCmdManagerImpl::addCommand(MgCommand* cmd)
-{
-    bool ret = cmd && !findCommand(cmd->getName());
-    if (ret) {
-        _cmds[cmd->getName()] = cmd;
-    }
     return ret;
 }
 

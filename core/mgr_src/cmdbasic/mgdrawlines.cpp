@@ -26,7 +26,7 @@ bool MgCmdDrawLines::backStep(const MgMotion* sender)
             m_index == m_step ? m_step - 1 : m_index);
         dynshape()->shape()->update();
     }
-    return MgCommandDraw::_backStep(sender);
+    return MgCommandDraw::backStep(sender);
 }
 
 bool MgCmdDrawLines::draw(const MgMotion* sender, GiGraphics* gs)
@@ -34,7 +34,7 @@ bool MgCmdDrawLines::draw(const MgMotion* sender, GiGraphics* gs)
     if (m_step > (needEnded() ? 3 : 2) && !sender->dragging()) {
         gs->drawHandle(dynshape()->shapec()->getExtent().center(), 6);
     }
-    return _draw(sender, gs);
+    return MgCommandDraw::draw(sender, gs);
 }
 
 bool MgCmdDrawLines::click(const MgMotion* sender)
@@ -95,7 +95,7 @@ bool MgCmdDrawLines::touchBegan(const MgMotion* sender)
     dynshape()->shape()->update();
     _lastClicked = true;
     
-    return _touchBegan(sender);
+    return MgCommandDraw::touchBegan(sender);
 }
 
 bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
@@ -108,7 +108,7 @@ bool MgCmdDrawLines::touchMoved(const MgMotion* sender)
     dynshape()->shape()->update();
     _lastClicked = false;
     
-    return _touchMoved(sender);
+    return MgCommandDraw::touchMoved(sender);
 }
 
 bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
@@ -126,8 +126,8 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
             if (closed) {
                 lines->removePoint(m_step);
             }
-            _addshape(sender);
-            _delayClear();
+            addShape(sender);
+            delayClear();
             m_step = 0;
             _lastClicked = false;
         }
@@ -142,7 +142,7 @@ bool MgCmdDrawLines::touchEnded(const MgMotion* sender)
         lines->removePoint(m_index);
     }
     
-    return _touchEnded(sender);
+    return MgCommandDraw::touchEnded(sender);
 }
 
 bool MgCmdDrawLines::checkClosed(const MgMotion* sender, const Point2d& pnt)
@@ -196,8 +196,8 @@ bool MgCmdDrawLines::doubleClick(const MgMotion* sender)
                && sender->displayMmToModel(5.f) > pnt.distanceTo(lines->getPoint(m_index))) {
             lines->removePoint(m_index--);
         }
-        _addshape(sender);
-        _delayClear();
+        addShape(sender);
+        delayClear();
         m_step = 0;
     }
     return true;
@@ -208,8 +208,8 @@ bool MgCmdDrawLines::cancel(const MgMotion* sender)
     MgBaseLines* lines = (MgBaseLines*)dynshape()->shape();
     
     if (m_step > (lines->isClosed() ? 2 : 1)) {
-        _addshape(sender);
-        _delayClear();
+        addShape(sender);
+        delayClear();
         m_step = 0;
         return true;
     }

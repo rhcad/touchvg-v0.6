@@ -20,11 +20,15 @@ public class MgCommandDraw extends MgCommand {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 
+  protected void finalize() {
+    delete();
+  }
+
   public synchronized void delete() {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        throw new UnsupportedOperationException("C++ destructor does not have public access");
+        touchvgJNI.delete_MgCommandDraw(swigCPtr);
       }
       swigCPtr = 0;
     }
@@ -46,9 +50,45 @@ public class MgCommandDraw extends MgCommand {
     touchvgJNI.MgCommandDraw_change_ownership(this, swigCPtr, true);
   }
 
-  protected MgCommandDraw() {
+  public MgCommandDraw() {
     this(touchvgJNI.new_MgCommandDraw(), true);
     touchvgJNI.MgCommandDraw_director_connect(this, swigCPtr, swigCMemOwn, true);
+  }
+
+  public MgShape addShape(MgMotion sender, MgShape shape, boolean autolock) {
+    long cPtr = touchvgJNI.MgCommandDraw_addShape__SWIG_0(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape, autolock);
+    return (cPtr == 0) ? null : new MgShape(cPtr, false);
+  }
+
+  public MgShape addShape(MgMotion sender, MgShape shape) {
+    long cPtr = touchvgJNI.MgCommandDraw_addShape__SWIG_1(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShape.getCPtr(shape), shape);
+    return (cPtr == 0) ? null : new MgShape(cPtr, false);
+  }
+
+  public MgShape addShape(MgMotion sender) {
+    long cPtr = touchvgJNI.MgCommandDraw_addShape__SWIG_2(swigCPtr, this, MgMotion.getCPtr(sender), sender);
+    return (cPtr == 0) ? null : new MgShape(cPtr, false);
+  }
+
+  public void delayClear() {
+    touchvgJNI.MgCommandDraw_delayClear(swigCPtr, this);
+  }
+
+  public boolean touchBeganStep(MgMotion sender) {
+    return touchvgJNI.MgCommandDraw_touchBeganStep(swigCPtr, this, MgMotion.getCPtr(sender), sender);
+  }
+
+  public boolean touchMovedStep(MgMotion sender) {
+    return touchvgJNI.MgCommandDraw_touchMovedStep(swigCPtr, this, MgMotion.getCPtr(sender), sender);
+  }
+
+  public boolean touchEndedStep(MgMotion sender) {
+    return touchvgJNI.MgCommandDraw_touchEndedStep(swigCPtr, this, MgMotion.getCPtr(sender), sender);
+  }
+
+  protected MgShape createShape(MgShapeFactory arg0) {
+    long cPtr = (getClass() == MgCommandDraw.class) ? touchvgJNI.MgCommandDraw_createShape(swigCPtr, this, MgShapeFactory.getCPtr(arg0), arg0) : touchvgJNI.MgCommandDraw_createShapeSwigExplicitMgCommandDraw(swigCPtr, this, MgShapeFactory.getCPtr(arg0), arg0);
+    return (cPtr == 0) ? null : new MgShape(cPtr, false);
   }
 
   protected int getMaxStep() {
@@ -57,6 +97,10 @@ public class MgCommandDraw extends MgCommand {
 
   protected void setStepPoint(int step, Point2d pt) {
     if (getClass() == MgCommandDraw.class) touchvgJNI.MgCommandDraw_setStepPoint(swigCPtr, this, step, Point2d.getCPtr(pt), pt); else touchvgJNI.MgCommandDraw_setStepPointSwigExplicitMgCommandDraw(swigCPtr, this, step, Point2d.getCPtr(pt), pt);
+  }
+
+  public boolean initialize(MgMotion sender, MgStorage arg1) {
+    return (getClass() == MgCommandDraw.class) ? touchvgJNI.MgCommandDraw_initialize(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgStorage.getCPtr(arg1), arg1) : touchvgJNI.MgCommandDraw_initializeSwigExplicitMgCommandDraw(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgStorage.getCPtr(arg1), arg1);
   }
 
   public boolean backStep(MgMotion sender) {
@@ -73,6 +117,18 @@ public class MgCommandDraw extends MgCommand {
 
   public int gatherShapes(MgMotion sender, MgShapes shapes) {
     return (getClass() == MgCommandDraw.class) ? touchvgJNI.MgCommandDraw_gatherShapes(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShapes.getCPtr(shapes), shapes) : touchvgJNI.MgCommandDraw_gatherShapesSwigExplicitMgCommandDraw(swigCPtr, this, MgMotion.getCPtr(sender), sender, MgShapes.getCPtr(shapes), shapes);
+  }
+
+  public boolean touchBegan(MgMotion sender) {
+    return (getClass() == MgCommandDraw.class) ? touchvgJNI.MgCommandDraw_touchBegan(swigCPtr, this, MgMotion.getCPtr(sender), sender) : touchvgJNI.MgCommandDraw_touchBeganSwigExplicitMgCommandDraw(swigCPtr, this, MgMotion.getCPtr(sender), sender);
+  }
+
+  public boolean touchMoved(MgMotion sender) {
+    return (getClass() == MgCommandDraw.class) ? touchvgJNI.MgCommandDraw_touchMoved(swigCPtr, this, MgMotion.getCPtr(sender), sender) : touchvgJNI.MgCommandDraw_touchMovedSwigExplicitMgCommandDraw(swigCPtr, this, MgMotion.getCPtr(sender), sender);
+  }
+
+  public boolean touchEnded(MgMotion sender) {
+    return (getClass() == MgCommandDraw.class) ? touchvgJNI.MgCommandDraw_touchEnded(swigCPtr, this, MgMotion.getCPtr(sender), sender) : touchvgJNI.MgCommandDraw_touchEndedSwigExplicitMgCommandDraw(swigCPtr, this, MgMotion.getCPtr(sender), sender);
   }
 
   public boolean click(MgMotion sender) {

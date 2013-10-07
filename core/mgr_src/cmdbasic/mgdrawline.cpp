@@ -21,7 +21,7 @@ bool MgCmdDrawLine::initialize(const MgMotion* sender, MgStorage*)
 
 bool MgCmdDrawLine::backStep(const MgMotion* sender)
 {
-    return MgCommandDraw::_backStep(sender);
+    return MgCommandDraw::backStep(sender);
 }
 
 bool MgCmdDrawLine::touchBegan(const MgMotion* sender)
@@ -33,7 +33,7 @@ bool MgCmdDrawLine::touchBegan(const MgMotion* sender)
     dynshape()->shape()->setPoint(1, pnt);
     dynshape()->shape()->update();
 
-    return _touchBegan(sender);
+    return MgCommandDraw::touchBegan(sender);
 }
 
 bool MgCmdDrawLine::touchMoved(const MgMotion* sender)
@@ -41,7 +41,7 @@ bool MgCmdDrawLine::touchMoved(const MgMotion* sender)
     dynshape()->shape()->setPoint(1, snapPoint(sender));
     dynshape()->shape()->update();
 
-    return _touchMoved(sender);
+    return MgCommandDraw::touchMoved(sender);
 }
 
 bool MgCmdDrawLine::touchEnded(const MgMotion* sender)
@@ -50,11 +50,11 @@ bool MgCmdDrawLine::touchEnded(const MgMotion* sender)
     dynshape()->shape()->update();
 
     if ( ((MgLine*)dynshape()->shape())->length() > sender->displayMmToModel(2.f)) {
-        _addshape(sender);
+        addShape(sender);
     }
-    _delayClear();
+    delayClear();
 
-    return _touchEnded(sender);
+    return MgCommandDraw::touchEnded(sender);
 }
 
 bool MgCmdDrawFixedLine::initialize(const MgMotion* sender, MgStorage*)

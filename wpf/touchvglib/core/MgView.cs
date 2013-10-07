@@ -153,11 +153,6 @@ public class MgView : IDisposable {
     return ret;
   }
 
-  public virtual bool addCommand(MgCommand cmd) {
-    bool ret = touchvgPINVOKE.MgView_addCommand(swigCPtr, MgCommand.getCPtr(cmd));
-    return ret;
-  }
-
   public virtual void regenAll() {
     touchvgPINVOKE.MgView_regenAll(swigCPtr);
   }

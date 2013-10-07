@@ -163,6 +163,14 @@ private:
         return sp;
     }
 
+    virtual MgCommand* createCommand(const MgMotion* sender, const char* name) {
+        MgCommand* cmd = (MgCommand*)0;
+        for (Iterator it = _arr.begin(); !cmd && it != _arr.end(); ++it) {
+            cmd = (*it)->createCommand(sender, name);
+        }
+        return cmd;
+    }
+
 private:
     typedef std::vector<CmdObserver*> Observers;
     typedef Observers::iterator Iterator;

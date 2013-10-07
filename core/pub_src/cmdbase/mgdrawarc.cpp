@@ -29,7 +29,7 @@ bool MgCmdArc3P::draw(const MgMotion* sender, GiGraphics* gs)
         MgArc* arc = (MgArc*)dynshape()->shape();
         gs->drawEllipse(&ctx, arc->getCenter(), arc->getRadius());
     }
-    return _draw(sender, gs);
+    return MgCommandDraw::draw(sender, gs);
 }
 
 void MgCmdArc3P::setStepPoint(int step, const Point2d& pt)

@@ -21,7 +21,7 @@ bool MgCmdDrawRect::initialize(const MgMotion* sender, MgStorage*)
 
 bool MgCmdDrawRect::backStep(const MgMotion* sender)
 {
-    return MgCommandDraw::_backStep(sender);
+    return MgCommandDraw::backStep(sender);
 }
 
 bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
@@ -31,7 +31,7 @@ bool MgCmdDrawRect::touchBegan(const MgMotion* sender)
     ((MgBaseRect*)dynshape()->shape())->setRect2P(m_startPt, m_startPt);
     dynshape()->shape()->update();
 
-    return _touchBegan(sender);
+    return MgCommandDraw::touchBegan(sender);
 }
 
 bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
@@ -43,7 +43,7 @@ bool MgCmdDrawRect::touchMoved(const MgMotion* sender)
     shape->setRect2P(pt1, pt2);
     dynshape()->shape()->update();
 
-    return _touchMoved(sender);
+    return MgCommandDraw::touchMoved(sender);
 }
 
 bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
@@ -61,11 +61,11 @@ bool MgCmdDrawRect::touchEnded(const MgMotion* sender)
         addRectShape(sender);
     }
 
-    return _touchEnded(sender);
+    return MgCommandDraw::touchEnded(sender);
 }
 
 void MgCmdDrawRect::addRectShape(const MgMotion* sender)
 {
-    _addshape(sender);
-    _delayClear();
+    addShape(sender);
+    delayClear();
 }
