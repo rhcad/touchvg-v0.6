@@ -3999,6 +3999,9 @@ class touchvgPINVOKE {
   [DllImport("touchvg", EntryPoint="CSharp_MgView_setNewShapeID")]
   public static extern void MgView_setNewShapeID(HandleRef jarg1, int jarg2);
 
+  [DllImport("touchvg", EntryPoint="CSharp_MgView_getCommandName")]
+  public static extern string MgView_getCommandName(HandleRef jarg1);
+
   [DllImport("touchvg", EntryPoint="CSharp_MgView_getCommand")]
   public static extern IntPtr MgView_getCommand(HandleRef jarg1);
 

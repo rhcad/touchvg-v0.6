@@ -1348,6 +1348,7 @@ public class touchvgJNI {
   public final static native void MgView_cancel(long jarg1, MgView jarg1_, long jarg2, MgMotion jarg2_);
   public final static native int MgView_getNewShapeID(long jarg1, MgView jarg1_);
   public final static native void MgView_setNewShapeID(long jarg1, MgView jarg1_, int jarg2);
+  public final static native String MgView_getCommandName(long jarg1, MgView jarg1_);
   public final static native long MgView_getCommand(long jarg1, MgView jarg1_);
   public final static native long MgView_findCommand(long jarg1, MgView jarg1_, String jarg2);
   public final static native boolean MgView_setCommand(long jarg1, MgView jarg1_, long jarg2, MgMotion jarg2_, String jarg3);

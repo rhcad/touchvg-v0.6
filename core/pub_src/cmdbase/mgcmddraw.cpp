@@ -7,6 +7,7 @@
 #include <mgaction.h>
 #include <cmdsubject.h>
 #include <string.h>
+#include <mglog.h>
 
 MgCommandDraw::MgCommandDraw() : m_step(0), m_shape(NULL), m_needClear(false)
 {
@@ -111,6 +112,7 @@ bool MgCommandDraw::_click(const MgMotion* sender)
     if (shape) {
         sender->view->setNewShapeID(shape->getID());
         sender->cancel();
+        LOGD("Command (%s) cancelled after the shape #%d clicked.", getName(), shape->getID());
     }
     
     return shape || (sender->view->useFinger() && longPress(sender));

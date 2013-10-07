@@ -119,6 +119,7 @@ public:
         _cmds->registerCommand(name, creator); }
     void cancel(const MgMotion* sender) {
         _cmds->setCommand(sender, "select", NULL); }
+    const char* getCommandName() { return _cmds->getCommandName(); }
     MgCommand* getCommand() { return _cmds->getCommand(); }
     MgCommand* findCommand(const char* name) {
         return _cmds->findCommand(name); }
@@ -188,7 +189,7 @@ public:
             newids.push_back(sp->getID());      // 记下新图形的ID
             regenAppend();                      // 通知视图获取快照并增量重绘
         }
-        else if (newids.back() != 0) {    // 已经regenAppend，但视图还未重绘
+        else if (newids.back() != 0) {          // 已经regenAppend，但视图还未重绘
             newids.insert(newids.begin(), sp->getID()); // 记下更多的ID
         }
         else {                                  // 已经regenAppend并增量重绘

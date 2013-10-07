@@ -59,6 +59,7 @@ public:
     virtual void cancel(const MgMotion* sender) = 0; //!< 取消当前命令
     virtual int getNewShapeID() = 0;                //!< 返回新绘图形的ID
     virtual void setNewShapeID(int sid) = 0;        //!< 设置新绘图形的ID
+    virtual const char* getCommandName() = 0;       //!< 得到当前命令名称
     virtual MgCommand* getCommand() = 0;                    //!< 得到当前命令
     virtual MgCommand* findCommand(const char* name) = 0;   //!< 查找命令
     virtual bool setCommand(const MgMotion* sender, const char* name) = 0;  //!< 启动命令

@@ -31541,6 +31541,21 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgView_1setNewShapeID(JNIEn
 }
 
 
+SWIGEXPORT jstring JNICALL Java_touchvg_core_touchvgJNI_MgView_1getCommandName(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  MgView *arg1 = (MgView *) 0 ;
+  char *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgView **)&jarg1; 
+  result = (char *)(arg1)->getCommandName();
+  if (result) jresult = jenv->NewStringUTF((const char *)result);
+  return jresult;
+}
+
+
 SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_MgView_1getCommand(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   MgView *arg1 = (MgView *) 0 ;

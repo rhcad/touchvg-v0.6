@@ -2,6 +2,9 @@
 
 package vgtest.testview.shape;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import touchvg.core.CmdObserverDefault;
 import touchvg.core.GiContext;
 import touchvg.core.GiGraphics;
@@ -68,8 +71,14 @@ public class ViewSinShape extends GraphView {
         }
     }
     
+    private Set<MgCommand> mCmdCache = new HashSet<MgCommand>();
+    
     private class DrawSinShape extends MgCommandDraw {
         public static final String NAME = "sin";
+        
+        public DrawSinShape() {
+        	mCmdCache.add(this);
+        }
         
         @Override
         public String getName() {
@@ -78,6 +87,7 @@ public class ViewSinShape extends GraphView {
         
         @Override
         public void release() {
+            mCmdCache.remove(this);
             delete();
         }
         
@@ -88,15 +98,40 @@ public class ViewSinShape extends GraphView {
         
         @Override
         public boolean click(MgMotion sender) {
-            dynshape().shape().setHandlePoint(0, snapPoint(sender), 0);
-            addShape(sender);
-            return super.click(sender);
+            super.click(sender);
+            if (sender.getView().getCommandName().equals(NAME)) {
+                dynshape().shape().setHandlePoint(0, snapPoint(sender), 0);
+                addShape(sender);
+            }
+            return true;
         }
     }
 
+    private static Set<SinShape> mShapeCache;
+    
     private class SinShape extends MgBaseShape {
         private MgSplines mCurve = new MgSplines();
         public static final int TYPE = 100;
+        
+        public SinShape() {
+        	if (mShapeCache == null)
+        		mShapeCache = new HashSet<SinShape>();
+        	mShapeCache.add(this);
+        	
+            for (int i = 0; i < 100; i++) {
+                double y = 10 * Math.sin(i * Math.PI / 20);
+                mCurve.addPoint(new Point2d(i * 0.2f, (float)y));
+            }
+        }
+        
+        private SinShape castShape(MgObject obj) {
+        	for (SinShape sp: mShapeCache) {
+        		if (MgObject.getCPtr(obj) == getCPtr(sp)) {
+        			return sp;
+        		}
+        	}
+        	return null;
+        }
         
         @Override
         public int getType() {
@@ -123,23 +158,23 @@ public class ViewSinShape extends GraphView {
         @Override
         public void copy(MgObject src) {
             super.copy(src);
-            if (src.isKindOf(TYPE)) {
-                SinShape s = (SinShape) src;
+            SinShape s = castShape(src);
+            if (s != null) {
                 mCurve.copy(s.mCurve);
             }
         }
         
         @Override
         public void release() {
+            mShapeCache.remove(this);
             delete();
         }
         
         @Override
         public boolean equals(MgObject src) {
-            if (src.isKindOf(TYPE)) {
-                SinShape s = (SinShape) src;
-                if (!mCurve.equals(s.mCurve))
-                    return false;
+        	SinShape s = castShape(src);
+            if (s == null || !mCurve.equals(s.mCurve)) {
+            	return false;
             }
             return super.equals(src);
         }
@@ -159,7 +194,7 @@ public class ViewSinShape extends GraphView {
 
         @Override
         public void clear() {
-            mCurve.clear();
+            //mCurve.clear();
             super.clear();
         }
 
@@ -185,7 +220,8 @@ public class ViewSinShape extends GraphView {
 
         @Override
         public float hitTest(Point2d pt, float tol, MgHitResult res) {
-            return mCurve.hitTest(pt, tol, res);
+            float dist = mCurve.hitTest(pt, tol, res);
+            return dist;
         }
 
         @Override

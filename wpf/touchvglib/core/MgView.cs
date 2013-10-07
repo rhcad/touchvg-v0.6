@@ -136,6 +136,11 @@ public class MgView : IDisposable {
     touchvgPINVOKE.MgView_setNewShapeID(swigCPtr, sid);
   }
 
+  public virtual string getCommandName() {
+    string ret = touchvgPINVOKE.MgView_getCommandName(swigCPtr);
+    return ret;
+  }
+
   public virtual MgCommand getCommand() {
     IntPtr cPtr = touchvgPINVOKE.MgView_getCommand(swigCPtr);
     MgCommand ret = (cPtr == IntPtr.Zero) ? null : new MgCommand(cPtr, false);

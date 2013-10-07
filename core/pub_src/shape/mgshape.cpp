@@ -235,7 +235,7 @@ void MgShape::copy(const MgObject& src)
 
 bool MgShape::isKindOf(int type) const
 {
-    return type == getType() || type == shapec()->getType();
+    return type == Type() || type == shapec()->getType();
 }
 
 bool MgShape::equals(const MgObject& src) const

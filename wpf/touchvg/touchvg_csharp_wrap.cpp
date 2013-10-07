@@ -23289,6 +23289,18 @@ SWIGEXPORT void SWIGSTDCALL CSharp_MgView_setNewShapeID(void * jarg1, int jarg2)
 }
 
 
+SWIGEXPORT char * SWIGSTDCALL CSharp_MgView_getCommandName(void * jarg1) {
+  char * jresult ;
+  MgView *arg1 = (MgView *) 0 ;
+  char *result = 0 ;
+  
+  arg1 = (MgView *)jarg1; 
+  result = (char *)(arg1)->getCommandName();
+  jresult = SWIG_csharp_string_callback((const char *)result); 
+  return jresult;
+}
+
+
 SWIGEXPORT void * SWIGSTDCALL CSharp_MgView_getCommand(void * jarg1) {
   void * jresult ;
   MgView *arg1 = (MgView *) 0 ;

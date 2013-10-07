@@ -100,7 +100,7 @@ MgObject* MgShapes::getOwner() const
 
 MgShape* MgShapes::addShape(const MgShape& src)
 {
-    MgShape* p = (MgShape*)src.clone();
+    MgShape* p = src.cloneShape();
     if (p) {
         p->setParent(this, im->getNewID(src.getID()));
         im->shapes.push_back(p);
@@ -277,9 +277,6 @@ MgShape* MgShapes::hitTest(const Box2d& limits, MgHitResult& res, Filter filter)
                 retshape = *it;
             }
         }
-    }
-    if (retshape && res.dist > limits.width() && !retshape->hasFillColor()) {
-        retshape = NULL;
     }
     
     return retshape;

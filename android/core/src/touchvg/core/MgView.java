@@ -115,6 +115,10 @@ public class MgView {
     touchvgJNI.MgView_setNewShapeID(swigCPtr, this, sid);
   }
 
+  public String getCommandName() {
+    return touchvgJNI.MgView_getCommandName(swigCPtr, this);
+  }
+
   public MgCommand getCommand() {
     long cPtr = touchvgJNI.MgView_getCommand(swigCPtr, this);
     return (cPtr == 0) ? null : new MgCommand(cPtr, false);

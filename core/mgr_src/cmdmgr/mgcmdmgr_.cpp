@@ -95,6 +95,7 @@ bool MgCmdManagerImpl::setCommand(const MgMotion* sender,
         cmd = sender->view->getCmdSubject()->createCommand(sender, name);
         if (cmd) {
             _cmds[name] = cmd;
+            LOGD("createCommand %d: %s", (int)_cmds.size(), name);
         }
     }
     
