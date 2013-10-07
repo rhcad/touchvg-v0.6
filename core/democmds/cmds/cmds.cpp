@@ -13,9 +13,8 @@ public:
 
 static DemoCmdsObserver _observer;
 
-int DemoCmdsImpl::registerCmds(MGVIEW_HANDLE mgView)
+int DemoCmdsImpl::registerCmds(MgView* view)
 {
-    MgView* view = (MgView*)mgView;
     view->getCmdSubject()->registerObserver(&_observer);
 
     //MgShapeT<MgCube>::registerCreator(view->getShapeFactory());
@@ -24,7 +23,7 @@ int DemoCmdsImpl::registerCmds(MGVIEW_HANDLE mgView)
     return 1;
 }
 
-int DemoCmdsImpl::getDimensions(MGVIEW_HANDLE, float*, char*, int)
+int DemoCmdsImpl::getDimensions(MgView*, float*, char*, int)
 {
     return 0;
 }

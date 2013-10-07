@@ -648,6 +648,9 @@ public class touchvgJNI {
   public final static native boolean MgObject_equals(long jarg1, MgObject jarg1_, long jarg2, MgObject jarg2_);
   public final static native int MgObject_getType(long jarg1, MgObject jarg1_);
   public final static native boolean MgObject_isKindOf(long jarg1, MgObject jarg1_, int jarg2);
+  public final static native long new_MgObject();
+  public final static native void MgObject_director_connect(MgObject obj, long cptr, boolean mem_own, boolean weak_global);
+  public final static native void MgObject_change_ownership(MgObject obj, long cptr, boolean take_or_release);
   public final static native int MgShape_Type();
   public final static native long MgShape_cloneShape(long jarg1, MgShape jarg1_);
   public final static native long MgShape_context(long jarg1, MgShape jarg1_);
@@ -1901,6 +1904,24 @@ public class touchvgJNI {
   }
   public static int SwigDirector_MgStorageBase_readString(MgStorageBase self, String name, long value) {
     return self.readString(name, new Chars(value, false));
+  }
+  public static long SwigDirector_MgObject_clone(MgObject self) {
+    return MgObject.getCPtr(self.clone());
+  }
+  public static void SwigDirector_MgObject_copy(MgObject self, long src) {
+    self.copy(new MgObject(src, false));
+  }
+  public static void SwigDirector_MgObject_release(MgObject self) {
+    self.release();
+  }
+  public static boolean SwigDirector_MgObject_equals(MgObject self, long src) {
+    return self.equals(new MgObject(src, false));
+  }
+  public static int SwigDirector_MgObject_getType(MgObject self) {
+    return self.getType();
+  }
+  public static boolean SwigDirector_MgObject_isKindOf(MgObject self, int type) {
+    return self.isKindOf(type);
   }
   public static long SwigDirector_MgBaseShape_clone(MgBaseShape self) {
     return MgObject.getCPtr(self.clone());

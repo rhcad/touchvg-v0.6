@@ -318,10 +318,6 @@
 							RelativePath="..\..\core\pub_inc\cmd\mgview.h"
 							>
 						</File>
-						<File
-							RelativePath="..\..\core\pub_inc\cmd\mgviewhandle.h"
-							>
-						</File>
 					</Filter>
 					<Filter
 						Name="cmdbase"

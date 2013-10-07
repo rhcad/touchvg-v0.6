@@ -5,7 +5,6 @@
 #define DEMOCMDS_GATE_H_
 
 #include "mgvector.h"
-#include "mgviewhandle.h"
 
 //! 示例应用的功能入口类
 /*! \ingroup CORE_VIEW
@@ -13,10 +12,10 @@
  */
 struct DemoCmdsGate {
     //! 登记绘图命令和图形类型
-    static int registerCmds(MGVIEW_HANDLE mgView);
+    static int registerCmds(long mgView);
 
     //! 得到当前图形的各种度量尺寸
-    static int getDimensions(MGVIEW_HANDLE mgView, 
+    static int getDimensions(long mgView, 
         mgvector<float>& vars, mgvector<char>& types);
 };
 

@@ -2,8 +2,8 @@
 
 package vgtest.testview.shape;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import touchvg.core.CmdObserverDefault;
 import touchvg.core.GiContext;
@@ -89,7 +89,7 @@ public class ViewSinShape extends GraphView {
         }
     }
     
-    private Set<MgCommand> mCmdCache = new HashSet<MgCommand>();
+    private List<MgCommand> mCmdCache = new ArrayList<MgCommand>();
     
     private class DrawSinShape extends MgCommandDraw {
         public static final String NAME = "sin";
@@ -125,7 +125,7 @@ public class ViewSinShape extends GraphView {
         }
     }
 
-    private static Set<SinShape> mShapeCache;
+    private static List<SinShape> mShapeCache;
     
     public SinShape castSinShape(MgObject obj) {
         return mShapeCache.isEmpty() ? null :
@@ -138,12 +138,12 @@ public class ViewSinShape extends GraphView {
         
         public SinShape() {
             if (mShapeCache == null)
-                mShapeCache = new HashSet<SinShape>();
+                mShapeCache = new ArrayList<SinShape>();
             mShapeCache.add(this);
             
-            for (int i = 0; i < 100; i++) {
-                double y = 10 * Math.sin(i * Math.PI / 20);
-                mCurve.addPoint(new Point2d(i * 0.2f, (float)y));
+            for (int i = 0; i < 20; i++) {
+                double y = 10 * Math.sin(i * Math.PI / 10);
+                mCurve.addPoint(new Point2d(i * 0.5f, (float)y));
             }
         }
         

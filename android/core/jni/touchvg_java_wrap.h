@@ -73,6 +73,26 @@ protected:
     bool swig_override[14];
 };
 
+class SwigDirector_MgObject : public MgObject, public Swig::Director {
+
+public:
+    void swig_connect_director(JNIEnv *jenv, jobject jself, jclass jcls, bool swig_mem_own, bool weak_global);
+    SwigDirector_MgObject(JNIEnv *jenv);
+    virtual MgObject *clone() const;
+    virtual void copy(MgObject const &src);
+    virtual void release();
+    virtual bool equals(MgObject const &src) const;
+    virtual int getType() const;
+    virtual bool isKindOf(int type) const;
+    virtual ~SwigDirector_MgObject();
+public:
+    bool swig_overrides(int n) {
+      return (n < 6 ? swig_override[n] : false);
+    }
+protected:
+    bool swig_override[6];
+};
+
 class SwigDirector_MgBaseShape : public MgBaseShape, public Swig::Director {
 
 public:

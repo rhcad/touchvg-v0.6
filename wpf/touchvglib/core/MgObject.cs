@@ -68,6 +68,76 @@ public class MgObject : IDisposable {
     return ret;
   }
 
+  public MgObject() : this(touchvgPINVOKE.new_MgObject(), true) {
+    SwigDirectorConnect();
+  }
+
+  private void SwigDirectorConnect() {
+    if (SwigDerivedClassHasMethod("clone", swigMethodTypes0))
+      swigDelegate0 = new SwigDelegateMgObject_0(SwigDirectorclone);
+    if (SwigDerivedClassHasMethod("copy", swigMethodTypes1))
+      swigDelegate1 = new SwigDelegateMgObject_1(SwigDirectorcopy);
+    if (SwigDerivedClassHasMethod("release", swigMethodTypes2))
+      swigDelegate2 = new SwigDelegateMgObject_2(SwigDirectorrelease);
+    if (SwigDerivedClassHasMethod("equals", swigMethodTypes3))
+      swigDelegate3 = new SwigDelegateMgObject_3(SwigDirectorequals);
+    if (SwigDerivedClassHasMethod("getType", swigMethodTypes4))
+      swigDelegate4 = new SwigDelegateMgObject_4(SwigDirectorgetType);
+    if (SwigDerivedClassHasMethod("isKindOf", swigMethodTypes5))
+      swigDelegate5 = new SwigDelegateMgObject_5(SwigDirectorisKindOf);
+    touchvgPINVOKE.MgObject_director_connect(swigCPtr, swigDelegate0, swigDelegate1, swigDelegate2, swigDelegate3, swigDelegate4, swigDelegate5);
+  }
+
+  private bool SwigDerivedClassHasMethod(string methodName, Type[] methodTypes) {
+    System.Reflection.MethodInfo methodInfo = this.GetType().GetMethod(methodName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance, null, methodTypes, null);
+    bool hasDerivedMethod = methodInfo.DeclaringType.IsSubclassOf(typeof(MgObject));
+    return hasDerivedMethod;
+  }
+
+  private IntPtr SwigDirectorclone() {
+    return MgObject.getCPtr(clone()).Handle;
+  }
+
+  private void SwigDirectorcopy(IntPtr src) {
+    copy(new MgObject(src, false));
+  }
+
+  private void SwigDirectorrelease() {
+    release();
+  }
+
+  private bool SwigDirectorequals(IntPtr src) {
+    return equals(new MgObject(src, false));
+  }
+
+  private int SwigDirectorgetType() {
+    return getType();
+  }
+
+  private bool SwigDirectorisKindOf(int type) {
+    return isKindOf(type);
+  }
+
+  public delegate IntPtr SwigDelegateMgObject_0();
+  public delegate void SwigDelegateMgObject_1(IntPtr src);
+  public delegate void SwigDelegateMgObject_2();
+  public delegate bool SwigDelegateMgObject_3(IntPtr src);
+  public delegate int SwigDelegateMgObject_4();
+  public delegate bool SwigDelegateMgObject_5(int type);
+
+  private SwigDelegateMgObject_0 swigDelegate0;
+  private SwigDelegateMgObject_1 swigDelegate1;
+  private SwigDelegateMgObject_2 swigDelegate2;
+  private SwigDelegateMgObject_3 swigDelegate3;
+  private SwigDelegateMgObject_4 swigDelegate4;
+  private SwigDelegateMgObject_5 swigDelegate5;
+
+  private static Type[] swigMethodTypes0 = new Type[] {  };
+  private static Type[] swigMethodTypes1 = new Type[] { typeof(MgObject) };
+  private static Type[] swigMethodTypes2 = new Type[] {  };
+  private static Type[] swigMethodTypes3 = new Type[] { typeof(MgObject) };
+  private static Type[] swigMethodTypes4 = new Type[] {  };
+  private static Type[] swigMethodTypes5 = new Type[] { typeof(int) };
 }
 
 }

@@ -11,6 +11,8 @@
 class GiCanvas;
 class GiCoreViewImpl;
 class GiContext;
+class MgView;
+struct MgStorage;
 
 //! 内核视图分发器类
 /*! 本对象拥有图形文档对象，负责显示和手势动作的分发。
@@ -68,7 +70,7 @@ public:
     const char* getCommand() const;
     
     //! 启动命令
-    bool setCommand(GiView* view, const char* name);
+    bool setCommand(GiView* view, const char* name, const char* params = "");
 
     //! 执行上下文动作
     bool doContextAction(int action);
@@ -148,13 +150,15 @@ public:
     bool getBoundingBox(mgvector<float>& box);
     
     //! 命令视图回调适配器的句柄, 可转换为 MgView 指针
-#if defined(__MINGW64__) || defined(__MINGW32__)
-    void* viewAdapter();
-#else
-    long viewAdapter();
-#endif
+    long viewAdapterHandle();
+
+    //! 命令视图回调适配器
+    MgView* viewAdapter();
 
 private:
+    bool loadShapes(MgStorage* s);
+    bool saveShapes(MgStorage* s);
+
     GiCoreViewImpl* impl;
 };
 

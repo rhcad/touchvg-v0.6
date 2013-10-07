@@ -1005,6 +1005,108 @@ void SwigDirector_MgStorageBase::swig_init_callbacks() {
   swig_callbackreadString = 0;
 }
 
+SwigDirector_MgObject::SwigDirector_MgObject() : MgObject(), Swig::Director() {
+  swig_init_callbacks();
+}
+
+MgObject *SwigDirector_MgObject::clone() const {
+  MgObject *c_result = 0 ;
+  void * jresult = 0 ;
+  
+  if (!swig_callbackclone) {
+    throw Swig::DirectorPureVirtualException("MgObject::clone");
+  } else {
+    jresult = (void *) swig_callbackclone();
+    c_result = (MgObject *)jresult; 
+  }
+  return c_result;
+}
+
+void SwigDirector_MgObject::copy(MgObject const &src) {
+  void * jsrc = 0 ;
+  
+  if (!swig_callbackcopy) {
+    throw Swig::DirectorPureVirtualException("MgObject::copy");
+  } else {
+    jsrc = (MgObject *) &src; 
+    swig_callbackcopy(jsrc);
+  }
+}
+
+void SwigDirector_MgObject::release() {
+  if (!swig_callbackrelease) {
+    throw Swig::DirectorPureVirtualException("MgObject::release");
+  } else {
+    swig_callbackrelease();
+  }
+}
+
+bool SwigDirector_MgObject::equals(MgObject const &src) const {
+  bool c_result = SwigValueInit< bool >() ;
+  unsigned int jresult = 0 ;
+  void * jsrc = 0 ;
+  
+  if (!swig_callbackequals) {
+    throw Swig::DirectorPureVirtualException("MgObject::equals");
+  } else {
+    jsrc = (MgObject *) &src; 
+    jresult = (unsigned int) swig_callbackequals(jsrc);
+    c_result = jresult ? true : false; 
+  }
+  return c_result;
+}
+
+int SwigDirector_MgObject::getType() const {
+  int c_result = SwigValueInit< int >() ;
+  int jresult = 0 ;
+  
+  if (!swig_callbackgetType) {
+    throw Swig::DirectorPureVirtualException("MgObject::getType");
+  } else {
+    jresult = (int) swig_callbackgetType();
+    c_result = (int)jresult; 
+  }
+  return c_result;
+}
+
+bool SwigDirector_MgObject::isKindOf(int type) const {
+  bool c_result = SwigValueInit< bool >() ;
+  unsigned int jresult = 0 ;
+  int jtype  ;
+  
+  if (!swig_callbackisKindOf) {
+    throw Swig::DirectorPureVirtualException("MgObject::isKindOf");
+  } else {
+    jtype = type;
+    jresult = (unsigned int) swig_callbackisKindOf(jtype);
+    c_result = jresult ? true : false; 
+  }
+  return c_result;
+}
+
+SwigDirector_MgObject::~SwigDirector_MgObject() {
+  
+}
+
+
+void SwigDirector_MgObject::swig_connect_director(SWIG_Callback0_t callbackclone, SWIG_Callback1_t callbackcopy, SWIG_Callback2_t callbackrelease, SWIG_Callback3_t callbackequals, SWIG_Callback4_t callbackgetType, SWIG_Callback5_t callbackisKindOf) {
+  swig_callbackclone = callbackclone;
+  swig_callbackcopy = callbackcopy;
+  swig_callbackrelease = callbackrelease;
+  swig_callbackequals = callbackequals;
+  swig_callbackgetType = callbackgetType;
+  swig_callbackisKindOf = callbackisKindOf;
+}
+
+void SwigDirector_MgObject::swig_init_callbacks() {
+  swig_callbackclone = 0;
+  swig_callbackcopy = 0;
+  swig_callbackrelease = 0;
+  swig_callbackequals = 0;
+  swig_callbackgetType = 0;
+  swig_callbackisKindOf = 0;
+}
+
 SwigDirector_MgBaseShape::SwigDirector_MgBaseShape() : MgBaseShape(), Swig::Director() {
   swig_init_callbacks();
 }
@@ -14405,6 +14507,25 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_MgObject_isKindOf(void * jarg1, int j
   result = (bool)((MgObject const *)arg1)->isKindOf(arg2);
   jresult = result; 
   return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_MgObject() {
+  void * jresult ;
+  MgObject *result = 0 ;
+  
+  result = (MgObject *)new SwigDirector_MgObject();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_MgObject_director_connect(void *objarg, SwigDirector_MgObject::SWIG_Callback0_t callback0, SwigDirector_MgObject::SWIG_Callback1_t callback1, SwigDirector_MgObject::SWIG_Callback2_t callback2, SwigDirector_MgObject::SWIG_Callback3_t callback3, SwigDirector_MgObject::SWIG_Callback4_t callback4, SwigDirector_MgObject::SWIG_Callback5_t callback5) {
+  MgObject *obj = (MgObject *)objarg;
+  SwigDirector_MgObject *director = dynamic_cast<SwigDirector_MgObject *>(obj);
+  if (director) {
+    director->swig_connect_director(callback0, callback1, callback2, callback3, callback4, callback5);
+  }
 }
 
 

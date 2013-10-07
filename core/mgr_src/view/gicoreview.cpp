@@ -475,17 +475,12 @@ MgView* GiCoreView::viewAdapter()
     return impl;
 }
 
-#if defined(__MINGW64__) || defined(__MINGW32__)
-void* GiCoreView::viewAdapterHandle()
-{
-    return viewAdapter();
-}
-#else
 long GiCoreView::viewAdapterHandle()
 {
-    return reinterpret_cast<long>(viewAdapter());
+    long ret;
+    *(MgView **)&ret = viewAdapter();
+    return ret;
 }
-#endif
 
 void GiCoreView::createView(GiView* view, int type)
 {

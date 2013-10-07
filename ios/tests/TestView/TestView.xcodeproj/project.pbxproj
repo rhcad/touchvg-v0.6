@@ -36,7 +36,6 @@
 		AE34D03B17F917E2004BC88B /* libTouchVG.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTouchVG.a; path = ../../output/libTouchVG.a; sourceTree = "<group>"; };
 		AE34D03E17F91848004BC88B /* GiCanvasAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GiCanvasAdapter.h; path = ../../output/include/GiCanvasAdapter.h; sourceTree = "<group>"; };
 		AE34D03F17F91B9D004BC88B /* DemoCmds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DemoCmds.h; path = ../../output/include/DemoCmds.h; sourceTree = "<group>"; };
-		AE34D04017F91D52004BC88B /* mgviewhandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgviewhandle.h; path = ../../output/include/mgviewhandle.h; sourceTree = "<group>"; };
 		AE34D04217F922D5004BC88B /* mgvector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mgvector.h; path = ../../output/include/mgvector.h; sourceTree = "<group>"; };
 		AE34D04317F92351004BC88B /* gicanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gicanvas.h; path = ../../output/include/gicanvas.h; sourceTree = "<group>"; };
 		AE34D04417F923F5004BC88B /* giview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = giview.h; path = ../../output/include/giview.h; sourceTree = "<group>"; };
@@ -119,7 +118,6 @@
 			children = (
 				AE34D03A17F917E2004BC88B /* libDemoCmds.a */,
 				AE34D04217F922D5004BC88B /* mgvector.h */,
-				AE34D04017F91D52004BC88B /* mgviewhandle.h */,
 				AE34D03F17F91B9D004BC88B /* DemoCmds.h */,
 			);
 			name = DemoCmds;

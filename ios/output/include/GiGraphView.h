@@ -7,6 +7,7 @@
 #ifdef __cplusplus
 class GiCoreView;
 class GiView;
+class MgView;
 #endif
 
 //! 绘图消息的观察者协议
@@ -50,8 +51,9 @@ class GiView;
 #ifdef __cplusplus
 - (GiView *)viewAdapter;                    //!< 得到视图适配器对象, GiViewAdapter
 - (GiCoreView *)coreView;                   //!< 得到跨平台内核视图
+- (MgView *)cmdView;                        //!< 返回内核命令视图
 #endif
-- (int)cmdViewHandle;                      //!< 返回内核视图的句柄, MgView 指针
+- (int)cmdViewHandle;                       //!< 返回内核视图的句柄, MgView 指针
 
 - (UIImage *)snapshot;                      //!< 得到静态图形的快照，自动释放
 - (BOOL)savePng:(NSString *)filename;       //!< 保存静态图形的快照到PNG文件

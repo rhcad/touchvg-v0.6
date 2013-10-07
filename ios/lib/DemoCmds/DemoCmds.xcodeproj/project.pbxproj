@@ -90,7 +90,6 @@
 		AE34D02A17F904AE004BC88B /* mgshape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE34CFDA17F904AE004BC88B /* mgshape.cpp */; };
 		AE34D02B17F904AE004BC88B /* mgshapes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE34CFDB17F904AE004BC88B /* mgshapes.cpp */; };
 		AE34D02C17F904AE004BC88B /* mgsplines.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE34CFDC17F904AE004BC88B /* mgsplines.cpp */; };
-		AE34D03517F90D19004BC88B /* mgviewhandle.h in Headers */ = {isa = PBXBuildFile; fileRef = AE34D03417F90D19004BC88B /* mgviewhandle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -179,7 +178,6 @@
 		AE34CFDA17F904AE004BC88B /* mgshape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mgshape.cpp; sourceTree = "<group>"; };
 		AE34CFDB17F904AE004BC88B /* mgshapes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mgshapes.cpp; sourceTree = "<group>"; };
 		AE34CFDC17F904AE004BC88B /* mgsplines.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mgsplines.cpp; sourceTree = "<group>"; };
-		AE34D03417F90D19004BC88B /* mgviewhandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mgviewhandle.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -308,7 +306,6 @@
 		AE34CF8717F904AE004BC88B /* cmd */ = {
 			isa = PBXGroup;
 			children = (
-				AE34D03417F90D19004BC88B /* mgviewhandle.h */,
 				AE34CF8817F904AE004BC88B /* mgaction.h */,
 				AE34CF8917F904AE004BC88B /* mgcmd.h */,
 				AE34CF8A17F904AE004BC88B /* mglockdata.h */,
@@ -481,7 +478,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE34D00117F904AE004BC88B /* mgvector.h in Headers */,
-				AE34D03517F90D19004BC88B /* mgviewhandle.h in Headers */,
 				AE34CFE217F904AE004BC88B /* DemoCmds.h in Headers */,
 				AE34CFDE17F904AE004BC88B /* cmds.h in Headers */,
 				AE34CFE017F904AE004BC88B /* HitTestCmd.h in Headers */,

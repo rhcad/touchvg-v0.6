@@ -89,6 +89,7 @@
 %include <mgstorage.h>
 %include <mgstoragebs.h>
 
+%feature("director") MgObject;
 %feature("director") MgBaseShape;
 %feature("director") MgBaseRect;
 %feature("director") MgBaseLines;

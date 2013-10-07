@@ -461,9 +461,6 @@
     <ClInclude Include="..\..\core\mgr_inc\view\gimousehelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\pub_inc\cmd\mgviewhandle.h">
-      <Filter>Source Files\command\cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\core\mgr_src\cmdbasic\mgcmderase.h">
       <Filter>Source Files\command_src\cmdbasic</Filter>
     </ClInclude>

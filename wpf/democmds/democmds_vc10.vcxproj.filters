@@ -251,9 +251,6 @@
     <ClInclude Include="..\..\core\pub_inc\cmd\mgselect.h">
       <Filter>Source Files\base\command\cmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\pub_inc\cmd\mgviewhandle.h">
-      <Filter>Source Files\base\command\cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\core\democmds\gate\DemoCmds.h">
       <Filter>Header Files</Filter>
     </ClInclude>

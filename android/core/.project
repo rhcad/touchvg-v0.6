@@ -537,11 +537,6 @@
 			<locationURI>PARENT-2-PROJECT_LOC/core/pub_inc/cmd/mgview.h</locationURI>
 		</link>
 		<link>
-			<name>jni/pub_inc/cmd/mgviewhandle.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/core/pub_inc/cmd/mgviewhandle.h</locationURI>
-		</link>
-		<link>
 			<name>jni/pub_inc/cmdbase/mgcmddraw.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/core/pub_inc/cmdbase/mgcmddraw.h</locationURI>

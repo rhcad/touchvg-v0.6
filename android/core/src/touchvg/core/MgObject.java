@@ -31,6 +31,21 @@ public class MgObject {
     }
   }
 
+  protected void swigDirectorDisconnect() {
+    swigCMemOwn = false;
+    delete();
+  }
+
+  public void swigReleaseOwnership() {
+    swigCMemOwn = false;
+    touchvgJNI.MgObject_change_ownership(this, swigCPtr, false);
+  }
+
+  public void swigTakeOwnership() {
+    swigCMemOwn = true;
+    touchvgJNI.MgObject_change_ownership(this, swigCPtr, true);
+  }
+
   public MgObject clone() {
     long cPtr = touchvgJNI.MgObject_clone(swigCPtr, this);
     return (cPtr == 0) ? null : new MgObject(cPtr, false);
@@ -54,6 +69,11 @@ public class MgObject {
 
   public boolean isKindOf(int type) {
     return touchvgJNI.MgObject_isKindOf(swigCPtr, this, type);
+  }
+
+  public MgObject() {
+    this(touchvgJNI.new_MgObject(), true);
+    touchvgJNI.MgObject_director_connect(this, swigCPtr, swigCMemOwn, true);
   }
 
 }

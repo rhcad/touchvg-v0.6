@@ -216,7 +216,6 @@
     <ClInclude Include="..\..\core\pub_inc\cmd\mgselect.h" />
     <ClInclude Include="..\..\core\pub_inc\cmd\mgsnap.h" />
     <ClInclude Include="..\..\core\pub_inc\cmd\mgview.h" />
-    <ClInclude Include="..\..\core\pub_inc\cmd\mgviewhandle.h" />
     <ClInclude Include="..\..\core\pub_inc\geom\mgbase.h" />
     <ClInclude Include="..\..\core\pub_inc\geom\mgbnd.h" />
     <ClInclude Include="..\..\core\pub_inc\geom\mgbox.h" />

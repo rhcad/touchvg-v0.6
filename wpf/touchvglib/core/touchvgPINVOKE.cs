@@ -2040,6 +2040,12 @@ class touchvgPINVOKE {
   [DllImport("touchvg", EntryPoint="CSharp_MgObject_isKindOf")]
   public static extern bool MgObject_isKindOf(HandleRef jarg1, int jarg2);
 
+  [DllImport("touchvg", EntryPoint="CSharp_new_MgObject")]
+  public static extern IntPtr new_MgObject();
+
+  [DllImport("touchvg", EntryPoint="CSharp_MgObject_director_connect")]
+  public static extern void MgObject_director_connect(HandleRef jarg1, MgObject.SwigDelegateMgObject_0 delegate0, MgObject.SwigDelegateMgObject_1 delegate1, MgObject.SwigDelegateMgObject_2 delegate2, MgObject.SwigDelegateMgObject_3 delegate3, MgObject.SwigDelegateMgObject_4 delegate4, MgObject.SwigDelegateMgObject_5 delegate5);
+
   [DllImport("touchvg", EntryPoint="CSharp_MgShape_Type")]
   public static extern int MgShape_Type();
 

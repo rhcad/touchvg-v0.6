@@ -137,6 +137,36 @@ private:
     void swig_init_callbacks();
 };
 
+class SwigDirector_MgObject : public MgObject, public Swig::Director {
+
+public:
+    SwigDirector_MgObject();
+    virtual MgObject *clone() const;
+    virtual void copy(MgObject const &src);
+    virtual void release();
+    virtual bool equals(MgObject const &src) const;
+    virtual int getType() const;
+    virtual bool isKindOf(int type) const;
+    virtual ~SwigDirector_MgObject();
+
+    typedef void * (SWIGSTDCALL* SWIG_Callback0_t)();
+    typedef void (SWIGSTDCALL* SWIG_Callback1_t)(void *);
+    typedef void (SWIGSTDCALL* SWIG_Callback2_t)();
+    typedef unsigned int (SWIGSTDCALL* SWIG_Callback3_t)(void *);
+    typedef int (SWIGSTDCALL* SWIG_Callback4_t)();
+    typedef unsigned int (SWIGSTDCALL* SWIG_Callback5_t)(int);
+    void swig_connect_director(SWIG_Callback0_t callbackclone, SWIG_Callback1_t callbackcopy, SWIG_Callback2_t callbackrelease, SWIG_Callback3_t callbackequals, SWIG_Callback4_t callbackgetType, SWIG_Callback5_t callbackisKindOf);
+
+private:
+    SWIG_Callback0_t swig_callbackclone;
+    SWIG_Callback1_t swig_callbackcopy;
+    SWIG_Callback2_t swig_callbackrelease;
+    SWIG_Callback3_t swig_callbackequals;
+    SWIG_Callback4_t swig_callbackgetType;
+    SWIG_Callback5_t swig_callbackisKindOf;
+    void swig_init_callbacks();
+};
+
 class SwigDirector_MgBaseShape : public MgBaseShape, public Swig::Director {
 
 public:

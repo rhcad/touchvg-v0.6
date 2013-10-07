@@ -116,6 +116,8 @@ float MgComposite::_hitTest(const Point2d& pt, float tol, MgHitResult& res) cons
     Box2d limits(pt, 2 * tol, 0);
 
     res.segment = 0;
+    res.dist = _FLT_MAX;
+
     for (MgShape* sp = _shapes->getFirstShape(it); sp;
         sp = _shapes->getNextShape(it))
     {
@@ -123,8 +125,8 @@ float MgComposite::_hitTest(const Point2d& pt, float tol, MgHitResult& res) cons
             float d = sp->shapec()->hitTest(pt, tol, tmpRes);
             if (res.dist > d - _MGZERO)
             {
-                res.dist = d;
                 res = tmpRes;
+                res.dist = d;
                 res.segment = sp->getID();
             }
         }

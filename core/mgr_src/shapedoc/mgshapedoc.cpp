@@ -54,7 +54,7 @@ void MgShapeDoc::addRef()
 
 void MgShapeDoc::release()
 {
-    if (giInterlockedDecrement(&im->refcount)) {
+    if (giInterlockedDecrement(&im->refcount) == 0) {
         delete this;
     }
 }

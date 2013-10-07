@@ -16,7 +16,6 @@
 %template(Floats) mgvector<float>;
 %template(Chars) mgvector<char>;
 
-%include <mgviewhandle.h>
 %include <DemoCmds.h>
 
 #ifdef SWIGJAVA

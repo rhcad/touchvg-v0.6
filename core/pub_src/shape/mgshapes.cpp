@@ -259,6 +259,7 @@ MgShape* MgShapes::hitTest(const Box2d& limits, MgHitResult& res, Filter filter)
 {
     MgShape* retshape = NULL;
     
+    res.dist = _FLT_MAX;
     for (I::citerator it = im->shapes.begin(); it != im->shapes.end(); ++it) {
         const MgBaseShape* shape = (*it)->shapec();
         Box2d extent(shape->getExtent());
@@ -272,8 +273,8 @@ MgShape* MgShapes::hitTest(const Box2d& limits, MgHitResult& res, Filter filter)
             float  dist = shape->hitTest(limits.center(), tol, tmpRes);
             
             if (res.dist > dist - _MGZERO) {     // 让末尾图形优先选中
-                res.dist = dist;
                 res = tmpRes;
+                res.dist = dist;
                 retshape = *it;
             }
         }

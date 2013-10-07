@@ -150,11 +150,7 @@ public:
     bool getBoundingBox(mgvector<float>& box);
     
     //! 命令视图回调适配器的句柄, 可转换为 MgView 指针
-#if defined(__MINGW64__) || defined(__MINGW32__)
-    void* viewAdapterHandle();
-#else
     long viewAdapterHandle();
-#endif
 
     //! 命令视图回调适配器
     MgView* viewAdapter();
