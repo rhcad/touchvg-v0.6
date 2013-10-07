@@ -215,8 +215,13 @@ public class GiCoreView {
     return touchvgJNI.GiCoreView_getBoundingBox(swigCPtr, this, Floats.getCPtr(box), box);
   }
 
-  public int viewAdapter() {
-    return touchvgJNI.GiCoreView_viewAdapter(swigCPtr, this);
+  public int viewAdapterHandle() {
+    return touchvgJNI.GiCoreView_viewAdapterHandle(swigCPtr, this);
+  }
+
+  public MgView viewAdapter() {
+    long cPtr = touchvgJNI.GiCoreView_viewAdapter(swigCPtr, this);
+    return (cPtr == 0) ? null : new MgView(cPtr, false);
   }
 
 }

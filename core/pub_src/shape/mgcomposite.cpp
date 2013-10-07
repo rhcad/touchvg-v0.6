@@ -189,7 +189,7 @@ bool MgGroup::_draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment)
 {
     MgShape* sp = _shapes->findShape(segment);
     if (sp) {
-        return sp->draw(mode, gs, ctx.isNullLine() ? NULL : &ctx);
+        return sp->draw(mode, gs, ctx.isNullLine() ? NULL : &ctx, -1);
     }
     return __super::_draw(mode, gs, ctx, segment);
 }

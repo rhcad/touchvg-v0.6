@@ -44,7 +44,7 @@ public class GraphView1 extends GraphView {
             helper.setCommand("lines");
         }
         else if ((flags >> 1) == 4) {
-            int n = DemoCmdsGate.registerCmds(this.coreViewHandle());
+            int n = DemoCmdsGate.registerCmds(helper.cmdViewHandle());
             helper.setCommand("hittest");
             Log.d("Test", "DemoCmdsGate.registerCmds = " + n
                     + ", setCommand: " + helper.getCommand());

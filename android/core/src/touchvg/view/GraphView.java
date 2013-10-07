@@ -105,11 +105,6 @@ public class GraphView extends View {
         return mViewAdapter;
     }
     
-    //! 返回内核视图的句柄, MgView 指针
-    public int coreViewHandle() {
-        return mCoreView.viewAdapter();
-    }
-    
     //! 释放临时缓存
     public void clearCachedData() {
         mCoreView.clearCachedData();

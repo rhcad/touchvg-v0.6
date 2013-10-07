@@ -79,6 +79,14 @@ public class Vector2d {
     return new Vector2d(touchvgJNI.Vector2d_transform(swigCPtr, this, Matrix2d.getCPtr(m), m), true);
   }
 
+  public Vector2d add(Vector2d v) {
+    return new Vector2d(touchvgJNI.Vector2d_add(swigCPtr, this, Vector2d.getCPtr(v), v), true);
+  }
+
+  public Vector2d subtract(Vector2d v) {
+    return new Vector2d(touchvgJNI.Vector2d_subtract(swigCPtr, this, Vector2d.getCPtr(v), v), true);
+  }
+
   public Vector2d negate() {
     return new Vector2d(touchvgJNI.Vector2d_negate(swigCPtr, this), false);
   }
@@ -88,7 +96,11 @@ public class Vector2d {
   }
 
   public Vector2d scaleBy(float sx, float sy) {
-    return new Vector2d(touchvgJNI.Vector2d_scaleBy(swigCPtr, this, sx, sy), false);
+    return new Vector2d(touchvgJNI.Vector2d_scaleBy__SWIG_0(swigCPtr, this, sx, sy), false);
+  }
+
+  public Vector2d scaleBy(float s) {
+    return new Vector2d(touchvgJNI.Vector2d_scaleBy__SWIG_1(swigCPtr, this, s), false);
   }
 
   public float dotProduct(Vector2d v) {

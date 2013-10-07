@@ -160,7 +160,7 @@ bool MgCmdSelect::draw(const MgMotion* sender, GiGraphics* gs)
         GiContext ctxbk(0, gs->getBkColor());       // 背景色、原线型
         for (it = selection.begin(); it != selection.end(); ++it) {
             if (! (*it)->shapec()->isKindOf(kMgShapeImage)) {
-                (*it)->draw(1, *gs, &ctxbk);        // 用背景色擦掉原图形
+                (*it)->draw(1, *gs, &ctxbk, -1);    // 用背景色擦掉原图形
             }
         }
         
@@ -173,7 +173,7 @@ bool MgCmdSelect::draw(const MgMotion* sender, GiGraphics* gs)
     // 外部动态改变图形属性时，或拖动时
     if (!m_showSel || !m_clones.empty()) {
         for (it = shapes.begin(); it != shapes.end(); ++it) {
-            (*it)->draw(m_showSel ? 2 : 0, *gs);    // 原样显示
+            (*it)->draw(m_showSel ? 2 : 0, *gs, NULL, -1);  // 原样显示
         }
     }
     else if (m_clones.empty()) {                    // 蓝色显示选中的图形

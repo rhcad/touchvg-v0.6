@@ -57,8 +57,8 @@ GiColor CGColorToGiColor(CGColorRef color) {
     return _view;
 }
 
-- (int)coreViewHandle {
-    return [_view coreViewHandle];
+- (int)cmdViewHandle {
+    return [_view cmdViewHandle];
 }
 
 - (NSString *)command {

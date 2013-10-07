@@ -471,15 +471,20 @@ GiCoreView::~GiCoreView()
     }
 }
 
-#if defined(__MINGW64__) || defined(__MINGW32__)
-void* GiCoreView::viewAdapter()
+MgView* GiCoreView::viewAdapter()
 {
-    return (MgView*)impl;
+    return impl;
+}
+
+#if defined(__MINGW64__) || defined(__MINGW32__)
+void* GiCoreView::viewAdapterHandle()
+{
+    return viewAdapter();
 }
 #else
-long GiCoreView::viewAdapter()
+long GiCoreView::viewAdapterHandle()
 {
-    return reinterpret_cast<long>((MgView*)impl);
+    return reinterpret_cast<long>(viewAdapter());
 }
 #endif
 

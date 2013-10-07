@@ -57,8 +57,9 @@ bool MgCmdErase::draw(const MgMotion* sender, GiGraphics* gs)
     
     for (std::vector<int>::const_iterator it = m_delIds.begin(); it != m_delIds.end(); ++it) {
         MgShape* shape = sender->view->shapes()->findShape(*it);
-        if (shape)
-            shape->draw(1, *gs, &ctx);
+        if (shape) {
+            shape->draw(1, *gs, &ctx, -1);
+        }
     }
     
     return true;

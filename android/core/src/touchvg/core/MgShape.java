@@ -65,15 +65,7 @@ public class MgShape extends MgObject {
   }
 
   public boolean draw(int mode, GiGraphics gs, GiContext ctx, int segment) {
-    return touchvgJNI.MgShape_draw__SWIG_0(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx, segment);
-  }
-
-  public boolean draw(int mode, GiGraphics gs, GiContext ctx) {
-    return touchvgJNI.MgShape_draw__SWIG_1(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx);
-  }
-
-  public boolean draw(int mode, GiGraphics gs) {
-    return touchvgJNI.MgShape_draw__SWIG_2(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs);
+    return touchvgJNI.MgShape_draw(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx, segment);
   }
 
   public boolean save(MgStorage s) {

@@ -152,30 +152,28 @@ public class MgBaseRect : MgBaseShape {
     if (SwigDerivedClassHasMethod("hitTestBox", swigMethodTypes18))
       swigDelegate18 = new SwigDelegateMgBaseRect_18(SwigDirectorhitTestBox);
     if (SwigDerivedClassHasMethod("draw", swigMethodTypes19))
-      swigDelegate19 = new SwigDelegateMgBaseRect_19(SwigDirectordraw__SWIG_0);
-    if (SwigDerivedClassHasMethod("draw", swigMethodTypes20))
-      swigDelegate20 = new SwigDelegateMgBaseRect_20(SwigDirectordraw__SWIG_1);
-    if (SwigDerivedClassHasMethod("save", swigMethodTypes21))
-      swigDelegate21 = new SwigDelegateMgBaseRect_21(SwigDirectorsave);
-    if (SwigDerivedClassHasMethod("load", swigMethodTypes22))
-      swigDelegate22 = new SwigDelegateMgBaseRect_22(SwigDirectorload);
-    if (SwigDerivedClassHasMethod("getHandleCount", swigMethodTypes23))
-      swigDelegate23 = new SwigDelegateMgBaseRect_23(SwigDirectorgetHandleCount);
-    if (SwigDerivedClassHasMethod("getHandlePoint", swigMethodTypes24))
-      swigDelegate24 = new SwigDelegateMgBaseRect_24(SwigDirectorgetHandlePoint);
-    if (SwigDerivedClassHasMethod("setHandlePoint", swigMethodTypes25))
-      swigDelegate25 = new SwigDelegateMgBaseRect_25(SwigDirectorsetHandlePoint);
-    if (SwigDerivedClassHasMethod("isHandleFixed", swigMethodTypes26))
-      swigDelegate26 = new SwigDelegateMgBaseRect_26(SwigDirectorisHandleFixed);
-    if (SwigDerivedClassHasMethod("getHandleType", swigMethodTypes27))
-      swigDelegate27 = new SwigDelegateMgBaseRect_27(SwigDirectorgetHandleType);
-    if (SwigDerivedClassHasMethod("offset", swigMethodTypes28))
-      swigDelegate28 = new SwigDelegateMgBaseRect_28(SwigDirectoroffset);
-    if (SwigDerivedClassHasMethod("setFlag", swigMethodTypes29))
-      swigDelegate29 = new SwigDelegateMgBaseRect_29(SwigDirectorsetFlag);
-    if (SwigDerivedClassHasMethod("getTypeName", swigMethodTypes30))
-      swigDelegate30 = new SwigDelegateMgBaseRect_30(SwigDirectorgetTypeName);
-    touchvgPINVOKE.MgBaseRect_director_connect(swigCPtr, swigDelegate0, swigDelegate1, swigDelegate2, swigDelegate3, swigDelegate4, swigDelegate5, swigDelegate6, swigDelegate7, swigDelegate8, swigDelegate9, swigDelegate10, swigDelegate11, swigDelegate12, swigDelegate13, swigDelegate14, swigDelegate15, swigDelegate16, swigDelegate17, swigDelegate18, swigDelegate19, swigDelegate20, swigDelegate21, swigDelegate22, swigDelegate23, swigDelegate24, swigDelegate25, swigDelegate26, swigDelegate27, swigDelegate28, swigDelegate29, swigDelegate30);
+      swigDelegate19 = new SwigDelegateMgBaseRect_19(SwigDirectordraw);
+    if (SwigDerivedClassHasMethod("save", swigMethodTypes20))
+      swigDelegate20 = new SwigDelegateMgBaseRect_20(SwigDirectorsave);
+    if (SwigDerivedClassHasMethod("load", swigMethodTypes21))
+      swigDelegate21 = new SwigDelegateMgBaseRect_21(SwigDirectorload);
+    if (SwigDerivedClassHasMethod("getHandleCount", swigMethodTypes22))
+      swigDelegate22 = new SwigDelegateMgBaseRect_22(SwigDirectorgetHandleCount);
+    if (SwigDerivedClassHasMethod("getHandlePoint", swigMethodTypes23))
+      swigDelegate23 = new SwigDelegateMgBaseRect_23(SwigDirectorgetHandlePoint);
+    if (SwigDerivedClassHasMethod("setHandlePoint", swigMethodTypes24))
+      swigDelegate24 = new SwigDelegateMgBaseRect_24(SwigDirectorsetHandlePoint);
+    if (SwigDerivedClassHasMethod("isHandleFixed", swigMethodTypes25))
+      swigDelegate25 = new SwigDelegateMgBaseRect_25(SwigDirectorisHandleFixed);
+    if (SwigDerivedClassHasMethod("getHandleType", swigMethodTypes26))
+      swigDelegate26 = new SwigDelegateMgBaseRect_26(SwigDirectorgetHandleType);
+    if (SwigDerivedClassHasMethod("offset", swigMethodTypes27))
+      swigDelegate27 = new SwigDelegateMgBaseRect_27(SwigDirectoroffset);
+    if (SwigDerivedClassHasMethod("setFlag", swigMethodTypes28))
+      swigDelegate28 = new SwigDelegateMgBaseRect_28(SwigDirectorsetFlag);
+    if (SwigDerivedClassHasMethod("getTypeName", swigMethodTypes29))
+      swigDelegate29 = new SwigDelegateMgBaseRect_29(SwigDirectorgetTypeName);
+    touchvgPINVOKE.MgBaseRect_director_connect(swigCPtr, swigDelegate0, swigDelegate1, swigDelegate2, swigDelegate3, swigDelegate4, swigDelegate5, swigDelegate6, swigDelegate7, swigDelegate8, swigDelegate9, swigDelegate10, swigDelegate11, swigDelegate12, swigDelegate13, swigDelegate14, swigDelegate15, swigDelegate16, swigDelegate17, swigDelegate18, swigDelegate19, swigDelegate20, swigDelegate21, swigDelegate22, swigDelegate23, swigDelegate24, swigDelegate25, swigDelegate26, swigDelegate27, swigDelegate28, swigDelegate29);
   }
 
   private bool SwigDerivedClassHasMethod(string methodName, Type[] methodTypes) {
@@ -260,12 +258,8 @@ public class MgBaseRect : MgBaseShape {
     return hitTestBox(new Box2d(rect, false));
   }
 
-  private bool SwigDirectordraw__SWIG_0(int mode, IntPtr gs, IntPtr ctx, int segment) {
+  private bool SwigDirectordraw(int mode, IntPtr gs, IntPtr ctx, int segment) {
     return draw(mode, new GiGraphics(gs, false), new GiContext(ctx, false), segment);
-  }
-
-  private bool SwigDirectordraw__SWIG_1(int mode, IntPtr gs, IntPtr ctx) {
-    return draw(mode, new GiGraphics(gs, false), new GiContext(ctx, false));
   }
 
   private bool SwigDirectorsave(IntPtr s) {
@@ -328,17 +322,16 @@ public class MgBaseRect : MgBaseShape {
   public delegate float SwigDelegateMgBaseRect_17(IntPtr pt, float tol, IntPtr res);
   public delegate bool SwigDelegateMgBaseRect_18(IntPtr rect);
   public delegate bool SwigDelegateMgBaseRect_19(int mode, IntPtr gs, IntPtr ctx, int segment);
-  public delegate bool SwigDelegateMgBaseRect_20(int mode, IntPtr gs, IntPtr ctx);
-  public delegate bool SwigDelegateMgBaseRect_21(IntPtr s);
-  public delegate bool SwigDelegateMgBaseRect_22(IntPtr factory, IntPtr s);
-  public delegate int SwigDelegateMgBaseRect_23();
-  public delegate IntPtr SwigDelegateMgBaseRect_24(int index);
-  public delegate bool SwigDelegateMgBaseRect_25(int index, IntPtr pt, float tol);
-  public delegate bool SwigDelegateMgBaseRect_26(int index);
-  public delegate int SwigDelegateMgBaseRect_27(int index);
-  public delegate bool SwigDelegateMgBaseRect_28(IntPtr vec, int segment);
-  public delegate void SwigDelegateMgBaseRect_29(int bit, bool on);
-  public delegate string SwigDelegateMgBaseRect_30();
+  public delegate bool SwigDelegateMgBaseRect_20(IntPtr s);
+  public delegate bool SwigDelegateMgBaseRect_21(IntPtr factory, IntPtr s);
+  public delegate int SwigDelegateMgBaseRect_22();
+  public delegate IntPtr SwigDelegateMgBaseRect_23(int index);
+  public delegate bool SwigDelegateMgBaseRect_24(int index, IntPtr pt, float tol);
+  public delegate bool SwigDelegateMgBaseRect_25(int index);
+  public delegate int SwigDelegateMgBaseRect_26(int index);
+  public delegate bool SwigDelegateMgBaseRect_27(IntPtr vec, int segment);
+  public delegate void SwigDelegateMgBaseRect_28(int bit, bool on);
+  public delegate string SwigDelegateMgBaseRect_29();
 
   private SwigDelegateMgBaseRect_0 swigDelegate0;
   private SwigDelegateMgBaseRect_1 swigDelegate1;
@@ -370,7 +363,6 @@ public class MgBaseRect : MgBaseShape {
   private SwigDelegateMgBaseRect_27 swigDelegate27;
   private SwigDelegateMgBaseRect_28 swigDelegate28;
   private SwigDelegateMgBaseRect_29 swigDelegate29;
-  private SwigDelegateMgBaseRect_30 swigDelegate30;
 
   private static Type[] swigMethodTypes0 = new Type[] {  };
   private static Type[] swigMethodTypes1 = new Type[] { typeof(MgObject) };
@@ -392,17 +384,16 @@ public class MgBaseRect : MgBaseShape {
   private static Type[] swigMethodTypes17 = new Type[] { typeof(Point2d), typeof(float), typeof(MgHitResult) };
   private static Type[] swigMethodTypes18 = new Type[] { typeof(Box2d) };
   private static Type[] swigMethodTypes19 = new Type[] { typeof(int), typeof(GiGraphics), typeof(GiContext), typeof(int) };
-  private static Type[] swigMethodTypes20 = new Type[] { typeof(int), typeof(GiGraphics), typeof(GiContext) };
-  private static Type[] swigMethodTypes21 = new Type[] { typeof(MgStorage) };
-  private static Type[] swigMethodTypes22 = new Type[] { typeof(MgShapeFactory), typeof(MgStorage) };
-  private static Type[] swigMethodTypes23 = new Type[] {  };
-  private static Type[] swigMethodTypes24 = new Type[] { typeof(int) };
-  private static Type[] swigMethodTypes25 = new Type[] { typeof(int), typeof(Point2d), typeof(float) };
+  private static Type[] swigMethodTypes20 = new Type[] { typeof(MgStorage) };
+  private static Type[] swigMethodTypes21 = new Type[] { typeof(MgShapeFactory), typeof(MgStorage) };
+  private static Type[] swigMethodTypes22 = new Type[] {  };
+  private static Type[] swigMethodTypes23 = new Type[] { typeof(int) };
+  private static Type[] swigMethodTypes24 = new Type[] { typeof(int), typeof(Point2d), typeof(float) };
+  private static Type[] swigMethodTypes25 = new Type[] { typeof(int) };
   private static Type[] swigMethodTypes26 = new Type[] { typeof(int) };
-  private static Type[] swigMethodTypes27 = new Type[] { typeof(int) };
-  private static Type[] swigMethodTypes28 = new Type[] { typeof(Vector2d), typeof(int) };
-  private static Type[] swigMethodTypes29 = new Type[] { typeof(MgShapeBit), typeof(bool) };
-  private static Type[] swigMethodTypes30 = new Type[] {  };
+  private static Type[] swigMethodTypes27 = new Type[] { typeof(Vector2d), typeof(int) };
+  private static Type[] swigMethodTypes28 = new Type[] { typeof(MgShapeBit), typeof(bool) };
+  private static Type[] swigMethodTypes29 = new Type[] {  };
 }
 
 }

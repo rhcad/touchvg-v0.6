@@ -19,7 +19,7 @@
 - (GiGraphView *)createGraphView:(CGRect)frame :(UIView *)parentView;   //!< 创建普通图形视图，并记到本类
 - (GiGraphView *)createMagnifierView:(CGRect)frame refView:(GiGraphView *)refView
                            parentView:(UIView *)parentView;  //!< 创建放大镜视图(不需要额外释放)，并记到本类
-- (int)coreViewHandle;                              //!< 返回内核视图的句柄, MgView 指针
+- (int)cmdViewHandle;                              //!< 返回内核视图的句柄, MgView 指针
 
 @property(nonatomic, assign) NSString   *command;   //!< 当前命令名称
 @property (nonatomic)         float     lineWidth;  //!< 线宽，正数表示毫米单位，零表示1像素宽，负数表示像素单位

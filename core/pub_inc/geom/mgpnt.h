@@ -97,6 +97,12 @@ public:
     {
         x *= sx; y *= sy; return *this;
     }
+
+    //! 比例放缩
+    Point2d& scaleBy(float s)
+    {
+        x *= s; y *= s; return *this;
+    }
     
 #ifndef SWIG
     //! 点累加
@@ -146,6 +152,30 @@ public:
     void offset(float dx, float dy)
     {
         x += dx; y += dy;
+    }
+
+    //! 平移
+    void offset(const Vector2d& vec)
+    {
+        x += vec.x; y += vec.y;
+    }
+
+    //! 点累加
+    Point2d add(const Point2d& pnt) const
+    {
+        return *this + pnt;
+    }
+
+    //! 得到两点之间的矢量, 点 - 点 = 矢量
+    Vector2d subtract(const Point2d& pnt) const
+    {
+        return *this - pnt;
+    }
+
+    //! 用矢量平移, 点 - 矢量 = 点
+    Point2d subtract(const Vector2d& vec) const
+    {
+        return *this - vec;
     }
     
 #ifndef SWIG

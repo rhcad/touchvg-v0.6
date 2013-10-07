@@ -87,7 +87,7 @@ bool MgCommandDraw::_draw(const MgMotion* sender, GiGraphics* gs)
         m_step = 0;
         m_shape->shape()->clear();
     }
-    bool ret = m_step > 0 && m_shape->draw(0, *gs);
+    bool ret = m_step > 0 && m_shape->draw(0, *gs, NULL, -1);
     return sender->view->getSnap()->drawSnap(sender, gs) || ret;
 }
 

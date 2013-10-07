@@ -251,8 +251,14 @@ public class GiCoreView : IDisposable {
     return ret;
   }
 
-  public int viewAdapter() {
-    int ret = touchvgPINVOKE.GiCoreView_viewAdapter(swigCPtr);
+  public int viewAdapterHandle() {
+    int ret = touchvgPINVOKE.GiCoreView_viewAdapterHandle(swigCPtr);
+    return ret;
+  }
+
+  public MgView viewAdapter() {
+    IntPtr cPtr = touchvgPINVOKE.GiCoreView_viewAdapter(swigCPtr);
+    MgView ret = (cPtr == IntPtr.Zero) ? null : new MgView(cPtr, false);
     return ret;
   }
 

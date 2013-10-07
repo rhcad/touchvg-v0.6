@@ -6,7 +6,7 @@ namespace democmds.api
 {
     public class DemoCmds
     {
-        // mgView: WPFViewHelper.coreViewHandle()
+        // mgView: WPFViewHelper.cmdViewHandle()
         public static int registerCmds(int mgView)
         {
             return DemoCmdsGate.registerCmds(mgView);

@@ -98,7 +98,7 @@ public:
     virtual bool isCurve() const;
     virtual float hitTest(Point2d const &pt, float tol, MgHitResult &res) const;
     virtual bool hitTestBox(Box2d const &rect) const;
-    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
+    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment) const;
     virtual bool save(MgStorage *s) const;
     virtual bool load(MgShapeFactory *factory, MgStorage *s);
     virtual int getHandleCount() const;
@@ -111,10 +111,10 @@ public:
     virtual char const *getTypeName() const;
 public:
     bool swig_overrides(int n) {
-      return (n < 31 ? swig_override[n] : false);
+      return (n < 30 ? swig_override[n] : false);
     }
 protected:
-    bool swig_override[31];
+    bool swig_override[30];
 };
 
 class SwigDirector_MgBaseRect : public MgBaseRect, public Swig::Director {
@@ -142,7 +142,7 @@ public:
     virtual bool isCurve() const;
     virtual float hitTest(Point2d const &pt, float tol, MgHitResult &res) const;
     virtual bool hitTestBox(Box2d const &rect) const;
-    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
+    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment) const;
     virtual bool save(MgStorage *s) const;
     virtual bool load(MgShapeFactory *factory, MgStorage *s);
     virtual int getHandleCount() const;
@@ -155,10 +155,10 @@ public:
     virtual char const *getTypeName() const;
 public:
     bool swig_overrides(int n) {
-      return (n < 31 ? swig_override[n] : false);
+      return (n < 30 ? swig_override[n] : false);
     }
 protected:
-    bool swig_override[31];
+    bool swig_override[30];
 };
 
 class SwigDirector_MgBaseLines : public MgBaseLines, public Swig::Director {
@@ -186,7 +186,7 @@ public:
     virtual bool isCurve() const;
     virtual float hitTest(Point2d const &pt, float tol, MgHitResult &res) const;
     virtual bool hitTestBox(Box2d const &rect) const;
-    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
+    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment) const;
     virtual bool save(MgStorage *s) const;
     virtual bool load(MgShapeFactory *factory, MgStorage *s);
     virtual int getHandleCount() const;
@@ -199,10 +199,10 @@ public:
     virtual char const *getTypeName() const;
 public:
     bool swig_overrides(int n) {
-      return (n < 31 ? swig_override[n] : false);
+      return (n < 30 ? swig_override[n] : false);
     }
 protected:
-    bool swig_override[31];
+    bool swig_override[30];
 };
 
 class SwigDirector_MgComposite : public MgComposite, public Swig::Director {
@@ -230,7 +230,7 @@ public:
     virtual bool isCurve() const;
     virtual float hitTest(Point2d const &pt, float tol, MgHitResult &res) const;
     virtual bool hitTestBox(Box2d const &rect) const;
-    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment = -1) const;
+    virtual bool draw(int mode, GiGraphics &gs, GiContext const &ctx, int segment) const;
     virtual bool save(MgStorage *s) const;
     virtual bool load(MgShapeFactory *factory, MgStorage *s);
     virtual int getHandleCount() const;
@@ -244,10 +244,10 @@ public:
     virtual bool canOffsetShapeAlone(MgShape *shape);
 public:
     bool swig_overrides(int n) {
-      return (n < 32 ? swig_override[n] : false);
+      return (n < 31 ? swig_override[n] : false);
     }
 protected:
-    bool swig_override[32];
+    bool swig_override[31];
 };
 
 struct SwigDirector_MgCommand : public MgCommand, public Swig::Director {

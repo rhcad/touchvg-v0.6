@@ -118,11 +118,7 @@ public class MgArc extends MgBaseShape {
   }
 
   public boolean draw(int mode, GiGraphics gs, GiContext ctx, int segment) {
-    return touchvgJNI.MgArc_draw__SWIG_0(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx, segment);
-  }
-
-  public boolean draw(int mode, GiGraphics gs, GiContext ctx) {
-    return touchvgJNI.MgArc_draw__SWIG_1(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx);
+    return touchvgJNI.MgArc_draw(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx, segment);
   }
 
   public boolean save(MgStorage s) {

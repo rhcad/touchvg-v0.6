@@ -418,7 +418,7 @@ namespace Swig {
 namespace Swig {
   namespace {
     jclass jclass_touchvgJNI = NULL;
-    jmethodID director_methids[245];
+    jmethodID director_methids[241];
   }
 }
 
@@ -1638,7 +1638,7 @@ void SwigDirector_MgBaseShape::copy(MgObject const &src) {
   jlong jsrc = 0 ;
   
   if (!swig_override[1]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::copy.");
+    MgBaseShape::copy(src);
     return;
   }
   swigjobj = swig_get_self(jenv);
@@ -1680,8 +1680,7 @@ bool SwigDirector_MgBaseShape::equals(MgObject const &src) const {
   jlong jsrc = 0 ;
   
   if (!swig_override[3]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::equals.");
-    return c_result;
+    return MgBaseShape::equals(src);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
@@ -1728,8 +1727,7 @@ bool SwigDirector_MgBaseShape::isKindOf(int type) const {
   jint jtype  ;
   
   if (!swig_override[5]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::isKindOf.");
-    return c_result;
+    return MgBaseShape::isKindOf(type);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
@@ -1779,8 +1777,7 @@ Box2d SwigDirector_MgBaseShape::getExtent() const {
   Box2d *argp ;
   
   if (!swig_override[7]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::getExtent.");
-    return c_result;
+    return MgBaseShape::getExtent();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
@@ -1805,7 +1802,7 @@ void SwigDirector_MgBaseShape::update() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[8]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::update.");
+    MgBaseShape::update();
     return;
   }
   swigjobj = swig_get_self(jenv);
@@ -1825,7 +1822,7 @@ void SwigDirector_MgBaseShape::transform(Matrix2d const &mat) {
   jlong jmat = 0 ;
   
   if (!swig_override[9]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::transform.");
+    MgBaseShape::transform(mat);
     return;
   }
   swigjobj = swig_get_self(jenv);
@@ -1845,7 +1842,7 @@ void SwigDirector_MgBaseShape::clear() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[10]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::clear.");
+    MgBaseShape::clear();
     return;
   }
   swigjobj = swig_get_self(jenv);
@@ -1864,7 +1861,7 @@ void SwigDirector_MgBaseShape::clearCachedData() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[11]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::clearCachedData.");
+    MgBaseShape::clearCachedData();
     return;
   }
   swigjobj = swig_get_self(jenv);
@@ -1962,8 +1959,7 @@ bool SwigDirector_MgBaseShape::isClosed() const {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[15]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::isClosed.");
-    return c_result;
+    return MgBaseShape::isClosed();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
@@ -2038,8 +2034,7 @@ bool SwigDirector_MgBaseShape::hitTestBox(Box2d const &rect) const {
   jlong jrect = 0 ;
   
   if (!swig_override[18]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::hitTestBox.");
-    return c_result;
+    return MgBaseShape::hitTestBox(rect);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
@@ -2066,8 +2061,7 @@ bool SwigDirector_MgBaseShape::draw(int mode, GiGraphics &gs, GiContext const &c
   jint jsegment  ;
   
   if (!swig_override[19]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::draw.");
-    return c_result;
+    return MgBaseShape::draw(mode,gs,ctx,segment);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
@@ -2093,14 +2087,13 @@ bool SwigDirector_MgBaseShape::save(MgStorage *s) const {
   jobject swigjobj = (jobject) NULL ;
   jlong js = 0 ;
   
-  if (!swig_override[21]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::save.");
-    return c_result;
+  if (!swig_override[20]) {
+    return MgBaseShape::save(s);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[55], swigjobj, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[54], swigjobj, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2119,15 +2112,14 @@ bool SwigDirector_MgBaseShape::load(MgShapeFactory *factory, MgStorage *s) {
   jlong jfactory = 0 ;
   jlong js = 0 ;
   
-  if (!swig_override[22]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::load.");
-    return c_result;
+  if (!swig_override[21]) {
+    return MgBaseShape::load(factory,s);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgShapeFactory **)&jfactory) = (MgShapeFactory *) factory; 
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[56], swigjobj, jfactory, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[55], swigjobj, jfactory, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2144,13 +2136,12 @@ int SwigDirector_MgBaseShape::getHandleCount() const {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[23]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::getHandleCount.");
-    return c_result;
+  if (!swig_override[22]) {
+    return MgBaseShape::getHandleCount();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[57], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[56], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -2169,14 +2160,13 @@ Point2d SwigDirector_MgBaseShape::getHandlePoint(int index) const {
   jint jindex  ;
   Point2d *argp ;
   
-  if (!swig_override[24]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::getHandlePoint.");
-    return c_result;
+  if (!swig_override[23]) {
+    return MgBaseShape::getHandlePoint(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[58], swigjobj, jindex);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[57], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     argp = *(Point2d **)&jresult; 
     if (!argp) {
@@ -2201,16 +2191,15 @@ bool SwigDirector_MgBaseShape::setHandlePoint(int index, Point2d const &pt, floa
   jlong jpt = 0 ;
   jfloat jtol  ;
   
-  if (!swig_override[25]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::setHandlePoint.");
-    return c_result;
+  if (!swig_override[24]) {
+    return MgBaseShape::setHandlePoint(index,pt,tol);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
     *(Point2d **)&jpt = (Point2d *) &pt; 
     jtol = (jfloat) tol;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[59], swigjobj, jindex, jpt, jtol);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[58], swigjobj, jindex, jpt, jtol);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2228,14 +2217,13 @@ bool SwigDirector_MgBaseShape::isHandleFixed(int index) const {
   jobject swigjobj = (jobject) NULL ;
   jint jindex  ;
   
-  if (!swig_override[26]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::isHandleFixed.");
-    return c_result;
+  if (!swig_override[25]) {
+    return MgBaseShape::isHandleFixed(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[60], swigjobj, jindex);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[59], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2253,14 +2241,13 @@ int SwigDirector_MgBaseShape::getHandleType(int index) const {
   jobject swigjobj = (jobject) NULL ;
   jint jindex  ;
   
-  if (!swig_override[27]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::getHandleType.");
-    return c_result;
+  if (!swig_override[26]) {
+    return MgBaseShape::getHandleType(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[61], swigjobj, jindex);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[60], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -2279,15 +2266,14 @@ bool SwigDirector_MgBaseShape::offset(Vector2d const &vec, int segment) {
   jlong jvec = 0 ;
   jint jsegment  ;
   
-  if (!swig_override[28]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::offset.");
-    return c_result;
+  if (!swig_override[27]) {
+    return MgBaseShape::offset(vec,segment);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(Vector2d **)&jvec = (Vector2d *) &vec; 
     jsegment = (jint) segment;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[62], swigjobj, jvec, jsegment);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[61], swigjobj, jvec, jsegment);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2304,7 +2290,7 @@ void SwigDirector_MgBaseShape::setFlag(MgShapeBit bit, bool on) {
   jint jbit  ;
   jboolean jon  ;
   
-  if (!swig_override[29]) {
+  if (!swig_override[28]) {
     MgBaseShape::setFlag(bit,on);
     return;
   }
@@ -2312,7 +2298,7 @@ void SwigDirector_MgBaseShape::setFlag(MgShapeBit bit, bool on) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jbit = (jint) bit;
     jon = (jboolean) on;
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[63], swigjobj, jbit, jon);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[62], swigjobj, jbit, jon);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -2327,13 +2313,13 @@ char const *SwigDirector_MgBaseShape::getTypeName() const {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[30]) {
+  if (!swig_override[29]) {
     SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseShape::getTypeName.");
     return (char const *)c_result;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[64], swigjobj);
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[63], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return (char const *)c_result;
     c_result = 0;
     if (jresult) {
@@ -2414,9 +2400,6 @@ void SwigDirector_MgBaseShape::swig_connect_director(JNIEnv *jenv, jobject jself
       "draw", "(ILtouchvg/core/GiGraphics;Ltouchvg/core/GiContext;I)Z", NULL 
     },
     {
-      "draw", "(ILtouchvg/core/GiGraphics;Ltouchvg/core/GiContext;)Z", NULL 
-    },
-    {
       "save", "(Ltouchvg/core/MgStorage;)Z", NULL 
     },
     {
@@ -2457,7 +2440,7 @@ void SwigDirector_MgBaseShape::swig_connect_director(JNIEnv *jenv, jobject jself
       baseclass = (jclass) jenv->NewGlobalRef(baseclass);
     }
     bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
-    for (int i = 0; i < 31; ++i) {
+    for (int i = 0; i < 30; ++i) {
       if (!methods[i].base_methid) {
         methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
         if (!methods[i].base_methid) return;
@@ -2489,7 +2472,7 @@ MgObject *SwigDirector_MgBaseRect::clone() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[65], swigjobj);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[64], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = *(MgObject **)&jresult; 
   } else {
@@ -2506,13 +2489,13 @@ void SwigDirector_MgBaseRect::copy(MgObject const &src) {
   jlong jsrc = 0 ;
   
   if (!swig_override[1]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::copy.");
+    MgBaseShape::copy(src);
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(MgObject **)&jsrc = (MgObject *) &src; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[66], swigjobj, jsrc);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[65], swigjobj, jsrc);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -2531,7 +2514,7 @@ void SwigDirector_MgBaseRect::release() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[67], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[66], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -2548,13 +2531,12 @@ bool SwigDirector_MgBaseRect::equals(MgObject const &src) const {
   jlong jsrc = 0 ;
   
   if (!swig_override[3]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::equals.");
-    return c_result;
+    return MgBaseShape::equals(src);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(MgObject **)&jsrc = (MgObject *) &src; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[68], swigjobj, jsrc);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[67], swigjobj, jsrc);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2577,7 +2559,7 @@ int SwigDirector_MgBaseRect::getType() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[69], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[68], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -2596,13 +2578,12 @@ bool SwigDirector_MgBaseRect::isKindOf(int type) const {
   jint jtype  ;
   
   if (!swig_override[5]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::isKindOf.");
-    return c_result;
+    return MgBaseShape::isKindOf(type);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jtype = (jint) type;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[70], swigjobj, jtype);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[69], swigjobj, jtype);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2630,7 +2611,7 @@ void SwigDirector_MgBaseRect::setOwner(MgShape *owner) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgShape **)&jowner) = (MgShape *) owner; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[71], swigjobj, jowner);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[70], swigjobj, jowner);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -2647,12 +2628,11 @@ Box2d SwigDirector_MgBaseRect::getExtent() const {
   Box2d *argp ;
   
   if (!swig_override[7]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::getExtent.");
-    return c_result;
+    return MgBaseShape::getExtent();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[72], swigjobj);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[71], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     argp = *(Box2d **)&jresult; 
     if (!argp) {
@@ -2673,12 +2653,12 @@ void SwigDirector_MgBaseRect::update() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[8]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::update.");
+    MgBaseShape::update();
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[73], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[72], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -2693,13 +2673,13 @@ void SwigDirector_MgBaseRect::transform(Matrix2d const &mat) {
   jlong jmat = 0 ;
   
   if (!swig_override[9]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::transform.");
+    MgBaseShape::transform(mat);
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(Matrix2d **)&jmat = (Matrix2d *) &mat; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[74], swigjobj, jmat);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[73], swigjobj, jmat);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -2713,12 +2693,12 @@ void SwigDirector_MgBaseRect::clear() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[10]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::clear.");
+    MgBaseShape::clear();
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[75], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[74], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -2732,12 +2712,12 @@ void SwigDirector_MgBaseRect::clearCachedData() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[11]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::clearCachedData.");
+    MgBaseShape::clearCachedData();
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[76], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[75], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -2758,7 +2738,7 @@ int SwigDirector_MgBaseRect::getPointCount() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[77], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[76], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -2784,7 +2764,7 @@ Point2d SwigDirector_MgBaseRect::getPoint(int index) const {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[78], swigjobj, jindex);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[77], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     argp = *(Point2d **)&jresult; 
     if (!argp) {
@@ -2814,7 +2794,7 @@ void SwigDirector_MgBaseRect::setPoint(int index, Point2d const &pt) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
     *(Point2d **)&jpt = (Point2d *) &pt; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[79], swigjobj, jindex, jpt);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[78], swigjobj, jindex, jpt);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -2830,12 +2810,11 @@ bool SwigDirector_MgBaseRect::isClosed() const {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[15]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::isClosed.");
-    return c_result;
+    return MgBaseShape::isClosed();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[80], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[79], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2857,7 +2836,7 @@ bool SwigDirector_MgBaseRect::isCurve() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[81], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[80], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2886,7 +2865,7 @@ float SwigDirector_MgBaseRect::hitTest(Point2d const &pt, float tol, MgHitResult
     *(Point2d **)&jpt = (Point2d *) &pt; 
     jtol = (jfloat) tol;
     *(MgHitResult **)&jres = (MgHitResult *) &res; 
-    jresult = (jfloat) jenv->CallStaticFloatMethod(Swig::jclass_touchvgJNI, Swig::director_methids[82], swigjobj, jpt, jtol, jres);
+    jresult = (jfloat) jenv->CallStaticFloatMethod(Swig::jclass_touchvgJNI, Swig::director_methids[81], swigjobj, jpt, jtol, jres);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (float)jresult; 
   } else {
@@ -2905,13 +2884,12 @@ bool SwigDirector_MgBaseRect::hitTestBox(Box2d const &rect) const {
   jlong jrect = 0 ;
   
   if (!swig_override[18]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::hitTestBox.");
-    return c_result;
+    return MgBaseShape::hitTestBox(rect);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(Box2d **)&jrect = (Box2d *) &rect; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[83], swigjobj, jrect);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[82], swigjobj, jrect);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2933,8 +2911,7 @@ bool SwigDirector_MgBaseRect::draw(int mode, GiGraphics &gs, GiContext const &ct
   jint jsegment  ;
   
   if (!swig_override[19]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::draw.");
-    return c_result;
+    return MgBaseShape::draw(mode,gs,ctx,segment);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
@@ -2942,7 +2919,7 @@ bool SwigDirector_MgBaseRect::draw(int mode, GiGraphics &gs, GiContext const &ct
     *(GiGraphics **)&jgs = (GiGraphics *) &gs; 
     *(GiContext **)&jctx = (GiContext *) &ctx; 
     jsegment = (jint) segment;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[84], swigjobj, jmode, jgs, jctx, jsegment);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[83], swigjobj, jmode, jgs, jctx, jsegment);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2960,14 +2937,13 @@ bool SwigDirector_MgBaseRect::save(MgStorage *s) const {
   jobject swigjobj = (jobject) NULL ;
   jlong js = 0 ;
   
-  if (!swig_override[21]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::save.");
-    return c_result;
+  if (!swig_override[20]) {
+    return MgBaseShape::save(s);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[86], swigjobj, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[84], swigjobj, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -2986,15 +2962,14 @@ bool SwigDirector_MgBaseRect::load(MgShapeFactory *factory, MgStorage *s) {
   jlong jfactory = 0 ;
   jlong js = 0 ;
   
-  if (!swig_override[22]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::load.");
-    return c_result;
+  if (!swig_override[21]) {
+    return MgBaseShape::load(factory,s);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgShapeFactory **)&jfactory) = (MgShapeFactory *) factory; 
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[87], swigjobj, jfactory, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[85], swigjobj, jfactory, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3011,13 +2986,12 @@ int SwigDirector_MgBaseRect::getHandleCount() const {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[23]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::getHandleCount.");
-    return c_result;
+  if (!swig_override[22]) {
+    return MgBaseShape::getHandleCount();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[88], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[86], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -3036,14 +3010,13 @@ Point2d SwigDirector_MgBaseRect::getHandlePoint(int index) const {
   jint jindex  ;
   Point2d *argp ;
   
-  if (!swig_override[24]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::getHandlePoint.");
-    return c_result;
+  if (!swig_override[23]) {
+    return MgBaseShape::getHandlePoint(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[89], swigjobj, jindex);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[87], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     argp = *(Point2d **)&jresult; 
     if (!argp) {
@@ -3068,16 +3041,15 @@ bool SwigDirector_MgBaseRect::setHandlePoint(int index, Point2d const &pt, float
   jlong jpt = 0 ;
   jfloat jtol  ;
   
-  if (!swig_override[25]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::setHandlePoint.");
-    return c_result;
+  if (!swig_override[24]) {
+    return MgBaseShape::setHandlePoint(index,pt,tol);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
     *(Point2d **)&jpt = (Point2d *) &pt; 
     jtol = (jfloat) tol;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[90], swigjobj, jindex, jpt, jtol);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[88], swigjobj, jindex, jpt, jtol);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3095,14 +3067,13 @@ bool SwigDirector_MgBaseRect::isHandleFixed(int index) const {
   jobject swigjobj = (jobject) NULL ;
   jint jindex  ;
   
-  if (!swig_override[26]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::isHandleFixed.");
-    return c_result;
+  if (!swig_override[25]) {
+    return MgBaseShape::isHandleFixed(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[91], swigjobj, jindex);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[89], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3120,14 +3091,13 @@ int SwigDirector_MgBaseRect::getHandleType(int index) const {
   jobject swigjobj = (jobject) NULL ;
   jint jindex  ;
   
-  if (!swig_override[27]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::getHandleType.");
-    return c_result;
+  if (!swig_override[26]) {
+    return MgBaseShape::getHandleType(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[92], swigjobj, jindex);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[90], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -3146,15 +3116,14 @@ bool SwigDirector_MgBaseRect::offset(Vector2d const &vec, int segment) {
   jlong jvec = 0 ;
   jint jsegment  ;
   
-  if (!swig_override[28]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::offset.");
-    return c_result;
+  if (!swig_override[27]) {
+    return MgBaseShape::offset(vec,segment);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(Vector2d **)&jvec = (Vector2d *) &vec; 
     jsegment = (jint) segment;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[93], swigjobj, jvec, jsegment);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[91], swigjobj, jvec, jsegment);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3171,7 +3140,7 @@ void SwigDirector_MgBaseRect::setFlag(MgShapeBit bit, bool on) {
   jint jbit  ;
   jboolean jon  ;
   
-  if (!swig_override[29]) {
+  if (!swig_override[28]) {
     MgBaseShape::setFlag(bit,on);
     return;
   }
@@ -3179,7 +3148,7 @@ void SwigDirector_MgBaseRect::setFlag(MgShapeBit bit, bool on) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jbit = (jint) bit;
     jon = (jboolean) on;
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[94], swigjobj, jbit, jon);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[92], swigjobj, jbit, jon);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -3194,13 +3163,13 @@ char const *SwigDirector_MgBaseRect::getTypeName() const {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[30]) {
+  if (!swig_override[29]) {
     SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseRect::getTypeName.");
     return (char const *)c_result;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[95], swigjobj);
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[93], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return (char const *)c_result;
     c_result = 0;
     if (jresult) {
@@ -3281,9 +3250,6 @@ void SwigDirector_MgBaseRect::swig_connect_director(JNIEnv *jenv, jobject jself,
       "draw", "(ILtouchvg/core/GiGraphics;Ltouchvg/core/GiContext;I)Z", NULL 
     },
     {
-      "draw", "(ILtouchvg/core/GiGraphics;Ltouchvg/core/GiContext;)Z", NULL 
-    },
-    {
       "save", "(Ltouchvg/core/MgStorage;)Z", NULL 
     },
     {
@@ -3324,7 +3290,7 @@ void SwigDirector_MgBaseRect::swig_connect_director(JNIEnv *jenv, jobject jself,
       baseclass = (jclass) jenv->NewGlobalRef(baseclass);
     }
     bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
-    for (int i = 0; i < 31; ++i) {
+    for (int i = 0; i < 30; ++i) {
       if (!methods[i].base_methid) {
         methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
         if (!methods[i].base_methid) return;
@@ -3356,7 +3322,7 @@ MgObject *SwigDirector_MgBaseLines::clone() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[96], swigjobj);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[94], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = *(MgObject **)&jresult; 
   } else {
@@ -3373,13 +3339,13 @@ void SwigDirector_MgBaseLines::copy(MgObject const &src) {
   jlong jsrc = 0 ;
   
   if (!swig_override[1]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::copy.");
+    MgBaseShape::copy(src);
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(MgObject **)&jsrc = (MgObject *) &src; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[97], swigjobj, jsrc);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[95], swigjobj, jsrc);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -3398,7 +3364,7 @@ void SwigDirector_MgBaseLines::release() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[98], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[96], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -3415,13 +3381,12 @@ bool SwigDirector_MgBaseLines::equals(MgObject const &src) const {
   jlong jsrc = 0 ;
   
   if (!swig_override[3]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::equals.");
-    return c_result;
+    return MgBaseShape::equals(src);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(MgObject **)&jsrc = (MgObject *) &src; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[99], swigjobj, jsrc);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[97], swigjobj, jsrc);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3444,7 +3409,7 @@ int SwigDirector_MgBaseLines::getType() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[100], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[98], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -3463,13 +3428,12 @@ bool SwigDirector_MgBaseLines::isKindOf(int type) const {
   jint jtype  ;
   
   if (!swig_override[5]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::isKindOf.");
-    return c_result;
+    return MgBaseShape::isKindOf(type);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jtype = (jint) type;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[101], swigjobj, jtype);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[99], swigjobj, jtype);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3497,7 +3461,7 @@ void SwigDirector_MgBaseLines::setOwner(MgShape *owner) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgShape **)&jowner) = (MgShape *) owner; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[102], swigjobj, jowner);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[100], swigjobj, jowner);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -3514,12 +3478,11 @@ Box2d SwigDirector_MgBaseLines::getExtent() const {
   Box2d *argp ;
   
   if (!swig_override[7]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::getExtent.");
-    return c_result;
+    return MgBaseShape::getExtent();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[103], swigjobj);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[101], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     argp = *(Box2d **)&jresult; 
     if (!argp) {
@@ -3540,12 +3503,12 @@ void SwigDirector_MgBaseLines::update() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[8]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::update.");
+    MgBaseShape::update();
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[104], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[102], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -3560,13 +3523,13 @@ void SwigDirector_MgBaseLines::transform(Matrix2d const &mat) {
   jlong jmat = 0 ;
   
   if (!swig_override[9]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::transform.");
+    MgBaseShape::transform(mat);
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(Matrix2d **)&jmat = (Matrix2d *) &mat; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[105], swigjobj, jmat);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[103], swigjobj, jmat);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -3580,12 +3543,12 @@ void SwigDirector_MgBaseLines::clear() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[10]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::clear.");
+    MgBaseShape::clear();
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[106], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[104], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -3599,12 +3562,12 @@ void SwigDirector_MgBaseLines::clearCachedData() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[11]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::clearCachedData.");
+    MgBaseShape::clearCachedData();
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[107], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[105], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -3625,7 +3588,7 @@ int SwigDirector_MgBaseLines::getPointCount() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[108], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[106], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -3651,7 +3614,7 @@ Point2d SwigDirector_MgBaseLines::getPoint(int index) const {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[109], swigjobj, jindex);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[107], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     argp = *(Point2d **)&jresult; 
     if (!argp) {
@@ -3681,7 +3644,7 @@ void SwigDirector_MgBaseLines::setPoint(int index, Point2d const &pt) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
     *(Point2d **)&jpt = (Point2d *) &pt; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[110], swigjobj, jindex, jpt);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[108], swigjobj, jindex, jpt);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -3697,12 +3660,11 @@ bool SwigDirector_MgBaseLines::isClosed() const {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[15]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::isClosed.");
-    return c_result;
+    return MgBaseShape::isClosed();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[111], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[109], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3725,7 +3687,7 @@ bool SwigDirector_MgBaseLines::isCurve() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[112], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[110], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3754,7 +3716,7 @@ float SwigDirector_MgBaseLines::hitTest(Point2d const &pt, float tol, MgHitResul
     *(Point2d **)&jpt = (Point2d *) &pt; 
     jtol = (jfloat) tol;
     *(MgHitResult **)&jres = (MgHitResult *) &res; 
-    jresult = (jfloat) jenv->CallStaticFloatMethod(Swig::jclass_touchvgJNI, Swig::director_methids[113], swigjobj, jpt, jtol, jres);
+    jresult = (jfloat) jenv->CallStaticFloatMethod(Swig::jclass_touchvgJNI, Swig::director_methids[111], swigjobj, jpt, jtol, jres);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (float)jresult; 
   } else {
@@ -3773,13 +3735,12 @@ bool SwigDirector_MgBaseLines::hitTestBox(Box2d const &rect) const {
   jlong jrect = 0 ;
   
   if (!swig_override[18]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::hitTestBox.");
-    return c_result;
+    return MgBaseShape::hitTestBox(rect);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(Box2d **)&jrect = (Box2d *) &rect; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[114], swigjobj, jrect);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[112], swigjobj, jrect);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3801,8 +3762,7 @@ bool SwigDirector_MgBaseLines::draw(int mode, GiGraphics &gs, GiContext const &c
   jint jsegment  ;
   
   if (!swig_override[19]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::draw.");
-    return c_result;
+    return MgBaseShape::draw(mode,gs,ctx,segment);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
@@ -3810,7 +3770,7 @@ bool SwigDirector_MgBaseLines::draw(int mode, GiGraphics &gs, GiContext const &c
     *(GiGraphics **)&jgs = (GiGraphics *) &gs; 
     *(GiContext **)&jctx = (GiContext *) &ctx; 
     jsegment = (jint) segment;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[115], swigjobj, jmode, jgs, jctx, jsegment);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[113], swigjobj, jmode, jgs, jctx, jsegment);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3828,14 +3788,13 @@ bool SwigDirector_MgBaseLines::save(MgStorage *s) const {
   jobject swigjobj = (jobject) NULL ;
   jlong js = 0 ;
   
-  if (!swig_override[21]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::save.");
-    return c_result;
+  if (!swig_override[20]) {
+    return MgBaseShape::save(s);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[117], swigjobj, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[114], swigjobj, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3854,15 +3813,14 @@ bool SwigDirector_MgBaseLines::load(MgShapeFactory *factory, MgStorage *s) {
   jlong jfactory = 0 ;
   jlong js = 0 ;
   
-  if (!swig_override[22]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::load.");
-    return c_result;
+  if (!swig_override[21]) {
+    return MgBaseShape::load(factory,s);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgShapeFactory **)&jfactory) = (MgShapeFactory *) factory; 
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[118], swigjobj, jfactory, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[115], swigjobj, jfactory, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3879,13 +3837,12 @@ int SwigDirector_MgBaseLines::getHandleCount() const {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[23]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::getHandleCount.");
-    return c_result;
+  if (!swig_override[22]) {
+    return MgBaseShape::getHandleCount();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[119], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[116], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -3904,14 +3861,13 @@ Point2d SwigDirector_MgBaseLines::getHandlePoint(int index) const {
   jint jindex  ;
   Point2d *argp ;
   
-  if (!swig_override[24]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::getHandlePoint.");
-    return c_result;
+  if (!swig_override[23]) {
+    return MgBaseShape::getHandlePoint(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[120], swigjobj, jindex);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[117], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     argp = *(Point2d **)&jresult; 
     if (!argp) {
@@ -3936,16 +3892,15 @@ bool SwigDirector_MgBaseLines::setHandlePoint(int index, Point2d const &pt, floa
   jlong jpt = 0 ;
   jfloat jtol  ;
   
-  if (!swig_override[25]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::setHandlePoint.");
-    return c_result;
+  if (!swig_override[24]) {
+    return MgBaseShape::setHandlePoint(index,pt,tol);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
     *(Point2d **)&jpt = (Point2d *) &pt; 
     jtol = (jfloat) tol;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[121], swigjobj, jindex, jpt, jtol);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[118], swigjobj, jindex, jpt, jtol);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3963,14 +3918,13 @@ bool SwigDirector_MgBaseLines::isHandleFixed(int index) const {
   jobject swigjobj = (jobject) NULL ;
   jint jindex  ;
   
-  if (!swig_override[26]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::isHandleFixed.");
-    return c_result;
+  if (!swig_override[25]) {
+    return MgBaseShape::isHandleFixed(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[122], swigjobj, jindex);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[119], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -3988,14 +3942,13 @@ int SwigDirector_MgBaseLines::getHandleType(int index) const {
   jobject swigjobj = (jobject) NULL ;
   jint jindex  ;
   
-  if (!swig_override[27]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::getHandleType.");
-    return c_result;
+  if (!swig_override[26]) {
+    return MgBaseShape::getHandleType(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[123], swigjobj, jindex);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[120], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -4014,15 +3967,14 @@ bool SwigDirector_MgBaseLines::offset(Vector2d const &vec, int segment) {
   jlong jvec = 0 ;
   jint jsegment  ;
   
-  if (!swig_override[28]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::offset.");
-    return c_result;
+  if (!swig_override[27]) {
+    return MgBaseShape::offset(vec,segment);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(Vector2d **)&jvec = (Vector2d *) &vec; 
     jsegment = (jint) segment;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[124], swigjobj, jvec, jsegment);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[121], swigjobj, jvec, jsegment);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4039,7 +3991,7 @@ void SwigDirector_MgBaseLines::setFlag(MgShapeBit bit, bool on) {
   jint jbit  ;
   jboolean jon  ;
   
-  if (!swig_override[29]) {
+  if (!swig_override[28]) {
     MgBaseShape::setFlag(bit,on);
     return;
   }
@@ -4047,7 +3999,7 @@ void SwigDirector_MgBaseLines::setFlag(MgShapeBit bit, bool on) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jbit = (jint) bit;
     jon = (jboolean) on;
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[125], swigjobj, jbit, jon);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[122], swigjobj, jbit, jon);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -4062,13 +4014,13 @@ char const *SwigDirector_MgBaseLines::getTypeName() const {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[30]) {
+  if (!swig_override[29]) {
     SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgBaseLines::getTypeName.");
     return (char const *)c_result;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[126], swigjobj);
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[123], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return (char const *)c_result;
     c_result = 0;
     if (jresult) {
@@ -4149,9 +4101,6 @@ void SwigDirector_MgBaseLines::swig_connect_director(JNIEnv *jenv, jobject jself
       "draw", "(ILtouchvg/core/GiGraphics;Ltouchvg/core/GiContext;I)Z", NULL 
     },
     {
-      "draw", "(ILtouchvg/core/GiGraphics;Ltouchvg/core/GiContext;)Z", NULL 
-    },
-    {
       "save", "(Ltouchvg/core/MgStorage;)Z", NULL 
     },
     {
@@ -4192,7 +4141,7 @@ void SwigDirector_MgBaseLines::swig_connect_director(JNIEnv *jenv, jobject jself
       baseclass = (jclass) jenv->NewGlobalRef(baseclass);
     }
     bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
-    for (int i = 0; i < 31; ++i) {
+    for (int i = 0; i < 30; ++i) {
       if (!methods[i].base_methid) {
         methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
         if (!methods[i].base_methid) return;
@@ -4224,7 +4173,7 @@ MgObject *SwigDirector_MgComposite::clone() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[127], swigjobj);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[124], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = *(MgObject **)&jresult; 
   } else {
@@ -4241,13 +4190,13 @@ void SwigDirector_MgComposite::copy(MgObject const &src) {
   jlong jsrc = 0 ;
   
   if (!swig_override[1]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::copy.");
+    MgBaseShape::copy(src);
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(MgObject **)&jsrc = (MgObject *) &src; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[128], swigjobj, jsrc);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[125], swigjobj, jsrc);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -4266,7 +4215,7 @@ void SwigDirector_MgComposite::release() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[129], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[126], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -4283,13 +4232,12 @@ bool SwigDirector_MgComposite::equals(MgObject const &src) const {
   jlong jsrc = 0 ;
   
   if (!swig_override[3]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::equals.");
-    return c_result;
+    return MgBaseShape::equals(src);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(MgObject **)&jsrc = (MgObject *) &src; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[130], swigjobj, jsrc);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[127], swigjobj, jsrc);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4312,7 +4260,7 @@ int SwigDirector_MgComposite::getType() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[131], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[128], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -4331,13 +4279,12 @@ bool SwigDirector_MgComposite::isKindOf(int type) const {
   jint jtype  ;
   
   if (!swig_override[5]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::isKindOf.");
-    return c_result;
+    return MgBaseShape::isKindOf(type);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jtype = (jint) type;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[132], swigjobj, jtype);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[129], swigjobj, jtype);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4365,7 +4312,7 @@ void SwigDirector_MgComposite::setOwner(MgShape *owner) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgShape **)&jowner) = (MgShape *) owner; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[133], swigjobj, jowner);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[130], swigjobj, jowner);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -4382,12 +4329,11 @@ Box2d SwigDirector_MgComposite::getExtent() const {
   Box2d *argp ;
   
   if (!swig_override[7]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::getExtent.");
-    return c_result;
+    return MgBaseShape::getExtent();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[134], swigjobj);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[131], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     argp = *(Box2d **)&jresult; 
     if (!argp) {
@@ -4408,12 +4354,12 @@ void SwigDirector_MgComposite::update() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[8]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::update.");
+    MgBaseShape::update();
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[135], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[132], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -4428,13 +4374,13 @@ void SwigDirector_MgComposite::transform(Matrix2d const &mat) {
   jlong jmat = 0 ;
   
   if (!swig_override[9]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::transform.");
+    MgBaseShape::transform(mat);
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(Matrix2d **)&jmat = (Matrix2d *) &mat; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[136], swigjobj, jmat);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[133], swigjobj, jmat);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -4448,12 +4394,12 @@ void SwigDirector_MgComposite::clear() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[10]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::clear.");
+    MgBaseShape::clear();
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[137], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[134], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -4467,12 +4413,12 @@ void SwigDirector_MgComposite::clearCachedData() {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[11]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::clearCachedData.");
+    MgBaseShape::clearCachedData();
     return;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[138], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[135], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -4493,7 +4439,7 @@ int SwigDirector_MgComposite::getPointCount() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[139], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[136], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -4519,7 +4465,7 @@ Point2d SwigDirector_MgComposite::getPoint(int index) const {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[140], swigjobj, jindex);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[137], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     argp = *(Point2d **)&jresult; 
     if (!argp) {
@@ -4549,7 +4495,7 @@ void SwigDirector_MgComposite::setPoint(int index, Point2d const &pt) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
     *(Point2d **)&jpt = (Point2d *) &pt; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[141], swigjobj, jindex, jpt);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[138], swigjobj, jindex, jpt);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -4565,12 +4511,11 @@ bool SwigDirector_MgComposite::isClosed() const {
   jobject swigjobj = (jobject) NULL ;
   
   if (!swig_override[15]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::isClosed.");
-    return c_result;
+    return MgBaseShape::isClosed();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[142], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[139], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4592,7 +4537,7 @@ bool SwigDirector_MgComposite::isCurve() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[143], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[140], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4621,7 +4566,7 @@ float SwigDirector_MgComposite::hitTest(Point2d const &pt, float tol, MgHitResul
     *(Point2d **)&jpt = (Point2d *) &pt; 
     jtol = (jfloat) tol;
     *(MgHitResult **)&jres = (MgHitResult *) &res; 
-    jresult = (jfloat) jenv->CallStaticFloatMethod(Swig::jclass_touchvgJNI, Swig::director_methids[144], swigjobj, jpt, jtol, jres);
+    jresult = (jfloat) jenv->CallStaticFloatMethod(Swig::jclass_touchvgJNI, Swig::director_methids[141], swigjobj, jpt, jtol, jres);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (float)jresult; 
   } else {
@@ -4640,13 +4585,12 @@ bool SwigDirector_MgComposite::hitTestBox(Box2d const &rect) const {
   jlong jrect = 0 ;
   
   if (!swig_override[18]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::hitTestBox.");
-    return c_result;
+    return MgBaseShape::hitTestBox(rect);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(Box2d **)&jrect = (Box2d *) &rect; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[145], swigjobj, jrect);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[142], swigjobj, jrect);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4668,8 +4612,7 @@ bool SwigDirector_MgComposite::draw(int mode, GiGraphics &gs, GiContext const &c
   jint jsegment  ;
   
   if (!swig_override[19]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::draw.");
-    return c_result;
+    return MgBaseShape::draw(mode,gs,ctx,segment);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
@@ -4677,7 +4620,7 @@ bool SwigDirector_MgComposite::draw(int mode, GiGraphics &gs, GiContext const &c
     *(GiGraphics **)&jgs = (GiGraphics *) &gs; 
     *(GiContext **)&jctx = (GiContext *) &ctx; 
     jsegment = (jint) segment;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[146], swigjobj, jmode, jgs, jctx, jsegment);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[143], swigjobj, jmode, jgs, jctx, jsegment);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4695,14 +4638,13 @@ bool SwigDirector_MgComposite::save(MgStorage *s) const {
   jobject swigjobj = (jobject) NULL ;
   jlong js = 0 ;
   
-  if (!swig_override[21]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::save.");
-    return c_result;
+  if (!swig_override[20]) {
+    return MgBaseShape::save(s);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[148], swigjobj, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[144], swigjobj, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4721,15 +4663,14 @@ bool SwigDirector_MgComposite::load(MgShapeFactory *factory, MgStorage *s) {
   jlong jfactory = 0 ;
   jlong js = 0 ;
   
-  if (!swig_override[22]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::load.");
-    return c_result;
+  if (!swig_override[21]) {
+    return MgBaseShape::load(factory,s);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgShapeFactory **)&jfactory) = (MgShapeFactory *) factory; 
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[149], swigjobj, jfactory, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[145], swigjobj, jfactory, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4746,13 +4687,12 @@ int SwigDirector_MgComposite::getHandleCount() const {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[23]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::getHandleCount.");
-    return c_result;
+  if (!swig_override[22]) {
+    return MgBaseShape::getHandleCount();
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[150], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[146], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -4771,14 +4711,13 @@ Point2d SwigDirector_MgComposite::getHandlePoint(int index) const {
   jint jindex  ;
   Point2d *argp ;
   
-  if (!swig_override[24]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::getHandlePoint.");
-    return c_result;
+  if (!swig_override[23]) {
+    return MgBaseShape::getHandlePoint(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[151], swigjobj, jindex);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[147], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     argp = *(Point2d **)&jresult; 
     if (!argp) {
@@ -4803,16 +4742,15 @@ bool SwigDirector_MgComposite::setHandlePoint(int index, Point2d const &pt, floa
   jlong jpt = 0 ;
   jfloat jtol  ;
   
-  if (!swig_override[25]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::setHandlePoint.");
-    return c_result;
+  if (!swig_override[24]) {
+    return MgBaseShape::setHandlePoint(index,pt,tol);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
     *(Point2d **)&jpt = (Point2d *) &pt; 
     jtol = (jfloat) tol;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[152], swigjobj, jindex, jpt, jtol);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[148], swigjobj, jindex, jpt, jtol);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4830,14 +4768,13 @@ bool SwigDirector_MgComposite::isHandleFixed(int index) const {
   jobject swigjobj = (jobject) NULL ;
   jint jindex  ;
   
-  if (!swig_override[26]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::isHandleFixed.");
-    return c_result;
+  if (!swig_override[25]) {
+    return MgBaseShape::isHandleFixed(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[153], swigjobj, jindex);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[149], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4855,14 +4792,13 @@ int SwigDirector_MgComposite::getHandleType(int index) const {
   jobject swigjobj = (jobject) NULL ;
   jint jindex  ;
   
-  if (!swig_override[27]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::getHandleType.");
-    return c_result;
+  if (!swig_override[26]) {
+    return MgBaseShape::getHandleType(index);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jindex = (jint) index;
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[154], swigjobj, jindex);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[150], swigjobj, jindex);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -4881,15 +4817,14 @@ bool SwigDirector_MgComposite::offset(Vector2d const &vec, int segment) {
   jlong jvec = 0 ;
   jint jsegment  ;
   
-  if (!swig_override[28]) {
-    SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::offset.");
-    return c_result;
+  if (!swig_override[27]) {
+    return MgBaseShape::offset(vec,segment);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *(Vector2d **)&jvec = (Vector2d *) &vec; 
     jsegment = (jint) segment;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[155], swigjobj, jvec, jsegment);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[151], swigjobj, jvec, jsegment);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -4906,7 +4841,7 @@ void SwigDirector_MgComposite::setFlag(MgShapeBit bit, bool on) {
   jint jbit  ;
   jboolean jon  ;
   
-  if (!swig_override[29]) {
+  if (!swig_override[28]) {
     MgBaseShape::setFlag(bit,on);
     return;
   }
@@ -4914,7 +4849,7 @@ void SwigDirector_MgComposite::setFlag(MgShapeBit bit, bool on) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jbit = (jint) bit;
     jon = (jboolean) on;
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[156], swigjobj, jbit, jon);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[152], swigjobj, jbit, jon);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -4929,13 +4864,13 @@ char const *SwigDirector_MgComposite::getTypeName() const {
   JNIEnv * jenv = swigjnienv.getJNIEnv() ;
   jobject swigjobj = (jobject) NULL ;
   
-  if (!swig_override[30]) {
+  if (!swig_override[29]) {
     SWIG_JavaThrowException(JNIEnvWrapper(this).getJNIEnv(), SWIG_JavaDirectorPureVirtual, "Attempted to invoke pure virtual method MgComposite::getTypeName.");
     return (char const *)c_result;
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[157], swigjobj);
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[153], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return (char const *)c_result;
     c_result = 0;
     if (jresult) {
@@ -4957,13 +4892,13 @@ bool SwigDirector_MgComposite::canOffsetShapeAlone(MgShape *shape) {
   jobject swigjobj = (jobject) NULL ;
   jlong jshape = 0 ;
   
-  if (!swig_override[31]) {
+  if (!swig_override[30]) {
     return MgComposite::canOffsetShapeAlone(shape);
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgShape **)&jshape) = (MgShape *) shape; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[158], swigjobj, jshape);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[154], swigjobj, jshape);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5040,9 +4975,6 @@ void SwigDirector_MgComposite::swig_connect_director(JNIEnv *jenv, jobject jself
       "draw", "(ILtouchvg/core/GiGraphics;Ltouchvg/core/GiContext;I)Z", NULL 
     },
     {
-      "draw", "(ILtouchvg/core/GiGraphics;Ltouchvg/core/GiContext;)Z", NULL 
-    },
-    {
       "save", "(Ltouchvg/core/MgStorage;)Z", NULL 
     },
     {
@@ -5086,7 +5018,7 @@ void SwigDirector_MgComposite::swig_connect_director(JNIEnv *jenv, jobject jself
       baseclass = (jclass) jenv->NewGlobalRef(baseclass);
     }
     bool derived = (jenv->IsSameObject(baseclass, jcls) ? false : true);
-    for (int i = 0; i < 32; ++i) {
+    for (int i = 0; i < 31; ++i) {
       if (!methods[i].base_methid) {
         methods[i].base_methid = jenv->GetMethodID(baseclass, methods[i].mname, methods[i].mdesc);
         if (!methods[i].base_methid) return;
@@ -5123,7 +5055,7 @@ char const *SwigDirector_MgCommand::getName() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[159], swigjobj);
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[155], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return (char const *)c_result;
     c_result = 0;
     if (jresult) {
@@ -5148,7 +5080,7 @@ void SwigDirector_MgCommand::release() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[160], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[156], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -5170,7 +5102,7 @@ bool SwigDirector_MgCommand::cancel(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[161], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[157], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5196,7 +5128,7 @@ bool SwigDirector_MgCommand::initialize(MgMotion const *sender, MgStorage *s) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[162], swigjobj, jsender, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[158], swigjobj, jsender, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5220,7 +5152,7 @@ bool SwigDirector_MgCommand::backStep(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[163], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[159], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5247,7 +5179,7 @@ bool SwigDirector_MgCommand::draw(MgMotion const *sender, GiGraphics *gs) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((GiGraphics **)&jgs) = (GiGraphics *) gs; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[164], swigjobj, jsender, jgs);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[160], swigjobj, jsender, jgs);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5273,7 +5205,7 @@ int SwigDirector_MgCommand::gatherShapes(MgMotion const *sender, MgShapes *shape
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShapes **)&jshapes) = (MgShapes *) shapes; 
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[165], swigjobj, jsender, jshapes);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[161], swigjobj, jsender, jshapes);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -5297,7 +5229,7 @@ bool SwigDirector_MgCommand::click(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[166], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[162], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5321,7 +5253,7 @@ bool SwigDirector_MgCommand::doubleClick(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[167], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[163], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5345,7 +5277,7 @@ bool SwigDirector_MgCommand::longPress(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[168], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[164], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5369,7 +5301,7 @@ bool SwigDirector_MgCommand::touchBegan(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[169], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[165], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5393,7 +5325,7 @@ bool SwigDirector_MgCommand::touchMoved(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[170], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[166], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5417,7 +5349,7 @@ bool SwigDirector_MgCommand::touchEnded(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[171], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[167], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5441,7 +5373,7 @@ bool SwigDirector_MgCommand::mouseHover(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[172], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[168], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5465,7 +5397,7 @@ bool SwigDirector_MgCommand::twoFingersMove(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[173], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[169], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5487,7 +5419,7 @@ bool SwigDirector_MgCommand::isDrawingCommand() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[174], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[170], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5509,7 +5441,7 @@ bool SwigDirector_MgCommand::isFloatingCommand() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[175], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[171], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5535,7 +5467,7 @@ bool SwigDirector_MgCommand::doContextAction(MgMotion const *sender, int action)
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     jaction = (jint) action;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[176], swigjobj, jsender, jaction);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[172], swigjobj, jsender, jaction);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5648,7 +5580,7 @@ void SwigDirector_CmdObserverDefault::onDocLoaded(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[177], swigjobj, jsender);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[173], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -5669,7 +5601,7 @@ void SwigDirector_CmdObserverDefault::onEnterSelectCommand(MgMotion const *sende
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[178], swigjobj, jsender);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[174], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -5690,7 +5622,7 @@ void SwigDirector_CmdObserverDefault::onUnloadCommands(MgCmdManager *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgCmdManager **)&jsender) = (MgCmdManager *) sender; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[179], swigjobj, jsender);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[175], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -5712,7 +5644,7 @@ bool SwigDirector_CmdObserverDefault::selectActionsNeedHided(MgMotion const *sen
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[180], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[176], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5738,7 +5670,7 @@ bool SwigDirector_CmdObserverDefault::doAction(MgMotion const *sender, int actio
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     jaction = (jint) action;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[181], swigjobj, jsender, jaction);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[177], swigjobj, jsender, jaction);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5764,7 +5696,7 @@ bool SwigDirector_CmdObserverDefault::doEndAction(MgMotion const *sender, int ac
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     jaction = (jint) action;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[182], swigjobj, jsender, jaction);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[178], swigjobj, jsender, jaction);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5791,7 +5723,7 @@ void SwigDirector_CmdObserverDefault::drawInShapeCommand(MgMotion const *sender,
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgCommand **)&jcmd) = (MgCommand *) cmd; 
     *((GiGraphics **)&jgs) = (GiGraphics *) gs; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[183], swigjobj, jsender, jcmd, jgs);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[179], swigjobj, jsender, jcmd, jgs);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -5818,7 +5750,7 @@ void SwigDirector_CmdObserverDefault::drawInSelectCommand(MgMotion const *sender
     *((MgShape **)&jsp) = (MgShape *) sp; 
     jhandleIndex = (jint) handleIndex;
     *((GiGraphics **)&jgs) = (GiGraphics *) gs; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[184], swigjobj, jsender, jsp, jhandleIndex, jgs);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[180], swigjobj, jsender, jsp, jhandleIndex, jgs);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -5842,7 +5774,7 @@ bool SwigDirector_CmdObserverDefault::onShapeWillAdded(MgMotion const *sender, M
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShape **)&jsp) = (MgShape *) sp; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[185], swigjobj, jsender, jsp);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[181], swigjobj, jsender, jsp);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5867,7 +5799,7 @@ void SwigDirector_CmdObserverDefault::onShapeAdded(MgMotion const *sender, MgSha
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShape **)&jsp) = (MgShape *) sp; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[186], swigjobj, jsender, jsp);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[182], swigjobj, jsender, jsp);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -5891,7 +5823,7 @@ bool SwigDirector_CmdObserverDefault::onShapeWillDeleted(MgMotion const *sender,
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShape **)&jsp) = (MgShape *) sp; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[187], swigjobj, jsender, jsp);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[183], swigjobj, jsender, jsp);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5916,7 +5848,7 @@ void SwigDirector_CmdObserverDefault::onShapeDeleted(MgMotion const *sender, MgS
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShape **)&jsp) = (MgShape *) sp; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[188], swigjobj, jsender, jsp);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[184], swigjobj, jsender, jsp);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -5940,7 +5872,7 @@ bool SwigDirector_CmdObserverDefault::onShapeCanRotated(MgMotion const *sender, 
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShape **)&jsp) = (MgShape *) sp; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[189], swigjobj, jsender, jsp);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[185], swigjobj, jsender, jsp);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5966,7 +5898,7 @@ bool SwigDirector_CmdObserverDefault::onShapeCanTransform(MgMotion const *sender
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShape **)&jsp) = (MgShape *) sp; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[190], swigjobj, jsender, jsp);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[186], swigjobj, jsender, jsp);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -5992,7 +5924,7 @@ bool SwigDirector_CmdObserverDefault::onShapeCanUnlock(MgMotion const *sender, M
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShape **)&jsp) = (MgShape *) sp; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[191], swigjobj, jsender, jsp);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[187], swigjobj, jsender, jsp);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6018,7 +5950,7 @@ bool SwigDirector_CmdObserverDefault::onShapeCanUngroup(MgMotion const *sender, 
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShape **)&jsp) = (MgShape *) sp; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[192], swigjobj, jsender, jsp);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[188], swigjobj, jsender, jsp);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6045,7 +5977,7 @@ void SwigDirector_CmdObserverDefault::onShapeMoved(MgMotion const *sender, MgSha
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShape **)&jsp) = (MgShape *) sp; 
     jsegment = (jint) segment;
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[193], swigjobj, jsender, jsp, jsegment);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[189], swigjobj, jsender, jsp, jsegment);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -6069,7 +6001,7 @@ MgBaseShape *SwigDirector_CmdObserverDefault::createShape(MgMotion const *sender
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     jtype = (jint) type;
-    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[194], swigjobj, jsender, jtype);
+    jresult = (jlong) jenv->CallStaticLongMethod(Swig::jclass_touchvgJNI, Swig::director_methids[190], swigjobj, jsender, jtype);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = *(MgBaseShape **)&jresult; 
   } else {
@@ -6192,7 +6124,7 @@ char const *SwigDirector_MgCommandDraw::getName() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[195], swigjobj);
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[191], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return (char const *)c_result;
     c_result = 0;
     if (jresult) {
@@ -6217,7 +6149,7 @@ void SwigDirector_MgCommandDraw::release() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[196], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[192], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -6239,7 +6171,7 @@ bool SwigDirector_MgCommandDraw::cancel(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[197], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[193], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6265,7 +6197,7 @@ bool SwigDirector_MgCommandDraw::initialize(MgMotion const *sender, MgStorage *s
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[198], swigjobj, jsender, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[194], swigjobj, jsender, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6289,7 +6221,7 @@ bool SwigDirector_MgCommandDraw::backStep(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[199], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[195], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6315,7 +6247,7 @@ bool SwigDirector_MgCommandDraw::draw(MgMotion const *sender, GiGraphics *gs) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((GiGraphics **)&jgs) = (GiGraphics *) gs; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[200], swigjobj, jsender, jgs);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[196], swigjobj, jsender, jgs);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6341,7 +6273,7 @@ int SwigDirector_MgCommandDraw::gatherShapes(MgMotion const *sender, MgShapes *s
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShapes **)&jshapes) = (MgShapes *) shapes; 
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[201], swigjobj, jsender, jshapes);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[197], swigjobj, jsender, jshapes);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -6365,7 +6297,7 @@ bool SwigDirector_MgCommandDraw::click(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[202], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[198], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6389,7 +6321,7 @@ bool SwigDirector_MgCommandDraw::doubleClick(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[203], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[199], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6413,7 +6345,7 @@ bool SwigDirector_MgCommandDraw::longPress(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[204], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[200], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6437,7 +6369,7 @@ bool SwigDirector_MgCommandDraw::touchBegan(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[205], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[201], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6461,7 +6393,7 @@ bool SwigDirector_MgCommandDraw::touchMoved(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[206], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[202], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6485,7 +6417,7 @@ bool SwigDirector_MgCommandDraw::touchEnded(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[207], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[203], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6509,7 +6441,7 @@ bool SwigDirector_MgCommandDraw::mouseHover(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[208], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[204], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6533,7 +6465,7 @@ bool SwigDirector_MgCommandDraw::twoFingersMove(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[209], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[205], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6555,7 +6487,7 @@ bool SwigDirector_MgCommandDraw::isDrawingCommand() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[210], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[206], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6577,7 +6509,7 @@ bool SwigDirector_MgCommandDraw::isFloatingCommand() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[211], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[207], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6603,7 +6535,7 @@ bool SwigDirector_MgCommandDraw::doContextAction(MgMotion const *sender, int act
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     jaction = (jint) action;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[212], swigjobj, jsender, jaction);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[208], swigjobj, jsender, jaction);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6625,7 +6557,7 @@ int SwigDirector_MgCommandDraw::getMaxStep() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[213], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[209], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -6650,7 +6582,7 @@ void SwigDirector_MgCommandDraw::setStepPoint(int step, Point2d const &pt) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jstep = (jint) step;
     *(Point2d **)&jpt = (Point2d *) &pt; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[214], swigjobj, jstep, jpt);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[210], swigjobj, jstep, jpt);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -6771,7 +6703,7 @@ char const *SwigDirector_MgCmdDrawRect::getName() const {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[215], swigjobj);
+    jresult = (jstring) jenv->CallStaticObjectMethod(Swig::jclass_touchvgJNI, Swig::director_methids[211], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return (char const *)c_result;
     c_result = 0;
     if (jresult) {
@@ -6796,7 +6728,7 @@ void SwigDirector_MgCmdDrawRect::release() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[216], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[212], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -6818,7 +6750,7 @@ bool SwigDirector_MgCmdDrawRect::cancel(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[217], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[213], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6844,7 +6776,7 @@ bool SwigDirector_MgCmdDrawRect::initialize(MgMotion const *sender, MgStorage *s
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgStorage **)&js) = (MgStorage *) s; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[218], swigjobj, jsender, js);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[214], swigjobj, jsender, js);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6868,7 +6800,7 @@ bool SwigDirector_MgCmdDrawRect::backStep(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[219], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[215], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6894,7 +6826,7 @@ bool SwigDirector_MgCmdDrawRect::draw(MgMotion const *sender, GiGraphics *gs) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((GiGraphics **)&jgs) = (GiGraphics *) gs; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[220], swigjobj, jsender, jgs);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[216], swigjobj, jsender, jgs);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6920,7 +6852,7 @@ int SwigDirector_MgCmdDrawRect::gatherShapes(MgMotion const *sender, MgShapes *s
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     *((MgShapes **)&jshapes) = (MgShapes *) shapes; 
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[221], swigjobj, jsender, jshapes);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[217], swigjobj, jsender, jshapes);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -6944,7 +6876,7 @@ bool SwigDirector_MgCmdDrawRect::click(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[222], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[218], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6968,7 +6900,7 @@ bool SwigDirector_MgCmdDrawRect::doubleClick(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[223], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[219], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -6992,7 +6924,7 @@ bool SwigDirector_MgCmdDrawRect::longPress(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[224], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[220], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7016,7 +6948,7 @@ bool SwigDirector_MgCmdDrawRect::touchBegan(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[225], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[221], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7040,7 +6972,7 @@ bool SwigDirector_MgCmdDrawRect::touchMoved(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[226], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[222], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7064,7 +6996,7 @@ bool SwigDirector_MgCmdDrawRect::touchEnded(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[227], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[223], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7088,7 +7020,7 @@ bool SwigDirector_MgCmdDrawRect::mouseHover(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[228], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[224], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7112,7 +7044,7 @@ bool SwigDirector_MgCmdDrawRect::twoFingersMove(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[229], swigjobj, jsender);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[225], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7134,7 +7066,7 @@ bool SwigDirector_MgCmdDrawRect::isDrawingCommand() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[230], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[226], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7156,7 +7088,7 @@ bool SwigDirector_MgCmdDrawRect::isFloatingCommand() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[231], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[227], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7182,7 +7114,7 @@ bool SwigDirector_MgCmdDrawRect::doContextAction(MgMotion const *sender, int act
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
     jaction = (jint) action;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[232], swigjobj, jsender, jaction);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[228], swigjobj, jsender, jaction);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7204,7 +7136,7 @@ int SwigDirector_MgCmdDrawRect::getMaxStep() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[233], swigjobj);
+    jresult = (jint) jenv->CallStaticIntMethod(Swig::jclass_touchvgJNI, Swig::director_methids[229], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = (int)jresult; 
   } else {
@@ -7229,7 +7161,7 @@ void SwigDirector_MgCmdDrawRect::setStepPoint(int step, Point2d const &pt) {
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     jstep = (jint) step;
     *(Point2d **)&jpt = (Point2d *) &pt; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[234], swigjobj, jstep, jpt);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[230], swigjobj, jstep, jpt);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -7250,7 +7182,7 @@ void SwigDirector_MgCmdDrawRect::addRectShape(MgMotion const *sender) {
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
     *((MgMotion **)&jsender) = (MgMotion *) sender; 
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[235], swigjobj, jsender);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[231], swigjobj, jsender);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -7373,7 +7305,7 @@ void SwigDirector_GiView::regenAll() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[236], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[232], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -7392,7 +7324,7 @@ void SwigDirector_GiView::regenAppend() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[237], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[233], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -7411,7 +7343,7 @@ void SwigDirector_GiView::redraw() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[238], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[234], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -7431,7 +7363,7 @@ bool SwigDirector_GiView::useFinger() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[239], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[235], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7453,7 +7385,7 @@ bool SwigDirector_GiView::isContextActionsVisible() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[240], swigjobj);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[236], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7487,7 +7419,7 @@ bool SwigDirector_GiView::showContextActions(mgvector< int > const &actions, mgv
     jy = (jfloat) y;
     jw = (jfloat) w;
     jh = (jfloat) h;
-    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[241], swigjobj, jactions, jbuttonXY, jx, jy, jw, jh);
+    jresult = (jboolean) jenv->CallStaticBooleanMethod(Swig::jclass_touchvgJNI, Swig::director_methids[237], swigjobj, jactions, jbuttonXY, jx, jy, jw, jh);
     if (jenv->ExceptionCheck() == JNI_TRUE) return c_result;
     c_result = jresult ? true : false; 
   } else {
@@ -7508,7 +7440,7 @@ void SwigDirector_GiView::commandChanged() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[242], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[238], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -7527,7 +7459,7 @@ void SwigDirector_GiView::selectionChanged() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[243], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[239], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -7546,7 +7478,7 @@ void SwigDirector_GiView::contentChanged() {
   }
   swigjobj = swig_get_self(jenv);
   if (swigjobj && jenv->IsSameObject(swigjobj, NULL) == JNI_FALSE) {
-    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[244], swigjobj);
+    jenv->CallStaticVoidMethod(Swig::jclass_touchvgJNI, Swig::director_methids[240], swigjobj);
     if (jenv->ExceptionCheck() == JNI_TRUE) return ;
   } else {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null upcall object");
@@ -8190,6 +8122,50 @@ SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Vector2d_1transform(JNIEnv
 }
 
 
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Vector2d_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jlong jresult = 0 ;
+  Vector2d *arg1 = (Vector2d *) 0 ;
+  Vector2d *arg2 = 0 ;
+  Vector2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(Vector2d **)&jarg1; 
+  arg2 = *(Vector2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Vector2d const & reference is null");
+    return 0;
+  } 
+  result = ((Vector2d const *)arg1)->add((Vector2d const &)*arg2);
+  *(Vector2d **)&jresult = new Vector2d((const Vector2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Vector2d_1subtract(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jlong jresult = 0 ;
+  Vector2d *arg1 = (Vector2d *) 0 ;
+  Vector2d *arg2 = 0 ;
+  Vector2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(Vector2d **)&jarg1; 
+  arg2 = *(Vector2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Vector2d const & reference is null");
+    return 0;
+  } 
+  result = ((Vector2d const *)arg1)->subtract((Vector2d const &)*arg2);
+  *(Vector2d **)&jresult = new Vector2d((const Vector2d &)result); 
+  return jresult;
+}
+
+
 SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Vector2d_1negate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   Vector2d *arg1 = (Vector2d *) 0 ;
@@ -8220,7 +8196,7 @@ SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Vector2d_1perpVector(JNIEn
 }
 
 
-SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Vector2d_1scaleBy(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2, jfloat jarg3) {
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Vector2d_1scaleBy_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2, jfloat jarg3) {
   jlong jresult = 0 ;
   Vector2d *arg1 = (Vector2d *) 0 ;
   float arg2 ;
@@ -8234,6 +8210,23 @@ SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Vector2d_1scaleBy(JNIEnv *
   arg2 = (float)jarg2; 
   arg3 = (float)jarg3; 
   result = (Vector2d *) &(arg1)->scaleBy(arg2,arg3);
+  *(Vector2d **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Vector2d_1scaleBy_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
+  jlong jresult = 0 ;
+  Vector2d *arg1 = (Vector2d *) 0 ;
+  float arg2 ;
+  Vector2d *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Vector2d **)&jarg1; 
+  arg2 = (float)jarg2; 
+  result = (Vector2d *) &(arg1)->scaleBy(arg2);
   *(Vector2d **)&jresult = result; 
   return jresult;
 }
@@ -9159,7 +9152,7 @@ SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Point2d_1transform(JNIEnv 
 }
 
 
-SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Point2d_1scaleBy(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2, jfloat jarg3) {
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Point2d_1scaleBy_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2, jfloat jarg3) {
   jlong jresult = 0 ;
   Point2d *arg1 = (Point2d *) 0 ;
   float arg2 ;
@@ -9178,7 +9171,24 @@ SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Point2d_1scaleBy(JNIEnv *j
 }
 
 
-SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_Point2d_1offset(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2, jfloat jarg3) {
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Point2d_1scaleBy_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
+  jlong jresult = 0 ;
+  Point2d *arg1 = (Point2d *) 0 ;
+  float arg2 ;
+  Point2d *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Point2d **)&jarg1; 
+  arg2 = (float)jarg2; 
+  result = (Point2d *) &(arg1)->scaleBy(arg2);
+  *(Point2d **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_Point2d_1offset_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2, jfloat jarg3) {
   Point2d *arg1 = (Point2d *) 0 ;
   float arg2 ;
   float arg3 ;
@@ -9190,6 +9200,90 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_Point2d_1offset(JNIEnv *jen
   arg2 = (float)jarg2; 
   arg3 = (float)jarg3; 
   (arg1)->offset(arg2,arg3);
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_Point2d_1offset_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  Point2d *arg1 = (Point2d *) 0 ;
+  Vector2d *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(Point2d **)&jarg1; 
+  arg2 = *(Vector2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Vector2d const & reference is null");
+    return ;
+  } 
+  (arg1)->offset((Vector2d const &)*arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Point2d_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jlong jresult = 0 ;
+  Point2d *arg1 = (Point2d *) 0 ;
+  Point2d *arg2 = 0 ;
+  Point2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(Point2d **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  result = ((Point2d const *)arg1)->add((Point2d const &)*arg2);
+  *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Point2d_1subtract_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jlong jresult = 0 ;
+  Point2d *arg1 = (Point2d *) 0 ;
+  Point2d *arg2 = 0 ;
+  Vector2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(Point2d **)&jarg1; 
+  arg2 = *(Point2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  result = ((Point2d const *)arg1)->subtract((Point2d const &)*arg2);
+  *(Vector2d **)&jresult = new Vector2d((const Vector2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_Point2d_1subtract_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jlong jresult = 0 ;
+  Point2d *arg1 = (Point2d *) 0 ;
+  Vector2d *arg2 = 0 ;
+  Point2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(Point2d **)&jarg1; 
+  arg2 = *(Vector2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Vector2d const & reference is null");
+    return 0;
+  } 
+  result = ((Point2d const *)arg1)->subtract((Vector2d const &)*arg2);
+  *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
+  return jresult;
 }
 
 
@@ -19823,7 +19917,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgShape_1hasFillColor(J
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgShape_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgShape_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgShape *arg1 = (MgShape *) 0 ;
   int arg2 ;
@@ -19847,57 +19941,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgShape_1draw_1_1SWIG_1
   arg4 = *(GiContext **)&jarg4; 
   arg5 = (int)jarg5; 
   result = (bool)((MgShape const *)arg1)->draw(arg2,*arg3,(GiContext const *)arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgShape_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgShape *arg1 = (MgShape *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = (GiContext *) 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgShape **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4; 
-  result = (bool)((MgShape const *)arg1)->draw(arg2,*arg3,(GiContext const *)arg4);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgShape_1draw_1_1SWIG_12(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_) {
-  jboolean jresult = 0 ;
-  MgShape *arg1 = (MgShape *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  arg1 = *(MgShape **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgShape const *)arg1)->draw(arg2,*arg3);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -20220,6 +20263,16 @@ SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_new_1MgBaseShape(JNIEnv *j
 }
 
 
+SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_delete_1MgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1Type(JNIEnv *jenv, jclass jcls) {
   jint jresult = 0 ;
   int result;
@@ -20302,6 +20355,21 @@ SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getExtent(JNI
 }
 
 
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getExtentSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  Box2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  result = ((MgBaseShape const *)arg1)->MgBaseShape::getExtent();
+  *(Box2d **)&jresult = new Box2d((const Box2d &)result); 
+  return jresult;
+}
+
+
 SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1update(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   MgBaseShape *arg1 = (MgBaseShape *) 0 ;
   
@@ -20310,6 +20378,17 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1update(JNIEnv 
   (void)jarg1_;
   arg1 = *(MgBaseShape **)&jarg1; 
   (arg1)->update();
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1updateSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  (arg1)->MgBaseShape::update();
 }
 
 
@@ -20331,6 +20410,24 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1transform(JNIE
 }
 
 
+SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1transformSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  Matrix2d *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = *(Matrix2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Matrix2d const & reference is null");
+    return ;
+  } 
+  (arg1)->MgBaseShape::transform((Matrix2d const &)*arg2);
+}
+
+
 SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   MgBaseShape *arg1 = (MgBaseShape *) 0 ;
   
@@ -20342,6 +20439,17 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1clear(JNIEnv *
 }
 
 
+SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1clearSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  (arg1)->MgBaseShape::clear();
+}
+
+
 SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1clearCachedData(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   MgBaseShape *arg1 = (MgBaseShape *) 0 ;
   
@@ -20350,6 +20458,17 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1clearCachedDat
   (void)jarg1_;
   arg1 = *(MgBaseShape **)&jarg1; 
   (arg1)->clearCachedData();
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1clearCachedDataSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  (arg1)->MgBaseShape::clearCachedData();
 }
 
 
@@ -20415,6 +20534,21 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1isClosed(J
   (void)jarg1_;
   arg1 = *(MgBaseShape **)&jarg1; 
   result = (bool)((MgBaseShape const *)arg1)->isClosed();
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1isClosedSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  result = (bool)((MgBaseShape const *)arg1)->MgBaseShape::isClosed();
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -20519,7 +20653,29 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1hitTestBox
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1hitTestBoxSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  Box2d *arg2 = 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = *(Box2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Box2d const & reference is null");
+    return 0;
+  } 
+  result = (bool)((MgBaseShape const *)arg1)->MgBaseShape::hitTestBox((Box2d const &)*arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgBaseShape *arg1 = (MgBaseShape *) 0 ;
   int arg2 ;
@@ -20552,12 +20708,13 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1draw_1_1SW
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1drawSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgBaseShape *arg1 = (MgBaseShape *) 0 ;
   int arg2 ;
   GiGraphics *arg3 = 0 ;
   GiContext *arg4 = 0 ;
+  int arg5 ;
   bool result;
   
   (void)jenv;
@@ -20577,7 +20734,8 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1draw_1_1SW
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
     return 0;
   } 
-  result = (bool)((MgBaseShape const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
+  arg5 = (int)jarg5; 
+  result = (bool)((MgBaseShape const *)arg1)->MgBaseShape::draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -20596,6 +20754,24 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1save(JNIEn
   arg1 = *(MgBaseShape **)&jarg1; 
   arg2 = *(MgStorage **)&jarg2; 
   result = (bool)((MgBaseShape const *)arg1)->save(arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1saveSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  MgStorage *arg2 = (MgStorage *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = *(MgStorage **)&jarg2; 
+  result = (bool)((MgBaseShape const *)arg1)->MgBaseShape::save(arg2);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -20622,6 +20798,27 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1load(JNIEn
 }
 
 
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1loadSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  MgShapeFactory *arg2 = (MgShapeFactory *) 0 ;
+  MgStorage *arg3 = (MgStorage *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  (void)jarg3_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = *(MgShapeFactory **)&jarg2; 
+  arg3 = *(MgStorage **)&jarg3; 
+  result = (bool)(arg1)->MgBaseShape::load(arg2,arg3);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getHandleCount(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jint jresult = 0 ;
   MgBaseShape *arg1 = (MgBaseShape *) 0 ;
@@ -20632,6 +20829,21 @@ SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getHandleCount
   (void)jarg1_;
   arg1 = *(MgBaseShape **)&jarg1; 
   result = (int)((MgBaseShape const *)arg1)->getHandleCount();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getHandleCountSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  result = (int)((MgBaseShape const *)arg1)->MgBaseShape::getHandleCount();
   jresult = (jint)result; 
   return jresult;
 }
@@ -20649,6 +20861,23 @@ SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getHandlePoin
   arg1 = *(MgBaseShape **)&jarg1; 
   arg2 = (int)jarg2; 
   result = ((MgBaseShape const *)arg1)->getHandlePoint(arg2);
+  *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getHandlePointSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jlong jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  int arg2 ;
+  Point2d result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = (int)jarg2; 
+  result = ((MgBaseShape const *)arg1)->MgBaseShape::getHandlePoint(arg2);
   *(Point2d **)&jresult = new Point2d((const Point2d &)result); 
   return jresult;
 }
@@ -20680,6 +20909,32 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1setHandleP
 }
 
 
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1setHandlePointSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jfloat jarg4) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  int arg2 ;
+  Point2d *arg3 = 0 ;
+  float arg4 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg3_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = *(Point2d **)&jarg3;
+  if (!arg3) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Point2d const & reference is null");
+    return 0;
+  } 
+  arg4 = (float)jarg4; 
+  result = (bool)(arg1)->MgBaseShape::setHandlePoint(arg2,(Point2d const &)*arg3,arg4);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1isHandleFixed(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   jboolean jresult = 0 ;
   MgBaseShape *arg1 = (MgBaseShape *) 0 ;
@@ -20697,6 +20952,23 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1isHandleFi
 }
 
 
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1isHandleFixedSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  int arg2 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = (int)jarg2; 
+  result = (bool)((MgBaseShape const *)arg1)->MgBaseShape::isHandleFixed(arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getHandleType(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   jint jresult = 0 ;
   MgBaseShape *arg1 = (MgBaseShape *) 0 ;
@@ -20709,6 +20981,23 @@ SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getHandleType(
   arg1 = *(MgBaseShape **)&jarg1; 
   arg2 = (int)jarg2; 
   result = (int)((MgBaseShape const *)arg1)->getHandleType(arg2);
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getHandleTypeSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jint jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  int arg2 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = (int)jarg2; 
+  result = (int)((MgBaseShape const *)arg1)->MgBaseShape::getHandleType(arg2);
   jresult = (jint)result; 
   return jresult;
 }
@@ -20733,6 +21022,30 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1offset(JNI
   } 
   arg3 = (int)jarg3; 
   result = (bool)(arg1)->offset((Vector2d const &)*arg2,arg3);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1offsetSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jint jarg3) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  Vector2d *arg2 = 0 ;
+  int arg3 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = *(Vector2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Vector2d const & reference is null");
+    return 0;
+  } 
+  arg3 = (int)jarg3; 
+  result = (bool)(arg1)->MgBaseShape::offset((Vector2d const &)*arg2,arg3);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -20797,6 +21110,138 @@ SWIGEXPORT jstring JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1getTypeName
   result = (char *)((MgBaseShape const *)arg1)->getTypeName();
   if (result) jresult = jenv->NewStringUTF((const char *)result);
   return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1copy(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  MgObject *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = *(MgObject **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "MgObject const & reference is null");
+    return ;
+  } 
+  (arg1)->copy((MgObject const &)*arg2);
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1copySwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  MgObject *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = *(MgObject **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "MgObject const & reference is null");
+    return ;
+  } 
+  (arg1)->MgBaseShape::copy((MgObject const &)*arg2);
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1equals(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  MgObject *arg2 = 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = *(MgObject **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "MgObject const & reference is null");
+    return 0;
+  } 
+  result = (bool)((MgBaseShape const *)arg1)->equals((MgObject const &)*arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1equalsSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  MgObject *arg2 = 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = *(MgObject **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "MgObject const & reference is null");
+    return 0;
+  } 
+  result = (bool)((MgBaseShape const *)arg1)->MgBaseShape::equals((MgObject const &)*arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1isKindOf(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  int arg2 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = (int)jarg2; 
+  result = (bool)((MgBaseShape const *)arg1)->isKindOf(arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1isKindOfSwigExplicitMgBaseShape(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jboolean jresult = 0 ;
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  int arg2 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = (int)jarg2; 
+  result = (bool)((MgBaseShape const *)arg1)->MgBaseShape::isKindOf(arg2);
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBaseShape_1setExtent(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  MgBaseShape *arg1 = (MgBaseShape *) 0 ;
+  Box2d *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(MgBaseShape **)&jarg1; 
+  arg2 = *(Box2d **)&jarg2;
+  if (!arg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Box2d const & reference is null");
+    return ;
+  } 
+  (arg1)->setExtent((Box2d const &)*arg2);
 }
 
 
@@ -21874,7 +22319,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgLine_1hitTestBox(JNIE
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgLine_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgLine_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgLine *arg1 = (MgLine *) 0 ;
   int arg2 ;
@@ -21902,37 +22347,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgLine_1draw_1_1SWIG_10
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgLine const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgLine_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgLine *arg1 = (MgLine *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgLine **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgLine const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -22860,7 +23274,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgRect_1hitTestBox(JNIE
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgRect_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgRect_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgRect *arg1 = (MgRect *) 0 ;
   int arg2 ;
@@ -22888,37 +23302,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgRect_1draw_1_1SWIG_10
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgRect const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgRect_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgRect *arg1 = (MgRect *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgRect **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgRect const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -23424,7 +23807,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgEllipse_1hitTestBox(J
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgEllipse_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgEllipse_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgEllipse *arg1 = (MgEllipse *) 0 ;
   int arg2 ;
@@ -23452,37 +23835,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgEllipse_1draw_1_1SWIG
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgEllipse const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgEllipse_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgEllipse *arg1 = (MgEllipse *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgEllipse **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgEllipse const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -24061,7 +24413,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgRoundRect_1hitTestBox
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgRoundRect_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgRoundRect_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgRoundRect *arg1 = (MgRoundRect *) 0 ;
   int arg2 ;
@@ -24089,37 +24441,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgRoundRect_1draw_1_1SW
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgRoundRect const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgRoundRect_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgRoundRect *arg1 = (MgRoundRect *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgRoundRect **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgRoundRect const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -24698,7 +25019,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgDiamond_1hitTestBox(J
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgDiamond_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgDiamond_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgDiamond *arg1 = (MgDiamond *) 0 ;
   int arg2 ;
@@ -24726,37 +25047,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgDiamond_1draw_1_1SWIG
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgDiamond const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgDiamond_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgDiamond *arg1 = (MgDiamond *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgDiamond **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgDiamond const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -25429,7 +25719,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgLines_1hitTestBox(JNI
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgLines_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgLines_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgLines *arg1 = (MgLines *) 0 ;
   int arg2 ;
@@ -25457,37 +25747,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgLines_1draw_1_1SWIG_1
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgLines const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgLines_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgLines *arg1 = (MgLines *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgLines **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgLines const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -26008,7 +26267,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgSplines_1hitTestBox(J
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgSplines_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgSplines_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgSplines *arg1 = (MgSplines *) 0 ;
   int arg2 ;
@@ -26036,37 +26295,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgSplines_1draw_1_1SWIG
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgSplines const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgSplines_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgSplines *arg1 = (MgSplines *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgSplines **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgSplines const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -26600,7 +26828,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgParallel_1hitTestBox(
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgParallel_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgParallel_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgParallel *arg1 = (MgParallel *) 0 ;
   int arg2 ;
@@ -26628,37 +26856,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgParallel_1draw_1_1SWI
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgParallel const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgParallel_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgParallel *arg1 = (MgParallel *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgParallel **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgParallel const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -27271,7 +27468,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgImageShape_1hitTestBo
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgImageShape_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgImageShape_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgImageShape *arg1 = (MgImageShape *) 0 ;
   int arg2 ;
@@ -27299,37 +27496,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgImageShape_1draw_1_1S
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgImageShape const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgImageShape_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgImageShape *arg1 = (MgImageShape *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgImageShape **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgImageShape const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -27890,7 +28056,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgArc_1hitTestBox(JNIEn
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgArc_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgArc_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgArc *arg1 = (MgArc *) 0 ;
   int arg2 ;
@@ -27918,37 +28084,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgArc_1draw_1_1SWIG_10(
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgArc const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgArc_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgArc *arg1 = (MgArc *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgArc **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgArc const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -28924,7 +29059,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgGroup_1hitTestBox(JNI
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgGroup_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgGroup_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgGroup *arg1 = (MgGroup *) 0 ;
   int arg2 ;
@@ -28952,37 +29087,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgGroup_1draw_1_1SWIG_1
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgGroup const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgGroup_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgGroup *arg1 = (MgGroup *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgGroup **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgGroup const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -29506,7 +29610,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgGrid_1hitTestBox(JNIE
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgGrid_1draw_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
+SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgGrid_1draw(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_, jint jarg5) {
   jboolean jresult = 0 ;
   MgGrid *arg1 = (MgGrid *) 0 ;
   int arg2 ;
@@ -29534,37 +29638,6 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgGrid_1draw_1_1SWIG_10
   } 
   arg5 = (int)jarg5; 
   result = (bool)((MgGrid const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4,arg5);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_MgGrid_1draw_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_, jlong jarg4, jobject jarg4_) {
-  jboolean jresult = 0 ;
-  MgGrid *arg1 = (MgGrid *) 0 ;
-  int arg2 ;
-  GiGraphics *arg3 = 0 ;
-  GiContext *arg4 = 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  (void)jarg3_;
-  (void)jarg4_;
-  arg1 = *(MgGrid **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = *(GiGraphics **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiGraphics & reference is null");
-    return 0;
-  } 
-  arg4 = *(GiContext **)&jarg4;
-  if (!arg4) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "GiContext const & reference is null");
-    return 0;
-  } 
-  result = (bool)((MgGrid const *)arg1)->draw(arg2,*arg3,(GiContext const &)*arg4);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -37599,7 +37672,7 @@ SWIGEXPORT jboolean JNICALL Java_touchvg_core_touchvgJNI_GiCoreView_1getBounding
 }
 
 
-SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_GiCoreView_1viewAdapter(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_GiCoreView_1viewAdapterHandle(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jint jresult = 0 ;
   GiCoreView *arg1 = (GiCoreView *) 0 ;
   long result;
@@ -37608,8 +37681,23 @@ SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_GiCoreView_1viewAdapter(JNI
   (void)jcls;
   (void)jarg1_;
   arg1 = *(GiCoreView **)&jarg1; 
-  result = (long)(arg1)->viewAdapter();
+  result = (long)(arg1)->viewAdapterHandle();
   jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_GiCoreView_1viewAdapter(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  GiCoreView *arg1 = (GiCoreView *) 0 ;
+  MgView *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(GiCoreView **)&jarg1; 
+  result = (MgView *)(arg1)->viewAdapter();
+  *(MgView **)&jresult = result; 
   return jresult;
 }
 
@@ -38078,7 +38166,7 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_swig_1module_1init(JNIEnv *
   static struct {
     const char *method;
     const char *signature;
-  } methods[245] = {
+  } methods[241] = {
     {
       "SwigDirector_GiCanvas_setPen", "(Ltouchvg/core/GiCanvas;IFIF)V" 
     },
@@ -38239,10 +38327,7 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_swig_1module_1init(JNIEnv *
       "SwigDirector_MgBaseShape_hitTestBox", "(Ltouchvg/core/MgBaseShape;J)Z" 
     },
     {
-      "SwigDirector_MgBaseShape_draw__SWIG_0", "(Ltouchvg/core/MgBaseShape;IJJI)Z" 
-    },
-    {
-      "SwigDirector_MgBaseShape_draw__SWIG_1", "(Ltouchvg/core/MgBaseShape;IJJ)Z" 
+      "SwigDirector_MgBaseShape_draw", "(Ltouchvg/core/MgBaseShape;IJJI)Z" 
     },
     {
       "SwigDirector_MgBaseShape_save", "(Ltouchvg/core/MgBaseShape;J)Z" 
@@ -38332,10 +38417,7 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_swig_1module_1init(JNIEnv *
       "SwigDirector_MgBaseRect_hitTestBox", "(Ltouchvg/core/MgBaseRect;J)Z" 
     },
     {
-      "SwigDirector_MgBaseRect_draw__SWIG_0", "(Ltouchvg/core/MgBaseRect;IJJI)Z" 
-    },
-    {
-      "SwigDirector_MgBaseRect_draw__SWIG_1", "(Ltouchvg/core/MgBaseRect;IJJ)Z" 
+      "SwigDirector_MgBaseRect_draw", "(Ltouchvg/core/MgBaseRect;IJJI)Z" 
     },
     {
       "SwigDirector_MgBaseRect_save", "(Ltouchvg/core/MgBaseRect;J)Z" 
@@ -38425,10 +38507,7 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_swig_1module_1init(JNIEnv *
       "SwigDirector_MgBaseLines_hitTestBox", "(Ltouchvg/core/MgBaseLines;J)Z" 
     },
     {
-      "SwigDirector_MgBaseLines_draw__SWIG_0", "(Ltouchvg/core/MgBaseLines;IJJI)Z" 
-    },
-    {
-      "SwigDirector_MgBaseLines_draw__SWIG_1", "(Ltouchvg/core/MgBaseLines;IJJ)Z" 
+      "SwigDirector_MgBaseLines_draw", "(Ltouchvg/core/MgBaseLines;IJJI)Z" 
     },
     {
       "SwigDirector_MgBaseLines_save", "(Ltouchvg/core/MgBaseLines;J)Z" 
@@ -38518,10 +38597,7 @@ SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_swig_1module_1init(JNIEnv *
       "SwigDirector_MgComposite_hitTestBox", "(Ltouchvg/core/MgComposite;J)Z" 
     },
     {
-      "SwigDirector_MgComposite_draw__SWIG_0", "(Ltouchvg/core/MgComposite;IJJI)Z" 
-    },
-    {
-      "SwigDirector_MgComposite_draw__SWIG_1", "(Ltouchvg/core/MgComposite;IJJ)Z" 
+      "SwigDirector_MgComposite_draw", "(Ltouchvg/core/MgComposite;IJJI)Z" 
     },
     {
       "SwigDirector_MgComposite_save", "(Ltouchvg/core/MgComposite;J)Z" 

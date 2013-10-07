@@ -139,13 +139,7 @@ public class MgLine : MgBaseShape {
   }
 
   public override bool draw(int mode, GiGraphics gs, GiContext ctx, int segment) {
-    bool ret = touchvgPINVOKE.MgLine_draw__SWIG_0(swigCPtr, mode, GiGraphics.getCPtr(gs), GiContext.getCPtr(ctx), segment);
-    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-  public override bool draw(int mode, GiGraphics gs, GiContext ctx) {
-    bool ret = touchvgPINVOKE.MgLine_draw__SWIG_1(swigCPtr, mode, GiGraphics.getCPtr(gs), GiContext.getCPtr(ctx));
+    bool ret = touchvgPINVOKE.MgLine_draw(swigCPtr, mode, GiGraphics.getCPtr(gs), GiContext.getCPtr(ctx), segment);
     if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }

@@ -72,11 +72,31 @@ public class Point2d {
   }
 
   public Point2d scaleBy(float sx, float sy) {
-    return new Point2d(touchvgJNI.Point2d_scaleBy(swigCPtr, this, sx, sy), false);
+    return new Point2d(touchvgJNI.Point2d_scaleBy__SWIG_0(swigCPtr, this, sx, sy), false);
+  }
+
+  public Point2d scaleBy(float s) {
+    return new Point2d(touchvgJNI.Point2d_scaleBy__SWIG_1(swigCPtr, this, s), false);
   }
 
   public void offset(float dx, float dy) {
-    touchvgJNI.Point2d_offset(swigCPtr, this, dx, dy);
+    touchvgJNI.Point2d_offset__SWIG_0(swigCPtr, this, dx, dy);
+  }
+
+  public void offset(Vector2d vec) {
+    touchvgJNI.Point2d_offset__SWIG_1(swigCPtr, this, Vector2d.getCPtr(vec), vec);
+  }
+
+  public Point2d add(Point2d pnt) {
+    return new Point2d(touchvgJNI.Point2d_add(swigCPtr, this, Point2d.getCPtr(pnt), pnt), true);
+  }
+
+  public Vector2d subtract(Point2d pnt) {
+    return new Vector2d(touchvgJNI.Point2d_subtract__SWIG_0(swigCPtr, this, Point2d.getCPtr(pnt), pnt), true);
+  }
+
+  public Point2d subtract(Vector2d vec) {
+    return new Point2d(touchvgJNI.Point2d_subtract__SWIG_1(swigCPtr, this, Vector2d.getCPtr(vec), vec), true);
   }
 
   public Vector2d negate() {

@@ -11,6 +11,7 @@
 class GiCanvas;
 class GiCoreViewImpl;
 class GiContext;
+class MgView;
 struct MgStorage;
 
 //! 内核视图分发器类
@@ -150,10 +151,13 @@ public:
     
     //! 命令视图回调适配器的句柄, 可转换为 MgView 指针
 #if defined(__MINGW64__) || defined(__MINGW32__)
-    void* viewAdapter();
+    void* viewAdapterHandle();
 #else
-    long viewAdapter();
+    long viewAdapterHandle();
 #endif
+
+    //! 命令视图回调适配器
+    MgView* viewAdapter();
 
 private:
     bool loadShapes(MgStorage* s);

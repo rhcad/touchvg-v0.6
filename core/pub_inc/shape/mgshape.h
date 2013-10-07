@@ -53,7 +53,7 @@ public:
         \param segment 子段号，来源于图形的hitTest
         \return 是否显示了图形，通常返回true
     */
-    virtual bool draw(int mode, GiGraphics& gs, const GiContext *ctx = NULL, int segment = -1) const;
+    virtual bool draw(int mode, GiGraphics& gs, const GiContext *ctx, int segment) const;
     
     //! 保存图形到指定的序列化对象
     virtual bool save(MgStorage* s) const;
@@ -78,7 +78,7 @@ public:
 
     virtual void copy(const MgObject& src);
     virtual bool equals(const MgObject& src) const;
-    bool isKindOf(int type) const;
+    virtual bool isKindOf(int type) const;
 
 protected:
     virtual ~MgShape() {}
@@ -117,11 +117,10 @@ struct MgHitResult {
 */
 class MgBaseShape : public MgObject
 {
-protected:
+public:
     MgBaseShape() : _flags(0) {}
     virtual ~MgBaseShape() {}
 
-public:
     //! 返回本对象的类型
     static int Type() { return 3; }
     
@@ -139,19 +138,19 @@ public:
     virtual void setOwner(MgShape* owner) { if (owner) owner = owner; }
 
     //! 返回图形模型坐标范围
-    virtual Box2d getExtent() const = 0;
+    virtual Box2d getExtent() const;
 
     //! 参数改变后重新计算坐标
-    virtual void update() = 0;
+    virtual void update();
 
     //! 矩阵变换
-    virtual void transform(const Matrix2d& mat) = 0;
+    virtual void transform(const Matrix2d& mat);
 
     //! 清除图形数据
-    virtual void clear() = 0;
+    virtual void clear();
     
     //! 释放临时数据内存
-    virtual void clearCachedData() = 0;
+    virtual void clearCachedData();
 
     //! 返回顶点个数
     virtual int getPointCount() const = 0;
@@ -163,7 +162,7 @@ public:
     virtual void setPoint(int index, const Point2d& pt) = 0;
 
     //! 返回是否闭合
-    virtual bool isClosed() const = 0;
+    virtual bool isClosed() const;
     
     //! 返回是否为曲线图形
     virtual bool isCurve() const = 0;
@@ -201,35 +200,35 @@ public:
     }
     
     //! 框选检查
-    virtual bool hitTestBox(const Box2d& rect) const = 0;
+    virtual bool hitTestBox(const Box2d& rect) const;
 
     //! 显示图形（mode：0-正常显示，1-选中显示，2-拖动显示）
     virtual bool draw(int mode, GiGraphics& gs, 
-        const GiContext& ctx, int segment = -1) const = 0;
+        const GiContext& ctx, int segment) const;
     
     //! 保存图形
-    virtual bool save(MgStorage* s) const = 0;
+    virtual bool save(MgStorage* s) const;
     
     //! 恢复图形
-    virtual bool load(MgShapeFactory* factory, MgStorage* s) = 0;
+    virtual bool load(MgShapeFactory* factory, MgStorage* s);
     
     //! 返回控制点个数
-    virtual int getHandleCount() const = 0;
+    virtual int getHandleCount() const;
     
     //! 返回指定序号的控制点坐标
-    virtual Point2d getHandlePoint(int index) const = 0;
+    virtual Point2d getHandlePoint(int index) const;
     
     //! 设置指定序号的控制点坐标，指定的容差用于比较重合点
-    virtual bool setHandlePoint(int index, const Point2d& pt, float tol) = 0;
+    virtual bool setHandlePoint(int index, const Point2d& pt, float tol);
     
     //! 返回指定序号的控制点是否不允许移动
-    virtual bool isHandleFixed(int index) const = 0;
+    virtual bool isHandleFixed(int index) const;
     
     //! 返回指定序号的控制点类型(MgHandleType)
-    virtual int getHandleType(int index) const = 0;
+    virtual int getHandleType(int index) const;
     
     //! 移动图形, 子段号 segment 由 hitTest() 得到
-    virtual bool offset(const Vector2d& vec, int segment) = 0;
+    virtual bool offset(const Vector2d& vec, int segment);
     
     //! 得到图形特征标志位
     bool getFlag(MgShapeBit bit) const;
@@ -239,6 +238,13 @@ public:
 
     //! 返回图形类名称
     virtual const char* getTypeName() const = 0;
+
+    virtual void copy(const MgObject& src);
+    virtual bool equals(const MgObject& src) const;
+    virtual bool isKindOf(int type) const;
+
+    //! 设置图形模型坐标范围，供Java等语言代码调用
+    void setExtent(const Box2d& rect) { _extent = rect; }
     
 protected:
     Box2d   _extent;
@@ -313,7 +319,7 @@ public:                                                      \
     virtual void setPoint(int index, const Point2d& pt);        \
     virtual bool isClosed() const;                              \
     virtual bool hitTestBox(const Box2d& rect) const;           \
-    virtual bool draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment = -1) const;  \
+    virtual bool draw(int mode, GiGraphics& gs, const GiContext& ctx, int segment) const;  \
     virtual bool save(MgStorage* s) const;                      \
     virtual bool load(MgShapeFactory* factory, MgStorage* s);   \
     virtual int getHandleCount() const;                         \

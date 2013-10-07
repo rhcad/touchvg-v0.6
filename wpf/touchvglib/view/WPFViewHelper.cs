@@ -28,7 +28,13 @@ namespace touchvg.view
         }
 
         //! 返回内核视图的句柄, MgView 指针
-        public int coreViewHandle()
+        public int cmdViewHandle()
+        {
+            return CoreView.viewAdapterHandle();
+        }
+
+        //! 返回内核命令视图
+        public MgView cmdView()
         {
             return CoreView.viewAdapter();
         }

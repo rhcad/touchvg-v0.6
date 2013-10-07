@@ -63,7 +63,7 @@ namespace WpfDemo
             this.comboBox1.ItemsSource = commandSource;
             this.comboBox1.SelectedIndex = 0;
 
-            DemoCmds.registerCmds(_helper.coreViewHandle());
+            DemoCmds.registerCmds(_helper.cmdViewHandle());
         }
 
         void Window1_Unloaded(object sender, RoutedEventArgs e)

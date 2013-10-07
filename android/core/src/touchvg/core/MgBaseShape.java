@@ -20,11 +20,15 @@ public class MgBaseShape extends MgObject {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 
+  protected void finalize() {
+    delete();
+  }
+
   public synchronized void delete() {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        throw new UnsupportedOperationException("C++ destructor does not have public access");
+        touchvgJNI.delete_MgBaseShape(swigCPtr);
       }
       swigCPtr = 0;
     }
@@ -46,7 +50,7 @@ public class MgBaseShape extends MgObject {
     touchvgJNI.MgBaseShape_change_ownership(this, swigCPtr, true);
   }
 
-  protected MgBaseShape() {
+  public MgBaseShape() {
     this(touchvgJNI.new_MgBaseShape(), true);
     touchvgJNI.MgBaseShape_director_connect(this, swigCPtr, swigCMemOwn, true);
   }
@@ -69,23 +73,23 @@ public class MgBaseShape extends MgObject {
   }
 
   public Box2d getExtent() {
-    return new Box2d(touchvgJNI.MgBaseShape_getExtent(swigCPtr, this), true);
+    return new Box2d((getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_getExtent(swigCPtr, this) : touchvgJNI.MgBaseShape_getExtentSwigExplicitMgBaseShape(swigCPtr, this), true);
   }
 
   public void update() {
-    touchvgJNI.MgBaseShape_update(swigCPtr, this);
+    if (getClass() == MgBaseShape.class) touchvgJNI.MgBaseShape_update(swigCPtr, this); else touchvgJNI.MgBaseShape_updateSwigExplicitMgBaseShape(swigCPtr, this);
   }
 
   public void transform(Matrix2d mat) {
-    touchvgJNI.MgBaseShape_transform(swigCPtr, this, Matrix2d.getCPtr(mat), mat);
+    if (getClass() == MgBaseShape.class) touchvgJNI.MgBaseShape_transform(swigCPtr, this, Matrix2d.getCPtr(mat), mat); else touchvgJNI.MgBaseShape_transformSwigExplicitMgBaseShape(swigCPtr, this, Matrix2d.getCPtr(mat), mat);
   }
 
   public void clear() {
-    touchvgJNI.MgBaseShape_clear(swigCPtr, this);
+    if (getClass() == MgBaseShape.class) touchvgJNI.MgBaseShape_clear(swigCPtr, this); else touchvgJNI.MgBaseShape_clearSwigExplicitMgBaseShape(swigCPtr, this);
   }
 
   public void clearCachedData() {
-    touchvgJNI.MgBaseShape_clearCachedData(swigCPtr, this);
+    if (getClass() == MgBaseShape.class) touchvgJNI.MgBaseShape_clearCachedData(swigCPtr, this); else touchvgJNI.MgBaseShape_clearCachedDataSwigExplicitMgBaseShape(swigCPtr, this);
   }
 
   public int getPointCount() {
@@ -101,7 +105,7 @@ public class MgBaseShape extends MgObject {
   }
 
   public boolean isClosed() {
-    return touchvgJNI.MgBaseShape_isClosed(swigCPtr, this);
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_isClosed(swigCPtr, this) : touchvgJNI.MgBaseShape_isClosedSwigExplicitMgBaseShape(swigCPtr, this);
   }
 
   public boolean isCurve() {
@@ -117,47 +121,43 @@ public class MgBaseShape extends MgObject {
   }
 
   public boolean hitTestBox(Box2d rect) {
-    return touchvgJNI.MgBaseShape_hitTestBox(swigCPtr, this, Box2d.getCPtr(rect), rect);
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_hitTestBox(swigCPtr, this, Box2d.getCPtr(rect), rect) : touchvgJNI.MgBaseShape_hitTestBoxSwigExplicitMgBaseShape(swigCPtr, this, Box2d.getCPtr(rect), rect);
   }
 
   public boolean draw(int mode, GiGraphics gs, GiContext ctx, int segment) {
-    return touchvgJNI.MgBaseShape_draw__SWIG_0(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx, segment);
-  }
-
-  public boolean draw(int mode, GiGraphics gs, GiContext ctx) {
-    return touchvgJNI.MgBaseShape_draw__SWIG_1(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx);
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_draw(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx, segment) : touchvgJNI.MgBaseShape_drawSwigExplicitMgBaseShape(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx, segment);
   }
 
   public boolean save(MgStorage s) {
-    return touchvgJNI.MgBaseShape_save(swigCPtr, this, MgStorage.getCPtr(s), s);
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_save(swigCPtr, this, MgStorage.getCPtr(s), s) : touchvgJNI.MgBaseShape_saveSwigExplicitMgBaseShape(swigCPtr, this, MgStorage.getCPtr(s), s);
   }
 
   public boolean load(MgShapeFactory factory, MgStorage s) {
-    return touchvgJNI.MgBaseShape_load(swigCPtr, this, MgShapeFactory.getCPtr(factory), factory, MgStorage.getCPtr(s), s);
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_load(swigCPtr, this, MgShapeFactory.getCPtr(factory), factory, MgStorage.getCPtr(s), s) : touchvgJNI.MgBaseShape_loadSwigExplicitMgBaseShape(swigCPtr, this, MgShapeFactory.getCPtr(factory), factory, MgStorage.getCPtr(s), s);
   }
 
   public int getHandleCount() {
-    return touchvgJNI.MgBaseShape_getHandleCount(swigCPtr, this);
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_getHandleCount(swigCPtr, this) : touchvgJNI.MgBaseShape_getHandleCountSwigExplicitMgBaseShape(swigCPtr, this);
   }
 
   public Point2d getHandlePoint(int index) {
-    return new Point2d(touchvgJNI.MgBaseShape_getHandlePoint(swigCPtr, this, index), true);
+    return new Point2d((getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_getHandlePoint(swigCPtr, this, index) : touchvgJNI.MgBaseShape_getHandlePointSwigExplicitMgBaseShape(swigCPtr, this, index), true);
   }
 
   public boolean setHandlePoint(int index, Point2d pt, float tol) {
-    return touchvgJNI.MgBaseShape_setHandlePoint(swigCPtr, this, index, Point2d.getCPtr(pt), pt, tol);
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_setHandlePoint(swigCPtr, this, index, Point2d.getCPtr(pt), pt, tol) : touchvgJNI.MgBaseShape_setHandlePointSwigExplicitMgBaseShape(swigCPtr, this, index, Point2d.getCPtr(pt), pt, tol);
   }
 
   public boolean isHandleFixed(int index) {
-    return touchvgJNI.MgBaseShape_isHandleFixed(swigCPtr, this, index);
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_isHandleFixed(swigCPtr, this, index) : touchvgJNI.MgBaseShape_isHandleFixedSwigExplicitMgBaseShape(swigCPtr, this, index);
   }
 
   public int getHandleType(int index) {
-    return touchvgJNI.MgBaseShape_getHandleType(swigCPtr, this, index);
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_getHandleType(swigCPtr, this, index) : touchvgJNI.MgBaseShape_getHandleTypeSwigExplicitMgBaseShape(swigCPtr, this, index);
   }
 
   public boolean offset(Vector2d vec, int segment) {
-    return touchvgJNI.MgBaseShape_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_offset(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment) : touchvgJNI.MgBaseShape_offsetSwigExplicitMgBaseShape(swigCPtr, this, Vector2d.getCPtr(vec), vec, segment);
   }
 
   public boolean getFlag(MgShapeBit bit) {
@@ -170,6 +170,22 @@ public class MgBaseShape extends MgObject {
 
   public String getTypeName() {
     return touchvgJNI.MgBaseShape_getTypeName(swigCPtr, this);
+  }
+
+  public void copy(MgObject src) {
+    if (getClass() == MgBaseShape.class) touchvgJNI.MgBaseShape_copy(swigCPtr, this, MgObject.getCPtr(src), src); else touchvgJNI.MgBaseShape_copySwigExplicitMgBaseShape(swigCPtr, this, MgObject.getCPtr(src), src);
+  }
+
+  public boolean equals(MgObject src) {
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_equals(swigCPtr, this, MgObject.getCPtr(src), src) : touchvgJNI.MgBaseShape_equalsSwigExplicitMgBaseShape(swigCPtr, this, MgObject.getCPtr(src), src);
+  }
+
+  public boolean isKindOf(int type) {
+    return (getClass() == MgBaseShape.class) ? touchvgJNI.MgBaseShape_isKindOf(swigCPtr, this, type) : touchvgJNI.MgBaseShape_isKindOfSwigExplicitMgBaseShape(swigCPtr, this, type);
+  }
+
+  public void setExtent(Box2d rect) {
+    touchvgJNI.MgBaseShape_setExtent(swigCPtr, this, Box2d.getCPtr(rect), rect);
   }
 
 }

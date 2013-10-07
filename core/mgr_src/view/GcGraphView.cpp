@@ -20,7 +20,7 @@ int GcBaseView::drawAppend(const int* newids, GiGraphics& gs)
     int n = 0;
     for (; *newids; newids++) {
         MgShape* sp = shapes()->findShape(*newids);
-        if (sp && sp->draw(0, gs)) {
+        if (sp && sp->draw(0, gs, NULL, -1)) {
             n++;
         }
     }

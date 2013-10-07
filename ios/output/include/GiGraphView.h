@@ -51,7 +51,7 @@ class GiView;
 - (GiView *)viewAdapter;                    //!< 得到视图适配器对象, GiViewAdapter
 - (GiCoreView *)coreView;                   //!< 得到跨平台内核视图
 #endif
-- (int)coreViewHandle;                      //!< 返回内核视图的句柄, MgView 指针
+- (int)cmdViewHandle;                      //!< 返回内核视图的句柄, MgView 指针
 
 - (UIImage *)snapshot;                      //!< 得到静态图形的快照，自动释放
 - (BOOL)savePng:(NSString *)filename;       //!< 保存静态图形的快照到PNG文件

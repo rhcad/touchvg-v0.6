@@ -75,7 +75,7 @@ static UIView* addGraphView(NSMutableArray *arr, NSUInteger &i, NSUInteger index
                 hlp.command = @"lines";
             }
             else if (type == 6) {
-                DemoCmdsGate::registerCmds([hlp coreViewHandle]);
+                DemoCmdsGate::registerCmds([hlp cmdViewHandle]);
                 hlp.command = @"hittest";
             }
         }

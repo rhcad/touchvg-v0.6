@@ -92,6 +92,18 @@ public class Vector2d : IDisposable {
     return ret;
   }
 
+  public Vector2d add(Vector2d v) {
+    Vector2d ret = new Vector2d(touchvgPINVOKE.Vector2d_add(swigCPtr, Vector2d.getCPtr(v)), true);
+    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
+  public Vector2d subtract(Vector2d v) {
+    Vector2d ret = new Vector2d(touchvgPINVOKE.Vector2d_subtract(swigCPtr, Vector2d.getCPtr(v)), true);
+    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
   public Vector2d negate() {
     Vector2d ret = new Vector2d(touchvgPINVOKE.Vector2d_negate(swigCPtr), false);
     return ret;
@@ -103,7 +115,12 @@ public class Vector2d : IDisposable {
   }
 
   public Vector2d scaleBy(float sx, float sy) {
-    Vector2d ret = new Vector2d(touchvgPINVOKE.Vector2d_scaleBy(swigCPtr, sx, sy), false);
+    Vector2d ret = new Vector2d(touchvgPINVOKE.Vector2d_scaleBy__SWIG_0(swigCPtr, sx, sy), false);
+    return ret;
+  }
+
+  public Vector2d scaleBy(float s) {
+    Vector2d ret = new Vector2d(touchvgPINVOKE.Vector2d_scaleBy__SWIG_1(swigCPtr, s), false);
     return ret;
   }
 

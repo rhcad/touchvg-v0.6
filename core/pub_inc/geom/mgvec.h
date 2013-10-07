@@ -106,6 +106,12 @@ public:
     }
 #endif // SWIG
     
+    //! 矢量加法
+    Vector2d add(const Vector2d& v) const { return *this + v; }
+    
+    //! 矢量减法
+    Vector2d subtract(const Vector2d& v) const { return *this - v; }
+    
     //! 矢量反向，即将该矢量设置为(-x, -y)
     Vector2d& negate()
     {
@@ -156,6 +162,12 @@ public:
     Vector2d& scaleBy(float sx, float sy)
     {
         x *= sx; y *= sy; return *this;
+    }
+
+    //! 比例放缩
+    Vector2d& scaleBy(float s)
+    {
+        x *= s; y *= s; return *this;
     }
     
     //! 矢量点积, A·B

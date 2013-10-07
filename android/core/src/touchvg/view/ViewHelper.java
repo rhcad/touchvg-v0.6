@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import touchvg.core.GiContextBits;
+import touchvg.core.MgView;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.ViewGroup.LayoutParams;
@@ -41,8 +42,13 @@ public class ViewHelper {
     }
     
     //! 返回内核视图的句柄, MgView 指针
-    public int coreViewHandle() {
-        return mView.coreViewHandle();
+    public int cmdViewHandle() {
+        return mView.coreView().viewAdapterHandle();
+    }
+    
+    //! 返回内核命令视图
+    public MgView cmdView() {
+        return mView.coreView().viewAdapter();
     }
     
     //! 自动创建FrameLayout布局，在其中创建普通绘图视图，并记下此视图

@@ -5,6 +5,57 @@
 #include "mgshape.h"
 #include <mgstorage.h>
 
+void MgBaseShape::copy(const MgObject& src) {
+    if (src.isKindOf(Type()))
+        _copy((const MgBaseShape&)src);
+}
+bool MgBaseShape::equals(const MgObject& src) const {
+    return src.isKindOf(Type()) && _equals((const MgBaseShape&)src);
+}
+bool MgBaseShape::isKindOf(int type) const {
+    return type == Type();
+}
+Box2d MgBaseShape::getExtent() const { return _getExtent(); }
+void MgBaseShape::update() { _update(); }
+void MgBaseShape::transform(const Matrix2d& mat) { _transform(mat); }
+void MgBaseShape::clear() { _clear(); }
+void MgBaseShape::clearCachedData() { _clearCachedData(); }
+
+bool MgBaseShape::isClosed() const {
+    return _isClosed();
+}
+bool MgBaseShape::hitTestBox(const Box2d& rect) const {
+    return _hitTestBox(rect);
+}
+bool MgBaseShape::draw(int mode, GiGraphics& gs, 
+                       const GiContext& ctx, int segment) const {
+    return _draw(mode, gs, ctx, segment);
+}
+bool MgBaseShape::save(MgStorage* s) const {
+    return _save(s);
+}
+bool MgBaseShape::load(MgShapeFactory* factory, MgStorage* s) {
+    return _load(factory, s);
+}
+int MgBaseShape::getHandleCount() const {
+    return _getHandleCount();
+}
+Point2d MgBaseShape::getHandlePoint(int index) const {
+    return _getHandlePoint(index);
+}
+bool MgBaseShape::setHandlePoint(int index, const Point2d& pt, float tol) {
+    return _rotateHandlePoint(index, pt) || _setHandlePoint(index, pt, tol);
+}
+bool MgBaseShape::isHandleFixed(int index) const {
+    return _isHandleFixed(index);
+}
+int MgBaseShape::getHandleType(int index) const {
+    return _getHandleType(index);
+}
+bool MgBaseShape::offset(const Vector2d& vec, int segment) {
+    return _offset(vec, segment);
+}
+
 void MgBaseShape::_copy(const MgBaseShape& src)
 {
     _extent = src._extent;

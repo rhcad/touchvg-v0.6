@@ -118,11 +118,7 @@ public class MgRoundRect extends MgBaseRect {
   }
 
   public boolean draw(int mode, GiGraphics gs, GiContext ctx, int segment) {
-    return touchvgJNI.MgRoundRect_draw__SWIG_0(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx, segment);
-  }
-
-  public boolean draw(int mode, GiGraphics gs, GiContext ctx) {
-    return touchvgJNI.MgRoundRect_draw__SWIG_1(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx);
+    return touchvgJNI.MgRoundRect_draw(swigCPtr, this, mode, GiGraphics.getCPtr(gs), gs, GiContext.getCPtr(ctx), ctx, segment);
   }
 
   public boolean save(MgStorage s) {

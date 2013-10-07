@@ -83,12 +83,40 @@ public class Point2d : IDisposable {
   }
 
   public Point2d scaleBy(float sx, float sy) {
-    Point2d ret = new Point2d(touchvgPINVOKE.Point2d_scaleBy(swigCPtr, sx, sy), false);
+    Point2d ret = new Point2d(touchvgPINVOKE.Point2d_scaleBy__SWIG_0(swigCPtr, sx, sy), false);
+    return ret;
+  }
+
+  public Point2d scaleBy(float s) {
+    Point2d ret = new Point2d(touchvgPINVOKE.Point2d_scaleBy__SWIG_1(swigCPtr, s), false);
     return ret;
   }
 
   public void offset(float dx, float dy) {
-    touchvgPINVOKE.Point2d_offset(swigCPtr, dx, dy);
+    touchvgPINVOKE.Point2d_offset__SWIG_0(swigCPtr, dx, dy);
+  }
+
+  public void offset(Vector2d vec) {
+    touchvgPINVOKE.Point2d_offset__SWIG_1(swigCPtr, Vector2d.getCPtr(vec));
+    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
+  }
+
+  public Point2d add(Point2d pnt) {
+    Point2d ret = new Point2d(touchvgPINVOKE.Point2d_add(swigCPtr, Point2d.getCPtr(pnt)), true);
+    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
+  public Vector2d subtract(Point2d pnt) {
+    Vector2d ret = new Vector2d(touchvgPINVOKE.Point2d_subtract__SWIG_0(swigCPtr, Point2d.getCPtr(pnt)), true);
+    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
+  public Point2d subtract(Vector2d vec) {
+    Point2d ret = new Point2d(touchvgPINVOKE.Point2d_subtract__SWIG_1(swigCPtr, Vector2d.getCPtr(vec)), true);
+    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
   }
 
   public Vector2d negate() {

@@ -77,19 +77,7 @@ public class MgShape : MgObject {
   }
 
   public virtual bool draw(int mode, GiGraphics gs, GiContext ctx, int segment) {
-    bool ret = touchvgPINVOKE.MgShape_draw__SWIG_0(swigCPtr, mode, GiGraphics.getCPtr(gs), GiContext.getCPtr(ctx), segment);
-    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-  public virtual bool draw(int mode, GiGraphics gs, GiContext ctx) {
-    bool ret = touchvgPINVOKE.MgShape_draw__SWIG_1(swigCPtr, mode, GiGraphics.getCPtr(gs), GiContext.getCPtr(ctx));
-    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
-  public virtual bool draw(int mode, GiGraphics gs) {
-    bool ret = touchvgPINVOKE.MgShape_draw__SWIG_2(swigCPtr, mode, GiGraphics.getCPtr(gs));
+    bool ret = touchvgPINVOKE.MgShape_draw(swigCPtr, mode, GiGraphics.getCPtr(gs), GiContext.getCPtr(ctx), segment);
     if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
