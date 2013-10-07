@@ -49,11 +49,12 @@ private:
         }
         return false;
     }
-    virtual void addShapeActions(const MgMotion* sender,
-        int* actions, int &n, const MgShape* shape) {
+    virtual int addShapeActions(const MgMotion* sender,
+        mgvector<int>& actions, int n, const MgShape* shape) {
         for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {
-            (*it)->addShapeActions(sender, actions, n, shape);
+            n = (*it)->addShapeActions(sender, actions, n, shape);
         }
+        return n;
     }
     virtual bool doAction(const MgMotion* sender, int action) {
         for (Iterator it = _arr.begin(); it != _arr.end(); ++it) {

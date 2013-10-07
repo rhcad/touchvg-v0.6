@@ -8,6 +8,7 @@ import java.util.Set;
 import touchvg.core.CmdObserverDefault;
 import touchvg.core.GiContext;
 import touchvg.core.GiGraphics;
+import touchvg.core.Ints;
 import touchvg.core.Matrix2d;
 import touchvg.core.MgBaseShape;
 import touchvg.core.MgCommand;
@@ -30,6 +31,7 @@ public class ViewSinShape extends GraphView {
     private MyCmdObserver mObserver = new MyCmdObserver();
     private static final int[] HANDLEIDS = { R.drawable.vgdot1,
             R.drawable.vgdot2, R.drawable.vgdot3 };
+    private static final int[] MYIMAGEIDS = { R.drawable.demo_switch };
 
     public ViewSinShape(Context context) {
         super(context);
@@ -37,7 +39,7 @@ public class ViewSinShape extends GraphView {
         final ViewHelper helper = new ViewHelper(this);
 
         ViewHelper.setContextButtonImages(null, R.array.vg_action_captions,
-                null, HANDLEIDS);
+                MYIMAGEIDS, HANDLEIDS);
 
         helper.cmdView().getCmdSubject().registerObserver(mObserver);
         helper.setCommand(DrawSinShape.NAME); // may be called by a button
@@ -55,6 +57,7 @@ public class ViewSinShape extends GraphView {
     }
     
     private class MyCmdObserver extends CmdObserverDefault {
+        private static final int ACTION_SWITCH = 40;
         
         @Override
         public MgBaseShape createShape(MgMotion sender, int type) {
@@ -69,6 +72,21 @@ public class ViewSinShape extends GraphView {
                 return new DrawSinShape();
             return super.createCommand(sender, name);
         }
+        
+        @Override
+        public int addShapeActions(MgMotion sender, Ints actions, int n, MgShape sp) {
+            if (castSinShape(sp) != null) {
+                actions.set(n++, ACTION_SWITCH);
+            }
+            return n;
+        }
+        
+        @Override
+        public boolean doAction(MgMotion sender, int action) {
+            if (action == ACTION_SWITCH) {
+            }
+            return super.doAction(sender, action);
+        }
     }
     
     private Set<MgCommand> mCmdCache = new HashSet<MgCommand>();
@@ -77,7 +95,7 @@ public class ViewSinShape extends GraphView {
         public static final String NAME = "sin";
         
         public DrawSinShape() {
-        	mCmdCache.add(this);
+            mCmdCache.add(this);
         }
         
         @Override
@@ -99,7 +117,7 @@ public class ViewSinShape extends GraphView {
         @Override
         public boolean click(MgMotion sender) {
             super.click(sender);
-            if (sender.getView().getCommandName().equals(NAME)) {
+            if (sender.getView().getCommandName().equals(NAME)) { // not cancel
                 dynshape().shape().setHandlePoint(0, snapPoint(sender), 0);
                 addShape(sender);
             }
@@ -109,28 +127,33 @@ public class ViewSinShape extends GraphView {
 
     private static Set<SinShape> mShapeCache;
     
+    public SinShape castSinShape(MgObject obj) {
+        return mShapeCache.isEmpty() ? null :
+            mShapeCache.iterator().next().castShape(obj);
+    }
+    
     private class SinShape extends MgBaseShape {
         private MgSplines mCurve = new MgSplines();
         public static final int TYPE = 100;
         
         public SinShape() {
-        	if (mShapeCache == null)
-        		mShapeCache = new HashSet<SinShape>();
-        	mShapeCache.add(this);
-        	
+            if (mShapeCache == null)
+                mShapeCache = new HashSet<SinShape>();
+            mShapeCache.add(this);
+            
             for (int i = 0; i < 100; i++) {
                 double y = 10 * Math.sin(i * Math.PI / 20);
                 mCurve.addPoint(new Point2d(i * 0.2f, (float)y));
             }
         }
         
-        private SinShape castShape(MgObject obj) {
-        	for (SinShape sp: mShapeCache) {
-        		if (MgObject.getCPtr(obj) == getCPtr(sp)) {
-        			return sp;
-        		}
-        	}
-        	return null;
+        public SinShape castShape(MgObject obj) {
+            for (SinShape sp: mShapeCache) {
+                if (MgObject.getCPtr(obj) == MgObject.getCPtr(sp)) {
+                    return sp;
+                }
+            }
+            return null;
         }
         
         @Override
@@ -172,9 +195,9 @@ public class ViewSinShape extends GraphView {
         
         @Override
         public boolean equals(MgObject src) {
-        	SinShape s = castShape(src);
+            SinShape s = castShape(src);
             if (s == null || !mCurve.equals(s.mCurve)) {
-            	return false;
+                return false;
             }
             return super.equals(src);
         }
@@ -220,8 +243,7 @@ public class ViewSinShape extends GraphView {
 
         @Override
         public float hitTest(Point2d pt, float tol, MgHitResult res) {
-            float dist = mCurve.hitTest(pt, tol, res);
-            return dist;
+            return mCurve.hitTest(pt, tol, res);
         }
 
         @Override
@@ -232,12 +254,16 @@ public class ViewSinShape extends GraphView {
 
         @Override
         public boolean save(MgStorage s) {
-            return super.save(s) && mCurve.save(s);
+            final Point2d pt = getPoint(0);
+            s.writeFloat("x", pt.getX());
+            s.writeFloat("y", pt.getY());
+            return super.save(s);
         }
 
         @Override
         public boolean load(MgShapeFactory factory, MgStorage s) {
-            return super.load(factory, s) && mCurve.load(factory, s);
+            setPoint(0, new Point2d(s.readFloat("x", 0), s.readFloat("y", 0)));
+            return super.load(factory, s);
         }
 
         @Override

@@ -58,6 +58,12 @@ public class CmdObserver : IDisposable {
     return ret;
   }
 
+  public virtual int addShapeActions(MgMotion sender, Ints actions, int n, MgShape sp) {
+    int ret = touchvgPINVOKE.CmdObserver_addShapeActions(swigCPtr, MgMotion.getCPtr(sender), Ints.getCPtr(actions), n, MgShape.getCPtr(sp));
+    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
   public virtual bool doAction(MgMotion sender, int action) {
     bool ret = touchvgPINVOKE.CmdObserver_doAction(swigCPtr, MgMotion.getCPtr(sender), action);
     return ret;

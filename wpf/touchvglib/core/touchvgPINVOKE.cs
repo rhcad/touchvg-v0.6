@@ -4374,6 +4374,9 @@ class touchvgPINVOKE {
   [DllImport("touchvg", EntryPoint="CSharp_CmdObserver_selectActionsNeedHided")]
   public static extern bool CmdObserver_selectActionsNeedHided(HandleRef jarg1, HandleRef jarg2);
 
+  [DllImport("touchvg", EntryPoint="CSharp_CmdObserver_addShapeActions")]
+  public static extern int CmdObserver_addShapeActions(HandleRef jarg1, HandleRef jarg2, HandleRef jarg3, int jarg4, HandleRef jarg5);
+
   [DllImport("touchvg", EntryPoint="CSharp_CmdObserver_doAction")]
   public static extern bool CmdObserver_doAction(HandleRef jarg1, HandleRef jarg2, int jarg3);
 
@@ -4542,8 +4545,14 @@ class touchvgPINVOKE {
   [DllImport("touchvg", EntryPoint="CSharp_CmdObserverDefault_createCommandSwigExplicitCmdObserverDefault")]
   public static extern IntPtr CmdObserverDefault_createCommandSwigExplicitCmdObserverDefault(HandleRef jarg1, HandleRef jarg2, string jarg3);
 
+  [DllImport("touchvg", EntryPoint="CSharp_CmdObserverDefault_addShapeActions")]
+  public static extern int CmdObserverDefault_addShapeActions(HandleRef jarg1, HandleRef jarg2, HandleRef jarg3, int jarg4, HandleRef jarg5);
+
+  [DllImport("touchvg", EntryPoint="CSharp_CmdObserverDefault_addShapeActionsSwigExplicitCmdObserverDefault")]
+  public static extern int CmdObserverDefault_addShapeActionsSwigExplicitCmdObserverDefault(HandleRef jarg1, HandleRef jarg2, HandleRef jarg3, int jarg4, HandleRef jarg5);
+
   [DllImport("touchvg", EntryPoint="CSharp_CmdObserverDefault_director_connect")]
-  public static extern void CmdObserverDefault_director_connect(HandleRef jarg1, CmdObserverDefault.SwigDelegateCmdObserverDefault_0 delegate0, CmdObserverDefault.SwigDelegateCmdObserverDefault_1 delegate1, CmdObserverDefault.SwigDelegateCmdObserverDefault_2 delegate2, CmdObserverDefault.SwigDelegateCmdObserverDefault_3 delegate3, CmdObserverDefault.SwigDelegateCmdObserverDefault_4 delegate4, CmdObserverDefault.SwigDelegateCmdObserverDefault_5 delegate5, CmdObserverDefault.SwigDelegateCmdObserverDefault_6 delegate6, CmdObserverDefault.SwigDelegateCmdObserverDefault_7 delegate7, CmdObserverDefault.SwigDelegateCmdObserverDefault_8 delegate8, CmdObserverDefault.SwigDelegateCmdObserverDefault_9 delegate9, CmdObserverDefault.SwigDelegateCmdObserverDefault_10 delegate10, CmdObserverDefault.SwigDelegateCmdObserverDefault_11 delegate11, CmdObserverDefault.SwigDelegateCmdObserverDefault_12 delegate12, CmdObserverDefault.SwigDelegateCmdObserverDefault_13 delegate13, CmdObserverDefault.SwigDelegateCmdObserverDefault_14 delegate14, CmdObserverDefault.SwigDelegateCmdObserverDefault_15 delegate15, CmdObserverDefault.SwigDelegateCmdObserverDefault_16 delegate16, CmdObserverDefault.SwigDelegateCmdObserverDefault_17 delegate17, CmdObserverDefault.SwigDelegateCmdObserverDefault_18 delegate18);
+  public static extern void CmdObserverDefault_director_connect(HandleRef jarg1, CmdObserverDefault.SwigDelegateCmdObserverDefault_0 delegate0, CmdObserverDefault.SwigDelegateCmdObserverDefault_1 delegate1, CmdObserverDefault.SwigDelegateCmdObserverDefault_2 delegate2, CmdObserverDefault.SwigDelegateCmdObserverDefault_3 delegate3, CmdObserverDefault.SwigDelegateCmdObserverDefault_4 delegate4, CmdObserverDefault.SwigDelegateCmdObserverDefault_5 delegate5, CmdObserverDefault.SwigDelegateCmdObserverDefault_6 delegate6, CmdObserverDefault.SwigDelegateCmdObserverDefault_7 delegate7, CmdObserverDefault.SwigDelegateCmdObserverDefault_8 delegate8, CmdObserverDefault.SwigDelegateCmdObserverDefault_9 delegate9, CmdObserverDefault.SwigDelegateCmdObserverDefault_10 delegate10, CmdObserverDefault.SwigDelegateCmdObserverDefault_11 delegate11, CmdObserverDefault.SwigDelegateCmdObserverDefault_12 delegate12, CmdObserverDefault.SwigDelegateCmdObserverDefault_13 delegate13, CmdObserverDefault.SwigDelegateCmdObserverDefault_14 delegate14, CmdObserverDefault.SwigDelegateCmdObserverDefault_15 delegate15, CmdObserverDefault.SwigDelegateCmdObserverDefault_16 delegate16, CmdObserverDefault.SwigDelegateCmdObserverDefault_17 delegate17, CmdObserverDefault.SwigDelegateCmdObserverDefault_18 delegate18, CmdObserverDefault.SwigDelegateCmdObserverDefault_19 delegate19);
 
   [DllImport("touchvg", EntryPoint="CSharp_CmdSubject_registerObserver")]
   public static extern void CmdSubject_registerObserver(HandleRef jarg1, HandleRef jarg2);

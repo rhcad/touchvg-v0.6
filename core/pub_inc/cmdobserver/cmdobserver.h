@@ -5,6 +5,8 @@
 #ifndef TOUCHVG_CMDOBSERVER_H_
 #define TOUCHVG_CMDOBSERVER_H_
 
+#include <mgvector.h>
+
 class MgShape;
 class MgBaseShape;
 class MgMotion;
@@ -28,15 +30,15 @@ struct CmdObserver {
 
     //! 选择命令中的上下文操作是否隐藏的回调通知
     virtual bool selectActionsNeedHided(const MgMotion* sender) = 0;
-#ifndef SWIG
+
     //! 对选中的图形增加上下文操作的回调通知
-    virtual void addShapeActions(const MgMotion* sender,
-        int* actions, int &n, const MgShape* sp) = 0;
-#endif
-    //! 执行非内置上下文操作的通知
+    virtual int addShapeActions(const MgMotion* sender,
+        mgvector<int>& actions, int n, const MgShape* sp) = 0;
+
+    //! 执行非内置上下文操作的通知，先于 doEndAction() 被调用
     virtual bool doAction(const MgMotion* sender, int action) = 0;
 
-    //! 在非绘图的命令中执行额外的上下文操作的通知
+    //! 在非绘图的命令中执行额外的上下文操作、没有命令响应此操作的通知
     virtual bool doEndAction(const MgMotion* sender, int action) = 0;
 
     //! 在绘图命令中显示额外内容的通知
@@ -113,8 +115,9 @@ public:
         if (sender) type++; return (MgBaseShape*)0; }
     virtual MgCommand* createCommand(const MgMotion* sender, const char* name) {
         if (sender && name) name=name; return (MgCommand*)0; }
+    virtual int addShapeActions(const MgMotion*,mgvector<int>&,int n, const MgShape*) {
+        return n; }
 #ifndef SWIG
-    virtual void addShapeActions(const MgMotion*,int*, int &, const MgShape*) {}
     virtual void onSelectTouchEnded(const MgMotion*,int,int,int,int,int,const int*) {}
 #endif
 

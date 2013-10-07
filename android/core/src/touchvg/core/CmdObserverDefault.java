@@ -133,4 +133,8 @@ public class CmdObserverDefault extends CmdObserver {
     return (cPtr == 0) ? null : new MgCommand(cPtr, false);
   }
 
+  public int addShapeActions(MgMotion arg0, Ints arg1, int n, MgShape arg3) {
+    return (getClass() == CmdObserverDefault.class) ? touchvgJNI.CmdObserverDefault_addShapeActions(swigCPtr, this, MgMotion.getCPtr(arg0), arg0, Ints.getCPtr(arg1), arg1, n, MgShape.getCPtr(arg3), arg3) : touchvgJNI.CmdObserverDefault_addShapeActionsSwigExplicitCmdObserverDefault(swigCPtr, this, MgMotion.getCPtr(arg0), arg0, Ints.getCPtr(arg1), arg1, n, MgShape.getCPtr(arg3), arg3);
+  }
+
 }

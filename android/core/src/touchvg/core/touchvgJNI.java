@@ -1474,6 +1474,7 @@ public class touchvgJNI {
   public final static native void CmdObserver_onEnterSelectCommand(long jarg1, CmdObserver jarg1_, long jarg2, MgMotion jarg2_);
   public final static native void CmdObserver_onUnloadCommands(long jarg1, CmdObserver jarg1_, long jarg2, MgCmdManager jarg2_);
   public final static native boolean CmdObserver_selectActionsNeedHided(long jarg1, CmdObserver jarg1_, long jarg2, MgMotion jarg2_);
+  public final static native int CmdObserver_addShapeActions(long jarg1, CmdObserver jarg1_, long jarg2, MgMotion jarg2_, long jarg3, Ints jarg3_, int jarg4, long jarg5, MgShape jarg5_);
   public final static native boolean CmdObserver_doAction(long jarg1, CmdObserver jarg1_, long jarg2, MgMotion jarg2_, int jarg3);
   public final static native boolean CmdObserver_doEndAction(long jarg1, CmdObserver jarg1_, long jarg2, MgMotion jarg2_, int jarg3);
   public final static native void CmdObserver_drawInShapeCommand(long jarg1, CmdObserver jarg1_, long jarg2, MgMotion jarg2_, long jarg3, MgCommand jarg3_, long jarg4, GiGraphics jarg4_);
@@ -1530,6 +1531,8 @@ public class touchvgJNI {
   public final static native long CmdObserverDefault_createShapeSwigExplicitCmdObserverDefault(long jarg1, CmdObserverDefault jarg1_, long jarg2, MgMotion jarg2_, int jarg3);
   public final static native long CmdObserverDefault_createCommand(long jarg1, CmdObserverDefault jarg1_, long jarg2, MgMotion jarg2_, String jarg3);
   public final static native long CmdObserverDefault_createCommandSwigExplicitCmdObserverDefault(long jarg1, CmdObserverDefault jarg1_, long jarg2, MgMotion jarg2_, String jarg3);
+  public final static native int CmdObserverDefault_addShapeActions(long jarg1, CmdObserverDefault jarg1_, long jarg2, MgMotion jarg2_, long jarg3, Ints jarg3_, int jarg4, long jarg5, MgShape jarg5_);
+  public final static native int CmdObserverDefault_addShapeActionsSwigExplicitCmdObserverDefault(long jarg1, CmdObserverDefault jarg1_, long jarg2, MgMotion jarg2_, long jarg3, Ints jarg3_, int jarg4, long jarg5, MgShape jarg5_);
   public final static native void CmdObserverDefault_director_connect(CmdObserverDefault obj, long cptr, boolean mem_own, boolean weak_global);
   public final static native void CmdObserverDefault_change_ownership(CmdObserverDefault obj, long cptr, boolean take_or_release);
   public final static native void CmdSubject_registerObserver(long jarg1, CmdSubject jarg1_, long jarg2, CmdObserver jarg2_);
@@ -2327,6 +2330,9 @@ public class touchvgJNI {
   }
   public static boolean SwigDirector_CmdObserverDefault_selectActionsNeedHided(CmdObserverDefault self, long sender) {
     return self.selectActionsNeedHided((sender == 0) ? null : new MgMotion(sender, false));
+  }
+  public static int SwigDirector_CmdObserverDefault_addShapeActions(CmdObserverDefault self, long arg0, long arg1, int n, long arg3) {
+    return self.addShapeActions((arg0 == 0) ? null : new MgMotion(arg0, false), new Ints(arg1, false), n, (arg3 == 0) ? null : new MgShape(arg3, false));
   }
   public static boolean SwigDirector_CmdObserverDefault_doAction(CmdObserverDefault self, long sender, int action) {
     return self.doAction((sender == 0) ? null : new MgMotion(sender, false), action);

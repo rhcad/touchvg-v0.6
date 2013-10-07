@@ -291,6 +291,7 @@ public:
     virtual void onEnterSelectCommand(MgMotion const *sender);
     virtual void onUnloadCommands(MgCmdManager *sender);
     virtual bool selectActionsNeedHided(MgMotion const *sender);
+    virtual int addShapeActions(MgMotion const *arg0, mgvector< int > &arg1, int n, MgShape const *arg3);
     virtual bool doAction(MgMotion const *sender, int action);
     virtual bool doEndAction(MgMotion const *sender, int action);
     virtual void drawInShapeCommand(MgMotion const *sender, MgCommand *cmd, GiGraphics *gs);
@@ -309,10 +310,10 @@ public:
     virtual ~SwigDirector_CmdObserverDefault();
 public:
     bool swig_overrides(int n) {
-      return (n < 19 ? swig_override[n] : false);
+      return (n < 20 ? swig_override[n] : false);
     }
 protected:
-    bool swig_override[19];
+    bool swig_override[20];
 };
 
 class SwigDirector_MgCommandDraw : public MgCommandDraw, public Swig::Director {

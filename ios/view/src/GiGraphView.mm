@@ -117,6 +117,10 @@ GiColor CGColorToGiColor(CGColorRef color);
 }
 
 - (int)cmdViewHandle {
+    return _adapter->coreView()->viewAdapterHandle();
+}
+
+- (MgView *)cmdView {
     return _adapter->coreView()->viewAdapter();
 }
 

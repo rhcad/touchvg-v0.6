@@ -62,74 +62,80 @@ public class CmdObserverDefault : CmdObserver {
   }
 
   public override bool doAction(MgMotion sender, int action) {
-    bool ret = (SwigDerivedClassHasMethod("doAction", swigMethodTypes4) ? touchvgPINVOKE.CmdObserverDefault_doActionSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), action) : touchvgPINVOKE.CmdObserverDefault_doAction(swigCPtr, MgMotion.getCPtr(sender), action));
+    bool ret = (SwigDerivedClassHasMethod("doAction", swigMethodTypes5) ? touchvgPINVOKE.CmdObserverDefault_doActionSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), action) : touchvgPINVOKE.CmdObserverDefault_doAction(swigCPtr, MgMotion.getCPtr(sender), action));
     return ret;
   }
 
   public override bool doEndAction(MgMotion sender, int action) {
-    bool ret = (SwigDerivedClassHasMethod("doEndAction", swigMethodTypes5) ? touchvgPINVOKE.CmdObserverDefault_doEndActionSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), action) : touchvgPINVOKE.CmdObserverDefault_doEndAction(swigCPtr, MgMotion.getCPtr(sender), action));
+    bool ret = (SwigDerivedClassHasMethod("doEndAction", swigMethodTypes6) ? touchvgPINVOKE.CmdObserverDefault_doEndActionSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), action) : touchvgPINVOKE.CmdObserverDefault_doEndAction(swigCPtr, MgMotion.getCPtr(sender), action));
     return ret;
   }
 
   public override void drawInShapeCommand(MgMotion sender, MgCommand cmd, GiGraphics gs) {
-    if (SwigDerivedClassHasMethod("drawInShapeCommand", swigMethodTypes6)) touchvgPINVOKE.CmdObserverDefault_drawInShapeCommandSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgCommand.getCPtr(cmd), GiGraphics.getCPtr(gs)); else touchvgPINVOKE.CmdObserverDefault_drawInShapeCommand(swigCPtr, MgMotion.getCPtr(sender), MgCommand.getCPtr(cmd), GiGraphics.getCPtr(gs));
+    if (SwigDerivedClassHasMethod("drawInShapeCommand", swigMethodTypes7)) touchvgPINVOKE.CmdObserverDefault_drawInShapeCommandSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgCommand.getCPtr(cmd), GiGraphics.getCPtr(gs)); else touchvgPINVOKE.CmdObserverDefault_drawInShapeCommand(swigCPtr, MgMotion.getCPtr(sender), MgCommand.getCPtr(cmd), GiGraphics.getCPtr(gs));
   }
 
   public override void drawInSelectCommand(MgMotion sender, MgShape sp, int handleIndex, GiGraphics gs) {
-    if (SwigDerivedClassHasMethod("drawInSelectCommand", swigMethodTypes7)) touchvgPINVOKE.CmdObserverDefault_drawInSelectCommandSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp), handleIndex, GiGraphics.getCPtr(gs)); else touchvgPINVOKE.CmdObserverDefault_drawInSelectCommand(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp), handleIndex, GiGraphics.getCPtr(gs));
+    if (SwigDerivedClassHasMethod("drawInSelectCommand", swigMethodTypes8)) touchvgPINVOKE.CmdObserverDefault_drawInSelectCommandSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp), handleIndex, GiGraphics.getCPtr(gs)); else touchvgPINVOKE.CmdObserverDefault_drawInSelectCommand(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp), handleIndex, GiGraphics.getCPtr(gs));
   }
 
   public override bool onShapeWillAdded(MgMotion sender, MgShape sp) {
-    bool ret = (SwigDerivedClassHasMethod("onShapeWillAdded", swigMethodTypes8) ? touchvgPINVOKE.CmdObserverDefault_onShapeWillAddedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeWillAdded(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
+    bool ret = (SwigDerivedClassHasMethod("onShapeWillAdded", swigMethodTypes9) ? touchvgPINVOKE.CmdObserverDefault_onShapeWillAddedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeWillAdded(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
     return ret;
   }
 
   public override void onShapeAdded(MgMotion sender, MgShape sp) {
-    if (SwigDerivedClassHasMethod("onShapeAdded", swigMethodTypes9)) touchvgPINVOKE.CmdObserverDefault_onShapeAddedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)); else touchvgPINVOKE.CmdObserverDefault_onShapeAdded(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp));
+    if (SwigDerivedClassHasMethod("onShapeAdded", swigMethodTypes10)) touchvgPINVOKE.CmdObserverDefault_onShapeAddedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)); else touchvgPINVOKE.CmdObserverDefault_onShapeAdded(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp));
   }
 
   public override bool onShapeWillDeleted(MgMotion sender, MgShape sp) {
-    bool ret = (SwigDerivedClassHasMethod("onShapeWillDeleted", swigMethodTypes10) ? touchvgPINVOKE.CmdObserverDefault_onShapeWillDeletedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeWillDeleted(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
+    bool ret = (SwigDerivedClassHasMethod("onShapeWillDeleted", swigMethodTypes11) ? touchvgPINVOKE.CmdObserverDefault_onShapeWillDeletedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeWillDeleted(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
     return ret;
   }
 
   public override void onShapeDeleted(MgMotion sender, MgShape sp) {
-    if (SwigDerivedClassHasMethod("onShapeDeleted", swigMethodTypes11)) touchvgPINVOKE.CmdObserverDefault_onShapeDeletedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)); else touchvgPINVOKE.CmdObserverDefault_onShapeDeleted(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp));
+    if (SwigDerivedClassHasMethod("onShapeDeleted", swigMethodTypes12)) touchvgPINVOKE.CmdObserverDefault_onShapeDeletedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)); else touchvgPINVOKE.CmdObserverDefault_onShapeDeleted(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp));
   }
 
   public override bool onShapeCanRotated(MgMotion sender, MgShape sp) {
-    bool ret = (SwigDerivedClassHasMethod("onShapeCanRotated", swigMethodTypes12) ? touchvgPINVOKE.CmdObserverDefault_onShapeCanRotatedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeCanRotated(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
+    bool ret = (SwigDerivedClassHasMethod("onShapeCanRotated", swigMethodTypes13) ? touchvgPINVOKE.CmdObserverDefault_onShapeCanRotatedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeCanRotated(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
     return ret;
   }
 
   public override bool onShapeCanTransform(MgMotion sender, MgShape sp) {
-    bool ret = (SwigDerivedClassHasMethod("onShapeCanTransform", swigMethodTypes13) ? touchvgPINVOKE.CmdObserverDefault_onShapeCanTransformSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeCanTransform(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
+    bool ret = (SwigDerivedClassHasMethod("onShapeCanTransform", swigMethodTypes14) ? touchvgPINVOKE.CmdObserverDefault_onShapeCanTransformSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeCanTransform(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
     return ret;
   }
 
   public override bool onShapeCanUnlock(MgMotion sender, MgShape sp) {
-    bool ret = (SwigDerivedClassHasMethod("onShapeCanUnlock", swigMethodTypes14) ? touchvgPINVOKE.CmdObserverDefault_onShapeCanUnlockSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeCanUnlock(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
+    bool ret = (SwigDerivedClassHasMethod("onShapeCanUnlock", swigMethodTypes15) ? touchvgPINVOKE.CmdObserverDefault_onShapeCanUnlockSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeCanUnlock(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
     return ret;
   }
 
   public override bool onShapeCanUngroup(MgMotion sender, MgShape sp) {
-    bool ret = (SwigDerivedClassHasMethod("onShapeCanUngroup", swigMethodTypes15) ? touchvgPINVOKE.CmdObserverDefault_onShapeCanUngroupSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeCanUngroup(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
+    bool ret = (SwigDerivedClassHasMethod("onShapeCanUngroup", swigMethodTypes16) ? touchvgPINVOKE.CmdObserverDefault_onShapeCanUngroupSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)) : touchvgPINVOKE.CmdObserverDefault_onShapeCanUngroup(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp)));
     return ret;
   }
 
   public override void onShapeMoved(MgMotion sender, MgShape sp, int segment) {
-    if (SwigDerivedClassHasMethod("onShapeMoved", swigMethodTypes16)) touchvgPINVOKE.CmdObserverDefault_onShapeMovedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp), segment); else touchvgPINVOKE.CmdObserverDefault_onShapeMoved(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp), segment);
+    if (SwigDerivedClassHasMethod("onShapeMoved", swigMethodTypes17)) touchvgPINVOKE.CmdObserverDefault_onShapeMovedSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp), segment); else touchvgPINVOKE.CmdObserverDefault_onShapeMoved(swigCPtr, MgMotion.getCPtr(sender), MgShape.getCPtr(sp), segment);
   }
 
   public override MgBaseShape createShape(MgMotion sender, int type) {
-    IntPtr cPtr = (SwigDerivedClassHasMethod("createShape", swigMethodTypes17) ? touchvgPINVOKE.CmdObserverDefault_createShapeSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), type) : touchvgPINVOKE.CmdObserverDefault_createShape(swigCPtr, MgMotion.getCPtr(sender), type));
+    IntPtr cPtr = (SwigDerivedClassHasMethod("createShape", swigMethodTypes18) ? touchvgPINVOKE.CmdObserverDefault_createShapeSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), type) : touchvgPINVOKE.CmdObserverDefault_createShape(swigCPtr, MgMotion.getCPtr(sender), type));
     MgBaseShape ret = (cPtr == IntPtr.Zero) ? null : new MgBaseShape(cPtr, false);
     return ret;
   }
 
   public override MgCommand createCommand(MgMotion sender, string name) {
-    IntPtr cPtr = (SwigDerivedClassHasMethod("createCommand", swigMethodTypes18) ? touchvgPINVOKE.CmdObserverDefault_createCommandSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), name) : touchvgPINVOKE.CmdObserverDefault_createCommand(swigCPtr, MgMotion.getCPtr(sender), name));
+    IntPtr cPtr = (SwigDerivedClassHasMethod("createCommand", swigMethodTypes19) ? touchvgPINVOKE.CmdObserverDefault_createCommandSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(sender), name) : touchvgPINVOKE.CmdObserverDefault_createCommand(swigCPtr, MgMotion.getCPtr(sender), name));
     MgCommand ret = (cPtr == IntPtr.Zero) ? null : new MgCommand(cPtr, false);
+    return ret;
+  }
+
+  public override int addShapeActions(MgMotion arg0, Ints arg1, int n, MgShape arg3) {
+    int ret = (SwigDerivedClassHasMethod("addShapeActions", swigMethodTypes4) ? touchvgPINVOKE.CmdObserverDefault_addShapeActionsSwigExplicitCmdObserverDefault(swigCPtr, MgMotion.getCPtr(arg0), Ints.getCPtr(arg1), n, MgShape.getCPtr(arg3)) : touchvgPINVOKE.CmdObserverDefault_addShapeActions(swigCPtr, MgMotion.getCPtr(arg0), Ints.getCPtr(arg1), n, MgShape.getCPtr(arg3)));
+    if (touchvgPINVOKE.SWIGPendingException.Pending) throw touchvgPINVOKE.SWIGPendingException.Retrieve();
     return ret;
   }
 
@@ -142,37 +148,39 @@ public class CmdObserverDefault : CmdObserver {
       swigDelegate2 = new SwigDelegateCmdObserverDefault_2(SwigDirectoronUnloadCommands);
     if (SwigDerivedClassHasMethod("selectActionsNeedHided", swigMethodTypes3))
       swigDelegate3 = new SwigDelegateCmdObserverDefault_3(SwigDirectorselectActionsNeedHided);
-    if (SwigDerivedClassHasMethod("doAction", swigMethodTypes4))
-      swigDelegate4 = new SwigDelegateCmdObserverDefault_4(SwigDirectordoAction);
-    if (SwigDerivedClassHasMethod("doEndAction", swigMethodTypes5))
-      swigDelegate5 = new SwigDelegateCmdObserverDefault_5(SwigDirectordoEndAction);
-    if (SwigDerivedClassHasMethod("drawInShapeCommand", swigMethodTypes6))
-      swigDelegate6 = new SwigDelegateCmdObserverDefault_6(SwigDirectordrawInShapeCommand);
-    if (SwigDerivedClassHasMethod("drawInSelectCommand", swigMethodTypes7))
-      swigDelegate7 = new SwigDelegateCmdObserverDefault_7(SwigDirectordrawInSelectCommand);
-    if (SwigDerivedClassHasMethod("onShapeWillAdded", swigMethodTypes8))
-      swigDelegate8 = new SwigDelegateCmdObserverDefault_8(SwigDirectoronShapeWillAdded);
-    if (SwigDerivedClassHasMethod("onShapeAdded", swigMethodTypes9))
-      swigDelegate9 = new SwigDelegateCmdObserverDefault_9(SwigDirectoronShapeAdded);
-    if (SwigDerivedClassHasMethod("onShapeWillDeleted", swigMethodTypes10))
-      swigDelegate10 = new SwigDelegateCmdObserverDefault_10(SwigDirectoronShapeWillDeleted);
-    if (SwigDerivedClassHasMethod("onShapeDeleted", swigMethodTypes11))
-      swigDelegate11 = new SwigDelegateCmdObserverDefault_11(SwigDirectoronShapeDeleted);
-    if (SwigDerivedClassHasMethod("onShapeCanRotated", swigMethodTypes12))
-      swigDelegate12 = new SwigDelegateCmdObserverDefault_12(SwigDirectoronShapeCanRotated);
-    if (SwigDerivedClassHasMethod("onShapeCanTransform", swigMethodTypes13))
-      swigDelegate13 = new SwigDelegateCmdObserverDefault_13(SwigDirectoronShapeCanTransform);
-    if (SwigDerivedClassHasMethod("onShapeCanUnlock", swigMethodTypes14))
-      swigDelegate14 = new SwigDelegateCmdObserverDefault_14(SwigDirectoronShapeCanUnlock);
-    if (SwigDerivedClassHasMethod("onShapeCanUngroup", swigMethodTypes15))
-      swigDelegate15 = new SwigDelegateCmdObserverDefault_15(SwigDirectoronShapeCanUngroup);
-    if (SwigDerivedClassHasMethod("onShapeMoved", swigMethodTypes16))
-      swigDelegate16 = new SwigDelegateCmdObserverDefault_16(SwigDirectoronShapeMoved);
-    if (SwigDerivedClassHasMethod("createShape", swigMethodTypes17))
-      swigDelegate17 = new SwigDelegateCmdObserverDefault_17(SwigDirectorcreateShape);
-    if (SwigDerivedClassHasMethod("createCommand", swigMethodTypes18))
-      swigDelegate18 = new SwigDelegateCmdObserverDefault_18(SwigDirectorcreateCommand);
-    touchvgPINVOKE.CmdObserverDefault_director_connect(swigCPtr, swigDelegate0, swigDelegate1, swigDelegate2, swigDelegate3, swigDelegate4, swigDelegate5, swigDelegate6, swigDelegate7, swigDelegate8, swigDelegate9, swigDelegate10, swigDelegate11, swigDelegate12, swigDelegate13, swigDelegate14, swigDelegate15, swigDelegate16, swigDelegate17, swigDelegate18);
+    if (SwigDerivedClassHasMethod("addShapeActions", swigMethodTypes4))
+      swigDelegate4 = new SwigDelegateCmdObserverDefault_4(SwigDirectoraddShapeActions);
+    if (SwigDerivedClassHasMethod("doAction", swigMethodTypes5))
+      swigDelegate5 = new SwigDelegateCmdObserverDefault_5(SwigDirectordoAction);
+    if (SwigDerivedClassHasMethod("doEndAction", swigMethodTypes6))
+      swigDelegate6 = new SwigDelegateCmdObserverDefault_6(SwigDirectordoEndAction);
+    if (SwigDerivedClassHasMethod("drawInShapeCommand", swigMethodTypes7))
+      swigDelegate7 = new SwigDelegateCmdObserverDefault_7(SwigDirectordrawInShapeCommand);
+    if (SwigDerivedClassHasMethod("drawInSelectCommand", swigMethodTypes8))
+      swigDelegate8 = new SwigDelegateCmdObserverDefault_8(SwigDirectordrawInSelectCommand);
+    if (SwigDerivedClassHasMethod("onShapeWillAdded", swigMethodTypes9))
+      swigDelegate9 = new SwigDelegateCmdObserverDefault_9(SwigDirectoronShapeWillAdded);
+    if (SwigDerivedClassHasMethod("onShapeAdded", swigMethodTypes10))
+      swigDelegate10 = new SwigDelegateCmdObserverDefault_10(SwigDirectoronShapeAdded);
+    if (SwigDerivedClassHasMethod("onShapeWillDeleted", swigMethodTypes11))
+      swigDelegate11 = new SwigDelegateCmdObserverDefault_11(SwigDirectoronShapeWillDeleted);
+    if (SwigDerivedClassHasMethod("onShapeDeleted", swigMethodTypes12))
+      swigDelegate12 = new SwigDelegateCmdObserverDefault_12(SwigDirectoronShapeDeleted);
+    if (SwigDerivedClassHasMethod("onShapeCanRotated", swigMethodTypes13))
+      swigDelegate13 = new SwigDelegateCmdObserverDefault_13(SwigDirectoronShapeCanRotated);
+    if (SwigDerivedClassHasMethod("onShapeCanTransform", swigMethodTypes14))
+      swigDelegate14 = new SwigDelegateCmdObserverDefault_14(SwigDirectoronShapeCanTransform);
+    if (SwigDerivedClassHasMethod("onShapeCanUnlock", swigMethodTypes15))
+      swigDelegate15 = new SwigDelegateCmdObserverDefault_15(SwigDirectoronShapeCanUnlock);
+    if (SwigDerivedClassHasMethod("onShapeCanUngroup", swigMethodTypes16))
+      swigDelegate16 = new SwigDelegateCmdObserverDefault_16(SwigDirectoronShapeCanUngroup);
+    if (SwigDerivedClassHasMethod("onShapeMoved", swigMethodTypes17))
+      swigDelegate17 = new SwigDelegateCmdObserverDefault_17(SwigDirectoronShapeMoved);
+    if (SwigDerivedClassHasMethod("createShape", swigMethodTypes18))
+      swigDelegate18 = new SwigDelegateCmdObserverDefault_18(SwigDirectorcreateShape);
+    if (SwigDerivedClassHasMethod("createCommand", swigMethodTypes19))
+      swigDelegate19 = new SwigDelegateCmdObserverDefault_19(SwigDirectorcreateCommand);
+    touchvgPINVOKE.CmdObserverDefault_director_connect(swigCPtr, swigDelegate0, swigDelegate1, swigDelegate2, swigDelegate3, swigDelegate4, swigDelegate5, swigDelegate6, swigDelegate7, swigDelegate8, swigDelegate9, swigDelegate10, swigDelegate11, swigDelegate12, swigDelegate13, swigDelegate14, swigDelegate15, swigDelegate16, swigDelegate17, swigDelegate18, swigDelegate19);
   }
 
   private bool SwigDerivedClassHasMethod(string methodName, Type[] methodTypes) {
@@ -195,6 +203,10 @@ public class CmdObserverDefault : CmdObserver {
 
   private bool SwigDirectorselectActionsNeedHided(IntPtr sender) {
     return selectActionsNeedHided((sender == IntPtr.Zero) ? null : new MgMotion(sender, false));
+  }
+
+  private int SwigDirectoraddShapeActions(IntPtr arg0, IntPtr arg1, int n, IntPtr arg3) {
+    return addShapeActions((arg0 == IntPtr.Zero) ? null : new MgMotion(arg0, false), new Ints(arg1, false), n, (arg3 == IntPtr.Zero) ? null : new MgShape(arg3, false));
   }
 
   private bool SwigDirectordoAction(IntPtr sender, int action) {
@@ -261,21 +273,22 @@ public class CmdObserverDefault : CmdObserver {
   public delegate void SwigDelegateCmdObserverDefault_1(IntPtr sender);
   public delegate void SwigDelegateCmdObserverDefault_2(IntPtr sender);
   public delegate bool SwigDelegateCmdObserverDefault_3(IntPtr sender);
-  public delegate bool SwigDelegateCmdObserverDefault_4(IntPtr sender, int action);
+  public delegate int SwigDelegateCmdObserverDefault_4(IntPtr arg0, IntPtr arg1, int n, IntPtr arg3);
   public delegate bool SwigDelegateCmdObserverDefault_5(IntPtr sender, int action);
-  public delegate void SwigDelegateCmdObserverDefault_6(IntPtr sender, IntPtr cmd, IntPtr gs);
-  public delegate void SwigDelegateCmdObserverDefault_7(IntPtr sender, IntPtr sp, int handleIndex, IntPtr gs);
-  public delegate bool SwigDelegateCmdObserverDefault_8(IntPtr sender, IntPtr sp);
-  public delegate void SwigDelegateCmdObserverDefault_9(IntPtr sender, IntPtr sp);
-  public delegate bool SwigDelegateCmdObserverDefault_10(IntPtr sender, IntPtr sp);
-  public delegate void SwigDelegateCmdObserverDefault_11(IntPtr sender, IntPtr sp);
-  public delegate bool SwigDelegateCmdObserverDefault_12(IntPtr sender, IntPtr sp);
+  public delegate bool SwigDelegateCmdObserverDefault_6(IntPtr sender, int action);
+  public delegate void SwigDelegateCmdObserverDefault_7(IntPtr sender, IntPtr cmd, IntPtr gs);
+  public delegate void SwigDelegateCmdObserverDefault_8(IntPtr sender, IntPtr sp, int handleIndex, IntPtr gs);
+  public delegate bool SwigDelegateCmdObserverDefault_9(IntPtr sender, IntPtr sp);
+  public delegate void SwigDelegateCmdObserverDefault_10(IntPtr sender, IntPtr sp);
+  public delegate bool SwigDelegateCmdObserverDefault_11(IntPtr sender, IntPtr sp);
+  public delegate void SwigDelegateCmdObserverDefault_12(IntPtr sender, IntPtr sp);
   public delegate bool SwigDelegateCmdObserverDefault_13(IntPtr sender, IntPtr sp);
   public delegate bool SwigDelegateCmdObserverDefault_14(IntPtr sender, IntPtr sp);
   public delegate bool SwigDelegateCmdObserverDefault_15(IntPtr sender, IntPtr sp);
-  public delegate void SwigDelegateCmdObserverDefault_16(IntPtr sender, IntPtr sp, int segment);
-  public delegate IntPtr SwigDelegateCmdObserverDefault_17(IntPtr sender, int type);
-  public delegate IntPtr SwigDelegateCmdObserverDefault_18(IntPtr sender, string name);
+  public delegate bool SwigDelegateCmdObserverDefault_16(IntPtr sender, IntPtr sp);
+  public delegate void SwigDelegateCmdObserverDefault_17(IntPtr sender, IntPtr sp, int segment);
+  public delegate IntPtr SwigDelegateCmdObserverDefault_18(IntPtr sender, int type);
+  public delegate IntPtr SwigDelegateCmdObserverDefault_19(IntPtr sender, string name);
 
   private SwigDelegateCmdObserverDefault_0 swigDelegate0;
   private SwigDelegateCmdObserverDefault_1 swigDelegate1;
@@ -296,16 +309,17 @@ public class CmdObserverDefault : CmdObserver {
   private SwigDelegateCmdObserverDefault_16 swigDelegate16;
   private SwigDelegateCmdObserverDefault_17 swigDelegate17;
   private SwigDelegateCmdObserverDefault_18 swigDelegate18;
+  private SwigDelegateCmdObserverDefault_19 swigDelegate19;
 
   private static Type[] swigMethodTypes0 = new Type[] { typeof(MgMotion) };
   private static Type[] swigMethodTypes1 = new Type[] { typeof(MgMotion) };
   private static Type[] swigMethodTypes2 = new Type[] { typeof(MgCmdManager) };
   private static Type[] swigMethodTypes3 = new Type[] { typeof(MgMotion) };
-  private static Type[] swigMethodTypes4 = new Type[] { typeof(MgMotion), typeof(int) };
+  private static Type[] swigMethodTypes4 = new Type[] { typeof(MgMotion), typeof(Ints), typeof(int), typeof(MgShape) };
   private static Type[] swigMethodTypes5 = new Type[] { typeof(MgMotion), typeof(int) };
-  private static Type[] swigMethodTypes6 = new Type[] { typeof(MgMotion), typeof(MgCommand), typeof(GiGraphics) };
-  private static Type[] swigMethodTypes7 = new Type[] { typeof(MgMotion), typeof(MgShape), typeof(int), typeof(GiGraphics) };
-  private static Type[] swigMethodTypes8 = new Type[] { typeof(MgMotion), typeof(MgShape) };
+  private static Type[] swigMethodTypes6 = new Type[] { typeof(MgMotion), typeof(int) };
+  private static Type[] swigMethodTypes7 = new Type[] { typeof(MgMotion), typeof(MgCommand), typeof(GiGraphics) };
+  private static Type[] swigMethodTypes8 = new Type[] { typeof(MgMotion), typeof(MgShape), typeof(int), typeof(GiGraphics) };
   private static Type[] swigMethodTypes9 = new Type[] { typeof(MgMotion), typeof(MgShape) };
   private static Type[] swigMethodTypes10 = new Type[] { typeof(MgMotion), typeof(MgShape) };
   private static Type[] swigMethodTypes11 = new Type[] { typeof(MgMotion), typeof(MgShape) };
@@ -313,9 +327,10 @@ public class CmdObserverDefault : CmdObserver {
   private static Type[] swigMethodTypes13 = new Type[] { typeof(MgMotion), typeof(MgShape) };
   private static Type[] swigMethodTypes14 = new Type[] { typeof(MgMotion), typeof(MgShape) };
   private static Type[] swigMethodTypes15 = new Type[] { typeof(MgMotion), typeof(MgShape) };
-  private static Type[] swigMethodTypes16 = new Type[] { typeof(MgMotion), typeof(MgShape), typeof(int) };
-  private static Type[] swigMethodTypes17 = new Type[] { typeof(MgMotion), typeof(int) };
-  private static Type[] swigMethodTypes18 = new Type[] { typeof(MgMotion), typeof(string) };
+  private static Type[] swigMethodTypes16 = new Type[] { typeof(MgMotion), typeof(MgShape) };
+  private static Type[] swigMethodTypes17 = new Type[] { typeof(MgMotion), typeof(MgShape), typeof(int) };
+  private static Type[] swigMethodTypes18 = new Type[] { typeof(MgMotion), typeof(int) };
+  private static Type[] swigMethodTypes19 = new Type[] { typeof(MgMotion), typeof(string) };
 }
 
 }

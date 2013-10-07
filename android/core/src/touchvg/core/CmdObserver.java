@@ -51,6 +51,10 @@ public class CmdObserver {
     return touchvgJNI.CmdObserver_selectActionsNeedHided(swigCPtr, this, MgMotion.getCPtr(sender), sender);
   }
 
+  public int addShapeActions(MgMotion sender, Ints actions, int n, MgShape sp) {
+    return touchvgJNI.CmdObserver_addShapeActions(swigCPtr, this, MgMotion.getCPtr(sender), sender, Ints.getCPtr(actions), actions, n, MgShape.getCPtr(sp), sp);
+  }
+
   public boolean doAction(MgMotion sender, int action) {
     return touchvgJNI.CmdObserver_doAction(swigCPtr, this, MgMotion.getCPtr(sender), sender, action);
   }
