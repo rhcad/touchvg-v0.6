@@ -10,7 +10,6 @@ ipch
 *.ch*
 *.hh*
 *.o
-*.a
 *.d
 *.tmp
 *_wrap.cxx
