@@ -5,6 +5,7 @@
 #import "GiGraphView1.h"
 
 @implementation LargeView1
+@synthesize subview2 = _subview2;
 
 - (id)initWithFrame:(CGRect)frame withType:(int)type
 {

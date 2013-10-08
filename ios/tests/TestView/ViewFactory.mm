@@ -20,7 +20,38 @@ static void addView(NSMutableArray *arr, NSString* title, UIView* view)
     }
 }
 
-static void addLargeView1(NSMutableArray *arr, NSUInteger &i, NSUInteger index, 
+static void testGraphView(GiGraphView *v, int type)
+{
+    GiViewHelper *hlp = [GiViewHelper instance:v];
+    
+    if (type & 32) {
+        [hlp addShapesForTest];
+    }
+    type = type & ~32;
+    
+    if (type == 1) {
+        hlp.command = @"splines";
+    }
+    else if (type == 2) {
+        hlp.command = @"select";
+    }
+    else if (type == 3) {
+        [hlp loadFromFile:[GiGraphView2 lastFileName]];
+        hlp.command = @"select";
+    }
+    else if (type == 4) {
+        hlp.command = @"line";
+    }
+    else if (type == 5) {
+        hlp.command = @"lines";
+    }
+    else if (type == 6) {
+        DemoCmdsGate::registerCmds([hlp cmdViewHandle]);
+        hlp.command = @"hittest";
+    }
+}
+
+static void addLargeView1(NSMutableArray *arr, NSUInteger &i, NSUInteger index,
                           NSString* title, CGRect frame, int type)
 {
     LargeView1 *view = nil;
@@ -30,6 +61,10 @@ static void addLargeView1(NSMutableArray *arr, NSUInteger &i, NSUInteger index,
     }
     addView(arr, title, view);
     [view release];
+    
+    if (view && type != 0) {
+        testGraphView(view.subview2, type);
+    }
 }
 
 static UIView* addGraphView(NSMutableArray *arr, NSUInteger &i, NSUInteger index,
@@ -50,34 +85,8 @@ static UIView* addGraphView(NSMutableArray *arr, NSUInteger &i, NSUInteger index
         }
         else {
             GiGraphView2 *v2 = [[GiGraphView2 alloc]initWithFrame:wrapview.bounds];
-            GiViewHelper *hlp = [GiViewHelper instance:v2];
             v = v2;
-            
-            if (type & 32) {
-                [hlp addShapesForTest];
-            }
-            type = type & ~32;
-            
-            if (type == 1) {
-                hlp.command = @"splines";
-            }
-            else if (type == 2) {
-                hlp.command = @"select";
-            }
-            else if (type == 3) {
-                [hlp loadFromFile:[GiGraphView2 lastFileName]];
-                hlp.command = @"select";
-            }
-            else if (type == 4) {
-                hlp.command = @"line";
-            }
-            else if (type == 5) {
-                hlp.command = @"lines";
-            }
-            else if (type == 6) {
-                DemoCmdsGate::registerCmds([hlp cmdViewHandle]);
-                hlp.command = @"hittest";
-            }
+            testGraphView(v2, type);
         }
         [wrapview addSubview:v];
         [v release];
@@ -105,13 +114,14 @@ static void gatherTestView(NSMutableArray *arr, NSUInteger index, CGRect frame)
     addGraphView(arr, i, index, @"GiGraphView1", frame, 0);
     addLargeView1(arr, i, index, @"GiGraphView1 in large view", frame, 0);
     addGraphView(arr, i, index, @"GiGraphView splines", frame, 1);
-    addGraphView(arr, i, index, @"GiGraphView draw", frame, 1|32);
+    addGraphView(arr, i, index, @"GiGraphView draw", frame, 4|32);
     addGraphView(arr, i, index, @"GiGraphView line", frame, 4);
     addGraphView(arr, i, index, @"GiGraphView lines", frame, 5);
     addGraphView(arr, i, index, @"GiGraphView hittest in democmds", frame, 6|32);
     addGraphView(arr, i, index, @"GiGraphView select randShapes", frame, 2|32);
     addGraphView(arr, i, index, @"GiGraphView select loadShapes", frame, 3);
     addLargeView1(arr, i, index, @"GiGraphView in large view", frame, 1);
+    addLargeView1(arr, i, index, @"GiGraphView draw in large view", frame, 4|32);
     testMagnifierView(arr, i, index, @"MagnifierView", frame, 1);
 }
 

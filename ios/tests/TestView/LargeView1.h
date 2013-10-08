@@ -12,6 +12,8 @@
     GiGraphView    *_subview2;
 }
 
+@property(nonatomic, readonly) GiGraphView  *subview2;
+
 - (id)initWithFrame:(CGRect)frame withType:(int)type;
 - (BOOL)savePng:(NSString *)filename;
 
