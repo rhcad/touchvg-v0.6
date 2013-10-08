@@ -1,8 +1,8 @@
 // ViewFactory.mm
 // Copyright (c) 2012-2013, https://github.com/rhcad/touchvg
 
-#import "GraphView1.h"
-#import "LargeView1.h"
+#import "GraphView2.h"
+#import "LargeView2.h"
 
 static UIViewController *_tmpController = nil;
 
@@ -18,25 +18,25 @@ static void addView(NSMutableArray *arr, NSString* title, UIView* view)
     }
 }
 
-static void addView1(NSMutableArray *arr, NSUInteger &i, NSUInteger index, 
+static void addView2(NSMutableArray *arr, NSUInteger &i, NSUInteger index, 
                      NSString* title, int flags, CGRect frame)
 {
-    GraphView1 *view = nil;
+    GraphView2 *view = nil;
     
     if (!arr && index == i++) {
-        view = [[GraphView1 alloc]initWithFrame:frame withFlags:flags];
+        view = [[GraphView2 alloc]initWithFrame:frame withFlags:flags];
     }
     addView(arr, title, view);
     [view release];
 }
 
-static void addLargeView1(NSMutableArray *arr, NSUInteger &i, NSUInteger index, 
+static void addLargeView2(NSMutableArray *arr, NSUInteger &i, NSUInteger index, 
                           NSString* title, int flags, CGRect frame)
 {
-    LargeView1 *view = nil;
+    LargeView2 *view = nil;
     
     if (!arr && index == i++) {
-        view = [[LargeView1 alloc]initWithFrame:frame withFlags:flags];
+        view = [[LargeView2 alloc]initWithFrame:frame withFlags:flags];
     }
     addView(arr, title, view);
     [view release];
@@ -46,13 +46,13 @@ static void gatherTestView(NSMutableArray *arr, NSUInteger index, CGRect frame)
 {
     NSUInteger i = 0;
     
-    addView1(arr, i, index, @"testTouch", 0, frame);
-    addView1(arr, i, index, @"testGesture", 1, frame);
-    addView1(arr, i, index, @"testGestureTouches", 2, frame);
+    addView2(arr, i, index, @"testTouch", 0, frame);
+    addView2(arr, i, index, @"testGesture", 1, frame);
+    addView2(arr, i, index, @"testGestureTouches", 2, frame);
     
-    addLargeView1(arr, i, index, @"testTouch in large view", 0, frame);
-    addLargeView1(arr, i, index, @"testGesture in large view", 1, frame);
-    addLargeView1(arr, i, index, @"testGestureTouches in large view", 2, frame);
+    addLargeView2(arr, i, index, @"testTouch in large view", 0, frame);
+    addLargeView2(arr, i, index, @"testGesture in large view", 1, frame);
+    addLargeView2(arr, i, index, @"testGestureTouches in large view", 2, frame);
 }
 
 void getTestViewTitles(NSMutableArray *arr)

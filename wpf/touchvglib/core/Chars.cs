@@ -41,7 +41,14 @@ public class Chars : IDisposable {
     }
   }
 
-  public Chars(int n) : this(touchvgPINVOKE.new_Chars(n), true) {
+  public Chars(int n) : this(touchvgPINVOKE.new_Chars__SWIG_0(n), true) {
+  }
+
+  public Chars() : this(touchvgPINVOKE.new_Chars__SWIG_1(), true) {
+  }
+
+  public void setSize(int n) {
+    touchvgPINVOKE.Chars_setSize(swigCPtr, n);
   }
 
   public int count() {

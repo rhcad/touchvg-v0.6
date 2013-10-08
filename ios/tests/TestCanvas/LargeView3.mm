@@ -1,10 +1,10 @@
-// LargeView1.mm
+// LargeView3.mm
 // Copyright (c) 2012-2013, https://github.com/rhcad/touchvg
 
-#import "LargeView1.h"
-#import "GraphView1.h"
+#import "LargeView3.h"
+#import "GraphView3.h"
 
-@implementation LargeView1
+@implementation LargeView3
 
 - (id)initWithFrame:(CGRect)frame withFlags:(int)t
 {
@@ -12,10 +12,10 @@
     if (self) {
         float w = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) ? 1024 : 2048;
         if (t & 0x400) {    // testDynCurves
-            _subview = [[GraphView2 alloc]initWithFrame:CGRectMake(0, 0, w, w) withFlags:t];
+            _subview = [[GraphView4 alloc]initWithFrame:CGRectMake(0, 0, w, w) withFlags:t];
         }
         else {
-            _subview = [[GraphView1 alloc]initWithFrame:CGRectMake(0, 0, w, w) withFlags:t];
+            _subview = [[GraphView3 alloc]initWithFrame:CGRectMake(0, 0, w, w) withFlags:t];
         }
         [self addSubview:_subview];
         [_subview release];

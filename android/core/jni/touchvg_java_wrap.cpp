@@ -443,7 +443,6 @@ namespace Swig {
 #include <mgshapetype.h>
 #include <mgstorage.h>
 #include <mgspfactory.h>
-#include <mgbasicspreg.h>
 
 #include <mgaction.h>
 #include <mglockdata.h>
@@ -30674,39 +30673,6 @@ SWIGEXPORT jint JNICALL Java_touchvg_core_touchvgJNI_kMgShapeGrid_1get(JNIEnv *j
   result = (MgShapeType)kMgShapeGrid;
   jresult = (jint)result; 
   return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_MgBasicShapes_1registerShapes(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  MgShapeFactory *arg1 = (MgShapeFactory *) 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(MgShapeFactory **)&jarg1; 
-  MgBasicShapes::registerShapes(arg1);
-}
-
-
-SWIGEXPORT jlong JNICALL Java_touchvg_core_touchvgJNI_new_1MgBasicShapes(JNIEnv *jenv, jclass jcls) {
-  jlong jresult = 0 ;
-  MgBasicShapes *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  result = (MgBasicShapes *)new MgBasicShapes();
-  *(MgBasicShapes **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_touchvg_core_touchvgJNI_delete_1MgBasicShapes(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  MgBasicShapes *arg1 = (MgBasicShapes *) 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = *(MgBasicShapes **)&jarg1; 
-  delete arg1;
 }
 
 

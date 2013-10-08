@@ -111,9 +111,6 @@
     <ClCompile Include="..\..\core\pub_src\shape\mgshapes.cpp">
       <Filter>Source Files\base\shape</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\core\pub_src\shape\mgbasicspreg.cpp">
-      <Filter>Source Files\base\shape</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\core\pub_src\shape\mgsplines.cpp">
       <Filter>Source Files\base\shape</Filter>
     </ClCompile>
@@ -237,9 +234,6 @@
       <Filter>Source Files\base\shape</Filter>
     </ClInclude>
     <ClInclude Include="..\..\core\pub_inc\shape\mgspfactory.h">
-      <Filter>Source Files\base\shape</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\core\pub_inc\shape\mgbasicspreg.h">
       <Filter>Source Files\base\shape</Filter>
     </ClInclude>
     <ClInclude Include="..\..\core\pub_inc\cmdobserver\cmdobserver.h">

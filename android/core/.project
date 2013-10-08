@@ -652,9 +652,9 @@
 			<locationURI>PARENT-2-PROJECT_LOC/core/pub_inc/shape/mgbasicsp.h</locationURI>
 		</link>
 		<link>
-			<name>jni/pub_inc/shape/mgbasicspreg.h</name>
+			<name>jni/mgr_inc/cmdbasic/mgbasicspreg.h</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/core/pub_inc/shape/mgbasicspreg.h</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/core/mgr_inc/cmdbasic/mgbasicspreg.h</locationURI>
 		</link>
 		<link>
 			<name>jni/pub_inc/shape/mgcomposite.h</name>
@@ -807,9 +807,9 @@
 			<locationURI>PARENT-2-PROJECT_LOC/core/pub_src/graph/gixform.cpp</locationURI>
 		</link>
 		<link>
-			<name>jni/pub_src/shape/mgbasicspreg.cpp</name>
+			<name>jni/mgr_src/cmdbasic/mgbasicspreg.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/core/pub_src/shape/mgbasicspreg.cpp</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/core/mgr_src/cmdbasic/mgbasicspreg.cpp</locationURI>
 		</link>
 		<link>
 			<name>jni/pub_src/shape/mgcomposite.cpp</name>

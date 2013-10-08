@@ -1917,8 +1917,14 @@ class touchvgPINVOKE {
   [DllImport("touchvg", EntryPoint="CSharp_delete_Ints")]
   public static extern void delete_Ints(HandleRef jarg1);
 
-  [DllImport("touchvg", EntryPoint="CSharp_new_Ints")]
-  public static extern IntPtr new_Ints(int jarg1);
+  [DllImport("touchvg", EntryPoint="CSharp_new_Ints__SWIG_0")]
+  public static extern IntPtr new_Ints__SWIG_0(int jarg1);
+
+  [DllImport("touchvg", EntryPoint="CSharp_new_Ints__SWIG_1")]
+  public static extern IntPtr new_Ints__SWIG_1();
+
+  [DllImport("touchvg", EntryPoint="CSharp_Ints_setSize")]
+  public static extern void Ints_setSize(HandleRef jarg1, int jarg2);
 
   [DllImport("touchvg", EntryPoint="CSharp_Ints_count")]
   public static extern int Ints_count(HandleRef jarg1);
@@ -1935,8 +1941,14 @@ class touchvgPINVOKE {
   [DllImport("touchvg", EntryPoint="CSharp_delete_Floats")]
   public static extern void delete_Floats(HandleRef jarg1);
 
-  [DllImport("touchvg", EntryPoint="CSharp_new_Floats")]
-  public static extern IntPtr new_Floats(int jarg1);
+  [DllImport("touchvg", EntryPoint="CSharp_new_Floats__SWIG_0")]
+  public static extern IntPtr new_Floats__SWIG_0(int jarg1);
+
+  [DllImport("touchvg", EntryPoint="CSharp_new_Floats__SWIG_1")]
+  public static extern IntPtr new_Floats__SWIG_1();
+
+  [DllImport("touchvg", EntryPoint="CSharp_Floats_setSize")]
+  public static extern void Floats_setSize(HandleRef jarg1, int jarg2);
 
   [DllImport("touchvg", EntryPoint="CSharp_Floats_count")]
   public static extern int Floats_count(HandleRef jarg1);
@@ -1953,8 +1965,14 @@ class touchvgPINVOKE {
   [DllImport("touchvg", EntryPoint="CSharp_delete_Chars")]
   public static extern void delete_Chars(HandleRef jarg1);
 
-  [DllImport("touchvg", EntryPoint="CSharp_new_Chars")]
-  public static extern IntPtr new_Chars(int jarg1);
+  [DllImport("touchvg", EntryPoint="CSharp_new_Chars__SWIG_0")]
+  public static extern IntPtr new_Chars__SWIG_0(int jarg1);
+
+  [DllImport("touchvg", EntryPoint="CSharp_new_Chars__SWIG_1")]
+  public static extern IntPtr new_Chars__SWIG_1();
+
+  [DllImport("touchvg", EntryPoint="CSharp_Chars_setSize")]
+  public static extern void Chars_setSize(HandleRef jarg1, int jarg2);
 
   [DllImport("touchvg", EntryPoint="CSharp_Chars_count")]
   public static extern int Chars_count(HandleRef jarg1);
@@ -1967,6 +1985,30 @@ class touchvgPINVOKE {
 
   [DllImport("touchvg", EntryPoint="CSharp_Chars_set__SWIG_1")]
   public static extern void Chars_set__SWIG_1(HandleRef jarg1, int jarg2, char jarg3, char jarg4);
+
+  [DllImport("touchvg", EntryPoint="CSharp_delete_Shapes")]
+  public static extern void delete_Shapes(HandleRef jarg1);
+
+  [DllImport("touchvg", EntryPoint="CSharp_new_Shapes__SWIG_0")]
+  public static extern IntPtr new_Shapes__SWIG_0(int jarg1);
+
+  [DllImport("touchvg", EntryPoint="CSharp_new_Shapes__SWIG_1")]
+  public static extern IntPtr new_Shapes__SWIG_1();
+
+  [DllImport("touchvg", EntryPoint="CSharp_Shapes_setSize")]
+  public static extern void Shapes_setSize(HandleRef jarg1, int jarg2);
+
+  [DllImport("touchvg", EntryPoint="CSharp_Shapes_count")]
+  public static extern int Shapes_count(HandleRef jarg1);
+
+  [DllImport("touchvg", EntryPoint="CSharp_Shapes_get")]
+  public static extern IntPtr Shapes_get(HandleRef jarg1, int jarg2);
+
+  [DllImport("touchvg", EntryPoint="CSharp_Shapes_set__SWIG_0")]
+  public static extern void Shapes_set__SWIG_0(HandleRef jarg1, int jarg2, HandleRef jarg3);
+
+  [DllImport("touchvg", EntryPoint="CSharp_Shapes_set__SWIG_1")]
+  public static extern void Shapes_set__SWIG_1(HandleRef jarg1, int jarg2, HandleRef jarg3, HandleRef jarg4);
 
   [DllImport("touchvg", EntryPoint="CSharp_MgStorage_readNode")]
   public static extern bool MgStorage_readNode(HandleRef jarg1, string jarg2, int jarg3, bool jarg4);
@@ -3810,15 +3852,6 @@ class touchvgPINVOKE {
   [DllImport("touchvg", EntryPoint="CSharp_MgGrid_valid")]
   public static extern bool MgGrid_valid(HandleRef jarg1, float jarg2);
 
-  [DllImport("touchvg", EntryPoint="CSharp_MgBasicShapes_registerShapes")]
-  public static extern void MgBasicShapes_registerShapes(HandleRef jarg1);
-
-  [DllImport("touchvg", EntryPoint="CSharp_new_MgBasicShapes")]
-  public static extern IntPtr new_MgBasicShapes();
-
-  [DllImport("touchvg", EntryPoint="CSharp_delete_MgBasicShapes")]
-  public static extern void delete_MgBasicShapes(HandleRef jarg1);
-
   [DllImport("touchvg", EntryPoint="CSharp_MgActionDispatcher_showInSelect")]
   public static extern bool MgActionDispatcher_showInSelect(HandleRef jarg1, HandleRef jarg2, int jarg3, HandleRef jarg4, HandleRef jarg5);
 
@@ -3884,6 +3917,15 @@ class touchvgPINVOKE {
 
   [DllImport("touchvg", EntryPoint="CSharp_delete_MgSnap")]
   public static extern void delete_MgSnap(HandleRef jarg1);
+
+  [DllImport("touchvg", EntryPoint="CSharp_MgSelection_getSelection__SWIG_0")]
+  public static extern int MgSelection_getSelection__SWIG_0(HandleRef jarg1, HandleRef jarg2, HandleRef jarg3, bool jarg4);
+
+  [DllImport("touchvg", EntryPoint="CSharp_MgSelection_getSelection__SWIG_1")]
+  public static extern int MgSelection_getSelection__SWIG_1(HandleRef jarg1, HandleRef jarg2, HandleRef jarg3);
+
+  [DllImport("touchvg", EntryPoint="CSharp_MgSelection_getSelectionCount")]
+  public static extern int MgSelection_getSelectionCount(HandleRef jarg1, HandleRef jarg2);
 
   [DllImport("touchvg", EntryPoint="CSharp_MgSelection_getSelectState")]
   public static extern int MgSelection_getSelectState(HandleRef jarg1, HandleRef jarg2);
@@ -4331,6 +4373,12 @@ class touchvgPINVOKE {
 
   [DllImport("touchvg", EntryPoint="CSharp_new_MgShapesLock__SWIG_1")]
   public static extern IntPtr new_MgShapesLock__SWIG_1(int jarg1, HandleRef jarg2);
+
+  [DllImport("touchvg", EntryPoint="CSharp_new_MgShapesLock__SWIG_2")]
+  public static extern IntPtr new_MgShapesLock__SWIG_2(HandleRef jarg1, int jarg2);
+
+  [DllImport("touchvg", EntryPoint="CSharp_new_MgShapesLock__SWIG_3")]
+  public static extern IntPtr new_MgShapesLock__SWIG_3(HandleRef jarg1);
 
   [DllImport("touchvg", EntryPoint="CSharp_delete_MgShapesLock")]
   public static extern void delete_MgShapesLock(HandleRef jarg1);

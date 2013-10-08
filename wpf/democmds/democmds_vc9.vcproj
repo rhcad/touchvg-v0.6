@@ -472,14 +472,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\core\pub_src\shape\mgbasicspreg.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\core\pub_inc\shape\mgbasicspreg.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\core\pub_src\shape\mgcomposite.cpp"
 						>
 					</File>

@@ -1279,9 +1279,6 @@ public class touchvgJNI {
   public final static native int kMgShapeImage_get();
   public final static native int kMgShapeArc_get();
   public final static native int kMgShapeGrid_get();
-  public final static native void MgBasicShapes_registerShapes(long jarg1, MgShapeFactory jarg1_);
-  public final static native long new_MgBasicShapes();
-  public final static native void delete_MgBasicShapes(long jarg1);
   public final static native int kMgActionInvalid_get();
   public final static native int kMgActionSelAll_get();
   public final static native int kMgActionSelReset_get();

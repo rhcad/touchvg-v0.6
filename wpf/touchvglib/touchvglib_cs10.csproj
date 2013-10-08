@@ -94,7 +94,6 @@
     <Compile Include="core\MgBaseLines.cs" />
     <Compile Include="core\MgBaseRect.cs" />
     <Compile Include="core\MgBaseShape.cs" />
-    <Compile Include="core\MgBasicShapes.cs" />
     <Compile Include="core\MgCmdArc3P.cs" />
     <Compile Include="core\MgCmdArcCSE.cs" />
     <Compile Include="core\MgCmdArcTan.cs" />
@@ -144,6 +143,7 @@
     <Compile Include="core\MgView.cs" />
     <Compile Include="core\Point2d.cs" />
     <Compile Include="core\RECT_2D.cs" />
+    <Compile Include="core\Shapes.cs" />
     <Compile Include="core\TestCanvas.cs" />
     <Compile Include="core\Tol.cs" />
     <Compile Include="core\touchvg.cs" />

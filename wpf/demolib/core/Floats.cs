@@ -41,7 +41,14 @@ public class Floats : IDisposable {
     }
   }
 
-  public Floats(int n) : this(democmdsPINVOKE.new_Floats(n), true) {
+  public Floats(int n) : this(democmdsPINVOKE.new_Floats__SWIG_0(n), true) {
+  }
+
+  public Floats() : this(democmdsPINVOKE.new_Floats__SWIG_1(), true) {
+  }
+
+  public void setSize(int n) {
+    democmdsPINVOKE.Floats_setSize(swigCPtr, n);
   }
 
   public int count() {

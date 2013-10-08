@@ -1,10 +1,10 @@
-// GraphView1.mm
+// GraphView2.mm
 // Copyright (c) 2012-2013, https://github.com/rhcad/touchvg
 
-#import "GraphView1.h"
+#import "GraphView2.h"
 #include <list>
 
-@interface GraphView1() {
+@interface GraphView2() {
     std::list<CGPoint> _points;
 }
 
@@ -12,7 +12,7 @@
 
 @end
 
-@implementation GraphView1
+@implementation GraphView2
 @synthesize panGestureRecognizer;
 
 - (id)initWithFrame:(CGRect)frame withFlags:(int)t

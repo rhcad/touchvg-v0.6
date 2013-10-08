@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE2B80331804042800E50A6E /* TouchVG.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AE2B80321804042800E50A6E /* TouchVG.bundle */; };
 		AE4E6F0616129337006CAA5C /* ViewFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE4E6F0416129337006CAA5C /* ViewFactory.mm */; };
-		AEADC20916EAB73C00484962 /* GraphView1.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEADC20816EAB73C00484962 /* GraphView1.mm */; };
-		AEADC21F16EB570800484962 /* LargeView1.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEADC21E16EB570800484962 /* LargeView1.mm */; };
+		AEADC20916EAB73C00484962 /* GraphView2.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEADC20816EAB73C00484962 /* GraphView2.mm */; };
+		AEADC21F16EB570800484962 /* LargeView2.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEADC21E16EB570800484962 /* LargeView2.mm */; };
 		AEF2D52B160964BA00DDB7F2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEF2D52A160964BA00DDB7F2 /* UIKit.framework */; };
 		AEF2D52D160964BA00DDB7F2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEF2D52C160964BA00DDB7F2 /* Foundation.framework */; };
 		AEF2D52F160964BA00DDB7F2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEF2D52E160964BA00DDB7F2 /* CoreGraphics.framework */; };
@@ -19,22 +20,15 @@
 		AEF2D56F1609B67200DDB7F2 /* app57.png in Resources */ = {isa = PBXBuildFile; fileRef = AEF2D56D1609B67200DDB7F2 /* app57.png */; };
 		AEF2D5701609B67200DDB7F2 /* app72.png in Resources */ = {isa = PBXBuildFile; fileRef = AEF2D56E1609B67200DDB7F2 /* app72.png */; };
 		AEF2D5B01609BF7D00DDB7F2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AEF2D5AD1609BF7D00DDB7F2 /* main.m */; };
-		C9AA194A17EE6BE8006D5074 /* translucent.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AA194217EE6BE8006D5074 /* translucent.png */; };
-		C9AA194B17EE6BE8006D5074 /* translucent@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AA194317EE6BE8006D5074 /* translucent@2x.png */; };
-		C9AA194C17EE6BE8006D5074 /* vgdot1.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AA194417EE6BE8006D5074 /* vgdot1.png */; };
-		C9AA194D17EE6BE8006D5074 /* vgdot1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AA194517EE6BE8006D5074 /* vgdot1@2x.png */; };
-		C9AA194E17EE6BE8006D5074 /* vgdot2.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AA194617EE6BE8006D5074 /* vgdot2.png */; };
-		C9AA194F17EE6BE8006D5074 /* vgdot2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AA194717EE6BE8006D5074 /* vgdot2@2x.png */; };
-		C9AA195017EE6BE8006D5074 /* vgdot3.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AA194817EE6BE8006D5074 /* vgdot3.png */; };
-		C9AA195117EE6BE8006D5074 /* vgdot3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C9AA194917EE6BE8006D5074 /* vgdot3@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AE2B80321804042800E50A6E /* TouchVG.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TouchVG.bundle; path = ../../output/TouchVG.bundle; sourceTree = "<group>"; };
 		AE4E6F0416129337006CAA5C /* ViewFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewFactory.mm; sourceTree = "<group>"; };
-		AEADC20716EAB73C00484962 /* GraphView1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphView1.h; sourceTree = "<group>"; };
-		AEADC20816EAB73C00484962 /* GraphView1.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphView1.mm; sourceTree = "<group>"; };
-		AEADC21D16EB570800484962 /* LargeView1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LargeView1.h; sourceTree = "<group>"; };
-		AEADC21E16EB570800484962 /* LargeView1.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LargeView1.mm; sourceTree = "<group>"; };
+		AEADC20716EAB73C00484962 /* GraphView2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphView2.h; sourceTree = "<group>"; };
+		AEADC20816EAB73C00484962 /* GraphView2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphView2.mm; sourceTree = "<group>"; };
+		AEADC21D16EB570800484962 /* LargeView2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LargeView2.h; sourceTree = "<group>"; };
+		AEADC21E16EB570800484962 /* LargeView2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LargeView2.mm; sourceTree = "<group>"; };
 		AEF2D526160964BA00DDB7F2 /* TestGesture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestGesture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AEF2D52A160964BA00DDB7F2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		AEF2D52C160964BA00DDB7F2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -50,14 +44,6 @@
 		AEF2D5AD1609BF7D00DDB7F2 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AEF2D5AE1609BF7D00DDB7F2 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
 		AEF2D5B81609C1A900DDB7F2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C9AA194217EE6BE8006D5074 /* translucent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = translucent.png; path = ../../lib/VGResources/images/translucent.png; sourceTree = "<group>"; };
-		C9AA194317EE6BE8006D5074 /* translucent@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "translucent@2x.png"; path = "../../lib/VGResources/images/translucent@2x.png"; sourceTree = "<group>"; };
-		C9AA194417EE6BE8006D5074 /* vgdot1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = vgdot1.png; path = ../../lib/VGResources/images/vgdot1.png; sourceTree = "<group>"; };
-		C9AA194517EE6BE8006D5074 /* vgdot1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "vgdot1@2x.png"; path = "../../lib/VGResources/images/vgdot1@2x.png"; sourceTree = "<group>"; };
-		C9AA194617EE6BE8006D5074 /* vgdot2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = vgdot2.png; path = ../../lib/VGResources/images/vgdot2.png; sourceTree = "<group>"; };
-		C9AA194717EE6BE8006D5074 /* vgdot2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "vgdot2@2x.png"; path = "../../lib/VGResources/images/vgdot2@2x.png"; sourceTree = "<group>"; };
-		C9AA194817EE6BE8006D5074 /* vgdot3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = vgdot3.png; path = ../../lib/VGResources/images/vgdot3.png; sourceTree = "<group>"; };
-		C9AA194917EE6BE8006D5074 /* vgdot3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "vgdot3@2x.png"; path = "../../lib/VGResources/images/vgdot3@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,10 +63,10 @@
 		AE0762FD160AAE3A00518207 /* Test */ = {
 			isa = PBXGroup;
 			children = (
-				AEADC21D16EB570800484962 /* LargeView1.h */,
-				AEADC21E16EB570800484962 /* LargeView1.mm */,
-				AEADC20716EAB73C00484962 /* GraphView1.h */,
-				AEADC20816EAB73C00484962 /* GraphView1.mm */,
+				AEADC21D16EB570800484962 /* LargeView2.h */,
+				AEADC21E16EB570800484962 /* LargeView2.mm */,
+				AEADC20716EAB73C00484962 /* GraphView2.h */,
+				AEADC20816EAB73C00484962 /* GraphView2.mm */,
 				AE4E6F0416129337006CAA5C /* ViewFactory.mm */,
 			);
 			name = Test;
@@ -143,14 +129,7 @@
 		AEF2D56C1609B67200DDB7F2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				C9AA194217EE6BE8006D5074 /* translucent.png */,
-				C9AA194317EE6BE8006D5074 /* translucent@2x.png */,
-				C9AA194417EE6BE8006D5074 /* vgdot1.png */,
-				C9AA194517EE6BE8006D5074 /* vgdot1@2x.png */,
-				C9AA194617EE6BE8006D5074 /* vgdot2.png */,
-				C9AA194717EE6BE8006D5074 /* vgdot2@2x.png */,
-				C9AA194817EE6BE8006D5074 /* vgdot3.png */,
-				C9AA194917EE6BE8006D5074 /* vgdot3@2x.png */,
+				AE2B80321804042800E50A6E /* TouchVG.bundle */,
 				AEF2D56D1609B67200DDB7F2 /* app57.png */,
 				AEF2D56E1609B67200DDB7F2 /* app72.png */,
 			);
@@ -211,14 +190,7 @@
 			files = (
 				AEF2D56F1609B67200DDB7F2 /* app57.png in Resources */,
 				AEF2D5701609B67200DDB7F2 /* app72.png in Resources */,
-				C9AA194A17EE6BE8006D5074 /* translucent.png in Resources */,
-				C9AA194B17EE6BE8006D5074 /* translucent@2x.png in Resources */,
-				C9AA194C17EE6BE8006D5074 /* vgdot1.png in Resources */,
-				C9AA194D17EE6BE8006D5074 /* vgdot1@2x.png in Resources */,
-				C9AA194E17EE6BE8006D5074 /* vgdot2.png in Resources */,
-				C9AA194F17EE6BE8006D5074 /* vgdot2@2x.png in Resources */,
-				C9AA195017EE6BE8006D5074 /* vgdot3.png in Resources */,
-				C9AA195117EE6BE8006D5074 /* vgdot3@2x.png in Resources */,
+				AE2B80331804042800E50A6E /* TouchVG.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,8 +206,8 @@
 				AEF2D541160964BA00DDB7F2 /* DetailViewController.mm in Sources */,
 				AEF2D5B01609BF7D00DDB7F2 /* main.m in Sources */,
 				AE4E6F0616129337006CAA5C /* ViewFactory.mm in Sources */,
-				AEADC20916EAB73C00484962 /* GraphView1.mm in Sources */,
-				AEADC21F16EB570800484962 /* LargeView1.mm in Sources */,
+				AEADC20916EAB73C00484962 /* GraphView2.mm in Sources */,
+				AEADC21F16EB570800484962 /* LargeView2.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

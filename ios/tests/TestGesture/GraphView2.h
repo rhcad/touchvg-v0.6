@@ -1,9 +1,9 @@
-// GraphView1.h
+// GraphView2.h
 // Copyright (c) 2012-2013, https://github.com/rhcad/touchvg
 
 #import <UIKit/UIKit.h>
 
-@interface GraphView1 : UIView {
+@interface GraphView2 : UIView {
     CGPoint         _lastpt;
     int             _flags;
 }

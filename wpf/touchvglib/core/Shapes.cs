@@ -11,20 +11,20 @@ namespace touchvg.core {
 using System;
 using System.Runtime.InteropServices;
 
-public class Floats : IDisposable {
+public class Shapes : IDisposable {
   private HandleRef swigCPtr;
   protected bool swigCMemOwn;
 
-  internal Floats(IntPtr cPtr, bool cMemoryOwn) {
+  internal Shapes(IntPtr cPtr, bool cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = new HandleRef(this, cPtr);
   }
 
-  internal static HandleRef getCPtr(Floats obj) {
+  internal static HandleRef getCPtr(Shapes obj) {
     return (obj == null) ? new HandleRef(null, IntPtr.Zero) : obj.swigCPtr;
   }
 
-  ~Floats() {
+  ~Shapes() {
     Dispose();
   }
 
@@ -33,7 +33,7 @@ public class Floats : IDisposable {
       if (swigCPtr.Handle != IntPtr.Zero) {
         if (swigCMemOwn) {
           swigCMemOwn = false;
-          touchvgPINVOKE.delete_Floats(swigCPtr);
+          touchvgPINVOKE.delete_Shapes(swigCPtr);
         }
         swigCPtr = new HandleRef(null, IntPtr.Zero);
       }
@@ -41,32 +41,33 @@ public class Floats : IDisposable {
     }
   }
 
-  public Floats(int n) : this(touchvgPINVOKE.new_Floats__SWIG_0(n), true) {
+  public Shapes(int n) : this(touchvgPINVOKE.new_Shapes__SWIG_0(n), true) {
   }
 
-  public Floats() : this(touchvgPINVOKE.new_Floats__SWIG_1(), true) {
+  public Shapes() : this(touchvgPINVOKE.new_Shapes__SWIG_1(), true) {
   }
 
   public void setSize(int n) {
-    touchvgPINVOKE.Floats_setSize(swigCPtr, n);
+    touchvgPINVOKE.Shapes_setSize(swigCPtr, n);
   }
 
   public int count() {
-    int ret = touchvgPINVOKE.Floats_count(swigCPtr);
+    int ret = touchvgPINVOKE.Shapes_count(swigCPtr);
     return ret;
   }
 
-  public float get(int index) {
-    float ret = touchvgPINVOKE.Floats_get(swigCPtr, index);
+  public MgShape get(int index) {
+    IntPtr cPtr = touchvgPINVOKE.Shapes_get(swigCPtr, index);
+    MgShape ret = (cPtr == IntPtr.Zero) ? null : new MgShape(cPtr, false);
     return ret;
   }
 
-  public void set(int index, float value) {
-    touchvgPINVOKE.Floats_set__SWIG_0(swigCPtr, index, value);
+  public void set(int index, MgShape value) {
+    touchvgPINVOKE.Shapes_set__SWIG_0(swigCPtr, index, MgShape.getCPtr(value));
   }
 
-  public void set(int index, float v1, float v2) {
-    touchvgPINVOKE.Floats_set__SWIG_1(swigCPtr, index, v1, v2);
+  public void set(int index, MgShape v1, MgShape v2) {
+    touchvgPINVOKE.Shapes_set__SWIG_1(swigCPtr, index, MgShape.getCPtr(v1), MgShape.getCPtr(v2));
   }
 
 }

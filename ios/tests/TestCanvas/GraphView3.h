@@ -1,4 +1,4 @@
-// GraphView1.h
+// GraphView3.h
 // Copyright (c) 2012-2013, https://github.com/rhcad/touchvg
 
 #import <UIKit/UIKit.h>
@@ -6,7 +6,7 @@
 class GiCanvasAdapter;
 
 //! 测试绘图的视图类
-@interface GraphView1 : UIView {
+@interface GraphView3 : UIView {
     GiCanvasAdapter  *_canvas;
     CGPoint         _lastpt;
     UIView          *_dynview;
@@ -31,7 +31,7 @@ class GiCanvasAdapter;
 @end
 
 //! 通过线程不断重绘的测试视图类
-@interface GraphView2 : GraphView1 {
+@interface GraphView4 : GraphView3 {
     NSThread    *_thread;
 }
 @end

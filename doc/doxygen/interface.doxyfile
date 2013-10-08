@@ -1528,6 +1528,7 @@ INCLUDE_FILE_PATTERNS  = *.h
 
 PREDEFINED             = __cplusplus \
                          TOUCHVG_SHAPE_FACTORY_H_ \
+                         SWIG_MGVECTOR_H \
                          DOXYGEN
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then 

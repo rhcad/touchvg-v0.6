@@ -349,7 +349,6 @@ namespace Swig {
 #include <mgshapetype.h>
 #include <mgstorage.h>
 #include <mgspfactory.h>
-#include <mgbasicspreg.h>
 
 #include <mgaction.h>
 #include <mglockdata.h>
@@ -13975,7 +13974,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_delete_Ints(void * jarg1) {
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_new_Ints(int jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Ints__SWIG_0(int jarg1) {
   void * jresult ;
   int arg1 ;
   mgvector< int > *result = 0 ;
@@ -13984,6 +13983,26 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Ints(int jarg1) {
   result = (mgvector< int > *)new mgvector< int >(arg1);
   jresult = (void *)result; 
   return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Ints__SWIG_1() {
+  void * jresult ;
+  mgvector< int > *result = 0 ;
+  
+  result = (mgvector< int > *)new mgvector< int >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_Ints_setSize(void * jarg1, int jarg2) {
+  mgvector< int > *arg1 = (mgvector< int > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (mgvector< int > *)jarg1; 
+  arg2 = (int)jarg2; 
+  (arg1)->setSize(arg2);
 }
 
 
@@ -14047,7 +14066,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_delete_Floats(void * jarg1) {
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_new_Floats(int jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Floats__SWIG_0(int jarg1) {
   void * jresult ;
   int arg1 ;
   mgvector< float > *result = 0 ;
@@ -14056,6 +14075,26 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Floats(int jarg1) {
   result = (mgvector< float > *)new mgvector< float >(arg1);
   jresult = (void *)result; 
   return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Floats__SWIG_1() {
+  void * jresult ;
+  mgvector< float > *result = 0 ;
+  
+  result = (mgvector< float > *)new mgvector< float >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_Floats_setSize(void * jarg1, int jarg2) {
+  mgvector< float > *arg1 = (mgvector< float > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (mgvector< float > *)jarg1; 
+  arg2 = (int)jarg2; 
+  (arg1)->setSize(arg2);
 }
 
 
@@ -14119,7 +14158,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_delete_Chars(void * jarg1) {
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_new_Chars(int jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Chars__SWIG_0(int jarg1) {
   void * jresult ;
   int arg1 ;
   mgvector< char > *result = 0 ;
@@ -14128,6 +14167,26 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Chars(int jarg1) {
   result = (mgvector< char > *)new mgvector< char >(arg1);
   jresult = (void *)result; 
   return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Chars__SWIG_1() {
+  void * jresult ;
+  mgvector< char > *result = 0 ;
+  
+  result = (mgvector< char > *)new mgvector< char >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_Chars_setSize(void * jarg1, int jarg2) {
+  mgvector< char > *arg1 = (mgvector< char > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (mgvector< char > *)jarg1; 
+  arg2 = (int)jarg2; 
+  (arg1)->setSize(arg2);
 }
 
 
@@ -14179,6 +14238,98 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Chars_set__SWIG_1(void * jarg1, int jarg2, ch
   arg2 = (int)jarg2; 
   arg3 = (char)jarg3; 
   arg4 = (char)jarg4; 
+  (arg1)->set(arg2,arg3,arg4);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_delete_Shapes(void * jarg1) {
+  mgvector< MgShape * > *arg1 = (mgvector< MgShape * > *) 0 ;
+  
+  arg1 = (mgvector< MgShape * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Shapes__SWIG_0(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  mgvector< MgShape * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  result = (mgvector< MgShape * > *)new mgvector< MgShape * >(arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Shapes__SWIG_1() {
+  void * jresult ;
+  mgvector< MgShape * > *result = 0 ;
+  
+  result = (mgvector< MgShape * > *)new mgvector< MgShape * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_Shapes_setSize(void * jarg1, int jarg2) {
+  mgvector< MgShape * > *arg1 = (mgvector< MgShape * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (mgvector< MgShape * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  (arg1)->setSize(arg2);
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_Shapes_count(void * jarg1) {
+  int jresult ;
+  mgvector< MgShape * > *arg1 = (mgvector< MgShape * > *) 0 ;
+  int result;
+  
+  arg1 = (mgvector< MgShape * > *)jarg1; 
+  result = (int)((mgvector< MgShape * > const *)arg1)->count();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Shapes_get(void * jarg1, int jarg2) {
+  void * jresult ;
+  mgvector< MgShape * > *arg1 = (mgvector< MgShape * > *) 0 ;
+  int arg2 ;
+  MgShape *result = 0 ;
+  
+  arg1 = (mgvector< MgShape * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  result = (MgShape *)((mgvector< MgShape * > const *)arg1)->get(arg2);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_Shapes_set__SWIG_0(void * jarg1, int jarg2, void * jarg3) {
+  mgvector< MgShape * > *arg1 = (mgvector< MgShape * > *) 0 ;
+  int arg2 ;
+  MgShape *arg3 = (MgShape *) 0 ;
+  
+  arg1 = (mgvector< MgShape * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (MgShape *)jarg3; 
+  (arg1)->set(arg2,arg3);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_Shapes_set__SWIG_1(void * jarg1, int jarg2, void * jarg3, void * jarg4) {
+  mgvector< MgShape * > *arg1 = (mgvector< MgShape * > *) 0 ;
+  int arg2 ;
+  MgShape *arg3 = (MgShape *) 0 ;
+  MgShape *arg4 = (MgShape *) 0 ;
+  
+  arg1 = (mgvector< MgShape * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (MgShape *)jarg3; 
+  arg4 = (MgShape *)jarg4; 
   (arg1)->set(arg2,arg3,arg4);
 }
 
@@ -22593,32 +22744,6 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_MgGrid_valid(void * jarg1, float jarg
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_MgBasicShapes_registerShapes(void * jarg1) {
-  MgShapeFactory *arg1 = (MgShapeFactory *) 0 ;
-  
-  arg1 = (MgShapeFactory *)jarg1; 
-  MgBasicShapes::registerShapes(arg1);
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_new_MgBasicShapes() {
-  void * jresult ;
-  MgBasicShapes *result = 0 ;
-  
-  result = (MgBasicShapes *)new MgBasicShapes();
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_delete_MgBasicShapes(void * jarg1) {
-  MgBasicShapes *arg1 = (MgBasicShapes *) 0 ;
-  
-  arg1 = (MgBasicShapes *)jarg1; 
-  delete arg1;
-}
-
-
 SWIGEXPORT unsigned int SWIGSTDCALL CSharp_MgActionDispatcher_showInSelect(void * jarg1, void * jarg2, int jarg3, void * jarg4, void * jarg5) {
   unsigned int jresult ;
   MgActionDispatcher *arg1 = (MgActionDispatcher *) 0 ;
@@ -22912,6 +23037,62 @@ SWIGEXPORT void SWIGSTDCALL CSharp_delete_MgSnap(void * jarg1) {
   
   arg1 = (MgSnap *)jarg1; 
   delete arg1;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_MgSelection_getSelection__SWIG_0(void * jarg1, void * jarg2, void * jarg3, unsigned int jarg4) {
+  int jresult ;
+  MgSelection *arg1 = (MgSelection *) 0 ;
+  MgView *arg2 = (MgView *) 0 ;
+  mgvector< MgShape * > *arg3 = 0 ;
+  bool arg4 ;
+  int result;
+  
+  arg1 = (MgSelection *)jarg1; 
+  arg2 = (MgView *)jarg2; 
+  arg3 = (mgvector< MgShape * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "mgvector< MgShape * > & type is null", 0);
+    return 0;
+  } 
+  arg4 = jarg4 ? true : false; 
+  result = (int)(arg1)->getSelection(arg2,*arg3,arg4);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_MgSelection_getSelection__SWIG_1(void * jarg1, void * jarg2, void * jarg3) {
+  int jresult ;
+  MgSelection *arg1 = (MgSelection *) 0 ;
+  MgView *arg2 = (MgView *) 0 ;
+  mgvector< MgShape * > *arg3 = 0 ;
+  int result;
+  
+  arg1 = (MgSelection *)jarg1; 
+  arg2 = (MgView *)jarg2; 
+  arg3 = (mgvector< MgShape * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "mgvector< MgShape * > & type is null", 0);
+    return 0;
+  } 
+  result = (int)(arg1)->getSelection(arg2,*arg3);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_MgSelection_getSelectionCount(void * jarg1, void * jarg2) {
+  int jresult ;
+  MgSelection *arg1 = (MgSelection *) 0 ;
+  MgView *arg2 = (MgView *) 0 ;
+  int result;
+  
+  arg1 = (MgSelection *)jarg1; 
+  arg2 = (MgView *)jarg2; 
+  result = (int)(arg1)->getSelectionCount(arg2);
+  jresult = result; 
+  return jresult;
 }
 
 
@@ -24745,6 +24926,32 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_MgShapesLock__SWIG_1(int jarg1, void * 
   arg1 = (int)jarg1; 
   arg2 = (MgView *)jarg2; 
   result = (MgShapesLock *)new MgShapesLock(arg1,arg2);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_MgShapesLock__SWIG_2(void * jarg1, int jarg2) {
+  void * jresult ;
+  MgView *arg1 = (MgView *) 0 ;
+  int arg2 ;
+  MgShapesLock *result = 0 ;
+  
+  arg1 = (MgView *)jarg1; 
+  arg2 = (int)jarg2; 
+  result = (MgShapesLock *)new MgShapesLock(arg1,arg2);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_MgShapesLock__SWIG_3(void * jarg1) {
+  void * jresult ;
+  MgView *arg1 = (MgView *) 0 ;
+  MgShapesLock *result = 0 ;
+  
+  arg1 = (MgView *)jarg1; 
+  result = (MgShapesLock *)new MgShapesLock(arg1);
   jresult = (void *)result; 
   return jresult;
 }

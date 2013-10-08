@@ -340,6 +340,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\core\mgr_inc\cmdbasic\mgbasicspreg.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\core\mgr_inc\cmdbasic\mgdrawcircle.h"
 						>
 					</File>
@@ -410,14 +414,6 @@
 				>
 				<File
 					RelativePath="..\..\core\pub_inc\shape\mgbasicsp.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\core\pub_src\shape\mgbasicspreg.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\core\pub_inc\shape\mgbasicspreg.h"
 					>
 				</File>
 				<File
@@ -753,6 +749,10 @@
 					>
 					<File
 						RelativePath="..\..\core\mgr_src\cmdbasic\cmdbasic.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\core\mgr_src\cmdbasic\mgbasicspreg.cpp"
 						>
 					</File>
 					<File

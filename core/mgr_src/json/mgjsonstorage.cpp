@@ -298,7 +298,7 @@ int MgJsonStorage::Impl::readInt(const char* name, int defvalue)
             ret = item.GetUint();
         }
         else {
-            ret = ret;
+            LOGD("Invalid value for readInt(%s)", name);
         }
     }
     
@@ -317,7 +317,7 @@ bool MgJsonStorage::Impl::readBool(const char* name, bool defvalue)
             ret = item.GetBool();
         }
         else {
-            ret = ret;
+            LOGD("Invalid value for readBool(%s)", name);
         }
     }
     
@@ -339,7 +339,7 @@ float MgJsonStorage::Impl::readFloat(const char* name, float defvalue)
             ret = (float)item.GetInt();
         }
         else {
-            ret = ret;
+            LOGD("Invalid value for readFloat(%s)", name);
         }
     }
     
@@ -369,13 +369,13 @@ int MgJsonStorage::Impl::readFloatArray(const char* name, float* values, int cou
                         values[ret++] = (float)v.GetInt();
                     }
                     else {
-                        ret = ret;
+                        LOGD("Invalid value for readFloatArray(%s)", name);
                     }
                 }
             }
         }
         else {
-            ret = ret;
+            LOGD("Invalid value for readFloatArray(%s)", name);
         }
     }
     if (values && ret < count) {
@@ -405,7 +405,7 @@ int MgJsonStorage::Impl::readString(const char* name, char* value, int count)
             }
         }
         else {
-            ret = ret;
+            LOGD("Invalid value for readString(%s)", name);
         }
     }
     

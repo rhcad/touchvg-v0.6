@@ -21,7 +21,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"translucent.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:
+                                 [UIImage imageNamed:@"TouchVG.bundle/translucent.png"]];
     
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, 
                                                           NSUserDomainMask, YES) objectAtIndex:0];
@@ -75,7 +76,7 @@
     bkmode = ++bkmode % 3;
     switch (bkmode) {
         case 0:
-            self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"translucent.png"]];
+            self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"TouchVG.bundle/translucent.png"]];
             break;
         case 1:
             self.view.backgroundColor = [UIColor whiteColor];

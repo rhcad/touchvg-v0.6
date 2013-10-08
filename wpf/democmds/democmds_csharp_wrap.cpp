@@ -295,7 +295,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_delete_Floats(void * jarg1) {
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_new_Floats(int jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Floats__SWIG_0(int jarg1) {
   void * jresult ;
   int arg1 ;
   mgvector< float > *result = 0 ;
@@ -304,6 +304,26 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Floats(int jarg1) {
   result = (mgvector< float > *)new mgvector< float >(arg1);
   jresult = (void *)result; 
   return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Floats__SWIG_1() {
+  void * jresult ;
+  mgvector< float > *result = 0 ;
+  
+  result = (mgvector< float > *)new mgvector< float >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_Floats_setSize(void * jarg1, int jarg2) {
+  mgvector< float > *arg1 = (mgvector< float > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (mgvector< float > *)jarg1; 
+  arg2 = (int)jarg2; 
+  (arg1)->setSize(arg2);
 }
 
 
@@ -367,7 +387,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_delete_Chars(void * jarg1) {
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_new_Chars(int jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Chars__SWIG_0(int jarg1) {
   void * jresult ;
   int arg1 ;
   mgvector< char > *result = 0 ;
@@ -376,6 +396,26 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Chars(int jarg1) {
   result = (mgvector< char > *)new mgvector< char >(arg1);
   jresult = (void *)result; 
   return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Chars__SWIG_1() {
+  void * jresult ;
+  mgvector< char > *result = 0 ;
+  
+  result = (mgvector< char > *)new mgvector< char >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_Chars_setSize(void * jarg1, int jarg2) {
+  mgvector< char > *arg1 = (mgvector< char > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (mgvector< char > *)jarg1; 
+  arg2 = (int)jarg2; 
+  (arg1)->setSize(arg2);
 }
 
 

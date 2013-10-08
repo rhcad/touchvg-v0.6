@@ -20,7 +20,6 @@
 #include <mgshapetype.h>
 #include <mgstorage.h>
 #include <mgspfactory.h>
-#include <mgbasicspreg.h>
 
 #include <mgaction.h>
 #include <mglockdata.h>
@@ -67,7 +66,6 @@
 %include <mgshapetype.h>
 %include <mgstorage.h>
 %include <mgspfactory.h>
-%include <mgbasicspreg.h>
 
 %include <mgaction.h>
 %include <mglockdata.h>

@@ -47,6 +47,12 @@ public class MgShapesLock : IDisposable {
   public MgShapesLock(int flags, MgView view) : this(touchvgPINVOKE.new_MgShapesLock__SWIG_1(flags, MgView.getCPtr(view)), true) {
   }
 
+  public MgShapesLock(MgView view, int timeout) : this(touchvgPINVOKE.new_MgShapesLock__SWIG_2(MgView.getCPtr(view), timeout), true) {
+  }
+
+  public MgShapesLock(MgView view) : this(touchvgPINVOKE.new_MgShapesLock__SWIG_3(MgView.getCPtr(view)), true) {
+  }
+
   public bool locked() {
     bool ret = touchvgPINVOKE.MgShapesLock_locked(swigCPtr);
     return ret;

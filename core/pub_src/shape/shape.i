@@ -20,7 +20,6 @@
 #include <mgshapetype.h>
 #include <mgstorage.h>
 #include <mgspfactory.h>
-#include <mgbasicspreg.h>
 %}
 
 %include <mgdef.h>
@@ -55,5 +54,4 @@
 %include <mgshapetype.h>
 %include <mgstorage.h>
 %include <mgspfactory.h>
-%include <mgbasicspreg.h>
 // no mgshape_.h mgshapet.h

@@ -1,7 +1,7 @@
-// GraphView1.mm
+// GraphView3.mm
 // Copyright (c) 2012-2013, https://github.com/rhcad/touchvg
 
-#import "GraphView1.h"
+#import "GraphView3.h"
 #import "CalloutView.h"
 #import <QuartzCore/CALayer.h>  // renderInContext
 #include "GiCanvasAdapter.h"
@@ -23,10 +23,10 @@ static int machToMs(uint64_t start)
 }
 
 //! 绘制动态图形的视图类
-@interface DynGraphView1 : UIView
+@interface DynGraphView3 : UIView
 @end
 
-@implementation DynGraphView1
+@implementation DynGraphView3
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -40,7 +40,7 @@ static int machToMs(uint64_t start)
 
 - (void)drawRect:(CGRect)rect
 {
-    GraphView1 *parent = (GraphView1 *)self.superview;
+    GraphView3 *parent = (GraphView3 *)self.superview;
     CGContextRef context = UIGraphicsGetCurrentContext();
     GiCanvasAdapter canvas;
     
@@ -52,7 +52,7 @@ static int machToMs(uint64_t start)
 
 @end
 
-@implementation GraphView1
+@implementation GraphView3
 
 - (void)dealloc
 {
@@ -75,7 +75,7 @@ static int machToMs(uint64_t start)
         _canvas = new GiCanvasAdapter();
         _dynview = self;
         if (_flags & 0x10000) {                     // 使用内嵌视图来绘制动态图形
-            _dynview = [[DynGraphView1 alloc]initWithFrame:self.bounds];
+            _dynview = [[DynGraphView3 alloc]initWithFrame:self.bounds];
             [self addSubview:_dynview];             // 添加到本静态图形视图中
         }
         
@@ -352,7 +352,7 @@ static int machToMs(uint64_t start)
 
 @end
 
-@implementation GraphView2
+@implementation GraphView4
 
 - (void)run
 {

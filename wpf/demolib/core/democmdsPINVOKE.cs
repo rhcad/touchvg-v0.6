@@ -192,8 +192,14 @@ class democmdsPINVOKE {
   [DllImport("democmds", EntryPoint="CSharp_delete_Floats")]
   public static extern void delete_Floats(HandleRef jarg1);
 
-  [DllImport("democmds", EntryPoint="CSharp_new_Floats")]
-  public static extern IntPtr new_Floats(int jarg1);
+  [DllImport("democmds", EntryPoint="CSharp_new_Floats__SWIG_0")]
+  public static extern IntPtr new_Floats__SWIG_0(int jarg1);
+
+  [DllImport("democmds", EntryPoint="CSharp_new_Floats__SWIG_1")]
+  public static extern IntPtr new_Floats__SWIG_1();
+
+  [DllImport("democmds", EntryPoint="CSharp_Floats_setSize")]
+  public static extern void Floats_setSize(HandleRef jarg1, int jarg2);
 
   [DllImport("democmds", EntryPoint="CSharp_Floats_count")]
   public static extern int Floats_count(HandleRef jarg1);
@@ -210,8 +216,14 @@ class democmdsPINVOKE {
   [DllImport("democmds", EntryPoint="CSharp_delete_Chars")]
   public static extern void delete_Chars(HandleRef jarg1);
 
-  [DllImport("democmds", EntryPoint="CSharp_new_Chars")]
-  public static extern IntPtr new_Chars(int jarg1);
+  [DllImport("democmds", EntryPoint="CSharp_new_Chars__SWIG_0")]
+  public static extern IntPtr new_Chars__SWIG_0(int jarg1);
+
+  [DllImport("democmds", EntryPoint="CSharp_new_Chars__SWIG_1")]
+  public static extern IntPtr new_Chars__SWIG_1();
+
+  [DllImport("democmds", EntryPoint="CSharp_Chars_setSize")]
+  public static extern void Chars_setSize(HandleRef jarg1, int jarg2);
 
   [DllImport("democmds", EntryPoint="CSharp_Chars_count")]
   public static extern int Chars_count(HandleRef jarg1);

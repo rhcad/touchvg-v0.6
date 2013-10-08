@@ -160,7 +160,7 @@
     <ClCompile Include="..\..\core\pub_src\shape\mgrect.cpp" />
     <ClCompile Include="..\..\core\pub_src\shape\mgshape.cpp" />
     <ClCompile Include="..\..\core\pub_src\shape\mgshapes.cpp" />
-    <ClCompile Include="..\..\core\pub_src\shape\mgbasicspreg.cpp" />
+    <ClCompile Include="..\..\core\mgr_src\cmdbasic\mgbasicspreg.cpp" />
     <ClCompile Include="..\..\core\pub_src\shape\mgsplines.cpp" />
     <ClCompile Include="..\..\core\mgr_src\view\GcGraphView.cpp" />
     <ClCompile Include="..\..\core\mgr_src\view\GcMagnifierView.cpp" />
@@ -238,7 +238,7 @@
     <ClInclude Include="..\..\core\pub_inc\mglog.h" />
     <ClInclude Include="..\..\core\pub_inc\mgvector.h" />
     <ClInclude Include="..\..\core\pub_inc\shape\mgbasicsp.h" />
-    <ClInclude Include="..\..\core\pub_inc\shape\mgbasicspreg.h" />
+    <ClInclude Include="..\..\core\mgr_inc\cmdbasic\mgbasicspreg.h" />
     <ClInclude Include="..\..\core\pub_inc\shape\mgcomposite.h" />
     <ClInclude Include="..\..\core\pub_inc\shape\mggrid.h" />
     <ClInclude Include="..\..\core\pub_inc\shape\mgobject.h" />

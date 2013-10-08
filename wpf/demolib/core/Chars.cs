@@ -41,7 +41,14 @@ public class Chars : IDisposable {
     }
   }
 
-  public Chars(int n) : this(democmdsPINVOKE.new_Chars(n), true) {
+  public Chars(int n) : this(democmdsPINVOKE.new_Chars__SWIG_0(n), true) {
+  }
+
+  public Chars() : this(democmdsPINVOKE.new_Chars__SWIG_1(), true) {
+  }
+
+  public void setSize(int n) {
+    democmdsPINVOKE.Chars_setSize(swigCPtr, n);
   }
 
   public int count() {

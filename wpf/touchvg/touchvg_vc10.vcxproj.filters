@@ -156,8 +156,8 @@
     <ClCompile Include="..\..\core\pub_src\shape\mgshapes.cpp">
       <Filter>Source Files\shape</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\core\pub_src\shape\mgbasicspreg.cpp">
-      <Filter>Source Files\shape</Filter>
+    <ClCompile Include="..\..\core\mgr_src\cmdbasic\mgbasicspreg.cpp">
+      <Filter>Source Files\command_src\cmdbasic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\core\pub_src\shape\mgsplines.cpp">
       <Filter>Source Files\shape</Filter>
@@ -446,9 +446,6 @@
     <ClInclude Include="..\..\core\mgr_inc\shapedoc\mgshapedoc.h">
       <Filter>Source Files\shapedoc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\core\pub_inc\shape\mgbasicspreg.h">
-      <Filter>Source Files\shape</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\core\pub_inc\cmdobserver\cmdobserver.h">
       <Filter>Source Files\command\cmdobserver</Filter>
     </ClInclude>
@@ -475,6 +472,9 @@
     </ClInclude>
     <ClInclude Include="..\..\core\pub_inc\mgvector.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\mgr_inc\cmdbasic\mgbasicspreg.h">
+      <Filter>Source Files\command\cmdbasic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

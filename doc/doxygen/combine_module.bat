@@ -19,9 +19,9 @@ xcopy ..\..\core\mgr_src\view\*.* %destpath%\view\ /Y
 xcopy ..\..\core\democmds\gate\*.* %destpath%\democmds\ /Y
 xcopy ..\..\core\democmds\cmds\*.* %destpath%\democmds\ /Y
 
-del /Q/S %destpath%\cmdobserver
-del /Q/S %destpath%\canvas
-del /Q/S %destpath%\storage
+rem del /Q/S %destpath%\cmdobserver
+rem del /Q/S %destpath%\canvas
+rem del /Q/S %destpath%\storage
 
 rem xcopy ..\..\win\include\canvas\*.* %destpath%\winview\ /Y
 rem xcopy ..\..\win\src\canvas\*.* %destpath%\winview\ /Y

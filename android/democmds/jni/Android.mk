@@ -49,7 +49,6 @@ LOCAL_SRC_FILES  := $(PUBSRC)/geom/mgmat.cpp \
                     $(PUBSRC)/shape/mgrect.cpp \
                     $(PUBSRC)/shape/mgshape.cpp \
                     $(PUBSRC)/shape/mgshapes.cpp \
-                    $(PUBSRC)/shape/mgbasicspreg.cpp \
                     $(PUBSRC)/shape/mgsplines.cpp \
                     $(PUBSRC)/cmdbase/mgcmddraw.cpp \
                     $(PUBSRC)/cmdbase/mgdrawarc.cpp \

@@ -5,8 +5,8 @@
 #include "mgbasicspreg.h"
 #include <mgspfactory.h>
 #include <mgshapet.h>
-#include "mgcomposite.h"
-#include "mggrid.h"
+#include <mgcomposite.h>
+#include <mggrid.h>
 
 void MgBasicShapes::registerShapes(MgShapeFactory* factory)
 {

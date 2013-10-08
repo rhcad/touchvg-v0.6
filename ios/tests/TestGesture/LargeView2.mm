@@ -1,16 +1,16 @@
-// LargeView1.mm
+// LargeView2.mm
 // Copyright (c) 2012-2013, https://github.com/rhcad/touchvg
 
-#import "LargeView1.h"
-#import "GraphView1.h"
+#import "LargeView2.h"
+#import "GraphView2.h"
 
-@implementation LargeView1
+@implementation LargeView2
 
 - (id)initWithFrame:(CGRect)frame withFlags:(int)t
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _subview = [[GraphView1 alloc]initWithFrame:CGRectMake(0, 0, 2048, 2048)
+        _subview = [[GraphView2 alloc]initWithFrame:CGRectMake(0, 0, 2048, 2048)
                                           withFlags:t];
         [self addSubview:_subview];
         [_subview release];
