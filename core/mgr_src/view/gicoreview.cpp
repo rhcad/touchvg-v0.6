@@ -40,7 +40,7 @@ public:
     MgBaseShape* shape() { return _shape; }
     const MgBaseShape* shapec() const { return _shape; }
     int getType() const { return 0x20000 | _shape->getType(); }
-    void release() { delete this; }
+    void release() { _shape->release(); delete this; }
     int getTag() const { return _tag; }
     void setTag(int tag) { _tag = tag; }
     int getID() const { return _id; }

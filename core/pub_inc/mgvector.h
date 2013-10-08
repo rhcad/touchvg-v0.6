@@ -44,14 +44,19 @@ public:
 #ifndef SWIG
     T *address() { return _v; }
 #endif
-    int count() const { return this ? _n : 0; }
-    T get(int index) const { return _v[index]; }
+    int count() const {
+        return this ? _n : 0;
+    }
+    T get(int index) const {
+        return (index >= 0 && index < _n) ? _v[index] : (T)0;
+    }
     void set(int index, T value) {
-        if (index < _n)
+        if (index >= 0 && index < _n) {
             _v[index] = value;
+        }
     }
     void set(int index, T v1, T v2) {
-        if (index + 1 < _n) {
+        if (index >= 0 && index + 1 < _n) {
             _v[index] = v1;
             _v[index+1] = v2;
         }

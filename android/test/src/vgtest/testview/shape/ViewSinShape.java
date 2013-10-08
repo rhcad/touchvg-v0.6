@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2013, https://github.com/rhcad/touchvg
+﻿// Copyright (c) 2012-2013, https://github.com/rhcad/touchvg
 
 package vgtest.testview.shape;
 

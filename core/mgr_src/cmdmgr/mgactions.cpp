@@ -98,6 +98,9 @@ bool MgCmdManagerImpl::showInSelect(const MgMotion* sender, int selState, const 
     if (selState > kMgSelNone && selState <= kMgSelVertex && shape) {
         mgvector<int> arr(actions, sizeof(actions)/sizeof(actions[0]));
         n = sender->view->getCmdSubject()->addShapeActions(sender, arr, n, shape);
+        for (int i = 0; i < n; i++) {
+            actions[i] = arr.get(i);
+        }
 
         if (shape->shapec()->isKindOf(kMgShapeGroup)
             && sender->view->shapeCanUngroup(shape)) {
