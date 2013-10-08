@@ -84,6 +84,7 @@
 %template(Ints) mgvector<int>;
 %template(Floats) mgvector<float>;
 %template(Chars) mgvector<char>;
+%template(Shapes) mgvector<MgShape*>;
 
 %feature("director") MgStorageBase;
 %include <mgstorage.h>

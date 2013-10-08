@@ -36,7 +36,15 @@ public class Ints {
   }
 
   public Ints(int n) {
-    this(touchvgJNI.new_Ints(n), true);
+    this(touchvgJNI.new_Ints__SWIG_0(n), true);
+  }
+
+  public Ints() {
+    this(touchvgJNI.new_Ints__SWIG_1(), true);
+  }
+
+  public void setSize(int n) {
+    touchvgJNI.Ints_setSize(swigCPtr, this, n);
   }
 
   public int count() {

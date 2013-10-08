@@ -246,7 +246,7 @@ SWIGEXPORT void JNICALL Java_democmds_core_democmdsJNI_delete_1Floats(JNIEnv *je
 }
 
 
-SWIGEXPORT jlong JNICALL Java_democmds_core_democmdsJNI_new_1Floats(JNIEnv *jenv, jclass jcls, jint jarg1) {
+SWIGEXPORT jlong JNICALL Java_democmds_core_democmdsJNI_new_1Floats_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jint jarg1) {
   jlong jresult = 0 ;
   int arg1 ;
   mgvector< float > *result = 0 ;
@@ -257,6 +257,31 @@ SWIGEXPORT jlong JNICALL Java_democmds_core_democmdsJNI_new_1Floats(JNIEnv *jenv
   result = (mgvector< float > *)new mgvector< float >(arg1);
   *(mgvector< float > **)&jresult = result; 
   return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_democmds_core_democmdsJNI_new_1Floats_1_1SWIG_11(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  mgvector< float > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (mgvector< float > *)new mgvector< float >();
+  *(mgvector< float > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_democmds_core_democmdsJNI_Floats_1setSize(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  mgvector< float > *arg1 = (mgvector< float > *) 0 ;
+  int arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(mgvector< float > **)&jarg1; 
+  arg2 = (int)jarg2; 
+  (arg1)->setSize(arg2);
 }
 
 
@@ -334,7 +359,7 @@ SWIGEXPORT void JNICALL Java_democmds_core_democmdsJNI_delete_1Chars(JNIEnv *jen
 }
 
 
-SWIGEXPORT jlong JNICALL Java_democmds_core_democmdsJNI_new_1Chars(JNIEnv *jenv, jclass jcls, jint jarg1) {
+SWIGEXPORT jlong JNICALL Java_democmds_core_democmdsJNI_new_1Chars_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jint jarg1) {
   jlong jresult = 0 ;
   int arg1 ;
   mgvector< char > *result = 0 ;
@@ -345,6 +370,31 @@ SWIGEXPORT jlong JNICALL Java_democmds_core_democmdsJNI_new_1Chars(JNIEnv *jenv,
   result = (mgvector< char > *)new mgvector< char >(arg1);
   *(mgvector< char > **)&jresult = result; 
   return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_democmds_core_democmdsJNI_new_1Chars_1_1SWIG_11(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  mgvector< char > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (mgvector< char > *)new mgvector< char >();
+  *(mgvector< char > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_democmds_core_democmdsJNI_Chars_1setSize(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  mgvector< char > *arg1 = (mgvector< char > *) 0 ;
+  int arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(mgvector< char > **)&jarg1; 
+  arg2 = (int)jarg2; 
+  (arg1)->setSize(arg2);
 }
 
 

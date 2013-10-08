@@ -43,6 +43,14 @@ public class MgShapesLock {
     this(touchvgJNI.new_MgShapesLock__SWIG_1(flags, MgView.getCPtr(view), view), true);
   }
 
+  public MgShapesLock(MgView view, int timeout) {
+    this(touchvgJNI.new_MgShapesLock__SWIG_2(MgView.getCPtr(view), view, timeout), true);
+  }
+
+  public MgShapesLock(MgView view) {
+    this(touchvgJNI.new_MgShapesLock__SWIG_3(MgView.getCPtr(view), view), true);
+  }
+
   public boolean locked() {
     return touchvgJNI.MgShapesLock_locked(swigCPtr, this);
   }

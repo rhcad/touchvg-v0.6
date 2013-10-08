@@ -17,6 +17,12 @@ MgShapesLock::MgShapesLock(int flags, MgView* view, int timeout)
     }
 }
 
+MgShapesLock::MgShapesLock(MgView* view, int timeout)
+{
+    locker = view ? view->getLockData() : NULL;
+    mode = locker && locker->lockData(Edit, timeout) ? 2 : 0;
+}
+
 MgShapesLock::~MgShapesLock()
 {
     bool ended = false;

@@ -18,9 +18,11 @@ import touchvg.core.MgMotion;
 import touchvg.core.MgObject;
 import touchvg.core.MgShape;
 import touchvg.core.MgShapeFactory;
+import touchvg.core.MgShapesLock;
 import touchvg.core.MgSplines;
 import touchvg.core.MgStorage;
 import touchvg.core.Point2d;
+import touchvg.core.Shapes;
 import touchvg.view.GraphView;
 import touchvg.view.ViewHelper;
 import vgtest.app.R;
@@ -75,7 +77,7 @@ public class ViewSinShape extends GraphView {
         
         @Override
         public int addShapeActions(MgMotion sender, Ints actions, int n, MgShape sp) {
-            if (castSinShape(sp) != null) {
+            if (castSinShape(sp.shapec()) != null) {
                 actions.set(n++, ACTION_SWITCH);
             }
             return n;
@@ -84,6 +86,24 @@ public class ViewSinShape extends GraphView {
         @Override
         public boolean doAction(MgMotion sender, int action) {
             if (action == ACTION_SWITCH) {
+                final MgShapesLock locker = new MgShapesLock(sender.getView());
+                if (locker.locked()) {
+                    final Shapes shapes = new Shapes();
+                    sender.getView().getSelection().getSelection(sender.getView(), shapes);
+
+                    for (int i = shapes.count() - 1; i >= 0; i--) {
+                        final MgShape shape = shapes.get(i);
+                        final SinShape sp = castSinShape(shape.shape());
+
+                        if (sp != null) {
+                            sp.switchValue();
+                            sp.update();
+                        }
+                    }
+                    shapes.delete();
+                    sender.getView().regenAll();
+                }
+                locker.delete();
             }
             return super.doAction(sender, action);
         }
@@ -133,15 +153,16 @@ public class ViewSinShape extends GraphView {
     }
     
     private class SinShape extends MgBaseShape {
-        private MgSplines mCurve = new MgSplines();
         public static final int TYPE = 100;
+        private MgSplines mCurve = new MgSplines();
+        int mTestValue = 0;
         
         public SinShape() {
             if (mShapeCache == null)
                 mShapeCache = new ArrayList<SinShape>();
             mShapeCache.add(this);
             
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 40; i++) {
                 double y = 10 * Math.sin(i * Math.PI / 10);
                 mCurve.addPoint(new Point2d(i * 0.5f, (float)y));
             }
@@ -154,6 +175,18 @@ public class ViewSinShape extends GraphView {
                 }
             }
             return null;
+        }
+        
+        public void switchValue() {
+            mTestValue++;
+            Point2d oldpt = getPoint(0);
+            mCurve.clear();
+            for (int i = 0; i < 40; i++) {
+                double y = 10 * Math.sin((i + mTestValue * 2) * Math.PI / 10);
+                mCurve.addPoint(new Point2d(i * 0.5f, (float)y));
+            }
+            update();
+            setPoint(0, oldpt);
         }
         
         @Override
@@ -255,6 +288,7 @@ public class ViewSinShape extends GraphView {
         @Override
         public boolean save(MgStorage s) {
             final Point2d pt = getPoint(0);
+            s.writeInt("testValue", mTestValue);
             s.writeFloat("x", pt.getX());
             s.writeFloat("y", pt.getY());
             return super.save(s);
@@ -262,6 +296,7 @@ public class ViewSinShape extends GraphView {
 
         @Override
         public boolean load(MgShapeFactory factory, MgStorage s) {
+            mTestValue = s.readInt("testValue", mTestValue);
             setPoint(0, new Point2d(s.readFloat("x", 0), s.readFloat("y", 0)));
             return super.load(factory, s);
         }

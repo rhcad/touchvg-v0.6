@@ -14,9 +14,15 @@ public:
     ~mgvector() {
         delete[] _v;
     }
-    mgvector(int n) {
+    mgvector(int n = 0) {
         _v = n > 0 ? new T[n] : (T*)0;
         _n = n;
+    }
+    void setSize(int n) {
+        if (!_v) {
+            _v = n > 0 ? new T[n] : (T*)0;
+            _n = n;
+        }
     }
     template<class T2>
     mgvector(const T2 *v, int n) {

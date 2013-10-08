@@ -36,7 +36,15 @@ public class Floats {
   }
 
   public Floats(int n) {
-    this(touchvgJNI.new_Floats(n), true);
+    this(touchvgJNI.new_Floats__SWIG_0(n), true);
+  }
+
+  public Floats() {
+    this(touchvgJNI.new_Floats__SWIG_1(), true);
+  }
+
+  public void setSize(int n) {
+    touchvgJNI.Floats_setSize(swigCPtr, this, n);
   }
 
   public int count() {

@@ -14,9 +14,15 @@ public:
     ~mgvector() {
         delete[] _v;
     }
-    mgvector(int n) {
+    mgvector(int n = 0) {
         _v = n > 0 ? new T[n] : (T*)0;
         _n = n;
+    }
+    void setSize(int n) {
+        if (!_v) {
+            _v = n > 0 ? new T[n] : (T*)0;
+            _n = n;
+        }
     }
     template<class T2>
     mgvector(const T2 *v, int n) {
@@ -44,14 +50,19 @@ public:
 #ifndef SWIG
     T *address() { return _v; }
 #endif
-    int count() const { return this ? _n : 0; }
-    T get(int index) const { return _v[index]; }
+    int count() const {
+        return this ? _n : 0;
+    }
+    T get(int index) const {
+        return (index >= 0 && index < _n) ? _v[index] : (T)0;
+    }
     void set(int index, T value) {
-        if (index < _n)
+        if (index >= 0 && index < _n) {
             _v[index] = value;
+        }
     }
     void set(int index, T v1, T v2) {
-        if (index + 1 < _n) {
+        if (index >= 0 && index + 1 < _n) {
             _v[index] = v1;
             _v[index+1] = v2;
         }

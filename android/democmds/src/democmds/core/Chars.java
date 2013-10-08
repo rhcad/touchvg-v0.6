@@ -36,7 +36,15 @@ public class Chars {
   }
 
   public Chars(int n) {
-    this(democmdsJNI.new_Chars(n), true);
+    this(democmdsJNI.new_Chars__SWIG_0(n), true);
+  }
+
+  public Chars() {
+    this(democmdsJNI.new_Chars__SWIG_1(), true);
+  }
+
+  public void setSize(int n) {
+    democmdsJNI.Chars_setSize(swigCPtr, this, n);
   }
 
   public int count() {

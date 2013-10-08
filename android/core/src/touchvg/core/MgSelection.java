@@ -35,6 +35,18 @@ public class MgSelection {
     }
   }
 
+  public int getSelection(MgView view, Shapes shapes, boolean forChange) {
+    return touchvgJNI.MgSelection_getSelection__SWIG_0(swigCPtr, this, MgView.getCPtr(view), view, Shapes.getCPtr(shapes), shapes, forChange);
+  }
+
+  public int getSelection(MgView view, Shapes shapes) {
+    return touchvgJNI.MgSelection_getSelection__SWIG_1(swigCPtr, this, MgView.getCPtr(view), view, Shapes.getCPtr(shapes), shapes);
+  }
+
+  public int getSelectionCount(MgView view) {
+    return touchvgJNI.MgSelection_getSelectionCount(swigCPtr, this, MgView.getCPtr(view), view);
+  }
+
   public MgSelState getSelectState(MgView view) {
     return MgSelState.swigToEnum(touchvgJNI.MgSelection_getSelectState(swigCPtr, this, MgView.getCPtr(view), view));
   }
