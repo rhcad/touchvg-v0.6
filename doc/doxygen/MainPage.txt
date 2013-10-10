@@ -12,11 +12,11 @@
 	\defgroup GROUP_ANDROID 平台适配器(Android)
 */
 
-/*! \mainpage 通用矢量图形框架 编程文档
+/*! \mainpage 通用矢量绘图框架 编程文档
 
 	\section sectinoIntro 概述
 
-	欢迎使用通用矢量图形框架(https://github.com/rhcad/touchvg)的编程文档，欢迎反馈意见。
+	欢迎使用通用矢量绘图框架(https://github.com/rhcad/touchvg)的编程文档，欢迎反馈意见。
 
 	通用图形平台库的跨平台部分采用C++实现，包含下列模块：
 	

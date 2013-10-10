@@ -4,9 +4,13 @@
 #
 # 2. Type `make java' to compile the swig projects for java.
 #    The program binaries files are outputed to './build/java'.
+#
+# 3. Type `make all install' for C++ applications.
+#    Type `make python' or `make perl' for more language applications.
 # 
-# 3. You can remove the program object files from the source code
+# 4. You can remove the program object files from the source code
 #    directory by typing `make java.clean'.
+#    Type `make clean' to remove object files for C++ applications.
 #
 # Readme about variables: https://github.com/rhcad/x3py/wiki/MakeVars
 #

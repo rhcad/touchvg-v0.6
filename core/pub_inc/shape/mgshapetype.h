@@ -30,7 +30,7 @@ typedef enum {
     kMgShapeDiamond = 14,       //!< 菱形
     kMgShapeLines = 15,         //!< 折线、多边形
     kMgShapeSplines = 16,       //!< 样条曲线
-    kMgShapeParallel = 17, //!< 平行四边形
+    kMgShapeParallel = 17,      //!< 平行四边形
     kMgShapeImage = 18,         //!< 图像矩形
     kMgShapeArc = 19,           //!< 圆弧
     kMgShapeGrid = 20,          //!< 网格
