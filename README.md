@@ -3,6 +3,8 @@
 > TouchVG 是一个主要由C++开发的轻量级2D矢量绘图框架，可在 iOS、Android、Windows 等多个平台构建矢量绘图应用。
 > 
 > 作者：张云贵 <rhcad@hotmail.com> 开源协议：LGPL 2.1，见 LICENSE 文件描述。
+>
+> * 此项目已经移到 [OSChina](http://git.oschina.net/rhcad/touchvg)。
 
 TouchVG 的功能
 --------------
