@@ -4,7 +4,7 @@
 > 
 > 作者：张云贵 <rhcad@hotmail.com> 开源协议：LGPL 2.1，见 LICENSE 文件描述。
 >
-> * 此项目已经移到 [OSChina](http://git.oschina.net/rhcad/touchvg)。
+> * 此项目已经移到 [TouchVG](https://github.com/rhcad/touchvg) 项目。
 
 TouchVG 的功能
 --------------
